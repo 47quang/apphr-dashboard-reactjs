@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { HashRouter } from 'react-router-dom';
+import App from './App.js';
+import { Provider } from 'react-redux';
+import store from './stores/store';
+import { icons } from './asset/icon';
+import '@coreui/coreui/dist/css/coreui.min.css';
+// import 'react-csv-importer/dist/index.css';
+import './i18n/i18n';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+const loading = (
+  <div className="pt-3 text-center">
+    <div className="sk-spinner sk-spinner-pulse"></div>
+  </div>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+React.icons = icons;
+
+ReactDOM.render(
+  <Provider store={store}>
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <App />
+      </Suspense>
+    </HashRouter>
+  </Provider>,
+  document.getElementById('root')
+);

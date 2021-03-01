@@ -1,0 +1,23 @@
+{
+  "Welcome to React": "Welcome to React and react-i18next",
+  "Dashboard": "Trang chủ",
+  "Roll up": "Điểm danh",
+  "Proposal": "Đề xuất",
+  "Profile": "Hồ sơ",
+  "Account": "Tài khoản",
+  "Notification": "Thông báo",
+  "Report": "Báo cáo",
+  "Setting": "Cấu hình",
+  "General": "Cấu hình chung",
+  "Shift": "Ca làm việc",
+  "Branch": "Chi nhánh",
+  "Department": "Phòng ban",
+  "Position": "Vị trí",
+  "Authorization": "Phân quyền",
+  "Role": "Vai trò",
+  "Permission": "Quyền",
+  "Permission group": "Nhóm quyền",
+  "Education": "Đào tạo",
+  "Course": "Khóa học",
+  "Timekeeping": "Timekeeping"
+}

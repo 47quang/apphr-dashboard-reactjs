@@ -1,0 +1,23 @@
+{
+  "Welcome to React": "Welcome to React and react-i18next",
+  "Dashboard": "Dashboard",
+  "Roll up": "Roll up",
+  "Proposal": "Proposal",
+  "Profile": "Profile",
+  "Account": "Account",
+  "Notification": "Notification",
+  "Report": "Report",
+  "Setting": "Setting",
+  "General": "General",
+  "Shift": "Shift",
+  "Branch": "Branch",
+  "Department": "Department",
+  "Position": "Position",
+  "Authorization": "Authorization",
+  "Role": "Role",
+  "Permission": "Permission",
+  "Permission group": "Permission group",
+  "Course": "Course",
+  "Timekeeping": "Timekeeping",
+  "Education": "Education"
+}

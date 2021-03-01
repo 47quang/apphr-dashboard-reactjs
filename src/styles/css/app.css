@@ -1,0 +1,24 @@
+.ag-root ::-webkit-scrollbar {
+  width: 1em;
+  height: 1em;
+}
+.ag-root ::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1em;
+}
+
+.ObjectPage-titleBar-0-2-8 {
+  padding: 0.5rem 0rem 0.5rem 2rem !important;
+}
+
+.ObjectPage-header-0-2-5 {
+  padding-right: 0 !important; 
+}
+
+.c-sidebar .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover {
+  background: #303c54 !important;
+}
+
+:host .ui5-shellbar-root {
+  padding: 0.25rem 0.5rem !important;
+}
