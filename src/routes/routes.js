@@ -1,4 +1,7 @@
 import React from 'react';
+import {ROUTE_NAME} from '../constants/key';
+
+
 
 const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
@@ -28,7 +31,7 @@ const routes = [
   { path: '/roll-up', name: 'RollUp', component: RollUp },
   { path: '/notification', name: 'Notification', component: Notification },
   { path: '/report', name: 'Report', component: Report },
-  { path: '/setting', exact: true, name: 'General', component: General },
+  { path: '/setting', exact: true, name: ROUTE_NAME.SETTING, component: General },
   { path: '/setting/general', name: 'General', component: General },
   { path: '/setting/position', name: 'Position', component: Position },
   { path: '/setting/shift', name: 'Shift', component: Shift },

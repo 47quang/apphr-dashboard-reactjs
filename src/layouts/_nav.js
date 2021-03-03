@@ -70,6 +70,11 @@ const _nav = [
       },
       {
         _tag: 'CSidebarNavItem',
+        name: 'DayOff',
+        to: '/setting/day-off',
+      },
+      {
+        _tag: 'CSidebarNavItem',
         name: 'Branch',
         to: '/setting/branch',
       },

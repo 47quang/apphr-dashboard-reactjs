@@ -31,14 +31,14 @@ const TheHeader = () => {
 
   const dispatch = useDispatch();
 
-  function changeLanguage(language) {
+  function changeLanguage(lang) {
     dispatch({
       type: 'CHANGE_LANGUAGE',
       payload: {
-        language
+        lang
       }
     });
-    i18n.changeLanguage(language);
+    i18n.changeLanguage(lang);
   }
 
   const toggleSidebar = () => {

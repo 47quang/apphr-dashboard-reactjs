@@ -8,7 +8,7 @@ i18n
   // .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'us',
+    fallbackLng: 'vi',
     debug: false, // log info into console web
 
     interpolation: {
