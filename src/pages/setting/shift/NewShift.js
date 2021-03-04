@@ -4,31 +4,54 @@ import CommonTextInput from "src/components/input/CommonTextInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import * as Yup from "yup";
 import { getRegexExpression, VALIDATION_TYPE } from "src/utils/validationUtils";
+import moment from 'moment';
+
+const isSameOrBefore = (startTime, endTime) => {
+    return moment(startTime, 'HH:mm').isSameOrBefore(moment(endTime, 'HH:mm'));
+}
 
 const SettingGeneralInfoSchema = Yup.object().shape({
-    companyName: Yup.string().trim().required("Bắt buộc nhập tên công ty"),
-    phoneNumber: Yup.string()
-        .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), "hihi")
-        .required("Bắt buộc nhập số điện thoại"),
-    email: Yup.string().email("Email nhập sai").required("Bắt buộc nhập email"),
-    tax: Yup.number(),
+    shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
+    shiftName: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
+    start: Yup.string()
+        .test(
+            'not empty',
+            'Bắt buộc chọn giờ check-in',
+            function (value) {
+                return !!value;
+            }
+        ),
+    end: Yup.string()
+        .test(
+            'not empty',
+            'Bắt buộc chọn giờ check-out',
+            function (value) {
+                return !!value;
+            }
+        ).test(
+            "end_time_test",
+            "Giờ check-out phải sau giờ check-in",
+            function (value) {
+                const { start } = this.parent;
+                console.log(start,value);
+                return isSameOrBefore(start, value);
+            }
+        ),
+    facOfShift: Yup.number().min(0, "Số không âm").required("Bắt buộc phải nhập hệ số giờ làm")
 });
 
 //TODO: translate
-const SettingGeneralPage = () => {
-    const lstEmployeeOption = [1, 2, 3, 4, 5, 6, 7];
+const NewShift = () => {
     return (
         <div className="m-auto">
-            <div className="shadow bg-white rounded p-4 container col-md-10">
+            <div className="shadow bg-white rounded p-4 container col-md-6">
                 <Formik
                     initialValues={{
-                        companyName: "APPHR",
-                        phoneNumber: "",
-                        email: "",
-                        address: "",
-                        tax: "",
-                        employeeAmount: "",
-                        rollCallType: "",
+                        shiftCode: "",
+                        shiftName: "",
+                        start: "",
+                        end: "",
+                        facOfShift: 1,
                     }}
                     validationSchema={SettingGeneralInfoSchema}
                     onSubmit={(values) => {
@@ -46,116 +69,86 @@ const SettingGeneralPage = () => {
                         <form autoComplete="off">
                             <div className="row">
                                 <CommonTextInput
-                                    containerClassName={"form-group col-lg-6"}
-                                    value={values.companyName}
-                                    onBlur={handleBlur("companyName")}
-                                    onChange={handleChange("companyName")}
-                                    inputID={"name"}
-                                    labelText={"Tên doanh nghiệp"}
+                                    containerClassName={"form-group col-lg-12"}
+                                    value={values.shiftCode}
+                                    onBlur={handleBlur("shiftCode")}
+                                    onChange={handleChange("shiftCode")}
+                                    inputID={"shiftCode"}
+                                    labelText={"Mã ca làm"}
                                     inputType={"text"}
-                                    placeholder={"Nhập tên doanh nghiệp"}
+                                    placeholder={"Nhập mã ca làm"}
                                     inputClassName={"form-control"}
                                     isRequiredField
-                                    isTouched={touched.companyName}
-                                    isError={errors.companyName && touched.companyName}
-                                    errorMessage={errors.companyName}
+                                    isTouched={touched.shiftCode}
+                                    isError={errors.shiftCode && touched.shiftCode}
+                                    errorMessage={errors.shiftCode}
                                 />
-
+                            </div>
+                            <div className="row">
                                 <CommonTextInput
-                                    containerClassName={"form-group col-lg-6"}
-                                    value={values.phoneNumber}
-                                    onBlur={handleBlur("phoneNumber")}
-                                    onChange={handleChange("phoneNumber")}
-                                    inputID={"phone"}
-                                    labelText={"Số điện thoại"}
+                                    containerClassName={"form-group col-lg-12"}
+                                    value={values.shiftName}
+                                    onBlur={handleBlur("shiftName")}
+                                    onChange={handleChange("shiftName")}
+                                    inputID={"shiftName"}
+                                    labelText={"Tên ca làm"}
                                     inputType={"text"}
-                                    placeholder={"Nhập số điện thoại"}
+                                    placeholder={"Nhập tên ca làm"}
                                     inputClassName={"form-control"}
                                     isRequiredField
-                                    isTouched={touched.phoneNumber}
-                                    isError={errors.phoneNumber && touched.phoneNumber}
-                                    errorMessage={errors.phoneNumber}
+                                    isTouched={touched.shiftName}
+                                    isError={errors.shiftName && touched.shiftName}
+                                    errorMessage={errors.shiftName}
                                 />
                             </div>
                             <div className="row">
                                 <CommonTextInput
                                     containerClassName={"form-group col-lg-6"}
-                                    value={values.email}
-                                    onBlur={handleBlur("email")}
-                                    onChange={handleChange("email")}
-                                    inputID={"email"}
-                                    labelText={"Email"}
-                                    inputType={"email"}
-                                    placeholder={"Nhập email"}
+                                    value={values.start}
+                                    onBlur={handleBlur("start")}
+                                    onChange={handleChange("start")}
+                                    inputID={"start"}
+                                    labelText={"Giờ check-in"}
+                                    inputType={"Time"}
                                     inputClassName={"form-control"}
                                     isRequiredField
-                                    isTouched={touched.email}
-                                    isError={errors.email && touched.email}
-                                    errorMessage={errors.email}
+                                    isTouched={touched.start}
+                                    isError={errors.start && touched.start}
+                                    errorMessage={errors.start}
                                 />
                                 <CommonTextInput
                                     containerClassName={"form-group col-lg-6"}
-                                    value={values.address}
-                                    onBlur={handleBlur("address")}
-                                    onChange={handleChange("address")}
-                                    inputID={"address"}
-                                    labelText={"Địa chỉ"}
-                                    inputType={"text"}
-                                    placeholder={"Nhập địa chỉ"}
+                                    value={values.end}
+                                    onBlur={handleBlur("end")}
+                                    onChange={handleChange("end")}
+                                    inputID={"end"}
+                                    labelText={"Giờ check-out"}
+                                    inputType={"Time"}
                                     inputClassName={"form-control"}
                                     isRequiredField
-                                    isTouched={touched.address}
-                                    isError={errors.address && touched.address}
-                                    errorMessage={errors.address}
+                                    isTouched={touched.end}
+                                    isError={errors.end && touched.end}
+                                    errorMessage={errors.end}
+                                    minTime={values.start}
                                 />
                             </div>
                             <div className="row">
                                 <CommonTextInput
-                                    containerClassName={"form-group col-lg-6"}
-                                    value={values.tax}
-                                    onBlur={handleBlur("tax")}
-                                    onChange={handleChange("tax")}
-                                    inputID={"tax"}
-                                    labelText={"Mã số thuế"}
+                                    containerClassName={"form-group col-lg-12"}
+                                    value={values.facOfShift}
+                                    onBlur={handleBlur("facOfShift")}
+                                    onChange={handleChange("facOfShift")}
+                                    inputID={"facOfShift"}
+                                    labelText={"Hệ số giờ làm"}
                                     inputType={"number"}
-                                    placeholder={"Nhập mã số thuế"}
                                     inputClassName={"form-control"}
                                     isRequiredField
-                                    isTouched={touched.tax}
-                                    isError={errors.tax && touched.tax}
-                                    errorMessage={errors.tax}
-                                />
-                                <CommonSelectInput
-                                    containerClassName={"form-group col-lg-6"}
-                                    value={values.employeeAmount}
-                                    onBlur={handleBlur("employeeAmount")}
-                                    onChange={handleChange("employeeAmount")}
-                                    inputID={"employeeAmount"}
-                                    labelText={"Số lượng nhân viên"}
-                                    selectClassName={"form-control"}
-                                    isRequiredField
-                                    isTouched={touched.tax}
-                                    isError={errors.tax && touched.tax}
-                                    errorMessage={errors.tax}
-                                    lstSelectOptions={lstEmployeeOption}
+                                    isTouched={touched.facOfShift}
+                                    isError={errors.facOfShift && touched.facOfShift}
+                                    errorMessage={errors.facOfShift}
                                 />
                             </div>
-                            <div className="row">
-                                <CommonSelectInput
-                                    containerClassName={"form-group col-lg-6"}
-                                    value={values.rollCallType}
-                                    onBlur={handleBlur("rollCallType")}
-                                    onChange={handleChange("rollCallType")}
-                                    inputID={"rollCallType"}
-                                    labelText={"Hình thức điểm danh"}
-                                    selectClassName={"form-control"}
-                                    isRequiredField
-                                    isTouched={touched.tax}
-                                    isError={errors.tax && touched.tax}
-                                    errorMessage={errors.tax}
-                                    lstSelectOptions={lstEmployeeOption}
-                                />
-                            </div>
+
                             <button
                                 className="btn btn-primary"
                                 type="submit"
@@ -171,4 +164,4 @@ const SettingGeneralPage = () => {
     );
 };
 
-export default SettingGeneralPage;
+export default NewShift;

@@ -16,6 +16,7 @@ const CommonTextInput = ({
   errorMessage,
   inputID,
   isTouched,
+  minTime
 }) => {
   const checkInputClassName = () => {
     if (isError) return joinClassName([inputClassName, "is-invalid"]);
@@ -36,6 +37,7 @@ const CommonTextInput = ({
         id={inputID}
         required={isRequiredField}
         autoComplete={"off"}
+        min={minTime ?? null}
       />
       {isError && errorMessage && (
         <div>
