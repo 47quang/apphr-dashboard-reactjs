@@ -35,7 +35,6 @@ const CommonTextInput = ({
         value={value}
         id={inputID}
         required={isRequiredField}
-        autoComplete={"off"}
       />
       {isError && errorMessage && (
         <div>
