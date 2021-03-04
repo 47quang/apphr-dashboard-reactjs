@@ -1,0 +1,4 @@
+[0m2021.03.04 12:20:20 INFO  Started: Metals version 0.10.0 in workspace 'C:\Users\user\Desktop\LV\apphr-dashboard-reactjs' for client vscode 1.53.2.[0m
+[0m2021.03.04 12:20:21 INFO  time: initialize in 1.14s[0m
+[0m2021.03.04 12:20:23 WARN  Build server is not auto-connectable.[0m
+[0m2021.03.04 12:20:23 WARN  no build tool detected in workspace 'C:\Users\user\Desktop\LV\apphr-dashboard-reactjs'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
