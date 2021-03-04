@@ -44,7 +44,7 @@ const SettingGeneralPage = () => {
             handleSubmit,
             handleBlur,
           }) => (
-            <form autoComplete="off">
+            <form>
               <div className="row">
                 <CommonTextInput
                   containerClassName={"form-group col-lg-6"}
