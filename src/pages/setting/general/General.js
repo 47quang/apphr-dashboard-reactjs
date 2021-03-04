@@ -73,7 +73,7 @@ const General = () => {
             <div className="form-group col-lg-6">
               <label>Hình thức điểm danh</label>
               <select className="form-control">
-                <option>1</option>
+                <option>hihi</option>
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
