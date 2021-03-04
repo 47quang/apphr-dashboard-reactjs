@@ -1,5 +1,5 @@
 import React from 'react';
-import {ROUTE_NAME} from '../constants/key';
+import { ROUTE_NAME } from '../constants/key';
 
 
 
@@ -14,6 +14,7 @@ const Report = React.lazy(() => import('src/pages/report/Report'));
 const General = React.lazy(() => import('src/pages/setting/general/General'));
 const Position = React.lazy(() => import('src/pages/setting/position/Position'));
 const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
+const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
 const Department = React.lazy(() => import('src/pages/setting/department/Department'));
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const Permission = React.lazy(() => import('src/pages/setting/authorization/permission/Permission'));
@@ -34,6 +35,7 @@ const routes = [
   { path: '/setting', exact: true, name: ROUTE_NAME.SETTING, component: General },
   { path: '/setting/general', name: 'General', component: General },
   { path: '/setting/position', name: 'Position', component: Position },
+  { path: '/setting/shift/newShift', name: ROUTE_NAME.NEW_SHIFT, component: NewShift },
   { path: '/setting/shift', name: 'Shift', component: Shift },
   { path: '/setting/branch', name: 'Branch', component: Branch },
   { path: '/setting/department', name: 'Department', component: Department },
