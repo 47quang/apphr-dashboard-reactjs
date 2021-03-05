@@ -1,58 +1,58 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   CHeader,
   CHeaderBrand,
   CHeaderNav,
   CBreadcrumbRouter,
-  CToggler
-} from '@coreui/react';
-import CIcon from '@coreui/icons-react';
-import routes from 'src/routes/routes';
-import '../styles/scss/header.scss';
+  CToggler,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import routes from "src/routes/routes";
+import "../styles/scss/header.scss";
 
 import {
   TheHeaderDropdownMssg,
   TheHeaderDropdownNotif,
   TheHeaderDropdownTasks,
-  TheHeaderDropdown
-} from './index';
+  TheHeaderDropdown,
+} from "./index";
 
 const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'vi', name: 'Vietnam' }
+  { code: "en", name: "English" },
+  { code: "vi", name: "Vietnam" },
 ];
 
 const TheHeader = () => {
   const { i18n } = useTranslation();
-  const language = useSelector(state => state.style.language);
-  const sidebarShow = useSelector(state => state.style.sidebarShow);
+  const language = useSelector((state) => state.style.language);
+  const sidebarShow = useSelector((state) => state.style.sidebarShow);
 
   const dispatch = useDispatch();
 
-  const changeLanguage(lang) {
+  const changeLanguage = (lang) => {
     dispatch({
-      type: 'CHANGE_LANGUAGE',
+      type: "CHANGE_LANGUAGE",
       payload: {
-        lang
-      }
+        lang,
+      },
     });
     i18n.changeLanguage(lang);
-  }
+  };
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow)
-    ? false
-    : 'responsive';
-    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
+    const val = [true, "responsive"].includes(sidebarShow)
+      ? false
+      : "responsive";
+    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
   };
-  
+
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow)
+    const val = [false, "responsive"].includes(sidebarShow)
       ? true
-      : 'responsive';
-    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
+      : "responsive";
+    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
   };
 
   return (
@@ -100,7 +100,7 @@ const TheHeader = () => {
         <TheHeaderDropdownNotif />
         <TheHeaderDropdownMssg />
         <TheHeaderDropdownTasks />
-        <TheHeaderDropdown/>
+        <TheHeaderDropdown />
       </CHeaderNav>
     </CHeader>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AddCircleOutlineOutlined } from "@material-ui/icons";
 import { COLORS } from "../../constants/theme";
 
-GridCreateToolbarButton.propTypes = {};
+
 //TODO: translate
 const GridCreateToolbarButton = (props) => {
   return (
@@ -26,5 +26,5 @@ const GridCreateToolbarButton = (props) => {
     </div>
   );
 };
-
+GridCreateToolbarButton.propTypes = {};
 export default GridCreateToolbarButton;
