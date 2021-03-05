@@ -1,17 +1,16 @@
-import * as React from 'react';
-import { DataGrid, GridOverlay, GridColumnsToolbarButton, GridFilterToolbarButton, GridToolbarContainer, GridToolbarExport } from '@material-ui/data-grid';
+import React, { useState } from 'react';
+import {
+  DataGrid,
+  GridOverlay,
+  GridColumnsToolbarButton,
+  GridFilterToolbarButton,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import GridCreateToolbarButton from 'src/components/toolbar/GridCreateToolbarButton'
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer>
-      <GridColumnsToolbarButton />
-      <GridFilterToolbarButton />
-      <GridToolbarExport />
-      <GridCreateToolbarButton/>
-    </GridToolbarContainer>
-  );
-}
+import GridDeleteToolbarButton from 'src/components/toolbar/GridDeleteToolbarButton'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,8 +96,45 @@ export default function Shift() {
     { field: 'name', headerName: 'Tên ca làm', flex: 1 },
     { field: 'start', headerName: 'Giờ check-in', flex: 1 },
     { field: 'end', headerName: 'Giờ check-out', flex: 1 },
+    {
+      field: '',
+      disableColumnMenu: true,
+      flex: 0.5,
+      renderCell: (props) => (
+        <div >
+          <button
+            variant="contained"
+            className="btn btn-primary"
+            size="small"
+            style={{ marginLeft: 5 }}
+            onClick={(e) => { console.log(props.row); }}
+          >
+            Chỉnh sửa
+          </button>
+        </div>
+      ),
+    },
+    {
+      field: ' ',
+      disableColumnMenu: true,
+      flex: 0.5,
+      renderCell: (props) => {
+        <div >
+          <button
+            variant="contained"
+            className="btn btn-danger"
+            size="small"
+            onClick={(e) => { console.log(props.row); }}
+          >
+            Xóa
+          </button>
+        </div>
+      },
+    },
+
 
   ];
+
   function createDate(id, shiftCode, shiftName, start, end) {
     return { id: id, code: shiftCode, name: shiftName, start: start, end: end };
   }
@@ -126,11 +162,34 @@ export default function Shift() {
     createDate(20, "SA1", "Ca sáng 1", "08:30", "11:30"),
   ]
 
+  const [selectionModel, setSelectionModel] = useState([]);
+
+  const handleRowsSelectedDelete = (rows) => {
+    console.log("Call API Delete ", rows);
+  }
+
+  const CustomToolbar = () => {
+    return (
+      <GridToolbarContainer>
+        <GridColumnsToolbarButton />
+        <GridFilterToolbarButton />
+        <GridToolbarExport />
+        <GridCreateToolbarButton />
+        <GridDeleteToolbarButton rowsSelected={selectionModel} onDelete={handleRowsSelectedDelete} />
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <div className="col-12 ">
       <DataGrid
         className="bg-white py-3 px-4"
         autoHeight
+        checkboxSelection
+        onSelectionModelChange={(newSelection) => {
+          setSelectionModel(newSelection.selectionModel);
+        }}
+        selectionModel={selectionModel}
         pageSize={5} rowsPerPageOptions={[5, 10]} pagination
         rows={rows} columns={columns}
         components={{

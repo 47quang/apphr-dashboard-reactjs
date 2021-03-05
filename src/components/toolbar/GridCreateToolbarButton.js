@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import {
   AddCircleOutlineOutlined,
-  DeleteOutlineOutlined,
 } from "@material-ui/icons";
 import { COLORS } from "../../constants/theme";
 
@@ -26,18 +25,6 @@ function GridCreateToolbarButton(props) {
           NEW
         </button>
       </Link>
-      <button
-        type="button"
-        className="btn"
-        style={{
-          color: COLORS.BUTTON_COLOR,
-          fontSize: 13,
-          justifyContent:'center'
-        }}
-      >
-        <DeleteOutlineOutlined style={{ fontSize: 18 }} className="mr-1" />
-        DELETE
-      </button>
     </div>
   );
 }
