@@ -1,6 +1,5 @@
 import React from "react";
 import Label from "../label/label";
-import PropTypes from 'prop-types';
 
 
 

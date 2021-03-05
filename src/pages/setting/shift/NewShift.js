@@ -1,51 +1,88 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
-import CommonSelectInput from "src/components/input/CommonSelectInput";
 import * as Yup from "yup";
-import { getRegexExpression, VALIDATION_TYPE } from "src/utils/validationUtils";
-import moment from "moment";
+import moment from 'moment';
 
-const isSameOrBefore = (startTime, endTime) => {
+const isBefore = (startTime, endTime) => {
   return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
 };
 
-const SettingGeneralInfoSchema = Yup.object().shape({
+const SettingShiftInfoSchema = Yup.object().shape({
   shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
   shiftName: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
-  start: Yup.string().test(
-    "not empty",
-    "Bắt buộc chọn giờ check-in",
-    (value) => !!value
-  ),
+  start: Yup.string()
+    .test(
+      'not empty',
+      'Bắt buộc chọn giờ check-in',
+      function (value) {
+        return !!value;
+      }
+    ),
   end: Yup.string()
-    .test("not empty", "Bắt buộc chọn giờ check-out", (value) => !!value)
-    .test("end_time_test", "Giờ check-out phải sau giờ check-in", (value) => {
-      const { start } = this.parent;
-      return isSameOrBefore(start, value);
-    }),
-  facOfShift: Yup.number()
-    .min(0, "Hệ số giờ làm phải là một số không âm")
-    .required("Bắt buộc phải nhập hệ số giờ làm"),
+    .test(
+      'not empty',
+      'Bắt buộc chọn giờ check-out',
+      function (value) {
+        return !!value;
+      }
+    ).test(
+      "end_time_test",
+      "Giờ check-out phải sau giờ check-in",
+      function (value) {
+        const { start } = this.parent;
+        return isBefore(start, value);
+      }
+    ),
+  facOfShift: Yup.number().min(0, "Hệ số giờ làm phải là một số không âm").required("Bắt buộc phải nhập hệ số giờ làm")
 });
 
 //TODO: translate
-const NewShift = () => {
+const NewShift = ({ t, location, match }) => {
+  const params = match.params;
+  const [initialValues, setInitialValues] = useState(
+    {
+      shiftCode: "",
+      shiftName: "",
+      start: "",
+      end: "",
+      facOfShift: 1,
+    }
+  );
+  const getShiftInfo = async () => {
+
+    setInitialValues(
+      {
+        shiftCode: "SĐ",
+        shiftName: "Dđ",
+        start: "08:30:00.000",
+        end: "14:30:00.00",
+        facOfShift: 3,
+      }
+    );
+  }
+  useEffect(() => {
+    if (params?.id)
+      getShiftInfo();
+  }, [params]);
+  console.log(initialValues);
+
+
   return (
     <div className="m-auto">
       <div className="shadow bg-white rounded p-4 container col-md-6">
         <Formik
-          initialValues={{
-            shiftCode: "",
-            shiftName: "",
-            start: "",
-            end: "",
-            facOfShift: 1,
-          }}
-          validationSchema={SettingGeneralInfoSchema}
+          enableReinitialize
+          initialValues={initialValues}
+          validationSchema={SettingShiftInfoSchema}
           onSubmit={(values) => {
-            console.log(values);
-            //api
+            if (params?.id){
+              console.log("Update Shift Success: ", values);
+            }
+            else{
+              console.log("Create Shift Success: ", values);
+            }
+            
             window.history.back();
           }}
         >
