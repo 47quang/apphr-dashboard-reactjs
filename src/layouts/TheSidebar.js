@@ -27,7 +27,7 @@ const TheSidebar = () => {
   const dispatch = useDispatch();
   const show = useSelector(state => state.style.sidebarShow);
 
-  function changeName(tree) {
+  const changeName(tree) {
     if (tree.name) {
       tree.name = t(tree.name);
     }

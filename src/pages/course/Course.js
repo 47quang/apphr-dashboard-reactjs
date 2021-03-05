@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-function Course() {
+const Course = () => {
   return <div>This is Course page</div>;
-}
+};
 
 export default Course;

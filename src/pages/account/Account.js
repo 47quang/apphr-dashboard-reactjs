@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-function Account() {
+const Account = () => {
   return <div>This is Account page</div>;
-}
+};
 
 export default Account;

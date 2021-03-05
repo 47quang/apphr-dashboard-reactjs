@@ -1,7 +1,7 @@
 import axios from 'axios';
 import querystring from 'query-string';
 
-// function getDefaultHeaders() {
+// const getDefaultHeaders() => {
 //   return {
 //     Authorization: 'Bearer ' + localStorage.getItem('token'),
 //   };

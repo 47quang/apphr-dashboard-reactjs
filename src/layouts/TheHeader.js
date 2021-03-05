@@ -31,7 +31,7 @@ const TheHeader = () => {
 
   const dispatch = useDispatch();
 
-  function changeLanguage(lang) {
+  const changeLanguage(lang) {
     dispatch({
       type: 'CHANGE_LANGUAGE',
       payload: {

@@ -1,17 +1,17 @@
 const initialState = {
-  language: 'en',
-  sidebarShow: 'responsive',
+  language: "en",
+  sidebarShow: "responsive",
 };
 
-function styleReducer(state = initialState, { type, payload }) {
+const styleReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case 'CHANGE_LANGUAGE':
+    case "CHANGE_LANGUAGE":
       return { ...state, ...payload };
-    case 'CHANGE_SIDEBARSHOW':
+    case "CHANGE_SIDEBARSHOW":
       return { ...state, ...payload };
     default:
       return state;
   }
-}
+};
 
 export default styleReducer;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Branch() {
+const Branch() => {
   return <div>This is Branch page</div>;
 }
 

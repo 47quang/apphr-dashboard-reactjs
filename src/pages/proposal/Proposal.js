@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-function Proposal() {
+const Proposal = () => {
   return <div>This is Proposal page</div>;
-}
+};
 
 export default Proposal;

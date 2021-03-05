@@ -17,7 +17,7 @@ const SettingGeneralInfoSchema = Yup.object().shape({
         .test(
             'not empty',
             'Bắt buộc chọn giờ check-in',
-            function (value) {
+            const (value) {
                 return !!value;
             }
         ),
@@ -25,13 +25,13 @@ const SettingGeneralInfoSchema = Yup.object().shape({
         .test(
             'not empty',
             'Bắt buộc chọn giờ check-out',
-            function (value) {
+            const (value) {
                 return !!value;
             }
         ).test(
             "end_time_test",
             "Giờ check-out phải sau giờ check-in",
-            function (value) {
+            const (value) {
                 const { start } = this.parent;
                 return isSameOrBefore(start, value);
             }

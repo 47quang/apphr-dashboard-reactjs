@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   DataGrid,
   GridOverlay,
@@ -6,30 +6,29 @@ import {
   GridFilterToolbarButton,
   GridToolbarContainer,
   GridToolbarExport,
-} from '@material-ui/data-grid';
-import { makeStyles } from '@material-ui/core/styles';
-import GridCreateToolbarButton from 'src/components/toolbar/GridCreateToolbarButton'
-import GridDeleteToolbarButton from 'src/components/toolbar/GridDeleteToolbarButton'
-
+} from "@material-ui/data-grid";
+import { makeStyles } from "@material-ui/core/styles";
+import GridCreateToolbarButton from "src/components/toolbar/GridCreateToolbarButton";
+import GridDeleteToolbarButton from "src/components/toolbar/GridDeleteToolbarButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexDirection: 'column',
-    '& .ant-empty-img-1': {
-      fill: theme.palette.type === 'light' ? '#aeb8c2' : '#262626',
+    flexDirection: "column",
+    "& .ant-empty-img-1": {
+      fill: theme.palette.type === "light" ? "#aeb8c2" : "#262626",
     },
-    '& .ant-empty-img-2': {
-      fill: theme.palette.type === 'light' ? '#f5f5f7' : '#595959',
+    "& .ant-empty-img-2": {
+      fill: theme.palette.type === "light" ? "#f5f5f7" : "#595959",
     },
-    '& .ant-empty-img-3': {
-      fill: theme.palette.type === 'light' ? '#dce0e6' : '#434343',
+    "& .ant-empty-img-3": {
+      fill: theme.palette.type === "light" ? "#dce0e6" : "#434343",
     },
-    '& .ant-empty-img-4': {
-      fill: theme.palette.type === 'light' ? '#fff' : '#1c1c1c',
+    "& .ant-empty-img-4": {
+      fill: theme.palette.type === "light" ? "#fff" : "#1c1c1c",
     },
-    '& .ant-empty-img-5': {
-      fillOpacity: theme.palette.type === 'light' ? '0.8' : '0.08',
-      fill: theme.palette.type === 'light' ? '#f5f5f5' : '#fff',
+    "& .ant-empty-img-5": {
+      fillOpacity: theme.palette.type === "light" ? "0.8" : "0.08",
+      fill: theme.palette.type === "light" ? "#f5f5f5" : "#fff",
     },
   },
   label: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CustomNoRowsOverlay() {
+const CustomNoRowsOverlay = () => {
   const classes = useStyles();
 
   return (
@@ -85,29 +84,28 @@ function CustomNoRowsOverlay() {
       <div>Chưa có ca làm việc nào</div>
     </GridOverlay>
   );
-}
+};
 
-
-
-
-export default function Shift() {
+const ShiftPage = () => {
   const columns = [
-    { field: 'code', headerName: 'Mã ca làm', flex: 1 },
-    { field: 'name', headerName: 'Tên ca làm', flex: 1 },
-    { field: 'start', headerName: 'Giờ check-in', flex: 1 },
-    { field: 'end', headerName: 'Giờ check-out', flex: 1 },
+    { field: "code", headerName: "Mã ca làm", flex: 1 },
+    { field: "name", headerName: "Tên ca làm", flex: 1 },
+    { field: "start", headerName: "Giờ check-in", flex: 1 },
+    { field: "end", headerName: "Giờ check-out", flex: 1 },
     {
-      field: '',
+      field: "",
       disableColumnMenu: true,
       flex: 0.5,
       renderCell: (props) => (
-        <div >
+        <div>
           <button
             variant="contained"
             className="btn btn-primary"
             size="small"
             style={{ marginLeft: 5 }}
-            onClick={(e) => { console.log(props.row); }}
+            onClick={(e) => {
+              console.log(props.row);
+            }}
           >
             Chỉnh sửa
           </button>
@@ -115,29 +113,29 @@ export default function Shift() {
       ),
     },
     {
-      field: ' ',
+      field: " ",
       disableColumnMenu: true,
       flex: 0.5,
       renderCell: (props) => {
-        <div >
+        <div>
           <button
             variant="contained"
             className="btn btn-danger"
             size="small"
-            onClick={(e) => { console.log(props.row); }}
+            onClick={(e) => {
+              console.log(props.row);
+            }}
           >
             Xóa
           </button>
-        </div>
+        </div>;
       },
     },
-
-
   ];
 
-  function createDate(id, shiftCode, shiftName, start, end) {
+  const createDate = (id, shiftCode, shiftName, start, end) => {
     return { id: id, code: shiftCode, name: shiftName, start: start, end: end };
-  }
+  };
 
   const rows = [
     createDate(1, "SA1", "Ca sáng 1", "08:30", "11:30"),
@@ -160,13 +158,13 @@ export default function Shift() {
     createDate(18, "SA1", "Ca sáng 1", "08:30", "11:30"),
     createDate(19, "SA1", "Ca sáng 1", "08:30", "11:30"),
     createDate(20, "SA1", "Ca sáng 1", "08:30", "11:30"),
-  ]
+  ];
 
   const [selectionModel, setSelectionModel] = useState([]);
 
   const handleRowsSelectedDelete = (rows) => {
     console.log("Call API Delete ", rows);
-  }
+  };
 
   const CustomToolbar = () => {
     return (
@@ -175,10 +173,13 @@ export default function Shift() {
         <GridFilterToolbarButton />
         <GridToolbarExport />
         <GridCreateToolbarButton />
-        <GridDeleteToolbarButton rowsSelected={selectionModel} onDelete={handleRowsSelectedDelete} />
+        <GridDeleteToolbarButton
+          rowsSelected={selectionModel}
+          onDelete={handleRowsSelectedDelete}
+        />
       </GridToolbarContainer>
     );
-  }
+  };
 
   return (
     <div className="col-12 ">
@@ -190,8 +191,11 @@ export default function Shift() {
           setSelectionModel(newSelection.selectionModel);
         }}
         selectionModel={selectionModel}
-        pageSize={5} rowsPerPageOptions={[5, 10]} pagination
-        rows={rows} columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10]}
+        pagination
+        rows={rows}
+        columns={columns}
         components={{
           Toolbar: CustomToolbar,
           NoRowsOverlay: CustomNoRowsOverlay,
@@ -199,4 +203,5 @@ export default function Shift() {
       />
     </div>
   );
-}
+};
+export default ShiftPage;

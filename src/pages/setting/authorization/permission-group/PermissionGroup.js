@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PermissionGroup() {
+const PermissionGroup() => {
   return <div>This is PermissionGroup page</div>;
 }
 

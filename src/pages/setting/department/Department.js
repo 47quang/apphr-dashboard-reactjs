@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Department() {
+const Department() => {
   return <div>This is Department page</div>;
 }
 

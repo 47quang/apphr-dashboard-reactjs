@@ -1,14 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import {
-  AddCircleOutlineOutlined,
-} from "@material-ui/icons";
+import { AddCircleOutlineOutlined } from "@material-ui/icons";
 import { COLORS } from "../../constants/theme";
 
 GridCreateToolbarButton.propTypes = {};
 //TODO: translate
-function GridCreateToolbarButton(props) {
+const GridCreateToolbarButton = (props) => {
   return (
     <div>
       <Link to="/setting/shift/newShift">
@@ -27,6 +25,6 @@ function GridCreateToolbarButton(props) {
       </Link>
     </div>
   );
-}
+};
 
 export default GridCreateToolbarButton;

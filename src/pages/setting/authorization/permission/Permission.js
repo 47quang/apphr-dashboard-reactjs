@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Permission() {
+const Permission() => {
   return <div>This is Permission page</div>;
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Report() {
+const Report=()=> {
   return <div>This is Report page</div>;
 }
 
