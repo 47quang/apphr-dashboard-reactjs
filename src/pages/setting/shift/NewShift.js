@@ -7,7 +7,7 @@ import { getRegexExpression, VALIDATION_TYPE } from "src/utils/validationUtils";
 import moment from 'moment';
 
 const isSameOrBefore = (startTime, endTime) => {
-    return moment(startTime, 'HH:mm').isSameOrBefore(moment(endTime, 'HH:mm'));
+    return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
 }
 
 const SettingGeneralInfoSchema = Yup.object().shape({
@@ -33,11 +33,10 @@ const SettingGeneralInfoSchema = Yup.object().shape({
             "Giờ check-out phải sau giờ check-in",
             function (value) {
                 const { start } = this.parent;
-                console.log(start,value);
                 return isSameOrBefore(start, value);
             }
         ),
-    facOfShift: Yup.number().min(0, "Số không âm").required("Bắt buộc phải nhập hệ số giờ làm")
+    facOfShift: Yup.number().min(0, "Hệ số giờ làm phải là một số không âm").required("Bắt buộc phải nhập hệ số giờ làm")
 });
 
 //TODO: translate
@@ -56,6 +55,8 @@ const NewShift = () => {
                     validationSchema={SettingGeneralInfoSchema}
                     onSubmit={(values) => {
                         console.log(values);
+                        //api
+                        window.history.back();
                     }}
                 >
                     {({
