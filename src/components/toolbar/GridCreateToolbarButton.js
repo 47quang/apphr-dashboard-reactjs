@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { AddCircleOutlineOutlined } from "@material-ui/icons";
 import { COLORS } from "../../constants/theme";
@@ -26,5 +25,7 @@ const GridCreateToolbarButton = (props) => {
     </div>
   );
 };
+
 GridCreateToolbarButton.propTypes = {};
+
 export default GridCreateToolbarButton;

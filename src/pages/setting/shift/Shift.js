@@ -10,6 +10,7 @@ import {
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import GridCreateToolbarButton from "src/components/toolbar/GridCreateToolbarButton";
 import GridDeleteToolbarButton from "src/components/toolbar/GridDeleteToolbarButton";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -88,7 +89,7 @@ const CustomNoRowsOverlay = () => {
   );
 };
 
-const ShiftPage = () => {
+const ShiftPage = (props) => {
   const columns = [
     { field: "code", headerName: "Mã ca làm", flex: 1 },
     { field: "name", headerName: "Tên ca làm", flex: 1 },
@@ -97,41 +98,46 @@ const ShiftPage = () => {
     {
       field: "",
       disableColumnMenu: true,
+      disableClickEventBubbling: true,
       flex: 0.5,
       renderCell: (props) => (
         <div>
-          <button
-            variant="contained"
-            className="btn btn-primary"
-            size="small"
-            style={{ marginLeft: 5 }}
-            onClick={(e) => {
-              console.log(props.row);
-            }}
-          >
-            Chỉnh sửa
+          <Link to={`/setting/shift/${props.row.id}`}>
+            <button
+              variant="contained"
+              className="btn btn-primary"
+              size="small"
+              style={{ marginLeft: 5 }}
+              onClick={(e) => {
+                console.log(props.row);
+              }}
+            >
+              Chỉnh sửa
           </button>
+          </Link>
         </div>
       ),
     },
     {
       field: " ",
       disableColumnMenu: true,
+      disableClickEventBubbling: true,
       flex: 0.5,
-      renderCell: (props) => {
+      renderCell: (props) => (
         <div>
           <button
             variant="contained"
             className="btn btn-danger"
             size="small"
+            style={{ marginLeft: 5 }}
             onClick={(e) => {
               console.log(props.row);
             }}
           >
             Xóa
           </button>
-        </div>;
-      },
+        </div>
+      ),
     },
   ];
 
