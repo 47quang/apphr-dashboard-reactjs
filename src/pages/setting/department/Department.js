@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const Department() => {
+const Department = () => {
   return <div>This is Department page</div>;
-}
+};
 
 export default Department;

@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const Role() => {
+const Role = () => {
   return <div>This is Role page</div>;
-}
+};
 
 export default Role;

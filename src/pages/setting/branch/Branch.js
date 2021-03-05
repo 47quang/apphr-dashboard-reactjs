@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const Branch() => {
+const Branch = () => {
   return <div>This is Branch page</div>;
-}
+};
 
 export default Branch;

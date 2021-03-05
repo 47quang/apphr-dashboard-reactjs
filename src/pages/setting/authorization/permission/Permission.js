@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const Permission() => {
+const Permission = () => {
   return <div>This is Permission page</div>;
-}
+};
 
 export default Permission;
