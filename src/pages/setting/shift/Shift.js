@@ -11,6 +11,8 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import GridCreateToolbarButton from "src/components/toolbar/GridCreateToolbarButton";
 import GridDeleteToolbarButton from "src/components/toolbar/GridDeleteToolbarButton";
 import { Link } from "react-router-dom";
+import { CContainer } from "@coreui/react";
+import { TheHeader } from "src/layouts";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -113,7 +115,7 @@ const ShiftPage = (props) => {
               }}
             >
               Chỉnh sửa
-          </button>
+            </button>
           </Link>
         </div>
       ),
@@ -189,26 +191,29 @@ const ShiftPage = (props) => {
     );
   };
   return (
-    <div className="col-12 ">
-      <DataGrid
-        className="bg-white py-3 px-4"
-        autoHeight
-        checkboxSelection
-        onSelectionModelChange={(newSelection) => {
-          setSelectionModel(newSelection.selectionModel);
-        }}
-        selectionModel={selectionModel}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10]}
-        pagination
-        rows={rows}
-        columns={columns}
-        components={{
-          Toolbar: CustomToolbar,
-          NoRowsOverlay: CustomNoRowsOverlay,
-        }}
-      />
-    </div>
+    <>
+      <TheHeader />
+      <CContainer fluid className="c-main mb-3">
+        <DataGrid
+          className="bg-white py-3 px-4"
+          autoHeight
+          checkboxSelection
+          onSelectionModelChange={(newSelection) => {
+            setSelectionModel(newSelection.selectionModel);
+          }}
+          selectionModel={selectionModel}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10]}
+          pagination
+          rows={rows}
+          columns={columns}
+          components={{
+            Toolbar: CustomToolbar,
+            NoRowsOverlay: CustomNoRowsOverlay,
+          }}
+        />
+      </CContainer>
+    </>
   );
 };
 export default ShiftPage;
