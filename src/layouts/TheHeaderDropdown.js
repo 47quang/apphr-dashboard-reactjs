@@ -13,10 +13,10 @@ const TheHeaderDropdown = () => {
   return (
     <CDropdown
       inNav
-      className="c-header-nav-items mx-2"
+      className="c-header-nav-items"
       direction="down"
     >
-      <CDropdownToggle className="c-header-nav-link" caret={false}>
+      <CDropdownToggle className="c-header-nav-link" caret={false} style={{paddingLeft:10}}>
         <div className="c-avatar">
           <CImg
             src={'/avatars/6.jpg'}
@@ -25,7 +25,7 @@ const TheHeaderDropdown = () => {
           />
         </div>
       </CDropdownToggle>
-      <CDropdownMenu className="pt-0" placement="bottom-end">
+      <CDropdownMenu className="pt-0" placement="bottom-start">
         <CDropdownItem
           header
           tag="div"

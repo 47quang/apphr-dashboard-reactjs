@@ -16,7 +16,7 @@ const CommonTextInput = ({
   errorMessage,
   inputID,
   isTouched,
-  minTime
+  minTime,
 }) => {
   const checkInputClassName = () => {
     if (isError) return joinClassName([inputClassName, "is-invalid"]);
@@ -26,7 +26,7 @@ const CommonTextInput = ({
   };
   return (
     <div className={containerClassName}>
-      <Label text={labelText} required={isRequiredField} />
+      <Label text={labelText} required={isRequiredField} labelID={inputID}/>
       <input
         type={inputType}
         className={checkInputClassName()}
@@ -41,10 +41,6 @@ const CommonTextInput = ({
       />
       {isError && errorMessage && (
         <div>
-          {/* <FontAwesomeIcon
-            icon={faExclamationCircle}
-            className={"text-danger"}
-          /> */}
           <small className={"text-danger"}> {errorMessage}</small>
         </div>
       )}

@@ -1,8 +1,6 @@
 import React from "react";
 import Label from "../label/label";
 
-
-
 const CommonSelectInput = ({
   containerClassName,
   labelText,
@@ -19,25 +17,23 @@ const CommonSelectInput = ({
 }) => {
   return (
     <div className={containerClassName}>
-      <Label text={labelText} required={isRequiredField} />
+      <Label text={labelText} required={isRequiredField} labelID={inputID} />
       <select
         className={selectClassName}
         onChange={onChange}
         onBlur={onBlur}
-        value={value} 
+        value={value}
         id={inputID}
         required={isRequiredField}
       >
         {lstSelectOptions.map((val, index) => (
-          <option value={val} key={index}>{val}</option>
+          <option value={val} key={index}>
+            {val}
+          </option>
         ))}
       </select>
       {isError && errorMessage && (
         <div>
-          {/* <FontAwesomeIcon
-            icon={faExclamationCircle}
-            className={"text-danger"}
-          /> */}
           <small className={"text-danger"}> {errorMessage}</small>
         </div>
       )}

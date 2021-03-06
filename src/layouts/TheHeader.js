@@ -1,45 +1,26 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
 import {
   CHeader,
-  CHeaderBrand,
   CHeaderNav,
   CBreadcrumbRouter,
   CToggler,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
+// import CIcon from "@coreui/icons-react";
 import routes from "src/routes/routes";
 import "../styles/scss/header.scss";
 
-import {
-  TheHeaderDropdownMssg,
-  TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks,
-  TheHeaderDropdown,
-} from "./index";
+// import {
+//   TheHeaderDropdownMssg,
+//   TheHeaderDropdownNotif,
+//   TheHeaderDropdownTasks,
+//   TheHeaderDropdown,
+// } from "./index";
 
-const languages = [
-  { code: "en", name: "English" },
-  { code: "vi", name: "Vietnam" },
-];
-
-const TheHeader = () => {
-  const { i18n } = useTranslation();
-  const language = useSelector((state) => state.style.language);
+const TheHeader = ({ buttonSummit }) => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
 
   const dispatch = useDispatch();
-
-  const changeLanguage = (lang) => {
-    dispatch({
-      type: "CHANGE_LANGUAGE",
-      payload: {
-        lang,
-      },
-    });
-    i18n.changeLanguage(lang);
-  };
 
   const toggleSidebar = () => {
     const val = [true, "responsive"].includes(sidebarShow)
@@ -67,9 +48,6 @@ const TheHeader = () => {
         className="ml-3 d-md-down-none"
         onClick={toggleSidebar}
       />
-      <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo" />
-      </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
         <CBreadcrumbRouter
@@ -77,8 +55,10 @@ const TheHeader = () => {
           routes={routes}
         />
       </CHeaderNav>
-
-      <CHeaderNav className="px-3">
+      <CHeaderNav>
+        <div className="mr-4">{buttonSummit ?? <></>}</div>
+      </CHeaderNav>
+      {/* <CHeaderNav className="px-3">
         <div className="lang">
           <div className={language}></div>
           <ul className="dropdown">
@@ -101,7 +81,7 @@ const TheHeader = () => {
         <TheHeaderDropdownMssg />
         <TheHeaderDropdownTasks />
         <TheHeaderDropdown />
-      </CHeaderNav>
+      </CHeaderNav> */}
     </CHeader>
   );
 };
