@@ -1,12 +1,17 @@
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
+import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
 import * as Yup from "yup";
 import moment from 'moment';
+import Label from "src/components/label/label";
+
+
 
 const isBefore = (startTime, endTime) => {
   return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
 };
+
 
 const SettingShiftInfoSchema = Yup.object().shape({
   shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
@@ -47,17 +52,35 @@ const NewShift = ({ t, location, match }) => {
       start: "",
       end: "",
       facOfShift: 1,
+      checked: [],
+      branches: [],
     }
   );
-  const getShiftInfo = async () => {
 
+  const handleChangeBranch = (newBranch) => {
+    setInitialValues({
+      ...initialValues,
+      branches: newBranch,
+    });
+  };
+
+  const mapChecked = (values) => {
+    return values.reduce((acc, val) => {
+      acc[+val] = 1;
+      return acc;
+    }, [0, 0, 0, 0, 0, 0, 0])
+  }
+
+
+  const getShiftInfo = async () => {
     setInitialValues(
       {
         shiftCode: "SĐ",
         shiftName: "Dđ",
-        start: "08:30:00.000",
+        start: "08:30",
         end: "14:30:00.00",
         facOfShift: 3,
+        checked: [],
       }
     );
   }
@@ -65,24 +88,37 @@ const NewShift = ({ t, location, match }) => {
     if (params?.id)
       getShiftInfo();
   }, [params]);
-  console.log(initialValues);
+  // console.log(initialValues);
+
+  // const handleCheckbox = (checkboxValue) => {
+  //   console.log(checkboxValue);
+  //   let temp = [...initialValues.checkBoxState];
+
+  //   temp[checkboxValue] = !temp[checkboxValue];
+
+  //   setInitialValues(prevState => ({
+  //     ...prevState,
+  //     checkBoxState: temp,
+  //   }))
+  // }
 
 
   return (
     <div className="m-auto">
-      <div className="shadow bg-white rounded p-4 container col-md-6">
+      <div className="shadow bg-white rounded p-4 container col-md-7">
         <Formik
           enableReinitialize
           initialValues={initialValues}
           validationSchema={SettingShiftInfoSchema}
           onSubmit={(values) => {
-            if (params?.id){
+            if (params?.id) {
               console.log("Update Shift Success: ", values);
             }
-            else{
+            else {
               console.log("Create Shift Success: ", values);
             }
-            
+            console.log(mapChecked(values.checked));
+
             window.history.back();
           }}
         >
@@ -175,6 +211,50 @@ const NewShift = ({ t, location, match }) => {
                   isError={errors.facOfShift && touched.facOfShift}
                   errorMessage={errors.facOfShift}
                 />
+              </div>
+              <div className="row">
+                <div className="form-group col-lg-12">
+                  <Label text="Thời gian hoạt động của ca làm:" />
+                  <div role="group" className="d-flex flex-row flex-wrap justify-content-between">
+                    <label>
+                      <Field type="checkbox" name="checked" value={"0"} />
+                      &nbsp;Chủ nhật
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"1"} />
+                      &nbsp;Thứ hai
+                  </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"2"} />
+                      &nbsp;Thứ ba
+                  </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"3"} />
+                      &nbsp;Thứ tư
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"4"} />
+                      &nbsp;Thứ năm
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"5"} />
+                      &nbsp;Thứ sáu
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="checked" value={"6"} />
+                      &nbsp;Thứ bảy
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-group col-lg-12">
+                  <Label text="Chi nhánh:" />
+                  <div role="group" className="d-flex flex-row flex-wrap justify-content-between">
+                    <CommonMultiSelectInput branches={values.branches}  onChangeBranch={handleChangeBranch}/>
+                  </div>
+                </div>
               </div>
 
               <button
