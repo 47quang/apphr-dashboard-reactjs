@@ -1,5 +1,5 @@
 import React from "react";
-import Label from "../label/label";
+import Label from "../text/label";
 import { joinClassName } from "src/utils/stringUtils";
 
 const CommonTextInput = ({
