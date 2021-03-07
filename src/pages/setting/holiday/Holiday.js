@@ -1,6 +1,5 @@
 import { Tab, Tabs, withStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import { TheHeader } from "src/layouts";
 import { COLORS } from "../../../constants/theme";
 
 const AntTabs = withStyles({
@@ -35,21 +34,18 @@ const AntTab = withStyles((theme) => ({
 }))((props) => <Tab disableRipple {...props} />);
 
 const HolidayPage = ({ t, location }) => {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <>
-      <TheHeader />
-      <div className="mt-2 bg-white px-3">
-        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-          <AntTab label="Ngày nghỉ lễ" />
-          <AntTab label="Thiết lập số ngày nghỉ" />
-        </AntTabs>
-      </div>
-    </>
+    <div className="mt-2 bg-white px-3">
+      <AntTabs value={value} onChange={handleChange} aria-label="ant example">
+        <AntTab label="Ngày nghỉ lễ" />
+        <AntTab label="Thiết lập số ngày nghỉ" />
+      </AntTabs>
+    </div>
   );
 };
 

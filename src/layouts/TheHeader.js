@@ -17,8 +17,11 @@ import "../styles/scss/header.scss";
 //   TheHeaderDropdown,
 // } from "./index";
 
-const TheHeader = ({ buttonSummit }) => {
+const TheHeader = () => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
+  const listButtonSubmit = useSelector(
+    (state) => state.header.listButtonSubmit
+  );
 
   const dispatch = useDispatch();
 
@@ -56,7 +59,7 @@ const TheHeader = ({ buttonSummit }) => {
         />
       </CHeaderNav>
       <CHeaderNav>
-        <div className="mr-4">{buttonSummit ?? <></>}</div>
+        <div className="mr-4">{listButtonSubmit ?? <></>}</div>
       </CHeaderNav>
       {/* <CHeaderNav className="px-3">
         <div className="lang">
