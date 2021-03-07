@@ -1,36 +1,35 @@
-import React from 'react';
 import {
   CCreateElement,
   CSidebar,
   CSidebarBrand,
+  CSidebarMinimizer,
   CSidebarNav,
   CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
   CSidebarNavDropdown,
   CSidebarNavItem,
-  CHeaderNav
-} from '@coreui/react';
-import nav from './_nav';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import TheHeaderDropdown from './TheHeaderDropdown';
+  CSidebarNavTitle,
+} from "@coreui/react";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import TheHeaderDropdown from "./TheHeaderDropdown";
+import nav from "./_nav";
 // import {
 //   TheHeaderDropdown,
 //   TheHeaderDropdownNotif,
 //   TheHeaderDropdownTasks,
 //   TheHeaderDropdownMssg
 // } from './index';
-const languages = [
-  { code: "en", name: "English" },
-  { code: "vi", name: "Vietnam" },
-];
+// const languages = [
+//   { code: "en", name: "English" },
+//   { code: "vi", name: "Vietnam" },
+// ];
 const TheSidebar = () => {
   const navigation = JSON.parse(JSON.stringify(nav));
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const show = useSelector(state => state.style.sidebarShow);
+  const show = useSelector((state) => state.style.sidebarShow);
 
   const changeName = (tree) => {
     if (tree.name) {
@@ -41,33 +40,33 @@ const TheSidebar = () => {
         changeName(child);
       }
     }
-  }
-  const { i18n } = useTranslation();
-  const language = useSelector((state) => state.style.language);
-  const changeLanguage = (lang) => {
-    dispatch({
-      type: "CHANGE_LANGUAGE",
-      payload: {
-        lang,
-      },
-    });
-    i18n.changeLanguage(lang);
   };
-  
+  // const { i18n } = useTranslation();
+  // const language = useSelector((state) => state.style.language);
+  // const changeLanguage = (lang) => {
+  //   dispatch({
+  //     type: "CHANGE_LANGUAGE",
+  //     payload: {
+  //       lang,
+  //     },
+  //   });
+  //   i18n.changeLanguage(lang);
+  // };
+
   return (
     <CSidebar
       show={show}
-      onShowChange={val => dispatch({ type: 'set', sidebarShow: val })}
+      onShowChange={(val) => dispatch({ type: "set", sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
         <img
           src="/public/images/sysadmin_logo.png"
           alt=""
-          style={{ height: '35px' }}
+          style={{ height: "35px" }}
         />
       </CSidebarBrand>
       {/* <CHeaderNav> */}
-        {/* <div className="lang">
+      {/* <div className="lang">
           <div className={language}></div>
           <ul className="dropdown">
             {languages.map((lng, index) => {
@@ -85,15 +84,15 @@ const TheSidebar = () => {
             })}
           </ul>
         </div> */}
-        {/* <TheHeaderDropdownNotif /> */}
-        {/* <TheHeaderDropdownMssg /> */}
-        {/* <TheHeaderDropdownTasks /> */}
-        
+      {/* <TheHeaderDropdownNotif /> */}
+      {/* <TheHeaderDropdownMssg /> */}
+      {/* <TheHeaderDropdownTasks /> */}
+
       {/* </CHeaderNav> */}
       <CSidebarNav>
         <TheHeaderDropdown />
         <CCreateElement
-          items={navigation.map(i => {
+          items={navigation.map((i) => {
             changeName(i);
             return i;
           })}
@@ -101,7 +100,7 @@ const TheSidebar = () => {
             CSidebarNavDivider,
             CSidebarNavDropdown,
             CSidebarNavItem,
-            CSidebarNavTitle
+            CSidebarNavTitle,
           }}
         />
       </CSidebarNav>

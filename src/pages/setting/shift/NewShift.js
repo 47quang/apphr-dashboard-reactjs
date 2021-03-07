@@ -1,19 +1,12 @@
+import { CContainer } from "@coreui/react";
 import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import CommonTextInput from "src/components/input/CommonTextInput";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
-import * as Yup from "yup";
-import moment from 'moment';
+import CommonTextInput from "src/components/input/CommonTextInput";
 import Label from "src/components/label/label";
 import { TheHeader } from "src/layouts";
-import { CContainer } from "@coreui/react";
-
-
-
-const isBefore = (startTime, endTime) => {
-  return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
-};
+import { SettingShiftInfoSchema } from "src/schema/formSchema";
 
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
 const typeOfRollUp = [
@@ -22,34 +15,6 @@ const typeOfRollUp = [
 ];
 
 
-const SettingShiftInfoSchema = Yup.object().shape({
-  shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
-  shiftName: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
-  start: Yup.string()
-    .test(
-      'not empty',
-      'Bắt buộc chọn giờ check-in',
-      function (value) {
-        return !!value;
-      }
-    ),
-  end: Yup.string()
-    .test(
-      'not empty',
-      'Bắt buộc chọn giờ check-out',
-      function (value) {
-        return !!value;
-      }
-    ).test(
-      "end_time_test",
-      "Giờ check-out phải sau giờ check-in",
-      function (value) {
-        const { start } = this.parent;
-        return isBefore(start, value);
-      }
-    ),
-  facOfShift: Yup.number().min(0, "Hệ số giờ làm phải là một số không âm").required("Bắt buộc phải nhập hệ số giờ làm")
-});
 
 //TODO: translate
 const NewShift = ({ t, location, match }) => {
@@ -75,15 +40,6 @@ const NewShift = ({ t, location, match }) => {
       branches: newBranch,
     });
   };
-
-  const mapChecked = (values) => {
-    // console.log("mapChecked");
-
-    return values.reduce((acc, val) => {
-      acc[+val] = 1;
-      return acc;
-    }, [0, 0, 0, 0, 0, 0, 0])
-  }
 
 
   const getShiftInfo = () => {

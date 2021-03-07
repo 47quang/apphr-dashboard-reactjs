@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import {WarningOutlined } from "@material-ui/icons";
+import { WarningOutlined } from "@material-ui/icons";
 
 //TODO: translate
 const WarningAlertDialog = ({

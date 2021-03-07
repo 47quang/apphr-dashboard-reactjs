@@ -1,5 +1,5 @@
-import axios from 'axios';
-import querystring from 'query-string';
+import axios from "axios";
+import querystring from "query-string";
 
 // const getDefaultHeaders=() => {
 //   return {
@@ -8,9 +8,9 @@ import querystring from 'query-string';
 // }
 
 const client = axios.create({
-  baseURL: 'http://54.254.78.127:9093',
+  baseURL: "http://54.254.78.127:9093",
   headers: {
-    'content-type': 'application/json',
+    "content-type": "application/json",
   },
   paramsSerializer: (params) => querystring.stringify(params),
   timeout: 20000,

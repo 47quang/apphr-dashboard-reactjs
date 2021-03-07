@@ -44,5 +44,8 @@ const ErrorAlertDialog = ({ isVisible, handleClose }) => {
     </Dialog>
   );
 };
-
+ErrorAlertDialog.propTypes = {
+  isVisible: PropTypes.bool,
+  handleClose: PropTypes.func,
+};
 export default ErrorAlertDialog;

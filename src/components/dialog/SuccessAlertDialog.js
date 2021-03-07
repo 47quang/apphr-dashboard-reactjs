@@ -1,5 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
 import {
   Dialog,
   DialogActions,
@@ -7,12 +5,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import {
-  CheckBoxOutlineBlankRounded,
-  CheckCircle,
-  CheckCircleOutlineOutlined,
-  ErrorOutlined,
-} from "@material-ui/icons";
+import { CheckCircleOutlineOutlined } from "@material-ui/icons";
+import PropTypes from "prop-types";
+import React from "react";
 
 //TODO: translate
 const SuccessAlertDialog = ({ isVisible, handleClose }) => {
