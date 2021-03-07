@@ -5,7 +5,7 @@ const FormHeader = ({ text = "" }) => {
       <div className="text-left">
         <h3>{text}</h3>
       </div>
-      <hr className="mb-4 pb-4" />
+      <hr className="mb-4 pb-2" />
     </>
   );
 };

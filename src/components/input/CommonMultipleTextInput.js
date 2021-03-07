@@ -1,5 +1,5 @@
 import React from "react";
-import Label from "../text/label";
+import Label from "../text/Label";
 
 const CommonMultipleTextInput = ({
   containerClassName,
