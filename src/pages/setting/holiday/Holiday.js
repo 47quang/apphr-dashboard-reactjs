@@ -1,7 +1,7 @@
-import { Paper, Tab, Tabs, withStyles } from "@material-ui/core";
+import { Tab, Tabs, withStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import { COLORS } from "../../../constants/theme";
 import { TheHeader } from "src/layouts";
+import { COLORS } from "../../../constants/theme";
 
 const AntTabs = withStyles({
   root: {

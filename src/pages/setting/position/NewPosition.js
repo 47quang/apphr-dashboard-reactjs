@@ -1,17 +1,14 @@
-import { Field, Formik } from "formik";
+import { CContainer } from "@coreui/react";
+import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import CommonTextInput from "src/components/input/CommonTextInput";
+import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
+import CommonSelectInput from "src/components/input/CommonSelectInput";
+import CommonTextInput from "src/components/input/CommonTextInput";
+import FormHeader from "src/components/text/FormHeader";
 import Label from "src/components/text/Label";
 import { TheHeader } from "src/layouts";
-import { CContainer } from "@coreui/react";
-import {
-  SettingPositionInfoSchema,
-  SettingShiftInfoSchema,
-} from "src/schema/formSchema";
-import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
-import CommonSelectInput from "src/components/input/CommonSelectInput";
-import FormHeader from "src/components/text/FormHeader";
+import { SettingPositionInfoSchema } from "src/schema/formSchema";
 
 //TODO: translate
 const NewPositionPage = ({ t, location, match }) => {
@@ -32,15 +29,15 @@ const NewPositionPage = ({ t, location, match }) => {
     });
   };
 
-  const mapChecked = (values) => {
-    return values.reduce(
-      (acc, val) => {
-        acc[+val] = 1;
-        return acc;
-      },
-      [0, 0, 0, 0, 0, 0, 0]
-    );
-  };
+  // const mapChecked = (values) => {
+  //   return values.reduce(
+  //     (acc, val) => {
+  //       acc[+val] = 1;
+  //       return acc;
+  //     },
+  //     [0, 0, 0, 0, 0, 0, 0]
+  //   );
+  // };
 
   const getShiftInfo = async () => {
     setInitialValues({
@@ -68,15 +65,15 @@ const NewPositionPage = ({ t, location, match }) => {
   //     checkBoxState: temp,
   //   }))
   // }
-  const listDateOfWeek = [
-    { value: "0", label: "Chủ nhật" },
-    { value: "2", label: "Thứ hai" },
-    { value: "3", label: "Thứ ba" },
-    { value: "4", label: "Thứ " },
-    { value: "5", label: "Thứ năm" },
-    { value: "6", label: "Thứ sáu" },
-    { value: "7", label: "Thứ bảy" },
-  ];
+  // const listDateOfWeek = [
+  //   { value: "0", label: "Chủ nhật" },
+  //   { value: "2", label: "Thứ hai" },
+  //   { value: "3", label: "Thứ ba" },
+  //   { value: "4", label: "Thứ " },
+  //   { value: "5", label: "Thứ năm" },
+  //   { value: "6", label: "Thứ sáu" },
+  //   { value: "7", label: "Thứ bảy" },
+  // ];
   return (
     <>
       <TheHeader />

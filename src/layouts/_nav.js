@@ -1,3 +1,5 @@
+import { ROUTE_NAME } from "src/constants/key";
+
 const _nav = [
   {
     _tag: "CSidebarNavTitle",
@@ -5,7 +7,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Course",
+    name: ROUTE_NAME.COURSE,
     to: "/course",
     icon: "cil-newspaper",
   },
@@ -25,94 +27,94 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Roll up",
+    name: ROUTE_NAME.ROLL_UP,
     to: "/roll-up",
     icon: "cil-touch-app",
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Proposal",
+    name: ROUTE_NAME.PROPOSAL,
     to: "/proposal",
     icon: "cil-description",
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Profile",
+    name: ROUTE_NAME.PROFILE,
     to: "/profile",
     icon: "cil-user",
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Account",
+    name: ROUTE_NAME.ACCOUNT,
     to: "/account",
     icon: "cil-pencil",
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Notification",
+    name: ROUTE_NAME.NOTIFICATION,
     to: "/notification",
     icon: "cil-bell",
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Report",
+    name: ROUTE_NAME.REPORT,
     to: "/report",
     icon: "cil-print",
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Setting",
+    name: ROUTE_NAME.SETTING,
     route: "/setting",
     icon: "cil-puzzle",
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "General",
+        name: ROUTE_NAME.GENERAL,
         to: "/setting/general",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Shift",
+        name: ROUTE_NAME.SHIFT,
         to: "/setting/shift",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Holiday",
+        name: ROUTE_NAME.HOLIDAY,
         to: "/setting/holiday",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Branch",
+        name: ROUTE_NAME.BRANCH,
         to: "/setting/branch",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Department",
+        name: ROUTE_NAME.DEPARTMENT,
         to: "/setting/department",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Position",
+        name: ROUTE_NAME.POSITION,
         to: "/setting/position",
       },
       {
         _tag: "CSidebarNavDropdown",
-        name: "Authorization",
+        name: ROUTE_NAME.AUTHORIZATION,
         route: "/setting/authorization",
         _children: [
           {
             _tag: "CSidebarNavItem",
-            name: "Role",
+            name: ROUTE_NAME.ROLE,
             to: "/setting/authorization/role",
           },
           {
             _tag: "CSidebarNavItem",
-            name: "Permission",
+            name: ROUTE_NAME.PERMISSION,
             to: "/setting/authorization/permission",
           },
           {
             _tag: "CSidebarNavItem",
-            name: "Permission group",
+            name: ROUTE_NAME.PERMISSION_GROUP,
             to: "/setting/authorization/permission-group",
           },
         ],
