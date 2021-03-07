@@ -10,6 +10,8 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 
+
+// TODO TRANS
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(1),
@@ -62,60 +64,48 @@ function getStyles(id, branches, theme) {
 		};
 }
 
-export default function CommonMultiSelectInput({ branches, onChangeBranch }) {
-	branches = branches || [];
+export default function CommonMultiSelectInput({ branches = [], onChangeBranch }) {
 	const classes = useStyles();
 	const theme = useTheme();
-	//const [branches, setBranches] = React.useState([]);
 	const hash = listOfBranches.reduce((acc, val) => {
 		acc[val.id] = val;
 		return acc;
 	}, {})
 	const handleChange = (event) => {
+		// console.log("handleChange");
 		console.log(event.target);
 		onChangeBranch(event.target.value);
 	};
 
-	// const handleChangeMultiple = (event) => {
-	//     const { options } = event.target;
-	//     const value = [];
-	//     for (let i = 0, l = options.length; i < l; i += 1) {
-	//         if (options[i].selected) {
-	//             value.push(options[i].value);
-	//         }
-	//     }
-	//     setBranches(value);
-	// };
 
 	return (
-		<div>
-			<FormControl className={classes.formControl}>
-				<Select
-					labelId="demo-mutiple-chip-label"
-					id="demo-mutiple-chip"
-					multiple
-					value={branches}
-					onChange={handleChange}
-					input={<Input id="select-multiple-chip" />}
-					renderValue={(selected) => (
-						<div className={classes.chips}>
-							{selected.map((value, index) => {
-								console.log("render");
-								return (
-									<Chip key={index} label={hash[value].name} className={classes.chip} />
-								)
-							})}
-						</div>
-					)}
-					MenuProps={MenuProps}
-				>
-					{listOfBranches.map(branch => (
-						<MenuItem key={branch.id} value={branch.id} label={branch.name} style={getStyles(branch.id, branches, theme)}>
-							{branch.name}
-						</MenuItem>
-					))}
-				</Select>
-			</FormControl>
-		</div>
+		<FormControl className={classes.formControl} style={{ width: '100%' }}>
+
+			<Select
+				placeholder="Chọn chi nhánh"
+				labelId="demo-mutiple-chip-label"
+				id="demo-mutiple-chip"
+				multiple
+				value={branches}
+				onChange={handleChange}
+				input={<Input id="select-multiple-chip" />}
+				renderValue={(selected) => (
+					<div className={classes.chips}>
+						{selected.map((value, index) => {
+							return (
+								<Chip key={index} label={hash[value].name} className={classes.chip} />
+							)
+						})}
+					</div>
+				)}
+				MenuProps={MenuProps}
+			>
+				{listOfBranches.map(branch => (
+					<MenuItem key={branch.id} value={branch.id} label={branch.name} style={getStyles(branch.id, branches, theme)}>
+						{branch.name}
+					</MenuItem>
+				))}
+			</Select>
+		</FormControl>
 	);
 }

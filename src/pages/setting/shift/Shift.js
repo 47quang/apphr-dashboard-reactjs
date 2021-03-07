@@ -1,219 +1,377 @@
-import React, { useState } from "react";
+// shortname, name, startCC, endCC, coefficient
+import React, { useState } from 'react';
+import { Redirect, useHistory, Link } from 'react-router-dom';
+import * as PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
 import {
-  DataGrid,
-  GridOverlay,
-  GridColumnsToolbarButton,
-  GridFilterToolbarButton,
-  GridToolbarContainer,
-  GridToolbarExport,
-} from "@material-ui/data-grid";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import GridCreateToolbarButton from "src/components/toolbar/GridCreateToolbarButton";
-import GridDeleteToolbarButton from "src/components/toolbar/GridDeleteToolbarButton";
-import { Link } from "react-router-dom";
+  SelectionState,
+  PagingState,
+  IntegratedPaging,
+  IntegratedSelection,
+  SortingState,
+  IntegratedSorting,
+  FilteringState,
+  IntegratedFiltering,
+  DataTypeProvider,
+  SearchState,
+  ColumnChooser,
+} from '@devexpress/dx-react-grid';
+import {
+  Grid,
+  Table,
+  TableHeaderRow,
+  TableSelection,
+  PagingPanel,
+  TableEditRow,
+  TableEditColumn,
+  TableFilterRow,
+  Toolbar,
+  SearchPanel,
+  TableColumnResizing,
+  TableColumnVisibility,
+} from '@devexpress/dx-react-grid-material-ui';
+import { EditingState } from '@devexpress/dx-react-grid';
 import { CContainer } from "@coreui/react";
 import { TheHeader } from "src/layouts";
+import { withStyles } from '@material-ui/core/styles';
+import DateRange from '@material-ui/icons/DateRange';
+import Input from '@material-ui/core/Input';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableCell from '@material-ui/core/TableCell';
+import Select from '@material-ui/core/Select';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    root: {
-      flexDirection: "column",
-      "& .ant-empty-img-1": {
-        fill: theme.palette.type === "light" ? "#aeb8c2" : "#262626",
-      },
-      "& .ant-empty-img-2": {
-        fill: theme.palette.type === "light" ? "#f5f5f7" : "#595959",
-      },
-      "& .ant-empty-img-3": {
-        fill: theme.palette.type === "light" ? "#dce0e6" : "#434343",
-      },
-      "& .ant-empty-img-4": {
-        fill: theme.palette.type === "light" ? "#fff" : "#1c1c1c",
-      },
-      "& .ant-empty-img-5": {
-        fillOpacity: theme.palette.type === "light" ? "0.8" : "0.08",
-        fill: theme.palette.type === "light" ? "#f5f5f5" : "#fff",
-      },
-    },
-    label: {
-      marginTop: theme.spacing(1),
-    },
-  })
-);
 
-const CustomNoRowsOverlay = () => {
-  const classes = useStyles();
+const getRowId = row => row.id;
 
+const FilterIcon = ({ type, ...restProps }) => {
+  if (type === 'month') return <DateRange {...restProps} />;
+  return <TableFilterRow.Icon type={type} {...restProps} />;
+};
+
+const styles = theme => ({
+  root: {
+    margin: theme.spacing(1),
+  },
+  numericInput: {
+    fontSize: '14px',
+    textAlign: 'right',
+    width: '100%',
+  },
+});
+
+const CurrencyEditorBase = ({ value, onValueChange, classes }) => {
+  const handleChange = (event) => {
+    const { value: targetValue } = event.target;
+    if (targetValue.trim() === '') {
+      onValueChange();
+      return;
+    }
+    onValueChange(parseInt(targetValue, 10));
+  };
   return (
-    <GridOverlay className={classes.root}>
-      <div className="py-2"></div>
-      <svg
-        width="120"
-        height="100"
-        viewBox="0 0 184 152"
-        aria-hidden
-        focusable="false"
-      >
-        <g fill="none" fillRule="evenodd">
-          <g transform="translate(24 31.67)">
-            <ellipse
-              className="ant-empty-img-5"
-              cx="67.797"
-              cy="106.89"
-              rx="67.797"
-              ry="12.668"
-            />
-            <path
-              className="ant-empty-img-1"
-              d="M122.034 69.674L98.109 40.229c-1.148-1.386-2.826-2.225-4.593-2.225h-51.44c-1.766 0-3.444.839-4.592 2.225L13.56 69.674v15.383h108.475V69.674z"
-            />
-            <path
-              className="ant-empty-img-2"
-              d="M33.83 0h67.933a4 4 0 0 1 4 4v93.344a4 4 0 0 1-4 4H33.83a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4z"
-            />
-            <path
-              className="ant-empty-img-3"
-              d="M42.678 9.953h50.237a2 2 0 0 1 2 2V36.91a2 2 0 0 1-2 2H42.678a2 2 0 0 1-2-2V11.953a2 2 0 0 1 2-2zM42.94 49.767h49.713a2.262 2.262 0 1 1 0 4.524H42.94a2.262 2.262 0 0 1 0-4.524zM42.94 61.53h49.713a2.262 2.262 0 1 1 0 4.525H42.94a2.262 2.262 0 0 1 0-4.525zM121.813 105.032c-.775 3.071-3.497 5.36-6.735 5.36H20.515c-3.238 0-5.96-2.29-6.734-5.36a7.309 7.309 0 0 1-.222-1.79V69.675h26.318c2.907 0 5.25 2.448 5.25 5.42v.04c0 2.971 2.37 5.37 5.277 5.37h34.785c2.907 0 5.277-2.421 5.277-5.393V75.1c0-2.972 2.343-5.426 5.25-5.426h26.318v33.569c0 .617-.077 1.216-.221 1.789z"
-            />
-          </g>
-          <path
-            className="ant-empty-img-3"
-            d="M149.121 33.292l-6.83 2.65a1 1 0 0 1-1.317-1.23l1.937-6.207c-2.589-2.944-4.109-6.534-4.109-10.408C138.802 8.102 148.92 0 161.402 0 173.881 0 184 8.102 184 18.097c0 9.995-10.118 18.097-22.599 18.097-4.528 0-8.744-1.066-12.28-2.902z"
-          />
-          <g className="ant-empty-img-4" transform="translate(149.65 15.383)">
-            <ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815" />
-            <path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z" />
-          </g>
-        </g>
-      </svg>
-      <div>Chưa có ca làm việc nào</div>
-    </GridOverlay>
+    <Input
+      type="number"
+      classes={{
+        input: classes.numericInput,
+        root: classes.root,
+      }}
+      fullWidth
+      value={value === undefined ? '' : value}
+      inputProps={{
+        min: 0,
+        placeholder: 'Lọc...',
+      }}
+      onChange={handleChange}
+    />
   );
 };
 
-const ShiftPage = (props) => {
-  const columns = [
-    { field: "code", headerName: "Mã ca làm", flex: 1 },
-    { field: "name", headerName: "Tên ca làm", flex: 1 },
-    { field: "start", headerName: "Giờ check-in", flex: 1 },
-    { field: "end", headerName: "Giờ check-out", flex: 1 },
-    {
-      field: "",
-      disableColumnMenu: true,
-      disableClickEventBubbling: true,
-      flex: 0.5,
-      renderCell: (props) => (
-        <div>
-          <Link to={`/setting/shift/${props.row.id}`}>
-            <button
-              variant="contained"
-              className="btn btn-primary"
-              size="small"
-              style={{ marginLeft: 5 }}
-              onClick={(e) => {
-                console.log(props.row);
-              }}
-            >
-              Chỉnh sửa
+CurrencyEditorBase.propTypes = {
+  value: PropTypes.number,
+  onValueChange: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+};
+
+CurrencyEditorBase.defaultProps = {
+  value: undefined,
+};
+
+const CurrencyEditor = withStyles(styles)(CurrencyEditorBase);
+
+const AddButton = () => (
+  <div>
+    <Link to={`/setting/shift/newShift`}>
+
+      <button
+        variant="contained"
+        className="btn btn-primary"
+        size="small"
+        style={{ marginLeft: 5 }}
+        onClick={(e) => {
+          console.log(e.target);
+        }}
+      >
+        Tạo mới
             </button>
-          </Link>
-        </div>
-      ),
+    </Link>
+  </div>
+);
+const EditButton = ({ row }) => (
+  <div>
+    <Link to={`/setting/shift/${row.id}`}>
+      <IconButton title="Chỉnh sửa" onClick={() => {
+        console.log(row);
+      }}>
+        <EditIcon />
+      </IconButton>
+
+    </Link>
+  </div>
+);
+
+const DeleteButton = ({ row }) => (
+  <IconButton onClick={() => {
+    console.log(row);
+  }} title="Delete row">
+    <DeleteIcon />
+  </IconButton>
+);
+
+
+
+const commandComponents = {
+  add: AddButton,
+  edit: EditButton,
+  delete: DeleteButton,
+};
+const Command = ({ id, onExecute }) => {
+  console.log("aaaa", id);
+  const CommandButton = commandComponents[id];
+  return (
+    <CommandButton
+      onExecute={onExecute}
+    />
+  );
+};
+
+
+
+const LookupEditCellBase = ({
+  availableColumnValues, value, onValueChange, classes,
+}) => (
+  <TableCell
+    className={classes.lookupEditCell}
+  >
+    <Select
+      value={value}
+      onChange={event => onValueChange(event.target.value)}
+      MenuProps={{
+        className: classes.selectMenu,
+      }}
+      input={(
+        <Input
+          classes={{ root: classes.inputRoot }}
+        />
+      )}
+    >
+      {availableColumnValues.map(item => (
+        <MenuItem key={item} value={item}>
+          {item}
+        </MenuItem>
+      ))}
+    </Select>
+  </TableCell>
+);
+
+export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
+
+
+const Shifts = () => {
+  const [columns] = useState([
+    { name: 'shortname', title: 'Mã ca làm' },
+    { name: 'name', title: 'Tên ca làm' },
+    { name: 'startCC', title: 'Giờ Check-in' },
+    { name: 'endCC', title: 'Giờ Check-out' },
+    { name: 'coefficient', title: 'Hệ số giờ làm' },
+  ]);
+  const [rows, setRows] = useState([
+    { id: 1, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 2, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 3, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 4, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 5, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 6, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    { id: 7, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+
+  ]);
+  const [selection, setSelection] = useState([]);
+  const [editingColumnExtensions] = useState([
+    {
+      columnName: 'shortname',
+      createRowChange: (row, value) => ({ user: { ...row.user, shortname: value } }),
     },
     {
-      field: " ",
-      disableColumnMenu: true,
-      disableClickEventBubbling: true,
-      flex: 0.5,
-      renderCell: (props) => (
-        <div>
-          <button
-            variant="contained"
-            className="btn btn-danger"
-            size="small"
-            style={{ marginLeft: 5 }}
-            onClick={(e) => {
-              console.log(props.row);
-            }}
-          >
-            Xóa
-          </button>
-        </div>
-      ),
+      columnName: 'name',
+      createRowChange: (row, value) => ({ user: { ...row.user, name: value } }),
     },
-  ];
+    {
+      columnName: 'startCC',
+      createRowChange: (row, value) => ({ car: { startCC: value } }),
+    },
+  ]);
 
-  const createDate = (id, shiftCode, shiftName, start, end) => {
-    return { id: id, code: shiftCode, name: shiftName, start: start, end: end };
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [pageSizes] = useState([5, 10, 15]);
+
+  const [dateColumns] = useState(['saleDate']);
+  const [dateFilterOperations] = useState(['month', 'contains', 'startsWith', 'endsWith']);
+  const [currencyColumns] = useState(['amount']);
+  const [currencyFilterOperations] = useState([
+    'equal',
+    'notEqual',
+    'greaterThan',
+    'greaterThanOrEqual',
+    'lessThan',
+    'lessThanOrEqual',
+  ]);
+  const [filteringColumnExtensions] = useState([
+    {
+      columnName: 'saleDate',
+      predicate: (value, filter, row) => {
+        if (!filter.value.length) return true;
+        if (filter && filter.operation === 'month') {
+          const month = parseInt(value.split('-')[1], 10);
+          return month === parseInt(filter.value, 10);
+        }
+        return IntegratedFiltering.defaultPredicate(value, filter, row);
+      },
+    },
+  ]);
+  const [searchValue, setSearchState] = useState('');
+  const [columnWidths, setColumnWidths] = useState([
+    { columnName: 'shortname', width: 200 },
+    { columnName: 'name', width: 200 },
+    { columnName: 'startCC', width: 200 },
+    { columnName: 'endCC', width: 200 },
+    { columnName: 'coefficient', width: 200 },
+  ]);
+  const [tableColumnExtensions] = useState([
+  ]);
+  const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
+
+  const commitChanges = ({ added, changed, deleted }) => {
+    let changedRows;
+    if (added) {
+      const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+      console.log("ADD");
+      changedRows = [
+        ...rows,
+        ...added.map((row, index) => ({
+          id: startingAddedId + index,
+          ...row,
+        })),
+      ];
+    }
+    if (changed) {
+      console.log("Edit");
+      return <Redirect to="/setting/shift/1" />;
+      //changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+    }
+    if (deleted) {
+      console.log("Del");
+      const deletedSet = new Set(deleted);
+      changedRows = rows.filter(row => !deletedSet.has(row.id));
+    }
+    setRows(changedRows);
   };
 
-  const rows = [
-    createDate(1, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(2, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(3, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(4, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(5, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(6, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(7, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(8, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(9, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(10, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(11, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(12, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(13, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(14, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(15, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(16, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(17, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(18, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(19, "SA1", "Ca sáng 1", "08:30", "11:30"),
-    createDate(20, "SA1", "Ca sáng 1", "08:30", "11:30"),
-  ];
 
-  const [selectionModel, setSelectionModel] = useState([]);
-
-  const handleRowsSelectedDelete = (rows) => {
-    console.log("Call API Delete ", rows);
-  };
-
-  const CustomToolbar = () => {
-    return (
-      <GridToolbarContainer>
-        <GridColumnsToolbarButton />
-        <GridFilterToolbarButton />
-        <GridToolbarExport />
-        <GridCreateToolbarButton />
-        <GridDeleteToolbarButton
-          rowsSelected={selectionModel}
-          onDelete={handleRowsSelectedDelete}
-        />
-      </GridToolbarContainer>
-    );
-  };
   return (
     <>
       <TheHeader />
       <CContainer fluid className="c-main mb-3">
-        <DataGrid
-          className="bg-white py-3 px-4"
-          autoHeight
-          checkboxSelection
-          onSelectionModelChange={(newSelection) => {
-            setSelectionModel(newSelection.selectionModel);
-          }}
-          selectionModel={selectionModel}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10]}
-          pagination
-          rows={rows}
-          columns={columns}
-          components={{
-            Toolbar: CustomToolbar,
-            NoRowsOverlay: CustomNoRowsOverlay,
-          }}
-        />
+        <div>
+          <span>
+            Total rows selected:
+        {' '}
+            {selection.length}
+          </span>
+          <Paper>
+            <Grid
+              rows={rows}
+              columns={columns}
+              getRowId={getRowId}
+            >
+              <SearchState
+                value={searchValue}
+                onValueChange={setSearchState}
+              />
+              <DataTypeProvider
+                for={dateColumns}
+                availableFilterOperations={dateFilterOperations}
+              />
+              <DataTypeProvider
+                for={currencyColumns}
+                availableFilterOperations={currencyFilterOperations}
+                editorComponent={CurrencyEditor}
+              />
+              <EditingState
+                columnExtensions={editingColumnExtensions}
+                onCommitChanges={commitChanges}
+
+              />
+              <PagingState
+                currentPage={currentPage}
+                onCurrentPageChange={setCurrentPage}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+              />
+              <SelectionState
+                selection={selection}
+                onSelectionChange={setSelection}
+              />
+              <IntegratedPaging />
+              <IntegratedSelection />
+              <SortingState
+                defaultSorting={[{ columnName: 'shortname', direction: 'asc' }]}
+              />
+              <IntegratedSorting />
+              <FilteringState defaultFilters={[]} />
+              <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+              <Table
+              />
+              <TableColumnResizing
+                columnWidths={columnWidths}
+                onColumnWidthsChange={setColumnWidths}
+              />
+              <TableHeaderRow showSortingControls />
+
+              <TableSelection showSelectAll />
+              <TableEditRow />
+              <TableEditColumn showAddCommand showEditCommand showDeleteCommand cellComponent={DeleteButton} />
+              <TableFilterRow
+                showFilterSelector
+                iconComponent={FilterIcon}
+                messages={{ month: 'Month equals' }}
+              />
+              <PagingPanel
+                pageSizes={pageSizes}
+              />
+              <Toolbar />
+              <SearchPanel />
+            </Grid>
+          </Paper>
+        </div>
+
       </CContainer>
     </>
   );
 };
-export default ShiftPage;
+export default Shifts;
