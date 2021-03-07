@@ -37,8 +37,8 @@ const Role = React.lazy(() =>
 );
 
 const routes = [
-  { path: "/", exact: true, name: "Dashboard", component: Dashboard },
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  { path: "/", exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
+  { path: "/dashboard", name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: "/course", name: "Course", component: Course },
   { path: "/account", name: "Account", component: Account },
   { path: "/profile", name: "Profile", component: Profile },
@@ -52,7 +52,7 @@ const routes = [
     name: ROUTE_NAME.SETTING,
     component: General,
   },
-  { path: "/setting/general", name: "General", component: General },
+  { path: "/setting/general", name: ROUTE_NAME.GENERAL, component: General },
   { path: "/setting/position", name: "Position", component: Position },
   {
     path: "/setting/shift/newShift",

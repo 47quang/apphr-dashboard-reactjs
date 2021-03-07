@@ -8,8 +8,6 @@ import { CContainer } from "@coreui/react";
 import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import { SettingGeneralInfoSchema } from "src/schema/formSchema";
 
-
-
 //TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
   const companyInfoForm = useRef();
@@ -66,7 +64,7 @@ const SettingGeneralPage = ({ t, location }) => {
   };
   return (
     <>
-      <TheHeader buttonSummit={getButtonSubmit()} />
+      <TheHeader buttonSummit={getButtonSubmit()} location={location} />
       <CContainer fluid className="c-main mb-3 px-4">
         <div className="m-auto">
           {isLoader ? (

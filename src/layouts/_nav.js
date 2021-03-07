@@ -1,3 +1,5 @@
+import { ROUTE_NAME } from "src/constants/key";
+
 const _nav = [
   {
     _tag: "CSidebarNavTitle",
@@ -61,13 +63,13 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Setting",
+    name: ROUTE_NAME.SETTING,
     route: "/setting",
     icon: "cil-puzzle",
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "General",
+        name: ROUTE_NAME.GENERAL,
         to: "/setting/general",
       },
       {

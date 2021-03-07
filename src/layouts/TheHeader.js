@@ -9,6 +9,7 @@ import {
 // import CIcon from "@coreui/icons-react";
 import routes from "src/routes/routes";
 import "../styles/scss/header.scss";
+import BreadcrumbRouter from "src/components/bread_scrum_router/BreadcrumbRouter";
 
 // import {
 //   TheHeaderDropdownMssg,
@@ -17,7 +18,7 @@ import "../styles/scss/header.scss";
 //   TheHeaderDropdown,
 // } from "./index";
 
-const TheHeader = ({ buttonSummit }) => {
+const TheHeader = ({ buttonSummit, location }) => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
 
   const dispatch = useDispatch();
@@ -35,26 +36,28 @@ const TheHeader = ({ buttonSummit }) => {
       : "responsive";
     dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
   };
-
   return (
-    <CHeader withSubheader>
-      <CToggler
-        inHeader
-        className="ml-md-3 d-lg-none"
-        onClick={toggleSidebarMobile}
-      />
-      <CToggler
-        inHeader
-        className="ml-3 d-md-down-none"
-        onClick={toggleSidebar}
-      />
-
-      <CHeaderNav className="d-md-down-none mr-auto">
-        <CBreadcrumbRouter
-          className="border-0 c-subheader-nav m-0 px-0 px-md-3"
-          routes={routes}
+    <CHeader withSubheader className="d-flex justify-content-between">
+      <>
+        <CToggler
+          inHeader
+          className="ml-md-3 d-lg-none"
+          onClick={toggleSidebarMobile}
         />
-      </CHeaderNav>
+        <CToggler
+          inHeader
+          className="ml-3 d-md-down-none"
+          onClick={toggleSidebar}
+        />
+
+        <CHeaderNav className="d-md-down-none mr-auto">
+          <CBreadcrumbRouter
+            className="border-0 c-subheader-nav m-0 px-0 px-md-3"
+            routes={routes}
+          />
+          <BreadcrumbRouter location={location} />
+        </CHeaderNav>
+      </>
       <CHeaderNav>
         <div className="mr-4">{buttonSummit ?? <></>}</div>
       </CHeaderNav>
