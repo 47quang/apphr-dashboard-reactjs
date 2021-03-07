@@ -13,7 +13,7 @@ const Notification = React.lazy(() =>
 const Report = React.lazy(() => import("src/pages/report/Report"));
 const General = React.lazy(() => import("src/pages/setting/general/General"));
 const Position = React.lazy(() =>
-  import("src/pages/setting/position/Position")
+  import("src/pages/setting/position/NewPosition")
 );
 const Shift = React.lazy(() => import("src/pages/setting/shift/Shift"));
 const NewShift = React.lazy(() => import("src/pages/setting/shift/NewShift"));

@@ -54,3 +54,10 @@ export const SettingHolidayInfoSchema = Yup.object().shape({
   startDate: Yup.string().required("Ngày bắt đầu không được bỏ trống"),
   endDate: Yup.string().required("Ngày kết thúc không được bỏ trống"),
 });
+
+//Position
+export const SettingPositionInfoSchema = Yup.object().shape({
+  positionCode: Yup.string().required("Nhập mã của vị trí"),
+  positionName: Yup.string().required("Bắt buộc nhập vào tên vị trí"),
+  department: Yup.string().required("Nhập vào phòng ban"),
+});
