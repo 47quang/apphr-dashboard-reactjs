@@ -54,3 +54,10 @@ export const SettingHolidayInfoSchema = Yup.object().shape({
   startDate: Yup.string().required("Ngày bắt đầu không được bỏ trống"),
   endDate: Yup.string().required("Ngày kết thúc không được bỏ trống"),
 });
+
+export const SettingBranchInfoSchema = Yup.object().shape({
+  branchCode: Yup.string().required("Bắt buộc nhập vào mã chi nhánh"),
+  branchName: Yup.string().required("Bắt buộc nhập vào tên của chi nhánh"),
+  address: Yup.string().trim().required("Bắt buộc nhập địa chỉ chi nhánh"),
+  description: Yup.string(),
+});
