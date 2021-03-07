@@ -2,6 +2,7 @@ import { CContainer } from "@coreui/react";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
+import FormHeader from "src/components/text/FormHeader";
 import { TheHeader } from "src/layouts";
 import { SettingHolidayInfoSchema } from "src/schema/formSchema";
 //TODO: translate
@@ -32,15 +33,14 @@ const NewHolidayPage = ({ t, location }) => {
                 handleSubmit,
               }) => (
                 <form>
-                  <h3>Thêm ngày nghỉ</h3>
-                  <hr />
+                  <FormHeader text="Thêm ngày nghỉ lễ" />
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
                       value={values.holidayTitle}
                       onBlur={handleBlur("holidayTitle")}
                       onChange={handleChange("holidayTitle")}
-                      inputID={"name"}
+                      inputID={"holidayTitle"}
                       labelText={"Tiêu đề"}
                       inputType={"text"}
                       placeholder={"Nhập tiêu đề cho ngày nghỉ"}
@@ -49,6 +49,36 @@ const NewHolidayPage = ({ t, location }) => {
                       isTouched={touched.holidayTitle}
                       isError={errors.holidayTitle && touched.holidayTitle}
                       errorMessage={errors.holidayTitle}
+                    />
+                    <CommonTextInput
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.startDate}
+                      onBlur={handleBlur("startDate")}
+                      onChange={handleChange("startDate")}
+                      inputID={"startDate"}
+                      labelText={"Ngày bắt đầu"}
+                      inputType={"date"}
+                      placeholder={"Nhập ngày bắt đầu"}
+                      inputClassName={"form-control"}
+                      isRequiredField
+                      isTouched={touched.startDate}
+                      isError={errors.startDate && touched.startDate}
+                      errorMessage={errors.startDate}
+                    />
+                    <CommonTextInput
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.endDate}
+                      onBlur={handleBlur("endDate")}
+                      onChange={handleChange("endDate")}
+                      inputID={"endDate"}
+                      labelText={"Ngày kết thúc"}
+                      inputType={"date"}
+                      placeholder={"Nhập ngày kết thúc"}
+                      inputClassName={"form-control"}
+                      isRequiredField
+                      isTouched={touched.endDate}
+                      isError={errors.endDate && touched.endDate}
+                      errorMessage={errors.endDate}
                     />
                   </div>
                   <button onClick={handleSubmit}>hihi</button>
