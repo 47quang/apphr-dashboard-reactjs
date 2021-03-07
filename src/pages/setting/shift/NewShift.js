@@ -18,7 +18,7 @@ const typeOfRollUp = [
 
 //TODO: translate
 const NewShift = ({ t, location, match }) => {
-  const params = match.params;
+  const params = match.params
   const [initialValues, setInitialValues] = useState(
     {
       shiftCode: "",

@@ -1,50 +1,147 @@
 // shortname, name, startCC, endCC, coefficient
-import React, { useState } from 'react';
-import { Redirect, useHistory, Link } from 'react-router-dom';
-import * as PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
+import { CContainer } from "@coreui/react";
 import {
-  SelectionState,
-  PagingState,
-  IntegratedPaging,
+  Getter, Plugin,
+  Template,
+  TemplateConnector,
+  TemplatePlaceholder
+} from "@devexpress/dx-react-core";
+import {
+  DataTypeProvider, EditingState, FilteringState,
+  IntegratedFiltering, IntegratedPaging,
   IntegratedSelection,
-  SortingState,
-  IntegratedSorting,
-  FilteringState,
-  IntegratedFiltering,
-  DataTypeProvider,
-  SearchState,
-  ColumnChooser,
+  IntegratedSorting, PagingState,
+  SearchState, SelectionState,
+  SortingState
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  Table,
-  TableHeaderRow,
-  TableSelection,
   PagingPanel,
-  TableEditRow,
-  TableEditColumn,
-  TableFilterRow,
-  Toolbar,
-  SearchPanel,
-  TableColumnResizing,
-  TableColumnVisibility,
+  SearchPanel, Table,
+  TableColumnResizing, TableEditRow,
+  TableFilterRow, TableHeaderRow,
+  TableSelection,
+  Toolbar
 } from '@devexpress/dx-react-grid-material-ui';
-import { EditingState } from '@devexpress/dx-react-grid';
-import { CContainer } from "@coreui/react";
-import { TheHeader } from "src/layouts";
-import { withStyles } from '@material-ui/core/styles';
-import DateRange from '@material-ui/icons/DateRange';
+import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import { withStyles } from '@material-ui/core/styles';
+import TableCell from '@material-ui/core/TableCell';
+import AddIcon from '@material-ui/icons/Add';
+import DateRange from '@material-ui/icons/DateRange';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import TableCell from '@material-ui/core/TableCell';
-import Select from '@material-ui/core/Select';
+import * as PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { TheHeader } from "src/layouts";
+
+const CustomTableEditColumn = () => (
+  <Plugin>
+    {/* Adding 'edit' and 'delete' columns */}
+    <Getter
+      name="tableColumns"
+      computed={({ tableColumns }) => {
+        const result = tableColumns.slice();
+        result.push({ key: "edit", type: "edit", width: 130 });
+        result.push({ key: "delete", type: "delete", width: 130 });
+        return result;
+      }}
+    />
+    {/* Styling 'delete' column */}
+    <Template
+      name="tableCell"
+      predicate={({ tableColumn, tableRow }) =>
+        tableColumn.type === "delete" && tableRow.type === Table.ROW_TYPE
+      }
+    >
+      {params => (
+        <TemplateConnector>
+          {(getters, { deleteRows, commitDeletedRows }) => (
+            <TableCell>
+              <IconButton
+                onClick={() => {
+                  const rowIds = [params.tableRow.rowId];
+                  deleteRows({ rowIds });
+                  commitDeletedRows({ rowIds });
+                }}
+                title="Delete row">
+                <DeleteIcon />
+              </IconButton>
+
+            </TableCell>
+          )}
+        </TemplateConnector>
+      )}
+    </Template>
+    <Template
+      name="tableCell"
+      predicate={({ tableColumn, tableRow }) =>
+        tableColumn.type === "delete" &&
+        tableRow.type === TableHeaderRow.ROW_TYPE
+      }
+    >
+      {params => (
+        <TemplateConnector>
+          {(getters, { deleteRows, addRow }) => (
+            <TableCell>
+              <Link to={`/setting/shift/newShift`}>
+                <IconButton
+                  onClick={() => {
+                    addRow();
+                  }}
+                >
+                  <AddIcon color="primary" />
+                </IconButton>
+
+              </Link>
+            </TableCell>
+          )}
+        </TemplateConnector>
+      )}
+    </Template>
+    {/* Styling 'edit' column */}
+    <Template
+      name="tableCell"
+      predicate={({ tableColumn, tableRow }) =>
+        tableColumn.type === "edit" && tableRow.type === Table.ROW_TYPE
+      }
+    >
+      {params => (
+        <TemplateConnector>
+          {(getters, { startEditRows }) => (
+            <TableCell>
+              <Link to={`/setting/shift/${params.tableRow.rowId}`}>
+                <IconButton
+                  onClick={() => {
+                    const rowIds = [params.tableRow.rowId];
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              </Link>
+            </TableCell>
+          )}
+        </TemplateConnector>
+      )}
+    </Template>
+  </Plugin>
+);
+
+const tableMessages = {
+  noData: 'Dữ liệu trống',
+};
+const filterRowMessages = {
+  filterPlaceholder: 'Lọc...',
+};
+const pagingPanelMessages = {
+  showAll: 'Tất cả',
+  rowsPerPage: 'Số hàng trên một trang',
+  info: 'Đạt',
+};
 
 
 const getRowId = row => row.id;
@@ -55,13 +152,17 @@ const FilterIcon = ({ type, ...restProps }) => {
 };
 
 const styles = theme => ({
-  root: {
-    margin: theme.spacing(1),
+  lookupEditCell: {
+    padding: theme.spacing(1),
   },
-  numericInput: {
-    fontSize: '14px',
-    textAlign: 'right',
+  dialog: {
+    width: 'calc(100% - 16px)',
+  },
+  inputRoot: {
     width: '100%',
+  },
+  selectMenu: {
+    position: 'absolute !important',
   },
 });
 
@@ -104,62 +205,6 @@ CurrencyEditorBase.defaultProps = {
 
 const CurrencyEditor = withStyles(styles)(CurrencyEditorBase);
 
-const AddButton = () => (
-  <div>
-    <Link to={`/setting/shift/newShift`}>
-
-      <button
-        variant="contained"
-        className="btn btn-primary"
-        size="small"
-        style={{ marginLeft: 5 }}
-        onClick={(e) => {
-          console.log(e.target);
-        }}
-      >
-        Tạo mới
-            </button>
-    </Link>
-  </div>
-);
-const EditButton = ({ row }) => (
-  <div>
-    <Link to={`/setting/shift/${row.id}`}>
-      <IconButton title="Chỉnh sửa" onClick={() => {
-        console.log(row);
-      }}>
-        <EditIcon />
-      </IconButton>
-
-    </Link>
-  </div>
-);
-
-const DeleteButton = ({ row }) => (
-  <IconButton onClick={() => {
-    console.log(row);
-  }} title="Delete row">
-    <DeleteIcon />
-  </IconButton>
-);
-
-
-
-const commandComponents = {
-  add: AddButton,
-  edit: EditButton,
-  delete: DeleteButton,
-};
-const Command = ({ id, onExecute }) => {
-  console.log("aaaa", id);
-  const CommandButton = commandComponents[id];
-  return (
-    <CommandButton
-      onExecute={onExecute}
-    />
-  );
-};
-
 
 
 const LookupEditCellBase = ({
@@ -192,43 +237,46 @@ const LookupEditCellBase = ({
 export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
 
 
+
+
+
+
 const Shifts = () => {
-  const [columns] = useState([
-    { name: 'shortname', title: 'Mã ca làm' },
-    { name: 'name', title: 'Tên ca làm' },
-    { name: 'startCC', title: 'Giờ Check-in' },
-    { name: 'endCC', title: 'Giờ Check-out' },
-    { name: 'coefficient', title: 'Hệ số giờ làm' },
-  ]);
-  const [rows, setRows] = useState([
-    { id: 1, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 2, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 3, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 4, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 5, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 6, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
-    { id: 7, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+  const [state, setState] = useState({
+    columns: [
+      { name: 'shortname', title: 'Mã ca làm' },
+      { name: 'name', title: 'Tên ca làm' },
+      { name: 'startCC', title: 'Giờ Check-in' },
+      { name: 'endCC', title: 'Giờ Check-out' },
+      { name: 'coefficient', title: 'Hệ số giờ làm' },
+    ],
+    rows: [
+      { id: 1, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 2, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 3, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 4, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 5, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 6, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+      { id: 7, shortname: "SA1", name: "Ca sáng 1", startCC: "08:30", endCC: "14:30", coefficient: 1 },
+    ],
+    selection: [],
+    currentPage: 0,
+    pageSize: 5,
+    pageSizes: [5, 10, 15],
+    columnWidths: [
+      { columnName: 'shortname', width: 200 },
+      { columnName: 'name', width: 200 },
+      { columnName: 'startCC', width: 200 },
+      { columnName: 'endCC', width: 200 },
+      { columnName: 'coefficient', width: 200 },
+    ],
+    editingRowIds: [],
 
-  ]);
-  const [selection, setSelection] = useState([]);
-  const [editingColumnExtensions] = useState([
-    {
-      columnName: 'shortname',
-      createRowChange: (row, value) => ({ user: { ...row.user, shortname: value } }),
-    },
-    {
-      columnName: 'name',
-      createRowChange: (row, value) => ({ user: { ...row.user, name: value } }),
-    },
-    {
-      columnName: 'startCC',
-      createRowChange: (row, value) => ({ car: { startCC: value } }),
-    },
-  ]);
+  });
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-  const [pageSizes] = useState([5, 10, 15]);
+  const [editingRowIds, getEditingRowIds] = useState([]);
+  const [addedRows, setAddedRows] = useState([]);
+  const [rowChanges, setRowChanges] = useState({});
 
   const [dateColumns] = useState(['saleDate']);
   const [dateFilterOperations] = useState(['month', 'contains', 'startsWith', 'endsWith']);
@@ -254,43 +302,11 @@ const Shifts = () => {
       },
     },
   ]);
-  const [searchValue, setSearchState] = useState('');
-  const [columnWidths, setColumnWidths] = useState([
-    { columnName: 'shortname', width: 200 },
-    { columnName: 'name', width: 200 },
-    { columnName: 'startCC', width: 200 },
-    { columnName: 'endCC', width: 200 },
-    { columnName: 'coefficient', width: 200 },
-  ]);
-  const [tableColumnExtensions] = useState([
-  ]);
-  const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
 
-  const commitChanges = ({ added, changed, deleted }) => {
-    let changedRows;
-    if (added) {
-      const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-      console.log("ADD");
-      changedRows = [
-        ...rows,
-        ...added.map((row, index) => ({
-          id: startingAddedId + index,
-          ...row,
-        })),
-      ];
-    }
-    if (changed) {
-      console.log("Edit");
-      return <Redirect to="/setting/shift/1" />;
-      //changedRows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-    }
-    if (deleted) {
-      console.log("Del");
-      const deletedSet = new Set(deleted);
-      changedRows = rows.filter(row => !deletedSet.has(row.id));
-    }
-    setRows(changedRows);
-  };
+
+
+
+
 
 
   return (
@@ -301,18 +317,15 @@ const Shifts = () => {
           <span>
             Total rows selected:
         {' '}
-            {selection.length}
+            {state.selection.length}
           </span>
           <Paper>
             <Grid
-              rows={rows}
-              columns={columns}
+              rows={state.rows}
+              columns={state.columns}
               getRowId={getRowId}
             >
-              <SearchState
-                value={searchValue}
-                onValueChange={setSearchState}
-              />
+
               <DataTypeProvider
                 for={dateColumns}
                 availableFilterOperations={dateFilterOperations}
@@ -323,19 +336,34 @@ const Shifts = () => {
                 editorComponent={CurrencyEditor}
               />
               <EditingState
-                columnExtensions={editingColumnExtensions}
-                onCommitChanges={commitChanges}
+                editingRowIds={editingRowIds}
+                onEditingRowIdsChange={getEditingRowIds}
+                rowChanges={rowChanges}
+                onRowChangesChange={setRowChanges}
+                addedRows={addedRows}
 
               />
               <PagingState
-                currentPage={currentPage}
-                onCurrentPageChange={setCurrentPage}
-                pageSize={pageSize}
-                onPageSizeChange={setPageSize}
+                currentPage={state.currentPage}
+                onCurrentPageChange={(PageNumber) => setState((prevState) => ({
+                  ...prevState,
+                  currentPage: PageNumber,
+                }
+                ))}
+                pageSize={state.pageSize}
+                onPageSizeChange={(newPageSize) => setState((prevState) => ({
+                  ...prevState,
+                  pageSize: newPageSize,
+                }
+                ))}
               />
               <SelectionState
-                selection={selection}
-                onSelectionChange={setSelection}
+                selection={state.selection}
+                onSelectionChange={(selection) => setState((prevState) => ({
+                  ...prevState,
+                  selection: selection,
+                }
+                ))}
               />
               <IntegratedPaging />
               <IntegratedSelection />
@@ -346,26 +374,27 @@ const Shifts = () => {
               <FilteringState defaultFilters={[]} />
               <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
               <Table
+                messages={tableMessages}
               />
               <TableColumnResizing
-                columnWidths={columnWidths}
-                onColumnWidthsChange={setColumnWidths}
+                columnWidths={state.columnWidths}
+                onColumnWidthsChange={(newColumnWidths) => setState((prevState) => ({
+                  ...prevState,
+                  columnWidths: newColumnWidths,
+                }
+                ))}
               />
               <TableHeaderRow showSortingControls />
+              <CustomTableEditColumn />
 
               <TableSelection showSelectAll />
               <TableEditRow />
-              <TableEditColumn showAddCommand showEditCommand showDeleteCommand cellComponent={DeleteButton} />
-              <TableFilterRow
-                showFilterSelector
-                iconComponent={FilterIcon}
-                messages={{ month: 'Month equals' }}
-              />
+
               <PagingPanel
-                pageSizes={pageSizes}
+                pageSizes={state.pageSizes}
+                messages={pagingPanelMessages}
               />
               <Toolbar />
-              <SearchPanel />
             </Grid>
           </Paper>
         </div>
