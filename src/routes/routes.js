@@ -21,7 +21,9 @@ const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")
 );
-const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
+const Holiday = React.lazy(() =>
+  import("src/pages/setting/holiday/NewHoliday")
+);
 const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")

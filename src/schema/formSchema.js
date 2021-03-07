@@ -2,6 +2,8 @@ import * as Yup from "yup";
 import { getRegexExpression, VALIDATION_TYPE } from "src/utils/validationUtils";
 import moment from "moment";
 
+//SETTING
+//General Information
 export const SettingGeneralInfoSchema = Yup.object().shape({
   companyName: Yup.string().trim().required("Bắt buộc nhập tên công ty"),
   phone: Yup.string()
@@ -15,6 +17,7 @@ export const SettingGeneralInfoSchema = Yup.object().shape({
   taxCode: Yup.string(),
 });
 
+//Shift
 const isBefore = (startTime, endTime) => {
   return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
 };
@@ -43,4 +46,11 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   facOfShift: Yup.number()
     .min(0, "Hệ số giờ làm phải là một số không âm")
     .required("Bắt buộc phải nhập hệ số giờ làm"),
+});
+
+//Holiday
+export const SettingHolidayInfoSchema = Yup.object().shape({
+  holidayTitle: Yup.string().required("Bắt buộc nhập vào tiêu đề của ngày lễ"),
+  startDate: Yup.string().required("Ngày bắt đầu không được bỏ trống"),
+  endDate: Yup.string().required("Ngày kết thúc không được bỏ trống"),
 });
