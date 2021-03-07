@@ -77,8 +77,8 @@ const _nav = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "DayOff",
-        to: "/setting/day-off",
+        name: "Holiday",
+        to: "/setting/holiday",
       },
       {
         _tag: "CSidebarNavItem",

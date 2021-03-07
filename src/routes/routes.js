@@ -21,7 +21,7 @@ const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")
 );
-const DayOff = React.lazy(() => import("src/pages/setting/day_off/DayOff"));
+const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
 const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")
@@ -60,7 +60,7 @@ const routes = [
   { path: "/setting/shift", name: "Shift", component: Shift },
   { path: "/setting/branch", name: "Branch", component: Branch },
   { path: "/setting/department", name: "Department", component: Department },
-  { path: "/setting/day-off", name: "DayOff", component: DayOff },
+  { path: "/setting/holiday", name: "Holiday", component: Holiday },
   {
     path: "/setting/authorization",
     exact: true,
