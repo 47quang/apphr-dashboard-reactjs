@@ -46,8 +46,8 @@ const CustomTableEditColumn = () => (
       name="tableColumns"
       computed={({ tableColumns }) => {
         const result = tableColumns.slice();
-        result.push({ key: "edit", type: "edit", width: 130 });
-        result.push({ key: "delete", type: "delete", width: 130 });
+        result.push({ key: "edit", type: "edit", width: 50 });
+        result.push({ key: "delete", type: "delete", width: 50 });
         return result;
       }}
     />
@@ -314,11 +314,7 @@ const Shifts = () => {
       <TheHeader />
       <CContainer fluid className="c-main mb-3">
         <div>
-          <span>
-            Total rows selected:
-        {' '}
-            {state.selection.length}
-          </span>
+
           <Paper>
             <Grid
               rows={state.rows}
@@ -388,15 +384,17 @@ const Shifts = () => {
               <CustomTableEditColumn />
 
               <TableSelection showSelectAll />
-              <TableEditRow />
-
+              <span>
+                Tổng số hàng đã chọn:{' '}
+                {state.selection.length}
+              </span>
               <PagingPanel
                 pageSizes={state.pageSizes}
                 messages={pagingPanelMessages}
               />
-              <Toolbar />
             </Grid>
           </Paper>
+
         </div>
 
       </CContainer>
