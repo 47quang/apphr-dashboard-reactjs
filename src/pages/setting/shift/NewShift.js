@@ -2,42 +2,10 @@ import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
-import * as Yup from "yup";
-import moment from "moment";
 import Label from "src/components/label/label";
 import { TheHeader } from "src/layouts";
 import { CContainer } from "@coreui/react";
-
-const isBefore = (startTime, endTime) => {
-  return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
-};
-
-const SettingShiftInfoSchema = Yup.object().shape({
-  shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
-  shiftName: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
-  start: Yup.string().test(
-    "not empty",
-    "Bắt buộc chọn giờ check-in",
-    function (value) {
-      return !!value;
-    }
-  ),
-  end: Yup.string()
-    .test("not empty", "Bắt buộc chọn giờ check-out", function (value) {
-      return !!value;
-    })
-    .test(
-      "end_time_test",
-      "Giờ check-out phải sau giờ check-in",
-      function (value) {
-        const { start } = this.parent;
-        return isBefore(start, value);
-      }
-    ),
-  facOfShift: Yup.number()
-    .min(0, "Hệ số giờ làm phải là một số không âm")
-    .required("Bắt buộc phải nhập hệ số giờ làm"),
-});
+import { SettingShiftInfoSchema } from "src/schema/formSchema";
 
 //TODO: translate
 const NewShift = ({ t, location, match }) => {
@@ -95,11 +63,19 @@ const NewShift = ({ t, location, match }) => {
   //     checkBoxState: temp,
   //   }))
   // }
-
+  const listDateOfWeek = [
+    { value: "0", label: "Chủ nhật" },
+    { value: "2", label: "Thứ hai" },
+    { value: "3", label: "Thứ ba" },
+    { value: "4", label: "Thứ " },
+    { value: "5", label: "Thứ năm" },
+    { value: "6", label: "Thứ sáu" },
+    { value: "7", label: "Thứ bảy" },
+  ];
   return (
     <>
       <TheHeader />
-      <CContainer fluid className="c-main mb-3">
+      <CContainer fluid className="c-main mb-3 px-4">
         <div className="m-auto">
           <div className="shadow bg-white rounded p-4 container col-md-7">
             <Formik
@@ -209,39 +185,22 @@ const NewShift = ({ t, location, match }) => {
                   </div>
                   <div className="row">
                     <div className="form-group col-lg-12">
-                      <Label text="Thời gian hoạt động của ca làm:" />
+                      <Label text="Thời gian hoạt động của ca làm" />
+
                       <div
                         role="group"
-                        className="d-flex flex-row flex-wrap justify-content-between"
+                        className="d-flex flex-row flex-wrap justify-content-around"
                       >
-                        <label>
-                          <Field type="checkbox" name="checked" value={"0"} />
-                          &nbsp;Chủ nhật
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"1"} />
-                          &nbsp;Thứ hai
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"2"} />
-                          &nbsp;Thứ ba
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"3"} />
-                          &nbsp;Thứ tư
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"4"} />
-                          &nbsp;Thứ năm
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"5"} />
-                          &nbsp;Thứ sáu
-                        </label>
-                        <label>
-                          <Field type="checkbox" name="checked" value={"6"} />
-                          &nbsp;Thứ bảy
-                        </label>
+                        {listDateOfWeek.map((value, index) => (
+                          <label key={index}>
+                            <Field
+                              type="checkbox"
+                              name="checked"
+                              value={value.value}
+                            />
+                            &nbsp;{value.label}
+                          </label>
+                        ))}
                       </div>
                     </div>
                   </div>

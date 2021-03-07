@@ -1,13 +1,13 @@
-import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
-import App from './App.js';
-import { Provider } from 'react-redux';
-import store from './stores/store';
-import { icons } from './asset/icon';
-import '@coreui/coreui/dist/css/coreui.min.css';
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom";
+import { HashRouter } from "react-router-dom";
+import App from "./App.js";
+import { Provider } from "react-redux";
+import store from "./stores/store";
+import { icons } from "./asset/icon";
+import "@coreui/coreui/dist/css/coreui.min.css";
 // import 'react-csv-importer/dist/index.css';
-import './i18n/i18n';
+import "./i18n/i18n";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -25,5 +25,5 @@ ReactDOM.render(
       </Suspense>
     </HashRouter>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

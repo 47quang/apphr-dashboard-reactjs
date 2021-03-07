@@ -26,7 +26,7 @@ const CommonTextInput = ({
   };
   return (
     <div className={containerClassName}>
-      <Label text={labelText} required={isRequiredField} labelID={inputID}/>
+      <Label text={labelText} required={isRequiredField} labelID={inputID} />
       <input
         type={inputType}
         className={checkInputClassName()}

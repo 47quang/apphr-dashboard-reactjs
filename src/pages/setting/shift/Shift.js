@@ -91,7 +91,7 @@ const CustomNoRowsOverlay = () => {
   );
 };
 
-const ShiftPage = (props) => {
+const ShiftPage = ({ t, location }) => {
   const columns = [
     { field: "code", headerName: "Mã ca làm", flex: 1 },
     { field: "name", headerName: "Tên ca làm", flex: 1 },
@@ -193,7 +193,7 @@ const ShiftPage = (props) => {
   return (
     <>
       <TheHeader />
-      <CContainer fluid className="c-main mb-3">
+      <CContainer fluid className="c-main mb-3 px-4">
         <DataGrid
           className="bg-white py-3 px-4"
           autoHeight

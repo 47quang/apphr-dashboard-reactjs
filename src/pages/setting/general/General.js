@@ -1,25 +1,14 @@
 import { Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
-import * as Yup from "yup";
-import { getRegexExpression, VALIDATION_TYPE } from "src/utils/validationUtils";
+
 import BasicLoader from "src/components/loader/BasicLoader";
 import { TheHeader } from "src/layouts";
 import { CContainer } from "@coreui/react";
 import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
+import { SettingGeneralInfoSchema } from "src/schema/formSchema";
 
-const SettingGeneralInfoSchema = Yup.object().shape({
-  companyName: Yup.string().trim().required("Bắt buộc nhập tên công ty"),
-  phone: Yup.string()
-    .matches(
-      getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER),
-      "Nhập không đúng số điện thoại"
-    )
-    .required("Bắt buộc nhập số điện thoại"),
-  email: Yup.string().email("Email nhập sai").required("Bắt buộc nhập email"),
-  address: Yup.string().trim(),
-  taxCode: Yup.string(),
-});
+
 
 //TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
@@ -78,7 +67,7 @@ const SettingGeneralPage = ({ t, location }) => {
   return (
     <>
       <TheHeader buttonSummit={getButtonSubmit()} />
-      <CContainer fluid className="c-main mb-3">
+      <CContainer fluid className="c-main mb-3 px-4">
         <div className="m-auto">
           {isLoader ? (
             <BasicLoader isVisible={isLoader} radius={10} />

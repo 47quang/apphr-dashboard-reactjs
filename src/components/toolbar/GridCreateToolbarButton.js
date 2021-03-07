@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { AddCircleOutlineOutlined } from "@material-ui/icons";
 import { COLORS } from "../../constants/theme";
 
-
 //TODO: translate
 const GridCreateToolbarButton = (props) => {
   return (
