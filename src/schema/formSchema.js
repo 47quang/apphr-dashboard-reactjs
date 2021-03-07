@@ -61,3 +61,11 @@ export const SettingPositionInfoSchema = Yup.object().shape({
   positionName: Yup.string().required("Bắt buộc nhập vào tên vị trí"),
   department: Yup.string().required("Nhập vào phòng ban"),
 });
+
+//Branch
+export const SettingBranchInfoSchema = Yup.object().shape({
+  branchCode: Yup.string().required("Bắt buộc nhập vào mã chi nhánh"),
+  branchName: Yup.string().required("Bắt buộc nhập vào tên của chi nhánh"),
+  address: Yup.string().trim().required("Bắt buộc nhập địa chỉ chi nhánh"),
+  description: Yup.string(),
+});

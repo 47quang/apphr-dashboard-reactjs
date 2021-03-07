@@ -25,7 +25,7 @@ const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
 const NewHoliday = React.lazy(() =>
   import("src/pages/setting/holiday/NewHoliday")
 );
-const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
+const Branch = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")
 );
