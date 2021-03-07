@@ -2,7 +2,7 @@ import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
-import Label from "src/components/label/label";
+import Label from "src/components/text/label";
 import { TheHeader } from "src/layouts";
 import { CContainer } from "@coreui/react";
 import { SettingShiftInfoSchema } from "src/schema/formSchema";
