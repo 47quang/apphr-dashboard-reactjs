@@ -1,24 +1,27 @@
 import { CContainer } from "@coreui/react";
 import { Field, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
-import Label from "src/components/label/label";
-import { TheHeader } from "src/layouts";
+import BasicLoader from "src/components/loader/BasicLoader";
+import Label from "src/components/text/Label";
 import { SettingShiftInfoSchema } from "src/schema/formSchema";
+import { useDispatch } from "react-redux";
+import { changeListButtonHeader } from "src/stores/actions/header";
 
+//TODO: translate
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
 const typeOfRollUp = [
   "WIFI",
   "QR_CODE",
 ];
 
-
-
-//TODO: translate
 const NewShift = ({ t, location, match }) => {
-  const params = match.params
+  const params = match.params;
+  const shiftInfoForm = useRef();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
   const [initialValues, setInitialValues] = useState(
     {
       shiftCode: "",
@@ -26,21 +29,18 @@ const NewShift = ({ t, location, match }) => {
       start: "",
       end: "",
       facOfShift: 1,
-      checked: [0, 0, 0, 0, 0, 0, 0],
+      checked: [],
       branches: [],
-      typeOfRollUp: ""
+      typeOfRollUp: "",
     }
   );
 
   const handleChangeBranch = (newBranch) => {
-    // console.log("handleChangeBranch");
-
     setInitialValues({
       ...initialValues,
       branches: newBranch,
     });
   };
-
 
   const getShiftInfo = () => {
     setInitialValues(
@@ -50,7 +50,7 @@ const NewShift = ({ t, location, match }) => {
         start: "08:30",
         end: "14:30:00.00",
         facOfShift: 3,
-        checked: [0, 1, 0, 1, 0, 1, 0],
+        checked: ["3", "1", "5"],
         branches: [1, 3, 5],
         typeOfRollUp: typeOfRollUp[0],
       }
@@ -58,40 +58,64 @@ const NewShift = ({ t, location, match }) => {
   }
 
   useEffect(() => {
+    let wait = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
     if (params?.id)
       getShiftInfo();
-  }, [params]);
+    dispatch(
+      changeListButtonHeader([
+        <button
+          className="btn btn-primary"
+          type="submit"
+          key="magicShift"
+          onClick={getOnSubmitInForm}
+        >
+          {(params?.id) ? "Cập nhật" : "Tạo mới"}
+        </button>,
+      ])
+    );
+    return () => {
+      dispatch(changeListButtonHeader([]));
+      clearTimeout(wait);
+    };
+  }, []);
+
+  const getOnSubmitInForm = (event) =>
+    shiftInfoForm.current.handleSubmit(event);
+
+  const enCodeChecked = (checked) => checked.reduce((acc, val) => {
+    acc[val - 1] = 1;
+    return acc;
+  }, Array(7).fill(0));
+
+  const deCodeChecked = (_checked) => _checked.reduce((acc, val, idx) => {
+    if (val !== 0)
+      acc.push(idx + 1 + '');
+    return acc
+  }, []);
 
 
-  const handleChangeCheckbox = (e) => {
-    const id = e.target.id;
-    let temp = [...initialValues.checked];
-    temp[id] = (temp[id] + 1) % 2;
+  const handleSubmitInfo = (values) => {
+    console.log(values);
+    values.checked = enCodeChecked(values.checked);
+    values.checked = deCodeChecked(values.checked);
+    console.log(values);
+  };
 
-    setInitialValues({
-      ...initialValues,
-      checked: temp,
-    })
-  }
 
   return (
-    <>
-      <TheHeader />
-      <CContainer fluid className="c-main mb-3">
+    <CContainer fluid className="c-main mb-3 px-4">
+      {isLoading ? (
+        <BasicLoader isVisible={isLoading} radius={10} />
+      ) : (<div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
           <Formik
+            innerRef={shiftInfoForm}
             enableReinitialize
             initialValues={initialValues}
             validationSchema={SettingShiftInfoSchema}
-            onSubmit={(values) => {
-              if (params?.id) {
-                console.log("Update Shift Success: ", values);
-              }
-              else {
-                console.log("Create Shift Success: ", values);
-              }
-
-            }}
+            onSubmit={(values) => handleSubmitInfo(values)}
           >
             {({
               values,
@@ -188,7 +212,7 @@ const NewShift = ({ t, location, match }) => {
                     <Label text="Thời gian hoạt động của ca làm:" />
                     <div role="group" className="d-flex flex-row flex-wrap justify-content-around">
                       {DAYS.map((day, index) => (<label key={index}>
-                        <Field type="checkbox" name="checked" id={index} checked={values.checked[index]} onChange={handleChangeCheckbox} />
+                        <Field type="checkbox" name="checked" value={index + ''} />
                       &nbsp;{day}
                       </label>))}
                     </div>
@@ -220,21 +244,13 @@ const NewShift = ({ t, location, match }) => {
                     lstSelectOptions={typeOfRollUp}
                   />
                 </div>
-
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                >
-                  Submit form
-              </button>
               </form>
             )}
           </Formik>
         </div>
-
-      </CContainer>
-    </>
+      </div>
+      )}
+    </CContainer>
   );
 };
 

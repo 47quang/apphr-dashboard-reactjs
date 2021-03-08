@@ -1,5 +1,5 @@
 import React from "react";
-import Label from "../label/label";
+import Label from "../text/Label";
 
 const CommonSelectInput = ({
   containerClassName,

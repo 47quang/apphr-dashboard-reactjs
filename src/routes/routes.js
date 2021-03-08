@@ -13,7 +13,7 @@ const Notification = React.lazy(() =>
 const Report = React.lazy(() => import("src/pages/report/Report"));
 const General = React.lazy(() => import("src/pages/setting/general/General"));
 const Position = React.lazy(() =>
-  import("src/pages/setting/position/Position")
+  import("src/pages/setting/position/NewPosition")
 );
 const Shift = React.lazy(() => import("src/pages/setting/shift/Shift"));
 const NewShift = React.lazy(() => import("src/pages/setting/shift/NewShift"));
@@ -21,8 +21,11 @@ const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")
 );
-const DayOff = React.lazy(() => import("src/pages/setting/day_off/DayOff"));
-const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
+const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
+const NewHoliday = React.lazy(() =>
+  import("src/pages/setting/holiday/NewHoliday")
+);
+const Branch = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")
 );
@@ -34,50 +37,71 @@ const Role = React.lazy(() =>
 );
 
 const routes = [
-  { path: "/", exact: true, name: "Dashboard", component: Dashboard },
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/course", name: "Course", component: Course },
-  { path: "/account", name: "Account", component: Account },
-  { path: "/profile", name: "Profile", component: Profile },
-  { path: "/proposal", name: "Proposal", component: Proposal },
-  { path: "/roll-up", name: "RollUp", component: RollUp },
-  { path: "/notification", name: "Notification", component: Notification },
-  { path: "/report", name: "Report", component: Report },
+  { path: "/", exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
+  { path: "/dashboard", name: ROUTE_NAME.DASHBOARD, component: Dashboard },
+  { path: "/course", name: ROUTE_NAME.COURSE, component: Course },
+  { path: "/account", name: ROUTE_NAME.ACCOUNT, component: Account },
+  { path: "/profile", name: ROUTE_NAME.PROFILE, component: Profile },
+  { path: "/proposal", name: ROUTE_NAME.PROPOSAL, component: Proposal },
+  { path: "/roll-up", name: ROUTE_NAME.ROLL_UP, component: RollUp },
+  {
+    path: "/notification",
+    name: ROUTE_NAME.NOTIFICATION,
+    component: Notification,
+  },
+  { path: "/report", name: ROUTE_NAME.REPORT, component: Report },
   {
     path: "/setting",
     exact: true,
     name: ROUTE_NAME.SETTING,
     component: General,
   },
-  { path: "/setting/general", name: "General", component: General },
-  { path: "/setting/position", name: "Position", component: Position },
+  { path: "/setting/general", name: ROUTE_NAME.GENERAL, component: General },
+  { path: "/setting/position", name: ROUTE_NAME.POSITION, component: Position },
   {
     path: "/setting/shift/newShift",
     name: ROUTE_NAME.NEW_SHIFT,
     component: NewShift,
   },
-  { path: "/setting/shift/:id", name: ROUTE_NAME.SHIFT, component: ShiftEdit },
-  { path: "/setting/shift", name: "Shift", component: Shift },
-  { path: "/setting/branch", name: "Branch", component: Branch },
-  { path: "/setting/department", name: "Department", component: Department },
-  { path: "/setting/day-off", name: "DayOff", component: DayOff },
+  {
+    path: "/setting/shift/:id",
+    name: ROUTE_NAME.SHIFT_UPDATE,
+    component: ShiftEdit,
+  },
+  { path: "/setting/shift", name: ROUTE_NAME.SHIFT, component: Shift },
+  { path: "/setting/branch", name: ROUTE_NAME.BRANCH, component: Branch },
+  {
+    path: "/setting/department",
+    name: ROUTE_NAME.DEPARTMENT,
+    component: Department,
+  },
+  { path: "/setting/holiday", name: ROUTE_NAME.HOLIDAY, component: Holiday },
+  {
+    path: "/setting/new-holiday",
+    name: ROUTE_NAME.NEW_HOLIDAY,
+    component: NewHoliday,
+  },
   {
     path: "/setting/authorization",
     exact: true,
-    name: "Permission",
+    name: ROUTE_NAME.PERMISSION,
     component: Permission,
   },
   {
     path: "/setting/authorization/permission",
-    name: "Permission",
+    name: ROUTE_NAME.PERMISSION,
     component: Permission,
   },
   {
     path: "/setting/authorization/permission-group",
-    name: "PermissionGroup",
+    name: ROUTE_NAME.PERMISSION_GROUP,
     component: PermissionGroup,
   },
-  { path: "/setting/authorization/role", name: "Role", component: Role },
+  {
+    path: "/setting/authorization/role",
+    name: ROUTE_NAME.ROLE,
+    component: Role,
+  },
 ];
 
 export default routes;

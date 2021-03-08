@@ -1,4 +1,3 @@
-import { CContainer } from '@coreui/react';
 import {
   Getter,
   Plugin,
@@ -35,15 +34,21 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog'
+import CommonTextInput from "src/components/input/CommonTextInput";
+import { Field, Formik } from "formik";
+import CommonSelectInput from "src/components/input/CommonSelectInput";
+
+
 
 /*
   Params:
     columnDef:  ,
     data: ,
-    pageName: ,
+    route: ,
+    idxColumnsFilter
 */
 
-const CustomTableEditColumn = () => {
+const CustomTableEditColumn = ({ route }) => {
   const [openWarning, setOpenWarning] = useState(false);
   let deletingRowID;
   const handleConfirm = (props) => {
@@ -122,7 +127,7 @@ const CustomTableEditColumn = () => {
           <TemplateConnector>
             {(getters, { startEditRows }) => (
               <TableCell>
-                <Link to={`/setting/shift/${params.tableRow.rowId}`}>
+                <Link to={`${route}/${params.tableRow.rowId}`}>
                   <IconButton>
                     <EditIcon />
                   </IconButton>
@@ -213,7 +218,7 @@ const filteringColumnExtensions = [
 ];
 
 const QTable = (props) => {
-  const { columnDef, data } = props;
+  const { columnDef, data, route, idxColumnsFilter } = props;
   const [state, setState] = useState({
     columns: columnDef,
     rows: data,
@@ -227,80 +232,144 @@ const QTable = (props) => {
   const [columnOrder, setColumnOrder] = useState(columnDef.map(col => col.name));
   const colHeight = Math.floor(1 / columnDef.length * 100);
   const tableColumnExtensions = columnDef.map(col => ({ name: col.name, align: 'left', width: colHeight + "%" }))
+
+  const columnsFilter = idxColumnsFilter.map(idx => columnDef[idx].title);
+  const filterTypes = ["Bao gồm", "Chính xác", "Không bao gồm"];
+  const [filterValues, setFilterValues] = useState({
+    columnsFilter: columnsFilter[0],
+    filterTypes: filterTypes[0],
+    textFilter: '',
+  });
+  console.log(filterValues);
+
   return (
-    <>
-      <CContainer fluid className="c-main mb-3">
-        <div>
-          <Paper>
-            <Grid rows={state.rows} columns={state.columns} getRowId={(row) => row.id}>
-              <DataTypeProvider for={dateColumns} />
-              <DataTypeProvider for={currencyColumns} />
-              <EditingState
-                editingRowIds={state.editingRowIds}
-                rowChanges={rowChanges}
-                onRowChangesChange={setRowChanges}
-                addedRows={[]}
-              />
-              <PagingState
-                currentPage={state.currentPage}
-                onCurrentPageChange={(PageNumber) =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    currentPage: PageNumber,
-                  }))
-                }
-                pageSize={state.pageSize}
-                onPageSizeChange={(newPageSize) =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    pageSize: newPageSize,
-                  }))
-                }
-              />
-              <SelectionState
-                selection={state.selection}
-                onSelectionChange={(selection) =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    selection: selection,
-                  }))
-                }
-              />
-              <IntegratedPaging />
-              <IntegratedSelection />
-              <SortingState
-                defaultSorting={[
-                  {
-                    columnName: columnDef && columnDef[0].name,
-                    direction: 'asc',
-                  },
-                ]}
-              />
-              <IntegratedFiltering
-                columnExtensions={filteringColumnExtensions}
-              />
-              <Table
-                tableComponent={TableComponent}
-                columnExtensions={tableColumnExtensions}
-              />
-              <TableColumnReordering
-                order={columnOrder}
-                onOrderChange={setColumnOrder}
-              />
-              <TableHeaderRow showSortingControls />
-              <TableFixedColumns
-                rightColumns={['edit', 'delete']}
-              />
-              <CustomTableEditColumn />
-              {/* <TableSelection showSelectAll /> */}
-              <PagingPanel
-                pageSizes={state.pageSizes}
-              />
-            </Grid>
-          </Paper>
+    <div>
+      <Paper>
+        <div className="m-auto">
+          <div className="rounded p-4 container col-md-12">
+            <Formik
+              enableReinitialize
+              initialValues={filterValues}
+              onSubmit={(values) => console.log(values)}
+              onChange={(values) => console.log(values)}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleSubmit,
+                handleBlur,
+              }) => (
+                <form autoComplete="off">
+                  <div className="row">
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-4"}
+                      value={values.columnsFilter}
+                      onBlur={handleBlur("columnsFilter")}
+                      onChange={handleChange("columnsFilter")}
+                      inputID={"columnsFilter"}
+                      labelText={"Chọn cột cần lọc"}
+                      selectClassName={"form-control"}
+                      lstSelectOptions={columnsFilter}
+                    />
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-4"}
+                      value={values.filterTypes}
+                      onBlur={handleBlur("filterTypes")}
+                      onChange={handleChange("filterTypes")}
+                      inputID={"filterTypes"}
+                      labelText={"Tùy chọn lọc"}
+                      selectClassName={"form-control"}
+                      lstSelectOptions={filterTypes}
+                    />
+                    <CommonTextInput
+                      containerClassName={"form-group col-lg-4"}
+                      value={values.textFilter}
+                      onBlur={handleBlur("textFilter")}
+                      onChange={handleChange("textFilter")}
+                      inputID={"textFilter"}
+                      labelText={"Từ khóa"}
+                      inputType={"text"}
+                      placeholder={"Nhập từ khóa"}
+                      inputClassName={"form-control"}
+                    />
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </CContainer>
-    </>
+
+
+        <Grid rows={state.rows} columns={state.columns} getRowId={(row) => row.id}>
+          <DataTypeProvider for={dateColumns} />
+          <DataTypeProvider for={currencyColumns} />
+          <EditingState
+            editingRowIds={state.editingRowIds}
+            rowChanges={rowChanges}
+            onRowChangesChange={setRowChanges}
+            addedRows={[]}
+          />
+          <PagingState
+            currentPage={state.currentPage}
+            onCurrentPageChange={(PageNumber) =>
+              setState((prevState) => ({
+                ...prevState,
+                currentPage: PageNumber,
+              }))
+            }
+            pageSize={state.pageSize}
+            onPageSizeChange={(newPageSize) =>
+              setState((prevState) => ({
+                ...prevState,
+                pageSize: newPageSize,
+              }))
+            }
+          />
+          <SelectionState
+            selection={state.selection}
+            onSelectionChange={(selection) =>
+              setState((prevState) => ({
+                ...prevState,
+                selection: selection,
+              }))
+            }
+          />
+          <IntegratedPaging />
+          <IntegratedSelection />
+          <SortingState
+            defaultSorting={[
+              {
+                columnName: columnDef && columnDef[0].name,
+                direction: 'asc',
+              },
+            ]}
+          />
+          <IntegratedFiltering
+            columnExtensions={filteringColumnExtensions}
+          />
+          <Table
+            tableComponent={TableComponent}
+            columnExtensions={tableColumnExtensions}
+          />
+          <TableColumnReordering
+            order={columnOrder}
+            onOrderChange={setColumnOrder}
+          />
+          <TableHeaderRow showSortingControls />
+          <TableFixedColumns
+            rightColumns={['edit', 'delete']}
+          />
+          <CustomTableEditColumn route={route} />
+          {/* <TableSelection showSelectAll /> */}
+          <PagingPanel
+            pageSizes={state.pageSizes}
+          />
+        </Grid>
+      </Paper>
+    </div>
+
   );
 };
 export default QTable;

@@ -1,5 +1,12 @@
 import QTable from "src/components/table/Table";
-import { TheHeader } from "src/layouts";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { changeListButtonHeader } from "src/stores/actions/header";
+import { Link } from 'react-router-dom';
+import { CContainer } from "@coreui/react";
+import BasicLoader from "src/components/loader/BasicLoader";
+
+
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [
@@ -70,10 +77,36 @@ const data = [
 ];
 
 
-const Shifts = () => {
-  return <>
-    <TheHeader />
-    <QTable columnDef={columnDef} data={data}></QTable>
-  </>
+const Shifts = ({ t, location }) => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let wait = () => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+    wait();
+    dispatch(
+      changeListButtonHeader([
+        <Link to={"/setting/shift/newShift"} className="btn btn-primary" key="newshift">
+          
+            Tạo ca làm
+        
+        </Link>
+      ])
+    );
+    return () => {
+      dispatch(changeListButtonHeader([]));
+      clearTimeout(wait);
+    };
+  }, []);
+
+  return <CContainer fluid className="c-main mb-3 px-4">
+    {isLoading ? (
+      <BasicLoader isVisible={isLoading} radius={10} />
+    ) : <QTable columnDef={columnDef} data={data} route={"/setting/shift"} idxColumnsFilter={[0,1]} />}
+  </CContainer>;
 };
 export default Shifts;
