@@ -1,90 +1,134 @@
 import { CContainer } from "@coreui/react";
-import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
+import { Field, Formik } from "formik";
+import React, { useEffect, useRef, useState } from "react";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
+import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput"
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
-import FormHeader from "src/components/text/FormHeader";
+import BasicLoader from "src/components/loader/BasicLoader";
 import Label from "src/components/text/Label";
-
-import { SettingPositionInfoSchema } from "src/schema/formSchema";
+import { SettingShiftInfoSchema } from "src/schema/formSchema";
+import { useDispatch } from "react-redux";
+import { changeListButtonHeader } from "src/stores/actions/header";
+import FormHeader from "src/components/text/FormHeader"
 
 //TODO: translate
+const listOfBranches = [
+  { id: 1, name: "APPHR Thủ Đức" },
+  { id: 2, name: "APPHR Quận 1" },
+  { id: 3, name: "APPHR Quận 2" },
+  { id: 4, name: "APPHR Quận 3" },
+  { id: 5, name: "APPHR Quận 4" },
+  { id: 6, name: "APPHR Quận 5" },
+  { id: 7, name: "APPHR Quận 6" },
+  { id: 8, name: "APPHR Quận 7" },
+  { id: 9, name: "APPHR Quận 8" },
+  { id: 10, name: "APPHR Quận 9" },
+  { id: 11, name: "APPHR Quận 10" },
+];
+
+const listOfShifts = [
+  { id: 1, name: "Ca sáng 1" },
+  { id: 2, name: "Ca sáng 2" },
+  { id: 3, name: "Ca sáng 3" },
+  { id: 4, name: "Ca chiều 1" },
+  { id: 5, name: "Ca chiều 2" },
+  { id: 6, name: "Ca chiều 3" },
+  { id: 7, name: "Ca tối 1" },
+  { id: 8, name: "Ca tối 2" },
+  { id: 9, name: "Ca tối 3" },
+];
+
+
 const NewPositionPage = ({ t, location, match }) => {
   const params = match.params;
-  const [initialValues, setInitialValues] = useState({
-    positionName: "",
-    positionCode: "",
-    department: "",
-    branch: "",
-    shift: [],
-    description: "",
-  });
+  const positionInfoForm = useRef();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const [initialValues, setInitialValues] = useState(
+    {
+      name: "",
+      shortname: "",
+      department: "",
+      branches: [],
+      shifts: [],
+      description: "",
+    }
+  );
 
-  const handleChangeBranch = (newBranch) => {
+  const handleChangeBranches = (newBranches) => {
     setInitialValues({
       ...initialValues,
-      branches: newBranch,
+      branches: newBranches,
     });
   };
-
-  // const mapChecked = (values) => {
-  //   return values.reduce(
-  //     (acc, val) => {
-  //       acc[+val] = 1;
-  //       return acc;
-  //     },
-  //     [0, 0, 0, 0, 0, 0, 0]
-  //   );
-  // };
-
-  const getShiftInfo = async () => {
+  const handleChangeShifts = (newShifts) => {
     setInitialValues({
-      positionName: "",
-      positionCode: "",
-      department: "",
-      branch: "",
-      shift: [],
-      description: "",
+      ...initialValues,
+      shifts: newShifts,
     });
   };
+
+  const getPositionInfo = () => {
+    setInitialValues(
+      {
+        name: "Nhân viên IT",
+        shortname: "DEV0",
+        department: "IT",
+        branches: [1, 3],
+        shifts: [1, 3],
+        description: "Nhân viên IT",
+      }
+    );
+  }
+
   useEffect(() => {
-    if (params?.id) getShiftInfo();
-  }, [params]);
-  // console.log(initialValues);
+    let wait = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    if (params?.id)
+      getPositionInfo();
+    dispatch(
+      changeListButtonHeader([
+        <button
+          className="btn btn-primary"
+          type="submit"
+          key="magicPosition"
+          onClick={getOnSubmitInForm}
+        >
+          {(params?.id) ? "Cập nhật" : "Tạo mới"}
+        </button>,
+      ])
+    );
+    return () => {
+      dispatch(changeListButtonHeader([]));
+      clearTimeout(wait);
+    };
+  }, []);
 
-  // const handleCheckbox = (checkboxValue) => {
-  //   console.log(checkboxValue);
-  //   let temp = [...initialValues.checkBoxState];
+  const getOnSubmitInForm = (event) =>
+    positionInfoForm.current.handleSubmit(event);
 
-  //   temp[checkboxValue] = !temp[checkboxValue];
 
-  //   setInitialValues(prevState => ({
-  //     ...prevState,
-  //     checkBoxState: temp,
-  //   }))
-  // }
-  // const listDateOfWeek = [
-  //   { value: "0", label: "Chủ nhật" },
-  //   { value: "2", label: "Thứ hai" },
-  //   { value: "3", label: "Thứ ba" },
-  //   { value: "4", label: "Thứ " },
-  //   { value: "5", label: "Thứ năm" },
-  //   { value: "6", label: "Thứ sáu" },
-  //   { value: "7", label: "Thứ bảy" },
-  // ];
+
+
+  const handleSubmitInfo = (values) => {
+    console.log(values);
+  };
+
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <div className="m-auto">
+      {isLoading ? (
+        <BasicLoader isVisible={isLoading} radius={10} />
+      ) : (<div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
           <Formik
+            innerRef={positionInfoForm}
             enableReinitialize
             initialValues={initialValues}
-            validationSchema={SettingPositionInfoSchema}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
+            validationSchema={SettingShiftInfoSchema}
+            onSubmit={(values) => handleSubmitInfo(values)}
           >
             {({
               values,
@@ -99,36 +143,36 @@ const NewPositionPage = ({ t, location, match }) => {
                 <div className="row">
                   <CommonTextInput
                     containerClassName={"form-group col-lg-12"}
-                    value={values.positionCode}
-                    onBlur={handleBlur("positionCode")}
-                    onChange={handleChange("positionCode")}
-                    inputID={"positionCode"}
+                    value={values.shortname}
+                    onBlur={handleBlur("shortname")}
+                    onChange={handleChange("shortname")}
+                    inputID={"shortname"}
                     labelText={"Mã vị trí"}
                     inputType={"text"}
                     placeholder={"Nhập mã vị trí"}
                     inputClassName={"form-control"}
                     isRequiredField
-                    isTouched={touched.positionCode}
-                    isError={errors.positionCode && touched.positionCode}
-                    errorMessage={errors.positionCode}
+                    isTouched={touched.shortname}
+                    isError={errors.shortname && touched.shortname}
+                    errorMessage={errors.shortname}
                   />
                 </div>
 
                 <div className="row">
                   <CommonTextInput
                     containerClassName={"form-group col-lg-12"}
-                    value={values.positionName}
-                    onBlur={handleBlur("positionName")}
-                    onChange={handleChange("positionName")}
-                    inputID={"positionName"}
+                    value={values.name}
+                    onBlur={handleBlur("name")}
+                    onChange={handleChange("name")}
+                    inputID={"name"}
                     labelText={"Tên vị trí"}
                     inputType={"text"}
                     placeholder={"Nhập tên vị trí"}
                     inputClassName={"form-control"}
                     isRequiredField
-                    isTouched={touched.positionName}
-                    isError={errors.positionName && touched.positionName}
-                    errorMessage={errors.positionName}
+                    isTouched={touched.name}
+                    isError={errors.name && touched.name}
+                    errorMessage={errors.name}
                   />
                 </div>
                 <div className="row">
@@ -152,8 +196,9 @@ const NewPositionPage = ({ t, location, match }) => {
                       className="d-flex flex-row flex-wrap justify-content-between"
                     >
                       <CommonMultiSelectInput
-                        branches={values.branches}
-                        onChangeBranch={handleChangeBranch}
+                        values={values.branches}
+                        onChangeValues={handleChangeBranches}
+                        listValues={listOfBranches}
                       />
                     </div>
                   </div>
@@ -166,8 +211,9 @@ const NewPositionPage = ({ t, location, match }) => {
                       className="d-flex flex-row flex-wrap justify-content-between"
                     >
                       <CommonMultiSelectInput
-                        branches={values.branches}
-                        onChangeBranch={handleChangeBranch}
+                        values={values.shifts}
+                        onChangeValues={handleChangeShifts}
+                        listValues={listOfShifts}
                       />
                     </div>
                   </div>
@@ -183,19 +229,12 @@ const NewPositionPage = ({ t, location, match }) => {
                     inputClassName={"form-control"}
                   />
                 </div>
-
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                >
-                  Submit form
-                </button>
               </form>
             )}
           </Formik>
         </div>
       </div>
+      )}
     </CContainer>
   );
 };

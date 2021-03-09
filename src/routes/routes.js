@@ -13,19 +13,32 @@ const Notification = React.lazy(() =>
 const Report = React.lazy(() => import("src/pages/report/Report"));
 const General = React.lazy(() => import("src/pages/setting/general/General"));
 const Position = React.lazy(() =>
+  import("src/pages/setting/position/Position")
+);
+const NewPosition = React.lazy(() =>
+  import("src/pages/setting/position/NewPosition")
+);
+const PositionEdit = React.lazy(() =>
   import("src/pages/setting/position/NewPosition")
 );
 const Shift = React.lazy(() => import("src/pages/setting/shift/Shift"));
 const NewShift = React.lazy(() => import("src/pages/setting/shift/NewShift"));
 const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
+
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")
 );
+const NewDepartment = React.lazy(() => import("src/pages/setting/department/NewDepartment"));
+const DepartmentEdit = React.lazy(() => import("src/pages/setting/department/NewDepartment"));
+
 const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
 const NewHoliday = React.lazy(() =>
   import("src/pages/setting/holiday/NewHoliday")
 );
-const Branch = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
+const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
+const NewBranch = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
+const BranchEdit = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
+
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")
 );
@@ -57,6 +70,16 @@ const routes = [
     component: General,
   },
   { path: "/setting/general", name: ROUTE_NAME.GENERAL, component: General },
+  {
+    path: "/setting/position/newPosition",
+    name: ROUTE_NAME.NEW_POSITION,
+    component: NewPosition,
+  },
+  {
+    path: "/setting/position/:id",
+    name: ROUTE_NAME.POSITION_UPDATE,
+    component: PositionEdit,
+  },
   { path: "/setting/position", name: ROUTE_NAME.POSITION, component: Position },
   {
     path: "/setting/shift/newShift",
@@ -69,7 +92,27 @@ const routes = [
     component: ShiftEdit,
   },
   { path: "/setting/shift", name: ROUTE_NAME.SHIFT, component: Shift },
+  {
+    path: "/setting/branch/newBranch",
+    name: ROUTE_NAME.NEW_BRANCH,
+    component: NewBranch,
+  },
+  {
+    path: "/setting/branch/:id",
+    name: ROUTE_NAME.BRANCH_UPDATE,
+    component: BranchEdit,
+  },
   { path: "/setting/branch", name: ROUTE_NAME.BRANCH, component: Branch },
+  {
+    path: "/setting/department/newDepartment",
+    name: ROUTE_NAME.NEW_DEPARTMENT,
+    component: NewDepartment,
+  },
+  {
+    path: "/setting/department/:id",
+    name: ROUTE_NAME.DEPARTMENT_UPDATE,
+    component: DepartmentEdit,
+  },
   {
     path: "/setting/department",
     name: ROUTE_NAME.DEPARTMENT,

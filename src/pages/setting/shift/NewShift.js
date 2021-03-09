@@ -16,6 +16,19 @@ const typeOfRollUp = [
   "WIFI",
   "QR_CODE",
 ];
+const listOfBranches = [
+  { id: 1, name: "APPHR Thủ Đức" },
+  { id: 2, name: "APPHR Quận 1" },
+  { id: 3, name: "APPHR Quận 2" },
+  { id: 4, name: "APPHR Quận 3" },
+  { id: 5, name: "APPHR Quận 4" },
+  { id: 6, name: "APPHR Quận 5" },
+  { id: 7, name: "APPHR Quận 6" },
+  { id: 8, name: "APPHR Quận 7" },
+  { id: 9, name: "APPHR Quận 8" },
+  { id: 10, name: "APPHR Quận 9" },
+  { id: 11, name: "APPHR Quận 10" },
+];
 
 const NewShift = ({ t, location, match }) => {
   const params = match.params;
@@ -223,7 +236,7 @@ const NewShift = ({ t, location, match }) => {
                   <div className="form-group col-lg-12">
                     <Label text="Chi nhánh:" />
                     <div className="d-flex flex-row flex-wrap justify-content-between">
-                      <CommonMultiSelectInput branches={values.branches} onChangeBranch={handleChangeBranch} />
+                      <CommonMultiSelectInput values={values.branches} onChangeValues={handleChangeBranch} listValues={listOfBranches} />
                     </div>
                   </div>
                 </div>

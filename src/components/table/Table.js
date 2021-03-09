@@ -35,7 +35,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog'
 import CommonTextInput from "src/components/input/CommonTextInput";
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 
 
@@ -235,12 +235,11 @@ const QTable = (props) => {
 
   const columnsFilter = idxColumnsFilter.map(idx => columnDef[idx].title);
   const filterTypes = ["Bao gồm", "Chính xác", "Không bao gồm"];
-  const [filterValues, setFilterValues] = useState({
+  const filterValues = {
     columnsFilter: columnsFilter[0],
     filterTypes: filterTypes[0],
     textFilter: '',
-  });
-  console.log(filterValues);
+  };
 
   return (
     <div>
@@ -251,7 +250,6 @@ const QTable = (props) => {
               enableReinitialize
               initialValues={filterValues}
               onSubmit={(values) => console.log(values)}
-              onChange={(values) => console.log(values)}
             >
               {({
                 values,

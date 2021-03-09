@@ -36,41 +36,27 @@ const MenuProps = {
   },
 };
 
-const listOfBranches = [
-  { id: 1, name: "APPHR Thủ Đức" },
-  { id: 2, name: "APPHR Quận 1" },
-  { id: 3, name: "APPHR Quận 2" },
-  { id: 4, name: "APPHR Quận 3" },
-  { id: 5, name: "APPHR Quận 4" },
-  { id: 6, name: "APPHR Quận 5" },
-  { id: 7, name: "APPHR Quận 6" },
-  { id: 8, name: "APPHR Quận 7" },
-  { id: 9, name: "APPHR Quận 8" },
-  { id: 10, name: "APPHR Quận 9" },
-  { id: 11, name: "APPHR Quận 10" },
-];
 
-function getStyles(id, branches, theme) {
-  if (branches)
+
+function getStyles(id, values, theme) {
+  if (values)
     return {
       fontWeight:
-        branches.indexOf(id) === -1
+        values.indexOf(id) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
 }
 
-export default function CommonMultiSelectInput({ branches = [], onChangeBranch }) {
+export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues }) {
   const classes = useStyles();
   const theme = useTheme();
-  const hash = listOfBranches.reduce((acc, val) => {
+  const hash = listValues.reduce((acc, val) => {
     acc[val.id] = val;
     return acc;
   }, {})
   const handleChange = (event) => {
-    // console.log("handleChange");
-    console.log(event.target);
-    onChangeBranch(event.target.value);
+    onChangeValues(event.target.value);
   };
 
 
@@ -82,7 +68,7 @@ export default function CommonMultiSelectInput({ branches = [], onChangeBranch }
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
         multiple
-        value={branches}
+        value={values}
         onChange={handleChange}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => (
@@ -96,9 +82,9 @@ export default function CommonMultiSelectInput({ branches = [], onChangeBranch }
         )}
         MenuProps={MenuProps}
       >
-        {listOfBranches.map(branch => (
-          <MenuItem key={branch.id} value={branch.id} label={branch.name} style={getStyles(branch.id, branches, theme)}>
-            {branch.name}
+        {listValues.map(val => (
+          <MenuItem key={val.id} value={val.id} label={val.name} style={getStyles(val.id, values, theme)}>
+            {val.name}
           </MenuItem>
         ))}
       </Select>
