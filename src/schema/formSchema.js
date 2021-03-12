@@ -45,6 +45,7 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     ),
   facOfShift: Yup.number()
     .min(0, "Hệ số giờ làm phải là một số không âm")
+
     .required("Bắt buộc phải nhập hệ số giờ làm"),
 });
 
@@ -57,15 +58,21 @@ export const SettingHolidayInfoSchema = Yup.object().shape({
 
 //Position
 export const SettingPositionInfoSchema = Yup.object().shape({
-  positionCode: Yup.string().required("Nhập mã của vị trí"),
-  positionName: Yup.string().required("Bắt buộc nhập vào tên vị trí"),
-  department: Yup.string().required("Nhập vào phòng ban"),
+  shortname: Yup.string().required("Nhập mã của vị trí"),
+  name: Yup.string().required("Bắt buộc nhập vào tên vị trí"),
 });
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
   branchCode: Yup.string().required("Bắt buộc nhập vào mã chi nhánh"),
   branchName: Yup.string().required("Bắt buộc nhập vào tên của chi nhánh"),
+  ip: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), "Địa chỉ IP không hợp lệ."),
   address: Yup.string().trim().required("Bắt buộc nhập địa chỉ chi nhánh"),
   description: Yup.string(),
+});
+
+//Department
+export const SettingDepartmentInfoSchema = Yup.object().shape({
+  departmentCode: Yup.string().required("Bắt buộc nhập vào mã phòng ban"),
+  departmentName: Yup.string().required("Bắt buộc nhập vào tên phòng ban"),
 });

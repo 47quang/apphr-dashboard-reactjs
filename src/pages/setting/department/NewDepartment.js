@@ -6,7 +6,7 @@ import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInpu
 import CommonTextInput from "src/components/input/CommonTextInput";
 import BasicLoader from "src/components/loader/BasicLoader";
 import Label from "src/components/text/Label";
-import { SettingShiftInfoSchema } from "src/schema/formSchema";
+import { SettingDepartmentInfoSchema } from "src/schema/formSchema";
 import { useDispatch } from "react-redux";
 import { changeListButtonHeader } from "src/stores/actions/header";
 
@@ -38,13 +38,6 @@ const NewDepartment = ({ t, location, match }) => {
 			description: "",
 		}
 	);
-
-	const handleChangeBranch = (newBranch) => {
-		setInitialValues({
-			...initialValues,
-			branches: newBranch,
-		});
-	};
 
 	const getDepartmentInfo = () => {
 		setInitialValues(
@@ -99,7 +92,7 @@ const NewDepartment = ({ t, location, match }) => {
 						innerRef={departmentInfoForm}
 						enableReinitialize
 						initialValues={initialValues}
-						validationSchema={SettingShiftInfoSchema}
+						validationSchema={SettingDepartmentInfoSchema}
 						onSubmit={(values) => handleSubmitInfo(values)}
 					>
 						{({
@@ -148,8 +141,8 @@ const NewDepartment = ({ t, location, match }) => {
 								<div className="row">
 									<div className="form-group col-lg-12">
 										<Label text="Chi nhánh:" />
-										<div className="d-flex flex-row flex-wrap justify-content-between">
-											<CommonMultiSelectInput values={values.branches} onChangeValues={handleChangeBranch} listValues={listOfBranches} />
+										<div className="d-flex flex-row flex-wrap justify-content-between border rounded-3">
+											<CommonMultiSelectInput values={values.branches} onChangeValues={handleChange("branches")} listValues={listOfBranches} />
 										</div>
 									</div>
 								</div>

@@ -156,6 +156,9 @@ const NewBranchPage = ({ t, location, match }) => {
                       inputType={"text"}
                       placeholder={"Nhập IP Router"}
                       inputClassName={"form-control"}
+                      isTouched={touched.ip}
+                      isError={errors.ip && touched.ip}
+                      errorMessage={errors.ip}
                     />
                   </div>
                   <div className="row">

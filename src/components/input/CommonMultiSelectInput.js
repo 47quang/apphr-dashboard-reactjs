@@ -55,10 +55,6 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
     acc[val.id] = val;
     return acc;
   }, {})
-  const handleChange = (event) => {
-    onChangeValues(event.target.value);
-  };
-
 
   return (
     <FormControl className={classes.formControl} style={{ width: '100%' }}>
@@ -68,8 +64,9 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
         multiple
+        disableUnderline
         value={values}
-        onChange={handleChange}
+        onChange={onChangeValues}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => (
           <div className={classes.chips}>

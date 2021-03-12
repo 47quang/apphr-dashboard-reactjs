@@ -48,12 +48,7 @@ const NewShift = ({ t, location, match }) => {
     }
   );
 
-  const handleChangeBranch = (newBranch) => {
-    setInitialValues({
-      ...initialValues,
-      branches: newBranch,
-    });
-  };
+
 
   const getShiftInfo = () => {
     setInitialValues(
@@ -236,7 +231,9 @@ const NewShift = ({ t, location, match }) => {
                   <div className="form-group col-lg-12">
                     <Label text="Chi nhánh:" />
                     <div className="d-flex flex-row flex-wrap justify-content-between">
-                      <CommonMultiSelectInput values={values.branches} onChangeValues={handleChangeBranch} listValues={listOfBranches} />
+                      <CommonMultiSelectInput values={values.branches}
+                        onChangeValues={handleChange("branches")}
+                        listValues={listOfBranches} />
                     </div>
                   </div>
                 </div>

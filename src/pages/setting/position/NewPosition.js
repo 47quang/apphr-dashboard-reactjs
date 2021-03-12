@@ -7,7 +7,7 @@ import CommonSelectInput from "src/components/input/CommonSelectInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import BasicLoader from "src/components/loader/BasicLoader";
 import Label from "src/components/text/Label";
-import { SettingShiftInfoSchema } from "src/schema/formSchema";
+import { SettingPositionInfoSchema } from "src/schema/formSchema";
 import { useDispatch } from "react-redux";
 import { changeListButtonHeader } from "src/stores/actions/header";
 import FormHeader from "src/components/text/FormHeader"
@@ -56,18 +56,7 @@ const NewPositionPage = ({ t, location, match }) => {
     }
   );
 
-  const handleChangeBranches = (newBranches) => {
-    setInitialValues({
-      ...initialValues,
-      branches: newBranches,
-    });
-  };
-  const handleChangeShifts = (newShifts) => {
-    setInitialValues({
-      ...initialValues,
-      shifts: newShifts,
-    });
-  };
+
 
   const getPositionInfo = () => {
     setInitialValues(
@@ -109,13 +98,9 @@ const NewPositionPage = ({ t, location, match }) => {
   const getOnSubmitInForm = (event) =>
     positionInfoForm.current.handleSubmit(event);
 
-
-
-
   const handleSubmitInfo = (values) => {
     console.log(values);
   };
-
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -127,7 +112,7 @@ const NewPositionPage = ({ t, location, match }) => {
             innerRef={positionInfoForm}
             enableReinitialize
             initialValues={initialValues}
-            validationSchema={SettingShiftInfoSchema}
+            validationSchema={SettingPositionInfoSchema}
             onSubmit={(values) => handleSubmitInfo(values)}
           >
             {({
@@ -197,7 +182,7 @@ const NewPositionPage = ({ t, location, match }) => {
                     >
                       <CommonMultiSelectInput
                         values={values.branches}
-                        onChangeValues={handleChangeBranches}
+                        onChangeValues={handleChange("branches")}
                         listValues={listOfBranches}
                       />
                     </div>
@@ -212,7 +197,7 @@ const NewPositionPage = ({ t, location, match }) => {
                     >
                       <CommonMultiSelectInput
                         values={values.shifts}
-                        onChangeValues={handleChangeShifts}
+                        onChangeValues={handleChange("shifts")}
                         listValues={listOfShifts}
                       />
                     </div>
