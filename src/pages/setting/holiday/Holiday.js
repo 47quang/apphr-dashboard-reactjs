@@ -1,64 +1,11 @@
-import { Tab, Tabs, withStyles } from "@material-ui/core";
 import QTable from "src/components/table/Table";
 import React, { useState, useEffect } from "react";
-import { COLORS } from "../../../constants/theme";
 import { CTabs, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from "@coreui/react";
 import { CContainer } from "@coreui/react";
 import BasicLoader from "src/components/loader/BasicLoader";
 import { useDispatch } from "react-redux";
 import { changeListButtonHeader } from "src/stores/actions/header";
 import { Link } from 'react-router-dom';
-
-
-
-// const AntTabs = withStyles({
-//   root: {
-//     borderBottom: "1px solid #e8e8e8",
-//   },
-//   indicator: {
-//     backgroundColor: `${COLORS.TAB_INDICATOR}`,
-//   },
-// })(Tabs);
-
-// const AntTab = withStyles((theme) => ({
-//   root: {
-//     textTransform: "none",
-//     minWidth: 72,
-//     fontWeight: theme.typography.fontWeightRegular,
-//     marginRight: theme.spacing(4),
-//     "&:hover": {
-//       color: `${COLORS.TAB_HOVER}`,
-//       opacity: 1,
-//     },
-//     "&$selected": {
-//       color: `${COLORS.TAB_INDICATOR}`,
-//       fontWeight: theme.typography.fontWeightMedium,
-//     },
-//     "&:focus": {
-//       color: `${COLORS.TAB_INDICATOR}`,
-//       border: "none",
-//     },
-//   },
-//   selected: {},
-// }))((props) => <Tab disableRipple {...props} />);
-
-// const HolidayPage = ({ t, location }) => {
-//   const [value, setValue] = useState(1);
-
-//   const handleChange = (event, newValue) => {
-//     setValue(newValue);
-//   };
-//   return (
-//     <div className="mt-2 bg-white px-3">
-//       <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-//         <AntTab label="Ngày nghỉ lễ" />
-//         <AntTab label="Thiết lập số ngày nghỉ" />
-//       </AntTabs>
-//     </div>
-//   );
-// };
-
-// export default HolidayPage;
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },
@@ -77,12 +24,12 @@ const dataOfRequestSetting = [
     total: '2',
   },
   {
-    id: 1,
+    id: 3,
     type: 'Nghỉ chế độ',
     total: '60',
   },
   {
-    id: 1,
+    id: 4,
     type: 'Xin làm thêm',
     total: '5',
   },

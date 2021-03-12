@@ -266,7 +266,6 @@ const QTable = (props) => {
                       value={values.columnsFilter}
                       onBlur={handleBlur("columnsFilter")}
                       onChange={handleChange("columnsFilter")}
-                      inputID={"columnsFilter"}
                       labelText={"Chọn cột cần lọc"}
                       selectClassName={"form-control"}
                       lstSelectOptions={columnsFilter}
@@ -276,7 +275,6 @@ const QTable = (props) => {
                       value={values.filterTypes}
                       onBlur={handleBlur("filterTypes")}
                       onChange={handleChange("filterTypes")}
-                      inputID={"filterTypes"}
                       labelText={"Tùy chọn lọc"}
                       selectClassName={"form-control"}
                       lstSelectOptions={filterTypes}
@@ -286,7 +284,6 @@ const QTable = (props) => {
                       value={values.textFilter}
                       onBlur={handleBlur("textFilter")}
                       onChange={handleChange("textFilter")}
-                      inputID={"textFilter"}
                       labelText={"Từ khóa"}
                       inputType={"text"}
                       placeholder={"Nhập từ khóa"}
