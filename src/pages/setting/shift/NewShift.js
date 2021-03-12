@@ -230,7 +230,7 @@ const NewShift = ({ t, location, match }) => {
                 <div className="row">
                   <div className="form-group col-lg-12">
                     <Label text="Chi nhánh:" />
-                    <div className="d-flex flex-row flex-wrap justify-content-between">
+                    <div className="d-flex flex-row flex-wrap justify-content-between border">
                       <CommonMultiSelectInput values={values.branches}
                         onChangeValues={handleChange("branches")}
                         listValues={listOfBranches} />
