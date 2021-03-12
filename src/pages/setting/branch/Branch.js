@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import BasicLoader from "src/components/loader/BasicLoader";
 import QTable from "src/components/table/Table";
 import { changeListButtonHeader } from "src/stores/actions/header";
+import { api } from "src/stores/apis/API_index";
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [
@@ -62,13 +63,19 @@ const Branch = ({ t, location }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
+  const getBranchInfo = async () => {
+    // const res = await api.location.getProvinceList();
+    // console.log("hhi" + res);
+    setIsLoading(false);
+  };
   useEffect(() => {
-    let wait = () => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    };
-    wait();
+    // let wait = () => {
+    //   setTimeout(() => {
+    //     setIsLoading(false);
+    //   }, 500);
+    // };
+    // wait();
+
     dispatch(
       changeListButtonHeader([
         <Link
@@ -80,9 +87,10 @@ const Branch = ({ t, location }) => {
         </Link>,
       ])
     );
+    getBranchInfo();
     return () => {
       dispatch(changeListButtonHeader([]));
-      clearTimeout(wait);
+      // clearTimeout(wait);
     };
   }, []);
 
