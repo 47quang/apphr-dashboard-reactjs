@@ -1,14 +1,13 @@
 import { CContainer } from "@coreui/react";
 import { Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import BasicLoader from "src/components/loader/BasicLoader";
-import { SettingBranchInfoSchema } from "src/schema/formSchema";
-import { useDispatch } from "react-redux";
-import { changeListButtonHeader } from "src/stores/actions/header";
 import FormHeader from "src/components/text/FormHeader";
-import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
-
+import { SettingBranchInfoSchema } from "src/schema/formSchema";
+import { changeListButtonHeader } from "src/stores/actions/header";
 
 //TODO: translate
 
@@ -25,25 +24,21 @@ const NewBranchPage = ({ t, location, match }) => {
     description: "",
   });
 
-
   const getBranchInfo = () => {
-    setInitialValues(
-      {
-        branchName: "APPHR Thủ Đức",
-        branchCode: "TD",
-        address: "Tầng 5 Vincom Thủ Đức",
-        ip: "192.168.54.32",
-        description: "Trụ sở chính",
-      }
-    );
-  }
+    setInitialValues({
+      branchName: "APPHR Thủ Đức",
+      branchCode: "TD",
+      address: "Tầng 5 Vincom Thủ Đức",
+      ip: "192.168.54.32",
+      description: "Trụ sở chính",
+    });
+  };
 
   useEffect(() => {
     let wait = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-    if (params?.id)
-      getBranchInfo();
+    if (params?.id) getBranchInfo();
     dispatch(
       changeListButtonHeader([
         <button
@@ -52,7 +47,7 @@ const NewBranchPage = ({ t, location, match }) => {
           key="magicBranch"
           onClick={getOnSubmitInForm}
         >
-          {(params?.id) ? "Cập nhật" : "Tạo mới"}
+          {params?.id ? "Cập nhật" : "Tạo mới"}
         </button>,
       ])
     );
@@ -64,8 +59,6 @@ const NewBranchPage = ({ t, location, match }) => {
 
   const getOnSubmitInForm = (event) =>
     branchInfoForm.current.handleSubmit(event);
-
-
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
