@@ -92,6 +92,7 @@ const Department = ({ t, location }) => {
           data={data}
           route={"/setting/department"}
           idxColumnsFilter={[0, 2]}
+          multiValuesCols={[2]}
         />
       )}
     </CContainer>

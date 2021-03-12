@@ -28,16 +28,28 @@ const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")
 );
-const NewDepartment = React.lazy(() => import("src/pages/setting/department/NewDepartment"));
-const DepartmentEdit = React.lazy(() => import("src/pages/setting/department/NewDepartment"));
+const NewDepartment = React.lazy(() =>
+  import("src/pages/setting/department/NewDepartment")
+);
+const DepartmentEdit = React.lazy(() =>
+  import("src/pages/setting/department/NewDepartment")
+);
 
 const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
 const NewHoliday = React.lazy(() =>
   import("src/pages/setting/holiday/NewHoliday")
 );
+const HolidayEdit = React.lazy(() =>
+  import("src/pages/setting/holiday/NewHoliday")
+);
+
 const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
-const NewBranch = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
-const BranchEdit = React.lazy(() => import("src/pages/setting/branch/NewBranch"));
+const NewBranch = React.lazy(() =>
+  import("src/pages/setting/branch/NewBranch")
+);
+const BranchEdit = React.lazy(() =>
+  import("src/pages/setting/branch/NewBranch")
+);
 
 const Permission = React.lazy(() =>
   import("src/pages/setting/authorization/permission/Permission")
@@ -118,12 +130,17 @@ const routes = [
     name: ROUTE_NAME.DEPARTMENT,
     component: Department,
   },
-  { path: "/setting/holiday", name: ROUTE_NAME.HOLIDAY, component: Holiday },
   {
-    path: "/setting/new-holiday",
+    path: "/setting/holiday/newHoliday",
     name: ROUTE_NAME.NEW_HOLIDAY,
     component: NewHoliday,
   },
+  {
+    path: "/setting/holiday/:id",
+    name: ROUTE_NAME.HOLIDAY_UPDATE,
+    component: HolidayEdit,
+  },
+  { path: "/setting/holiday", name: ROUTE_NAME.HOLIDAY, component: Holiday },
   {
     path: "/setting/authorization",
     exact: true,

@@ -111,6 +111,7 @@ const Position = ({ t, location }) => {
           data={data}
           route={"/setting/position"}
           idxColumnsFilter={[0, 2]}
+          multiValuesCols={[3]}
         />
       )}
     </CContainer>

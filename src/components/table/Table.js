@@ -37,6 +37,7 @@ import WarningAlertDialog from "src/components/dialog/WarningAlertDialog";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import { Formik } from "formik";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
+import Chip from "@material-ui/core/Chip";
 
 /*
   Params:
@@ -183,9 +184,6 @@ export const TableComponent = withStyles(styles, {
   name: "TableComponent",
 })(TableComponentBase);
 
-const dateColumns = ["saleDate"];
-const currencyColumns = ["amount"];
-
 const filteringColumnExtensions = [
   {
     columnName: "saleDate",
@@ -200,8 +198,39 @@ const filteringColumnExtensions = [
   },
 ];
 
+const DateFormatter = ({ value }) =>
+  value.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3.$2.$1");
+
+const DateTypeProvider = (props) => (
+  <DataTypeProvider formatterComponent={DateFormatter} {...props} />
+);
+
+const MultiValuesFormatter = ({ value }) => {
+  console.log("this value", value);
+  return value.map((val, idx) => (
+    <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" />
+  ));
+};
+const MultiValuesTypeProvider = (props) => (
+  <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />
+);
+
 const QTable = (props) => {
-  const { columnDef, data, route, idxColumnsFilter } = props;
+  const {
+    columnDef,
+    data,
+    route,
+    idxColumnsFilter,
+    dateCols,
+    multiValuesCols,
+  } = props;
+  let dateColumns = Array.isArray(dateCols)
+    ? dateCols.map((idx) => columnDef[idx].name)
+    : [""];
+  let multiValuesColumns = Array.isArray(multiValuesCols)
+    ? multiValuesCols.map((idx) => columnDef[idx].name)
+    : [""];
+  console.log(data);
   const [state, setState] = useState({
     columns: columnDef,
     rows: data,
@@ -215,11 +244,12 @@ const QTable = (props) => {
   const [columnOrder, setColumnOrder] = useState(
     columnDef.map((col) => col.name)
   );
-  const colHeight = Math.floor((1 / columnDef.length) * 100);
+  const colHeight = Math.floor((0.9 / columnDef.length) * 100);
   const tableColumnExtensions = columnDef.map((col) => ({
-    name: col.name,
+    columnName: col.name,
     align: "left",
     width: colHeight + "%",
+    wordWrapEnabled: true,
   }));
 
   const columnsFilter = idxColumnsFilter.map((idx) => columnDef[idx].title);
@@ -290,8 +320,8 @@ const QTable = (props) => {
           columns={state.columns}
           getRowId={(row) => row.id}
         >
-          <DataTypeProvider for={dateColumns} />
-          <DataTypeProvider for={currencyColumns} />
+          <DateTypeProvider for={dateColumns} />
+          <MultiValuesTypeProvider for={multiValuesColumns} />
           <EditingState
             editingRowIds={state.editingRowIds}
             rowChanges={rowChanges}

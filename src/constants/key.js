@@ -23,6 +23,7 @@ export const ROUTE_NAME = {
   DEPARTMENT_UPDATE: "Department Update",
   HOLIDAY: "Holiday",
   NEW_HOLIDAY: "New Holiday",
+  HOLIDAY_UPDATE: "Holiday Update",
   PERMISSION: "Permission",
   PERMISSION_GROUP: "PermissionGroup",
   ROLE: "Role",

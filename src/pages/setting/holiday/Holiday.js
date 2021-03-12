@@ -52,43 +52,43 @@ const data = [
   {
     id: 1,
     title: "Tết Dương lịch",
-    start: "1/1/2021",
-    end: "1/1/2021",
+    start: "2021-01-01",
+    end: "2021-01-01",
     coefficient: 2,
   },
   {
     id: 2,
     title: "Tết Âm lịch",
-    start: "31/1/2021",
-    end: "23/2/2021",
+    start: "2021-02-23",
+    end: "2021-02-23",
     coefficient: 2,
   },
   {
     id: 3,
     title: "Giổ tổ Hùng Vương",
-    start: "30/3/2021",
-    end: "30/3/2021",
+    start: "2021-03-30",
+    end: "2021-03-30",
     coefficient: 2,
   },
   {
     id: 4,
     title: "Ngày giải phóng miền Nam thống nhất Đất Nước",
-    start: "30/4/2021",
-    end: "30/4/2021",
+    start: "2021-04-30",
+    end: "2021-04-30",
     coefficient: 2,
   },
   {
     id: 5,
     title: "Ngày quốc tế lao động",
-    start: "1/5/2021",
-    end: "1/5/2021",
+    start: "2021-05-01",
+    end: "2021-05-01",
     coefficient: 2,
   },
   {
     id: 6,
     title: "Ngày quốc tế thiếu nhi",
-    start: "1/6/2021",
-    end: "1/6/2021",
+    start: "2021-06-01",
+    end: "2021-06-01",
     coefficient: 2,
   },
 ];
@@ -136,8 +136,10 @@ const HolidayPage = ({ t, location }) => {
   }, [isDefaultTab]);
 
   const handleChangeTab = (e) => {
-    setIsDefaultTab(e === "holiday");
-    setIsLoading(true);
+    if ((e === "holiday") !== isDefaultTab) {
+      setIsDefaultTab(e === "holiday");
+      setIsLoading(true);
+    }
   };
 
   return (
@@ -163,6 +165,7 @@ const HolidayPage = ({ t, location }) => {
                 data={data}
                 route={"/setting/holiday"}
                 idxColumnsFilter={[0]}
+                dateCols={[1, 2]}
               />
             )}
           </CTabPane>
