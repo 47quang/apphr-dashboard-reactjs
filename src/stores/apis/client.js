@@ -8,7 +8,8 @@ import querystring from "query-string";
 // }
 
 const client = axios.create({
-  baseURL: "http://54.254.78.127:9093",
+  // baseURL: "http://54.254.78.127:9093",
+  baseURL: "http://13.250.31.133",
   headers: {
     "content-type": "application/json",
   },
