@@ -3,8 +3,8 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import FormHeader from "src/components/text/FormHeader";
-
 import { SettingHolidayInfoSchema } from "src/schema/formSchema";
+
 //TODO: translate
 const NewHolidayPage = ({ t, location }) => {
   const [initialValues, setInitialValues] = useState({
