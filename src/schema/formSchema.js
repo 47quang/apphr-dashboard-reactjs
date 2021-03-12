@@ -64,9 +64,12 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
-  branchCode: Yup.string().required("Bắt buộc nhập vào mã chi nhánh"),
-  branchName: Yup.string().required("Bắt buộc nhập vào tên của chi nhánh"),
-  ip: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), "Địa chỉ IP không hợp lệ."),
+  shortname: Yup.string().required("Bắt buộc nhập vào mã chi nhánh"),
+  name: Yup.string().required("Bắt buộc nhập vào tên của chi nhánh"),
+  ip: Yup.string().matches(
+    getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS),
+    "Địa chỉ IP không hợp lệ."
+  ),
   address: Yup.string().trim().required("Bắt buộc nhập địa chỉ chi nhánh"),
   description: Yup.string(),
 });

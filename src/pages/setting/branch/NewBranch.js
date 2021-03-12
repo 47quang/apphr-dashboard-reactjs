@@ -17,8 +17,8 @@ const NewBranchPage = ({ t, location, match }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [initialValues, setInitialValues] = useState({
-    branchName: "",
-    branchCode: "",
+    name: "",
+    shortname: "",
     address: "",
     ip: "",
     description: "",
@@ -26,8 +26,8 @@ const NewBranchPage = ({ t, location, match }) => {
 
   const getBranchInfo = () => {
     setInitialValues({
-      branchName: "APPHR Thủ Đức",
-      branchCode: "TD",
+      name: "APPHR Thủ Đức",
+      shortname: "TD",
       address: "Tầng 5 Vincom Thủ Đức",
       ip: "192.168.54.32",
       description: "Trụ sở chính",
@@ -89,35 +89,35 @@ const NewBranchPage = ({ t, location, match }) => {
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.branchCode}
-                      onBlur={handleBlur("branchCode")}
-                      onChange={handleChange("branchCode")}
-                      inputID={"branchCode"}
+                      value={values.shortname}
+                      onBlur={handleBlur("shortname")}
+                      onChange={handleChange("shortname")}
+                      inputID={"shortname"}
                       labelText={"Mã chi nhánh"}
                       inputType={"text"}
                       placeholder={"Nhập mã chi nhánh"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.branchCode}
-                      isError={errors.branchCode && touched.branchCode}
-                      errorMessage={errors.branchCode}
+                      isTouched={touched.shortname}
+                      isError={errors.shortname && touched.shortname}
+                      errorMessage={errors.shortname}
                     />
                   </div>
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.branchName}
-                      onBlur={handleBlur("branchName")}
-                      onChange={handleChange("branchName")}
-                      inputID={"branchName"}
+                      value={values.name}
+                      onBlur={handleBlur("name")}
+                      onChange={handleChange("name")}
+                      inputID={"name"}
                       labelText={"Tên chi nhánh"}
                       inputType={"text"}
                       placeholder={"Nhập tên chi nhánh"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.branchName}
-                      isError={errors.branchName && touched.branchName}
-                      errorMessage={errors.branchName}
+                      isTouched={touched.name}
+                      isError={errors.name && touched.name}
+                      errorMessage={errors.name}
                     />
                   </div>
 

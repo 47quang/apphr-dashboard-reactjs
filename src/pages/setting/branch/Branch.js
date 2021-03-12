@@ -8,52 +8,52 @@ import { changeListButtonHeader } from "src/stores/actions/header";
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [
-  { name: "branchCode", title: "Mã chi nhánh" },
-  { name: "branchName", title: "Tên chi nhánh" },
+  { name: "shortname", title: "Mã chi nhánh" },
+  { name: "name", title: "Tên chi nhánh" },
   { name: "address", title: "Địa chỉ" },
 ];
 
 const data = [
   {
     id: 1,
-    branchCode: "APPHRTD",
-    branchName: "APPHR Thủ Đức",
+    shortname: "APPHRTD",
+    name: "APPHR Thủ Đức",
     address: "Tầng 5 Vincom Thủ Đức, Quận Thủ Đức, Thành phố Hồ Chí Minh ",
   },
   {
     id: 2,
-    branchCode: "APPHRQ1",
-    branchName: "APPHR Quận 1",
+    shortname: "APPHRQ1",
+    name: "APPHR Quận 1",
     address: "Tầng 5 Vincom Quận 1, Quận 1, Thành phố Hồ Chí Minh ",
   },
   {
     id: 3,
-    branchCode: "APPHRQ2",
-    branchName: "APPHR Quận 2",
+    shortname: "APPHRQ2",
+    name: "APPHR Quận 2",
     address: "Tầng 5 Vincom Quận 2, Quận 2, Thành phố Hồ Chí Minh ",
   },
   {
     id: 4,
-    branchCode: "APPHRQ3",
-    branchName: "APPHR Quận 3",
+    shortname: "APPHRQ3",
+    name: "APPHR Quận 3",
     address: "Tầng 5 Vincom Quận 3, Quận 3, Thành phố Hồ Chí Minh ",
   },
   {
     id: 5,
-    branchCode: "APPHRQ4",
-    branchName: "APPHR Quận 4",
+    shortname: "APPHRQ4",
+    name: "APPHR Quận 4",
     address: "Tầng 5 Vincom Quận 4, Quận 4, Thành phố Hồ Chí Minh ",
   },
   {
     id: 6,
-    branchCode: "APPHRQ5",
-    branchName: "APPHR Quận 5",
+    shortname: "APPHRQ5",
+    name: "APPHR Quận 5",
     address: "Tầng 5 Vincom Quận 5, Quận 5, Thành phố Hồ Chí Minh ",
   },
   {
     id: 7,
-    branchCode: "APPHRQ6",
-    branchName: "APPHR Quận 6",
+    shortname: "APPHRQ6",
+    name: "APPHR Quận 6",
     address: "Tầng 5 Vincom Quận 6, Quận 6, Thành phố Hồ Chí Minh ",
   },
 ];

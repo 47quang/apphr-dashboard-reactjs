@@ -3,7 +3,7 @@ import {
   Plugin,
   Template,
   TemplateConnector,
-} from '@devexpress/dx-react-core';
+} from "@devexpress/dx-react-core";
 import {
   DataTypeProvider,
   EditingState,
@@ -13,7 +13,7 @@ import {
   PagingState,
   SelectionState,
   SortingState,
-} from '@devexpress/dx-react-grid';
+} from "@devexpress/dx-react-grid";
 import {
   Grid,
   PagingPanel,
@@ -21,24 +21,22 @@ import {
   TableHeaderRow,
   TableColumnReordering,
   TableFixedColumns,
-} from '@devexpress/dx-react-grid-material-ui';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
-import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog'
+} from "@devexpress/dx-react-grid-material-ui";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import Select from "@material-ui/core/Select";
+import { withStyles } from "@material-ui/core/styles";
+import TableCell from "@material-ui/core/TableCell";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import WarningAlertDialog from "src/components/dialog/WarningAlertDialog";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import { Formik } from "formik";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
-
-
 
 /*
   Params:
@@ -56,10 +54,10 @@ const CustomTableEditColumn = ({ route }) => {
       // Call API Delete
     }
     setOpenWarning(!openWarning);
-  }
+  };
   const handleCancel = () => {
     setOpenWarning(!openWarning);
-  }
+  };
   return (
     <Plugin>
       <WarningAlertDialog
@@ -75,21 +73,21 @@ const CustomTableEditColumn = ({ route }) => {
         name="tableColumns"
         computed={({ tableColumns }) => {
           return tableColumns.concat(
-            { key: 'edit', type: 'edit', width: "5%" },
-            { key: 'delete', type: 'delete', width: "5%" }
+            { key: "edit", type: "edit", width: "5%" },
+            { key: "delete", type: "delete", width: "5%" }
           );
         }}
       />
       <Template
         name="tableCell"
         predicate={({ tableColumn, tableRow }) =>
-          tableColumn.type === 'delete' && tableRow.type === Table.ROW_TYPE
+          tableColumn.type === "delete" && tableRow.type === Table.ROW_TYPE
         }
       >
         {(params) => (
           <TemplateConnector>
             {(getters, { deleteRows, commitDeletedRows }) => (
-              <TableCell>
+              <TableCell className="px-0 py-0">
                 <IconButton
                   onClick={() => {
                     setOpenWarning(!openWarning);
@@ -104,29 +102,17 @@ const CustomTableEditColumn = ({ route }) => {
           </TemplateConnector>
         )}
       </Template>
+
       <Template
         name="tableCell"
         predicate={({ tableColumn, tableRow }) =>
-          tableColumn.type === 'delete' &&
-          tableRow.type === TableHeaderRow.ROW_TYPE
-        }
-      >
-        {(params) => (
-          <TemplateConnector>
-            {(getters, { deleteRows, addRow }) => <TableCell></TableCell>}
-          </TemplateConnector>
-        )}
-      </Template>
-      <Template
-        name="tableCell"
-        predicate={({ tableColumn, tableRow }) =>
-          tableColumn.type === 'edit' && tableRow.type === Table.ROW_TYPE
+          tableColumn.type === "edit" && tableRow.type === Table.ROW_TYPE
         }
       >
         {(params) => (
           <TemplateConnector>
             {(getters, { startEditRows }) => (
-              <TableCell>
+              <TableCell className="px-0 py-0">
                 <Link to={`${route}/${params.tableRow.rowId}`}>
                   <IconButton>
                     <EditIcon />
@@ -137,8 +123,8 @@ const CustomTableEditColumn = ({ route }) => {
           </TemplateConnector>
         )}
       </Template>
-    </Plugin >
-  )
+    </Plugin>
+  );
 };
 
 const styles = (theme) => ({
@@ -146,17 +132,17 @@ const styles = (theme) => ({
     padding: theme.spacing(1),
   },
   dialog: {
-    width: 'calc(100% - 16px)',
+    width: "calc(100% - 16px)",
   },
   inputRoot: {
-    width: '100%',
+    width: "100%",
   },
   selectMenu: {
-    position: 'absolute !important',
+    position: "absolute !important",
   },
   tableStriped: {
-    '& tbody tr:nth-of-type(odd)': {
-      backgroundColor: '#fafafa',
+    "& tbody tr:nth-of-type(odd)": {
+      backgroundColor: "#fafafa",
     },
   },
 });
@@ -186,30 +172,27 @@ const LookupEditCellBase = ({
 );
 
 export const LookupEditCell = withStyles(styles, {
-  name: 'ControlledModeDemo',
+  name: "ControlledModeDemo",
 })(LookupEditCellBase);
 
 const TableComponentBase = ({ classes, ...restProps }) => (
-  <Table.Table
-    {...restProps}
-    className={classes.tableStriped}
-  />
+  <Table.Table {...restProps} className={classes.tableStriped} />
 );
 
 export const TableComponent = withStyles(styles, {
-  name: 'TableComponent',
+  name: "TableComponent",
 })(TableComponentBase);
 
-const dateColumns = ['saleDate'];
-const currencyColumns = ['amount'];
+const dateColumns = ["saleDate"];
+const currencyColumns = ["amount"];
 
 const filteringColumnExtensions = [
   {
-    columnName: 'saleDate',
+    columnName: "saleDate",
     predicate: (value, filter, row) => {
       if (!filter.value.length) return true;
-      if (filter && filter.operation === 'month') {
-        const month = parseInt(value.split('-')[1], 10);
+      if (filter && filter.operation === "month") {
+        const month = parseInt(value.split("-")[1], 10);
         return month === parseInt(filter.value, 10);
       }
       return IntegratedFiltering.defaultPredicate(value, filter, row);
@@ -229,16 +212,22 @@ const QTable = (props) => {
     editingRowIds: [],
   });
   const [rowChanges, setRowChanges] = useState({});
-  const [columnOrder, setColumnOrder] = useState(columnDef.map(col => col.name));
-  const colHeight = Math.floor(1 / columnDef.length * 100);
-  const tableColumnExtensions = columnDef.map(col => ({ name: col.name, align: 'left', width: colHeight + "%" }))
+  const [columnOrder, setColumnOrder] = useState(
+    columnDef.map((col) => col.name)
+  );
+  const colHeight = Math.floor((1 / columnDef.length) * 100);
+  const tableColumnExtensions = columnDef.map((col) => ({
+    name: col.name,
+    align: "left",
+    width: colHeight + "%",
+  }));
 
-  const columnsFilter = idxColumnsFilter.map(idx => columnDef[idx].title);
+  const columnsFilter = idxColumnsFilter.map((idx) => columnDef[idx].title);
   const filterTypes = ["Bao gồm", "Chính xác", "Không bao gồm"];
   const filterValues = {
     columnsFilter: columnsFilter[0],
     filterTypes: filterTypes[0],
-    textFilter: '',
+    textFilter: "",
   };
 
   return (
@@ -296,8 +285,11 @@ const QTable = (props) => {
           </div>
         </div>
 
-
-        <Grid rows={state.rows} columns={state.columns} getRowId={(row) => row.id}>
+        <Grid
+          rows={state.rows}
+          columns={state.columns}
+          getRowId={(row) => row.id}
+        >
           <DataTypeProvider for={dateColumns} />
           <DataTypeProvider for={currencyColumns} />
           <EditingState
@@ -337,34 +329,27 @@ const QTable = (props) => {
             defaultSorting={[
               {
                 columnName: columnDef && columnDef[0].name,
-                direction: 'asc',
+                direction: "asc",
               },
             ]}
           />
-          <IntegratedFiltering
-            columnExtensions={filteringColumnExtensions}
-          />
+          <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <Table
-            tableComponent={TableComponent}
             columnExtensions={tableColumnExtensions}
+            tableComponent={TableComponent}
           />
           <TableColumnReordering
             order={columnOrder}
             onOrderChange={setColumnOrder}
           />
           <TableHeaderRow showSortingControls />
-          <TableFixedColumns
-            rightColumns={['edit', 'delete']}
-          />
+          <TableFixedColumns rightColumns={["edit", "delete"]} />
           <CustomTableEditColumn route={route} />
           {/* <TableSelection showSelectAll /> */}
-          <PagingPanel
-            pageSizes={state.pageSizes}
-          />
+          <PagingPanel pageSizes={state.pageSizes} />
         </Grid>
       </Paper>
     </div>
-
   );
 };
 export default QTable;

@@ -8,28 +8,28 @@ import { changeListButtonHeader } from "src/stores/actions/header";
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [
-  { name: "departmentCode", title: "Mã phòng ban" },
-  { name: "departmentName", title: "Tên phòng ban" },
+  { name: "shortname", title: "Mã phòng ban" },
+  { name: "name", title: "Tên phòng ban" },
   { name: "branches", title: "Chi nhánh" },
 ];
 
 const data = [
   {
     id: 1,
-    departmentCode: "IT",
-    departmentName: "IT",
+    shortname: "IT",
+    name: "IT",
     branches: ["APPHR Thủ Đức", "APPHR Quận 1"],
   },
   {
     id: 2,
-    departmentCode: "ACC",
-    departmentName: "Kế toán",
+    shortname: "ACC",
+    name: "Kế toán",
     branches: ["APPHR Thủ Đức", "APPHR Quận 1"],
   },
   {
     id: 3,
-    departmentCode: "SEC",
-    departmentName: "Bảo vệ",
+    shortname: "SEC",
+    name: "Bảo vệ",
     branches: [
       "APPHR Thủ Đức",
       "APPHR Quận 1",
@@ -41,8 +41,8 @@ const data = [
   },
   {
     id: 4,
-    departmentCode: "EDU",
-    departmentName: "Giáo dục",
+    shortname: "EDU",
+    name: "Giáo dục",
     branches: [
       "APPHR Thủ Đức",
       "APPHR Quận 1",
