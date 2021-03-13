@@ -70,7 +70,7 @@ export const SettingBranchInfoSchema = Yup.object().shape({
     getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS),
     "Địa chỉ IP không hợp lệ."
   ),
-  address: Yup.string().trim().required("Bắt buộc nhập địa chỉ chi nhánh"),
+  address: Yup.string(),
   description: Yup.string(),
 });
 

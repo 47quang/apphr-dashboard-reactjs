@@ -5,7 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
-
+import InputLabel from "@material-ui/core/InputLabel";
 
 // TODO TRANS
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_PADDING_TOP = 4;
 const MenuProps = {
   PaperProps: {
     style: {
@@ -35,8 +35,6 @@ const MenuProps = {
     },
   },
 };
-
-
 
 function getStyles(id, values, theme) {
   if (values)
@@ -48,19 +46,23 @@ function getStyles(id, values, theme) {
     };
 }
 
-export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues }) {
+export default function CommonMultiSelectInput({
+  values = [],
+  onChangeValues,
+  listValues,
+  placeholder,
+}) {
   const classes = useStyles();
   const theme = useTheme();
-  const hash = listValues.reduce((acc, val) => {
+  let hash = listValues.reduce((acc, val) => {
     acc[val.id] = val;
     return acc;
-  }, {})
+  }, {});
 
   return (
-    <FormControl className={classes.formControl} style={{ width: '100%' }}>
-
+    <FormControl className={classes.formControl} style={{ width: "100%" }}>
+      <InputLabel id="demo-simple-select-label">{placeholder}</InputLabel>
       <Select
-        placeholder="Chọn chi nhánh"
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
         multiple
@@ -68,19 +70,29 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
         value={values}
         onChange={onChangeValues}
         input={<Input id="select-multiple-chip" />}
-        renderValue={(selected) => (
-          <div className={classes.chips}>
-            {selected.map((value, index) => {
-              return (
-                <Chip key={index} label={hash[value].name} className={classes.chip} />
-              )
-            })}
-          </div>
-        )}
+        renderValue={(selected) => {
+          if (Array.isArray(selected))
+            <div className={classes.chips}>
+              {selected.map((value, index) => {
+                return (
+                  <Chip
+                    key={index}
+                    label={hash[value].name}
+                    className={classes.chip}
+                  />
+                );
+              })}
+            </div>;
+        }}
         MenuProps={MenuProps}
       >
-        {listValues.map(val => (
-          <MenuItem key={val.id} value={val.id} label={val.name} style={getStyles(val.id, values, theme)}>
+        {listValues.map((val) => (
+          <MenuItem
+            key={val.id}
+            value={val.id}
+            label={val.name}
+            style={getStyles(val.id, values, theme)}
+          >
             {val.name}
           </MenuItem>
         ))}

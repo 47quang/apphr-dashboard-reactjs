@@ -38,6 +38,12 @@ const listOfShifts = [
   { id: 8, name: "Ca tối 2" },
   { id: 9, name: "Ca tối 3" },
 ];
+const listOfDepartments = [
+  { id: 1, name: "IT" },
+  { id: 2, name: "Bảo vệ" },
+  { id: 3, name: "Kế toán" },
+  { id: 4, name: "Giáo dục" },
+];
 
 const NewPositionPage = ({ t, location, match }) => {
   const params = match.params;
@@ -163,7 +169,8 @@ const NewPositionPage = ({ t, location, match }) => {
                       onBlur={handleBlur("department")}
                       onChange={handleChange("department")}
                       inputID={"department"}
-                      lstSelectOptions={["p1", "p2"]}
+                      lstSelectOptions={listOfDepartments}
+                      placeholder={"Chọn phòng ban"}
                     />
                   </div>
                   <div className="row">
@@ -177,6 +184,7 @@ const NewPositionPage = ({ t, location, match }) => {
                           values={values.branches}
                           onChangeValues={handleChange("branches")}
                           listValues={listOfBranches}
+                          placeholder={"Chọn chi nhánh"}
                         />
                       </div>
                     </div>
@@ -192,6 +200,7 @@ const NewPositionPage = ({ t, location, match }) => {
                           values={values.shifts}
                           onChangeValues={handleChange("shifts")}
                           listValues={listOfShifts}
+                          placeholder={"Chọn ca làm việc"}
                         />
                       </div>
                     </div>

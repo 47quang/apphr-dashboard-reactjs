@@ -20,7 +20,10 @@ const DAYS = [
   "Thứ sáu",
   "Thứ bảy",
 ];
-const typeOfRollUp = ["WIFI", "QR_CODE"];
+const typeOfRollUp = [
+  { id: 1, name: "WIFI" },
+  { id: 2, name: "QR_CODE" },
+];
 const listOfBranches = [
   { id: 1, name: "APPHR Thủ Đức" },
   { id: 2, name: "APPHR Quận 1" },
@@ -242,26 +245,28 @@ const NewShift = ({ t, location, match }) => {
                           values={values.branches}
                           onChangeValues={handleChange("branches")}
                           listValues={listOfBranches}
+                          placeholder={"Chọn chi nhánh"}
                         />
                       </div>
                     </div>
+                  </div>
 
-                    <div className="row">
-                      <CommonSelectInput
-                        containerClassName={"form-group col-lg-12"}
-                        value={values.typeOfRollUp}
-                        onBlur={handleBlur("typeOfRollUp")}
-                        onChange={handleChange("typeOfRollUp")}
-                        inputID={"typeOfRollUp"}
-                        labelText={"Hình thức điểm danh"}
-                        selectClassName={"form-control"}
-                        isRequiredField
-                        isTouched={touched.typeOfRollUp}
-                        isError={errors.typeOfRollUp && touched.typeOfRollUp}
-                        errorMessage={errors.typeOfRollUp}
-                        lstSelectOptions={typeOfRollUp}
-                      />
-                    </div>
+                  <div className="row">
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.typeOfRollUp}
+                      onBlur={handleBlur("typeOfRollUp")}
+                      onChange={handleChange("typeOfRollUp")}
+                      inputID={"typeOfRollUp"}
+                      labelText={"Hình thức điểm danh"}
+                      selectClassName={"form-control"}
+                      isRequiredField
+                      isTouched={touched.typeOfRollUp}
+                      isError={errors.typeOfRollUp && touched.typeOfRollUp}
+                      errorMessage={errors.typeOfRollUp}
+                      lstSelectOptions={typeOfRollUp}
+                      placeholder={"Chọn hình thức điểm danh"}
+                    />
                   </div>
                 </form>
               )}

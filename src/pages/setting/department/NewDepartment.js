@@ -141,6 +141,7 @@ const NewDepartment = ({ t, location, match }) => {
                           values={values.branches}
                           onChangeValues={handleChange("branches")}
                           listValues={listOfBranches}
+                          placeholder={"Chọn chi nhánh"}
                         />
                       </div>
                     </div>

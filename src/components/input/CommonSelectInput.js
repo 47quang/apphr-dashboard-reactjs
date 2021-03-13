@@ -13,8 +13,13 @@ const CommonSelectInput = ({
   errorMessage,
   inputID,
   isTouched,
+  placeholder,
   lstSelectOptions = [],
 }) => {
+  const hash = lstSelectOptions.reduce((acc, val) => {
+    acc[val.id] = val;
+    return acc;
+  }, {});
   return (
     <div className={containerClassName}>
       <Label text={labelText} required={isRequiredField} labelID={inputID} />
@@ -26,11 +31,16 @@ const CommonSelectInput = ({
         id={inputID}
         required={isRequiredField}
       >
-        {lstSelectOptions.map((val, index) => (
-          <option value={val} key={index}>
-            {val}
-          </option>
-        ))}
+        <option defaultValue>{placeholder}</option>
+        {lstSelectOptions.length > 0 ? (
+          lstSelectOptions.map((val, index) => (
+            <option value={hash[val.id]?.id} key={index}>
+              {val.name}
+            </option>
+          ))
+        ) : (
+          <></>
+        )}
       </select>
       {isError && errorMessage && (
         <div>

@@ -206,7 +206,6 @@ const DateTypeProvider = (props) => (
 );
 
 const MultiValuesFormatter = ({ value }) => {
-  console.log("this value", value);
   return value.map((val, idx) => (
     <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" />
   ));
@@ -230,7 +229,6 @@ const QTable = (props) => {
   let multiValuesColumns = Array.isArray(multiValuesCols)
     ? multiValuesCols.map((idx) => columnDef[idx].name)
     : [""];
-  console.log(data);
   const [state, setState] = useState({
     columns: columnDef,
     rows: data,
@@ -252,8 +250,15 @@ const QTable = (props) => {
     wordWrapEnabled: true,
   }));
 
-  const columnsFilter = idxColumnsFilter.map((idx) => columnDef[idx].title);
-  const filterTypes = ["Bao gồm", "Chính xác", "Không bao gồm"];
+  const columnsFilter = idxColumnsFilter.map((idx) => ({
+    id: idx,
+    name: columnDef[idx].title,
+  }));
+  const filterTypes = [
+    { id: 1, name: "Bao gồm" },
+    { id: 2, name: "Chính xác" },
+    { id: 3, name: "Không bao gồm" },
+  ];
   const filterValues = {
     columnsFilter: columnsFilter[0],
     filterTypes: filterTypes[0],
@@ -285,9 +290,10 @@ const QTable = (props) => {
                       value={values.columnsFilter}
                       onBlur={handleBlur("columnsFilter")}
                       onChange={handleChange("columnsFilter")}
-                      labelText={"Chọn cột cần lọc"}
+                      labelText={"Cột để lọc"}
                       selectClassName={"form-control"}
                       lstSelectOptions={columnsFilter}
+                      placeholder={"Chọn cột cần lọc"}
                     />
                     <CommonSelectInput
                       containerClassName={"form-group col-lg-4"}
@@ -295,6 +301,7 @@ const QTable = (props) => {
                       onBlur={handleBlur("filterTypes")}
                       onChange={handleChange("filterTypes")}
                       labelText={"Tùy chọn lọc"}
+                      placeholder={"Chọn kiểu lọc"}
                       selectClassName={"form-control"}
                       lstSelectOptions={filterTypes}
                     />

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
+import CommonSelectInput from "src/components/input/CommonSelectInput";
 import BasicLoader from "src/components/loader/BasicLoader";
 import { SettingGeneralInfoSchema } from "src/schema/formSchema";
 import { changeListButtonHeader } from "src/stores/actions/header";
@@ -66,6 +67,44 @@ const SettingGeneralPage = ({ t, location }) => {
   const handleSubmitInfo = (values) => {
     console.log(values);
   };
+
+  const getListOfProvinces = () => {
+    let lstOfProvinces = [
+      { id: 1, name: "Hồ Chí Minh" },
+      { id: 5, name: "Bình Dương" },
+    ];
+    return lstOfProvinces;
+  };
+  const getListOfDistricts = (provinceID) => {
+    if (provinceID === "1")
+      return [
+        { id: 1, name: "Quận 1" },
+        { id: 2, name: "Quận 2" },
+        { id: 3, name: "Quận 3" },
+        { id: 4, name: "Quận 4" },
+        { id: 5, name: "Quận 5" },
+        { id: 6, name: "Quận 10" },
+        { id: 10, name: "Quận Thủ Đức" },
+      ];
+    else if (provinceID === "5")
+      return [
+        { id: 1, name: "Dĩ An" },
+        { id: 2, name: "Thủ Dầu Một" },
+      ];
+  };
+
+  const getListOfWars = (districtID) => {
+    let lstWars = [
+      { id: 1, name: "Phường 01" },
+      { id: 2, name: "Phường 02" },
+      { id: 3, name: "Phường 03" },
+      { id: 5, name: "Phường 05" },
+      { id: 7, name: "Phường 07" },
+      { id: 9, name: "Phường 09" },
+    ];
+    return lstWars;
+  };
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -153,6 +192,42 @@ const SettingGeneralPage = ({ t, location }) => {
                       inputType={"text"}
                       placeholder={"Nhập mã số thuế"}
                       inputClassName={"form-control"}
+                    />
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-6"}
+                      value={values.provinceId}
+                      onBlur={handleBlur("provinceId")}
+                      onChange={handleChange("provinceId")}
+                      inputID={"provinceId"}
+                      labelText={"Tỉnh/Thành phố"}
+                      selectClassName={"form-control"}
+                      placeholder={"Chọn Tỉnh/Thành phố"}
+                      lstSelectOptions={getListOfProvinces()}
+                    />
+                  </div>
+
+                  <div className="row">
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-6"}
+                      value={values.districtId}
+                      onBlur={handleBlur("districtId")}
+                      onChange={handleChange("districtId")}
+                      inputID={"districtId"}
+                      labelText={"Quận huyện"}
+                      selectClassName={"form-control"}
+                      placeholder={"Chọn Quận/Huyện"}
+                      lstSelectOptions={getListOfDistricts(values.provinceId)}
+                    />
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-6"}
+                      value={values.wardId}
+                      onBlur={handleBlur("wardId")}
+                      onChange={handleChange("wardId")}
+                      inputID={"wardId"}
+                      labelText={"Phường xã"}
+                      selectClassName={"form-control"}
+                      placeholder={"Chọn Phường/Xã"}
+                      lstSelectOptions={getListOfWars(values.provinceId)}
                     />
                   </div>
 
