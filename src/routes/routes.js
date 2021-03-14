@@ -31,8 +31,8 @@ const Department = React.lazy(() =>
 const NewDepartment = React.lazy(() =>
   import("src/pages/setting/department/NewDepartment")
 );
-const DepartmentEdit = React.lazy(() =>
-  import("src/pages/setting/department/NewDepartment")
+const EditDepartment = React.lazy(() =>
+  import("src/pages/setting/department/EditDepartment")
 );
 
 const Holiday = React.lazy(() => import("src/pages/setting/holiday/Holiday"));
@@ -126,7 +126,7 @@ const routes = [
   {
     path: "/setting/department/id=:id",
     name: ROUTE_NAME.DEPARTMENT_UPDATE,
-    component: DepartmentEdit,
+    component: EditDepartment,
   },
   {
     path: "/setting/department",

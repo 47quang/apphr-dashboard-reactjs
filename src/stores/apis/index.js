@@ -38,21 +38,21 @@ export const api = {
     },
   },
   department: {
-    getDepartments: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT, {
         params: params,
       });
     },
-    postDepartment: (body) => {
-      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, body);
+    post: (data) => {
+      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, data);
     },
-    putDepartment: (body, id) => {
-      return client.put(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`, body);
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_DEPARTMENT + `/${data.id}`, data);
     },
-    getDepartment: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
-    deleteDepartment: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
   },
