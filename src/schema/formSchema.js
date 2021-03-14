@@ -25,31 +25,30 @@ const isBefore = (startTime, endTime) => {
   return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
 };
 export const SettingShiftInfoSchema = Yup.object().shape({
-  shiftCode: Yup.string().trim().required('Bắt buộc nhập mã ca làm'),
-  shiftName: Yup.string().trim().required('Bắt buộc nhập tên ca làm'),
-  start: Yup.string().test(
-    'not empty',
-    'Bắt buộc chọn giờ check-in',
+  shortname: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
+  name: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
+  startCC: Yup.string().test(
+    "not empty",
+    "Bắt buộc chọn giờ check-in",
     function (value) {
       return !!value;
     }
   ),
-  end: Yup.string()
-    .test('not empty', 'Bắt buộc chọn giờ check-out', function (value) {
+  endCC: Yup.string()
+    .test("not empty", "Bắt buộc chọn giờ check-out", function (value) {
       return !!value;
     })
     .test(
       'end_time_test',
       'Giờ check-out phải sau giờ check-in',
       function (value) {
-        const { start } = this.parent;
-        return isBefore(start, value);
+        const { startCC } = this.parent;
+        return isBefore(startCC, value);
       }
     ),
-  facOfShift: Yup.number()
-    .min(0, 'Hệ số giờ làm phải là một số không âm')
-
-    .required('Bắt buộc phải nhập hệ số giờ làm'),
+  coefficient: Yup.number()
+    .min(0, "Hệ số giờ làm phải là một số không âm")
+    .required("Bắt buộc phải nhập hệ số giờ làm"),
 });
 
 //Holiday

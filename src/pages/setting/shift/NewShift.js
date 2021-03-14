@@ -1,7 +1,8 @@
 import { CContainer } from "@coreui/react";
+import { StarRateTwoTone } from "@material-ui/icons";
 import { Field, Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
@@ -9,6 +10,13 @@ import BasicLoader from "src/components/loader/BasicLoader";
 import Label from "src/components/text/Label";
 import { SettingShiftInfoSchema } from "src/schema/formSchema";
 import { changeListButtonHeader } from "src/stores/actions/header";
+import {
+  createNewShift,
+  fetchShift,
+  updateShift,
+} from "src/stores/actions/shift";
+import { api } from "src/stores/apis";
+import { REDUX_STATE } from "src/stores/states";
 
 //TODO: translate
 const DAYS = [
@@ -20,9 +28,9 @@ const DAYS = [
   "Thứ sáu",
   "Thứ bảy",
 ];
-const typeOfRollUp = [
-  { id: 1, name: "WIFI" },
-  { id: 2, name: "QR_CODE" },
+const typeCC = [
+  { id: "WIFI", name: "WIFI" },
+  { id: "QR_CODE", name: "QR_CODE" },
 ];
 const listOfBranches = [
   { id: 1, name: "APPHR Thủ Đức" },
@@ -42,36 +50,19 @@ const NewShift = ({ t, location, match }) => {
   const params = match.params;
   const shiftInfoForm = useRef();
   const dispatch = useDispatch();
+  const shift = useSelector((state) => state.shift.shift);
+  const branches = useSelector((state) => state.branch.branches);
   const [isLoading, setIsLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState({
-    shiftCode: "",
-    shiftName: "",
-    start: "",
-    end: "",
-    facOfShift: 1,
-    checked: [],
-    branches: [],
-    typeOfRollUp: "",
-  });
-
-  const getShiftInfo = () => {
-    setInitialValues({
-      shiftCode: "SĐ",
-      shiftName: "Dđ",
-      start: "08:30",
-      end: "14:30:00.00",
-      facOfShift: 3,
-      checked: ["3", "1", "5"],
-      branches: [1, 3, 5],
-      typeOfRollUp: typeOfRollUp[0],
-    });
+  const shiftId = params?.id;
+  const getShiftInfo = (id) => {
+    dispatch(fetchShift(id));
   };
 
   useEffect(() => {
     let wait = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-    if (params?.id) getShiftInfo();
+    if (shiftId) getShiftInfo(params.id);
     dispatch(
       changeListButtonHeader([
         <button
@@ -80,11 +71,12 @@ const NewShift = ({ t, location, match }) => {
           key="magicShift"
           onClick={getOnSubmitInForm}
         >
-          {params?.id ? "Cập nhật" : "Tạo mới"}
+          {shiftId ? "Cập nhật" : "Tạo mới"}
         </button>,
       ])
     );
     return () => {
+      dispatch({ type: REDUX_STATE.shift.EMPTY_VALUE });
       dispatch(changeListButtonHeader([]));
       clearTimeout(wait);
     };
@@ -93,12 +85,15 @@ const NewShift = ({ t, location, match }) => {
   const getOnSubmitInForm = (event) =>
     shiftInfoForm.current.handleSubmit(event);
 
-  const enCodeChecked = (checked) =>
-    checked.reduce((acc, val) => {
-      acc[val - 1] = 1;
+  const enCodeChecked = (operateLoop) => {
+    return operateLoop.reduce((acc, val) => {
+      acc[parseInt(val)] = 1;
       return acc;
     }, Array(7).fill(0));
-
+  };
+  const formatTime = (time) => {
+    return time + ":00";
+  };
   const deCodeChecked = (_checked) =>
     _checked.reduce((acc, val, idx) => {
       if (val !== 0) acc.push(idx + 1 + "");
@@ -106,10 +101,12 @@ const NewShift = ({ t, location, match }) => {
     }, []);
 
   const handleSubmitInfo = (values) => {
-    console.log(values);
-    values.checked = enCodeChecked(values.checked);
-    values.checked = deCodeChecked(values.checked);
-    console.log(values);
+    let valuesTemp = values;
+    valuesTemp.operateLoop = enCodeChecked(values.operateLoop);
+    valuesTemp.startCC = formatTime(values.startCC);
+    valuesTemp.endCC = formatTime(values.endCC);
+    if (shiftId) dispatch(updateShift(values));
+    else dispatch(createNewShift(values));
   };
 
   return (
@@ -122,7 +119,7 @@ const NewShift = ({ t, location, match }) => {
             <Formik
               innerRef={shiftInfoForm}
               enableReinitialize
-              initialValues={initialValues}
+              initialValues={shift}
               validationSchema={SettingShiftInfoSchema}
               onSubmit={(values) => handleSubmitInfo(values)}
             >
@@ -139,82 +136,82 @@ const NewShift = ({ t, location, match }) => {
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.shiftCode}
-                      onBlur={handleBlur("shiftCode")}
-                      onChange={handleChange("shiftCode")}
-                      inputID={"shiftCode"}
+                      value={values.shortname}
+                      onBlur={handleBlur("shortname")}
+                      onChange={handleChange("shortname")}
+                      inputID={"shortname"}
                       labelText={"Mã ca làm"}
                       inputType={"text"}
                       placeholder={"Nhập mã ca làm"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.shiftCode}
-                      isError={errors.shiftCode && touched.shiftCode}
-                      errorMessage={errors.shiftCode}
+                      isTouched={touched.shortname}
+                      isError={errors.shortname && touched.shortname}
+                      errorMessage={errors.shortname}
                     />
                   </div>
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.shiftName}
-                      onBlur={handleBlur("shiftName")}
-                      onChange={handleChange("shiftName")}
-                      inputID={"shiftName"}
+                      value={values.name}
+                      onBlur={handleBlur("name")}
+                      onChange={handleChange("name")}
+                      inputID={"name"}
                       labelText={"Tên ca làm"}
                       inputType={"text"}
                       placeholder={"Nhập tên ca làm"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.shiftName}
-                      isError={errors.shiftName && touched.shiftName}
-                      errorMessage={errors.shiftName}
+                      isTouched={touched.name}
+                      isError={errors.name && touched.name}
+                      errorMessage={errors.name}
                     />
                   </div>
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-6"}
-                      value={values.start}
-                      onBlur={handleBlur("start")}
-                      onChange={handleChange("start")}
-                      inputID={"start"}
+                      value={values.startCC}
+                      onBlur={handleBlur("startCC")}
+                      onChange={handleChange("startCC")}
+                      inputID={"startCC"}
                       labelText={"Giờ check-in"}
                       inputType={"Time"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.start}
-                      isError={errors.start && touched.start}
-                      errorMessage={errors.start}
+                      isTouched={touched.startCC}
+                      isError={errors.startCC && touched.startCC}
+                      errorMessage={errors.startCC}
                     />
                     <CommonTextInput
                       containerClassName={"form-group col-lg-6"}
-                      value={values.end}
-                      onBlur={handleBlur("end")}
-                      onChange={handleChange("end")}
-                      inputID={"end"}
+                      value={values.endCC}
+                      onBlur={handleBlur("endCC")}
+                      onChange={handleChange("endCC")}
+                      inputID={"endCC"}
                       labelText={"Giờ check-out"}
                       inputType={"Time"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.end}
-                      isError={errors.end && touched.end}
-                      errorMessage={errors.end}
-                      minTime={values.start}
+                      isTouched={touched.endCC}
+                      isError={errors.endCC && touched.endCC}
+                      errorMessage={errors.endCC}
+                      minTime={values.startCC}
                     />
                   </div>
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.facOfShift}
-                      onBlur={handleBlur("facOfShift")}
-                      onChange={handleChange("facOfShift")}
-                      inputID={"facOfShift"}
+                      value={values.coefficient}
+                      onBlur={handleBlur("coefficient")}
+                      onChange={handleChange("coefficient")}
+                      inputID={"coefficient"}
                       labelText={"Hệ số giờ làm"}
                       inputType={"number"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.facOfShift}
-                      isError={errors.facOfShift && touched.facOfShift}
-                      errorMessage={errors.facOfShift}
+                      isTouched={touched.coefficient}
+                      isError={errors.coefficient && touched.coefficient}
+                      errorMessage={errors.coefficient}
                     />
                   </div>
                   <div className="row">
@@ -228,7 +225,7 @@ const NewShift = ({ t, location, match }) => {
                           <label key={index}>
                             <Field
                               type="checkbox"
-                              name="checked"
+                              name="operateLoop"
                               value={index + ""}
                             />
                             &nbsp;{day}
@@ -238,35 +235,35 @@ const NewShift = ({ t, location, match }) => {
                     </div>
                   </div>
 
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="form-group col-lg-12">
                       <Label text="Chi nhánh:" />
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
-                          values={values.branches}
-                          onChangeValues={handleChange("branches")}
+                          values={values.branchIds}
+                          onChangeValues={handleChange("branchIds")}
                           listValues={listOfBranches}
                           setValues={setValues}
                           placeholder={"Chọn chi nhánh"}
                         />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="row">
                     <CommonSelectInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.typeOfRollUp}
-                      onBlur={handleBlur("typeOfRollUp")}
-                      onChange={handleChange("typeOfRollUp")}
-                      inputID={"typeOfRollUp"}
+                      value={values.typeCC}
+                      onBlur={handleBlur("typeCC")}
+                      onChange={handleChange("typeCC")}
+                      inputID={"typeCC"}
                       labelText={"Hình thức điểm danh"}
                       selectClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.typeOfRollUp}
-                      isError={errors.typeOfRollUp && touched.typeOfRollUp}
-                      errorMessage={errors.typeOfRollUp}
-                      lstSelectOptions={typeOfRollUp}
+                      isTouched={touched.typeCC}
+                      isError={errors.typeCC && touched.typeCC}
+                      errorMessage={errors.typeCC}
+                      lstSelectOptions={typeCC}
                       placeholder={"Chọn hình thức điểm danh"}
                     />
                   </div>
