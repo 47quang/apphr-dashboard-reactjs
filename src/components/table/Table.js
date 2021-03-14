@@ -48,12 +48,13 @@ import Label from "src/components/text/Label";
     idxColumnsFilter
 */
 
-const CustomTableEditColumn = ({ route }) => {
+const CustomTableEditColumn = ({ route, deleteRowFunc }) => {
   const [openWarning, setOpenWarning] = useState(false);
-  let deletingRowID;
+  const [deletingRowID, setDeleteRowID] = useState();
   const handleConfirm = (props) => {
     if (Number.isInteger(deletingRowID)) {
       // Call API Delete
+      deleteRowFunc(deletingRowID);
     }
     setOpenWarning(!openWarning);
   };
@@ -93,7 +94,7 @@ const CustomTableEditColumn = ({ route }) => {
                 <IconButton
                   onClick={() => {
                     setOpenWarning(!openWarning);
-                    deletingRowID = params.tableRow.rowId;
+                    setDeleteRowID(params.tableRow.rowId);
                   }}
                   title="Delete row"
                 >
@@ -207,6 +208,7 @@ const DateTypeProvider = (props) => (
 );
 
 const MultiValuesFormatter = ({ value }) => {
+  console.log(value);
   return value.map((val, idx) => (
     <Chip
       label={val}
@@ -229,6 +231,7 @@ const QTable = (props) => {
     idxColumnsFilter,
     dateCols,
     multiValuesCols,
+    deleteRowFunc,
   } = props;
   let dateColumns = Array.isArray(dateCols)
     ? dateCols.map((idx) => columnDef[idx].name)
@@ -238,7 +241,6 @@ const QTable = (props) => {
     : [""];
   const [state, setState] = useState({
     columns: columnDef,
-    rows: data,
     selection: [],
     currentPage: 0,
     pageSize: 5,
@@ -277,10 +279,7 @@ const QTable = (props) => {
       <Paper>
         <div className="m-auto">
           <div className="rounded p-4 container col-md-12">
-            <Formik
-              enableReinitialize
-              initialValues={filterValues}
-            >
+            <Formik enableReinitialize initialValues={filterValues}>
               {({
                 values,
                 errors,
@@ -336,11 +335,7 @@ const QTable = (props) => {
           </div>
         </div>
 
-        <Grid
-          rows={state.rows}
-          columns={state.columns}
-          getRowId={(row) => row.id}
-        >
+        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <EditingState
@@ -395,7 +390,7 @@ const QTable = (props) => {
           />
           <TableHeaderRow showSortingControls />
           <TableFixedColumns rightColumns={["edit", "delete"]} />
-          <CustomTableEditColumn route={route} />
+          <CustomTableEditColumn route={route} deleteRowFunc={deleteRowFunc} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>

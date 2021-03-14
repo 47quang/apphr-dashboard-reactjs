@@ -17,7 +17,7 @@ const columnDef = [
   { name: "shortname", title: "Mã vị trí" },
   { name: "name", title: "Tên vị trí" },
   { name: "departmentId", title: "Phòng ban" },
-  { name: "branchId", title: "Ca làm việc" },
+  { name: "branchId", title: "Chi nhánh" },
 ];
 
 const Position = ({ t, location, history }) => {
@@ -64,6 +64,7 @@ const Position = ({ t, location, history }) => {
           data={positions}
           route={"/setting/position/id="}
           idxColumnsFilter={[0, 2]}
+          deleteRowFunc={deleteRowFunc}
         />
       )}
     </CContainer>

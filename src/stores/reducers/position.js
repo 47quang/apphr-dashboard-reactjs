@@ -7,7 +7,7 @@ const initialState = {
     shortname: "",
     branchId: 0,
     departmentId: 0,
-    academicLevel: "",
+    academicLevel: "not_require",
     note: "",
     expYear: 0,
   },
@@ -37,12 +37,12 @@ const positionReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.position.EMPTY_VALUE:
       return {
         ...state,
-        branch: {
+        position: {
           name: "",
           shortname: "",
           branchId: 0,
           departmentId: 0,
-          academicLevel: "",
+          academicLevel: "not_require",
           note: "",
           expYear: 0,
         },

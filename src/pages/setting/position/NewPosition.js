@@ -1,7 +1,7 @@
 import { CContainer } from "@coreui/react";
 import { Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
@@ -10,6 +10,11 @@ import BasicLoader from "src/components/loader/BasicLoader";
 import FormHeader from "src/components/text/FormHeader";
 import Label from "src/components/text/Label";
 import { SettingPositionInfoSchema } from "src/schema/formSchema";
+import { fetchBranches } from "src/stores/actions/branch";
+import {
+  fetchDepartment,
+  fetchDepartments,
+} from "src/stores/actions/department";
 import { changeActions } from "src/stores/actions/header";
 import {
   fetchPosition,
@@ -44,37 +49,15 @@ const listOfShifts = [
   { id: 8, name: "Ca tối 2" },
   { id: 9, name: "Ca tối 3" },
 ];
-const listOfDepartments = [
-  { id: 1, name: "IT" },
-  { id: 2, name: "Bảo vệ" },
-  { id: 3, name: "Kế toán" },
-  { id: 4, name: "Giáo dục" },
-];
 
 const NewPositionPage = ({ t, location, match, history }) => {
   const params = match.params;
   const positionInfoForm = useRef();
   const dispatch = useDispatch();
+  const departments = useSelector((state) => state.department.departments);
+  const branches = useSelector((state) => state.branch.branches);
+  const position = useSelector((state) => state.position.position);
   const [isLoading, setIsLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState({
-    name: "",
-    shortname: "",
-    department: "",
-    branches: [],
-    shifts: [],
-    description: "",
-  });
-
-  const getPositionInfo = () => {
-    setInitialValues({
-      name: "Nhân viên IT",
-      shortname: "DEV0",
-      department: "IT",
-      branches: [1, 3],
-      shifts: [1, 3],
-      description: "Nhân viên IT",
-    });
-  };
 
   useEffect(() => {
     let wait = setTimeout(() => {
@@ -91,6 +74,8 @@ const NewPositionPage = ({ t, location, match, history }) => {
       },
     ];
     dispatch(changeActions(actions));
+    dispatch(fetchBranches());
+    dispatch(fetchDepartments());
 
     return () => {
       clearTimeout(wait);
@@ -99,20 +84,18 @@ const NewPositionPage = ({ t, location, match, history }) => {
 
   const btnCreatePosition = () => {
     const form = positionInfoForm.current.values;
-    form.provinceId = parseInt(form.provinceId);
-    form.districtId = parseInt(form.districtId);
-    form.wardId = parseInt(form.wardId);
+    form.branchId = parseInt(form.branchId);
+    form.departmentId = parseInt(form.departmentId);
     delete form.id;
     dispatch(createPosition(form));
-    history.push("/setting/branch");
+    history.push("/setting/position");
   };
   const btnUpdatePosition = () => {
     const form = positionInfoForm.current.values;
-    form.provinceId = parseInt(form.provinceId);
-    form.districtId = parseInt(form.districtId);
-    form.wardId = parseInt(form.wardId);
+    form.branchId = parseInt(form.branchId);
+    form.departmentId = parseInt(form.departmentId);
     dispatch(updatePosition(form, params.id));
-    history.push("/setting/branch");
+    history.push("/setting/position");
   };
 
   const getOnSubmitInForm = (event) =>
@@ -132,7 +115,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
             <Formik
               innerRef={positionInfoForm}
               enableReinitialize
-              initialValues={initialValues}
+              initialValues={position}
               validationSchema={SettingPositionInfoSchema}
               onSubmit={(values) => handleSubmitInfo(values)}
             >
@@ -191,7 +174,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
                       onBlur={handleBlur("branchId")}
                       onChange={handleChange("branchId")}
                       inputID={"branchId"}
-                      lstSelectOptions={listOfDepartments}
+                      lstSelectOptions={branches}
                       placeholder={"Chọn chi nhánh"}
                     />
                   </div>
@@ -205,7 +188,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
                       onBlur={handleBlur("departmentId")}
                       onChange={handleChange("departmentId")}
                       inputID={"departmentId"}
-                      lstSelectOptions={listOfDepartments}
+                      lstSelectOptions={departments}
                       placeholder={"Chọn phòng ban"}
                     />
                   </div>
@@ -229,10 +212,10 @@ const NewPositionPage = ({ t, location, match, history }) => {
                   <div className="row">
                     <CommonMultipleTextInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.description}
-                      onBlur={handleBlur("description")}
-                      onChange={handleChange("description")}
-                      inputID={"description"}
+                      value={values.note}
+                      onBlur={handleBlur("note")}
+                      onChange={handleChange("note")}
+                      inputID={"note"}
                       labelText={"Ghi chú"}
                       inputClassName={"form-control"}
                     />

@@ -28,6 +28,7 @@ export const fetchPosition = (id) => {
 };
 
 export const createPosition = (params) => {
+  console.log(params);
   return (dispatch, getState) => {
     api.position
       .postPosition(params)

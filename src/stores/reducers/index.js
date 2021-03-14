@@ -8,6 +8,7 @@ import shiftReducer from "./shift";
 import styleReducer from "./style";
 import userReducer from "./user";
 import positionReducer from "./position";
+import departmentReducer from "./department";
 
 export default combineReducers({
   style: styleReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   setting: settingReducer,
   shift: shiftReducer,
   position: positionReducer,
+  department: departmentReducer,
 });

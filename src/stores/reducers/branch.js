@@ -17,9 +17,9 @@ const initialState = {
 
 const branchReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case REDUX_STATE.SET_BRANCHES:
+    case REDUX_STATE.branch.SET_BRANCHES:
       return { ...state, branches: payload };
-    case REDUX_STATE.SET_BRANCH:
+    case REDUX_STATE.branch.SET_BRANCH:
       return { ...state, branch: Object.assign({}, state.branch, payload) };
     default:
       return state;

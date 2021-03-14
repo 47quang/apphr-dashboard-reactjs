@@ -1,36 +1,37 @@
-import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
+import { CContainer } from '@coreui/react';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchBranches } from 'src/stores/actions/branch';
+import { fetchDepartment, updateDepartment } from 'src/stores/actions/department';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import { createDepartment, resetDepartment } from 'src/stores/actions/department';
+import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 
-const NewDepartment = ({ t, location }) => {
+const EditDepartment = ({ t, location, match }) => {
   const departmentRef = useRef();
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const department = useSelector((state) => state.department.department);
+  console.log(department);
 
   useEffect(() => {
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo mới',
+        name: 'Cập nhật',
         callback: () => {
           const form = departmentRef.current.values;
           form.branchId = parseInt(form.branchId);
-          dispatch(createDepartment(form));
+          dispatch(updateDepartment(form));
         },
       },
     ];
-    dispatch(resetDepartment());
     dispatch(changeActions(actions));
     dispatch(fetchBranches());
+    dispatch(fetchDepartment({ id: match.params.id }));
   }, []);
 
   return (
@@ -79,19 +80,6 @@ const NewDepartment = ({ t, location }) => {
                     errorMessage={errors.name}
                   />
                 </div>
-                {/* <div className="row">
-                  <div className="form-group col-lg-12">
-                    <Label text="Chi nhánh:" />
-                    <div className="d-flex flex-row flex-wrap justify-content-between border rounded-3">
-                      <CommonMultiSelectInput
-                        values={values.branches}
-                        onChangeValues={handleChange('branches')}
-                        listValues={branches}
-                        placeholder={'Chọn chi nhánh'}
-                      />
-                    </div>
-                  </div>
-                </div> */}
                 <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-12'}
@@ -126,4 +114,4 @@ const NewDepartment = ({ t, location }) => {
   );
 };
 
-export default NewDepartment;
+export default EditDepartment;

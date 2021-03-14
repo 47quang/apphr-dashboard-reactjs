@@ -1,15 +1,14 @@
-import client from "./client";
+import client from './client';
 
 const API_PREFIX = {
-  API_GENERAL: "/api.tenant",
-  API_SETTING_BRANCH: "/api.branch",
-  API_SETTING_DEPARTMENT: "/api.department",
-  API_SETTING_POSITION: "/api.position",
-  API_SETTING_SHIFT: "/api.shift",
-  API_PROVINCE: "/api.province",
-  API_DISTRICT: "/api.district",
-  API_WARD: "/api.ward",
-  API_GENERAL: "/api.tenant",
+  API_GENERAL: '/api.tenant',
+  API_SETTING_BRANCH: '/api.branch',
+  API_SETTING_DEPARTMENT: '/api.department',
+  API_SETTING_POSITION: '/api.position',
+  API_SETTING_SHIFT: '/api.shift',
+  API_PROVINCE: '/api.province',
+  API_DISTRICT: '/api.district',
+  API_WARD: '/api.ward',
 };
 
 export const api = {
@@ -39,24 +38,21 @@ export const api = {
     },
   },
   department: {
-    getDepartmentList: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT, {
         params: params,
       });
     },
-    postDepartment: (bodyParams) => {
-      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, bodyParams);
+    post: (data) => {
+      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, data);
     },
-    putDepartment: (bodyParams, id) => {
-      return client.put(
-        API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`,
-        bodyParams
-      );
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_DEPARTMENT + `/${data.id}`, data);
     },
-    getDepartment: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
-    deleteDepartment: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
   },

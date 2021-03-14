@@ -1,7 +1,7 @@
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchBranches = (params) => {
+export const fetchBranches = () => {
   return (dispatch, getState) => {
     api.branch
       .getBranches()
@@ -14,10 +14,10 @@ export const fetchBranches = (params) => {
   };
 };
 
-export const createBranch = (params) => {
+export const createBranch = (data) => {
   return (dispatch, getState) => {
     api.branch
-      .postBranch()
+      .postBranch(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })

@@ -1,100 +1,48 @@
-import { CContainer } from "@coreui/react";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import BasicLoader from "src/components/loader/BasicLoader";
-import QTable from "src/components/table/Table";
-import { changeListButtonHeader } from "src/stores/actions/header";
+import { CContainer } from '@coreui/react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import QTable from 'src/components/table/Table';
+import {
+  fetchDepartments,
+  deleteDepartment,
+} from 'src/stores/actions/department';
+import { changeActions } from 'src/stores/actions/header';
 
-// shortname, name, startCC, endCC, coefficient
 const columnDef = [
-  { name: "shortname", title: "Mã phòng ban" },
-  { name: "name", title: "Tên phòng ban" },
-  { name: "branches", title: "Chi nhánh" },
+  { name: 'shortname', title: 'Mã phòng ban' },
+  { name: 'name', title: 'Tên phòng ban' },
+  { name: 'branchId', title: 'Chi nhánh' },
 ];
 
-const data = [
-  {
-    id: 1,
-    shortname: "IT",
-    name: "IT",
-    branches: ["APPHR Thủ Đức", "APPHR Quận 1"],
-  },
-  {
-    id: 2,
-    shortname: "ACC",
-    name: "Kế toán",
-    branches: ["APPHR Thủ Đức", "APPHR Quận 1"],
-  },
-  {
-    id: 3,
-    shortname: "SEC",
-    name: "Bảo vệ",
-    branches: [
-      "APPHR Thủ Đức",
-      "APPHR Quận 1",
-      "APPHR Quận 2",
-      "APPHR Quận 3",
-      "APPHR Quận 4",
-      "APPHR Quận 5",
-    ],
-  },
-  {
-    id: 4,
-    shortname: "EDU",
-    name: "Giáo dục",
-    branches: [
-      "APPHR Thủ Đức",
-      "APPHR Quận 1",
-      "APPHR Quận 2",
-      "APPHR Quận 3",
-      "APPHR Quận 4",
-      "APPHR Quận 5",
-    ],
-  },
-];
-
-const Department = ({ t, location }) => {
+const Department = ({ t, location, history }) => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const departments = useSelector((state) => state.department.departments);
 
   useEffect(() => {
-    let wait = () => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    };
-    wait();
-    dispatch(
-      changeListButtonHeader([
-        <Link
-          to={"/setting/department/newDepartment"}
-          className="btn btn-primary"
-          key="newDepartment"
-        >
-          Tạo phòng ban
-        </Link>,
-      ])
-    );
-    return () => {
-      dispatch(changeListButtonHeader([]));
-      clearTimeout(wait);
-    };
+    const actions = [
+      {
+        type: 'primary',
+        name: 'Tạo phòng ban',
+        callback: () => history.push('/setting/department/newDepartment'),
+      },
+    ];
+    dispatch(changeActions(actions));
+    dispatch(fetchDepartments());
   }, []);
+
+  const deleteRow = (rowId) => {
+    dispatch(deleteDepartment({ id: rowId }));
+  };
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      {isLoading ? (
-        <BasicLoader isVisible={isLoading} radius={10} />
-      ) : (
-        <QTable
-          columnDef={columnDef}
-          data={data}
-          route={"/setting/department/id="}
-          idxColumnsFilter={[0, 2]}
-          multiValuesCols={[2]}
-        />
-      )}
+      <QTable
+        columnDef={columnDef}
+        data={departments}
+        route={'/setting/department/id='}
+        idxColumnsFilter={[0, 2]}
+        deleteRow={deleteRow}
+      />
     </CContainer>
   );
 };
