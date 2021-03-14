@@ -11,12 +11,12 @@ export const fetchShifts = (params) => {
 export const fetchShift = (id) => {
   const deCodeChecked = (_checked) =>
     _checked.reduce((acc, val, idx) => {
-      if (parseInt(val) !== 0) acc.push(idx + 1 + "");
+      if (parseInt(val) !== 0) acc.push(idx + 1 + '');
       return acc;
     }, []);
   const convertTime = (time) => {
-    let timeTemp = time.split(":");
-    return timeTemp.splice(0, 2).join(":");
+    let timeTemp = time.split(':');
+    return timeTemp.splice(0, 2).join(':');
   };
 
   return (dispatch, getState) => {
@@ -28,12 +28,12 @@ export const fetchShift = (id) => {
     });
   };
 };
-export const createNewShift = (bodyParams, formRef) => {
+export const createNewShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .postShift(bodyParams)
+      .postShift(data)
       .then(({ payload }) => {
-        formRef.current.resetForm();
+        dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
       })
       .catch((err) => {
         console.log(REDUX_STATE.shift.GET_SHIFT, err);
@@ -41,10 +41,10 @@ export const createNewShift = (bodyParams, formRef) => {
   };
 };
 
-export const updateShift = (bodyParams, id) => {
+export const updateShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .putShift(bodyParams, id)
+      .putShift(data)
       .then(({ payload }) => {
         dispatch({
           type: REDUX_STATE.shift.SET_SHIFT,
@@ -57,11 +57,13 @@ export const updateShift = (bodyParams, id) => {
   };
 };
 
-export const deleteShift = (id) => {
+export const deleteShift = (params) => {
   return (dispatch, getState) => {
     api.shift
-      .deleteShift(id)
-      .then(({ payload }) => {})
+      .deleteShift(params.id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
+      })
       .catch((err) => {
         console.log(REDUX_STATE.shift.GET_SHIFT, err);
       });

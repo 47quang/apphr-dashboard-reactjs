@@ -1,19 +1,18 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   branches: [],
   branch: {
     id: 0,
-    name: "",
-    shortname: "",
-    address: "",
+    name: '',
+    shortname: '',
+    address: '',
     provinceId: 0,
     districtId: 0,
     wardId: 0,
-    phone: "",
-    note: "",
+    phone: '',
+    note: '',
   },
-  deletedBranchId: 0,
 };
 
 const branchReducer = (state = initialState, { type, payload }) => {
@@ -25,26 +24,21 @@ const branchReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.branch.DELETE_BRANCH:
       return {
         ...state,
-        branches: state.branches.filter((b) => b.id !== state.deletedBranchId),
-      };
-    case REDUX_STATE.branch.SET_DELETED_BRANCH_ID:
-      return {
-        ...state,
-        deletedBranchId: payload,
+        branches: state.branches.filter((b) => b.id !== payload.id),
       };
     case REDUX_STATE.branch.EMPTY_VALUE:
       return {
         ...state,
         branch: {
           id: 0,
-          name: "",
-          shortname: "",
-          address: "",
+          name: '',
+          shortname: '',
+          address: '',
           provinceId: 0,
           districtId: 0,
           wardId: 0,
-          phone: "",
-          note: "",
+          phone: '',
+          note: '',
         },
       };
     default:

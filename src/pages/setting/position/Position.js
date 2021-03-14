@@ -78,7 +78,7 @@ const Position = ({ t, location, history }) => {
       {
         type: 'primary',
         name: 'Tạo mới',
-        callback: () => history.push('/setting/position/newPosition'),
+        callback: () => history.push('/setting/position/create'),
       },
     ];
     dispatch(changeActions(actions));
@@ -86,7 +86,7 @@ const Position = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={data} route={'/setting/position/id='} idxColumnsFilter={[0, 2]} multiValuesCols={[3]} />
+      <QTable columnDef={columnDef} data={data} route={'/setting/position/'} idxColumnsFilter={[0, 2]} multiValuesCols={[3]} />
     </CContainer>
   );
 };

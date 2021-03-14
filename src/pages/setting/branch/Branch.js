@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { changeActions } from 'src/stores/actions/header';
-import { fetchBranches, deleteBranch, setDeleteDBranchId } from 'src/stores/actions/branch';
+import { fetchBranches, deleteBranch } from 'src/stores/actions/branch';
 
 const columnDef = [
   { name: 'shortname', title: 'Mã chi nhánh' },
@@ -19,9 +19,7 @@ const Branch = ({ t, location, history }) => {
       {
         type: 'primary',
         name: 'Tạo chi nhánh',
-        callback: () => {
-          history.push('/setting/branch/newBranch');
-        },
+        callback: () => history.push('/setting/branch/create'),
       },
     ];
     dispatch(fetchBranches());
@@ -29,14 +27,13 @@ const Branch = ({ t, location, history }) => {
   }, []);
 
   const deleteRow = async (rowId) => {
-    dispatch(setDeleteDBranchId(rowId));
     dispatch(deleteBranch(rowId));
     dispatch(fetchBranches());
   };
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={branches} route={'/setting/branch/id='} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable columnDef={columnDef} data={branches} route={'/setting/branch/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

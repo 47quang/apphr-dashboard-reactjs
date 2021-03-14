@@ -22,8 +22,8 @@ const Department = ({ t, location, history }) => {
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo phòng ban',
-        callback: () => history.push('/setting/department/newDepartment'),
+        name: 'Tạo mới',
+        callback: () => history.push('/setting/department/create'),
       },
     ];
     dispatch(changeActions(actions));
@@ -39,7 +39,7 @@ const Department = ({ t, location, history }) => {
       <QTable
         columnDef={columnDef}
         data={departments}
-        route={'/setting/department/id='}
+        route={'/setting/department/'}
         idxColumnsFilter={[0, 2]}
         deleteRow={deleteRow}
       />

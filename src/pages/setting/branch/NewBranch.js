@@ -55,6 +55,7 @@ const NewBranchPage = ({ t, location, match, history }) => {
     dispatch(createBranch(form));
     history.push('/setting/branch');
   };
+
   const btnUpdateBranch = () => {
     const form = branchInfoForm.current.values;
     form.provinceId = parseInt(form.provinceId);

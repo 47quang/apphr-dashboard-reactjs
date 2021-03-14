@@ -149,7 +149,7 @@ const QTable = (props) => {
     idxColumnsFilter,
     dateCols,
     multiValuesCols,
-    handleDeleteRow,
+    deleteRow,
   } = props;
 
   const CustomTableEditColumn = ({ route }) => {
@@ -157,7 +157,7 @@ const QTable = (props) => {
     const [deletingRowID, setDeletingRowID] = useState(-1);
     const handleConfirm = (e) => {
       if (Number.isInteger(deletingRowID)) {
-        handleDeleteRow(deletingRowID);
+        deleteRow(deletingRowID);
       }
       setOpenWarning(!openWarning);
     };

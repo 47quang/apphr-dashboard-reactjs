@@ -56,45 +56,51 @@ const routes = [
   },
   { path: '/setting/general', name: ROUTE_NAME.GENERAL, component: General },
   {
-    path: '/setting/position/newPosition',
+    path: '/setting/position/create',
+    exact: true,
     name: ROUTE_NAME.NEW_POSITION,
     component: NewPosition,
   },
   {
-    path: '/setting/position/id=:id',
+    path: '/setting/position/:id',
     name: ROUTE_NAME.POSITION_UPDATE,
     component: PositionEdit,
   },
   { path: '/setting/position', name: ROUTE_NAME.POSITION, component: Position },
   {
-    path: '/setting/shift/newShift',
+    path: '/setting/shift/create',
+    exact: true,
     name: ROUTE_NAME.NEW_SHIFT,
     component: NewShift,
   },
   {
-    path: '/setting/shift/id=:id',
+    path: '/setting/shift/:id',
     name: ROUTE_NAME.SHIFT_UPDATE,
     component: ShiftEdit,
   },
   { path: '/setting/shift', name: ROUTE_NAME.SHIFT, component: Shift },
   {
-    path: '/setting/branch/newBranch',
+    path: '/setting/branch/create',
+    exact: true,
+
     name: ROUTE_NAME.NEW_BRANCH,
     component: NewBranch,
   },
   {
-    path: '/setting/branch/id=:id',
+    path: '/setting/branch/:id',
     name: ROUTE_NAME.BRANCH_UPDATE,
     component: BranchEdit,
   },
   { path: '/setting/branch', name: ROUTE_NAME.BRANCH, component: Branch },
   {
-    path: '/setting/department/newDepartment',
+    path: '/setting/department/create',
+    exact: true,
+
     name: ROUTE_NAME.NEW_DEPARTMENT,
     component: NewDepartment,
   },
   {
-    path: '/setting/department/id=:id',
+    path: '/setting/department/:id',
     name: ROUTE_NAME.DEPARTMENT_UPDATE,
     component: EditDepartment,
   },
@@ -104,7 +110,9 @@ const routes = [
     component: Department,
   },
   {
-    path: '/setting/holiday/newHoliday',
+    path: '/setting/holiday/create',
+    exact: true,
+
     name: ROUTE_NAME.NEW_HOLIDAY,
     component: NewHoliday,
   },

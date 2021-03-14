@@ -1,8 +1,6 @@
 import client from './client';
 
 const API_PREFIX = {
-<<<<<<< HEAD
-  API_GENERAL: '/api.tenant',
   API_SETTING_BRANCH: '/api.branch',
   API_SETTING_DEPARTMENT: '/api.department',
   API_SETTING_POSITION: '/api.position',
@@ -10,16 +8,7 @@ const API_PREFIX = {
   API_PROVINCE: '/api.province',
   API_DISTRICT: '/api.district',
   API_WARD: '/api.ward',
-=======
-  API_SETTING_BRANCH: "/api.branch",
-  API_SETTING_DEPARTMENT: "/api.department",
-  API_SETTING_POSITION: "/api.position",
-  API_SETTING_SHIFT: "/api.shift",
-  API_PROVINCE: "/api.province",
-  API_DISTRICT: "/api.district",
-  API_WARD: "/api.ward",
-  API_GENERAL: "/api.tenant",
->>>>>>> feature/settings-shift
+  API_GENERAL: '/api.tenant',
 };
 
 export const api = {
@@ -98,9 +87,8 @@ export const api = {
     getShift: (id) => {
       return client.get(API_PREFIX.API_SETTING_SHIFT + `/${id}`);
     },
-    putShift: (bodyParams, id) => {
-      console.log(bodyParams, id);
-      return client.put(API_PREFIX.API_SETTING_SHIFT + `/${id}`, bodyParams);
+    putShift: (data) => {
+      return client.put(API_PREFIX.API_SETTING_SHIFT + `/${data.id}`, data);
     },
     deleteShift: (id) => {
       return client.delete(API_PREFIX.API_SETTING_SHIFT + `/${id}`);
