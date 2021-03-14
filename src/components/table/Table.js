@@ -39,6 +39,8 @@ import { Formik } from "formik";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import Chip from "@material-ui/core/Chip";
 import Label from "src/components/text/Label";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBranches, deleteBranch } from "src/stores/actions/branch";
 
 /*
   Params:
@@ -50,11 +52,14 @@ import Label from "src/components/text/Label";
 */
 
 const CustomTableEditColumn = ({ route, deleteRowFunc }) => {
+  const dispatch = useDispatch();
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeleteRowID] = useState();
   const handleConfirm = (props) => {
     if (Number.isInteger(deletingRowID)) {
       // Call API Delete
+      deleteRowFunc(deletingRowID);
+      //dispatch(fetchBranches());
     }
     setOpenWarning(!openWarning);
   };
@@ -389,7 +394,7 @@ const QTable = (props) => {
           />
           <TableHeaderRow showSortingControls />
           <TableFixedColumns rightColumns={["edit", "delete"]} />
-          <CustomTableEditColumn route={{ route, deleteRowFunc }} />
+          <CustomTableEditColumn route={route} deleteRowFunc={deleteRowFunc} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>

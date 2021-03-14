@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QTable from "src/components/table/Table";
 import { changeActions } from "src/stores/actions/header";
-import { fetchBranches } from "src/stores/actions/branch";
+import { fetchBranches, deleteBranch } from "src/stores/actions/branch";
 
 const columnDef = [
   { name: "shortname", title: "Mã chi nhánh" },
@@ -28,6 +28,11 @@ const Branch = ({ t, location, history }) => {
 
     dispatch(changeActions(actions));
   }, []);
+  const deleteRowFunc = async (delRowId) => {
+    dispatch(deleteBranch(delRowId));
+    dispatch(fetchBranches());
+  };
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
@@ -35,6 +40,7 @@ const Branch = ({ t, location, history }) => {
         data={branches}
         route={"/setting/branch/id="}
         idxColumnsFilter={[0, 1]}
+        deleteRowFunc={deleteRowFunc}
       />
     </CContainer>
   );

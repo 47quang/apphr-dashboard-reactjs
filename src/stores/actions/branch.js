@@ -52,3 +52,16 @@ export const updateBranch = (data, id) => {
       });
   };
 };
+
+export const deleteBranch = (id) => {
+  return (dispatch, getState) => {
+    api.branch
+      .deleteBranch(id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
