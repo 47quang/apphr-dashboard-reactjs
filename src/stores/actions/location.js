@@ -1,12 +1,4 @@
 import { api } from '../apis/index';
-// export const setAccounts = (accounts) => {
-//   return {
-//     type: SET_ACCOUNT,
-//     payload: {
-//       accounts,
-//     },
-//   };
-// };
 
 // export const fetchAccounts = (params) => {
 //   return (dispatch, getState) => {
@@ -21,8 +13,13 @@ import { api } from '../apis/index';
 
 export const fetchProvinces = (params) => {
   return (dispatch, getState) => {
-    api.location.getProvinceList().then((resp) => {
-      console.log({ resp });
-    });
+    api.location
+      .getProvinceList()
+      .then(({ payload }) => {
+        dispatch({ type: 'SET_PROVINCES', payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
