@@ -45,7 +45,8 @@ import Label from 'src/components/text/Label';
     columnDef:  ,
     data: ,
     route: ,
-    idxColumnsFilter
+    idxColumnsFilter,
+    deleteRowFunc,
 */
 
 const CustomTableEditColumn = ({ route, deleteRow }) => {

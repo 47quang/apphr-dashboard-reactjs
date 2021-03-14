@@ -1,14 +1,13 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CHeader,
   CHeaderNav,
   CBreadcrumbRouter,
   CToggler,
-} from '@coreui/react';
-import { Link } from 'react-router-dom';
-import routes from 'src/routes/routes';
-import '../styles/scss/header.scss';
+} from "@coreui/react";
+import routes from "src/routes/routes";
+import "../styles/scss/header.scss";
 
 const TheHeader = () => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
@@ -18,17 +17,17 @@ const TheHeader = () => {
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow)
+    const val = [true, "responsive"].includes(sidebarShow)
       ? false
-      : 'responsive';
-    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
+      : "responsive";
+    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
   };
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow)
+    const val = [false, "responsive"].includes(sidebarShow)
       ? true
-      : 'responsive';
-    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
+      : "responsive";
+    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
   };
 
   return (

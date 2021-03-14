@@ -1,5 +1,5 @@
-import { api } from '../apis/index';
-import { REDUX_STATE } from '../states';
+import { api } from "../apis/index";
+import { REDUX_STATE } from "../states";
 
 export const fetchBranches = () => {
   return (dispatch, getState) => {
@@ -14,15 +14,68 @@ export const fetchBranches = () => {
   };
 };
 
-export const createBranch = (data) => {
+export const fetchBranch = (id) => {
   return (dispatch, getState) => {
     api.branch
-      .postBranch(data)
+      .getBranch(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+};
+
+export const createBranch = (params) => {
+  return (dispatch, getState) => {
+    api.branch
+      .postBranch(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const updateBranch = (data, id) => {
+  return (dispatch, getState) => {
+    api.branch
+      .putBranch(data, id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const deleteBranch = (id) => {
+  return (dispatch, getState) => {
+    api.branch
+      .deleteBranch(id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const setDeleteDBranchId = (id) => {
+  return {
+    type: REDUX_STATE.branch.SET_DELETED_BRANCH_ID,
+    payload: id,
+  };
+};
+
+export const setEmptyDBranch = () => {
+  return {
+    type: REDUX_STATE.branch.EMPTY_VALUE,
+    payload: [],
   };
 };
