@@ -1,4 +1,4 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   provinces: [],

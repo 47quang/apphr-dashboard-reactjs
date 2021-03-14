@@ -25,4 +25,4 @@ export const updateGeneral = (payload) => {
         console.log(err);
       });
   };
-}
+};

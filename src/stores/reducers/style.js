@@ -1,13 +1,15 @@
+import { REDUX_STATE } from '../states/index';
+
 const initialState = {
-  language: "en",
-  sidebarShow: "responsive",
+  language: 'en',
+  sidebarShow: 'responsive',
 };
 
 const styleReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case "CHANGE_LANGUAGE":
+    case REDUX_STATE.style.CHANGE_LANGUAGE:
       return { ...state, ...payload };
-    case "CHANGE_SIDEBARSHOW":
+    case REDUX_STATE.style.CHANGE_SIDEBARSHOW:
       return { ...state, ...payload };
     default:
       return state;

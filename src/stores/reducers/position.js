@@ -1,14 +1,14 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   positions: [],
   position: {
-    name: "",
-    shortname: "",
+    name: '',
+    shortname: '',
     branchId: 0,
     departmentId: 0,
-    academicLevel: "",
-    note: "",
+    academicLevel: '',
+    note: '',
     expYear: 0,
   },
 };

@@ -1,5 +1,5 @@
-import { api } from "../apis";
-import { REDUX_STATE } from "../states";
+import { api } from '../apis';
+import { REDUX_STATE } from '../states';
 
 export const fetchShifts = (params) => {
   return (dispatch, getState) => {

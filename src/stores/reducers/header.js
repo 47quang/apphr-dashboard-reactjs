@@ -1,14 +1,16 @@
-import { CHANGE_ACTIONS } from '../actions/header';
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   actions: [],
 };
 
 const headerReducer = (state = initialState, { type, payload }) => {
-  if (type === CHANGE_ACTIONS) {
-    return { ...state, actions: payload };
-  } else {
-    return state;
+  switch (type) {
+    case REDUX_STATE.header.CHANGE_ACTIONS:
+      return { ...state, actions: payload };
+
+    default:
+      return state;
   }
 };
 

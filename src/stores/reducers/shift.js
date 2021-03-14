@@ -1,16 +1,16 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   shifts: [],
   shift: {
-    name: "",
-    shortname: "",
+    name: '',
+    shortname: '',
     coefficient: 0,
-    startCC: "",
-    endCC: "",
+    startCC: '',
+    endCC: '',
     branchIds: [1],
     operateLoop: [],
-    typeCC: "",
+    typeCC: '',
     isOvertime: true,
   },
 };
