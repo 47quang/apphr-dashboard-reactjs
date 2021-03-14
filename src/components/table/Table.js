@@ -207,6 +207,7 @@ const DateTypeProvider = (props) => (
 );
 
 const MultiValuesFormatter = ({ value }) => {
+  console.log(value);
   return value.map((val, idx) => (
     <Chip
       label={val}
@@ -276,10 +277,7 @@ const QTable = (props) => {
       <Paper>
         <div className="m-auto">
           <div className="rounded p-4 container col-md-12">
-            <Formik
-              enableReinitialize
-              initialValues={filterValues}
-            >
+            <Formik enableReinitialize initialValues={filterValues}>
               {({
                 values,
                 errors,
@@ -335,11 +333,7 @@ const QTable = (props) => {
           </div>
         </div>
 
-        <Grid
-          rows={data}
-          columns={state.columns}
-          getRowId={(row) => row.id}
-        >
+        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <EditingState
