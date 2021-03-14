@@ -42,6 +42,9 @@ const NewHoliday = React.lazy(() =>
 const HolidayEdit = React.lazy(() =>
   import("src/pages/setting/holiday/NewHoliday")
 );
+const HolidaySettingsEdit = React.lazy(() =>
+  import("src/pages/setting/holiday/HolidaySettings")
+);
 
 const Branch = React.lazy(() => import("src/pages/setting/branch/Branch"));
 const NewBranch = React.lazy(() =>
@@ -88,7 +91,7 @@ const routes = [
     component: NewPosition,
   },
   {
-    path: "/setting/position/:id",
+    path: "/setting/position/id=:id",
     name: ROUTE_NAME.POSITION_UPDATE,
     component: PositionEdit,
   },
@@ -99,7 +102,7 @@ const routes = [
     component: NewShift,
   },
   {
-    path: "/setting/shift/:id",
+    path: "/setting/shift/id=:id",
     name: ROUTE_NAME.SHIFT_UPDATE,
     component: ShiftEdit,
   },
@@ -110,7 +113,7 @@ const routes = [
     component: NewBranch,
   },
   {
-    path: "/setting/branch/:id",
+    path: "/setting/branch/id=:id",
     name: ROUTE_NAME.BRANCH_UPDATE,
     component: BranchEdit,
   },
@@ -121,7 +124,7 @@ const routes = [
     component: NewDepartment,
   },
   {
-    path: "/setting/department/:id",
+    path: "/setting/department/id=:id",
     name: ROUTE_NAME.DEPARTMENT_UPDATE,
     component: DepartmentEdit,
   },
@@ -136,7 +139,14 @@ const routes = [
     component: NewHoliday,
   },
   {
-    path: "/setting/holiday/:id",
+    path: "/setting/holiday/tab2:id",
+    exact: true,
+    name: ROUTE_NAME.HOLIDAY_SETTINGS_UPDATE,
+    component: HolidaySettingsEdit,
+  },
+  {
+    path: "/setting/holiday/tab1:id",
+    exact: true,
     name: ROUTE_NAME.HOLIDAY_UPDATE,
     component: HolidayEdit,
   },
@@ -158,7 +168,7 @@ const routes = [
     component: PermissionGroup,
   },
   {
-    path: "/setting/authorization/role",
+    path: "/setting/role",
     name: ROUTE_NAME.ROLE,
     component: Role,
   },

@@ -109,7 +109,7 @@ const Position = ({ t, location }) => {
         <QTable
           columnDef={columnDef}
           data={data}
-          route={"/setting/position"}
+          route={"/setting/position/id="}
           idxColumnsFilter={[0, 2]}
           multiValuesCols={[3]}
         />

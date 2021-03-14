@@ -6,6 +6,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
 import InputLabel from "@material-ui/core/InputLabel";
+import { Cancel } from "@material-ui/icons";
+// import CancelIcon from "@material-ui/icons/Cancel";
 
 // TODO TRANS
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +53,7 @@ export default function CommonMultiSelectInput({
   onChangeValues,
   listValues,
   placeholder,
+  setValues,
 }) {
   const classes = useStyles();
   const theme = useTheme();
@@ -58,20 +61,32 @@ export default function CommonMultiSelectInput({
     acc[val.id] = val;
     return acc;
   }, {});
+  const handleDelete = (idx) => {
+    let pos = values.indexOf(idx);
+    values = values.splice(pos, 1);
+    return values;
+  };
 
   return (
     <FormControl className={classes.formControl} style={{ width: "100%" }}>
-      <InputLabel id="demo-simple-select-label">{placeholder}</InputLabel>
+      {/* <InputLabel id="demo-simple-select-label" hidden={values.length > 0}>
+        {placeholder}
+      </InputLabel> */}
       <Select
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
         multiple
+        displayEmpty={true}
         disableUnderline
         value={values}
-        onChange={onChangeValues}
+        onChange={(e) => {
+          console.log(e.target);
+        }}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => {
-          if (Array.isArray(selected))
+          return selected.length === 0 ? (
+            <em>{placeholder}</em>
+          ) : (
             <div className={classes.chips}>
               {selected.map((value, index) => {
                 return (
@@ -79,10 +94,13 @@ export default function CommonMultiSelectInput({
                     key={index}
                     label={hash[value].name}
                     className={classes.chip}
+                    color="primary"
+                    variant="outlined"
                   />
                 );
               })}
-            </div>;
+            </div>
+          );
         }}
         MenuProps={MenuProps}
       >

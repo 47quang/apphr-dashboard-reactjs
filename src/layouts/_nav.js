@@ -97,28 +97,29 @@ const _nav = [
         name: ROUTE_NAME.POSITION,
         to: "/setting/position",
       },
+
       {
-        _tag: "CSidebarNavDropdown",
-        name: ROUTE_NAME.AUTHORIZATION,
-        route: "/setting/authorization",
-        _children: [
-          {
-            _tag: "CSidebarNavItem",
-            name: ROUTE_NAME.ROLE,
-            to: "/setting/authorization/role",
-          },
-          {
-            _tag: "CSidebarNavItem",
-            name: ROUTE_NAME.PERMISSION,
-            to: "/setting/authorization/permission",
-          },
-          {
-            _tag: "CSidebarNavItem",
-            name: ROUTE_NAME.PERMISSION_GROUP,
-            to: "/setting/authorization/permission-group",
-          },
-        ],
+        _tag: "CSidebarNavItem",
+        name: ROUTE_NAME.ROLE,
+        to: "/setting/role",
       },
+      // {
+      //   _tag: "CSidebarNavDropdown",
+      //   name: ROUTE_NAME.AUTHORIZATION,
+      //   route: "/setting/authorization",
+      //   _children: [
+      //     {
+      //       _tag: "CSidebarNavItem",
+      //       name: ROUTE_NAME.PERMISSION,
+      //       to: "/setting/authorization/permission",
+      //     },
+      //     {
+      //       _tag: "CSidebarNavItem",
+      //       name: ROUTE_NAME.PERMISSION_GROUP,
+      //       to: "/setting/authorization/permission-group",
+      //     },
+      //   ],
+      // },
     ],
   },
 ];

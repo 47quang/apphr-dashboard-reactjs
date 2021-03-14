@@ -90,7 +90,7 @@ const Department = ({ t, location }) => {
         <QTable
           columnDef={columnDef}
           data={data}
-          route={"/setting/department"}
+          route={"/setting/department/id="}
           idxColumnsFilter={[0, 2]}
           multiValuesCols={[2]}
         />
