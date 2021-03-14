@@ -1,17 +1,17 @@
 import axios from "axios";
 import querystring from "query-string";
 
-const getDefaultHeaders=() => {
+const getDefaultHeaders = () => {
   return {
-    Authorization: 'Bearer ' + localStorage.getItem('token'),
+    Authorization: "Bearer " + localStorage.getItem("token"),
   };
-}
+};
 
 const client = axios.create({
-  baseURL: "http://13.250.31.133",
+  baseURL: "http://13.212.137.159",
   headers: {
     "content-type": "application/json",
-    "x-tenant-id": localStorage.getItem('tenantId'),
+    "x-tenant-id": localStorage.getItem("tenantId"),
   },
   paramsSerializer: (params) => querystring.stringify(params),
   timeout: 20000,
