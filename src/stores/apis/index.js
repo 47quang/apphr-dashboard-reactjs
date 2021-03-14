@@ -1,6 +1,7 @@
 import client from "./client";
 
 const API_PREFIX = {
+  API_GENERAL: "/api.tenant",
   API_SETTING_BRANCH: "/api.branch",
   API_SETTING_DEPARTMENT: "/api.department",
   API_SETTING_POSITION: "/api.position",
@@ -11,6 +12,12 @@ const API_PREFIX = {
 };
 
 export const api = {
+  general: {
+    getGeneralInfo: (id) => {
+      return client.get(API_PREFIX.API_GENERAL + `/${1}`);
+    },
+  },
+
   branch: {
     getBranchList: (params) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH, {
@@ -91,7 +98,7 @@ export const api = {
     },
   },
   location: {
-    getProvinceInfo: (provinceID) => {
+    getProvinceInfo: ({ provinceID }) => {
       return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}`);
     },
     getProvinceList: () => {
@@ -100,13 +107,13 @@ export const api = {
     getDistrictList: (provinceID) => {
       return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}/district`);
     },
-    getDistrictInfo: (districtID) => {
+    getDistrictInfo: ({ districtID }) => {
       return client.get(API_PREFIX.API_DISTRICT + `/${districtID}`);
     },
     getWardList: (districtID) => {
       return client.get(API_PREFIX.API_DISTRICT + `/${districtID}/ward`);
     },
-    getWardInfo: (wardID) => {
+    getWardInfo: ({ wardID }) => {
       return client.get(API_PREFIX.API_WARD + `/${wardID}`);
     },
   },

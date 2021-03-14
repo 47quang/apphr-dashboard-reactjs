@@ -4,4 +4,7 @@ export const REDUX_STATE = {
     SET_DISTRICTS: "SET_DISTRICTS",
     SET_WARDS: "SET_WARDS",
   },
+  general: {
+    SET_GENERAL: "SET_GENERAL",
+  },
 };

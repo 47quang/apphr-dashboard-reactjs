@@ -33,11 +33,13 @@ const CommonSelectInput = ({
       >
         <option defaultValue>{placeholder}</option>
         {lstSelectOptions.length > 0 ? (
-          lstSelectOptions.map((val, index) => (
-            <option value={hash[val.id]?.id} key={index}>
-              {val.name}
-            </option>
-          ))
+          lstSelectOptions.map((val, index) => {
+            return (
+              <option value={hash[val.id]?.id} key={index}>
+                {val.name}
+              </option>
+            );
+          })
         ) : (
           <></>
         )}

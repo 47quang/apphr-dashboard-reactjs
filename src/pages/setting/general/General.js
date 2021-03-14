@@ -13,6 +13,7 @@ import {
   fetchProvinces,
   fetchWards,
 } from "src/stores/actions/location";
+import { fetchGeneralInfo } from "src/stores/actions/general";
 
 //TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
@@ -21,39 +22,11 @@ const SettingGeneralPage = ({ t, location }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
-  const [initialValues, setInitialValues] = useState({
-    companyName: "",
-    provinceId: 0,
-    districtId: 0,
-    wardId: 0,
-    address: "",
-    phone: "",
-    email: "",
-    shortName: "",
-    taxCode: "",
-    note: "",
-  });
-  const [isLoader, setIsLoader] = useState(true);
-  const getCompanyInfo = async () => {
-    setInitialValues({
-      companyName: "APPHPR",
-      provinceId: 0,
-      districtId: 0,
-      wardId: 0,
-      address: "",
-      phone: "",
-      email: "",
-      shortName: "",
-      taxCode: "",
-      note: "",
-    });
-    setTimeout(() => {
-      setIsLoader(false);
-    }, 500);
-  };
+  const settingInfo = useSelector((state) => state.general);
+  const [isLoader, setIsLoader] = useState(false);
   useEffect(() => {
     dispatch(fetchProvinces());
-    getCompanyInfo();
+    dispatch(fetchGeneralInfo(1));
     dispatch(
       changeListButtonHeader([
         <button
@@ -78,14 +51,13 @@ const SettingGeneralPage = ({ t, location }) => {
   };
 
   const getDistricts = (id) => {
-    dispatch(fetchDistricts({ provinceID: id }));
+    dispatch(fetchDistricts(id));
   };
 
   const getWards = (id) => {
-    dispatch(fetchWards({ districtID: id }));
+    dispatch(fetchWards(id));
   };
 
-  const getAddressInfo = (handeChange, getInfo) => {};
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -96,7 +68,7 @@ const SettingGeneralPage = ({ t, location }) => {
             <Formik
               innerRef={companyInfoForm}
               enableReinitialize
-              initialValues={initialValues}
+              initialValues={settingInfo}
               validationSchema={SettingGeneralInfoSchema}
               onSubmit={(values) => handleSubmitInfo(values)}
             >
@@ -105,25 +77,25 @@ const SettingGeneralPage = ({ t, location }) => {
                   <div className="row">
                     <CommonTextInput
                       containerClassName={"form-group col-lg-6"}
-                      value={values.companyName}
-                      onBlur={handleBlur("companyName")}
-                      onChange={handleChange("companyName")}
+                      value={values.name}
+                      onBlur={handleBlur("name")}
+                      onChange={handleChange("name")}
                       inputID={"name"}
                       labelText={"Tên doanh nghiệp"}
                       inputType={"text"}
                       placeholder={"Nhập tên doanh nghiệp"}
                       inputClassName={"form-control"}
                       isRequiredField
-                      isTouched={touched.companyName}
-                      isError={errors.companyName && touched.companyName}
-                      errorMessage={errors.companyName}
+                      isTouched={touched.name}
+                      isError={errors.name && touched.name}
+                      errorMessage={errors.name}
                     />
                     <CommonTextInput
                       containerClassName={"form-group col-lg-6"}
-                      value={values.shortName}
-                      onBlur={handleBlur("shortName")}
-                      onChange={handleChange("shortName")}
-                      inputID={"shortName"}
+                      value={values.shortname}
+                      onBlur={handleBlur("shortname")}
+                      onChange={handleChange("shortname")}
+                      inputID={"shortname"}
                       labelText={"Tên viết tắt của doanh nghiệp"}
                       inputType={"text"}
                       placeholder={"Nhập tên viết tắt"}

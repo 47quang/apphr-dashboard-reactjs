@@ -5,7 +5,7 @@ import moment from "moment";
 //SETTING
 //General Information
 export const SettingGeneralInfoSchema = Yup.object().shape({
-  companyName: Yup.string().trim().required("Bắt buộc nhập tên công ty"),
+  name: Yup.string().trim().required("Bắt buộc nhập tên công ty"),
   phone: Yup.string()
     .matches(
       getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER),
