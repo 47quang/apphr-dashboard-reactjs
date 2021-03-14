@@ -1,16 +1,27 @@
-import { CContainer } from '@coreui/react';
-import { Formik } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import BasicLoader from 'src/components/loader/BasicLoader';
-import FormHeader from 'src/components/text/FormHeader';
-import Label from 'src/components/text/Label';
-import { SettingPositionInfoSchema } from 'src/schema/formSchema';
-import { changeActions, changeListButtonHeader } from 'src/stores/actions/header';
+import { CContainer } from "@coreui/react";
+import { Formik } from "formik";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
+import CommonMultiSelectInput from "src/components/input/CommonMultiSelectInput";
+import CommonSelectInput from "src/components/input/CommonSelectInput";
+import CommonTextInput from "src/components/input/CommonTextInput";
+import BasicLoader from "src/components/loader/BasicLoader";
+import FormHeader from "src/components/text/FormHeader";
+import Label from "src/components/text/Label";
+import { SettingPositionInfoSchema } from "src/schema/formSchema";
+import { fetchBranches } from "src/stores/actions/branch";
+import {
+  fetchDepartment,
+  fetchDepartments,
+} from "src/stores/actions/department";
+import { changeActions } from "src/stores/actions/header";
+import {
+  fetchPosition,
+  setEmptyPosition,
+  createPosition,
+  updatePosition,
+} from "src/stores/actions/position";
 
 //TODO: translate
 const listOfBranches = [
@@ -38,49 +49,57 @@ const listOfShifts = [
   { id: 8, name: 'Ca tối 2' },
   { id: 9, name: 'Ca tối 3' },
 ];
-const listOfDepartments = [
-  { id: 1, name: 'IT' },
-  { id: 2, name: 'Bảo vệ' },
-  { id: 3, name: 'Kế toán' },
-  { id: 4, name: 'Giáo dục' },
-];
 
-const NewPositionPage = ({ t, location, match }) => {
+const NewPositionPage = ({ t, location, match, history }) => {
   const params = match.params;
   const positionInfoForm = useRef();
   const dispatch = useDispatch();
+  const departments = useSelector((state) => state.department.departments);
+  const branches = useSelector((state) => state.branch.branches);
+  const position = useSelector((state) => state.position.position);
   const [isLoading, setIsLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState({
-    name: '',
-    shortname: '',
-    department: '',
-    branches: [],
-    shifts: [],
-    description: '',
-  });
-
-  const getPositionInfo = () => {
-    setInitialValues({
-      name: 'Nhân viên IT',
-      shortname: 'DEV0',
-      department: 'IT',
-      branches: [1, 3],
-      shifts: [1, 3],
-      description: 'Nhân viên IT',
-    });
-  };
 
   useEffect(() => {
-    if (params?.id) getPositionInfo();
+    let wait = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    if (params?.id) dispatch(fetchPosition(params.id));
+    else dispatch(setEmptyPosition());
+
     const actions = [
       {
-        type: 'primary',
-        name: 'Tạo mới',
-        callback: () => {},
+        type: "primary",
+        name: params?.id ? "Cập nhật" : "Tạo mới",
+        callback: params?.id ? btnUpdatePosition : btnCreatePosition,
       },
     ];
     dispatch(changeActions(actions));
+    dispatch(fetchBranches());
+    dispatch(fetchDepartments());
+
+    return () => {
+      clearTimeout(wait);
+    };
   }, []);
+
+  const btnCreatePosition = () => {
+    const form = positionInfoForm.current.values;
+    form.branchId = parseInt(form.branchId);
+    form.departmentId = parseInt(form.departmentId);
+    delete form.id;
+    dispatch(createPosition(form));
+    history.push("/setting/position");
+  };
+  const btnUpdatePosition = () => {
+    const form = positionInfoForm.current.values;
+    form.branchId = parseInt(form.branchId);
+    form.departmentId = parseInt(form.departmentId);
+    dispatch(updatePosition(form, params.id));
+    history.push("/setting/position");
+  };
+
+  const getOnSubmitInForm = (event) =>
+    positionInfoForm.current.handleSubmit(event);
 
   const handleSubmitInfo = (values) => {
     console.log(values);
@@ -96,7 +115,7 @@ const NewPositionPage = ({ t, location, match }) => {
             <Formik
               innerRef={positionInfoForm}
               enableReinitialize
-              initialValues={initialValues}
+              initialValues={position}
               validationSchema={SettingPositionInfoSchema}
               onSubmit={(values) => handleSubmitInfo(values)}
             >
@@ -140,31 +159,33 @@ const NewPositionPage = ({ t, location, match }) => {
                   </div>
                   <div className="row">
                     <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.department}
-                      labelText={'Phòng ban'}
-                      selectClassName={'form-control'}
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.branchId}
+                      labelText={"Chi nhánh"}
+                      selectClassName={"form-control"}
                       isRequiredField
-                      onBlur={handleBlur('department')}
-                      onChange={handleChange('department')}
-                      inputID={'department'}
-                      lstSelectOptions={listOfDepartments}
-                      placeholder={'Chọn phòng ban'}
+                      onBlur={handleBlur("branchId")}
+                      onChange={handleChange("branchId")}
+                      inputID={"branchId"}
+                      lstSelectOptions={branches}
+                      placeholder={"Chọn chi nhánh"}
                     />
                   </div>
                   <div className="row">
-                    <div className="form-group col-lg-12">
-                      <Label text="Chi nhánh" />
-                      <div role="group" className="d-flex flex-row flex-wrap justify-content-between border">
-                        <CommonMultiSelectInput
-                          values={values.branches}
-                          onChangeValues={handleChange('branches')}
-                          listValues={listOfBranches}
-                          placeholder={'Chọn chi nhánh'}
-                        />
-                      </div>
-                    </div>
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.departmentId}
+                      labelText={"Phòng ban"}
+                      selectClassName={"form-control"}
+                      isRequiredField
+                      onBlur={handleBlur("departmentId")}
+                      onChange={handleChange("departmentId")}
+                      inputID={"departmentId"}
+                      lstSelectOptions={departments}
+                      placeholder={"Chọn phòng ban"}
+                    />
                   </div>
+
                   <div className="row">
                     <div className="form-group col-lg-12">
                       <Label text="Ca làm việc" />
@@ -180,13 +201,13 @@ const NewPositionPage = ({ t, location, match }) => {
                   </div>
                   <div className="row">
                     <CommonMultipleTextInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.description}
-                      onBlur={handleBlur('description')}
-                      onChange={handleChange('description')}
-                      inputID={'description'}
-                      labelText={'Ghi chú'}
-                      inputClassName={'form-control'}
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.note}
+                      onBlur={handleBlur("note")}
+                      onChange={handleChange("note")}
+                      inputID={"note"}
+                      labelText={"Ghi chú"}
+                      inputClassName={"form-control"}
                     />
                   </div>
                 </form>
