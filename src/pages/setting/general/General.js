@@ -1,7 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -14,6 +14,9 @@ import { fetchProvinces } from 'src/stores/actions/location';
 const SettingGeneralPage = ({ t, location }) => {
   const companyInfoForm = useRef();
   const dispatch = useDispatch();
+  const provinces = useSelector((state) => state.location.provinces);
+  const districts = useSelector((state) => state.location.provinces);
+  const wards = useSelector((state) => state.location.provinces);
   const [initialValues, setInitialValues] = useState({
     companyName: '',
     provinceId: 0,
@@ -68,14 +71,6 @@ const SettingGeneralPage = ({ t, location }) => {
 
   const handleSubmitInfo = (values) => {
     console.log(values);
-  };
-
-  const getListOfProvinces = () => {
-    let lstOfProvinces = [
-      { id: 1, name: 'Hồ Chí Minh' },
-      { id: 5, name: 'Bình Dương' },
-    ];
-    return lstOfProvinces;
   };
   const getListOfDistricts = (provinceID) => {
     if (provinceID === '1')
@@ -204,7 +199,7 @@ const SettingGeneralPage = ({ t, location }) => {
                       labelText={'Tỉnh/Thành phố'}
                       selectClassName={'form-control'}
                       placeholder={'Chọn Tỉnh/Thành phố'}
-                      lstSelectOptions={getListOfProvinces()}
+                      lstSelectOptions={provinces}
                     />
                   </div>
 

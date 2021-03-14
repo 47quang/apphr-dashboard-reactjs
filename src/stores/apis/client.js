@@ -8,7 +8,7 @@ const getDefaultHeaders=() => {
 }
 
 const client = axios.create({
-  baseURL: "http://13.250.31.133",
+  baseURL: "http://13.212.137.159",
   headers: {
     "content-type": "application/json",
     "x-tenant-id": localStorage.getItem('tenantId'),
