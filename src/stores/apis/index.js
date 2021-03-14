@@ -1,10 +1,5 @@
 import client from "./client";
 
-const config = {
-  headers: {
-    Authorization: `Bearer quang`,
-  },
-};
 const API_PREFIX = {
   API_SETTING_BRANCH: "/api.branch",
   API_SETTING_DEPARTMENT: "/api.department",
@@ -100,7 +95,7 @@ export const api = {
       return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}`);
     },
     getProvinceList: () => {
-      return client.get(API_PREFIX.API_PROVINCE, null, config);
+      return client.get(API_PREFIX.API_PROVINCE);
     },
     getDistrictList: (provinceID) => {
       return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}/district`);

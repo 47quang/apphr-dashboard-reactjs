@@ -1,17 +1,17 @@
 import axios from "axios";
 import querystring from "query-string";
 
-// const getDefaultHeaders=() => {
-//   return {
-//     Authorization: 'Bearer ' + localStorage.getItem('token'),
-//   };
-// }
+const getDefaultHeaders=() => {
+  return {
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
+  };
+}
 
 const client = axios.create({
-  // baseURL: "http://54.254.78.127:9093",
   baseURL: "http://13.250.31.133",
   headers: {
     "content-type": "application/json",
+    "x-tenant-id": localStorage.getItem('tenantId'),
   },
   paramsSerializer: (params) => querystring.stringify(params),
   timeout: 20000,
@@ -19,7 +19,7 @@ const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-  // Object.assign(config.headers, getDefaultHeaders());
+  Object.assign(config.headers, getDefaultHeaders());
   return config;
 });
 

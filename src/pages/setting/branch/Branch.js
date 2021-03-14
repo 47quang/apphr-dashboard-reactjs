@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import BasicLoader from "src/components/loader/BasicLoader";
 import QTable from "src/components/table/Table";
 import { changeListButtonHeader } from "src/stores/actions/header";
-import { api } from "src/stores/apis/API_index";
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [

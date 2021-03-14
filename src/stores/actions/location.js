@@ -1,9 +1,5 @@
-// import accountApi from "../apis/account";
-
-// export const SET_ACCOUNT = "SET_ACCOUNT";
-
+import { api } from '../apis/index';
 // export const setAccounts = (accounts) => {
-//   console.log({ accounts });
 //   return {
 //     type: SET_ACCOUNT,
 //     payload: {
@@ -22,3 +18,11 @@
 //       .catch((err) => console.log(err));
 //   };
 // };
+
+export const fetchProvinces = (params) => {
+  return (dispatch, getState) => {
+    api.location.getProvinceList().then((resp) => {
+      console.log({ resp });
+    });
+  };
+};
