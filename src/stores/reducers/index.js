@@ -7,6 +7,7 @@ import settingReducer from "./setting";
 import shiftReducer from "./shift";
 import styleReducer from "./style";
 import userReducer from "./user";
+import positionReducer from "./position";
 
 export default combineReducers({
   style: styleReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   branch: branchReducer,
   setting: settingReducer,
   shift: shiftReducer,
+  position: positionReducer,
 });

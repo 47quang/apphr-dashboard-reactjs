@@ -64,7 +64,7 @@ export const api = {
     postPosition: (bodyParams) => {
       return client.post(API_PREFIX.API_SETTING_POSITION, bodyParams);
     },
-    getPositionList: (params) => {
+    getPositions: (params) => {
       return client.get(API_PREFIX.API_SETTING_POSITION, {
         params: params,
       });

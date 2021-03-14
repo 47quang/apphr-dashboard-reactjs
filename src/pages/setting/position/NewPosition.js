@@ -10,7 +10,13 @@ import BasicLoader from "src/components/loader/BasicLoader";
 import FormHeader from "src/components/text/FormHeader";
 import Label from "src/components/text/Label";
 import { SettingPositionInfoSchema } from "src/schema/formSchema";
-import { changeListButtonHeader } from "src/stores/actions/header";
+import { changeActions } from "src/stores/actions/header";
+import {
+  fetchPosition,
+  setEmptyPosition,
+  createPosition,
+  updatePosition,
+} from "src/stores/actions/position";
 
 //TODO: translate
 const listOfBranches = [
@@ -45,7 +51,7 @@ const listOfDepartments = [
   { id: 4, name: "Giáo dục" },
 ];
 
-const NewPositionPage = ({ t, location, match }) => {
+const NewPositionPage = ({ t, location, match, history }) => {
   const params = match.params;
   const positionInfoForm = useRef();
   const dispatch = useDispatch();
@@ -74,24 +80,40 @@ const NewPositionPage = ({ t, location, match }) => {
     let wait = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-    if (params?.id) getPositionInfo();
-    dispatch(
-      changeListButtonHeader([
-        <button
-          className="btn btn-primary"
-          type="submit"
-          key="magicPosition"
-          onClick={getOnSubmitInForm}
-        >
-          {params?.id ? "Cập nhật" : "Tạo mới"}
-        </button>,
-      ])
-    );
+    if (params?.id) dispatch(fetchPosition(params.id));
+    else dispatch(setEmptyPosition());
+
+    const actions = [
+      {
+        type: "primary",
+        name: params?.id ? "Cập nhật" : "Tạo mới",
+        callback: params?.id ? btnUpdatePosition : btnCreatePosition,
+      },
+    ];
+    dispatch(changeActions(actions));
+
     return () => {
-      dispatch(changeListButtonHeader([]));
       clearTimeout(wait);
     };
   }, []);
+
+  const btnCreatePosition = () => {
+    const form = positionInfoForm.current.values;
+    form.provinceId = parseInt(form.provinceId);
+    form.districtId = parseInt(form.districtId);
+    form.wardId = parseInt(form.wardId);
+    delete form.id;
+    dispatch(createPosition(form));
+    history.push("/setting/branch");
+  };
+  const btnUpdatePosition = () => {
+    const form = positionInfoForm.current.values;
+    form.provinceId = parseInt(form.provinceId);
+    form.districtId = parseInt(form.districtId);
+    form.wardId = parseInt(form.wardId);
+    dispatch(updatePosition(form, params.id));
+    history.push("/setting/branch");
+  };
 
   const getOnSubmitInForm = (event) =>
     positionInfoForm.current.handleSubmit(event);
@@ -162,33 +184,32 @@ const NewPositionPage = ({ t, location, match }) => {
                   <div className="row">
                     <CommonSelectInput
                       containerClassName={"form-group col-lg-12"}
-                      value={values.department}
+                      value={values.branchId}
+                      labelText={"Chi nhánh"}
+                      selectClassName={"form-control"}
+                      isRequiredField
+                      onBlur={handleBlur("branchId")}
+                      onChange={handleChange("branchId")}
+                      inputID={"branchId"}
+                      lstSelectOptions={listOfDepartments}
+                      placeholder={"Chọn chi nhánh"}
+                    />
+                  </div>
+                  <div className="row">
+                    <CommonSelectInput
+                      containerClassName={"form-group col-lg-12"}
+                      value={values.departmentId}
                       labelText={"Phòng ban"}
                       selectClassName={"form-control"}
                       isRequiredField
-                      onBlur={handleBlur("department")}
-                      onChange={handleChange("department")}
-                      inputID={"department"}
+                      onBlur={handleBlur("departmentId")}
+                      onChange={handleChange("departmentId")}
+                      inputID={"departmentId"}
                       lstSelectOptions={listOfDepartments}
                       placeholder={"Chọn phòng ban"}
                     />
                   </div>
-                  <div className="row">
-                    <div className="form-group col-lg-12">
-                      <Label text="Chi nhánh" />
-                      <div
-                        role="group"
-                        className="d-flex flex-row flex-wrap justify-content-between border"
-                      >
-                        <CommonMultiSelectInput
-                          values={values.branches}
-                          onChangeValues={handleChange("branches")}
-                          listValues={listOfBranches}
-                          placeholder={"Chọn chi nhánh"}
-                        />
-                      </div>
-                    </div>
-                  </div>
+
                   <div className="row">
                     <div className="form-group col-lg-12">
                       <Label text="Ca làm việc" />
