@@ -38,6 +38,7 @@ import CommonTextInput from "src/components/input/CommonTextInput";
 import { Formik } from "formik";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
 import Chip from "@material-ui/core/Chip";
+import Label from "src/components/text/Label";
 
 /*
   Params:
@@ -292,7 +293,7 @@ const QTable = (props) => {
                 <form autoComplete="off">
                   <div className="row">
                     <CommonSelectInput
-                      containerClassName={"form-group col-lg-4"}
+                      containerClassName={"form-group col-lg-3"}
                       value={values.columnsFilter}
                       onBlur={handleBlur("columnsFilter")}
                       onChange={handleChange("columnsFilter")}
@@ -302,7 +303,7 @@ const QTable = (props) => {
                       placeholder={"Chọn cột cần lọc"}
                     />
                     <CommonSelectInput
-                      containerClassName={"form-group col-lg-4"}
+                      containerClassName={"form-group col-lg-3"}
                       value={values.filterTypes}
                       onBlur={handleBlur("filterTypes")}
                       onChange={handleChange("filterTypes")}
@@ -312,7 +313,7 @@ const QTable = (props) => {
                       lstSelectOptions={filterTypes}
                     />
                     <CommonTextInput
-                      containerClassName={"form-group col-lg-4"}
+                      containerClassName={"form-group col-lg-3"}
                       value={values.textFilter}
                       onBlur={handleBlur("textFilter")}
                       onChange={handleChange("textFilter")}
@@ -321,6 +322,14 @@ const QTable = (props) => {
                       placeholder={"Nhập từ khóa"}
                       inputClassName={"form-control"}
                     />
+                    <div className="d-flex align-items-end form-group col-lg-3">
+                      <button
+                        type="button"
+                        className="align-bottom btn btn-primary"
+                      >
+                        Primary
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}
