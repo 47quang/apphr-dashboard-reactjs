@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchBranches } from 'src/stores/actions/branch';
-import { fetchDepartment, updateDepartment } from 'src/stores/actions/department';
+import { fetchDepartment, resetDepartment, updateDepartment } from 'src/stores/actions/department';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -32,18 +32,17 @@ const EditDepartment = ({ t, location, match }) => {
     dispatch(changeActions(actions));
     dispatch(fetchBranches());
     dispatch(fetchDepartment({ id: match.params.id }));
+    return () => {
+      dispatch(changeActions([]));
+      dispatch(resetDepartment());
+    };
   }, []);
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
-          <Formik
-            innerRef={departmentRef}
-            enableReinitialize
-            initialValues={department}
-            validationSchema={SettingDepartmentInfoSchema}
-          >
+          <Formik innerRef={departmentRef} enableReinitialize initialValues={department} validationSchema={SettingDepartmentInfoSchema}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <form autoComplete="off">
                 <div className="row">

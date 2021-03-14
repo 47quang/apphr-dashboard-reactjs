@@ -3,7 +3,7 @@ import { REDUX_STATE } from '../states';
 
 export const fetchShifts = (params) => {
   return (dispatch, getState) => {
-    api.shift.getShiftList(params).then(({ payload }) => {
+    api.shift.getAll(params).then(({ payload }) => {
       dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
     });
   };
@@ -20,7 +20,7 @@ export const fetchShift = (id) => {
   };
 
   return (dispatch, getState) => {
-    api.shift.getShift(id).then(({ payload }) => {
+    api.shift.get(id).then(({ payload }) => {
       payload.operateLoop = deCodeChecked(payload.operateLoop);
       payload.startCC = convertTime(payload.startCC);
       payload.endCC = convertTime(payload.endCC);
@@ -31,7 +31,7 @@ export const fetchShift = (id) => {
 export const createNewShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .postShift(data)
+      .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
       })
@@ -44,7 +44,7 @@ export const createNewShift = (data) => {
 export const updateShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .putShift(data)
+      .put(data)
       .then(({ payload }) => {
         dispatch({
           type: REDUX_STATE.shift.SET_SHIFT,
@@ -60,12 +60,19 @@ export const updateShift = (data) => {
 export const deleteShift = (params) => {
   return (dispatch, getState) => {
     api.shift
-      .deleteShift(params.id)
+      .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
       })
       .catch((err) => {
         console.log(REDUX_STATE.shift.GET_SHIFT, err);
       });
+  };
+};
+
+export const resetShift = () => {
+  return {
+    type: REDUX_STATE.shift.EMPTY_VALUE,
+    payload: {},
   };
 };

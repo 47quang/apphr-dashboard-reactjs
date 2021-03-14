@@ -9,7 +9,7 @@ import Label from 'src/components/text/Label';
 import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
-import { createNewShift } from 'src/stores/actions/shift';
+import { createNewShift, resetShift } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
@@ -43,6 +43,7 @@ const NewShift = ({ t, location, history }) => {
     dispatch(changeActions(actions));
     return () => {
       dispatch(changeActions([]));
+      dispatch(resetShift());
     };
   }, [dispatch]);
 
@@ -67,7 +68,7 @@ const NewShift = ({ t, location, history }) => {
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
-          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift?.shift ? shift.shift : shift} validationSchema={SettingShiftInfoSchema}>
+          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift} validationSchema={SettingShiftInfoSchema}>
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => (
               <form autoComplete="off">
                 <div className="row">

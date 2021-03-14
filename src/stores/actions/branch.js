@@ -4,7 +4,7 @@ import { REDUX_STATE } from "../states";
 export const fetchBranches = () => {
   return (dispatch, getState) => {
     api.branch
-      .getBranches()
+      .getAll()
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
       })
@@ -17,7 +17,7 @@ export const fetchBranches = () => {
 export const fetchBranch = (id) => {
   return (dispatch, getState) => {
     api.branch
-      .getBranch(id)
+      .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
@@ -30,7 +30,7 @@ export const fetchBranch = (id) => {
 export const createBranch = (params) => {
   return (dispatch, getState) => {
     api.branch
-      .postBranch(params)
+      .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
@@ -43,7 +43,7 @@ export const createBranch = (params) => {
 export const updateBranch = (data, id) => {
   return (dispatch, getState) => {
     api.branch
-      .putBranch(data, id)
+      .put(data, id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
@@ -56,7 +56,7 @@ export const updateBranch = (data, id) => {
 export const deleteBranch = (id) => {
   return (dispatch, getState) => {
     api.branch
-      .deleteBranch(id)
+      .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
       })

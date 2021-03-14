@@ -28,9 +28,12 @@ const NewDepartment = ({ t, location }) => {
         },
       },
     ];
-    dispatch(resetDepartment());
     dispatch(changeActions(actions));
     dispatch(fetchBranches());
+    return () => {
+      dispatch(changeActions([]));
+      dispatch(resetDepartment());
+    }
   }, []);
 
   return (

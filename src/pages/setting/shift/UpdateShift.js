@@ -9,7 +9,7 @@ import Label from 'src/components/text/Label';
 import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
-import { fetchShift, updateShift } from 'src/stores/actions/shift';
+import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
 
 //TODO: translate
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
@@ -42,6 +42,7 @@ const UpdateShift = ({ t, location, match }) => {
     dispatch(changeActions(actions));
     return () => {
       dispatch(changeActions([]));
+      dispatch(resetShift());
     };
   }, [dispatch]);
 
