@@ -31,7 +31,7 @@ const CommonSelectInput = ({
         id={inputID}
         required={isRequiredField}
       >
-        <option defaultValue>{placeholder}</option>
+        <option value={0}>{placeholder}</option>
         {lstSelectOptions.length > 0 ? (
           lstSelectOptions.map((val, index) => {
             return (
