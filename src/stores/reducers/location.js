@@ -7,7 +7,6 @@ const initialState = {
 };
 
 const locationReducer = (state = initialState, { type, payload }) => {
-  console.log("type", type);
   switch (type) {
     case REDUX_STATE.location.SET_PROVINCES:
       return { ...state, provinces: payload };

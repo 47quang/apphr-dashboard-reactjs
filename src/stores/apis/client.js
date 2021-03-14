@@ -11,7 +11,8 @@ const client = axios.create({
   baseURL: "http://13.212.137.159",
   headers: {
     "content-type": "application/json",
-    "x-tenant-id": localStorage.getItem("tenantId"),
+    // "x-tenant-id": localStorage.getItem("tenantId"),
+    "x-tenant-id": 1,
   },
   paramsSerializer: (params) => querystring.stringify(params),
   timeout: 20000,

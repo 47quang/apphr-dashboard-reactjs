@@ -74,7 +74,7 @@ export const api = {
   },
   shift: {
     postShift: (bodyParams) => {
-      return client.post(API_PREFIX.API_SETTING_SHIFT, bodyParams);
+      return client.post(API_PREFIX.API_SETTING_SHIFT, { ...bodyParams });
     },
     getShiftList: (params) => {
       return client.get(API_PREFIX.API_SETTING_SHIFT, {
