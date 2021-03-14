@@ -23,7 +23,7 @@ export const fetchProvinces = (params) => {
   };
 };
 
-export const fetchDistricts = (provinceID) => {
+export const fetchDistricts = (params) => {
   return (dispatch, getState) => {
     api.location
       .getDistricts(params.provinceId)
@@ -36,7 +36,7 @@ export const fetchDistricts = (provinceID) => {
   };
 };
 
-export const fetchWards = (districtID) => {
+export const fetchWards = (params) => {
   return (dispatch, getState) => {
     api.location
       .getWards(params.districtId)
