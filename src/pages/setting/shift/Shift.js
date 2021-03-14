@@ -110,7 +110,7 @@ const Shifts = ({ t, location }) => {
         <QTable
           columnDef={columnDef}
           data={data}
-          route={"/setting/shift"}
+          route={"/setting/shift/id="}
           idxColumnsFilter={[0, 1]}
         />
       )}

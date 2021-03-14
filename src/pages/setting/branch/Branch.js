@@ -101,7 +101,7 @@ const Branch = ({ t, location }) => {
         <QTable
           columnDef={columnDef}
           data={data}
-          route={"/setting/branch"}
+          route={"/setting/branch/id="}
           idxColumnsFilter={[0, 1]}
         />
       )}

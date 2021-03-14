@@ -117,18 +117,7 @@ const HolidayPage = ({ t, location }) => {
           </Link>,
         ])
       );
-    else
-      dispatch(
-        changeListButtonHeader([
-          <Link
-            to={"/setting/holiday/newHoliday"}
-            className="btn btn-primary"
-            key="newHoliday"
-          >
-            Cập nhật
-          </Link>,
-        ])
-      );
+
     return () => {
       dispatch(changeListButtonHeader([]));
       clearTimeout(wait);
@@ -163,7 +152,7 @@ const HolidayPage = ({ t, location }) => {
               <QTable
                 columnDef={columnDef}
                 data={data}
-                route={"/setting/holiday"}
+                route={"/setting/holiday/tab1.id="}
                 idxColumnsFilter={[0]}
                 dateCols={[1, 2]}
               />
@@ -176,7 +165,7 @@ const HolidayPage = ({ t, location }) => {
               <QTable
                 columnDef={columnDefOfRequestSetting}
                 data={dataOfRequestSetting}
-                route={"/setting/holiday"}
+                route={"/setting/holiday/tab2.id="}
                 idxColumnsFilter={[0]}
               />
             )}

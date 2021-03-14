@@ -132,6 +132,7 @@ const NewShift = ({ t, location, match }) => {
                 touched,
                 handleChange,
                 handleSubmit,
+                setValues,
                 handleBlur,
               }) => (
                 <form autoComplete="off">
@@ -245,6 +246,7 @@ const NewShift = ({ t, location, match }) => {
                           values={values.branches}
                           onChangeValues={handleChange("branches")}
                           listValues={listOfBranches}
+                          setValues={setValues}
                           placeholder={"Chọn chi nhánh"}
                         />
                       </div>

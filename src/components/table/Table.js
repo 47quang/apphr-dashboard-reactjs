@@ -114,7 +114,7 @@ const CustomTableEditColumn = ({ route }) => {
           <TemplateConnector>
             {(getters, { startEditRows }) => (
               <TableCell className="px-0 py-0">
-                <Link to={`${route}/${params.tableRow.rowId}`}>
+                <Link to={`${route}${params.tableRow.rowId}`}>
                   <IconButton>
                     <EditIcon />
                   </IconButton>
@@ -207,7 +207,13 @@ const DateTypeProvider = (props) => (
 
 const MultiValuesFormatter = ({ value }) => {
   return value.map((val, idx) => (
-    <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" />
+    <Chip
+      label={val}
+      key={idx}
+      className="mx-1 my-1 px-0 py-0"
+      color="primary"
+      variant="outlined"
+    />
   ));
 };
 const MultiValuesTypeProvider = (props) => (

@@ -24,6 +24,7 @@ export const ROUTE_NAME = {
   HOLIDAY: "Holiday",
   NEW_HOLIDAY: "New Holiday",
   HOLIDAY_UPDATE: "Holiday Update",
+  HOLIDAY_SETTINGS_UPDATE: "Holiday Settings Update",
   PERMISSION: "Permission",
   PERMISSION_GROUP: "PermissionGroup",
   ROLE: "Role",

@@ -56,6 +56,13 @@ export const SettingHolidayInfoSchema = Yup.object().shape({
   endDate: Yup.string().required("Ngày kết thúc không được bỏ trống"),
 });
 
+export const SettingHolidayLimitSchema = Yup.object().shape({
+  total: Yup.number()
+    .integer("Số ngày đề xuất tối đa là một số nguyên")
+    .min(0, "Số ngày đề xuất tối đa là một số không âm")
+    .required("Bắt buộc phải nhập số ngày đề  xuất tối đa"),
+});
+
 //Position
 export const SettingPositionInfoSchema = Yup.object().shape({
   shortname: Yup.string().required("Nhập mã của vị trí"),
