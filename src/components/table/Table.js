@@ -238,7 +238,6 @@ const QTable = (props) => {
     : [""];
   const [state, setState] = useState({
     columns: columnDef,
-    rows: data,
     selection: [],
     currentPage: 0,
     pageSize: 5,
@@ -337,7 +336,7 @@ const QTable = (props) => {
         </div>
 
         <Grid
-          rows={state.rows}
+          rows={data}
           columns={state.columns}
           getRowId={(row) => row.id}
         >

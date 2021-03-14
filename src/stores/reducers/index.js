@@ -1,12 +1,13 @@
-import { combineReducers } from "redux";
-import accountReducer from "./account";
-import branchReducer from "./branch";
-import headerReducer from "./header";
-import locationReducer from "./location";
-import settingReducer from "./setting";
-import shiftReducer from "./shift";
-import styleReducer from "./style";
-import userReducer from "./user";
+import { combineReducers } from 'redux';
+import accountReducer from './account';
+import branchReducer from './branch';
+import headerReducer from './header';
+import locationReducer from './location';
+import settingReducer from './setting';
+import shiftReducer from './shift';
+import styleReducer from './style';
+import userReducer from './user';
+import departmentReducer from './department';
 
 export default combineReducers({
   style: styleReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   branch: branchReducer,
   setting: settingReducer,
   shift: shiftReducer,
+  department: departmentReducer,
 });

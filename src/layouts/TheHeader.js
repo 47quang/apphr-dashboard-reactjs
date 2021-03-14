@@ -57,7 +57,7 @@ const TheHeader = () => {
             <button
               key={index}
               type="submit"
-              className={`btn btn-${type}`}
+              className={`btn btn-${type} mr-4`}
               onClick={callback}
             >
               {name}
