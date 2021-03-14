@@ -1,12 +1,12 @@
-import { CHANGE_HEADER_STATE } from "../actions/header";
+import { CHANGE_ACTIONS } from '../actions/header';
 
 const initialState = {
-  listButtonSubmit: [],
+  actions: [],
 };
 
 const headerReducer = (state = initialState, { type, payload }) => {
-  if (type === CHANGE_HEADER_STATE) {
-    return { ...state, listButtonSubmit: payload.lst };
+  if (type === CHANGE_ACTIONS) {
+    return { ...state, actions: payload };
   } else {
     return state;
   }

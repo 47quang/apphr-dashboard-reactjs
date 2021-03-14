@@ -8,20 +8,21 @@ const API_PREFIX = {
   API_PROVINCE: "/api.province",
   API_DISTRICT: "/api.district",
   API_WARD: "/api.ward",
+  API_GENERAL: '/api.tenant'
 };
 
 export const api = {
   branch: {
-    getBranchList: (params) => {
+    getBranches: (params) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH, {
         params: params,
       });
     },
-    postBranch: (bodyParams) => {
-      return client.post(API_PREFIX.API_SETTING_BRANCH, bodyParams);
+    postBranch: (data) => {
+      return client.post(API_PREFIX.API_SETTING_BRANCH, data);
     },
-    putBranch: (bodyParams, id) => {
-      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, bodyParams);
+    putBranch: (data, id) => {
+      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, data);
     },
     getBranch: (id) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
@@ -110,4 +111,12 @@ export const api = {
       return client.get(API_PREFIX.API_WARD + `/${wardID}`);
     },
   },
+  setting: {
+    getGeneral: (tenantId) => {
+      return client.get(API_PREFIX.API_GENERAL + `/${tenantId}`);
+    },
+    putGeneral: (payload) => {
+      return client.put(API_PREFIX.API_GENERAL + `/${payload.id}`, payload);
+    }
+  }
 };
