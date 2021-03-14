@@ -38,6 +38,8 @@ const NewBranchPage = ({ t, location, match, history }) => {
 
   useEffect(() => {
     if (params?.id) dispatch(fetchBranch(params.id));
+    else dispatch(setEmptyDBranch());
+
     const actions = [
       {
         type: "primary",
@@ -59,7 +61,6 @@ const NewBranchPage = ({ t, location, match, history }) => {
   }, [branch.provinceId, branch.districtId]);
 
   const btnCreateBranch = () => {
-    dispatch(setEmptyDBranch());
     const form = branchInfoForm.current.values;
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
