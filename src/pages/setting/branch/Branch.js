@@ -3,7 +3,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QTable from "src/components/table/Table";
 import { changeActions } from "src/stores/actions/header";
-import { fetchBranches, deleteBranch } from "src/stores/actions/branch";
+import {
+  fetchBranches,
+  deleteBranch,
+  setDeleteDBranchId,
+} from "src/stores/actions/branch";
 
 const columnDef = [
   { name: "shortname", title: "Mã chi nhánh" },
@@ -29,6 +33,7 @@ const Branch = ({ t, location, history }) => {
     dispatch(changeActions(actions));
   }, []);
   const deleteRowFunc = async (delRowId) => {
+    dispatch(setDeleteDBranchId(delRowId));
     dispatch(deleteBranch(delRowId));
     dispatch(fetchBranches());
   };

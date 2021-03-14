@@ -13,7 +13,7 @@ const initialState = {
     phone: "",
     note: "",
   },
-  deleteBranchId: 0,
+  deletedBranchId: 0,
 };
 
 const branchReducer = (state = initialState, { type, payload }) => {
@@ -25,7 +25,17 @@ const branchReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.branch.DELETE_BRANCH:
       return {
         ...state,
-        branches: state.branches.filter((b) => b.id !== state.deleteBranchId),
+        branches: state.branches.filter((b) => b.id !== state.deletedBranchId),
+      };
+    case REDUX_STATE.branch.SET_DELETED_BRANCH_ID:
+      return {
+        ...state,
+        deletedBranchId: payload,
+      };
+    case REDUX_STATE.branch.EMPTY_VALUE:
+      return {
+        ...state,
+        branch: initialState.branch,
       };
     default:
       return state;

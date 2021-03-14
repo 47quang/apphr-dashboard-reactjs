@@ -13,6 +13,7 @@ import {
   createBranch,
   fetchBranch,
   updateBranch,
+  setEmptyDBranch,
 } from "src/stores/actions/branch";
 import {
   fetchDistricts,
@@ -58,6 +59,7 @@ const NewBranchPage = ({ t, location, match, history }) => {
   }, [branch.provinceId, branch.districtId]);
 
   const btnCreateBranch = () => {
+    dispatch(setEmptyDBranch());
     const form = branchInfoForm.current.values;
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);

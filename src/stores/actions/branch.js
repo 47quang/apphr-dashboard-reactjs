@@ -65,3 +65,17 @@ export const deleteBranch = (id) => {
       });
   };
 };
+
+export const setDeleteDBranchId = (id) => {
+  return {
+    type: REDUX_STATE.branch.SET_DELETED_BRANCH_ID,
+    payload: id,
+  };
+};
+
+export const setEmptyDBranch = () => {
+  return {
+    type: REDUX_STATE.branch.EMPTY_VALUE,
+    payload: [],
+  };
+};
