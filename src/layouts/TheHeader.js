@@ -6,7 +6,6 @@ import {
   CBreadcrumbRouter,
   CToggler,
 } from "@coreui/react";
-import { Link } from "react-router-dom";
 import routes from "src/routes/routes";
 import "../styles/scss/header.scss";
 
