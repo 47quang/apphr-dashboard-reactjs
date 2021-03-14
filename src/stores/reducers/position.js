@@ -7,8 +7,8 @@ const initialState = {
     shortname: '',
     branchId: 0,
     departmentId: 0,
-    academicLevel: "not_require",
-    note: "",
+    academicLevel: 'not_require',
+    note: '',
     expYear: 0,
   },
   deletedPositionId: 0,
@@ -25,27 +25,12 @@ const positionReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.position.DELETE_POSITION:
       return {
         ...state,
-        positions: state.positions.filter(
-          (b) => b.id !== state.deletedPositionId
-        ),
-      };
-    case REDUX_STATE.position.SET_DELETED_BRANCH_ID:
-      return {
-        ...state,
-        deletedPositionId: payload,
+        positions: state.positions.filter((b) => b.id !== payload.id),
       };
     case REDUX_STATE.position.EMPTY_VALUE:
       return {
         ...state,
-        position: {
-          name: "",
-          shortname: "",
-          branchId: 0,
-          departmentId: 0,
-          academicLevel: "not_require",
-          note: "",
-          expYear: 0,
-        },
+        position: initialState.position,
       };
     default:
       return state;

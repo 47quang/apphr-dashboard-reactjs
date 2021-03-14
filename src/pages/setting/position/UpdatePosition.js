@@ -12,10 +12,11 @@ import { SettingPositionInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { changeActions } from 'src/stores/actions/header';
-import { setEmptyPosition, createPosition } from 'src/stores/actions/position';
+import { fetchPosition, setEmptyPosition, updatePosition } from 'src/stores/actions/position';
 import { fetchShifts } from 'src/stores/actions/shift';
 
-const NewPositionPage = ({ t, location, match, history }) => {
+const UpdatePosition = ({ t, location, match, history }) => {
+  const params = match.params;
   const positionRef = useRef();
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
@@ -24,20 +25,21 @@ const NewPositionPage = ({ t, location, match, history }) => {
   const position = useSelector((state) => state.position.position);
 
   useEffect(() => {
+    dispatch(fetchPosition(params.id));
+    dispatch(fetchShifts());
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo mới',
+        name: 'Cập nhật',
         callback: handleSubmit,
       },
     ];
-    dispatch(fetchShifts());
     dispatch(changeActions(actions));
     dispatch(fetchBranches());
     dispatch(fetchDepartments());
     return () => {
-      dispatch(setEmptyPosition());
       dispatch(changeActions([]));
+      dispatch(setEmptyPosition());
     };
   }, []);
 
@@ -45,7 +47,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
     const form = positionRef.current.values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(createPosition(form));
+    dispatch(updatePosition(form, params.id));
     history.push('/setting/position');
   };
 
@@ -154,4 +156,4 @@ const NewPositionPage = ({ t, location, match, history }) => {
   );
 };
 
-export default NewPositionPage;
+export default UpdatePosition;

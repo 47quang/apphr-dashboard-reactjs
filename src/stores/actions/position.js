@@ -4,7 +4,7 @@ import { REDUX_STATE } from "../states";
 export const fetchPositions = (params) => {
   return (dispatch, getState) => {
     api.position
-      .getPositions()
+      .getAll()
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
       })
@@ -17,7 +17,7 @@ export const fetchPositions = (params) => {
 export const fetchPosition = (id) => {
   return (dispatch, getState) => {
     api.position
-      .getPosition(id)
+      .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
@@ -31,7 +31,7 @@ export const createPosition = (params) => {
   console.log(params);
   return (dispatch, getState) => {
     api.position
-      .postPosition(params)
+      .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
@@ -44,7 +44,7 @@ export const createPosition = (params) => {
 export const updatePosition = (data, id) => {
   return (dispatch, getState) => {
     api.position
-      .putPosition(data, id)
+      .put(data, id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
@@ -54,23 +54,16 @@ export const updatePosition = (data, id) => {
   };
 };
 
-export const deletePosition = (id) => {
+export const deletePosition = (params) => {
   return (dispatch, getState) => {
     api.position
-      .deletePosition(id)
+      .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.DELETE_POSITION, payload });
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-};
-
-export const setDeletedPositionId = (id) => {
-  return {
-    type: REDUX_STATE.position.SET_DELETED_BRANCH_ID,
-    payload: id,
   };
 };
 

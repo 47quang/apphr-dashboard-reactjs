@@ -57,21 +57,21 @@ export const api = {
     },
   },
   position: {
-    postPosition: (bodyParams) => {
+    post: (bodyParams) => {
       return client.post(API_PREFIX.API_SETTING_POSITION, bodyParams);
     },
-    getPositions: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_POSITION, {
         params: params,
       });
     },
-    getPosition: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_POSITION + `/${id}`);
     },
-    putPosition: (bodyParams, id) => {
+    put: (bodyParams, id) => {
       return client.put(API_PREFIX.API_SETTING_POSITION + `/${id}`, bodyParams);
     },
-    deletePosition: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_POSITION + `/${id}`);
     },
   },

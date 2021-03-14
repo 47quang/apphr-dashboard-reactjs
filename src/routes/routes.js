@@ -12,7 +12,9 @@ const Report = React.lazy(() => import('src/pages/report/Report'));
 const General = React.lazy(() => import('src/pages/setting/general/General'));
 const Position = React.lazy(() => import('src/pages/setting/position/Position'));
 const NewPosition = React.lazy(() => import('src/pages/setting/position/NewPosition'));
-const PositionEdit = React.lazy(() => import('src/pages/setting/position/NewPosition'));
+const EditPosition = React.lazy(() => import('src/pages/setting/position/UpdatePosition'));
+
+
 const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
 const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
 const UpdateShift = React.lazy(() => import('src/pages/setting/shift/UpdateShift'));
@@ -64,7 +66,7 @@ const routes = [
   {
     path: '/setting/position/:id',
     name: ROUTE_NAME.POSITION_UPDATE,
-    component: PositionEdit,
+    component: EditPosition,
   },
   { path: '/setting/position', name: ROUTE_NAME.POSITION, component: Position },
   {
