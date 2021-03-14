@@ -54,8 +54,8 @@ const NewBranchPage = ({ t, location, match }) => {
     ];
     return lstOfProvinces;
   };
-  const getListOfDistricts = (provinceID) => {
-    if (provinceID === '1')
+  const getListOfDistricts = (provinceId) => {
+    if (provinceId === '1')
       return [
         { id: 1, name: 'Quận 1' },
         { id: 2, name: 'Quận 2' },
@@ -65,14 +65,14 @@ const NewBranchPage = ({ t, location, match }) => {
         { id: 6, name: 'Quận 10' },
         { id: 10, name: 'Quận Thủ Đức' },
       ];
-    else if (provinceID === '5')
+    else if (provinceId === '5')
       return [
         { id: 1, name: 'Dĩ An' },
         { id: 2, name: 'Thủ Dầu Một' },
       ];
   };
 
-  const getListOfWars = (districtID) => {
+  const getListOfWars = (districtId) => {
     let lstWars = [
       { id: 1, name: 'Phường 01' },
       { id: 2, name: 'Phường 02' },
@@ -86,7 +86,6 @@ const NewBranchPage = ({ t, location, match }) => {
 
   const createBranch = async (nVal) => {
     const resp = await dispatch(createBranch());
-    console.log('--> ', resp);
   };
 
   return (

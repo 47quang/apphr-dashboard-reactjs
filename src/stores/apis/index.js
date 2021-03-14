@@ -92,22 +92,22 @@ export const api = {
     },
   },
   location: {
-    getProvinceInfo: (provinceID) => {
-      return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}`);
+    getProvince: (provinceId) => {
+      return client.get(API_PREFIX.API_PROVINCE + `/${provinceId}`);
     },
-    getProvinceList: () => {
+    getProvinces: () => {
       return client.get(API_PREFIX.API_PROVINCE);
     },
-    getDistrictList: (provinceID) => {
-      return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}/district`);
+    getDistricts: (provinceId) => {
+      return client.get(API_PREFIX.API_PROVINCE + `/${provinceId}/district`);
     },
-    getDistrictInfo: (districtID) => {
-      return client.get(API_PREFIX.API_DISTRICT + `/${districtID}`);
+    getDistrict: (districtId) => {
+      return client.get(API_PREFIX.API_DISTRICT + `/${districtId}`);
     },
-    getWardList: (districtID) => {
-      return client.get(API_PREFIX.API_DISTRICT + `/${districtID}/ward`);
+    getWards: (districtId) => {
+      return client.get(API_PREFIX.API_DISTRICT + `/${districtId}/ward`);
     },
-    getWardInfo: (wardID) => {
+    getWard: (wardID) => {
       return client.get(API_PREFIX.API_WARD + `/${wardID}`);
     },
   },

@@ -79,9 +79,6 @@ export default function CommonMultiSelectInput({
         displayEmpty={true}
         disableUnderline
         value={values}
-        onChange={(e) => {
-          console.log(e.target);
-        }}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => {
           return selected.length === 0 ? (

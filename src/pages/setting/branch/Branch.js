@@ -16,7 +16,6 @@ const columnDef = [
 
 const Branch = ({ t, location }) => {
   const branches = useSelector((state) => state.branch.branches);
-  console.log(branches);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
