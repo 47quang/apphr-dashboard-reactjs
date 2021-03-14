@@ -15,6 +15,9 @@ export const SettingGeneralInfoSchema = Yup.object().shape({
   email: Yup.string().email("Email nhập sai").required("Bắt buộc nhập email"),
   address: Yup.string().trim(),
   taxCode: Yup.string(),
+  provinceId: Yup.number().required(),
+  districtId: Yup.number().required(),
+  wardId: Yup.number().required(),
 });
 
 //Shift
@@ -22,16 +25,16 @@ const isBefore = (startTime, endTime) => {
   return moment(startTime, "HH:mm").isBefore(moment(endTime, "HH:mm"));
 };
 export const SettingShiftInfoSchema = Yup.object().shape({
-  shiftCode: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
-  shiftName: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
-  start: Yup.string().test(
+  shortname: Yup.string().trim().required("Bắt buộc nhập mã ca làm"),
+  name: Yup.string().trim().required("Bắt buộc nhập tên ca làm"),
+  startCC: Yup.string().test(
     "not empty",
     "Bắt buộc chọn giờ check-in",
     function (value) {
       return !!value;
     }
   ),
-  end: Yup.string()
+  endCC: Yup.string()
     .test("not empty", "Bắt buộc chọn giờ check-out", function (value) {
       return !!value;
     })
@@ -39,13 +42,12 @@ export const SettingShiftInfoSchema = Yup.object().shape({
       "end_time_test",
       "Giờ check-out phải sau giờ check-in",
       function (value) {
-        const { start } = this.parent;
-        return isBefore(start, value);
+        const { startCC } = this.parent;
+        return isBefore(startCC, value);
       }
     ),
-  facOfShift: Yup.number()
+  coefficient: Yup.number()
     .min(0, "Hệ số giờ làm phải là một số không âm")
-
     .required("Bắt buộc phải nhập hệ số giờ làm"),
 });
 

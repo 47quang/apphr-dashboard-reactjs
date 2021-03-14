@@ -15,7 +15,7 @@ import { REDUX_STATE } from "../states";
 export const fetchProvinces = (params) => {
   return (dispatch, getState) => {
     api.location
-      .getProvinceList()
+      .getProvinces()
       .then(({ payload }) => {
         dispatch({ type: "SET_PROVINCES", payload });
       })
@@ -26,7 +26,7 @@ export const fetchProvinces = (params) => {
 export const fetchDistricts = (provinceID) => {
   return (dispatch, getState) => {
     api.location
-      .getDistrictList(provinceID)
+      .getDistricts(params.provinceId)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.location.SET_DISTRICTS, payload });
       })
@@ -39,7 +39,7 @@ export const fetchDistricts = (provinceID) => {
 export const fetchWards = (districtID) => {
   return (dispatch, getState) => {
     api.location
-      .getWardList(districtID)
+      .getWards(params.districtId)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.location.SET_WARDS, payload });
       })

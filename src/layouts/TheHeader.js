@@ -1,42 +1,34 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   CHeader,
   CHeaderNav,
   CBreadcrumbRouter,
   CToggler,
-} from "@coreui/react";
-// import CIcon from "@coreui/icons-react";
-import routes from "src/routes/routes";
-import "../styles/scss/header.scss";
-
-// import {
-//   TheHeaderDropdownMssg,
-//   TheHeaderDropdownNotif,
-//   TheHeaderDropdownTasks,
-//   TheHeaderDropdown,
-// } from "./index";
+} from '@coreui/react';
+import { Link } from 'react-router-dom';
+import routes from 'src/routes/routes';
+import '../styles/scss/header.scss';
 
 const TheHeader = () => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
-  const listButtonSubmit = useSelector(
-    (state) => state.header.listButtonSubmit
-  );
+
+  const actions = useSelector((state) => state.header.actions);
 
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
-    const val = [true, "responsive"].includes(sidebarShow)
+    const val = [true, 'responsive'].includes(sidebarShow)
       ? false
-      : "responsive";
-    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
+      : 'responsive';
+    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
   };
 
   const toggleSidebarMobile = () => {
-    const val = [false, "responsive"].includes(sidebarShow)
+    const val = [false, 'responsive'].includes(sidebarShow)
       ? true
-      : "responsive";
-    dispatch({ type: "CHANGE_SIDEBARSHOW", payload: { sidebarShow: val } });
+      : 'responsive';
+    dispatch({ type: 'CHANGE_SIDEBARSHOW', payload: { sidebarShow: val } });
   };
 
   return (
@@ -59,32 +51,20 @@ const TheHeader = () => {
         />
       </CHeaderNav>
       <CHeaderNav>
-        <div className="mr-4">{listButtonSubmit ?? <></>}</div>
+        {actions.map((action, index) => {
+          const { type, name, callback } = action;
+          return (
+            <button
+              key={index}
+              type="submit"
+              className={`btn btn-${type}`}
+              onClick={callback}
+            >
+              {name}
+            </button>
+          );
+        })}
       </CHeaderNav>
-      {/* <CHeaderNav className="px-3">
-        <div className="lang">
-          <div className={language}></div>
-          <ul className="dropdown">
-            {languages.map((lng, index) => {
-              if (lng.code !== language) {
-                return (
-                  <li key={index}>
-                    <div
-                      onClick={() => changeLanguage(lng.code)}
-                      className={lng.code}
-                    ></div>
-                  </li>
-                );
-              }
-              return null;
-            })}
-          </ul>
-        </div>
-        <TheHeaderDropdownNotif />
-        <TheHeaderDropdownMssg />
-        <TheHeaderDropdownTasks />
-        <TheHeaderDropdown />
-      </CHeaderNav> */}
     </CHeader>
   );
 };

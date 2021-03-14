@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
-import styleReducer from "./style";
-import userReducer from "./user";
 import accountReducer from "./account";
+import branchReducer from "./branch";
 import headerReducer from "./header";
 import locationReducer from "./location";
-import generalReducer from "./general";
+import settingReducer from "./setting";
+import shiftReducer from "./shift";
+import styleReducer from "./style";
+import userReducer from "./user";
 
 export default combineReducers({
   style: styleReducer,
@@ -12,5 +14,7 @@ export default combineReducers({
   account: accountReducer,
   header: headerReducer,
   location: locationReducer,
-  general: generalReducer,
+  branch: branchReducer,
+  setting: settingReducer,
+  shift: shiftReducer,
 });

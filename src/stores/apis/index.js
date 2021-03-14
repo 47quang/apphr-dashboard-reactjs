@@ -9,6 +9,7 @@ const API_PREFIX = {
   API_PROVINCE: "/api.province",
   API_DISTRICT: "/api.district",
   API_WARD: "/api.ward",
+  API_GENERAL: "/api.tenant",
 };
 
 export const api = {
@@ -19,16 +20,16 @@ export const api = {
   },
 
   branch: {
-    getBranchList: (params) => {
+    getBranches: (params) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH, {
         params: params,
       });
     },
-    postBranch: (bodyParams) => {
-      return client.post(API_PREFIX.API_SETTING_BRANCH, bodyParams);
+    postBranch: (data) => {
+      return client.post(API_PREFIX.API_SETTING_BRANCH, data);
     },
-    putBranch: (bodyParams, id) => {
-      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, bodyParams);
+    putBranch: (data, id) => {
+      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, data);
     },
     getBranch: (id) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
@@ -80,7 +81,7 @@ export const api = {
   },
   shift: {
     postShift: (bodyParams) => {
-      return client.post(API_PREFIX.API_SETTING_SHIFT, bodyParams);
+      return client.post(API_PREFIX.API_SETTING_SHIFT, { ...bodyParams });
     },
     getShiftList: (params) => {
       return client.get(API_PREFIX.API_SETTING_SHIFT, {
@@ -98,23 +99,31 @@ export const api = {
     },
   },
   location: {
-    getProvinceInfo: ({ provinceID }) => {
-      return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}`);
+    getProvince: (provinceId) => {
+      return client.get(API_PREFIX.API_PROVINCE + `/${provinceId}`);
     },
-    getProvinceList: () => {
+    getProvinces: () => {
       return client.get(API_PREFIX.API_PROVINCE);
     },
-    getDistrictList: (provinceID) => {
-      return client.get(API_PREFIX.API_PROVINCE + `/${provinceID}/district`);
+    getDistricts: (provinceId) => {
+      return client.get(API_PREFIX.API_PROVINCE + `/${provinceId}/district`);
     },
-    getDistrictInfo: ({ districtID }) => {
-      return client.get(API_PREFIX.API_DISTRICT + `/${districtID}`);
+    getDistrict: (districtId) => {
+      return client.get(API_PREFIX.API_DISTRICT + `/${districtId}`);
     },
-    getWardList: (districtID) => {
-      return client.get(API_PREFIX.API_DISTRICT + `/${districtID}/ward`);
+    getWards: (districtId) => {
+      return client.get(API_PREFIX.API_DISTRICT + `/${districtId}/ward`);
     },
-    getWardInfo: ({ wardID }) => {
+    getWard: (wardID) => {
       return client.get(API_PREFIX.API_WARD + `/${wardID}`);
+    },
+  },
+  setting: {
+    getGeneral: (tenantId) => {
+      return client.get(API_PREFIX.API_GENERAL + `/${tenantId}`);
+    },
+    putGeneral: (payload) => {
+      return client.put(API_PREFIX.API_GENERAL + `/${payload.id}`, payload);
     },
   },
 };

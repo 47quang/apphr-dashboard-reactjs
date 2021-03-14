@@ -280,7 +280,6 @@ const QTable = (props) => {
             <Formik
               enableReinitialize
               initialValues={filterValues}
-              onSubmit={(values) => console.log(values)}
             >
               {({
                 values,

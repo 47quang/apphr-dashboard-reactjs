@@ -1,10 +1,12 @@
 import { CContainer } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import BasicLoader from "src/components/loader/BasicLoader";
 import QTable from "src/components/table/Table";
 import { changeListButtonHeader } from "src/stores/actions/header";
+import { fetchShifts } from "src/stores/actions/shift";
+import { api } from "src/stores/apis";
 
 // shortname, name, startCC, endCC, coefficient
 const columnDef = [
@@ -76,8 +78,17 @@ const data = [
 
 const Shifts = ({ t, location }) => {
   const dispatch = useDispatch();
+  const shifts = useSelector((state) => state.shift.shifts);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getShiftInfo = () => {
+    dispatch(
+      fetchShifts({
+        page: 0,
+        perpage: 5,
+      })
+    );
+  };
   useEffect(() => {
     let wait = () => {
       setTimeout(() => {
@@ -85,6 +96,7 @@ const Shifts = ({ t, location }) => {
       }, 500);
     };
     wait();
+    getShiftInfo();
     dispatch(
       changeListButtonHeader([
         <Link
@@ -109,7 +121,7 @@ const Shifts = ({ t, location }) => {
       ) : (
         <QTable
           columnDef={columnDef}
-          data={data}
+          data={shifts}
           route={"/setting/shift/id="}
           idxColumnsFilter={[0, 1]}
         />
