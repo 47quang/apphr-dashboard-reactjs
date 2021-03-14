@@ -7,13 +7,14 @@ import {
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { CheckCircleOutlineOutlined } from "@material-ui/icons";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 
 //TODO: translate
 const SuccessAlertDialog = ({ isVisible, handleClose }) => {
+  const [visible, setVisible] = useState(isVisible ?? true);
   return (
     <Dialog
-      open={isVisible}
+      open={visible}
       onClose={handleClose}
       aria-labelledby="success-alert-dialog-title"
     >
@@ -34,7 +35,10 @@ const SuccessAlertDialog = ({ isVisible, handleClose }) => {
       <DialogActions className="align-center">
         <button
           autoFocus
-          onClick={handleClose}
+          onClick={(e) => {
+            if (handleClose && isVisible) handleClose();
+            else setVisible(false);
+          }}
           className="btn btn-success mx-auto"
         >
           OK

@@ -23,7 +23,9 @@ const PositionEdit = React.lazy(() =>
 );
 const Shift = React.lazy(() => import("src/pages/setting/shift/Shift"));
 const NewShift = React.lazy(() => import("src/pages/setting/shift/NewShift"));
-const ShiftEdit = React.lazy(() => import("src/pages/setting/shift/NewShift"));
+const ShiftEdit = React.lazy(() =>
+  import("src/pages/setting/shift/UpdateShift")
+);
 
 const Department = React.lazy(() =>
   import("src/pages/setting/department/Department")

@@ -8,7 +8,7 @@ const API_PREFIX = {
   API_PROVINCE: "/api.province",
   API_DISTRICT: "/api.district",
   API_WARD: "/api.ward",
-  API_GENERAL: '/api.tenant'
+  API_GENERAL: "/api.tenant",
 };
 
 export const api = {
@@ -85,6 +85,7 @@ export const api = {
       return client.get(API_PREFIX.API_SETTING_SHIFT + `/${id}`);
     },
     putShift: (bodyParams, id) => {
+      console.log(bodyParams, id);
       return client.put(API_PREFIX.API_SETTING_SHIFT + `/${id}`, bodyParams);
     },
     deleteShift: (id) => {
@@ -117,6 +118,6 @@ export const api = {
     },
     putGeneral: (payload) => {
       return client.put(API_PREFIX.API_GENERAL + `/${payload.id}`, payload);
-    }
-  }
+    },
+  },
 };

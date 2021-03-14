@@ -13,8 +13,7 @@ import {
   changeActions,
   changeListButtonHeader,
 } from "src/stores/actions/header";
-import { createNewShift } from "src/stores/actions/shift";
-import { REDUX_STATE } from "src/stores/states";
+import { fetchShift, updateShift } from "src/stores/actions/shift";
 
 //TODO: translate
 const DAYS = [
@@ -31,20 +30,21 @@ const typeCC = [
   { id: "QR_CODE", name: "QR_CODE" },
 ];
 
-const NewShift = ({ t, location, match }) => {
+const UpdateShift = ({ t, location, match }) => {
   const shiftInfoForm = useRef();
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
   const [isLoading, setIsLoading] = useState(true);
+  const shiftId = match.params.id;
   const wait = () => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 1000);
   };
   useEffect(() => {
-    dispatch({ type: REDUX_STATE.shift.EMPTY_VALUE });
     wait();
+    dispatch(fetchShift(shiftId));
 
     dispatch(
       fetchBranches({
@@ -60,14 +60,14 @@ const NewShift = ({ t, location, match }) => {
           key="magicShift"
           onClick={getOnSubmitInForm}
         >
-          {"Tạo mới"}
+          {"Cập nhật"}
         </button>,
       ])
     );
     const actions = [
       {
         type: "primary",
-        name: "Tạo mới",
+        name: "Cập nhật",
         callback: getOnSubmitInForm,
       },
     ];
@@ -76,28 +76,30 @@ const NewShift = ({ t, location, match }) => {
       dispatch(changeActions([]));
       clearTimeout(wait);
     };
-  }, [dispatch]);
+  }, [dispatch, shiftId]);
 
   const getOnSubmitInForm = (event) =>
     shiftInfoForm.current.handleSubmit(event);
 
-  const handleSubmitInfo = (values) => {
-    const enCodeChecked = (operateLoop) => {
-      return operateLoop.reduce((acc, val) => {
-        acc[parseInt(val)] = 1;
-        return acc;
-      }, Array(7).fill(0));
-    };
+  const enCodeChecked = (operateLoop) => {
+    return operateLoop.reduce((acc, val) => {
+      acc[parseInt(val)] = 1;
+      return acc;
+    }, Array(7).fill(0));
+  };
 
-    const convertTime = (time) => {
-      return time + ":00";
-    };
+  const convertTime = (time) => {
+    const timeTemp = time.split(":");
+    return timeTemp.length === 2 ? time + ":00" : time;
+  };
+
+  const handleSubmitInfo = (values) => {
     let valuesTemp = values;
     valuesTemp.operateLoop = enCodeChecked(values.operateLoop);
     valuesTemp.startCC = convertTime(values.startCC);
     valuesTemp.endCC = convertTime(values.endCC);
     setIsLoading(true);
-    dispatch(createNewShift(valuesTemp, shiftInfoForm));
+    dispatch(updateShift(valuesTemp, shiftId));
     wait();
   };
   return (
@@ -119,6 +121,7 @@ const NewShift = ({ t, location, match }) => {
                 errors,
                 touched,
                 handleChange,
+                handleSubmit,
                 setValues,
                 handleBlur,
               }) => (
@@ -242,9 +245,14 @@ const NewShift = ({ t, location, match }) => {
                         <CommonMultiSelectInput
                           values={values.branchIds}
                           onChangeValues={handleChange("branchIds")}
-                          listValues={branches}
+                          listValues={
+                            branches?.branches ? branches.branches : branches
+                          }
                           setValues={setValues}
                           placeholder={"Chọn chi nhánh"}
+                          isTouched={touched.branchIds}
+                          isError={errors.branchIds && touched.branchIds}
+                          errorMessage={errors.branchIds}
                         />
                       </div>
                       {touched.branchIds && errors.branchIds && (
@@ -284,4 +292,4 @@ const NewShift = ({ t, location, match }) => {
   );
 };
 
-export default NewShift;
+export default UpdateShift;
