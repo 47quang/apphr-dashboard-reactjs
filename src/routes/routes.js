@@ -13,18 +13,18 @@ const General = React.lazy(() => import('src/pages/setting/general/General'));
 const Position = React.lazy(() => import('src/pages/setting/position/Position'));
 const NewPosition = React.lazy(() => import('src/pages/setting/position/NewPosition'));
 const PositionEdit = React.lazy(() => import('src/pages/setting/position/NewPosition'));
-// const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
-// const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
-// const EditShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
+const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
+const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
+const EditShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
 
 const Department = React.lazy(() => import('src/pages/setting/department/Department'));
 const NewDepartment = React.lazy(() => import('src/pages/setting/department/NewDepartment'));
 const EditDepartment = React.lazy(() => import('src/pages/setting/department/EditDepartment'));
 
-// const Holiday = React.lazy(() => import('src/pages/setting/holiday/Holiday'));
-// const NewHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
-// const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
-// const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettings'));
+const Holiday = React.lazy(() => import('src/pages/setting/holiday/Holiday'));
+const NewHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
+const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
+const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettings'));
 
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const NewBranch = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
