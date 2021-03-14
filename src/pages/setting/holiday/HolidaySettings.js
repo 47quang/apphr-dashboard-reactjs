@@ -44,9 +44,9 @@ const HolidaySettings = ({ t, location, match, history }) => {
 
   const getOnSubmitInForm = (event) => holidayInfoForm.current.handleSubmit(event);
 
-  const handleSubmitInfo = (values) => {
-    console.log(values);
-  };
+  // const handleSubmitInfo = (values) => {
+  //   console.log(values);
+  // };
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">

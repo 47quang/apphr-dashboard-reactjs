@@ -6,6 +6,7 @@ import {
   CBreadcrumbRouter,
   CToggler,
 } from "@coreui/react";
+import { Link } from "react-router-dom";
 import routes from "src/routes/routes";
 import "../styles/scss/header.scss";
 
@@ -49,10 +50,14 @@ const TheHeader = () => {
           routes={routes}
         />
       </CHeaderNav>
-      <CHeaderNav>
+      <CHeaderNav className="px-3">
         {actions.map((action, index) => {
-          const { type, name, callback } = action;
-          return (
+          const { type, name, callback, to } = action;
+          return to ? (
+            <Link to={to} className={`btn btn-${type}`} key={index}>
+              Tạo ca làm
+            </Link>
+          ) : (
             <button
               key={index}
               type="submit"

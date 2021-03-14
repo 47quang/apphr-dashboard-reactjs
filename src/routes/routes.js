@@ -15,7 +15,7 @@ const NewPosition = React.lazy(() => import('src/pages/setting/position/NewPosit
 const PositionEdit = React.lazy(() => import('src/pages/setting/position/NewPosition'));
 const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
 const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
-const EditShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
+const ShiftEdit = React.lazy(() => import('src/pages/setting/shift/UpdateShift'));
 
 const Department = React.lazy(() => import('src/pages/setting/department/Department'));
 const NewDepartment = React.lazy(() => import('src/pages/setting/department/NewDepartment'));
@@ -74,7 +74,7 @@ const routes = [
   {
     path: '/setting/shift/id=:id',
     name: ROUTE_NAME.SHIFT_UPDATE,
-    component: EditShift,
+    component: ShiftEdit,
   },
   { path: '/setting/shift', name: ROUTE_NAME.SHIFT, component: Shift },
   {

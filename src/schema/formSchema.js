@@ -49,6 +49,20 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   coefficient: Yup.number()
     .min(0, "Hệ số giờ làm phải là một số không âm")
     .required("Bắt buộc phải nhập hệ số giờ làm"),
+  branchIds: Yup.array()
+    .of(Yup.number())
+    .required()
+    .test("empty string", "Phải chọn chi nhánh", function (value) {
+      return value ? value.length > 0 : false;
+    }),
+
+  operateLoop: Yup.array()
+    .of(Yup.number())
+    .required()
+    .test("not choose", "Phải chọn thời gian làm việc", function (value) {
+      return value ? value.reduce((a, b) => a + b, 0) > 0 : false;
+    }),
+  typeCC: Yup.string().required("Bắt buộc chọn hình thức điểm danh"),
 });
 
 //Holiday

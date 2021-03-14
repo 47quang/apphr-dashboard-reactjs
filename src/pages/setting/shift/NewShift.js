@@ -2,13 +2,15 @@ import { CContainer } from '@coreui/react';
 import { Field, Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import BasicLoader from 'src/components/loader/BasicLoader';
 import Label from 'src/components/text/Label';
 import { SettingShiftInfoSchema } from 'src/schema/formSchema';
-import { changeActions } from 'src/stores/actions/header';
-import { createNewShift, fetchShift, updateShift } from 'src/stores/actions/shift';
+import { fetchBranches } from 'src/stores/actions/branch';
+import { changeActions, changeListButtonHeader } from 'src/stores/actions/header';
+import { createNewShift } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 
 //TODO: translate
@@ -18,59 +20,69 @@ const typeCC = [
   { id: 'QR_CODE', name: 'QR_CODE' },
 ];
 
-const NewShift = ({ t, location, match, history }) => {
-  const params = match.params;
+const NewShift = ({ t, location, match }) => {
   const shiftInfoForm = useRef();
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
   const [isLoading, setIsLoading] = useState(true);
-  const shiftId = params?.id;
-  const getShiftInfo = (id) => {
-    dispatch(fetchShift(id));
-  };
-
-  useEffect(() => {
-    let wait = setTimeout(() => {
+  const wait = () => {
+    setTimeout(() => {
       setIsLoading(false);
     }, 500);
-    if (shiftId) getShiftInfo(params.id);
+  };
+  useEffect(() => {
+    dispatch({ type: REDUX_STATE.shift.EMPTY_VALUE });
+    wait();
+
+    dispatch(
+      fetchBranches({
+        page: 0,
+        perpage: 1000,
+      }),
+    );
+    dispatch(
+      changeListButtonHeader([
+        <button className="btn btn-primary" type="submit" key="magicShift" onClick={getOnSubmitInForm}>
+          {'Tạo mới'}
+        </button>,
+      ]),
+    );
     const actions = [
       {
         type: 'primary',
         name: 'Tạo mới',
-        callback: () => history.push('/setting/shift/newShift'),
+        callback: getOnSubmitInForm,
       },
     ];
     dispatch(changeActions(actions));
-  }, []);
+    return () => {
+      dispatch(changeActions([]));
+      clearTimeout(wait);
+    };
+  }, [dispatch]);
 
   const getOnSubmitInForm = (event) => shiftInfoForm.current.handleSubmit(event);
 
-  const enCodeChecked = (operateLoop) => {
-    return operateLoop.reduce((acc, val) => {
-      acc[parseInt(val)] = 1;
-      return acc;
-    }, Array(7).fill(0));
-  };
-  const formatTime = (time) => {
-    return time + ':00';
-  };
-  const deCodeChecked = (_checked) =>
-    _checked.reduce((acc, val, idx) => {
-      if (val !== 0) acc.push(idx + 1 + '');
-      return acc;
-    }, []);
-
   const handleSubmitInfo = (values) => {
+    const enCodeChecked = (operateLoop) => {
+      return operateLoop.reduce((acc, val) => {
+        acc[parseInt(val)] = 1;
+        return acc;
+      }, Array(7).fill(0));
+    };
+
+    const convertTime = (time) => {
+      return time + ':00';
+    };
     let valuesTemp = values;
     valuesTemp.operateLoop = enCodeChecked(values.operateLoop);
-    valuesTemp.startCC = formatTime(values.startCC);
-    valuesTemp.endCC = formatTime(values.endCC);
-    if (shiftId) dispatch(updateShift(values));
-    else dispatch(createNewShift(values));
+    valuesTemp.startCC = convertTime(values.startCC);
+    valuesTemp.endCC = convertTime(values.endCC);
+    setIsLoading(true);
+    dispatch(createNewShift(valuesTemp, shiftInfoForm));
+    wait();
   };
-
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       {isLoading ? (
@@ -81,11 +93,11 @@ const NewShift = ({ t, location, match, history }) => {
             <Formik
               innerRef={shiftInfoForm}
               enableReinitialize
-              initialValues={shift}
+              initialValues={shift?.shift ? shift.shift : shift}
               validationSchema={SettingShiftInfoSchema}
               onSubmit={(values) => handleSubmitInfo(values)}
             >
-              {({ values, errors, touched, handleChange, handleSubmit, setValues, handleBlur }) => (
+              {({ values, errors, touched, handleChange, setValues, handleBlur }) => (
                 <form autoComplete="off">
                   <div className="row">
                     <CommonTextInput
@@ -170,7 +182,7 @@ const NewShift = ({ t, location, match, history }) => {
                   </div>
                   <div className="row">
                     <div className="form-group col-lg-12">
-                      <Label text="Thời gian hoạt động của ca làm:" />
+                      <Label text="Thời gian hoạt động của ca làm" required={true} />
                       <div role="group" className="d-flex flex-row flex-wrap justify-content-around">
                         {DAYS.map((day, index) => (
                           <label key={index}>
@@ -179,23 +191,33 @@ const NewShift = ({ t, location, match, history }) => {
                           </label>
                         ))}
                       </div>
+                      {touched.operateLoop && errors.operateLoop && (
+                        <div>
+                          <small className={'text-danger'}>{errors.operateLoop}</small>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* <div className="row">
+                  <div className="row">
                     <div className="form-group col-lg-12">
-                      <Label text="Chi nhánh:" />
+                      <Label text="Chi nhánh" required={true} />
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
                           values={values.branchIds}
-                          onChangeValues={handleChange("branchIds")}
-                          listValues={listOfBranches}
+                          onChangeValues={handleChange('branchIds')}
+                          listValues={branches}
                           setValues={setValues}
-                          placeholder={"Chọn chi nhánh"}
+                          placeholder={'Chọn chi nhánh'}
                         />
                       </div>
+                      {touched.branchIds && errors.branchIds && (
+                        <div>
+                          <small className={'text-danger'}>{errors.branchIds}</small>
+                        </div>
+                      )}
                     </div>
-                  </div> */}
+                  </div>
 
                   <div className="row">
                     <CommonSelectInput

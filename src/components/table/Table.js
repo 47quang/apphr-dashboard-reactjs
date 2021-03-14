@@ -18,27 +18,26 @@ import {
   Grid,
   PagingPanel,
   Table,
-  TableHeaderRow,
   TableColumnReordering,
   TableFixedColumns,
-} from '@devexpress/dx-react-grid-material-ui';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
-import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import { Formik } from 'formik';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import Chip from '@material-ui/core/Chip';
-import Label from 'src/components/text/Label';
+  TableHeaderRow,
+} from "@devexpress/dx-react-grid-material-ui";
+import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import Select from "@material-ui/core/Select";
+import { withStyles } from "@material-ui/core/styles";
+import TableCell from "@material-ui/core/TableCell";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import { Formik } from "formik";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import WarningAlertDialog from "src/components/dialog/WarningAlertDialog";
+import CommonSelectInput from "src/components/input/CommonSelectInput";
+import CommonTextInput from "src/components/input/CommonTextInput";
 
 /*
   Params:
@@ -48,88 +47,6 @@ import Label from 'src/components/text/Label';
     idxColumnsFilter,
     deleteRowFunc,
 */
-
-const CustomTableEditColumn = ({ route, deleteRow }) => {
-  const [openWarning, setOpenWarning] = useState(false);
-  const [deletingRowID, setDeleteRowID] = useState();
-  const handleConfirm = (props) => {
-    if (Number.isInteger(deletingRowID)) {
-      // Call API Delete
-      deleteRow(deletingRowID);
-    }
-    setOpenWarning(!openWarning);
-  };
-  const handleCancel = () => {
-    setOpenWarning(!openWarning);
-  };
-  return (
-    <Plugin>
-      <WarningAlertDialog
-        isVisible={openWarning}
-        title={'Xóa hàng'}
-        titleConfirm={'Đồng ý'}
-        handleConfirm={handleConfirm}
-        titleCancel={'Từ chối'}
-        handleCancel={handleCancel}
-        warningMessage={'Bạn có muốn xóa hàng này?'}
-      />
-      <Getter
-        name="tableColumns"
-        computed={({ tableColumns }) => {
-          return tableColumns.concat(
-            { key: 'edit', type: 'edit', width: '5%' },
-            { key: 'delete', type: 'delete', width: '5%' }
-          );
-        }}
-      />
-      <Template
-        name="tableCell"
-        predicate={({ tableColumn, tableRow }) =>
-          tableColumn.type === 'delete' && tableRow.type === Table.ROW_TYPE
-        }
-      >
-        {(params) => (
-          <TemplateConnector>
-            {(getters, { deleteRows, commitDeletedRows }) => (
-              <TableCell className="px-0 py-0">
-                <IconButton
-                  onClick={() => {
-                    setOpenWarning(!openWarning);
-                    setDeleteRowID(params.tableRow.rowId);
-                  }}
-                  title="Delete row"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            )}
-          </TemplateConnector>
-        )}
-      </Template>
-
-      <Template
-        name="tableCell"
-        predicate={({ tableColumn, tableRow }) =>
-          tableColumn.type === 'edit' && tableRow.type === Table.ROW_TYPE
-        }
-      >
-        {(params) => (
-          <TemplateConnector>
-            {(getters, { startEditRows }) => (
-              <TableCell className="px-0 py-0">
-                <Link to={`${route}${params.tableRow.rowId}`}>
-                  <IconButton>
-                    <EditIcon />
-                  </IconButton>
-                </Link>
-              </TableCell>
-            )}
-          </TemplateConnector>
-        )}
-      </Template>
-    </Plugin>
-  );
-};
 
 const styles = (theme) => ({
   lookupEditCell: {
@@ -232,8 +149,89 @@ const QTable = (props) => {
     idxColumnsFilter,
     dateCols,
     multiValuesCols,
-    deleteRow,
+    handleDeleteRow,
   } = props;
+
+  const CustomTableEditColumn = ({ route }) => {
+    const [openWarning, setOpenWarning] = useState(false);
+    const [deletingRowID, setDeletingRowID] = useState(-1);
+    const handleConfirm = (e) => {
+      if (Number.isInteger(deletingRowID)) {
+        handleDeleteRow(deletingRowID);
+      }
+      setOpenWarning(!openWarning);
+    };
+    const handleCancel = () => {
+      setOpenWarning(!openWarning);
+    };
+    return (
+      <Plugin>
+        <WarningAlertDialog
+          isVisible={openWarning}
+          title={"Xóa hàng"}
+          titleConfirm={"Đồng ý"}
+          handleConfirm={handleConfirm}
+          titleCancel={"Từ chối"}
+          handleCancel={handleCancel}
+          warningMessage={"Bạn có muốn xóa hàng này?"}
+        />
+        <Getter
+          name="tableColumns"
+          computed={({ tableColumns }) => {
+            return tableColumns.concat(
+              { key: "edit", type: "edit", width: "5%" },
+              { key: "delete", type: "delete", width: "5%" }
+            );
+          }}
+        />
+        <Template
+          name="tableCell"
+          predicate={({ tableColumn, tableRow }) =>
+            tableColumn.type === "delete" && tableRow.type === Table.ROW_TYPE
+          }
+        >
+          {(params) => (
+            <TemplateConnector>
+              {(getters, { deleteRows, commitDeletedRows }) => (
+                <TableCell className="px-0 py-0">
+                  <IconButton
+                    onClick={() => {
+                      setDeletingRowID(params.tableRow.rowId);
+                      setOpenWarning(!openWarning);
+                    }}
+                    title="Delete row"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              )}
+            </TemplateConnector>
+          )}
+        </Template>
+
+        <Template
+          name="tableCell"
+          predicate={({ tableColumn, tableRow }) =>
+            tableColumn.type === "edit" && tableRow.type === Table.ROW_TYPE
+          }
+        >
+          {(params) => (
+            <TemplateConnector>
+              {(getters, { startEditRows }) => (
+                <TableCell className="px-0 py-0">
+                  <Link to={`${route}${params.tableRow.rowId}`}>
+                    <IconButton>
+                      <EditIcon />
+                    </IconButton>
+                  </Link>
+                </TableCell>
+              )}
+            </TemplateConnector>
+          )}
+        </Template>
+      </Plugin>
+    );
+  };
   let dateColumns = Array.isArray(dateCols)
     ? dateCols.map((idx) => columnDef[idx].name)
     : [''];

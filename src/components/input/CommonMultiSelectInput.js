@@ -1,12 +1,10 @@
-import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
+import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Chip from "@material-ui/core/Chip";
-import InputLabel from "@material-ui/core/InputLabel";
-import { Cancel } from "@material-ui/icons";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React from "react";
 // import CancelIcon from "@material-ui/icons/Cancel";
 
 // TODO TRANS
@@ -61,11 +59,11 @@ export default function CommonMultiSelectInput({
     acc[val.id] = val;
     return acc;
   }, {});
-  const handleDelete = (idx) => {
-    let pos = values.indexOf(idx);
-    values = values.splice(pos, 1);
-    return values;
-  };
+  // const handleDelete = (idx) => {
+  //   let pos = values.indexOf(idx);
+  //   values = values.splice(pos, 1);
+  //   return values;
+  // };
 
   return (
     <FormControl className={classes.formControl} style={{ width: "100%" }}>
