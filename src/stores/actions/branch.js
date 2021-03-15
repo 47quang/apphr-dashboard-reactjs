@@ -30,9 +30,10 @@ export const fetchBranch = (id) => {
 export const createBranch = (params) => {
   return (dispatch, getState) => {
     api.branch
-      .postBranch(params)
+      .postBranch(params.data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+        params.history.push("/setting/branch");
       })
       .catch((err) => {
         console.log(err);
@@ -40,12 +41,13 @@ export const createBranch = (params) => {
   };
 };
 
-export const updateBranch = (data, id) => {
+export const updateBranch = (data, id, history) => {
   return (dispatch, getState) => {
     api.branch
       .putBranch(data, id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+        history.push("/setting/branch");
       })
       .catch((err) => {
         console.log(err);

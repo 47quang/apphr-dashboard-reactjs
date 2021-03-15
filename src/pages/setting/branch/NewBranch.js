@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
 import CommonTextInput from "src/components/input/CommonTextInput";
 import CommonSelectInput from "src/components/input/CommonSelectInput";
-import BasicLoader from "src/components/loader/BasicLoader";
 import FormHeader from "src/components/text/FormHeader";
 import { SettingBranchInfoSchema } from "src/schema/formSchema";
-import { changeListButtonHeader } from "src/stores/actions/header";
 import {
   createBranch,
   fetchBranch,
@@ -44,12 +42,15 @@ const NewBranchPage = ({ t, location, match, history }) => {
       {
         type: "primary",
         name: params?.id ? "Cập nhật" : "Tạo mới",
-        callback: params?.id ? btnUpdateBranch : btnCreateBranch,
+        callback: getOnSubmitInForm,
       },
     ];
     dispatch(changeActions(actions));
     dispatch(fetchProvinces());
-  }, []);
+    return () => {
+      dispatch(changeActions([]));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (branch.provinceId) {
@@ -60,26 +61,9 @@ const NewBranchPage = ({ t, location, match, history }) => {
     }
   }, [branch.provinceId, branch.districtId]);
 
-  const btnCreateBranch = () => {
-    const form = branchInfoForm.current.values;
-    form.provinceId = parseInt(form.provinceId);
-    form.districtId = parseInt(form.districtId);
-    form.wardId = parseInt(form.wardId);
-    delete form.id;
-    dispatch(createBranch(form));
-    history.push("/setting/branch");
-  };
-  const btnUpdateBranch = () => {
-    const form = branchInfoForm.current.values;
-    form.provinceId = parseInt(form.provinceId);
-    form.districtId = parseInt(form.districtId);
-    form.wardId = parseInt(form.wardId);
-    dispatch(updateBranch(form, params.id));
-    history.push("/setting/branch");
-  };
-
-  const getOnSubmitInForm = (event) =>
+  const getOnSubmitInForm = (event) => {
     branchInfoForm.current.handleSubmit(event);
+  };
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -91,7 +75,18 @@ const NewBranchPage = ({ t, location, match, history }) => {
             initialValues={branch}
             validationSchema={SettingBranchInfoSchema}
             onSubmit={(values) => {
-              createBranch(values);
+              let form = values;
+              form.provinceId = parseInt(form.provinceId);
+              form.districtId = parseInt(form.districtId);
+              form.wardId = parseInt(form.wardId);
+              if (params?.id) {
+                // Call API UPDATE
+                dispatch(updateBranch(form, params.id, history));
+              } else {
+                // Call API CREATE
+                delete form.id;
+                dispatch(createBranch({ data: form, history: history }));
+              }
             }}
           >
             {({

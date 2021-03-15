@@ -1,14 +1,14 @@
-import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import QTable from 'src/components/table/Table';
-import { fetchDepartments } from 'src/stores/actions/department';
-import { changeActions } from 'src/stores/actions/header';
+import { CContainer } from "@coreui/react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import QTable from "src/components/table/Table";
+import { fetchDepartments } from "src/stores/actions/department";
+import { changeActions } from "src/stores/actions/header";
 
 const columnDef = [
-  { name: 'shortname', title: 'Mã phòng ban' },
-  { name: 'name', title: 'Tên phòng ban' },
-  { name: 'branches', title: 'Chi nhánh' },
+  { name: "shortname", title: "Mã phòng ban" },
+  { name: "name", title: "Tên phòng ban" },
+  { name: "branches", title: "Chi nhánh" },
 ];
 
 const Department = ({ t, location, history }) => {
@@ -18,9 +18,9 @@ const Department = ({ t, location, history }) => {
   useEffect(() => {
     const actions = [
       {
-        type: 'primary',
-        name: 'Tạo phòng ban',
-        callback: () => history.push('/setting/department/newDepartment'),
+        type: "primary",
+        name: "Tạo phòng ban",
+        callback: () => history.push("/setting/department/newDepartment"),
       },
     ];
     dispatch(changeActions(actions));
@@ -32,9 +32,8 @@ const Department = ({ t, location, history }) => {
       <QTable
         columnDef={columnDef}
         data={departments}
-        route={'/setting/department/id='}
+        route={"/setting/department/id="}
         idxColumnsFilter={[0, 2]}
-        multiValuesCols={[2]}
       />
     </CContainer>
   );
