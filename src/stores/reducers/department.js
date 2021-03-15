@@ -28,13 +28,7 @@ const departmentReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.department.RESET_DEPARTMENT:
       return {
         ...state,
-        department: {
-          id: 0,
-          name: '',
-          shortname: '',
-          branchId: 0,
-          note: '',
-        },
+        department: initialState.department,
       };
     default:
       return state;

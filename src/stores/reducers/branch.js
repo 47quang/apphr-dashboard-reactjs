@@ -29,17 +29,7 @@ const branchReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.branch.EMPTY_VALUE:
       return {
         ...state,
-        branch: {
-          id: 0,
-          name: '',
-          shortname: '',
-          address: '',
-          provinceId: 0,
-          districtId: 0,
-          wardId: 0,
-          phone: '',
-          note: '',
-        },
+        branch: initialState.branch,
       };
     default:
       return state;
