@@ -74,6 +74,16 @@ export const SettingHolidayLimitSchema = Yup.object().shape({
 export const SettingPositionInfoSchema = Yup.object().shape({
   shortname: Yup.string().required('Nhập mã của vị trí'),
   name: Yup.string().required('Bắt buộc nhập vào tên vị trí'),
+  branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
+    return value !== '0';
+  }),
+  departmentId: Yup.string().test('empty string', 'Phải chọn phòng ban', function (value) {
+    return value !== '0';
+  }),
+  academicLevel: Yup.string().test('empty string', 'Phải chọn trình độ cho vị trí', function (value) {
+    return value !== '0';
+  }),
+  expYear: Yup.number().required('Nhập vào năm kinh nghiệm').min(0, 'Năm kinh nghiệm là một số không âm'),
 });
 
 //Branch

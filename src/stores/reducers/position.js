@@ -7,7 +7,7 @@ const initialState = {
     shortname: '',
     branchId: 0,
     departmentId: 0,
-    academicLevel: 'not_require',
+    academicLevel: '0',
     note: '',
     expYear: 0,
   },

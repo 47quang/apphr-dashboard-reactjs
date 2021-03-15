@@ -26,6 +26,9 @@ const Position = ({ t, location, history }) => {
     ];
     dispatch(changeActions(actions));
     dispatch(fetchPositions());
+    return () => {
+      dispatch(changeActions([]));
+    };
   }, []);
 
   const deleteRow = async (rowId) => {

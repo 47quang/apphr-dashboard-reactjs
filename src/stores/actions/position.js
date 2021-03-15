@@ -33,6 +33,7 @@ export const createPosition = (params) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
+        window.history.back();
       })
       .catch((err) => {
         console.log(err);
