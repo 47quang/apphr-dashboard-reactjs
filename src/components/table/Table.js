@@ -1,9 +1,4 @@
-import {
-  Getter,
-  Plugin,
-  Template,
-  TemplateConnector,
-} from "@devexpress/dx-react-core";
+import { Getter, Plugin, Template, TemplateConnector } from '@devexpress/dx-react-core';
 import {
   DataTypeProvider,
   EditingState,
@@ -13,31 +8,24 @@ import {
   PagingState,
   SelectionState,
   SortingState,
-} from "@devexpress/dx-react-grid";
-import {
-  Grid,
-  PagingPanel,
-  Table,
-  TableColumnReordering,
-  TableFixedColumns,
-  TableHeaderRow,
-} from "@devexpress/dx-react-grid-material-ui";
-import Chip from "@material-ui/core/Chip";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
-import { withStyles } from "@material-ui/core/styles";
-import TableCell from "@material-ui/core/TableCell";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { Formik } from "formik";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import WarningAlertDialog from "src/components/dialog/WarningAlertDialog";
-import CommonSelectInput from "src/components/input/CommonSelectInput";
-import CommonTextInput from "src/components/input/CommonTextInput";
+} from '@devexpress/dx-react-grid';
+import { Grid, PagingPanel, Table, TableColumnReordering, TableFixedColumns, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import { withStyles } from '@material-ui/core/styles';
+import TableCell from '@material-ui/core/TableCell';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { Formik } from 'formik';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
 
 /*
   Params:
@@ -53,27 +41,22 @@ const styles = (theme) => ({
     padding: theme.spacing(1),
   },
   dialog: {
-    width: "calc(100% - 16px)",
+    width: 'calc(100% - 16px)',
   },
   inputRoot: {
-    width: "100%",
+    width: '100%',
   },
   selectMenu: {
-    position: "absolute !important",
+    position: 'absolute !important',
   },
   tableStriped: {
-    "& tbody tr:nth-of-type(odd)": {
-      backgroundColor: "#fafafa",
+    '& tbody tr:nth-of-type(odd)': {
+      backgroundColor: '#fafafa',
     },
   },
 });
 
-const LookupEditCellBase = ({
-  availableColumnValues,
-  value,
-  onValueChange,
-  classes,
-}) => (
+const LookupEditCellBase = ({ availableColumnValues, value, onValueChange, classes }) => (
   <TableCell className={classes.lookupEditCell}>
     <Select
       value={value}
@@ -93,24 +76,22 @@ const LookupEditCellBase = ({
 );
 
 export const LookupEditCell = withStyles(styles, {
-  name: "ControlledModeDemo",
+  name: 'ControlledModeDemo',
 })(LookupEditCellBase);
 
-const TableComponentBase = ({ classes, ...restProps }) => (
-  <Table.Table {...restProps} className={classes.tableStriped} />
-);
+const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
 
 export const TableComponent = withStyles(styles, {
-  name: "TableComponent",
+  name: 'TableComponent',
 })(TableComponentBase);
 
 const filteringColumnExtensions = [
   {
-    columnName: "saleDate",
+    columnName: 'saleDate',
     predicate: (value, filter, row) => {
       if (!filter.value.length) return true;
-      if (filter && filter.operation === "month") {
-        const month = parseInt(value.split("-")[1], 10);
+      if (filter && filter.operation === 'month') {
+        const month = parseInt(value.split('-')[1], 10);
         return month === parseInt(filter.value, 10);
       }
       return IntegratedFiltering.defaultPredicate(value, filter, row);
@@ -118,39 +99,17 @@ const filteringColumnExtensions = [
   },
 ];
 
-const DateFormatter = ({ value }) =>
-  value.replace(/(\d{4})-(\d{2})-(\d{2})/, "$3.$2.$1");
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
 
-const DateTypeProvider = (props) => (
-  <DataTypeProvider formatterComponent={DateFormatter} {...props} />
-);
+const DateTypeProvider = (props) => <DataTypeProvider formatterComponent={DateFormatter} {...props} />;
 
 const MultiValuesFormatter = ({ value }) => {
-  console.log(value);
-  return value.map((val, idx) => (
-    <Chip
-      label={val}
-      key={idx}
-      className="mx-1 my-1 px-0 py-0"
-      color="primary"
-      variant="outlined"
-    />
-  ));
+  return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
 };
-const MultiValuesTypeProvider = (props) => (
-  <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />
-);
+const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
 
 const QTable = (props) => {
-  const {
-    columnDef,
-    data,
-    route,
-    idxColumnsFilter,
-    dateCols,
-    multiValuesCols,
-    deleteRow,
-  } = props;
+  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow } = props;
 
   const CustomTableEditColumn = ({ route }) => {
     const [openWarning, setOpenWarning] = useState(false);
@@ -168,28 +127,20 @@ const QTable = (props) => {
       <Plugin>
         <WarningAlertDialog
           isVisible={openWarning}
-          title={"Xóa hàng"}
-          titleConfirm={"Đồng ý"}
+          title={'Xóa hàng'}
+          titleConfirm={'Đồng ý'}
           handleConfirm={handleConfirm}
-          titleCancel={"Từ chối"}
+          titleCancel={'Từ chối'}
           handleCancel={handleCancel}
-          warningMessage={"Bạn có muốn xóa hàng này?"}
+          warningMessage={'Bạn có muốn xóa hàng này?'}
         />
         <Getter
           name="tableColumns"
           computed={({ tableColumns }) => {
-            return tableColumns.concat(
-              { key: "edit", type: "edit", width: "5%" },
-              { key: "delete", type: "delete", width: "5%" }
-            );
+            return tableColumns.concat({ key: 'edit', type: 'edit', width: '5%' }, { key: 'delete', type: 'delete', width: '5%' });
           }}
         />
-        <Template
-          name="tableCell"
-          predicate={({ tableColumn, tableRow }) =>
-            tableColumn.type === "delete" && tableRow.type === Table.ROW_TYPE
-          }
-        >
+        <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'delete' && tableRow.type === Table.ROW_TYPE}>
           {(params) => (
             <TemplateConnector>
               {(getters, { deleteRows, commitDeletedRows }) => (
@@ -209,12 +160,7 @@ const QTable = (props) => {
           )}
         </Template>
 
-        <Template
-          name="tableCell"
-          predicate={({ tableColumn, tableRow }) =>
-            tableColumn.type === "edit" && tableRow.type === Table.ROW_TYPE
-          }
-        >
+        <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'edit' && tableRow.type === Table.ROW_TYPE}>
           {(params) => (
             <TemplateConnector>
               {(getters, { startEditRows }) => (
@@ -232,12 +178,8 @@ const QTable = (props) => {
       </Plugin>
     );
   };
-  let dateColumns = Array.isArray(dateCols)
-    ? dateCols.map((idx) => columnDef[idx].name)
-    : [""];
-  let multiValuesColumns = Array.isArray(multiValuesCols)
-    ? multiValuesCols.map((idx) => columnDef[idx].name)
-    : [""];
+  let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
+  let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   const [state, setState] = useState({
     columns: columnDef,
     selection: [],
@@ -247,14 +189,12 @@ const QTable = (props) => {
     editingRowIds: [],
   });
   const [rowChanges, setRowChanges] = useState({});
-  const [columnOrder, setColumnOrder] = useState(
-    columnDef.map((col) => col.name)
-  );
+  const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
   const colHeight = Math.floor((0.9 / columnDef.length) * 100);
   const tableColumnExtensions = columnDef.map((col) => ({
     columnName: col.name,
-    align: "left",
-    width: colHeight + "%",
+    align: 'left',
+    width: colHeight + '%',
     wordWrapEnabled: true,
   }));
 
@@ -263,14 +203,14 @@ const QTable = (props) => {
     name: columnDef[idx].title,
   }));
   const filterTypes = [
-    { id: 1, name: "Bao gồm" },
-    { id: 2, name: "Chính xác" },
-    { id: 3, name: "Không bao gồm" },
+    { id: 1, name: 'Bao gồm' },
+    { id: 2, name: 'Chính xác' },
+    { id: 3, name: 'Không bao gồm' },
   ];
   const filterValues = {
     columnsFilter: columnsFilter[0],
     filterTypes: filterTypes[0],
-    textFilter: "",
+    textFilter: '',
   };
 
   return (
@@ -279,51 +219,41 @@ const QTable = (props) => {
         <div className="m-auto">
           <div className="rounded p-4 container col-md-12">
             <Formik enableReinitialize initialValues={filterValues}>
-              {({
-                values,
-                errors,
-                touched,
-                handleChange,
-                handleSubmit,
-                handleBlur,
-              }) => (
+              {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                 <form autoComplete="off">
                   <div className="row">
                     <CommonSelectInput
-                      containerClassName={"form-group col-lg-3"}
+                      containerClassName={'form-group col-lg-3'}
                       value={values.columnsFilter}
-                      onBlur={handleBlur("columnsFilter")}
-                      onChange={handleChange("columnsFilter")}
-                      labelText={"Cột để lọc"}
-                      selectClassName={"form-control"}
+                      onBlur={handleBlur('columnsFilter')}
+                      onChange={handleChange('columnsFilter')}
+                      labelText={'Cột để lọc'}
+                      selectClassName={'form-control'}
                       lstSelectOptions={columnsFilter}
-                      placeholder={"Chọn cột cần lọc"}
+                      placeholder={'Chọn cột cần lọc'}
                     />
                     <CommonSelectInput
-                      containerClassName={"form-group col-lg-3"}
+                      containerClassName={'form-group col-lg-3'}
                       value={values.filterTypes}
-                      onBlur={handleBlur("filterTypes")}
-                      onChange={handleChange("filterTypes")}
-                      labelText={"Tùy chọn lọc"}
-                      placeholder={"Chọn kiểu lọc"}
-                      selectClassName={"form-control"}
+                      onBlur={handleBlur('filterTypes')}
+                      onChange={handleChange('filterTypes')}
+                      labelText={'Tùy chọn lọc'}
+                      placeholder={'Chọn kiểu lọc'}
+                      selectClassName={'form-control'}
                       lstSelectOptions={filterTypes}
                     />
                     <CommonTextInput
-                      containerClassName={"form-group col-lg-3"}
+                      containerClassName={'form-group col-lg-3'}
                       value={values.textFilter}
-                      onBlur={handleBlur("textFilter")}
-                      onChange={handleChange("textFilter")}
-                      labelText={"Từ khóa"}
-                      inputType={"text"}
-                      placeholder={"Nhập từ khóa"}
-                      inputClassName={"form-control"}
+                      onBlur={handleBlur('textFilter')}
+                      onChange={handleChange('textFilter')}
+                      labelText={'Từ khóa'}
+                      inputType={'text'}
+                      placeholder={'Nhập từ khóa'}
+                      inputClassName={'form-control'}
                     />
                     <div className="d-flex align-items-end form-group col-lg-3">
-                      <button
-                        type="button"
-                        className="align-bottom btn btn-primary"
-                      >
+                      <button type="button" className="align-bottom btn btn-primary">
                         Primary
                       </button>
                     </div>
@@ -337,12 +267,7 @@ const QTable = (props) => {
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
-          <EditingState
-            editingRowIds={state.editingRowIds}
-            rowChanges={rowChanges}
-            onRowChangesChange={setRowChanges}
-            addedRows={[]}
-          />
+          <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
           <PagingState
             currentPage={state.currentPage}
             onCurrentPageChange={(PageNumber) =>
@@ -374,21 +299,15 @@ const QTable = (props) => {
             defaultSorting={[
               {
                 columnName: columnDef && columnDef[0].name,
-                direction: "asc",
+                direction: 'asc',
               },
             ]}
           />
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
-          <Table
-            columnExtensions={tableColumnExtensions}
-            tableComponent={TableComponent}
-          />
-          <TableColumnReordering
-            order={columnOrder}
-            onOrderChange={setColumnOrder}
-          />
+          <Table columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
+          <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           <TableHeaderRow showSortingControls />
-          <TableFixedColumns rightColumns={["edit", "delete"]} />
+          <TableFixedColumns rightColumns={['edit', 'delete']} />
           <CustomTableEditColumn route={route} deleteRow={deleteRow} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />

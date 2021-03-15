@@ -1,5 +1,5 @@
-import { api } from "../apis/index";
-import { REDUX_STATE } from "../states";
+import { api } from '../apis/index';
+import { REDUX_STATE } from '../states';
 
 export const fetchPositions = (params) => {
   return (dispatch, getState) => {
@@ -28,7 +28,6 @@ export const fetchPosition = (id) => {
 };
 
 export const createPosition = (params) => {
-  console.log(params);
   return (dispatch, getState) => {
     api.position
       .post(params)

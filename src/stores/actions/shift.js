@@ -1,3 +1,4 @@
+import { convertBranchesId, convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
 
@@ -8,23 +9,18 @@ export const fetchShifts = (params) => {
     });
   };
 };
+const formatDownloadedData = (payload) => {
+  payload.operateLoop = deCodeChecked(payload.operateLoop);
+  payload.startCC = convertTimeWithoutSecond(payload.startCC);
+  payload.endCC = convertTimeWithoutSecond(payload.endCC);
+  payload.branchIds = convertBranchesId(payload.branchIds);
+  return payload;
+};
 export const fetchShift = (id) => {
-  const deCodeChecked = (_checked) =>
-    _checked.reduce((acc, val, idx) => {
-      if (parseInt(val) !== 0) acc.push(idx + 1 + '');
-      return acc;
-    }, []);
-  const convertTime = (time) => {
-    let timeTemp = time.split(':');
-    return timeTemp.splice(0, 2).join(':');
-  };
-
   return (dispatch, getState) => {
     api.shift.get(id).then(({ payload }) => {
-      payload.operateLoop = deCodeChecked(payload.operateLoop);
-      payload.startCC = convertTime(payload.startCC);
-      payload.endCC = convertTime(payload.endCC);
-      dispatch({ type: REDUX_STATE.shift.GET_SHIFT, payload: payload });
+      payload = formatDownloadedData(payload);
+      dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
     });
   };
 };
@@ -33,10 +29,11 @@ export const createNewShift = (data) => {
     api.shift
       .post(data)
       .then(({ payload }) => {
+        payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.GET_SHIFT, err);
+        console.log(REDUX_STATE.shift.SET_SHIFT, err);
       });
   };
 };
@@ -46,13 +43,14 @@ export const updateShift = (data) => {
     api.shift
       .put(data)
       .then(({ payload }) => {
+        payload.operateLoop = deCodeChecked(payload.operateLoop);
         dispatch({
           type: REDUX_STATE.shift.SET_SHIFT,
           payload: payload,
         });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.GET_SHIFT, err);
+        console.log(REDUX_STATE.shift.SET_SHIFT, err);
       });
   };
 };
@@ -65,7 +63,7 @@ export const deleteShift = (params) => {
         dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.GET_SHIFT, err);
+        console.log(REDUX_STATE.shift.DELETE_SHIFT, err);
       });
   };
 };

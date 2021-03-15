@@ -1,6 +1,6 @@
 import { CContainer } from '@coreui/react';
 import { Field, Formik } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -10,6 +10,7 @@ import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
+import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
 
 //TODO: translate
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
@@ -23,6 +24,7 @@ const UpdateShift = ({ t, location, match }) => {
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
+  const [branchesError, setBranchesError] = useState(false);
   useEffect(() => {
     dispatch(fetchShift(match?.params?.id));
 
@@ -46,30 +48,21 @@ const UpdateShift = ({ t, location, match }) => {
     };
   }, [dispatch]);
 
-  const enCodeChecked = (operateLoop) => {
-    return operateLoop.reduce((acc, val) => {
-      acc[parseInt(val)] = 1;
-      return acc;
-    }, Array(7).fill(0));
-  };
-
-  const convertTime = (time) => {
-    const timeTemp = time.split(':');
-    return timeTemp.length === 2 ? time + ':00' : time;
-  };
-
   const handleSubmit = () => {
     const form = shiftRef.current.values;
-    form.operateLoop = enCodeChecked(form.operateLoop);
-    form.startCC = convertTime(form.startCC);
-    form.endCC = convertTime(form.endCC);
-    dispatch(updateShift(form));
+    if (form.branchIds.length === 0) setBranchesError(true);
+    else if (form.typeCC !== '0') {
+      form.operateLoop = enCodeChecked(form.operateLoop);
+      form.startCC = convertTimeWithSecond(form.startCC);
+      form.endCC = convertTimeWithSecond(form.endCC);
+      dispatch(updateShift(form));
+    }
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
-          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift} validationSchema={SettingShiftInfoSchema}>
+          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift?.shift ? shift.shift : shift} validationSchema={SettingShiftInfoSchema}>
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => (
               <form autoComplete="off">
                 <div className="row">
@@ -182,12 +175,10 @@ const UpdateShift = ({ t, location, match }) => {
                         listValues={branches?.branches ? branches.branches : branches}
                         setValues={setValues}
                         placeholder={'Chọn chi nhánh'}
-                        isTouched={touched.branchIds}
-                        isError={errors.branchIds && touched.branchIds}
-                        errorMessage={errors.branchIds}
                       />
                     </div>
-                    {touched.branchIds && errors.branchIds && (
+
+                    {branchesError && (
                       <div>
                         <small className={'text-danger'}>{errors.branchIds}</small>
                       </div>
@@ -211,6 +202,7 @@ const UpdateShift = ({ t, location, match }) => {
                     lstSelectOptions={typeCC}
                     placeholder={'Chọn hình thức điểm danh'}
                   />
+                  {touched.typeCC}
                 </div>
               </form>
             )}

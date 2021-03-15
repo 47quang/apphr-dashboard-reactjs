@@ -1,6 +1,6 @@
 import { CContainer } from '@coreui/react';
 import { Field, Formik } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -23,7 +23,7 @@ const NewShift = ({ t, location, history }) => {
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
-
+  const [branchesError, setBranchesError] = useState(false);
   useEffect(() => {
     dispatch({ type: REDUX_STATE.shift.EMPTY_VALUE });
 
@@ -59,16 +59,19 @@ const NewShift = ({ t, location, history }) => {
       return time + ':00';
     };
     const form = shiftRef.current.values;
-    form.operateLoop = enCodeChecked(form.operateLoop);
-    form.startCC = convertTime(form.startCC);
-    form.endCC = convertTime(form.endCC);
-    dispatch(createNewShift(form));
+    if (form.branchIds.length === 0) setBranchesError(true);
+    else if (form.typeCC !== '0') {
+      form.operateLoop = enCodeChecked(form.operateLoop);
+      form.startCC = convertTime(form.startCC);
+      form.endCC = convertTime(form.endCC);
+      dispatch(createNewShift(form));
+    }
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-md-7">
-          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift} validationSchema={SettingShiftInfoSchema}>
+          <Formik innerRef={shiftRef} enableReinitialize initialValues={shift.shift ?? shift} validationSchema={SettingShiftInfoSchema}>
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => (
               <form autoComplete="off">
                 <div className="row">
@@ -183,7 +186,7 @@ const NewShift = ({ t, location, history }) => {
                         placeholder={'Chọn chi nhánh'}
                       />
                     </div>
-                    {touched.branchIds && errors.branchIds && (
+                    {branchesError && (
                       <div>
                         <small className={'text-danger'}>{errors.branchIds}</small>
                       </div>

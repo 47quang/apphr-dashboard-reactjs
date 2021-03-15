@@ -15,7 +15,6 @@ const EditDepartment = ({ t, location, match }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const department = useSelector((state) => state.department.department);
-  console.log(department);
 
   useEffect(() => {
     const actions = [
