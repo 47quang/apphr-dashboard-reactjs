@@ -1,6 +1,11 @@
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
+const convertTime = (payload) => {
+  payload.startDate = payload.startDate.replace('Z', '');
+  payload.endDate = payload.endDate.replace('Z', '');
+  return payload;
+};
 export const fetchHolidays = () => {
   return (dispatch, getState) => {
     api.holiday
@@ -19,8 +24,7 @@ export const fetchHoliday = (id) => {
     api.holiday
       .get(id)
       .then(({ payload }) => {
-        payload.startDate = payload.startDate.replace('Z', '');
-        payload.endDate = payload.endDate.replace('Z', '');
+        payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
       })
       .catch((err) => {
@@ -48,6 +52,7 @@ export const updateHoliday = (data) => {
     api.holiday
       .put(data)
       .then(({ payload }) => {
+        payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
       })
       .catch((err) => {
