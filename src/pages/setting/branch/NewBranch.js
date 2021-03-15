@@ -1,13 +1,7 @@
-import { CContainer } from '@coreui/react';
-import { Formik } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import FormHeader from 'src/components/text/FormHeader';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
-import { createBranch, fetchBranch, updateBranch, setEmptyBranch } from 'src/stores/actions/branch';
+import { setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { changeActions } from 'src/stores/actions/header';
 import BranchItemBody from './BranchItemBody';
