@@ -14,7 +14,6 @@ const Position = React.lazy(() => import('src/pages/setting/position/Position'))
 const NewPosition = React.lazy(() => import('src/pages/setting/position/NewPosition'));
 const EditPosition = React.lazy(() => import('src/pages/setting/position/UpdatePosition'));
 
-
 const Shift = React.lazy(() => import('src/pages/setting/shift/Shift'));
 const NewShift = React.lazy(() => import('src/pages/setting/shift/NewShift'));
 const UpdateShift = React.lazy(() => import('src/pages/setting/shift/UpdateShift'));
@@ -30,7 +29,7 @@ const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/Ho
 
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const NewBranch = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
-const BranchEdit = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
+const EditBranch = React.lazy(() => import('src/pages/setting/branch/UpdateBranch'));
 
 const Permission = React.lazy(() => import('src/pages/setting/authorization/permission/Permission'));
 const PermissionGroup = React.lazy(() => import('src/pages/setting/authorization/permission-group/PermissionGroup'));
@@ -91,7 +90,7 @@ const routes = [
   {
     path: '/setting/branch/:id',
     name: ROUTE_NAME.BRANCH_UPDATE,
-    component: BranchEdit,
+    component: EditBranch,
   },
   { path: '/setting/branch', name: ROUTE_NAME.BRANCH, component: Branch },
   {
