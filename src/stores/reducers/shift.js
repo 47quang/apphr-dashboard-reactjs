@@ -1,16 +1,16 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
   shifts: [],
   shift: {
-    name: "",
-    shortname: "",
+    name: '',
+    shortname: '',
     coefficient: 0,
-    startCC: "",
-    endCC: "",
-    branchIds: [1],
+    startCC: '',
+    endCC: '',
+    branchIds: [],
     operateLoop: [],
-    typeCC: "",
+    typeCC: '',
     isOvertime: true,
   },
 };
@@ -20,11 +20,17 @@ export const shiftReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.shift.GET_SHIFTS:
       return { ...state, shifts: payload };
     case REDUX_STATE.shift.GET_SHIFT:
-      return { ...state, shift: payload };
+      return { ...state, shift: Object.assign({}, state.shift, payload) };
     case REDUX_STATE.shift.SET_SHIFT:
-      return { ...state, shift: payload };
+      return { ...state, shift: Object.assign({},state.shift, payload) };
     case REDUX_STATE.shift.EMPTY_VALUE:
-      return { ...state, shift: initialState };
+      return { ...state, shift: initialState.shift };
+
+    case REDUX_STATE.shift.DELETE_SHIFT:
+      return {
+        ...state,
+        shifts: state.shifts.filter((s) => s.id !== payload.id),
+      };
     default:
       return state;
   }

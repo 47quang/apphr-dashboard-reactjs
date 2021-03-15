@@ -1,7 +1,6 @@
 import client from './client';
 
 const API_PREFIX = {
-  API_GENERAL: '/api.tenant',
   API_SETTING_BRANCH: '/api.branch',
   API_SETTING_DEPARTMENT: '/api.department',
   API_SETTING_POSITION: '/api.position',
@@ -9,6 +8,7 @@ const API_PREFIX = {
   API_PROVINCE: '/api.province',
   API_DISTRICT: '/api.district',
   API_WARD: '/api.ward',
+  API_GENERAL: '/api.tenant',
 };
 
 export const api = {
@@ -19,78 +19,78 @@ export const api = {
   },
 
   branch: {
-    getBranches: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH, {
         params: params,
       });
     },
-    postBranch: (data) => {
+    post: (data) => {
       return client.post(API_PREFIX.API_SETTING_BRANCH, data);
     },
-    putBranch: (data, id) => {
+    put: (data, id) => {
       return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, data);
     },
-    getBranch: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
     },
-    deleteBranch: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
     },
   },
   department: {
-    getDepartments: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT, {
         params: params,
       });
     },
-    postDepartment: (body) => {
-      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, body);
+    post: (data) => {
+      return client.post(API_PREFIX.API_SETTING_DEPARTMENT, data);
     },
-    putDepartment: (body, id) => {
-      return client.put(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`, body);
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_DEPARTMENT + `/${data.id}`, data);
     },
-    getDepartment: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
-    deleteDepartment: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
     },
   },
   position: {
-    postPosition: (bodyParams) => {
+    post: (bodyParams) => {
       return client.post(API_PREFIX.API_SETTING_POSITION, bodyParams);
     },
-    getPositionList: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_POSITION, {
         params: params,
       });
     },
-    getPosition: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_POSITION + `/${id}`);
     },
-    putPosition: (bodyParams, id) => {
+    put: (bodyParams, id) => {
       return client.put(API_PREFIX.API_SETTING_POSITION + `/${id}`, bodyParams);
     },
-    deletePosition: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_POSITION + `/${id}`);
     },
   },
   shift: {
-    postShift: (bodyParams) => {
+    post: (bodyParams) => {
       return client.post(API_PREFIX.API_SETTING_SHIFT, { ...bodyParams });
     },
-    getShiftList: (params) => {
+    getAll: (params) => {
       return client.get(API_PREFIX.API_SETTING_SHIFT, {
         params: params,
       });
     },
-    getShift: (id) => {
+    get: (id) => {
       return client.get(API_PREFIX.API_SETTING_SHIFT + `/${id}`);
     },
-    putShift: (bodyParams, id) => {
-      return client.put(API_PREFIX.API_SETTING_SHIFT + `/${id}`, bodyParams);
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_SHIFT + `/${data.id}`, data);
     },
-    deleteShift: (id) => {
+    delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_SHIFT + `/${id}`);
     },
   },

@@ -1,10 +1,10 @@
-import React from "react";
-import Label from "../text/Label";
+import React from 'react';
+import Label from '../text/Label';
 
 const CommonSelectInput = ({
   containerClassName,
   labelText,
-  selectClassName = "",
+  selectClassName = '',
   isRequiredField,
   onChange,
   onBlur,
@@ -23,14 +23,7 @@ const CommonSelectInput = ({
   return (
     <div className={containerClassName}>
       <Label text={labelText} required={isRequiredField} labelID={inputID} />
-      <select
-        className={selectClassName}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-        id={inputID}
-        required={isRequiredField}
-      >
+      <select className={selectClassName} onChange={onChange} onBlur={onBlur} value={value} id={inputID} required={isRequiredField}>
         <option value={0}>{placeholder}</option>
         {lstSelectOptions.length > 0 ? (
           lstSelectOptions.map((val, index) => {
@@ -46,7 +39,7 @@ const CommonSelectInput = ({
       </select>
       {isError && errorMessage && (
         <div>
-          <small className={"text-danger"}> {errorMessage}</small>
+          <small className={'text-danger'}> {errorMessage}</small>
         </div>
       )}
     </div>

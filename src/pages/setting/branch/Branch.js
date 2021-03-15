@@ -1,18 +1,15 @@
-import { CContainer } from "@coreui/react";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import QTable from "src/components/table/Table";
-import { changeActions } from "src/stores/actions/header";
-import {
-  fetchBranches,
-  deleteBranch,
-  setDeleteDBranchId,
-} from "src/stores/actions/branch";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { CContainer } from '@coreui/react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import QTable from 'src/components/table/Table';
+import { changeActions } from 'src/stores/actions/header';
+import { fetchBranches, deleteBranch } from 'src/stores/actions/branch';
 
 const columnDef = [
-  { name: "shortname", title: "Mã chi nhánh" },
-  { name: "name", title: "Tên chi nhánh" },
-  { name: "address", title: "Địa chỉ" },
+  { name: 'shortname', title: 'Mã chi nhánh' },
+  { name: 'name', title: 'Tên chi nhánh' },
+  { name: 'address', title: 'Địa chỉ' },
 ];
 const Branch = ({ t, location, history }) => {
   const dispatch = useDispatch();
@@ -21,32 +18,23 @@ const Branch = ({ t, location, history }) => {
   useEffect(() => {
     const actions = [
       {
-        type: "primary",
-        name: "Tạo chi nhánh",
-        callback: () => {
-          history.push("/setting/branch/newBranch");
-        },
+        type: 'primary',
+        name: 'Tạo chi nhánh',
+        callback: () => history.push('/setting/branch/create'),
       },
     ];
     dispatch(fetchBranches());
-
     dispatch(changeActions(actions));
   }, []);
-  const deleteRowFunc = async (delRowId) => {
-    dispatch(setDeleteDBranchId(delRowId));
-    dispatch(deleteBranch(delRowId));
+
+  const deleteRow = async (rowId) => {
+    dispatch(deleteBranch(rowId));
     dispatch(fetchBranches());
   };
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable
-        columnDef={columnDef}
-        data={branches}
-        route={"/setting/branch/id="}
-        idxColumnsFilter={[0, 1]}
-        deleteRowFunc={deleteRowFunc}
-      />
+      <QTable columnDef={columnDef} data={branches} route={'/setting/branch/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

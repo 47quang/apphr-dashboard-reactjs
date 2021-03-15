@@ -1,48 +1,76 @@
-import { api } from "../apis";
-import { REDUX_STATE } from "../states";
+import { convertBranchesId, convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
+import { api } from '../apis';
+import { REDUX_STATE } from '../states';
 
 export const fetchShifts = (params) => {
   return (dispatch, getState) => {
-    api.shift.getShiftList(params).then(({ payload }) => {
+    api.shift.getAll(params).then(({ payload }) => {
       dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
     });
   };
 };
+const formatDownloadedData = (payload) => {
+  payload.operateLoop = deCodeChecked(payload.operateLoop);
+  payload.startCC = convertTimeWithoutSecond(payload.startCC);
+  payload.endCC = convertTimeWithoutSecond(payload.endCC);
+  payload.branchIds = convertBranchesId(payload.branchIds);
+  return payload;
+};
 export const fetchShift = (id) => {
   return (dispatch, getState) => {
-    api.shift.getShift(id).then(({ payload }) => {
-      dispatch({ type: REDUX_STATE.shift.GET_SHIFT, payload: payload });
+    api.shift.get(id).then(({ payload }) => {
+      payload = formatDownloadedData(payload);
+      dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
     });
   };
 };
-export const createNewShift = (bodyParams) => {
+export const createNewShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .postShift(bodyParams)
+      .post(data)
       .then(({ payload }) => {
-        dispatch({
-          type: REDUX_STATE.shift.GET_SHIFT,
-          payload: payload,
-        });
+        payload = formatDownloadedData(payload);
+        dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.GET_SHIFT, err);
+        console.log(REDUX_STATE.shift.SET_SHIFT, err);
       });
   };
 };
 
-export const updateShift = (bodyParams) => {
+export const updateShift = (data) => {
   return (dispatch, getState) => {
     api.shift
-      .putShift(bodyParams)
+      .put(data)
       .then(({ payload }) => {
+        payload.operateLoop = deCodeChecked(payload.operateLoop);
         dispatch({
           type: REDUX_STATE.shift.SET_SHIFT,
           payload: payload,
         });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.GET_SHIFT, err);
+        console.log(REDUX_STATE.shift.SET_SHIFT, err);
       });
+  };
+};
+
+export const deleteShift = (params) => {
+  return (dispatch, getState) => {
+    api.shift
+      .delete(params.id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
+      })
+      .catch((err) => {
+        console.log(REDUX_STATE.shift.DELETE_SHIFT, err);
+      });
+  };
+};
+
+export const resetShift = () => {
+  return {
+    type: REDUX_STATE.shift.EMPTY_VALUE,
+    payload: {},
   };
 };

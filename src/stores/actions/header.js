@@ -1,18 +1,7 @@
-export const CHANGE_HEADER_STATE = 'CHANGE_LIST_BUTTON';
-export const CHANGE_ACTIONS = 'CHANGE_ACTIONS';
-
-export const changeListButtonHeader = (lst) => {
-  return {
-    type: CHANGE_HEADER_STATE,
-    payload: {
-      lst,
-    },
-  };
-};
-
+import {REDUX_STATE} from '../states/index'
 export const changeActions = (payload) => {
   return {
-    type: CHANGE_ACTIONS,
+    type: REDUX_STATE.header.CHANGE_ACTIONS,
     payload,
   };
 };

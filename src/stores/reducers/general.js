@@ -1,16 +1,16 @@
-import { REDUX_STATE } from "../states";
+import { REDUX_STATE } from '../states';
 
 const initialState = {
-  name: "",
+  name: '',
   provinceId: 0,
   districtId: 0,
   wardId: 0,
-  address: "",
-  phone: "",
-  email: "",
-  shortname: "",
-  taxCode: "",
-  note: "",
+  address: '',
+  phone: '',
+  email: '',
+  shortname: '',
+  taxCode: '',
+  note: '',
 };
 
 const generalReducer = (state = initialState, { type, payload }) => {

@@ -1,12 +1,12 @@
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchBranches = () => {
+export const fetchPositions = (params) => {
   return (dispatch, getState) => {
-    api.branch
+    api.position
       .getAll()
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
+        dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -14,12 +14,12 @@ export const fetchBranches = () => {
   };
 };
 
-export const fetchBranch = (id) => {
+export const fetchPosition = (id) => {
   return (dispatch, getState) => {
-    api.branch
+    api.position
       .get(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+        dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -27,13 +27,12 @@ export const fetchBranch = (id) => {
   };
 };
 
-export const createBranch = (params) => {
+export const createPosition = (params) => {
   return (dispatch, getState) => {
-    api.branch
-      .post(params.data)
+    api.position
+      .post(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        params.history.push('/setting/branch');
+        dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -41,13 +40,12 @@ export const createBranch = (params) => {
   };
 };
 
-export const updateBranch = (data, id, history) => {
+export const updatePosition = (data, id) => {
   return (dispatch, getState) => {
-    api.branch
+    api.position
       .put(data, id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        history.push('/setting/branch');
+        dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -55,12 +53,12 @@ export const updateBranch = (data, id, history) => {
   };
 };
 
-export const deleteBranch = (id) => {
+export const deletePosition = (params) => {
   return (dispatch, getState) => {
-    api.branch
-      .delete(id)
+    api.position
+      .delete(params.id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
+        dispatch({ type: REDUX_STATE.position.DELETE_POSITION, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -68,9 +66,9 @@ export const deleteBranch = (id) => {
   };
 };
 
-export const setEmptyDBranch = () => {
+export const setEmptyPosition = () => {
   return {
-    type: REDUX_STATE.branch.EMPTY_VALUE,
+    type: REDUX_STATE.position.EMPTY_VALUE,
     payload: [],
   };
 };

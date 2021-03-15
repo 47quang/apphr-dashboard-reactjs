@@ -1,24 +1,15 @@
-import { CContainer } from "@coreui/react";
-import { Formik } from "formik";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CommonMultipleTextInput from "src/components/input/CommonMultipleTextInput";
-import CommonTextInput from "src/components/input/CommonTextInput";
-import CommonSelectInput from "src/components/input/CommonSelectInput";
-import FormHeader from "src/components/text/FormHeader";
-import { SettingBranchInfoSchema } from "src/schema/formSchema";
-import {
-  createBranch,
-  fetchBranch,
-  updateBranch,
-  setEmptyDBranch,
-} from "src/stores/actions/branch";
-import {
-  fetchDistricts,
-  fetchProvinces,
-  fetchWards,
-} from "src/stores/actions/location";
-import { changeActions } from "src/stores/actions/header";
+import { CContainer } from '@coreui/react';
+import { Formik } from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import FormHeader from 'src/components/text/FormHeader';
+import { SettingBranchInfoSchema } from 'src/schema/formSchema';
+import { createBranch, fetchBranch, updateBranch, setEmptyDBranch } from 'src/stores/actions/branch';
+import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
+import { changeActions } from 'src/stores/actions/header';
 
 //TODO: translate
 
@@ -30,9 +21,6 @@ const NewBranchPage = ({ t, location, match, history }) => {
   const wards = useSelector((state) => state.location.wards);
   const branchInfoForm = useRef();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getBranchInfo = () => {};
 
   useEffect(() => {
     if (params?.id) dispatch(fetchBranch(params.id));
@@ -40,8 +28,8 @@ const NewBranchPage = ({ t, location, match, history }) => {
 
     const actions = [
       {
-        type: "primary",
-        name: params?.id ? "Cập nhật" : "Tạo mới",
+        type: 'primary',
+        name: params?.id ? 'Cập nhật' : 'Tạo mới',
         callback: getOnSubmitInForm,
       },
     ];
@@ -89,42 +77,35 @@ const NewBranchPage = ({ t, location, match, history }) => {
               }
             }}
           >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleSubmit,
-              handleBlur,
-            }) => (
+            {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
               <form autoComplete="off">
-                <FormHeader text={"Thêm chi nhánh"} />
+                <FormHeader text={'Thêm chi nhánh'} />
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.shortname}
-                    onBlur={handleBlur("shortname")}
-                    onChange={handleChange("shortname")}
-                    inputID={"shortname"}
-                    labelText={"Mã chi nhánh"}
-                    inputType={"text"}
-                    placeholder={"Nhập mã chi nhánh"}
-                    inputClassName={"form-control"}
+                    onBlur={handleBlur('shortname')}
+                    onChange={handleChange('shortname')}
+                    inputID={'shortname'}
+                    labelText={'Mã chi nhánh'}
+                    inputType={'text'}
+                    placeholder={'Nhập mã chi nhánh'}
+                    inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.shortname}
                     isError={errors.shortname && touched.shortname}
                     errorMessage={errors.shortname}
                   />
                   <CommonTextInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.name}
-                    onBlur={handleBlur("name")}
-                    onChange={handleChange("name")}
-                    inputID={"name"}
-                    labelText={"Tên chi nhánh"}
-                    inputType={"text"}
-                    placeholder={"Nhập tên chi nhánh"}
-                    inputClassName={"form-control"}
+                    onBlur={handleBlur('name')}
+                    onChange={handleChange('name')}
+                    inputID={'name'}
+                    labelText={'Tên chi nhánh'}
+                    inputType={'text'}
+                    placeholder={'Nhập tên chi nhánh'}
+                    inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
@@ -133,88 +114,88 @@ const NewBranchPage = ({ t, location, match, history }) => {
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.ip}
-                    onBlur={handleBlur("ip")}
-                    onChange={handleChange("ip")}
-                    inputID={"ip"}
-                    labelText={"IP Router"}
-                    inputType={"text"}
-                    placeholder={"Nhập IP Router"}
-                    inputClassName={"form-control"}
+                    onBlur={handleBlur('ip')}
+                    onChange={handleChange('ip')}
+                    inputID={'ip'}
+                    labelText={'IP Router'}
+                    inputType={'text'}
+                    placeholder={'Nhập IP Router'}
+                    inputClassName={'form-control'}
                     isTouched={touched.ip}
                     isError={errors.ip && touched.ip}
                     errorMessage={errors.ip}
                   />
                   <CommonSelectInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.provinceId}
-                    onBlur={handleBlur("provinceId")}
+                    onBlur={handleBlur('provinceId')}
                     onChange={(e) => {
                       dispatch(fetchDistricts({ provinceId: e.target.value }));
                       dispatch({
-                        type: "SET_WARDS",
+                        type: 'SET_WARDS',
                         payload: [],
                       });
-                      handleChange("provinceId")(e);
+                      handleChange('provinceId')(e);
                     }}
-                    inputID={"provinceId"}
-                    labelText={"Tỉnh/Thành phố"}
-                    selectClassName={"form-control"}
-                    placeholder={"Chọn Tỉnh/Thành phố"}
+                    inputID={'provinceId'}
+                    labelText={'Tỉnh/Thành phố'}
+                    selectClassName={'form-control'}
+                    placeholder={'Chọn Tỉnh/Thành phố'}
                     lstSelectOptions={provinces}
                   />
                 </div>
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.districtId}
-                    onBlur={handleBlur("districtId")}
+                    onBlur={handleBlur('districtId')}
                     onChange={(e) => {
                       dispatch(fetchWards({ districtId: e.target.value }));
-                      handleChange("districtId")(e);
+                      handleChange('districtId')(e);
                     }}
-                    inputID={"districtId"}
-                    labelText={"Quận huyện"}
-                    selectClassName={"form-control"}
-                    placeholder={"Chọn Quận/Huyện"}
+                    inputID={'districtId'}
+                    labelText={'Quận huyện'}
+                    selectClassName={'form-control'}
+                    placeholder={'Chọn Quận/Huyện'}
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput
-                    containerClassName={"form-group col-lg-6"}
+                    containerClassName={'form-group col-lg-6'}
                     value={values.wardId}
-                    onBlur={handleBlur("wardId")}
-                    onChange={handleChange("wardId")}
-                    inputID={"wardId"}
-                    labelText={"Phường xã"}
-                    selectClassName={"form-control"}
-                    placeholder={"Chọn Phường/Xã"}
+                    onBlur={handleBlur('wardId')}
+                    onChange={handleChange('wardId')}
+                    inputID={'wardId'}
+                    labelText={'Phường xã'}
+                    selectClassName={'form-control'}
+                    placeholder={'Chọn Phường/Xã'}
                     lstSelectOptions={wards}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={"form-group col-lg-12"}
+                    containerClassName={'form-group col-lg-12'}
                     value={values.address}
-                    onBlur={handleBlur("address")}
-                    onChange={handleChange("address")}
-                    inputID={"address"}
-                    labelText={"Địa chỉ chi nhánh"}
-                    inputType={"text"}
-                    placeholder={"Nhập địa chỉ chi nhánh"}
-                    inputClassName={"form-control"}
+                    onBlur={handleBlur('address')}
+                    onChange={handleChange('address')}
+                    inputID={'address'}
+                    labelText={'Địa chỉ chi nhánh'}
+                    inputType={'text'}
+                    placeholder={'Nhập địa chỉ chi nhánh'}
+                    inputClassName={'form-control'}
                   />
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={"form-group col-lg-12"}
+                    containerClassName={'form-group col-lg-12'}
                     value={values.description}
-                    onBlur={handleBlur("description")}
-                    onChange={handleChange("description")}
-                    inputID={"description"}
-                    labelText={"Mô tả"}
-                    inputClassName={"form-control"}
+                    onBlur={handleBlur('description')}
+                    onChange={handleChange('description')}
+                    inputID={'description'}
+                    labelText={'Mô tả'}
+                    inputClassName={'form-control'}
                   />
                 </div>
               </form>
