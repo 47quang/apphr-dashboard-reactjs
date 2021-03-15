@@ -17,8 +17,11 @@ import {
 import CIcon from '@coreui/icons-react';
 
 const Login = ({ t, location }) => {
+  const handleLogin = (event) => {
+    console.log(event);
+  };
   return (
-    <div className="c-app c-default-layout flex-row align-items-center" style={{background: '#3c4b64'}}>
+    <div className="c-app c-default-layout flex-row align-items-center" style={{ background: '#3c4b64' }}>
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md="4">
@@ -34,11 +37,7 @@ const Login = ({ t, location }) => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput
-                        type="text"
-                        placeholder="Username"
-                        autoComplete="username"
-                      />
+                      <CInput type="text" placeholder="Username" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -46,15 +45,11 @@ const Login = ({ t, location }) => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput
-                        type="password"
-                        placeholder="Password"
-                        autoComplete="current-password"
-                      />
+                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" className="px-4" onClick={handleLogin}>
                           Login
                         </CButton>
                       </CCol>

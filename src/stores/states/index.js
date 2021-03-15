@@ -1,4 +1,8 @@
 export const REDUX_STATE = {
+  login: {
+    SET_TOKEN: 'SET_TOKEN',
+    GET_TOKEN: 'GET_TOKEN',
+  },
   location: {
     SET_PROVINCES: 'SET_PROVINCES',
     SET_DISTRICTS: 'SET_DISTRICTS',

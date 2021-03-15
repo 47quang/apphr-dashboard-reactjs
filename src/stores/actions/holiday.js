@@ -40,6 +40,7 @@ export const createHoliday = (params) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        window.history.back();
       })
       .catch((err) => {
         console.log(err);

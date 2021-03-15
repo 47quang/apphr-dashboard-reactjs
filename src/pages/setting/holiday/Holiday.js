@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { changeActions } from 'src/stores/actions/header';
-import { fetchHolidays, deleteHoliday } from 'src/stores/actions/holiday';
+import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },

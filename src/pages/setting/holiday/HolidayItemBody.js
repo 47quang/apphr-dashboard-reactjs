@@ -1,13 +1,12 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { createHoliday, updateHoliday } from 'src/stores/actions/holiday';
+import { SettingHolidayInfoSchema } from 'src/schema/formSchema';
+import { renderButtons } from 'src/utils/formUtils';
 
-const HolidayItemBody = ({ holidayRef, holiday, validationSchema, isUpdate }) => {
-  const dispatch = useDispatch();
+const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -16,18 +15,9 @@ const HolidayItemBody = ({ holidayRef, holiday, validationSchema, isUpdate }) =>
             innerRef={holidayRef}
             enableReinitialize
             initialValues={holiday}
-            validationSchema={validationSchema}
+            validationSchema={SettingHolidayInfoSchema}
             onSubmit={(values) => {
-              let form = values;
-              form.coefficient = parseInt(form.coefficient);
-              if (isUpdate) {
-                // Call API UPDATE
-                dispatch(updateHoliday(form));
-              } else {
-                // Call API CREATE
-                delete form.id;
-                dispatch(createHoliday(form));
-              }
+              submitForm(values);
             }}
           >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -95,6 +85,7 @@ const HolidayItemBody = ({ holidayRef, holiday, validationSchema, isUpdate }) =>
                     errorMessage={errors.coefficient}
                   />
                 </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>

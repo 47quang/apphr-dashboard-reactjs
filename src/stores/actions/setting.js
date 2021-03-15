@@ -14,10 +14,10 @@ export const fetchGeneral = (params) => {
   };
 };
 
-export const updateGeneral = (payload) => {
+export const updateGeneral = (data) => {
   return (dispatch, getState) => {
     api.setting
-      .putGeneral(payload)
+      .putGeneral(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.setting.SET_GENERAL, payload });
       })

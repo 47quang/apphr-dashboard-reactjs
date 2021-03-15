@@ -28,9 +28,6 @@ const HolidaySettings = ({ t, location, match, history }) => {
   };
 
   useEffect(() => {
-    let wait = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
     if (params?.id) getHolidayInfo();
     const actions = [
       {

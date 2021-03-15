@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SettingHolidayInfoSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
-import { fetchHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
+import { fetchHoliday, setEmptyHoliday, updateHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
 
 //TODO: translate
@@ -14,25 +13,39 @@ const UpdateHoliday = ({ t, location, history, match }) => {
 
   useEffect(() => {
     dispatch(fetchHoliday(match?.params?.id.split('=')[1])); //param.id = ".id=4"
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Cập nhật',
-        callback: handleSubmit,
-      },
-    ];
-    dispatch(changeActions(actions));
     return () => {
       dispatch(changeActions([]));
       dispatch(setEmptyHoliday());
     };
   }, []);
 
-  const handleSubmit = (event) => {
-    holidayInfoForm.current.handleSubmit(event);
+  const submitForm = (values) => {
+    let form = values;
+    form.coefficient = parseInt(form.coefficient);
+    // Call API UPDATE
+    dispatch(updateHoliday(form));
   };
-  console.log(holiday);
-  return <HolidayItemBody holidayRef={holidayInfoForm} holiday={holiday} validationSchema={SettingHolidayInfoSchema} isUpdate={true} />;
+
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        window.history.back();
+      },
+      name: 'Quay lại',
+    },
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        holidayInfoForm.current.handleSubmit(e);
+      },
+      name: 'Tạo mới',
+    },
+  ];
+
+  return <HolidayItemBody holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
 };
 
 export default UpdateHoliday;
