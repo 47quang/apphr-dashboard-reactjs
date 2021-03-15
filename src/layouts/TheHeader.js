@@ -6,7 +6,6 @@ import {
   CBreadcrumbRouter,
   CToggler,
 } from "@coreui/react";
-import { Link } from "react-router-dom";
 import routes from "src/routes/routes";
 import "../styles/scss/header.scss";
 
@@ -33,37 +32,17 @@ const TheHeader = () => {
 
   return (
     <CHeader withSubheader>
-      <CToggler
-        inHeader
-        className="ml-md-3 d-lg-none"
-        onClick={toggleSidebarMobile}
-      />
-      <CToggler
-        inHeader
-        className="ml-3 d-md-down-none"
-        onClick={toggleSidebar}
-      />
+      <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
+      <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <CBreadcrumbRouter
-          className="border-0 c-subheader-nav m-0 px-0 px-md-3"
-          routes={routes}
-        />
+        <CBreadcrumbRouter className="border-0 c-subheader-nav m-0 px-0 px-md-3" routes={routes} />
       </CHeaderNav>
       <CHeaderNav className="px-3">
         {actions.map((action, index) => {
-          const { type, name, callback, to } = action;
-          return to ? (
-            <Link to={to} className={`btn btn-${type}`} key={index}>
-              Tạo ca làm
-            </Link>
-          ) : (
-            <button
-              key={index}
-              type="submit"
-              className={`btn btn-${type} mr-4`}
-              onClick={callback}
-            >
+          const { type, name, callback } = action;
+          return (
+            <button key={index} type="submit" className={`btn btn-${type} mr-4`} onClick={callback}>
               {name}
             </button>
           );

@@ -44,12 +44,15 @@ function getStyles(id, values, theme) {
 }
 
 export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues }) {
+  values = [...new Set(values)];
   const classes = useStyles();
   const theme = useTheme();
+
   let hash = listValues.reduce((acc, val) => {
     acc[val.id] = val;
     return acc;
   }, {});
+
   // const handleDelete = (idx) => {
   //   let pos = values.indexOf(idx);
   //   values = values.splice(pos, 1);
@@ -71,13 +74,16 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
         onChange={onChangeValues}
         input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => {
-          return selected.length === 0 ? (
+          return selected.length === 0 || listValues.length === 0 ? (
             <em>{placeholder}</em>
           ) : (
             <div className={classes.chips}>
               {selected.map((value, index) => {
+<<<<<<< HEAD
                 console.log('hash ', value);
 
+=======
+>>>>>>> 3332a1b7377056d80f88fa705f32ed736740015e
                 return <Chip key={index} label={hash[value].name} className={classes.chip} color="primary" variant="outlined" />;
               })}
             </div>

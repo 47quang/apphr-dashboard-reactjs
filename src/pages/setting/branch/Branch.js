@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

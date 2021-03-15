@@ -59,6 +59,7 @@ export const createDepartment = (data) => {
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
+        window.history.back();
       })
       .catch((err) => {
         console.log(err);

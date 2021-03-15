@@ -5,7 +5,7 @@ import QTable from 'src/components/table/Table';
 import { changeActions } from 'src/stores/actions/header';
 import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
-const Shifts = ({ t, location }) => {
+const Shifts = ({ t, location, history }) => {
   const columnDef = [
     { name: 'shortname', title: 'Mã ca làm' },
     { name: 'name', title: 'Tên ca làm' },
@@ -26,8 +26,8 @@ const Shifts = ({ t, location }) => {
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo ca làm',
-        to: '/setting/shift/create',
+        name: 'Tạo mới',
+        callback: () => history.push('/setting/shift/create'),
       },
     ];
     dispatch(changeActions(actions));

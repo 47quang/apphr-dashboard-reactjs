@@ -6,6 +6,7 @@ import settingReducer from './setting';
 import shiftReducer from './shift';
 import styleReducer from './style';
 import userReducer from './user';
+import positionReducer from './position';
 import departmentReducer from './department';
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   branch: branchReducer,
   setting: settingReducer,
   shift: shiftReducer,
+  position: positionReducer,
   department: departmentReducer,
 });
