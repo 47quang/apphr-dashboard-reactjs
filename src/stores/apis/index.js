@@ -9,6 +9,7 @@ const API_PREFIX = {
   API_DISTRICT: '/api.district',
   API_WARD: '/api.ward',
   API_GENERAL: '/api.tenant',
+  API_SETTING_HOLIDAY: '/api.holiday',
 };
 
 export const api = {
@@ -120,6 +121,25 @@ export const api = {
     },
     putGeneral: (payload) => {
       return client.put(API_PREFIX.API_GENERAL + `/${payload.id}`, payload);
+    },
+  },
+  holiday: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_SETTING_HOLIDAY, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_SETTING_HOLIDAY, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_HOLIDAY + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_SETTING_HOLIDAY + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_SETTING_HOLIDAY + `/${id}`);
     },
   },
 };
