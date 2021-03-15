@@ -27,8 +27,8 @@ export const api = {
     post: (data) => {
       return client.post(API_PREFIX.API_SETTING_BRANCH, data);
     },
-    put: (data, id) => {
-      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${id}`, data);
+    put: (data) => {
+      return client.put(API_PREFIX.API_SETTING_BRANCH + `/${data.id}`, data);
     },
     get: (id) => {
       return client.get(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
