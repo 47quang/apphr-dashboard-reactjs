@@ -24,7 +24,7 @@ const EditDepartment = React.lazy(() => import('src/pages/setting/department/Edi
 
 const Holiday = React.lazy(() => import('src/pages/setting/holiday/Holiday'));
 const NewHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
-const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
+const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/UpdateHoliday'));
 const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettings'));
 
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));

@@ -58,9 +58,10 @@ export const SettingShiftInfoSchema = Yup.object().shape({
 
 //Holiday
 export const SettingHolidayInfoSchema = Yup.object().shape({
-  holidayTitle: Yup.string().required('Bắt buộc nhập vào tiêu đề của ngày lễ'),
-  startDate: Yup.string().required('Ngày bắt đầu không được bỏ trống'),
-  endDate: Yup.string().required('Ngày kết thúc không được bỏ trống'),
+  title: Yup.string().required('Bắt buộc nhập vào tiêu đề của ngày lễ'),
+  startDate: Yup.date().required('Ngày bắt đầu không được bỏ trống'),
+  endDate: Yup.date().required('Ngày kết thúc không được bỏ trống'),
+  coefficient: Yup.number().min(0, 'Hệ số giờ làm phải là một số không âm').required('Bắt buộc phải nhập hệ số giờ làm'),
 });
 
 export const SettingHolidayLimitSchema = Yup.object().shape({

@@ -8,6 +8,7 @@ import styleReducer from './style';
 import userReducer from './user';
 import positionReducer from './position';
 import departmentReducer from './department';
+import holidayReducer from './holiday';
 
 export default combineReducers({
   style: styleReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   shift: shiftReducer,
   position: positionReducer,
   department: departmentReducer,
+  holiday: holidayReducer,
 });

@@ -1,9 +1,9 @@
 import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import BasicLoader from 'src/components/loader/BasicLoader';
+import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { changeActions } from 'src/stores/actions/header';
+import { fetchHolidays, deleteHoliday } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },
@@ -34,81 +34,45 @@ const dataOfRequestSetting = [
 ];
 const columnDef = [
   { name: 'title', title: 'Tiêu đề' },
-  { name: 'start', title: 'Ngày bắt đầu' },
-  { name: 'end', title: 'Ngày kế thúc' },
-  { name: 'coefficient', title: 'Hệ số giờ làm' },
-];
-
-const data = [
-  {
-    id: 1,
-    title: 'Tết Dương lịch',
-    start: '2021-01-01',
-    end: '2021-01-01',
-    coefficient: 2,
-  },
-  {
-    id: 2,
-    title: 'Tết Âm lịch',
-    start: '2021-02-23',
-    end: '2021-02-23',
-    coefficient: 2,
-  },
-  {
-    id: 3,
-    title: 'Giổ tổ Hùng Vương',
-    start: '2021-03-30',
-    end: '2021-03-30',
-    coefficient: 2,
-  },
-  {
-    id: 4,
-    title: 'Ngày giải phóng miền Nam thống nhất Đất Nước',
-    start: '2021-04-30',
-    end: '2021-04-30',
-    coefficient: 2,
-  },
-  {
-    id: 5,
-    title: 'Ngày quốc tế lao động',
-    start: '2021-05-01',
-    end: '2021-05-01',
-    coefficient: 2,
-  },
-  {
-    id: 6,
-    title: 'Ngày quốc tế thiếu nhi',
-    start: '2021-06-01',
-    end: '2021-06-01',
-    coefficient: 2,
-  },
+  { name: 'startDate', title: 'Ngày bắt đầu' },
+  { name: 'endDate', title: 'Ngày kế thúc' },
+  //{ name: 'coefficient', title: 'Hệ số giờ làm' },
 ];
 
 const HolidayPage = ({ t, location, history }) => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const holidays = useSelector((state) => state.holiday.holidays);
   const [isDefaultTab, setIsDefaultTab] = useState(true);
+
+  useEffect(() => {
+    dispatch(fetchHolidays());
+  }, []);
 
   useEffect(() => {
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo mới',
-        callback: () => history.push('/setting/holiday/newHoliday'),
+        name: 'Tạo ngày nghỉ',
+        callback: () => history.push('/setting/holiday/create'),
       },
     ];
     if (isDefaultTab) {
       dispatch(changeActions(actions));
     }
+    return () => {
+      dispatch(changeActions([]));
+    };
   }, [isDefaultTab]);
 
   const handleChangeTab = (e) => {
     if ((e === 'holiday') !== isDefaultTab) {
       setIsDefaultTab(e === 'holiday');
-      setIsLoading(true);
     }
   };
-
+  const deleteRow = async (rowId) => {
+    dispatch(deleteHoliday(rowId));
+    dispatch(fetchHolidays());
+  };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <CTabs activeTab="holiday" onActiveTabChange={handleChangeTab}>
@@ -122,29 +86,17 @@ const HolidayPage = ({ t, location, history }) => {
         </CNav>
         <CTabContent>
           <CTabPane data-tab="holiday">
-            {isLoading ? (
-              <BasicLoader isVisible={isLoading} radius={10} />
-            ) : (
-              <QTable
-                columnDef={columnDef}
-                data={data}
-                route={'/setting/holiday/tab1.id='}
-                idxColumnsFilter={[0]}
-                dateCols={[1, 2]}
-              />
-            )}
+            <QTable
+              columnDef={columnDef}
+              data={holidays}
+              route={'/setting/holiday/tab1.id='}
+              idxColumnsFilter={[0]}
+              dateCols={[1, 2]}
+              deleteRow={deleteRow}
+            />
           </CTabPane>
           <CTabPane data-tab="holidaySettings">
-            {isLoading ? (
-              <BasicLoader isVisible={isLoading} radius={10} />
-            ) : (
-              <QTable
-                columnDef={columnDefOfRequestSetting}
-                data={dataOfRequestSetting}
-                route={'/setting/holiday/tab2.id='}
-                idxColumnsFilter={[0]}
-              />
-            )}
+            <QTable columnDef={columnDefOfRequestSetting} data={dataOfRequestSetting} route={'/setting/holiday/tab2.id='} idxColumnsFilter={[0]} />
           </CTabPane>
         </CTabContent>
       </CTabs>
