@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
-import { fetchBranch, setEmptyBranch } from 'src/stores/actions/branch';
+import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
-import { changeActions } from 'src/stores/actions/header';
 import BranchItemBody from './BranchItemBody';
 
 //TODO: translate
@@ -17,19 +16,9 @@ const UpdateBranch = ({ t, location, history, match }) => {
   const wards = useSelector((state) => state.location.wards);
 
   useEffect(() => {
-    dispatch(fetchBranch(match?.params?.id));
-
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Cập nhật',
-        callback: handleSubmit,
-      },
-    ];
-    dispatch(changeActions(actions));
+    dispatch(fetchBranch(match.params?.id));
     dispatch(fetchProvinces());
     return () => {
-      dispatch(changeActions([]));
       dispatch(setEmptyBranch());
     };
   }, []);
@@ -42,11 +31,41 @@ const UpdateBranch = ({ t, location, history, match }) => {
       dispatch(fetchWards({ districtId: branch.districtId }));
     }
   }, [branch.provinceId, branch.districtId]);
+  const submitForm = (values) => {
+    let form = values;
+    form.provinceId = parseInt(form.provinceId);
+    form.districtId = parseInt(form.districtId);
+    form.wardId = parseInt(form.wardId);
 
-  const handleSubmit = (event) => {
-    branchInfoForm.current.handleSubmit(event);
+    // Call API UPDATE
+    dispatch(updateBranch(form));
   };
-
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        window.history.back();
+      },
+      name: 'Quay lại',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        branchInfoForm.current.handleReset(e);
+      },
+      name: 'Reset',
+    },
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        branchInfoForm.current.handleSubmit(e);
+      },
+      name: 'Cập nhật',
+    },
+  ];
   return (
     <BranchItemBody
       branchRef={branchInfoForm}
@@ -55,7 +74,8 @@ const UpdateBranch = ({ t, location, history, match }) => {
       provinces={provinces}
       districts={districts}
       wards={wards}
-      isUpdate={true}
+      buttons={buttons}
+      submitForm={submitForm}
     />
   );
 };

@@ -34,7 +34,7 @@ const Shifts = ({ t, location, history }) => {
     return () => {
       dispatch(changeActions([]));
     };
-  }, [dispatch]);
+  }, []);
 
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }));

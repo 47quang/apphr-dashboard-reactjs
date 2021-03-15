@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +24,9 @@ const Branch = ({ t, location, history }) => {
     ];
     dispatch(fetchBranches());
     dispatch(changeActions(actions));
+    return () => {
+      dispatch(changeActions([]));
+    };
   }, []);
 
   const deleteRow = async (rowId) => {

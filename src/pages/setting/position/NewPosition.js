@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
-import { changeActions } from 'src/stores/actions/header';
 import { createPosition, setEmptyPosition } from 'src/stores/actions/position';
 import { fetchShifts } from 'src/stores/actions/shift';
 import PositionItemBody from './PositionItemBody';

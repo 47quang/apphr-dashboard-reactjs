@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
-import { setEmptyBranch } from 'src/stores/actions/branch';
+import { createBranch, setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
-import { changeActions } from 'src/stores/actions/header';
 import BranchItemBody from './BranchItemBody';
 
 //TODO: translate
@@ -18,18 +17,9 @@ const NewBranchPage = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(setEmptyBranch());
-
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo mới',
-        callback: handleSubmit,
-      },
-    ];
-    dispatch(changeActions(actions));
     dispatch(fetchProvinces());
     return () => {
-      dispatch(changeActions([]));
+      dispatch(setEmptyBranch());
     };
   }, []);
 
@@ -42,9 +32,34 @@ const NewBranchPage = ({ t, location, history }) => {
     }
   }, [branch.provinceId, branch.districtId]);
 
-  const handleSubmit = (event) => {
-    branchInfoForm.current.handleSubmit(event);
+  const submitForm = (values) => {
+    let form = values;
+    form.provinceId = parseInt(form.provinceId);
+    form.districtId = parseInt(form.districtId);
+    form.wardId = parseInt(form.wardId);
+
+    // Call API CREATE
+    delete form.id;
+    dispatch(createBranch(form));
   };
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        window.history.back();
+      },
+      name: 'Quay lại',
+    },
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        branchInfoForm.current.handleSubmit(e);
+      },
+      name: 'Tạo mới',
+    },
+  ];
 
   return (
     <BranchItemBody
@@ -54,7 +69,8 @@ const NewBranchPage = ({ t, location, history }) => {
       provinces={provinces}
       districts={districts}
       wards={wards}
-      isUpdate={false}
+      buttons={buttons}
+      submitForm={submitForm}
     />
   );
 };

@@ -3,13 +3,13 @@ import { Formik } from 'formik';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { createBranch, updateBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
+import { renderButtons } from 'src/utils/formUtils';
 
-const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, districts, wards, isUpdate }) => {
+const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons }) => {
   const dispatch = useDispatch();
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -21,18 +21,7 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
             initialValues={branch}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              let form = values;
-              form.provinceId = parseInt(form.provinceId);
-              form.districtId = parseInt(form.districtId);
-              form.wardId = parseInt(form.wardId);
-              if (isUpdate) {
-                // Call API UPDATE
-                dispatch(updateBranch(form));
-              } else {
-                // Call API CREATE
-                delete form.id;
-                dispatch(createBranch(form));
-              }
+              submitForm(values);
             }}
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
@@ -156,6 +145,7 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
                     inputClassName={'form-control'}
                   />
                 </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>

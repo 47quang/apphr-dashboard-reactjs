@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBranches } from 'src/stores/actions/branch';
-import { fetchDepartment, resetDepartment } from 'src/stores/actions/department';
-import { changeActions } from 'src/stores/actions/header';
+import { fetchDepartment, resetDepartment, updateDepartment } from 'src/stores/actions/department';
 import DepartmentItemBody from './DepartmentItemBody';
 
 const EditDepartment = ({ t, location, match }) => {
@@ -12,26 +11,46 @@ const EditDepartment = ({ t, location, match }) => {
   const department = useSelector((state) => state.department.department);
 
   useEffect(() => {
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Cập nhật',
-        callback: handleSubmit,
-      },
-    ];
-    dispatch(changeActions(actions));
     dispatch(fetchBranches());
     dispatch(fetchDepartment({ id: match.params.id }));
     return () => {
-      dispatch(changeActions([]));
       dispatch(resetDepartment());
     };
   }, []);
-  const handleSubmit = (e) => {
-    departmentRef.current.handleSubmit(e);
-  };
 
-  return <DepartmentItemBody departmentRef={departmentRef} department={department} branches={branches} isUpdate={true} />;
+  const submitForm = (values) => {
+    const form = values;
+    form.branchId = parseInt(form.branchId);
+
+    dispatch(updateDepartment(form));
+  };
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        window.history.back();
+      },
+      name: 'Quay lại',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        departmentRef.current.handleReset(e);
+      },
+      name: 'Reset',
+    },
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        departmentRef.current.handleSubmit(e);
+      },
+      name: 'Cập nhật',
+    },
+  ];
+  return <DepartmentItemBody departmentRef={departmentRef} department={department} branches={branches} submitForm={submitForm} buttons={buttons} />;
 };
 
 export default EditDepartment;

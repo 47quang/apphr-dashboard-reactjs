@@ -45,6 +45,14 @@ const UpdatePosition = ({ t, location, match, history }) => {
       name: 'Quay lại',
     },
     {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        positionRef.current.handleReset(e);
+      },
+      name: 'Reset',
+    },
+    {
       type: 'submit',
       className: `btn btn-primary`,
       onClick: (e) => {

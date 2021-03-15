@@ -102,4 +102,5 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
   branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
     return value !== '0';
   }),
+  note: Yup.string().required('Ghi chú không được bỏ trống'),
 });

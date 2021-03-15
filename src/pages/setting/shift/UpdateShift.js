@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
-import { fetchShift, resetShift } from 'src/stores/actions/shift';
+import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
+import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 //TODO: translate
 
@@ -20,24 +21,57 @@ const UpdateShift = ({ t, location, match }) => {
         perpage: 1000,
       }),
     );
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Cập nhật',
-        callback: handleSubmit,
-      },
-    ];
-    dispatch(changeActions(actions));
     return () => {
       dispatch(changeActions([]));
       dispatch(resetShift());
     };
-  }, [dispatch]);
+  }, []);
+  const submitForm = (values) => {
+    let form = values;
 
-  const handleSubmit = (e) => {
-    shiftRef.current.handleSubmit(e);
+    form.operateLoop = enCodeChecked(form.operateLoop);
+    form.startCC = convertTimeWithSecond(form.startCC);
+    form.endCC = convertTimeWithSecond(form.endCC);
+    dispatch(updateShift(form));
   };
-  return <ShiftItemBody shiftRef={shiftRef} shift={shift} validationSchema={SettingShiftInfoSchema} branches={branches} isUpdate={true} />;
+
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        window.history.back();
+      },
+      name: 'Quay lại',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        shiftRef.current.handleReset(e);
+      },
+      name: 'Reset',
+    },
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        shiftRef.current.handleSubmit(e);
+      },
+      name: 'Cập nhật',
+    },
+  ];
+
+  return (
+    <ShiftItemBody
+      shiftRef={shiftRef}
+      shift={shift}
+      validationSchema={SettingShiftInfoSchema}
+      branches={branches}
+      buttons={buttons}
+      submitForm={submitForm}
+    />
+  );
 };
 
 export default UpdateShift;

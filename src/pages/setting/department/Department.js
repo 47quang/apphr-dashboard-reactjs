@@ -25,6 +25,9 @@ const Department = ({ t, location, history }) => {
       },
     ];
     dispatch(changeActions(actions));
+    return () => {
+      dispatch(changeActions([]));
+    };
   }, []);
 
   const deleteRow = (rowId) => {

@@ -1,20 +1,17 @@
 import { CContainer } from '@coreui/react';
 import { Field, Formik } from 'formik';
-import { useDispatch } from 'react-redux';
 import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
-import { createNewShift, updateShift } from 'src/stores/actions/shift';
-import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
+import { renderButtons } from 'src/utils/formUtils';
 
-const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, isUpdate }) => {
+const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, submitForm }) => {
   const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
   const typeCC = [
     { id: 'WIFI', name: 'WIFI' },
     { id: 'QR_CODE', name: 'QR_CODE' },
   ];
-  const dispatch = useDispatch();
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -25,13 +22,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, isUpdate }
             initialValues={shift.shift ?? shift}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              let form = values;
-
-              form.operateLoop = enCodeChecked(form.operateLoop);
-              form.startCC = convertTimeWithSecond(form.startCC);
-              form.endCC = convertTimeWithSecond(form.endCC);
-              if (isUpdate) dispatch(updateShift(form));
-              else dispatch(createNewShift(form));
+              submitForm(values);
             }}
           >
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => (
@@ -173,6 +164,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, isUpdate }
                     placeholder={'Chọn hình thức điểm danh'}
                   />
                 </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>

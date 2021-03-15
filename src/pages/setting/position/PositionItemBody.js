@@ -5,8 +5,9 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { SettingPositionInfoSchema } from 'src/schema/formSchema';
+import { renderButtons } from 'src/utils/formUtils';
 
-const PositionItemBody = ({ positionRef, position, departments, branches, shifts, submitForm, buttons }) => {
+const PositionItemBody = ({ positionRef, position, departments, branches, submitForm, buttons }) => {
   const academicLevels = [
     { id: 'not_require', name: 'Không yêu cầu' },
     { id: 'intermediate', name: 'Trung cấp' },
@@ -143,13 +144,7 @@ const PositionItemBody = ({ positionRef, position, departments, branches, shifts
                     inputClassName={'form-control'}
                   />
                 </div>
-                <div className={'d-flex flex-row justify-content-lg-end'}>
-                  {buttons.map((button, index) => (
-                    <button key={index} type={button.type} className={button.className} onClick={button.onClick}>
-                      {button.name}
-                    </button>
-                  ))}
-                </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>

@@ -58,7 +58,7 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
   //   values = values.splice(pos, 1);
   //   return values;
   // };
-
+  console.log(values, listValues, hash);
   return (
     <FormControl className={classes.formControl} style={{ width: '100%' }}>
       {/* <InputLabel id="demo-simple-select-label" hidden={values.length > 0}>

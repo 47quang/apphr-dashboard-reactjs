@@ -1,14 +1,12 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
-import { useDispatch } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
-import { createDepartment, updateDepartment } from 'src/stores/actions/department';
+import { renderButtons } from 'src/utils/formUtils';
 
-const DepartmentItemBody = ({ departmentRef, department, branches, isUpdate }) => {
-  const dispatch = useDispatch();
+const DepartmentItemBody = ({ departmentRef, department, branches, buttons, submitForm }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -19,13 +17,7 @@ const DepartmentItemBody = ({ departmentRef, department, branches, isUpdate }) =
             initialValues={department}
             validationSchema={SettingDepartmentInfoSchema}
             onSubmit={(values) => {
-              const form = values;
-              form.branchId = parseInt(form.branchId);
-              if (isUpdate) {
-                dispatch(updateDepartment(form));
-              } else {
-                dispatch(createDepartment(form));
-              }
+              submitForm(values);
             }}
           >
             {({ values, errors, touched, handleChange, handleBlur }) => (
@@ -91,8 +83,14 @@ const DepartmentItemBody = ({ departmentRef, department, branches, isUpdate }) =
                     inputID={'note'}
                     labelText={'Ghi chú'}
                     inputClassName={'form-control'}
+                    placeholder={'Nhập vào ghi chú'}
+                    isRequiredField
+                    isTouched={touched.note}
+                    isError={errors.note && touched.note}
+                    errorMessage={errors.note}
                   />
                 </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>
