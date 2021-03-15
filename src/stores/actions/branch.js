@@ -30,10 +30,9 @@ export const fetchBranch = (id) => {
 export const createBranch = (params) => {
   return (dispatch, getState) => {
     api.branch
-      .post(params.data)
+      .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        params.history.push('/setting/branch');
       })
       .catch((err) => {
         console.log(err);
@@ -41,13 +40,12 @@ export const createBranch = (params) => {
   };
 };
 
-export const updateBranch = (data, id, history) => {
+export const updateBranch = (data) => {
   return (dispatch, getState) => {
     api.branch
-      .put(data, id)
+      .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        history.push('/setting/branch');
       })
       .catch((err) => {
         console.log(err);
@@ -68,7 +66,7 @@ export const deleteBranch = (id) => {
   };
 };
 
-export const setEmptyDBranch = () => {
+export const setEmptyBranch = () => {
   return {
     type: REDUX_STATE.branch.EMPTY_VALUE,
     payload: [],
