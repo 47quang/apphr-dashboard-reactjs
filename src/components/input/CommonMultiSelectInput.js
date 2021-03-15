@@ -79,11 +79,6 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
           ) : (
             <div className={classes.chips}>
               {selected.map((value, index) => {
-<<<<<<< HEAD
-                console.log('hash ', value);
-
-=======
->>>>>>> 3332a1b7377056d80f88fa705f32ed736740015e
                 return <Chip key={index} label={hash[value].name} className={classes.chip} color="primary" variant="outlined" />;
               })}
             </div>
