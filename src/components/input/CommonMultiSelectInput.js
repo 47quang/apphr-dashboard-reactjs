@@ -1,10 +1,10 @@
-import Chip from "@material-ui/core/Chip";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import React from "react";
+import Chip from '@material-ui/core/Chip';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
 // import CancelIcon from "@material-ui/icons/Cancel";
 
 // TODO TRANS
@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   chips: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   chip: {
     margin: 2,
@@ -39,20 +39,11 @@ const MenuProps = {
 function getStyles(id, values, theme) {
   if (values)
     return {
-      fontWeight:
-        values.indexOf(id) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
+      fontWeight: values.indexOf(id) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium,
     };
 }
 
-export default function CommonMultiSelectInput({
-  values = [],
-  onChangeValues,
-  listValues,
-  placeholder,
-  setValues,
-}) {
+export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues }) {
   const classes = useStyles();
   const theme = useTheme();
   let hash = listValues.reduce((acc, val) => {
@@ -66,7 +57,7 @@ export default function CommonMultiSelectInput({
   // };
 
   return (
-    <FormControl className={classes.formControl} style={{ width: "100%" }}>
+    <FormControl className={classes.formControl} style={{ width: '100%' }}>
       {/* <InputLabel id="demo-simple-select-label" hidden={values.length > 0}>
         {placeholder}
       </InputLabel> */}
@@ -85,15 +76,9 @@ export default function CommonMultiSelectInput({
           ) : (
             <div className={classes.chips}>
               {selected.map((value, index) => {
-                return (
-                  <Chip
-                    key={index}
-                    label={hash[value].name}
-                    className={classes.chip}
-                    color="primary"
-                    variant="outlined"
-                  />
-                );
+                console.log('hash ', value);
+
+                return <Chip key={index} label={hash[value].name} className={classes.chip} color="primary" variant="outlined" />;
               })}
             </div>
           );
@@ -101,12 +86,7 @@ export default function CommonMultiSelectInput({
         MenuProps={MenuProps}
       >
         {listValues.map((val) => (
-          <MenuItem
-            key={val.id}
-            value={val.id}
-            label={val.name}
-            style={getStyles(val.id, values, theme)}
-          >
+          <MenuItem key={val.id} value={val.id} label={val.name} style={getStyles(val.id, values, theme)}>
             {val.name}
           </MenuItem>
         ))}
