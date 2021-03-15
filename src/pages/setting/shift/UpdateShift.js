@@ -37,7 +37,6 @@ const UpdateShift = ({ t, location, match }) => {
   const handleSubmit = (e) => {
     shiftRef.current.handleSubmit(e);
   };
-  console.log(shift);
   return <ShiftItemBody shiftRef={shiftRef} shift={shift} validationSchema={SettingShiftInfoSchema} branches={branches} isUpdate={true} />;
 };
 

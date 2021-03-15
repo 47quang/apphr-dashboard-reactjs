@@ -110,7 +110,6 @@ const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent=
 
 const QTable = (props) => {
   const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow } = props;
-
   const CustomTableEditColumn = ({ route }) => {
     const [openWarning, setOpenWarning] = useState(false);
     const [deletingRowID, setDeletingRowID] = useState(-1);

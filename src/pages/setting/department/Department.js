@@ -5,18 +5,18 @@ import QTable from 'src/components/table/Table';
 import { fetchDepartments, deleteDepartment } from 'src/stores/actions/department';
 import { changeActions } from 'src/stores/actions/header';
 
-const columnDef = [
-  { name: 'shortname', title: 'Mã phòng ban' },
-  { name: 'name', title: 'Tên phòng ban' },
-  { name: 'branchname', title: 'Chi nhánh' },
-  { name: 'note', title: 'Ghi chú' },
-];
-
 const Department = ({ t, location, history }) => {
+  const columnDef = [
+    { name: 'shortname', title: 'Mã phòng ban' },
+    { name: 'name', title: 'Tên phòng ban' },
+    { name: 'branchname', title: 'Chi nhánh' },
+    { name: 'note', title: 'Ghi chú' },
+  ];
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);
 
   useEffect(() => {
+    dispatch(fetchDepartments());
     const actions = [
       {
         type: 'primary',
@@ -25,7 +25,6 @@ const Department = ({ t, location, history }) => {
       },
     ];
     dispatch(changeActions(actions));
-    dispatch(fetchDepartments());
   }, []);
 
   const deleteRow = (rowId) => {

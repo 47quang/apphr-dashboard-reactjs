@@ -87,6 +87,9 @@ export const SettingBranchInfoSchema = Yup.object().shape({
 
 //Department
 export const SettingDepartmentInfoSchema = Yup.object().shape({
-  departmentCode: Yup.string().required('Bắt buộc nhập vào mã phòng ban'),
-  departmentName: Yup.string().required('Bắt buộc nhập vào tên phòng ban'),
+  shortname: Yup.string().required('Bắt buộc nhập vào mã phòng ban'),
+  name: Yup.string().required('Bắt buộc nhập vào tên phòng ban'),
+  branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
+    return value !== '0';
+  }),
 });
