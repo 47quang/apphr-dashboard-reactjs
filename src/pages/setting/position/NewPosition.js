@@ -15,9 +15,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
   const position = useSelector((state) => state.position.position);
 
   useEffect(() => {
-    dispatch(fetchShifts());
     dispatch(fetchBranches());
-    dispatch(fetchDepartments());
     return () => {
       dispatch(setEmptyPosition());
     };

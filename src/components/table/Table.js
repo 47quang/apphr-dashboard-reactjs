@@ -124,24 +124,24 @@ const MultiValuesFormatter = ({ value }) => {
 };
 const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
 
-const AddRowPanel = ({ route }) => {
+const AddRowPanel = ({ route, disableCreate }) => {
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
         <TemplatePlaceholder />
         {
-          <Link to={`${route}create`}>
-            <IconButton>
+          <IconButton disabled={disableCreate}>
+            <Link to={`${route}create`}>
               <AddCircleOutlineIcon />
-            </IconButton>
-          </Link>
+            </Link>
+          </IconButton>
         }
       </Template>
     </Plugin>
   );
 };
 
-const CustomTableEditColumn = ({ route, deleteRow }) => {
+const CustomTableEditColumn = ({ route, deleteRow, disableDelete }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const handleConfirm = (e) => {
@@ -168,7 +168,7 @@ const CustomTableEditColumn = ({ route, deleteRow }) => {
         name="tableColumns"
         computed={({ tableColumns }) => {
           return tableColumns.concat({
-            key: 'behavior',
+            key: 'behavior' + route,
             type: 'behavior',
             width: '10%',
             align: 'center',
@@ -186,6 +186,7 @@ const CustomTableEditColumn = ({ route, deleteRow }) => {
                   </IconButton>
                 </Link>
                 <IconButton
+                  disabled={disableDelete}
                   onClick={() => {
                     setDeletingRowID(params.tableRow.rowId);
                     setOpenWarning(!openWarning);
@@ -204,7 +205,7 @@ const CustomTableEditColumn = ({ route, deleteRow }) => {
 };
 
 const QTable = (props) => {
-  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow } = props;
+  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow, disableCreate, disableDelete } = props;
   const exporterRef = useRef(null);
 
   const startExport = useCallback(() => {
@@ -223,6 +224,7 @@ const QTable = (props) => {
     editingRowIds: [],
   });
   const [rowChanges, setRowChanges] = useState({});
+
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
   const colHeight = Math.floor((0.9 / columnDef.length) * 100);
@@ -351,10 +353,10 @@ const QTable = (props) => {
           <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
           <Toolbar />
           <ExportPanel startExport={startExport} color={'primary'} />
-          <AddRowPanel route={route} />
+          <AddRowPanel route={route} disableCreate={disableCreate} />
           <ColumnChooser />
           <TableFixedColumns />
-          <CustomTableEditColumn route={route} deleteRow={deleteRow} />
+          <CustomTableEditColumn route={route} deleteRow={deleteRow} disableDelete={disableDelete} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>

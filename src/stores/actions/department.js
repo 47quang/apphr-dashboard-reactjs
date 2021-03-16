@@ -4,7 +4,7 @@ import { REDUX_STATE } from '../states';
 export const fetchDepartments = (params) => {
   return (dispatch, getState) => {
     api.department
-      .getAll()
+      .getAll(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENTS, payload });
       })

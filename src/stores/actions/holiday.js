@@ -81,3 +81,16 @@ export const setEmptyHoliday = () => {
     payload: [],
   };
 };
+
+export const fetchAllRequest = () => {
+  return (dispatch, getState) => {
+    api.holiday
+      .getAllRequest()
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.holiday.GET_REQUESTS, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};

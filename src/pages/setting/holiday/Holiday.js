@@ -1,13 +1,14 @@
 import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
+import { TrendingUpRounded, TrendingUpTwoTone } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { changeActions } from 'src/stores/actions/header';
-import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
+import { deleteHoliday, fetchHolidays, fetchAllRequest } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },
-  { name: 'total', title: 'Số ngày tối đa' },
+  { name: 'amount', title: 'Số ngày tối đa' },
 ];
 
 const dataOfRequestSetting = [
@@ -42,10 +43,12 @@ const columnDef = [
 const HolidayPage = ({ t, location, history }) => {
   const dispatch = useDispatch();
   const holidays = useSelector((state) => state.holiday.holidays);
+  const requests = useSelector((state) => state.holiday.requests);
   const [isDefaultTab, setIsDefaultTab] = useState(true);
 
   useEffect(() => {
     dispatch(fetchHolidays());
+    dispatch(fetchAllRequest());
   }, []);
 
   const handleChangeTab = (e) => {
@@ -80,7 +83,14 @@ const HolidayPage = ({ t, location, history }) => {
             />
           </CTabPane>
           <CTabPane data-tab="holidaySettings">
-            <QTable columnDef={columnDefOfRequestSetting} data={dataOfRequestSetting} route={'/setting/holiday/tab2.id='} idxColumnsFilter={[0]} />
+            <QTable
+              columnDef={columnDefOfRequestSetting}
+              data={requests}
+              route={'/setting/holiday/tab2.id='}
+              idxColumnsFilter={[0]}
+              disableCreate={true}
+              disableDelete={true}
+            />
           </CTabPane>
         </CTabContent>
       </CTabs>

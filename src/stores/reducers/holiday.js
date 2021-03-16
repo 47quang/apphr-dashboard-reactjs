@@ -8,6 +8,11 @@ const initialState = {
     endDate: '',
     coefficient: 0,
   },
+  requests: [],
+  request: {
+    type: '',
+    amount: 0,
+  },
 };
 
 const holidayReducer = (state = initialState, { type, payload }) => {
@@ -25,6 +30,16 @@ const holidayReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         holiday: initialState.holiday,
+      };
+    case REDUX_STATE.holiday.GET_REQUESTS:
+      return {
+        ...state,
+        requests: payload,
+      };
+    case REDUX_STATE.holiday.GET_REQUEST:
+      return {
+        ...state,
+        request: payload,
       };
     default:
       return state;

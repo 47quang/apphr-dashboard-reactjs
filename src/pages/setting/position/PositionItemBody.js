@@ -1,13 +1,17 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { SettingPositionInfoSchema } from 'src/schema/formSchema';
+import { fetchDepartments } from 'src/stores/actions/department';
 import { renderButtons } from 'src/utils/formUtils';
 
-const PositionItemBody = ({ positionRef, position, departments, branches, submitForm, buttons }) => {
+const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons }) => {
+  const dispatch = useDispatch();
+  const departments = useSelector((state) => state.department.departments);
   const academicLevels = [
     { id: 'not_require', name: 'Không yêu cầu' },
     { id: 'intermediate', name: 'Trung cấp' },
@@ -68,6 +72,27 @@ const PositionItemBody = ({ positionRef, position, departments, branches, submit
                 <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-12'}
+                    value={values.branchId}
+                    labelText={'Chi nhánh'}
+                    selectClassName={'form-control'}
+                    isRequiredField
+                    onBlur={handleBlur('branchId')}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      dispatch(fetchDepartments({ branchId: e.target.value }));
+                      handleChange('branchId')(e);
+                    }}
+                    inputID={'branchId'}
+                    lstSelectOptions={branches}
+                    placeholder={'Chọn chi nhánh'}
+                    isTouched={touched.branchId}
+                    isError={errors.branchId && touched.branchId}
+                    errorMessage={errors.branchId}
+                  />
+                </div>
+                <div className="row">
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-12'}
                     value={values.departmentId}
                     labelText={'Phòng ban'}
                     selectClassName={'form-control'}
@@ -80,23 +105,6 @@ const PositionItemBody = ({ positionRef, position, departments, branches, submit
                     isTouched={touched.departmentId}
                     isError={errors.departmentId && touched.departmentId}
                     errorMessage={errors.departmentId}
-                  />
-                </div>
-                <div className="row">
-                  <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
-                    value={values.branchId}
-                    labelText={'Chi nhánh'}
-                    selectClassName={'form-control'}
-                    isRequiredField
-                    onBlur={handleBlur('branchId')}
-                    onChange={handleChange('branchId')}
-                    inputID={'branchId'}
-                    lstSelectOptions={branches}
-                    placeholder={'Chọn chi nhánh'}
-                    isTouched={touched.branchId}
-                    isError={errors.branchId && touched.branchId}
-                    errorMessage={errors.branchId}
                   />
                 </div>
 

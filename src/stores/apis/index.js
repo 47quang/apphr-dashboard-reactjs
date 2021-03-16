@@ -11,6 +11,7 @@ const API_PREFIX = {
   API_GENERAL: '/api.tenant',
   API_SETTING_HOLIDAY: '/api.holiday',
   API_USER: '/api.user',
+  API_META: '/api.meta/__type_holiday',
 };
 
 export const api = {
@@ -141,6 +142,11 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_HOLIDAY + `/${id}`);
+    },
+    getAllRequest: (params) => {
+      return client.get(API_PREFIX.API_META, {
+        params: params,
+      });
     },
   },
   user: {
