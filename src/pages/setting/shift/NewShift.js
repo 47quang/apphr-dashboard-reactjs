@@ -35,7 +35,7 @@ const NewShift = ({ t, location, history }) => {
     form.operateLoop = enCodeChecked(form.operateLoop);
     form.startCC = convertTimeWithSecond(form.startCC);
     form.endCC = convertTimeWithSecond(form.endCC);
-    dispatch(createNewShift(form));
+    dispatch(createNewShift(form, history));
   };
 
   const buttons = [
@@ -43,7 +43,7 @@ const NewShift = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push(`/setting/shift`);
       },
       name: 'Quay lại',
     },

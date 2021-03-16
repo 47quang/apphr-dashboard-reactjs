@@ -4,7 +4,7 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartment, resetDepartment, updateDepartment } from 'src/stores/actions/department';
 import DepartmentItemBody from './DepartmentItemBody';
 
-const EditDepartment = ({ t, location, match }) => {
+const EditDepartment = ({ t, location, match, history }) => {
   const departmentRef = useRef();
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
@@ -29,7 +29,7 @@ const EditDepartment = ({ t, location, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/department');
       },
       name: 'Quay lại',
     },

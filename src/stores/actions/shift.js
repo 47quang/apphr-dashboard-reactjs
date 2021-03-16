@@ -24,13 +24,14 @@ export const fetchShift = (id) => {
     });
   };
 };
-export const createNewShift = (data) => {
+export const createNewShift = (data, history) => {
   return (dispatch, getState) => {
     api.shift
       .post(data)
       .then(({ payload }) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
+        history.push(`/setting/shift/${payload.id}`);
       })
       .catch((err) => {
         console.log(REDUX_STATE.shift.SET_SHIFT, err);

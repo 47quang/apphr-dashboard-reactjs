@@ -15,7 +15,7 @@ const holidayReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.holiday.SET_HOLIDAYS:
       return { ...state, holidays: payload };
     case REDUX_STATE.holiday.SET_HOLIDAY:
-      return { ...state, holiday: Object.assign({}, state.holiday, payload) };
+      return { ...state, holiday: payload };
     case REDUX_STATE.holiday.DELETE_HOLIDAY:
       return {
         ...state,

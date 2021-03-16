@@ -23,17 +23,6 @@ const Shifts = ({ t, location, history }) => {
         perpage: 1000,
       }),
     );
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo mới',
-        callback: () => history.push('/setting/shift/create'),
-      },
-    ];
-    dispatch(changeActions(actions));
-    return () => {
-      dispatch(changeActions([]));
-    };
   }, []);
 
   const deleteRow = (rowID) => {

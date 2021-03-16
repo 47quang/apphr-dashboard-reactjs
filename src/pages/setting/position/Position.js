@@ -17,18 +17,7 @@ const Position = ({ t, location, history }) => {
   const positions = useSelector((state) => state.position.positions);
 
   useEffect(() => {
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo mới',
-        callback: () => history.push('/setting/position/create'),
-      },
-    ];
-    dispatch(changeActions(actions));
     dispatch(fetchPositions());
-    return () => {
-      dispatch(changeActions([]));
-    };
   }, []);
 
   const deleteRow = async (rowId) => {

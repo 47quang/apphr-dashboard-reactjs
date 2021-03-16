@@ -15,18 +15,7 @@ const Branch = ({ t, location, history }) => {
   const branches = useSelector((state) => state.branch.branches);
 
   useEffect(() => {
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo chi nhánh',
-        callback: () => history.push('/setting/branch/create'),
-      },
-    ];
     dispatch(fetchBranches());
-    dispatch(changeActions(actions));
-    return () => {
-      dispatch(changeActions([]));
-    };
   }, []);
 
   const deleteRow = async (rowId) => {

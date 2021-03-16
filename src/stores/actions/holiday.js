@@ -33,14 +33,13 @@ export const fetchHoliday = (id) => {
   };
 };
 
-export const createHoliday = (params) => {
-  console.log(params);
+export const createHoliday = (params, history) => {
   return (dispatch, getState) => {
     api.holiday
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        window.history.back();
+        history.push(`/setting/holiday/tab1.id=${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
@@ -55,6 +54,7 @@ export const updateHoliday = (data) => {
       .then(({ payload }) => {
         payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        console.log(payload.coefficient);
       })
       .catch((err) => {
         console.log(err);

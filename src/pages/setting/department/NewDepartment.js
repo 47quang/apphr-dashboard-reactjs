@@ -4,7 +4,7 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { createDepartment, resetDepartment } from 'src/stores/actions/department';
 import DepartmentItemBody from './DepartmentItemBody';
 
-const NewDepartment = ({ t, location }) => {
+const NewDepartment = ({ t, location, history }) => {
   const departmentRef = useRef();
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
@@ -21,14 +21,14 @@ const NewDepartment = ({ t, location }) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
 
-    dispatch(createDepartment(form));
+    dispatch(createDepartment(form, history));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/department');
       },
       name: 'Quay lại',
     },

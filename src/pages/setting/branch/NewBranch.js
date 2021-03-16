@@ -40,14 +40,14 @@ const NewBranchPage = ({ t, location, history }) => {
 
     // Call API CREATE
     delete form.id;
-    dispatch(createBranch(form));
+    dispatch(createBranch(form, history));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/branch');
       },
       name: 'Quay lại',
     },

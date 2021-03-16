@@ -8,7 +8,7 @@ import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 //TODO: translate
 
-const UpdateShift = ({ t, location, match }) => {
+const UpdateShift = ({ t, location, match, history }) => {
   const shiftRef = useRef();
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
@@ -40,7 +40,7 @@ const UpdateShift = ({ t, location, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push(`/setting/shift`);
       },
       name: 'Quay lại',
     },

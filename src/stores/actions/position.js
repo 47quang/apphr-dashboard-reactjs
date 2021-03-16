@@ -27,13 +27,13 @@ export const fetchPosition = (id) => {
   };
 };
 
-export const createPosition = (params) => {
+export const createPosition = (params, history) => {
   return (dispatch, getState) => {
     api.position
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
-        window.history.back();
+        history.push(`/setting/position/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

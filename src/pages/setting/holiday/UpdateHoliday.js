@@ -23,6 +23,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
     // Call API UPDATE
+    console.log(form);
     dispatch(updateHoliday(form));
   };
 
@@ -31,9 +32,17 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/holiday');
       },
       name: 'Quay lại',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        holidayInfoForm.current.handleReset(e);
+      },
+      name: 'Reset',
     },
     {
       type: 'submit',
@@ -41,7 +50,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: 'Cập nhật',
     },
   ];
 

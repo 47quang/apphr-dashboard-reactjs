@@ -40,7 +40,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push(`/setting/position/`);
       },
       name: 'Quay lại',
     },

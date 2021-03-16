@@ -53,13 +53,13 @@ export const updateDepartment = (data) => {
   };
 };
 
-export const createDepartment = (data) => {
+export const createDepartment = (data, history) => {
   return (dispatch, getState) => {
     api.department
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
-        window.history.back();
+        history.push(`/setting/department/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

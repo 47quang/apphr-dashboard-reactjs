@@ -12,6 +12,7 @@ const initialState = {
     wardId: 0,
     phone: '',
     note: '',
+    ipRouter: '',
   },
 };
 

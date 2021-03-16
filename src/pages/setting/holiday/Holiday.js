@@ -48,22 +48,6 @@ const HolidayPage = ({ t, location, history }) => {
     dispatch(fetchHolidays());
   }, []);
 
-  useEffect(() => {
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo ngày nghỉ',
-        callback: () => history.push('/setting/holiday/create'),
-      },
-    ];
-    if (isDefaultTab) {
-      dispatch(changeActions(actions));
-    }
-    return () => {
-      dispatch(changeActions([]));
-    };
-  }, [isDefaultTab]);
-
   const handleChangeTab = (e) => {
     if ((e === 'holiday') !== isDefaultTab) {
       setIsDefaultTab(e === 'holiday');

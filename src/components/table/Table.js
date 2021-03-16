@@ -1,4 +1,4 @@
-import { Getter, Plugin, Template, TemplateConnector } from '@devexpress/dx-react-core';
+import { Getter, Plugin, Template, TemplateConnector, TemplatePlaceholder } from '@devexpress/dx-react-core';
 import {
   DataTypeProvider,
   EditingState,
@@ -9,7 +9,22 @@ import {
   SelectionState,
   SortingState,
 } from '@devexpress/dx-react-grid';
-import { Grid, PagingPanel, Table, TableColumnReordering, TableFixedColumns, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
+import { GridExporter } from '@devexpress/dx-react-grid-export';
+import saveAs from 'file-saver';
+import {
+  Grid,
+  PagingPanel,
+  Table,
+  TableColumnReordering,
+  TableFixedColumns,
+  TableHeaderRow,
+  DragDropProvider,
+  TableColumnVisibility,
+  VirtualTable,
+  ExportPanel,
+  Toolbar,
+  ColumnChooser,
+} from '@devexpress/dx-react-grid-material-ui';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
@@ -20,8 +35,9 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -108,75 +124,94 @@ const MultiValuesFormatter = ({ value }) => {
 };
 const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
 
+const AddRowPanel = ({ route }) => {
+  return (
+    <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {
+          <Link to={`${route}create`}>
+            <IconButton>
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </Link>
+        }
+      </Template>
+    </Plugin>
+  );
+};
+
+const CustomTableEditColumn = ({ route, deleteRow }) => {
+  const [openWarning, setOpenWarning] = useState(false);
+  const [deletingRowID, setDeletingRowID] = useState(-1);
+  const handleConfirm = (e) => {
+    if (Number.isInteger(deletingRowID)) {
+      deleteRow(deletingRowID);
+    }
+    setOpenWarning(!openWarning);
+  };
+  const handleCancel = () => {
+    setOpenWarning(!openWarning);
+  };
+  return (
+    <Plugin>
+      <WarningAlertDialog
+        isVisible={openWarning}
+        title={'Xóa hàng'}
+        titleConfirm={'Đồng ý'}
+        handleConfirm={handleConfirm}
+        titleCancel={'Từ chối'}
+        handleCancel={handleCancel}
+        warningMessage={'Bạn có muốn xóa hàng này?'}
+      />
+      <Getter
+        name="tableColumns"
+        computed={({ tableColumns }) => {
+          return tableColumns.concat({
+            key: 'behavior',
+            type: 'behavior',
+            width: '10%',
+            align: 'center',
+          });
+        }}
+      />
+      <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
+        {(params) => (
+          <TemplateConnector>
+            {(getters, { deleteRows, commitDeletedRows }) => (
+              <TableCell className="px-0 py-0">
+                <Link to={`${route}${params.tableRow.rowId}`}>
+                  <IconButton>
+                    <EditIcon />
+                  </IconButton>
+                </Link>
+                <IconButton
+                  onClick={() => {
+                    setDeletingRowID(params.tableRow.rowId);
+                    setOpenWarning(!openWarning);
+                  }}
+                  title="Delete row"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            )}
+          </TemplateConnector>
+        )}
+      </Template>
+    </Plugin>
+  );
+};
+
 const QTable = (props) => {
   const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow } = props;
-  const CustomTableEditColumn = ({ route }) => {
-    const [openWarning, setOpenWarning] = useState(false);
-    const [deletingRowID, setDeletingRowID] = useState(-1);
-    const handleConfirm = (e) => {
-      if (Number.isInteger(deletingRowID)) {
-        deleteRow(deletingRowID);
-      }
-      setOpenWarning(!openWarning);
-    };
-    const handleCancel = () => {
-      setOpenWarning(!openWarning);
-    };
-    return (
-      <Plugin>
-        <WarningAlertDialog
-          isVisible={openWarning}
-          title={'Xóa hàng'}
-          titleConfirm={'Đồng ý'}
-          handleConfirm={handleConfirm}
-          titleCancel={'Từ chối'}
-          handleCancel={handleCancel}
-          warningMessage={'Bạn có muốn xóa hàng này?'}
-        />
-        <Getter
-          name="tableColumns"
-          computed={({ tableColumns }) => {
-            return tableColumns.concat({ key: 'edit', type: 'edit', width: '5%' }, { key: 'delete', type: 'delete', width: '5%' });
-          }}
-        />
-        <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'delete' && tableRow.type === Table.ROW_TYPE}>
-          {(params) => (
-            <TemplateConnector>
-              {(getters, { deleteRows, commitDeletedRows }) => (
-                <TableCell className="px-0 py-0">
-                  <IconButton
-                    onClick={() => {
-                      setDeletingRowID(params.tableRow.rowId);
-                      setOpenWarning(!openWarning);
-                    }}
-                    title="Delete row"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              )}
-            </TemplateConnector>
-          )}
-        </Template>
+  const exporterRef = useRef(null);
 
-        <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'edit' && tableRow.type === Table.ROW_TYPE}>
-          {(params) => (
-            <TemplateConnector>
-              {(getters, { startEditRows }) => (
-                <TableCell className="px-0 py-0">
-                  <Link to={`${route}${params.tableRow.rowId}`}>
-                    <IconButton>
-                      <EditIcon />
-                    </IconButton>
-                  </Link>
-                </TableCell>
-              )}
-            </TemplateConnector>
-          )}
-        </Template>
-      </Plugin>
-    );
-  };
+  const startExport = useCallback(() => {
+    exporterRef.current.exportGrid();
+  }, [exporterRef]);
+
+  const [defaultHiddenColumnNames] = useState([]);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   const [state, setState] = useState({
@@ -189,6 +224,7 @@ const QTable = (props) => {
   });
   const [rowChanges, setRowChanges] = useState({});
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
+
   const colHeight = Math.floor((0.9 / columnDef.length) * 100);
   const tableColumnExtensions = columnDef.map((col) => ({
     columnName: col.name,
@@ -210,6 +246,11 @@ const QTable = (props) => {
     columnsFilter: columnsFilter[0],
     filterTypes: filterTypes[0],
     textFilter: '',
+  };
+  const onSave = (workbook) => {
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
+    });
   };
 
   return (
@@ -303,14 +344,21 @@ const QTable = (props) => {
             ]}
           />
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+          <DragDropProvider />
           <Table columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           <TableHeaderRow showSortingControls />
-          <TableFixedColumns rightColumns={['edit', 'delete']} />
+          <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
+          <Toolbar />
+          <ExportPanel startExport={startExport} color={'primary'} />
+          <AddRowPanel route={route} />
+          <ColumnChooser />
+          <TableFixedColumns />
           <CustomTableEditColumn route={route} deleteRow={deleteRow} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>
+        <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />
       </Paper>
     </div>
   );

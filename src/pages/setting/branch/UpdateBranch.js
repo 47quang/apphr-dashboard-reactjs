@@ -45,7 +45,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/branch');
       },
       name: 'Quay lại',
     },

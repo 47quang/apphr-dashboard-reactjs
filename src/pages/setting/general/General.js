@@ -9,6 +9,7 @@ import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { fetchGeneral, updateGeneral } from 'src/stores/actions/setting';
+import { renderButtons } from 'src/utils/formUtils';
 
 //TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
@@ -19,16 +20,8 @@ const SettingGeneralPage = ({ t, location }) => {
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
   useEffect(() => {
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Cập nhật',
-        callback: updateSetting,
-      },
-    ];
     dispatch(fetchProvinces());
     dispatch(fetchGeneral(1));
-    dispatch(changeActions(actions));
   }, []);
 
   useEffect(() => {
@@ -47,6 +40,14 @@ const SettingGeneralPage = ({ t, location }) => {
     form.wardId = parseInt(form.wardId);
     dispatch(updateGeneral(form));
   };
+  const buttons = [
+    {
+      type: 'submit',
+      className: `btn btn-primary`,
+      onClick: updateSetting,
+      name: 'Cập nhật',
+    },
+  ];
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -199,6 +200,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputClassName={'form-control'}
                   />
                 </div>
+                {renderButtons(buttons)}
               </form>
             )}
           </Formik>

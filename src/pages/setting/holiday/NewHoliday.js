@@ -23,7 +23,7 @@ const NewHolidayPage = ({ t, location, history }) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
     delete form.id;
-    dispatch(createHoliday(form));
+    dispatch(createHoliday(form, history));
   };
 
   const buttons = [
@@ -31,7 +31,7 @@ const NewHolidayPage = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push('/setting/holiday');
       },
       name: 'Quay lại',
     },

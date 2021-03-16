@@ -62,17 +62,17 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-6'}
-                    value={values.ip}
-                    onBlur={handleBlur('ip')}
-                    onChange={handleChange('ip')}
-                    inputID={'ip'}
+                    value={values.ipRouter}
+                    onBlur={handleBlur('ipRouter')}
+                    onChange={handleChange('ipRouter')}
+                    inputID={'ipRouter'}
                     labelText={'IP Router'}
                     inputType={'text'}
                     placeholder={'Nhập IP Router'}
                     inputClassName={'form-control'}
-                    isTouched={touched.ip}
-                    isError={errors.ip && touched.ip}
-                    errorMessage={errors.ip}
+                    isTouched={touched.ipRouter}
+                    isError={errors.ip && touched.ipRouter}
+                    errorMessage={errors.ipRouter}
                   />
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-6'}
@@ -137,10 +137,10 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
                 <div className="row">
                   <CommonMultipleTextInput
                     containerClassName={'form-group col-lg-12'}
-                    value={values.description}
-                    onBlur={handleBlur('description')}
-                    onChange={handleChange('description')}
-                    inputID={'description'}
+                    value={values.note}
+                    onBlur={handleBlur('note')}
+                    onChange={handleChange('note')}
+                    inputID={'note'}
                     labelText={'Mô tả'}
                     inputClassName={'form-control'}
                   />

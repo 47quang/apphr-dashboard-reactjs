@@ -17,17 +17,6 @@ const Department = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(fetchDepartments());
-    const actions = [
-      {
-        type: 'primary',
-        name: 'Tạo mới',
-        callback: () => history.push('/setting/department/create'),
-      },
-    ];
-    dispatch(changeActions(actions));
-    return () => {
-      dispatch(changeActions([]));
-    };
   }, []);
 
   const deleteRow = (rowId) => {

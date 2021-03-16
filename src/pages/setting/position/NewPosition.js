@@ -27,7 +27,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(createPosition(form));
+    dispatch(createPosition(form, history));
   };
 
   const buttons = [
@@ -35,7 +35,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        window.history.back();
+        history.push(`/setting/position/`);
       },
       name: 'Quay lại',
     },
