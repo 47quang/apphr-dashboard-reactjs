@@ -10,6 +10,7 @@ const API_PREFIX = {
   API_WARD: '/api.ward',
   API_GENERAL: '/api.tenant',
   API_SETTING_HOLIDAY: '/api.holiday',
+  API_USER: '/api.user',
 };
 
 export const api = {
@@ -140,6 +141,14 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_HOLIDAY + `/${id}`);
+    },
+  },
+  user: {
+    login: (params) => {
+      return client.post(API_PREFIX.API_USER + `/login`, params);
+    },
+    createUser: (payload) => {
+      return client.put(API_PREFIX.API_USER, payload);
     },
   },
 };

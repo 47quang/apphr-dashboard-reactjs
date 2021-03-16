@@ -59,4 +59,7 @@ export const REDUX_STATE = {
     DELETE_HOLIDAY: 'DELETE_HOLIDAY',
     EMPTY_VALUE: 'EMPTY_VALUE',
   },
+  user: {
+    SET_USER: 'SET_USER',
+  },
 };
