@@ -7,6 +7,7 @@ export const login = (params, history) => {
       .login(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.user.SET_USER, payload });
+        localStorage.setItem('token', payload.token);
         history.push('/');
       })
       .catch((err) => {
