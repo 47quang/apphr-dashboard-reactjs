@@ -53,9 +53,6 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 */
 
 const styles = (theme) => ({
-  lookupEditCell: {
-    padding: theme.spacing(1),
-  },
   dialog: {
     width: 'calc(100% - 16px)',
   },
@@ -71,29 +68,6 @@ const styles = (theme) => ({
     },
   },
 });
-
-const LookupEditCellBase = ({ availableColumnValues, value, onValueChange, classes }) => (
-  <TableCell className={classes.lookupEditCell}>
-    <Select
-      value={value}
-      onChange={(event) => onValueChange(event.target.value)}
-      MenuProps={{
-        className: classes.selectMenu,
-      }}
-      input={<Input classes={{ root: classes.inputRoot }} />}
-    >
-      {availableColumnValues.map((item) => (
-        <MenuItem key={item} value={item}>
-          {item}
-        </MenuItem>
-      ))}
-    </Select>
-  </TableCell>
-);
-
-export const LookupEditCell = withStyles(styles, {
-  name: 'ControlledModeDemo',
-})(LookupEditCellBase);
 
 const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
 
@@ -167,12 +141,13 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete }) => {
       <Getter
         name="tableColumns"
         computed={({ tableColumns }) => {
-          return tableColumns.concat({
+          tableColumns.push({
             key: 'behavior' + route,
             type: 'behavior',
             width: '10%',
             align: 'center',
           });
+          return tableColumns;
         }}
       />
       <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
@@ -347,7 +322,7 @@ const QTable = (props) => {
           />
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <DragDropProvider />
-          <Table columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
+          <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           <TableHeaderRow showSortingControls />
           <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
