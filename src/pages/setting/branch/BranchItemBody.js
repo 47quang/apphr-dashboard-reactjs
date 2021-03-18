@@ -7,6 +7,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
+import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
 const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons }) => {
@@ -81,7 +82,7 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
                     onChange={(e) => {
                       dispatch(fetchDistricts({ provinceId: e.target.value }));
                       dispatch({
-                        type: 'SET_WARDS',
+                        type: REDUX_STATE.location.SET_WARDS,
                         payload: [],
                       });
                       handleChange('provinceId')(e);

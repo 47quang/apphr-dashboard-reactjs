@@ -1,10 +1,8 @@
 import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
-import { TrendingUpRounded, TrendingUpTwoTone } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { changeActions } from 'src/stores/actions/header';
-import { deleteHoliday, fetchHolidays, fetchAllRequest } from 'src/stores/actions/holiday';
+import { deleteHoliday, fetchAllRequest, fetchHolidays } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },

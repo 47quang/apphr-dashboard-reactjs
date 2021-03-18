@@ -15,3 +15,19 @@ export const login = (params, history) => {
       });
   };
 };
+
+export const logout = (history) => {
+  return (dispatch, getState) => {
+    const payload = {
+      user: '',
+      token: '',
+    };
+    dispatch({
+      type: REDUX_STATE.user.SET_USER,
+      payload,
+    });
+    localStorage.setItem('token', payload.token);
+    localStorage.setItem('user', payload.user);
+    history.push('/');
+  };
+};

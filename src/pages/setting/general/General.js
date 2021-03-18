@@ -6,7 +6,6 @@ import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInpu
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
-import { changeActions } from 'src/stores/actions/header';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { fetchGeneral, updateGeneral } from 'src/stores/actions/setting';
 import { renderButtons } from 'src/utils/formUtils';

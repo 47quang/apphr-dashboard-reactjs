@@ -78,7 +78,6 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     isRequiredField
                     onBlur={handleBlur('branchId')}
                     onChange={(e) => {
-                      console.log(e.target.value);
                       dispatch(fetchDepartments({ branchId: e.target.value }));
                       handleChange('branchId')(e);
                     }}

@@ -1,6 +1,4 @@
-import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
-
+import CIcon from '@coreui/icons-react';
 //import { Link } from 'react-router-dom';
 import {
   CButton,
@@ -16,7 +14,8 @@ import {
   CInputGroupText,
   CRow,
 } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { login } from 'src/stores/actions/user';
 
 const Login = ({ t, location, history }) => {
@@ -24,7 +23,6 @@ const Login = ({ t, location, history }) => {
   const dispatch = useDispatch();
   const handleLogin = (event) => {
     dispatch(login({ username: formValue.current.username.value, password: formValue.current.password.value }, history));
-    console.log({ username: formValue.current.username.value, password: formValue.current.password.value });
   };
   return (
     <div className="c-app c-default-layout flex-row align-items-center" style={{ background: '#3c4b64' }}>

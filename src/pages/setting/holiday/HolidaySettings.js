@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import BasicLoader from 'src/components/loader/BasicLoader';
-import { SettingHolidayLimitSchema } from 'src/schema/formSchema';
 import FormHeader from 'src/components/text/FormHeader';
+import { SettingHolidayLimitSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
 
 //TODO: translate
@@ -39,11 +39,7 @@ const HolidaySettings = ({ t, location, match, history }) => {
     dispatch(changeActions(actions));
   }, []);
 
-  const getOnSubmitInForm = (event) => holidayInfoForm.current.handleSubmit(event);
-
-  // const handleSubmitInfo = (values) => {
-  //   console.log(values);
-  // };
+  // const getOnSubmitInForm = (event) => holidayInfoForm.current.handleSubmit(event);
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">

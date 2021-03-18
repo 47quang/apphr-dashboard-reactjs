@@ -2,8 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { fetchDepartments, deleteDepartment } from 'src/stores/actions/department';
-import { changeActions } from 'src/stores/actions/header';
+import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
 
 const Department = ({ t, location, history }) => {
   const columnDef = [

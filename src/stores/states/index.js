@@ -2,6 +2,7 @@ export const REDUX_STATE = {
   login: {
     SET_TOKEN: 'SET_TOKEN',
     GET_TOKEN: 'GET_TOKEN',
+    LOG_OUT: 'LOG_OUT',
   },
   location: {
     SET_PROVINCES: 'SET_PROVINCES',
@@ -46,7 +47,7 @@ export const REDUX_STATE = {
   },
   style: {
     CHANGE_LANGUAGE: 'CHANGE_LANGUAGE',
-    CHANGE_SIDEBARSHOW: 'CHANGE_SIDEBARSHOW',
+    CHANGE_SIDE_BAR_SHOW: 'CHANGE_SIDE_BAR_SHOW',
   },
   header: {
     CHANGE_ACTIONS: 'CHANGE_ACTIONS',

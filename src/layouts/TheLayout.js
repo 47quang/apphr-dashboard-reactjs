@@ -1,16 +1,17 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { TheContent, TheSidebar } from "./index";
-import TheHeader from "./TheHeader";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { TheContent, TheSidebar } from './index';
+import TheHeader from './TheHeader';
 
-const TheLayout = ({ location }) => {
+const TheLayout = (props) => {
+  const { location } = props;
   const token = useSelector((state) => state.user.token);
   if (!token) {
     return (
       <Redirect
         to={{
-          pathname: "/login",
+          pathname: '/login',
           state: { from: location },
         }}
       />
@@ -20,7 +21,7 @@ const TheLayout = ({ location }) => {
     <div className="c-app c-default-layout">
       <TheSidebar />
       <div className="c-wrapper">
-        <TheHeader />
+        <TheHeader {...props} />
         <div className="c-body">
           <TheContent />
         </div>

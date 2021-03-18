@@ -4,9 +4,14 @@ import { REDUX_STATE } from '../states';
 
 export const fetchShifts = (params) => {
   return (dispatch, getState) => {
-    api.shift.getAll(params).then(({ payload }) => {
-      dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
-    });
+    api.shift
+      .getAll(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 const formatDownloadedData = (payload) => {
@@ -18,10 +23,15 @@ const formatDownloadedData = (payload) => {
 };
 export const fetchShift = (id) => {
   return (dispatch, getState) => {
-    api.shift.get(id).then(({ payload }) => {
-      payload = formatDownloadedData(payload);
-      dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
-    });
+    api.shift
+      .get(id)
+      .then(({ payload }) => {
+        payload = formatDownloadedData(payload);
+        dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 export const createNewShift = (data, history) => {
@@ -34,7 +44,7 @@ export const createNewShift = (data, history) => {
         history.push(`/setting/shift/${payload.id}`);
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.SET_SHIFT, err);
+        console.log(err);
       });
   };
 };
@@ -51,7 +61,7 @@ export const updateShift = (data) => {
         });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.SET_SHIFT, err);
+        console.log(err);
       });
   };
 };
@@ -64,7 +74,7 @@ export const deleteShift = (params) => {
         dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
       })
       .catch((err) => {
-        console.log(REDUX_STATE.shift.DELETE_SHIFT, err);
+        console.log(err);
       });
   };
 };
