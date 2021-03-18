@@ -54,7 +54,6 @@ export const updateHoliday = (data) => {
       .then(({ payload }) => {
         payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        console.log(payload.coefficient);
       })
       .catch((err) => {
         console.log(err);

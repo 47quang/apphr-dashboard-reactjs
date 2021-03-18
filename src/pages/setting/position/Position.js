@@ -2,8 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { fetchPositions, deletePosition } from 'src/stores/actions/position';
-import { changeActions } from 'src/stores/actions/header';
+import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 
 const columnDef = [
   { name: 'shortname', title: 'Mã vị trí' },

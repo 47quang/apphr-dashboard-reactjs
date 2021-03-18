@@ -1,38 +1,14 @@
 import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
-import { TrendingUpRounded, TrendingUpTwoTone } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { changeActions } from 'src/stores/actions/header';
-import { deleteHoliday, fetchHolidays, fetchAllRequest } from 'src/stores/actions/holiday';
+import { deleteHoliday, fetchAllRequest, fetchHolidays } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
   { name: 'type', title: 'Loại đề xuất' },
   { name: 'amount', title: 'Số ngày tối đa' },
 ];
 
-const dataOfRequestSetting = [
-  {
-    id: 1,
-    type: 'Nghỉ có phép',
-    total: '12',
-  },
-  {
-    id: 2,
-    type: 'Nghỉ không phép',
-    total: '2',
-  },
-  {
-    id: 3,
-    type: 'Nghỉ chế độ',
-    total: '60',
-  },
-  {
-    id: 4,
-    type: 'Xin làm thêm',
-    total: '5',
-  },
-];
 const columnDef = [
   { name: 'title', title: 'Tiêu đề' },
   { name: 'startDate', title: 'Ngày bắt đầu' },

@@ -10,34 +10,30 @@ import {
   SortingState,
 } from '@devexpress/dx-react-grid';
 import { GridExporter } from '@devexpress/dx-react-grid-export';
-import saveAs from 'file-saver';
 import {
+  ColumnChooser,
+  DragDropProvider,
+  ExportPanel,
   Grid,
   PagingPanel,
   Table,
   TableColumnReordering,
+  TableColumnVisibility,
   TableFixedColumns,
   TableHeaderRow,
-  DragDropProvider,
-  TableColumnVisibility,
-  VirtualTable,
-  ExportPanel,
   Toolbar,
-  ColumnChooser,
 } from '@devexpress/dx-react-grid-material-ui';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import saveAs from 'file-saver';
 import { Formik } from 'formik';
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';

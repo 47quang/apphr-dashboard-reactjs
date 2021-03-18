@@ -32,7 +32,6 @@ const UpdatePosition = ({ t, location, match, history }) => {
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
     dispatch(updatePosition(form, params.id));
-    // history.push('/setting/position');
   };
 
   const buttons = [
