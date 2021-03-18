@@ -12,6 +12,7 @@ const API_PREFIX = {
   API_SETTING_HOLIDAY: '/api.holiday',
   API_USER: '/api.user',
   API_META: '/api.meta/__type_holiday',
+  API_ACCOUNT: 'API_ACCOUNT',
 };
 
 export const api = {
@@ -155,6 +156,30 @@ export const api = {
     },
     createUser: (payload) => {
       return client.put(API_PREFIX.API_USER, payload);
+    },
+  },
+  account: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ACCOUNT, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ACCOUNT, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ACCOUNT + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ACCOUNT + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ACCOUNT + `/${id}`);
+    },
+    getAllProfiles: (params) => {
+      return client.get(API_PREFIX.API_ACCOUNT, {
+        params: params,
+      });
     },
   },
 };

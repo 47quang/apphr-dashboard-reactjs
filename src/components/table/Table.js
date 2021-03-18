@@ -42,6 +42,7 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import classNames from 'classnames';
 
 /*
   Params:
@@ -67,6 +68,10 @@ const styles = (theme) => ({
       backgroundColor: '#fafafa',
     },
   },
+  customToolbar: {
+    float: 'left',
+    display: 'inline-flex',
+  },
 });
 
 const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
@@ -75,6 +80,10 @@ export const TableComponent = withStyles(styles, {
   name: 'TableComponent',
 })(TableComponentBase);
 
+const ToolbarRootBase = ({ classes, className, ...restProps }) => (
+  <Toolbar.Root className={classNames(className, classes.customToolbar)} {...restProps} />
+);
+const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 const filteringColumnExtensions = [
   {
     columnName: 'saleDate',
@@ -104,9 +113,9 @@ const AddRowPanel = ({ route, disableCreate }) => {
       <Template name="toolbarContent">
         <TemplatePlaceholder />
         {
-          <IconButton disabled={disableCreate}>
-            <Link to={`${route}create`}>
-              <AddCircleOutlineIcon />
+          <IconButton disabled={disableCreate} className="py-0 px-0">
+            <Link to={`${route}create`} className="px-0 py-0">
+              <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
             </Link>
           </IconButton>
         }
@@ -115,7 +124,7 @@ const AddRowPanel = ({ route, disableCreate }) => {
   );
 };
 
-const CustomTableEditColumn = ({ route, deleteRow, disableDelete }) => {
+const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const handleConfirm = (e) => {
@@ -141,22 +150,25 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete }) => {
       <Getter
         name="tableColumns"
         computed={({ tableColumns }) => {
-          tableColumns.push({
+          tableColumns.splice(0, 0, {
             key: 'behavior' + route,
             type: 'behavior',
-            width: '10%',
+            width: !disableEdit ? '10%' : '0%',
             align: 'center',
           });
           return tableColumns;
         }}
       />
-      <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
+      <Template
+        name="tableCell"
+        predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE && !disableEdit}
+      >
         {(params) => (
           <TemplateConnector>
             {(getters, { deleteRows, commitDeletedRows }) => (
               <TableCell className="px-0 py-0">
                 <Link to={`${route}${params.tableRow.rowId}`}>
-                  <IconButton>
+                  <IconButton disabled={disableEdit}>
                     <EditIcon />
                   </IconButton>
                 </Link>
@@ -180,7 +192,7 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete }) => {
 };
 
 const QTable = (props) => {
-  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow, disableCreate, disableDelete } = props;
+  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow, disableCreate, disableDelete, disableEdit } = props;
   const exporterRef = useRef(null);
 
   const startExport = useCallback(() => {
@@ -202,13 +214,16 @@ const QTable = (props) => {
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
-  const colHeight = Math.floor((0.9 / columnDef.length) * 100);
-  const tableColumnExtensions = columnDef.map((col) => ({
-    columnName: col.name,
-    align: 'left',
-    width: colHeight + '%',
-    wordWrapEnabled: true,
-  }));
+  const colHeight = columnDef.length < 6 ? Math.floor((0.8 / (columnDef.length - 1)) * 100) : 17;
+  const tableColumnExtensions = columnDef.map((col, idx) => {
+    return {
+      columnName: col.name,
+      align: 'left',
+      width: colHeight + '%',
+      wordWrapEnabled: true,
+    };
+  });
+  tableColumnExtensions[0]['width'] = 10 + '%';
 
   const columnsFilter = idxColumnsFilter.map((idx) => ({
     id: idx,
@@ -326,12 +341,12 @@ const QTable = (props) => {
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           <TableHeaderRow showSortingControls />
           <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
-          <Toolbar />
+          <Toolbar rootComponent={ToolbarRoot} />
           <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} />
           <ColumnChooser />
           <TableFixedColumns />
-          <CustomTableEditColumn route={route} deleteRow={deleteRow} disableDelete={disableDelete} />
+          <CustomTableEditColumn route={route} deleteRow={deleteRow} disableDelete={disableDelete} disableEdit={disableEdit} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>

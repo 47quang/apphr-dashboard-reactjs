@@ -6,12 +6,12 @@ const convertTime = (payload) => {
   payload.endDate = payload.endDate.replace('Z', '');
   return payload;
 };
-export const fetchHolidays = () => {
+export const fetchAccounts = () => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .getAll()
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
+        dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -19,13 +19,13 @@ export const fetchHolidays = () => {
   };
 };
 
-export const fetchHoliday = (id) => {
+export const fetchAccount = (id) => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .get(id)
       .then(({ payload }) => {
         payload = convertTime(payload);
-        dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -33,13 +33,13 @@ export const fetchHoliday = (id) => {
   };
 };
 
-export const createHoliday = (params, history) => {
+export const createAccount = (params, history) => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .post(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        history.push(`/setting/holiday/tab1.id=${payload.id}`);
+        dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
+        history.push(`/setting/account/tab1.id=${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
@@ -47,13 +47,13 @@ export const createHoliday = (params, history) => {
   };
 };
 
-export const updateHoliday = (data) => {
+export const updateAccount = (data) => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .put(data)
       .then(({ payload }) => {
         payload = convertTime(payload);
-        dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -61,12 +61,12 @@ export const updateHoliday = (data) => {
   };
 };
 
-export const deleteHoliday = (id) => {
+export const deleteAccount = (id) => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.DELETE_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.account.DELETE_ACCOUNT, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -74,19 +74,26 @@ export const deleteHoliday = (id) => {
   };
 };
 
-export const setEmptyHoliday = () => {
+export const setEmptyAccount = () => {
   return {
-    type: REDUX_STATE.holiday.EMPTY_VALUE,
+    type: REDUX_STATE.account.EMPTY_ACCOUNT_VALUE,
     payload: [],
   };
 };
 
-export const fetchAllRequest = () => {
+export const setEmptyProfile = () => {
+  return {
+    type: REDUX_STATE.account.EMPTY_PROFILE_VALUE,
+    payload: [],
+  };
+};
+
+export const fetchAllProfiles = (params) => {
   return (dispatch, getState) => {
     api.holiday
-      .getAllRequest()
+      .getAllRequest(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.GET_REQUESTS, payload });
+        dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
         console.log(err);

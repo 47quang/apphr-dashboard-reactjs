@@ -9,6 +9,7 @@ import userReducer from './user';
 import positionReducer from './position';
 import departmentReducer from './department';
 import holidayReducer from './holiday';
+import accountReducer from './account';
 
 export default combineReducers({
   style: styleReducer,
@@ -21,4 +22,5 @@ export default combineReducers({
   position: positionReducer,
   department: departmentReducer,
   holiday: holidayReducer,
+  account: accountReducer,
 });

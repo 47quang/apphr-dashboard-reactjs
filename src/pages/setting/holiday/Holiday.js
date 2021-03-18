@@ -11,28 +11,6 @@ const columnDefOfRequestSetting = [
   { name: 'amount', title: 'Số ngày tối đa' },
 ];
 
-const dataOfRequestSetting = [
-  {
-    id: 1,
-    type: 'Nghỉ có phép',
-    total: '12',
-  },
-  {
-    id: 2,
-    type: 'Nghỉ không phép',
-    total: '2',
-  },
-  {
-    id: 3,
-    type: 'Nghỉ chế độ',
-    total: '60',
-  },
-  {
-    id: 4,
-    type: 'Xin làm thêm',
-    total: '5',
-  },
-];
 const columnDef = [
   { name: 'title', title: 'Tiêu đề' },
   { name: 'startDate', title: 'Ngày bắt đầu' },
