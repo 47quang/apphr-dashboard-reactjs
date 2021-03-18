@@ -5,7 +5,7 @@ const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
 const Account = React.lazy(() => import('src/pages/account/Account'));
 const NewAccount = React.lazy(() => import('src/pages/account/NewAccount'));
-const EditAccount = React.lazy(() => import('src/pages/account/NewAccount'));
+const EditAccount = React.lazy(() => import('src/pages/account/UpdateAccount'));
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
@@ -42,6 +42,7 @@ const routes = [
   { path: '/dashboard', name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: '/course', name: ROUTE_NAME.COURSE, component: Course },
   { path: '/account/create', name: ROUTE_NAME.NEW_ACCOUNT, component: NewAccount },
+  { path: '/account/:id', name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
   { path: '/account', name: ROUTE_NAME.ACCOUNT, component: Account },
   { path: '/profile', name: ROUTE_NAME.PROFILE, component: Profile },
   { path: '/proposal', name: ROUTE_NAME.PROPOSAL, component: Proposal },

@@ -62,7 +62,7 @@ const Account = () => {
             <QTable
               columnDef={columnDefOfAccounts}
               data={accounts}
-              route={'/account/tab1.id='}
+              route={'/account/'}
               idxColumnsFilter={[0]}
               deleteRow={deleteRow}
               disableCreate={true}
