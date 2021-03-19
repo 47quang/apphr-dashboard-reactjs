@@ -1,12 +1,8 @@
-import { CContainer } from "@coreui/react";
-import React from "react";
-
+import React from 'react';
+import BasicInfo from './BasicInfo';
+import JobTimelineInfo from './JobTimeline';
 const Profile = ({ t, location }) => {
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <div>This is Profile setting page</div>
-    </CContainer>
-  );
+  return <JobTimelineInfo />;
 };
 
 export default Profile;
