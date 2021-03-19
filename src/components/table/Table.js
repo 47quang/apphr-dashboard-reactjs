@@ -210,7 +210,7 @@ const QTable = (props) => {
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
-  const colHeight = columnDef.length < 6 ? Math.floor((0.8 / (columnDef.length - 1)) * 100) : 17;
+  const colHeight = columnDef.length < 6 ? Math.floor((0.8 / (columnDef.length - 1)) * 100) : 15;
   const tableColumnExtensions = columnDef.map((col, idx) => {
     return {
       columnName: col.name,

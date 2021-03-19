@@ -30,7 +30,6 @@ const Account = () => {
   const accounts = useSelector((state) => state.account.accounts);
   const profiles = useSelector((state) => state.account.profiles);
   const [isDefaultTab, setIsDefaultTab] = useState(true);
-  console.log(accounts);
   useEffect(() => {
     // dispatch(fetchAccounts());
     // dispatch(fetchAllProfiles({isHaveAccount: false}));

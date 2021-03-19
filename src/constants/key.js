@@ -5,6 +5,8 @@ export const ROUTE_NAME = {
   NEW_ACCOUNT: 'New Account',
   ACCOUNT_UPDATE: 'Account Update',
   PROFILE: 'Profile',
+  NEW_PROFILE: 'New Profile',
+  PROFILE_UPDATE: 'Profile Update',
   PROPOSAL: 'Proposal',
   ROLL_UP: 'Roll up',
   NOTIFICATION: 'Notification',

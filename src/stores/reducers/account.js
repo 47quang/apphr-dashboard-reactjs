@@ -614,9 +614,9 @@ const accountReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case REDUX_STATE.account.SET_ACCOUNTS:
       return { ...state, accounts: payload };
-    case REDUX_STATE.account.SET_HOLIDAY:
+    case REDUX_STATE.account.SET_ACCOUNT:
       return { ...state, account: payload };
-    case REDUX_STATE.account.DELETE_HOLIDAY:
+    case REDUX_STATE.account.DELETE_ACCOUNT:
       return {
         ...state,
         accounts: state.accounts.filter((b) => b.id !== payload.id),

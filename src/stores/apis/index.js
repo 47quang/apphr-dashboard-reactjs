@@ -15,6 +15,7 @@ const API_PREFIX = {
   API_ACCOUNT: 'API_ACCOUNT',
   API_ROLE: '/api.role',
   API_PERMISSION: '/api.permission',
+  API_PROFILE: '/api.profile',
 };
 
 export const api = {
@@ -209,6 +210,30 @@ export const api = {
     },
     getAllPermission: (params) => {
       return client.get(API_PREFIX.API_PERMISSION, {
+        params: params,
+      });
+    },
+  },
+  profile: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_PROFILE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_PROFILE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_PROFILE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_PROFILE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_PROFILE + `/${id}`);
+    },
+    getAllRole: (params) => {
+      return client.get(API_PREFIX.API_PROFILE, {
         params: params,
       });
     },

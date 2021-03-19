@@ -7,6 +7,8 @@ const Account = React.lazy(() => import('src/pages/account/Account'));
 const NewAccount = React.lazy(() => import('src/pages/account/NewAccount'));
 const EditAccount = React.lazy(() => import('src/pages/account/UpdateAccount'));
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
+const NewProfile = React.lazy(() => import('src/pages/profile/NewProfile'));
+const EditProfile = React.lazy(() => import('src/pages/profile/UpdateProfile'));
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
@@ -46,6 +48,8 @@ const routes = [
   { path: '/account/create', name: ROUTE_NAME.NEW_ACCOUNT, component: NewAccount },
   { path: '/account/:id', name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
   { path: '/account', name: ROUTE_NAME.ACCOUNT, component: Account },
+  { path: '/profile/create', name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
+  { path: '/profile/:id', name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: '/profile', name: ROUTE_NAME.PROFILE, component: Profile },
   { path: '/proposal', name: ROUTE_NAME.PROPOSAL, component: Proposal },
   { path: '/roll-up', name: ROUTE_NAME.ROLL_UP, component: RollUp },
