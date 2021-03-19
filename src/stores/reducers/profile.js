@@ -262,6 +262,8 @@ const initialState = {
       countDay: 30,
     },
   ],
+  tabName: 'profile',
+  subTabName: 'basicInfo',
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -284,6 +286,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         roles: payload,
+      };
+    case REDUX_STATE.profile.SET_TAB_NAME:
+      return {
+        ...state,
+        tabName: payload,
+      };
+    case REDUX_STATE.profile.SET_SUB_TAB_NAME:
+      return {
+        ...state,
+        subTabName: payload,
       };
     default:
       return state;

@@ -93,3 +93,16 @@ export const fetchRoles = (params) => {
       });
   };
 };
+export const setTabName = (params) => {
+  return {
+    type: REDUX_STATE.profile.SET_TAB_NAME,
+    payload: params,
+  };
+};
+
+export const setSubTabName = (params) => {
+  return {
+    type: REDUX_STATE.profile.SET_SUB_TAB_NAME,
+    payload: params,
+  };
+};

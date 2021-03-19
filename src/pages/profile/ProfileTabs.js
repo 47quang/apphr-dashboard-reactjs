@@ -4,25 +4,39 @@ import { useDispatch, useSelector } from 'react-redux';
 import Contract from './Contract';
 import HistoryWorking from './HistoryWorking';
 import BasicInfo from './BasicInfo';
+import AcademicLevel from './AcademicLevel';
+import AddressInfo from './AddressInfo';
+import { setTabName, setSubTabName } from 'src/stores/actions/profile';
 
 const ProfileTabs = ({ isCreate, buttons }) => {
-  //const dispatch = useDispatch();
-  const [tabName, setTabName] = useState('profile');
-  const [subTabName, setSubTabName] = useState('basicInfo');
+  const dispatch = useDispatch();
+  const tabName = useSelector((state) => state.profile.tabName);
+  const subTabName = useSelector((state) => state.profile.subTabName);
   useEffect(() => {
     // dispatch(fetchAccounts());
     // dispatch(fetchAllProfiles({isHaveAccount: false}));
   }, []);
 
+  const handleChangeTab = (e) => {
+    if (e !== tabName) {
+      dispatch(setTabName(e));
+      dispatch(setSubTabName('basicInfo'));
+    }
+  };
+  const handleChangeSubTab = (e) => {
+    if (e !== tabName) {
+      dispatch(setSubTabName(e));
+    }
+  };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <CTabs activeTab="profile">
+      <CTabs activeTab={tabName} onActiveTabChange={handleChangeTab}>
         <CNav variant="tabs">
           <CNavItem color="pink">
             <CNavLink data-tab="profile">Hồ sơ cá nhân</CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink data-tab="request" hidden={!isCreate}>
+            <CNavLink data-tab="request" hidden={isCreate}>
               Đề xuất cá nhân
             </CNavLink>
           </CNavItem>
@@ -32,7 +46,7 @@ const ProfileTabs = ({ isCreate, buttons }) => {
         </CNav>
         <CTabContent>
           <CTabPane data-tab="profile">
-            <CTabs activeTab="basicInfo">
+            <CTabs activeTab={subTabName} onActiveTabChange={handleChangeSubTab}>
               <CNav variant="tabs">
                 <CNavItem>
                   <CNavLink data-tab="basicInfo">Thông tin cơ bản</CNavLink>
@@ -63,9 +77,13 @@ const ProfileTabs = ({ isCreate, buttons }) => {
                 <CTabPane data-tab="contract">
                   <Contract isCreate={isCreate} />
                 </CTabPane>
-                <CTabPane data-tab="qualification">3</CTabPane>
+                <CTabPane data-tab="qualification">
+                  <AcademicLevel />
+                </CTabPane>
                 <CTabPane data-tab="certificate">4</CTabPane>
-                <CTabPane data-tab="contact">5</CTabPane>
+                <CTabPane data-tab="contact">
+                  <AddressInfo />
+                </CTabPane>
                 <CTabPane data-tab="salary">6</CTabPane>
                 <CTabPane data-tab="DiffInfo">7</CTabPane>
               </CTabContent>

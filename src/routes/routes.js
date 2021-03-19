@@ -3,12 +3,17 @@ import { ROUTE_NAME } from '../constants/key';
 
 const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
+
 const Account = React.lazy(() => import('src/pages/account/Account'));
 const NewAccount = React.lazy(() => import('src/pages/account/NewAccount'));
 const EditAccount = React.lazy(() => import('src/pages/account/UpdateAccount'));
+
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
 const NewProfile = React.lazy(() => import('src/pages/profile/NewProfile'));
 const EditProfile = React.lazy(() => import('src/pages/profile/UpdateProfile'));
+const NewContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
+const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
+
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
@@ -45,9 +50,13 @@ const routes = [
   { path: '/', exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: '/dashboard', name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: '/course', name: ROUTE_NAME.COURSE, component: Course },
+
   { path: '/account/create', name: ROUTE_NAME.NEW_ACCOUNT, component: NewAccount },
   { path: '/account/:id', name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
   { path: '/account', name: ROUTE_NAME.ACCOUNT, component: Account },
+
+  { path: '/profile/contract/create', name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
+  { path: '/profile/contract/:id', name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
   { path: '/profile/create', name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
   { path: '/profile/:id', name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: '/profile', name: ROUTE_NAME.PROFILE, component: Profile },
