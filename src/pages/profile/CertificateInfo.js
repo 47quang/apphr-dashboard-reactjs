@@ -3,31 +3,26 @@ import { Add, Delete } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import Label from 'src/components/text/Label';
 
-const AcademicLevel = () => {
-  const initialAcademicLevelInfo = {
-    academicInfo: [
+const CertificateInfo = () => {
+  const initialCertificateInfo = {
+    certificateInfo: [
       {
-        academicLevel: 'skype',
-        major: 'klaus@formik.com',
-        educationPlace: 'ĐHBK',
+        name: 'skype',
+        certificateType: 'klaus@formik.com',
+        certificatePlace: 'ĐHBK',
         note: 'ádkjfhakdjfh',
-        date: '',
+        startDate: '',
+        endDate: '',
       },
     ],
   };
-  const academicLevels = [
-    { id: 'intermediate', name: 'Trung cấp' },
-    { id: 'college', name: 'Cao đẳng' },
-    { id: 'university', name: 'Đại học' },
-    { id: 'master', name: 'Thạc sĩ' },
-    { id: 'doctor_of_philosophy', name: 'Tiến sĩ' },
-  ];
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <Formik
-            initialValues={initialAcademicLevelInfo}
+            initialValues={initialCertificateInfo}
             onSubmit={(values) => {
               console.log(values);
             }}
@@ -36,11 +31,11 @@ const AcademicLevel = () => {
               return (
                 <Form>
                   <FieldArray
-                    name="academicInfo"
+                    name="certificateInfo"
                     render={({ insert, remove, push }) => (
                       <div>
-                        {values.academicInfo.length > 0 &&
-                          values.academicInfo.map((friend, index) => (
+                        {values.certificateInfo.length > 0 &&
+                          values.certificateInfo.map((friend, index) => (
                             <div key={index}>
                               <div className={'d-flex justify-content-between'}>
                                 <h5>{index + 1}.</h5>
@@ -51,30 +46,29 @@ const AcademicLevel = () => {
                               <hr className="mt-1" />
                               <div className="row">
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Trình độ'} />
-                                  <Field className={'form-control'} name={`academicInfo.${index}.academicLevel`} component="select">
-                                    {academicLevels.map((ch, idx) => (
-                                      <option key={idx} value={ch.id}>
-                                        {ch.name}
-                                      </option>
-                                    ))}
-                                  </Field>
+                                  <Label text={'Tên chứng chỉ'} />
+                                  <Field
+                                    type="text"
+                                    className={'form-control'}
+                                    name={`certificateInfo.${index}.academicLevel`}
+                                    placeholder="Nhập tên chứng chỉ"
+                                  />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Chuyên ngành'} />
+                                  <Label text={'Loại chứng chỉ'} />
                                   <Field
                                     className={'form-control'}
-                                    name={`academicInfo.${index}.major`}
-                                    placeholder="Nhập chuyên ngành"
+                                    name={`certificateInfo.${index}.certificateType`}
+                                    placeholder="Nhập loại chứng chỉ"
                                     type="text"
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Nơi đào tạo'} />
+                                  <Label text={'Nơi cấp'} />
                                   <Field
                                     className={'form-control'}
-                                    name={`academicInfo.${index}.educationPlace`}
-                                    placeholder="Nhập nơi đào tạo"
+                                    name={`certificateInfo.${index}.certificatePlace`}
+                                    placeholder="Nhập nơi cấp"
                                     type="text"
                                   />
                                 </div>
@@ -82,19 +76,23 @@ const AcademicLevel = () => {
                               <div className="row">
                                 <div className="form-group col-lg-4">
                                   <Label text={'Ngày cấp bằng'} />
-                                  <input type="date" className={'form-control'} rows={5} name={`academicInfo.${index}.date`} />
+                                  <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.stateDate`} />
+                                </div>
+                                <div className="form-group col-lg-4">
+                                  <Label text={'Ngày hết hạn'} />
+                                  <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.endDate`} />
                                 </div>
                               </div>
                               <div className="row">
                                 <div className="form-group col-lg-12">
                                   <Label text={'Ghi chú'} />
-                                  <textarea className={'form-control'} rows={5} name={`academicInfo.${index}.note`} />
+                                  <textarea className={'form-control'} rows={5} name={`certificateInfo.${index}.note`} />
                                 </div>
                               </div>
                             </div>
                           ))}
                         <div className="d-flex justify-content-center">
-                          {/* <button type="button" className="btn btn-primary" onClick={() => push({ academicLevel: 'skype', major: '' })}>
+                          {/* <button type="button" className="btn btn-primary" onClick={() => push({name: 'skype', certificateType: '' })}>
                             <AddCircle /> Thêm kênh liên lạc
                           </button> */}
                           <button
@@ -102,7 +100,14 @@ const AcademicLevel = () => {
                             style={{ border: 'dotted 0.5px black' }}
                             className="px-5 py-1 bg-white"
                             onClick={() =>
-                              push({ academicLevel: 'skype', major: 'klaus@formik.com', educationPlace: 'ĐHBK', note: 'ádkjfhakdjfh', date: '' })
+                              push({
+                                name: 'skype',
+                                certificateType: 'klaus@formik.com',
+                                certificatePlace: 'ĐHBK',
+                                note: 'ádkjfhakdjfh',
+                                startDate: '',
+                                endDate: '',
+                              })
                             }
                           >
                             <Add /> Thêm
@@ -142,4 +147,4 @@ const AcademicLevel = () => {
     </CContainer>
   );
 };
-export default AcademicLevel;
+export default CertificateInfo;
