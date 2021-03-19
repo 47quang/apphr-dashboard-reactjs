@@ -10,6 +10,7 @@ import positionReducer from './position';
 import departmentReducer from './department';
 import holidayReducer from './holiday';
 import accountReducer from './account';
+import roleReducer from './role';
 
 export default combineReducers({
   style: styleReducer,
@@ -23,4 +24,5 @@ export default combineReducers({
   department: departmentReducer,
   holiday: holidayReducer,
   account: accountReducer,
+  role: roleReducer,
 });

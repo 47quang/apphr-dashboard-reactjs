@@ -8,7 +8,7 @@ import { AccountInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
 
-const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissions }) => {
+const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissions, roles }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -211,7 +211,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.username}
-                    isError={errors.name && touched.username}
+                    isError={errors.username && touched.username}
                     errorMessage={errors.username}
                   />
                   <CommonTextInput
@@ -234,11 +234,11 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     onBlur={handleBlur('role')}
                     onChange={handleChange('role')}
                     inputID={'role'}
-                    lstSelectOptions={[]}
-                    placeholder={'DEV FRONT END'}
+                    lstSelectOptions={roles}
+                    placeholder={'Chọn vai trò'}
                     isRequiredField
                     isTouched={touched.role}
-                    isError={errors.name && touched.role}
+                    isError={errors.role && touched.role}
                     errorMessage={errors.role}
                   />
                   <CommonTextInput
@@ -268,24 +268,24 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                           value={permission.group}
                           checked={initCheck(
                             permission.children.map((per) => per.id),
-                            values.checks,
+                            values.permissions,
                           )}
                           onChange={(event) => {
                             const thisPermission = permission.children.map((per) => per.id);
                             setFieldValue(permission.group, event.target.checked);
                             if (event.target.checked) {
-                              setFieldValue('checks', Array.from(new Set([...values.checks, ...thisPermission])));
+                              setFieldValue('permissions', Array.from(new Set([...values.permissions, ...thisPermission])));
                             } else {
                               setFieldValue(
-                                'checks',
-                                values.checks.filter((x) => !thisPermission.includes(x)),
+                                'permissions',
+                                values.permissions.filter((x) => !thisPermission.includes(x)),
                               );
                             }
                           }}
                         />
                         {permission.name}
                         <FieldArray
-                          name="checks"
+                          name="permissions"
                           render={(arrayHelpers) => {
                             return (
                               <div className="mx-4 px-2">
@@ -294,15 +294,15 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                                     <label>
                                       <Checkbox
                                         color="primary"
-                                        name="checks_"
+                                        name="permissions_"
                                         type="checkbox"
                                         value={per.id}
-                                        checked={values.checks.includes(per.id)}
+                                        checked={values.permissions.includes(per.id)}
                                         onChange={(e) => {
                                           if (e.target.checked) {
                                             arrayHelpers.push(per.id);
                                           } else {
-                                            const idx = values.checks.indexOf(per.id);
+                                            const idx = values.permissions.indexOf(per.id);
                                             arrayHelpers.remove(idx);
                                           }
                                         }}

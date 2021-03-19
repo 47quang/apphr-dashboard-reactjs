@@ -13,6 +13,8 @@ const API_PREFIX = {
   API_USER: '/api.user',
   API_META: '/api.meta/__type_holiday',
   API_ACCOUNT: 'API_ACCOUNT',
+  API_ROLE: '/api.role',
+  API_PERMISSION: '/api.permission',
 };
 
 export const api = {
@@ -178,6 +180,35 @@ export const api = {
     },
     getAllProfiles: (params) => {
       return client.get(API_PREFIX.API_ACCOUNT, {
+        params: params,
+      });
+    },
+    getAllRole: (params) => {
+      return client.get(API_PREFIX.API_ROLE, {
+        params: params,
+      });
+    },
+  },
+  role: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ROLE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ROLE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ROLE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ROLE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ROLE + `/${id}`);
+    },
+    getAllPermission: (params) => {
+      return client.get(API_PREFIX.API_PERMISSION, {
         params: params,
       });
     },
