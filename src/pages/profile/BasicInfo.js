@@ -2,6 +2,7 @@ import { CContainer } from '@coreui/react';
 import { Field, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -23,8 +24,10 @@ const BasicInfo = () => {
     birthday: Date.now(),
     gender: 1,
     id: '',
+    have_id: false,
     id_date: '',
     id_place: '',
+    have_passport: false,
     passport: '',
     passport_start: '',
     passport_end: '',
@@ -151,97 +154,109 @@ const BasicInfo = () => {
                   </div>
                   <Label text="Chứng minh thư/Hộ chiếu" labelID="checkbox-id-password" />
                   <div className="row" role="group" aria-labelledby="checkbox-id-password">
-                    <div className="col-lg-6">
-                      <label>
-                        <Field type="checkbox" name="checked" value="id" />
-                        Chứng minh thư
-                      </label>
+                    <div className="col-lg-6 pl-4">
+                      <CommonCheckbox label={'CMND/CCCD'} value={values.have_id} onBlur={handleBlur('have_id')} onChange={handleChange('have_id')} />
                     </div>
-                    <div className="col-lg-6"></div>
+                    <div className="col-lg-6 pl-4">
+                      <CommonCheckbox
+                        label={'Hộ chiếu'}
+                        value={values.have_passport}
+                        onBlur={handleBlur('have_passport')}
+                        onChange={handleChange('have_passport')}
+                      />
+                    </div>
                   </div>
                   <div className="row">
                     <div className="col-lg-6">
-                      <CommonTextInput
-                        containerClassName={'form-group'}
-                        value={values.id}
-                        onBlur={handleBlur('id')}
-                        onChange={handleChange('id')}
-                        inputID={'id'}
-                        labelText={'Số CMND/CCCD'}
-                        inputType={'text'}
-                        placeholder={'Nhập số CMND/CCCD'}
-                        inputClassName={'form-control'}
-                      />
-                      <CommonTextInput
-                        containerClassName={'form-group'}
-                        value={values.id_date}
-                        onBlur={handleBlur('id_date')}
-                        onChange={handleChange('id_date')}
-                        inputID={'id_date'}
-                        labelText={'Ngày cấp'}
-                        inputType={'date'}
-                        placeholder={'Chọn ngày cấp'}
-                        inputClassName={'form-control'}
-                      />
-                      <CommonSelectInput
-                        containerClassName={'form-group'}
-                        value={values.id_place}
-                        onBlur={handleBlur('id_place')}
-                        onChange={handleChange('id_place')}
-                        inputID={'id_place'}
-                        labelText={'Nơi cấp'}
-                        selectClassName={'form-control'}
-                        placeholder={'Chọn tỉnh/thành phố'}
-                        lstSelectOptions={provinces}
-                      />
+                      {values.have_id && (
+                        <>
+                          <CommonTextInput
+                            containerClassName={'form-group'}
+                            value={values.id}
+                            onBlur={handleBlur('id')}
+                            onChange={handleChange('id')}
+                            inputID={'id'}
+                            labelText={'Số CMND/CCCD'}
+                            inputType={'text'}
+                            placeholder={'Nhập số CMND/CCCD'}
+                            inputClassName={'form-control'}
+                          />
+                          <CommonTextInput
+                            containerClassName={'form-group'}
+                            value={values.id_date}
+                            onBlur={handleBlur('id_date')}
+                            onChange={handleChange('id_date')}
+                            inputID={'id_date'}
+                            labelText={'Ngày cấp'}
+                            inputType={'date'}
+                            placeholder={'Chọn ngày cấp'}
+                            inputClassName={'form-control'}
+                          />
+                          <CommonSelectInput
+                            containerClassName={'form-group'}
+                            value={values.id_place}
+                            onBlur={handleBlur('id_place')}
+                            onChange={handleChange('id_place')}
+                            inputID={'id_place'}
+                            labelText={'Nơi cấp'}
+                            selectClassName={'form-control'}
+                            placeholder={'Chọn tỉnh/thành phố'}
+                            lstSelectOptions={provinces}
+                          />
+                        </>
+                      )}
                     </div>
                     <div className="col-lg-6">
-                      <CommonTextInput
-                        containerClassName={'form-group'}
-                        value={values.passport}
-                        onBlur={handleBlur('passport')}
-                        onChange={handleChange('passport')}
-                        inputID={'passport'}
-                        labelText={'Hộ chiếu'}
-                        inputType={'text'}
-                        placeholder={'Nhập hộ chiếu'}
-                        inputClassName={'form-control'}
-                      />
-                      <div className="row">
-                        <CommonTextInput
-                          containerClassName={'form-group col-6'}
-                          value={values.passport_start}
-                          onBlur={handleBlur('passport_start')}
-                          onChange={handleChange('passport_start')}
-                          inputID={'passport_start'}
-                          labelText={'Ngày cấp'}
-                          inputType={'date'}
-                          placeholder={'Chọn ngày'}
-                          inputClassName={'form-control'}
-                        />
-                        <CommonTextInput
-                          containerClassName={'form-group col-6'}
-                          value={values.passport_end}
-                          onBlur={handleBlur('passport_end')}
-                          onChange={handleChange('passport_end')}
-                          inputID={'passport_end'}
-                          labelText={'Ngày hết hạn'}
-                          inputType={'date'}
-                          placeholder={'Chọn ngày'}
-                          inputClassName={'form-control'}
-                        />
-                      </div>
-                      <CommonSelectInput
-                        containerClassName={'form-group'}
-                        value={values.passport_place}
-                        onBlur={handleBlur('passport_place')}
-                        onChange={handleChange('passport_place')}
-                        inputID={'passport_place'}
-                        labelText={'Nơi cấp'}
-                        selectClassName={'form-control'}
-                        placeholder={'Chọn tỉnh/thành phố'}
-                        lstSelectOptions={provinces}
-                      />
+                      {values.have_passport && (
+                        <>
+                          <CommonTextInput
+                            containerClassName={'form-group'}
+                            value={values.passport}
+                            onBlur={handleBlur('passport')}
+                            onChange={handleChange('passport')}
+                            inputID={'passport'}
+                            labelText={'Hộ chiếu'}
+                            inputType={'text'}
+                            placeholder={'Nhập hộ chiếu'}
+                            inputClassName={'form-control'}
+                          />
+                          <div className="row">
+                            <CommonTextInput
+                              containerClassName={'form-group col-6'}
+                              value={values.passport_start}
+                              onBlur={handleBlur('passport_start')}
+                              onChange={handleChange('passport_start')}
+                              inputID={'passport_start'}
+                              labelText={'Ngày cấp'}
+                              inputType={'date'}
+                              placeholder={'Chọn ngày'}
+                              inputClassName={'form-control'}
+                            />
+                            <CommonTextInput
+                              containerClassName={'form-group col-6'}
+                              value={values.passport_end}
+                              onBlur={handleBlur('passport_end')}
+                              onChange={handleChange('passport_end')}
+                              inputID={'passport_end'}
+                              labelText={'Ngày hết hạn'}
+                              inputType={'date'}
+                              placeholder={'Chọn ngày'}
+                              inputClassName={'form-control'}
+                            />
+                          </div>
+                          <CommonSelectInput
+                            containerClassName={'form-group'}
+                            value={values.passport_place}
+                            onBlur={handleBlur('passport_place')}
+                            onChange={handleChange('passport_place')}
+                            inputID={'passport_place'}
+                            labelText={'Nơi cấp'}
+                            selectClassName={'form-control'}
+                            placeholder={'Chọn tỉnh/thành phố'}
+                            lstSelectOptions={provinces}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                 </form>

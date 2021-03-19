@@ -15,6 +15,7 @@ const CommonSelectInput = ({
   isTouched,
   placeholder,
   isDisable,
+  name,
   lstSelectOptions = [],
 }) => {
   const hash = lstSelectOptions.reduce((acc, val) => {
@@ -23,13 +24,14 @@ const CommonSelectInput = ({
   }, {});
   return (
     <div className={containerClassName}>
-      <Label text={labelText} required={isRequiredField} labelID={inputID} />
+      {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
       <select
         className={selectClassName}
         onChange={onChange}
         onBlur={onBlur}
         value={value}
         id={inputID}
+        name={inputID}
         required={isRequiredField}
         disabled={isDisable}
       >

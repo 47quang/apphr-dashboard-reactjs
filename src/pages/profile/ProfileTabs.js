@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Contract from './Contract';
 import HistoryWorking from './HistoryWorking';
+import BasicInfo from './BasicInfo';
 
 const ProfileTabs = ({ isCreate, buttons }) => {
   //const dispatch = useDispatch();
@@ -56,7 +57,9 @@ const ProfileTabs = ({ isCreate, buttons }) => {
                 </CNavItem>
               </CNav>
               <CTabContent>
-                <CTabPane data-tab="basicInfo">1</CTabPane>
+                <CTabPane data-tab="basicInfo">
+                  <BasicInfo />
+                </CTabPane>
                 <CTabPane data-tab="contract">
                   <Contract isCreate={isCreate} />
                 </CTabPane>

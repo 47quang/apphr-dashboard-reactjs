@@ -1,3 +1,5 @@
+import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 
 const { CContainer } = require('@coreui/react');
@@ -9,7 +11,7 @@ const JobTimelineInfo = () => {
     contractDate: '',
     endDate: '',
     note: '',
-    isFired: '',
+    isFired: false,
     firedNote: '',
     firedDate: '',
   };
@@ -67,8 +69,54 @@ const JobTimelineInfo = () => {
                     errorMessage={errors.endDate}
                   />
                 </div>
-                <div className="row"></div>
-                <div className="row"></div>
+                <div className="row">
+                  <CommonMultipleTextInput
+                    containerClassName={'form-group col-lg-12'}
+                    inputClassName={'form-control'}
+                    value={values.note}
+                    inputID={'note'}
+                    onChange={handleChange('note')}
+                    onBlur={handleBlur('note')}
+                    labelText={'Ghi chú'}
+                  />
+                </div>
+                <div className={'row'}>
+                  <CommonCheckbox
+                    containerClassName={'col-lg-12'}
+                    inputClassName={''}
+                    checkboxId={'isFired'}
+                    label={'Nghỉ việc'}
+                    onChange={handleChange('isFired')}
+                    onBlur={handleBlur('isFired')}
+                    value={values.isFired}
+                  />
+                </div>
+                {values.isFired && (
+                  <>
+                    <div className={'row'}>
+                      <CommonMultipleTextInput
+                        containerClassName={'form-group col-lg-12'}
+                        inputClassName={'form-control'}
+                        value={values.firedNote}
+                        inputID={'reason'}
+                        onChange={handleChange('firedNote')}
+                        onBlur={handleBlur('firedNote')}
+                        labelText={'Lý do nghỉ việc'}
+                      />
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values.firedDate}
+                        onBlur={handleBlur('firedDate')}
+                        onChange={handleChange('firedDate')}
+                        inputID={'firedDate'}
+                        labelText={'Ngày nghỉ việc'}
+                        inputType={'date'}
+                        placeholder={'Ngày nghỉ việc'}
+                        inputClassName={'form-control'}
+                      />
+                    </div>
+                  </>
+                )}
               </form>
             )}
           </Formik>
@@ -79,13 +127,3 @@ const JobTimelineInfo = () => {
 };
 
 export default JobTimelineInfo;
-
-{
-  /* <CContainer fluid className="c-main mb-3 px-4">
-      <div className="m-auto">
-        <div className="shadow bg-white rounded p-4">
-          <Formik>{({ values, handleBlur, handleSubmit, errors, touched }) => <form></form>}</Formik>
-        </div>
-      </div>
-    </CContainer> */
-}
