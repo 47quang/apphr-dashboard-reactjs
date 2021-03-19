@@ -30,5 +30,7 @@ export const ROUTE_NAME = {
   PERMISSION: 'Permission',
   PERMISSION_GROUP: 'PermissionGroup',
   ROLE: 'Role',
+  NEW_ROLE: 'New Role',
+  ROLE_UPDATE: 'Role Update',
   AUTHORIZATION: 'Authorization',
 };

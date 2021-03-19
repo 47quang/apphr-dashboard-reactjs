@@ -113,3 +113,7 @@ export const AccountInfoSchema = Yup.object().shape({
   }),
   coefficient: Yup.number().min(0, 'Hệ số công phải là một số không âm').required('Bắt buộc phải nhập hệ số công'),
 });
+export const RoleInfoSchema = Yup.object().shape({
+  id: Yup.string().required('Bắt buộc nhập vào tên vai trò'),
+  name: Yup.string().required('Bắt buộc nhập vào tên vai trò'),
+});

@@ -114,12 +114,13 @@ const initialState = {
     },
   ],
   account: {
-    checks: [1, 2, 3, 4, 5, 13, 14, 20],
+    permissions: [1, 2, 3, 4, 5, 13, 14, 20],
     username: '',
     password: '',
     role: '',
     coefficient: 0,
   },
+  roles: [],
   profiles: [
     {
       id: 1,
@@ -639,6 +640,11 @@ const accountReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         profile: payload,
+      };
+    case REDUX_STATE.account.GET_ROLES:
+      return {
+        ...state,
+        roles: payload,
       };
     default:
       return state;

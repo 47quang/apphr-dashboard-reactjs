@@ -36,6 +36,8 @@ const EditBranch = React.lazy(() => import('src/pages/setting/branch/UpdateBranc
 const Permission = React.lazy(() => import('src/pages/setting/authorization/permission/Permission'));
 const PermissionGroup = React.lazy(() => import('src/pages/setting/authorization/permission-group/PermissionGroup'));
 const Role = React.lazy(() => import('src/pages/setting/authorization/role/Role'));
+const NewRole = React.lazy(() => import('src/pages/setting/authorization/role/NewRole'));
+const EditRole = React.lazy(() => import('src/pages/setting/authorization/role/UpdateRole'));
 
 const routes = [
   { path: '/', exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -149,6 +151,16 @@ const routes = [
     path: '/setting/authorization/permission-group',
     name: ROUTE_NAME.PERMISSION_GROUP,
     component: PermissionGroup,
+  },
+  {
+    path: '/setting/role/create',
+    name: ROUTE_NAME.NEW_ROLE,
+    component: NewRole,
+  },
+  {
+    path: '/setting/role/:id',
+    name: ROUTE_NAME.ROLE_UPDATE,
+    component: EditRole,
   },
   {
     path: '/setting/role',
