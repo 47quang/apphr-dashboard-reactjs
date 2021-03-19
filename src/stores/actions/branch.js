@@ -1,5 +1,5 @@
-import { api } from "../apis/index";
-import { REDUX_STATE } from "../states";
+import { api } from '../apis/index';
+import { REDUX_STATE } from '../states';
 
 export const fetchBranches = () => {
   return (dispatch, getState) => {
@@ -40,10 +40,10 @@ export const createBranch = (params) => {
   };
 };
 
-export const updateBranch = (data, id) => {
+export const updateBranch = (data) => {
   return (dispatch, getState) => {
     api.branch
-      .put(data, id)
+      .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
@@ -66,7 +66,7 @@ export const deleteBranch = (id) => {
   };
 };
 
-export const setEmptyDBranch = () => {
+export const setEmptyBranch = () => {
   return {
     type: REDUX_STATE.branch.EMPTY_VALUE,
     payload: [],
