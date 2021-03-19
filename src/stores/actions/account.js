@@ -90,10 +90,23 @@ export const setEmptyProfile = () => {
 
 export const fetchAllProfiles = (params) => {
   return (dispatch, getState) => {
-    api.holiday
+    api.account
       .getAllRequest(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchRoles = (params) => {
+  return (dispatch, getState) => {
+    api.account
+      .getAllRole(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.account.GET_ROLES, payload });
       })
       .catch((err) => {
         console.log(err);
