@@ -1,9 +1,10 @@
 import React from 'react';
+import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
 import JobTimelineInfo from './JobTimeline';
 const Profile = ({ t, location }) => {
-  return <AddressInfo />;
+  return <AcademicLevel />;
 };
 
 export default Profile;
