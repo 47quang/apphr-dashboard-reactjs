@@ -50,8 +50,8 @@ const BasicInfo = () => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto row">
-        <div className="col-8">
-          <div className="shadow bg-white rounded p-4 container">
+        <div className="col-xl-8 mb-4">
+          <div className="shadow bg-white rounded px-4 container pt-4 pb-5">
             <FormHeader text="Thông tin cơ bản" />
             <Formik initialValues={employeeInfo}>
               {({ values, errors, touched, handleBlur, handleChange }) => (
@@ -153,21 +153,17 @@ const BasicInfo = () => {
                     />
                   </div>
                   <Label text="Chứng minh thư/Hộ chiếu" labelID="checkbox-id-password" />
-                  <div className="row" role="group" aria-labelledby="checkbox-id-password">
-                    <div className="col-lg-6 pl-4">
-                      <CommonCheckbox label={'CMND/CCCD'} value={values.have_id} onBlur={handleBlur('have_id')} onChange={handleChange('have_id')} />
-                    </div>
-                    <div className="col-lg-6 pl-4">
-                      <CommonCheckbox
-                        label={'Hộ chiếu'}
-                        value={values.have_passport}
-                        onBlur={handleBlur('have_passport')}
-                        onChange={handleChange('have_passport')}
-                      />
-                    </div>
-                  </div>
+                  <div className="row" role="group" aria-labelledby="checkbox-id-password"></div>
                   <div className="row">
                     <div className="col-lg-6">
+                      <div className="pl-2">
+                        <CommonCheckbox
+                          label={'CMND/CCCD'}
+                          value={values.have_id}
+                          onBlur={handleBlur('have_id')}
+                          onChange={handleChange('have_id')}
+                        />
+                      </div>
                       {values.have_id && (
                         <>
                           <CommonTextInput
@@ -207,6 +203,14 @@ const BasicInfo = () => {
                       )}
                     </div>
                     <div className="col-lg-6">
+                      <div className="pl-2">
+                        <CommonCheckbox
+                          label={'Hộ chiếu'}
+                          value={values.have_passport}
+                          onBlur={handleBlur('have_passport')}
+                          onChange={handleChange('have_passport')}
+                        />
+                      </div>
                       {values.have_passport && (
                         <>
                           <CommonTextInput
@@ -264,7 +268,7 @@ const BasicInfo = () => {
             </Formik>
           </div>
         </div>
-        <div className="col-4">
+        <div className="col-xl-4">
           <div className="shadow bg-white rounded p-4 container">
             <FormHeader text="Vị trí làm việc" />
             <Formik initialValues={positionInfo}>

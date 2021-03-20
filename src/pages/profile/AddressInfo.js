@@ -62,7 +62,7 @@ const AddressInfo = () => {
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto row">
         <div className="col-xl-7">
-          <div className="shadow bg-white rounded p-4">
+          <div className="shadow bg-white rounded p-4 mb-4">
             <FormHeader text={'Địa chỉ thường trú'} />
             <Formik initialValues={permanentAddressInfo}>
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
@@ -152,8 +152,8 @@ const AddressInfo = () => {
               )}
             </Formik>
           </div>
-          <div className="my-4" />
-          <div className="shadow bg-white rounded p-4">
+
+          <div className="shadow bg-white rounded p-4 mb-4">
             <FormHeader text={'Liên hệ khẩn cấp'} />
             <Formik initialValues={urgentContactInfo}>
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
@@ -209,7 +209,6 @@ const AddressInfo = () => {
               )}
             </Formik>
           </div>
-          <div className="my-4" />
         </div>
         <div className={'col-xl-5'}>
           <div className="shadow bg-white rounded p-4">
