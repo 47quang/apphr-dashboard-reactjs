@@ -33,10 +33,7 @@ const DepartmentItemBody = ({ departmentRef, department, branches, buttons, subm
                     inputType={'text'}
                     placeholder={'Nhập mã phòng ban'}
                     inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.shortname}
-                    isError={errors.shortname && touched.shortname}
-                    errorMessage={errors.shortname}
+                    isDisable={true}
                   />
                 </div>
                 <div className="row">

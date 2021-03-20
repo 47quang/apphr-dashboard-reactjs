@@ -35,7 +35,7 @@ const NewAccount = ({ t, location, history }) => {
       name: 'Quay lại',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         accountInfoForm.current.handleSubmit(e);

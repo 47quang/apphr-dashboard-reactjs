@@ -33,7 +33,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         profileInfoForm.current.handleSubmit(e);

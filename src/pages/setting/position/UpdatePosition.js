@@ -52,7 +52,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         positionRef.current.handleSubmit(e);

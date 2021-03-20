@@ -22,7 +22,6 @@ const isBefore = (startTime, endTime) => {
   return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
 };
 export const SettingShiftInfoSchema = Yup.object().shape({
-  shortname: Yup.string().trim().required('Bắt buộc nhập mã ca làm'),
   name: Yup.string().trim().required('Bắt buộc nhập tên ca làm'),
   startCC: Yup.string().test('not empty', 'Bắt buộc chọn giờ check-in', function (value) {
     return !!value;
@@ -73,7 +72,6 @@ export const SettingHolidayLimitSchema = Yup.object().shape({
 
 //Position
 export const SettingPositionInfoSchema = Yup.object().shape({
-  shortname: Yup.string().required('Nhập mã của vị trí'),
   name: Yup.string().required('Bắt buộc nhập vào tên vị trí'),
   branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
     return value !== '0';
@@ -89,7 +87,6 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
-  shortname: Yup.string().required('Bắt buộc nhập vào mã chi nhánh'),
   name: Yup.string().required('Bắt buộc nhập vào tên của chi nhánh'),
   ipRouter: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), 'Địa chỉ IP không hợp lệ.'),
   address: Yup.string(),
@@ -98,7 +95,6 @@ export const SettingBranchInfoSchema = Yup.object().shape({
 
 //Department
 export const SettingDepartmentInfoSchema = Yup.object().shape({
-  shortname: Yup.string().required('Bắt buộc nhập vào mã phòng ban'),
   name: Yup.string().required('Bắt buộc nhập vào tên phòng ban'),
   branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
     return value !== '0';

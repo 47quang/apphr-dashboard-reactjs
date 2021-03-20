@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import QTable from 'src/components/table/Table';
 import { useDispatch, useSelector } from 'react-redux';
+import { CContainer } from '@coreui/react';
 
 const columnDef = [
   { name: 'id', title: 'Số thứ tự' },
@@ -26,14 +27,16 @@ const HistoryWorking = ({ isCreate }) => {
   if (isCreate) {
   } else {
     return (
-      <QTable
-        columnDef={columnDef}
-        data={history}
-        route={'/profile/historyWorking/'}
-        idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
-        deleteRow={deleteRow}
-        dateCols={[6, 7]}
-      />
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable
+          columnDef={columnDef}
+          data={history}
+          route={'/profile/historyWorking/'}
+          idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
+          deleteRow={deleteRow}
+          dateCols={[6, 7]}
+        />
+      </CContainer>
     );
   }
 };

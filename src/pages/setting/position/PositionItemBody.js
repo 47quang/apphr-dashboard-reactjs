@@ -45,10 +45,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     inputType={'text'}
                     placeholder={'Nhập mã vị trí'}
                     inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.shortname}
-                    isError={errors.shortname && touched.shortname}
-                    errorMessage={errors.shortname}
+                    isDisable={true}
                   />
                 </div>
 

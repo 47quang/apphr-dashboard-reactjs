@@ -94,15 +94,6 @@ const filteringColumnExtensions = [
   },
 ];
 
-const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
-
-const DateTypeProvider = (props) => <DataTypeProvider formatterComponent={DateFormatter} {...props} />;
-
-const MultiValuesFormatter = ({ value }) => {
-  return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
-};
-const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
-
 const AddRowPanel = ({ route, disableCreate }) => {
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
@@ -146,30 +137,29 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
       <Getter
         name="tableColumns"
         computed={({ tableColumns }) => {
-          tableColumns.splice(0, 0, {
-            key: 'behavior' + route,
-            type: 'behavior',
-            width: !disableEdit ? '10%' : '0%',
-            align: 'center',
-          });
-          return tableColumns;
+          return tableColumns.concat([
+            {
+              key: 'behavior' + route,
+              type: 'behavior',
+              width: !disableEdit ? '10%' : '0%',
+              align: 'center',
+            },
+          ]);
         }}
       />
-      <Template
-        name="tableCell"
-        predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE && !disableEdit}
-      >
+      <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
         {(params) => (
           <TemplateConnector>
             {(getters, { deleteRows, commitDeletedRows }) => (
               <TableCell className="px-0 py-0">
                 <Link to={`${route}${params.tableRow.rowId}`}>
-                  <IconButton disabled={disableEdit}>
+                  <IconButton hidden={disableEdit}>
                     <EditIcon />
                   </IconButton>
                 </Link>
+
                 <IconButton
-                  disabled={disableDelete}
+                  hidden={disableDelete}
                   onClick={() => {
                     setDeletingRowID(params.tableRow.rowId);
                     setOpenWarning(!openWarning);
@@ -188,7 +178,19 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
 };
 
 const QTable = (props) => {
-  const { columnDef, data, route, idxColumnsFilter, dateCols, multiValuesCols, deleteRow, disableCreate, disableDelete, disableEdit } = props;
+  const {
+    columnDef,
+    data,
+    route,
+    idxColumnsFilter,
+    dateCols,
+    multiValuesCols,
+    linkCols,
+    deleteRow,
+    disableCreate,
+    disableDelete,
+    disableEdit,
+  } = props;
   const exporterRef = useRef(null);
 
   const startExport = useCallback(() => {
@@ -198,6 +200,8 @@ const QTable = (props) => {
   const [defaultHiddenColumnNames] = useState([]);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
+  let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
+
   const [state, setState] = useState({
     columns: columnDef,
     selection: [],
@@ -210,7 +214,7 @@ const QTable = (props) => {
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
-  const colHeight = columnDef.length < 6 ? Math.floor((0.8 / (columnDef.length - 1)) * 100) : 15;
+  const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
   const tableColumnExtensions = columnDef.map((col, idx) => {
     return {
       columnName: col.name,
@@ -219,7 +223,7 @@ const QTable = (props) => {
       wordWrapEnabled: true,
     };
   });
-  tableColumnExtensions[0]['width'] = 10 + '%';
+  tableColumnExtensions[0]['width'] = 15 + '%';
 
   const columnsFilter = idxColumnsFilter.map((idx) => ({
     id: idx,
@@ -240,6 +244,20 @@ const QTable = (props) => {
       saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
     });
   };
+
+  const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
+
+  const DateTypeProvider = (props) => <DataTypeProvider formatterComponent={DateFormatter} {...props} />;
+
+  const MultiValuesFormatter = ({ value }) => {
+    return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
+  };
+  const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
+
+  const LinkFormatter = ({ value, column }) =>
+    value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : 'Chưa có hồ sơ';
+
+  const LinkTypeProvider = (props) => <DataTypeProvider formatterComponent={LinkFormatter} {...props} />;
 
   return (
     <div>
@@ -295,6 +313,7 @@ const QTable = (props) => {
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
+          <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
           <PagingState
             currentPage={state.currentPage}

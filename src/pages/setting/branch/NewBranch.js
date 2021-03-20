@@ -37,7 +37,7 @@ const NewBranchPage = ({ t, location, history }) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-
+    console.log(form);
     // Call API CREATE
     delete form.id;
     dispatch(createBranch(form, history));
@@ -52,7 +52,7 @@ const NewBranchPage = ({ t, location, history }) => {
       name: 'Quay lại',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         branchInfoForm.current.handleSubmit(e);

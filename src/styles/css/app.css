@@ -12,13 +12,25 @@
 }
 
 .ObjectPage-header-0-2-5 {
-  padding-right: 0 !important; 
+  padding-right: 0 !important;
 }
 
-.c-sidebar .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover {
+.c-sidebar .c-sidebar-nav-dropdown-toggle:hover,
+.c-sidebar .c-sidebar-nav-link:hover {
   background: #303c54 !important;
 }
 
 :host .ui5-shellbar-root {
   padding: 0.25rem 0.5rem !important;
+}
+button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+button:focus {
+  outline: none !important;
 }

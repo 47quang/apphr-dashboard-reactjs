@@ -39,10 +39,7 @@ const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, distri
                     inputType={'text'}
                     placeholder={'Nhập mã chi nhánh'}
                     inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.shortname}
-                    isError={errors.shortname && touched.shortname}
-                    errorMessage={errors.shortname}
+                    isDisable={true}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-6'}

@@ -3,6 +3,7 @@ import { REDUX_STATE } from '../states';
 const initialState = {
   holidays: [],
   holiday: {
+    id: 0,
     title: '',
     startDate: '',
     endDate: '',

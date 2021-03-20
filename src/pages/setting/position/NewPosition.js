@@ -36,7 +36,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
       name: 'Quay lại',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         positionRef.current.handleSubmit(e);

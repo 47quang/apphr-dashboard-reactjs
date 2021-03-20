@@ -53,7 +53,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         shiftRef.current.handleSubmit(e);

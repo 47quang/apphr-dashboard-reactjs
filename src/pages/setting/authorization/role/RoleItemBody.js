@@ -38,10 +38,7 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                     inputType={'text'}
                     placeholder={'Nhập tên vai trò'}
                     inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.id}
-                    isError={errors.id && touched.id}
-                    errorMessage={errors.id}
+                    isDisable={true}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-3'}
@@ -62,7 +59,7 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                 <div className="row">
                   {permissions.map((permission) => {
                     return (
-                      <div className="form-group col-lg-3">
+                      <div className="form-group col-lg-3" key={permission.id + 'group'}>
                         <Field
                           component={Checkbox}
                           color={'primary'}
@@ -92,7 +89,7 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                             return (
                               <div className="mx-4 px-2">
                                 {permission.children.map((per) => (
-                                  <div key={per.id}>
+                                  <div key={per.id + 'child'}>
                                     <label>
                                       <Checkbox
                                         color="primary"

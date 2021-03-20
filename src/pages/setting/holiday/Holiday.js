@@ -10,6 +10,7 @@ const columnDefOfRequestSetting = [
 ];
 
 const columnDef = [
+  { name: 'id', title: 'Mã ngày nghỉ' },
   { name: 'title', title: 'Tiêu đề' },
   { name: 'startDate', title: 'Ngày bắt đầu' },
   { name: 'endDate', title: 'Ngày kế thúc' },
@@ -53,8 +54,8 @@ const HolidayPage = ({ t, location, history }) => {
               columnDef={columnDef}
               data={holidays}
               route={'/setting/holiday/tab1.id='}
-              idxColumnsFilter={[0]}
-              dateCols={[1, 2]}
+              idxColumnsFilter={[1]}
+              dateCols={[3, 2]}
               deleteRow={deleteRow}
             />
           </CTabPane>

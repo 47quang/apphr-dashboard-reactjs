@@ -17,7 +17,7 @@ const columnDefOfProfiles = [
 ];
 
 const Profile = ({ t, location }) => {
-  const profiles = useSelector((state) => state.account.profiles);
+  const profiles = useSelector((state) => state.profile.profiles);
   useEffect(() => {
     // dispatch(fetchAllProfiles());
   }, []);

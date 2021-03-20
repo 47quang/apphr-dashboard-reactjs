@@ -32,7 +32,7 @@ const NewRole = ({ t, location, history }) => {
       name: 'Quay lại',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         roleInfoForm.current.handleSubmit(e);

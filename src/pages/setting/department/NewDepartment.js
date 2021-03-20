@@ -33,7 +33,7 @@ const NewDepartment = ({ t, location, history }) => {
       name: 'Quay lại',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);

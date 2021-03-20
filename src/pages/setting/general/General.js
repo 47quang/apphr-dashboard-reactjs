@@ -42,7 +42,7 @@ const SettingGeneralPage = ({ t, location }) => {
   };
   const buttons = [
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: updateSetting,
       name: 'Cập nhật',

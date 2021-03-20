@@ -6,11 +6,17 @@ const convertTime = (payload) => {
   payload.endDate = payload.endDate.replace('Z', '');
   return payload;
 };
+
+const handleAccounts = (payload) => {
+  return payload;
+};
+
 export const fetchAccounts = () => {
   return (dispatch, getState) => {
     api.account
       .getAll()
       .then(({ payload }) => {
+        payload = handleAccounts(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
       })
       .catch((err) => {
@@ -76,28 +82,8 @@ export const deleteAccount = (id) => {
 
 export const setEmptyAccount = () => {
   return {
-    type: REDUX_STATE.account.EMPTY_ACCOUNT_VALUE,
+    type: REDUX_STATE.account.EMPTY_VALUE,
     payload: [],
-  };
-};
-
-export const setEmptyProfile = () => {
-  return {
-    type: REDUX_STATE.account.EMPTY_PROFILE_VALUE,
-    payload: [],
-  };
-};
-
-export const fetchAllProfiles = (params) => {
-  return (dispatch, getState) => {
-    api.account
-      .getAllRequest(params)
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 };
 

@@ -42,7 +42,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);

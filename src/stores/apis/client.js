@@ -8,7 +8,7 @@ const getDefaultHeaders = () => {
 };
 
 const client = axios.create({
-  baseURL: 'http://13.212.137.159',
+  baseURL: 'http://13.212.141.121',
   headers: {
     'content-type': 'application/json',
   },

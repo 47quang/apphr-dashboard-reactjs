@@ -36,12 +36,9 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     inputID={'shortname'}
                     labelText={'Mã ca làm'}
                     inputType={'text'}
-                    placeholder={'Nhập mã ca làm'}
+                    placeholder={'Mã ca làm'}
+                    isDisable={true}
                     inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.shortname}
-                    isError={errors.shortname && touched.shortname}
-                    errorMessage={errors.shortname}
                   />
                 </div>
                 <div className="row">

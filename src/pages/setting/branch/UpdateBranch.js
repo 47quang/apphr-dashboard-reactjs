@@ -58,7 +58,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         branchInfoForm.current.handleSubmit(e);

@@ -42,7 +42,7 @@ const UpdateAccount = ({ t, location, history }) => {
       name: 'Reset',
     },
     {
-      type: 'submit',
+      type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
         accountInfoForm.current.handleSubmit(e);
