@@ -119,7 +119,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                       onChange={handleChange('endDate')}
                       inputID={'endDate'}
                       labelText={'Ngày kết thúc'}
-                      inputType={'datetime-local'}
+                      inputType={'date'}
                       inputClassName={'form-control'}
                       isDisable={true}
                     />
@@ -128,7 +128,6 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
               )}
             </Formik>
           </div>
-          ;
         </div>
         <div className="col-4 px-4">
           <div className="shadow bg-white rounded p-4 col-md-12">
@@ -180,7 +179,6 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
               )}
             </Formik>
           </div>
-          ;
         </div>
       </div>
       <div className="row px-4">
