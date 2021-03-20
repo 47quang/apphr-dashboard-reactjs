@@ -67,24 +67,24 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                           value={permission.group}
                           checked={initCheck(
                             permission.children.map((per) => per.id),
-                            values.permissions,
+                            values.permissionIds,
                           )}
                           onChange={(event) => {
                             const thisPermission = permission.children.map((per) => per.id);
                             setFieldValue(permission.group, event.target.checked);
                             if (event.target.checked) {
-                              setFieldValue('permissions', Array.from(new Set([...values.permissions, ...thisPermission])));
+                              setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
                             } else {
                               setFieldValue(
-                                'permissions',
-                                values.permissions.filter((x) => !thisPermission.includes(x)),
+                                'permissionIds',
+                                values.permissionIds.filter((x) => !thisPermission.includes(x)),
                               );
                             }
                           }}
                         />
                         {permission.name}
                         <FieldArray
-                          name="permissions"
+                          name="permissionIds"
                           render={(arrayHelpers) => {
                             return (
                               <div className="mx-4 px-2">
@@ -93,15 +93,15 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                                     <label>
                                       <Checkbox
                                         color="primary"
-                                        name="permissions_"
+                                        name="permissionIds"
                                         type="checkbox"
                                         value={per.id}
-                                        checked={values.permissions.includes(per.id)}
+                                        checked={values.permissionIds.includes(per.id)}
                                         onChange={(e) => {
                                           if (e.target.checked) {
                                             arrayHelpers.push(per.id);
                                           } else {
-                                            const idx = values.permissions.indexOf(per.id);
+                                            const idx = values.permissionIds.indexOf(per.id);
                                             arrayHelpers.remove(idx);
                                           }
                                         }}

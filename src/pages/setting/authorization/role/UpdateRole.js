@@ -12,7 +12,6 @@ const UpdateRole = ({ t, location, history, match }) => {
   const permissions = useSelector((state) => state.role.permissions);
 
   useEffect(() => {
-    dispatch(setEmptyRole());
     dispatch(fetchPermissions());
     dispatch(fetchRole(match?.params?.id));
   }, []);
@@ -29,7 +28,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/account');
+        history.push('/setting/role');
       },
       name: 'Quay lại',
     },
@@ -50,7 +49,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       name: 'Cập nhật',
     },
   ];
-
+  console.log(role);
   return <RoleItemBody roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
 };
 

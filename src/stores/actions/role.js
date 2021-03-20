@@ -27,6 +27,7 @@ export const fetchRole = (id) => {
     api.role
       .get(id)
       .then(({ payload }) => {
+        console.log(payload);
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
       })
       .catch((err) => {

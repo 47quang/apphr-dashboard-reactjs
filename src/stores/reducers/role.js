@@ -5,13 +5,9 @@ const initialState = {
   role: {
     id: '',
     name: '',
-    permissions: [],
+    permissionIds: [],
   },
   permissions: [],
-};
-const handlePayload = (payload) => {
-  payload.permissions = payload.permissions.map((per) => per.id);
-  return payload;
 };
 
 const roleReducer = (state = initialState, { type, payload }) => {
@@ -19,7 +15,6 @@ const roleReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.role.SET_ROLES:
       return { ...state, roles: payload };
     case REDUX_STATE.role.SET_ROLE:
-      payload = handlePayload(payload);
       return { ...state, role: payload };
     case REDUX_STATE.role.DELETE_ROLE:
       return {
