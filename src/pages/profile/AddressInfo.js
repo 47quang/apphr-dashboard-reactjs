@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
+import { REDUX_STATE } from 'src/stores/states';
 
 const { CContainer } = require('@coreui/react');
 const { Formik, FieldArray, Field, Form } = require('formik');
@@ -87,7 +88,7 @@ const AddressInfo = () => {
                       onChange={(e) => {
                         dispatch(fetchDistricts({ provinceId: e.target.value }));
                         dispatch({
-                          type: 'SET_WARDS',
+                          type: REDUX_STATE.location.SET_WARDS,
                           payload: [],
                         });
                         handleChange('provinceId')(e);

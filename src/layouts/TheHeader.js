@@ -1,14 +1,11 @@
+import { CBreadcrumbRouter, CHeader, CHeaderNav, CToggler } from '@coreui/react';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { CHeader, CHeaderNav, CBreadcrumbRouter, CToggler } from '@coreui/react';
-import routes from 'src/routes/routes';
-import '../styles/scss/header.scss';
 import { useTranslation } from 'react-i18next';
-import TheHeaderDropdownNotif from './TheHeaderDropdownNotif';
-import TheHeaderDropdownMssg from './TheHeaderDropdownMssg';
-import TheHeaderDropdownTasks from './TheHeaderDropdownTasks';
-import TheHeaderDropdown from './TheHeaderDropdown';
+import { useDispatch, useSelector } from 'react-redux';
+import routes from 'src/routes/routes';
 import { REDUX_STATE } from 'src/stores/states';
+import '../styles/scss/header.scss';
+import TheHeaderDropdown from './TheHeaderDropdown';
 
 const TheHeader = (props) => {
   const languages = [

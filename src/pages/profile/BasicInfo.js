@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
