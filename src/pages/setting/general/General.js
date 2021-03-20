@@ -8,6 +8,7 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { fetchGeneral, updateGeneral } from 'src/stores/actions/setting';
+import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
 //TODO: translate
@@ -134,7 +135,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     onChange={(e) => {
                       dispatch(fetchDistricts({ provinceId: e.target.value }));
                       dispatch({
-                        type: 'SET_WARDS',
+                        type: REDUX_STATE.location.SET_WARDS,
                         payload: [],
                       });
                       handleChange('provinceId')(e);
