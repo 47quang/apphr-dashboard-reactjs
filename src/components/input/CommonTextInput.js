@@ -1,12 +1,12 @@
-import React from "react";
-import Label from "../text/Label";
-import { joinClassName } from "src/utils/stringUtils";
+import React from 'react';
+import Label from '../text/Label';
+import { joinClassName } from 'src/utils/stringUtils';
 
 const CommonTextInput = ({
   containerClassName,
   labelText,
   inputType,
-  inputClassName = "",
+  inputClassName = '',
   placeholder,
   isRequiredField,
   onChange,
@@ -20,14 +20,14 @@ const CommonTextInput = ({
   isDisable,
 }) => {
   const checkInputClassName = () => {
-    if (isError) return joinClassName([inputClassName, "is-invalid"]);
+    if (isError) return joinClassName([inputClassName, 'is-invalid']);
     else if (isTouched) {
-      return joinClassName([inputClassName, "is-valid"]);
+      return joinClassName([inputClassName, 'is-valid']);
     } else return inputClassName;
   };
   return (
     <div className={containerClassName}>
-      <Label text={labelText} required={isRequiredField} labelID={inputID} />
+      {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
       <input
         type={inputType}
         className={checkInputClassName()}
@@ -37,13 +37,13 @@ const CommonTextInput = ({
         value={value}
         id={inputID}
         required={isRequiredField}
-        autoComplete={"off"}
+        autoComplete={'off'}
         min={minTime ?? null}
         disabled={isDisable}
       />
       {isError && errorMessage && (
         <div>
-          <small className={"text-danger"}> {errorMessage}</small>
+          <small className={'text-danger'}> {errorMessage}</small>
         </div>
       )}
     </div>
