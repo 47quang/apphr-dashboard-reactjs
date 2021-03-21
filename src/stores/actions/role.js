@@ -42,10 +42,12 @@ export const createRole = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
         history.push(`/setting/role/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -56,9 +58,11 @@ export const updateRole = (data) => {
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -69,9 +73,11 @@ export const deleteRole = (id) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

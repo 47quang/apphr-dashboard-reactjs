@@ -20,9 +20,11 @@ export const deleteDepartment = (params) => {
       .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.DELETE_DEPARTMENT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -46,9 +48,11 @@ export const updateDepartment = (data) => {
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -59,10 +63,12 @@ export const createDepartment = (data, history) => {
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
         history.push(`/setting/department/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

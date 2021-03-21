@@ -20,6 +20,7 @@ export const updateGeneral = (data) => {
       .putGeneral(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.setting.SET_GENERAL, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);

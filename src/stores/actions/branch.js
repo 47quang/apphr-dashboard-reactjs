@@ -33,10 +33,12 @@ export const createBranch = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
         history.push(`/setting/branch/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -47,9 +49,11 @@ export const updateBranch = (data) => {
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -60,9 +64,11 @@ export const deleteBranch = (id) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

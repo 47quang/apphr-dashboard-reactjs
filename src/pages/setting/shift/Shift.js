@@ -22,7 +22,7 @@ const Shifts = ({ t, location, history }) => {
         perpage: 1000,
       }),
     );
-  }, []);
+  }, []); // eslint-disable-next-line
 
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }));

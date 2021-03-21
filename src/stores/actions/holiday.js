@@ -39,10 +39,12 @@ export const createHoliday = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
         history.push(`/setting/holiday/tab1.id=${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -54,9 +56,11 @@ export const updateHoliday = (data) => {
       .then(({ payload }) => {
         payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -67,9 +71,11 @@ export const deleteHoliday = (id) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.DELETE_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

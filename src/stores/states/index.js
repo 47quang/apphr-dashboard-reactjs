@@ -92,4 +92,8 @@ export const REDUX_STATE = {
     SET_TAB_NAME: 'SET_TAB_NAME',
     SET_SUB_TAB_NAME: 'SET_SUB_TAB_NAME',
   },
+  notification: {
+    SET_NOTI: 'SET_NOTI',
+    SET_OPEN: 'SET_OPEN',
+  },
 };

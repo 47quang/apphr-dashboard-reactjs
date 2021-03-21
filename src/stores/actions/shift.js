@@ -41,10 +41,12 @@ export const createNewShift = (data, history) => {
       .then(({ payload }) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
         history.push(`/setting/shift/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -59,9 +61,11 @@ export const updateShift = (data) => {
           type: REDUX_STATE.shift.SET_SHIFT,
           payload: payload,
         });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -72,9 +76,11 @@ export const deleteShift = (params) => {
       .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.branch.SET_ALERT, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
