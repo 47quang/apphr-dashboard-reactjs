@@ -48,6 +48,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
   ];
   return (
     <PositionItemBody
+      t={t}
       positionRef={positionRef}
       position={position}
       departments={departments}

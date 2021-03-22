@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
@@ -28,7 +27,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
               <form autoComplete="off">
-                <FormHeader text={t('title.branch_create')} />
+                {/* <FormHeader text={t('title.branch_create')} /> */}
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-6'}

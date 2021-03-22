@@ -4,21 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import FormHeader from 'src/components/text/FormHeader';
 import { SettingPositionInfoSchema } from 'src/schema/formSchema';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { renderButtons } from 'src/utils/formUtils';
 
-const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons }) => {
+const PositionItemBody = ({ t, positionRef, position, branches, submitForm, buttons }) => {
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);
   const academicLevels = [
-    { id: 'not_require', name: 'Không yêu cầu' },
-    { id: 'intermediate', name: 'Trung cấp' },
-    { id: 'college', name: 'Cao đẳng' },
-    { id: 'university', name: 'Đại học' },
-    { id: 'master', name: 'Thạc sĩ' },
-    { id: 'doctor_of_philosophy', name: 'Tiến sĩ' },
+    { id: 'not_require', name: t('label.not_require') },
+    { id: 'intermediate', name: t('label.intermediate') },
+    { id: 'college', name: t('label.college') },
+    { id: 'university', name: t('label.university') },
+    { id: 'master', name: t('label.master') },
+    { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
   ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -33,7 +32,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
           >
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <form autoComplete="off">
-                <FormHeader text="Thêm vị trí" />
+                {/* <FormHeader text={t('label.position_create')} /> */}
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-12'}
@@ -41,9 +40,9 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
                     inputID={'shortname'}
-                    labelText={'Mã vị trí'}
+                    labelText={t('label.position_code')}
                     inputType={'text'}
-                    placeholder={'Nhập mã vị trí'}
+                    placeholder={t('placeholder.position_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -56,9 +55,9 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên vị trí'}
+                    labelText={t('label.position_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên vị trí'}
+                    placeholder={t('placeholder.position_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -70,7 +69,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-12'}
                     value={values.branchId}
-                    labelText={'Chi nhánh'}
+                    labelText={t('label.branch')}
                     selectClassName={'form-control'}
                     isRequiredField
                     onBlur={handleBlur('branchId')}
@@ -80,7 +79,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     }}
                     inputID={'branchId'}
                     lstSelectOptions={branches}
-                    placeholder={'Chọn chi nhánh'}
+                    placeholder={t('placeholder.select_branch')}
                     isTouched={touched.branchId}
                     isError={errors.branchId && touched.branchId}
                     errorMessage={errors.branchId}
@@ -90,14 +89,14 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-12'}
                     value={values.departmentId}
-                    labelText={'Phòng ban'}
+                    labelText={t('label.department')}
                     selectClassName={'form-control'}
                     isRequiredField
                     onBlur={handleBlur('departmentId')}
                     onChange={handleChange('departmentId')}
                     inputID={'departmentId'}
                     lstSelectOptions={departments}
-                    placeholder={'Chọn phòng ban'}
+                    placeholder={t('placeholder.select_department')}
                     isTouched={touched.departmentId}
                     isError={errors.departmentId && touched.departmentId}
                     errorMessage={errors.departmentId}
@@ -111,14 +110,14 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     onBlur={handleBlur('academicLevel')}
                     onChange={handleChange('academicLevel')}
                     inputID={'academicLevel'}
-                    labelText={'Trình độ'}
+                    labelText={t('label.academic_level')}
                     selectClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.academicLevel}
                     isError={errors.academicLevel && touched.academicLevel}
                     errorMessage={errors.academicLevel}
                     lstSelectOptions={academicLevels}
-                    placeholder={'Chọn trình độ'}
+                    placeholder={t('placeholder.select_academic_level')}
                   />
                 </div>
                 <div className="row">
@@ -128,7 +127,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     onBlur={handleBlur('expYear')}
                     onChange={handleChange('expYear')}
                     inputID={'expYear'}
-                    labelText={'Năm kinh nghiệm'}
+                    labelText={t('label.experience_year')}
                     inputType={'number'}
                     inputClassName={'form-control'}
                     isRequiredField
@@ -144,7 +143,7 @@ const PositionItemBody = ({ positionRef, position, branches, submitForm, buttons
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.description')}
                     inputClassName={'form-control'}
                   />
                 </div>

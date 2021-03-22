@@ -34,8 +34,11 @@
     "branch_name": "Tên chi nhánh",
     "branch_address": "Địa chỉ chi nhánh",
     "branch_ip_router": "Địa chỉ IP của Router",
+    "department": "Phòng ban",
     "department_code": "Mã phòng ban",
     "department_name": "Tên chi nhánh",
+    "position_name": "Tên vị trí",
+    "position_code": "Mã vị trí",
     "shift_name": "Tên ca làm",
     "shift_code": "Mã ca làm",
     "shift_time": "Thời gian hoạt động của ca làm",
@@ -59,11 +62,17 @@
     "friday": "Thứ sáu",
     "saturday": "Thứ bảy",
     "wi_fi": "Wi-Fi",
-    "qr_code": "Mã QR"
+    "qr_code": "Mã QR",
+    "not_require": "Không yêu cầu",
+    "intermediate": "Trung cấp",
+    "college": "Cao đẳng",
+    "university": "Đại học",
+    "master": "Thạc sĩ",
+    "doctor_of_philosophy": "Tiến sĩ",
+    "experience_year": "Năm kinh nghiệp",
+    "academic_level": "Trình độ"
   },
-  "title": {
-    "branch_create": "Thêm chi nhánh"
-  },
+  "title": {},
   "message": {},
   "placeholder": {
     "company_name": "Nhập tên doanh nghiệp",
@@ -75,6 +84,8 @@
     "branch_address": "Nhập địa chỉ chi nhánh",
     "department_code": "Nhập mã phòng ban",
     "department_name": "Nhập tên phòng ban",
+    "position_code": "Nhập mã vị trí",
+    "position_name": "Nhập tên vị trí",
     "shift_name": "Nhập tên ca làm",
     "shift_code": "Nhập mã ca làm",
     "phone_number": "Nhập số điện thoại",
@@ -85,6 +96,8 @@
     "select_district": "Chọn Quận/Huyện",
     "select_ward": "Chọn Phường/Xã/Thị trấn",
     "select_branch": "Chọn chi nhánh",
-    "select_roll_call_type": "Chọn hình thức điểm danh"
+    "select_department": "Chọn phòng ban",
+    "select_roll_call_type": "Chọn hình thức điểm danh",
+    "select_academic_level": "Chọn trình độ"
   }
 }
