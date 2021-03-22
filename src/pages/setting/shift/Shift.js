@@ -2,6 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
 const Shifts = ({ t, location, history }) => {
@@ -30,7 +31,7 @@ const Shifts = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={shifts} route={'/setting/shift/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable columnDef={columnDef} data={shifts} route={ROUTE_PATH.SHIFT + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

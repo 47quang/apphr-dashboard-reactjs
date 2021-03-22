@@ -2,6 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
 
 const Department = ({ t, location, history }) => {
@@ -31,7 +32,7 @@ const Department = ({ t, location, history }) => {
           d.note = d.note.substr(0, 30) + '...';
           return d;
         })}
-        route={'/setting/department/'}
+        route={ROUTE_PATH.DEPARTMENT + '/'}
         idxColumnsFilter={[0, 2]}
         deleteRow={deleteRow}
       />

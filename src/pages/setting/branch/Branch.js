@@ -2,6 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
 
 const columnDef = [
@@ -24,7 +25,7 @@ const Branch = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={branches} route={'/setting/branch/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable columnDef={columnDef} data={branches} route={ROUTE_PATH.BRANCH + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

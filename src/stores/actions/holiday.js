@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -39,7 +40,7 @@ export const createHoliday = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        history.push(`/setting/holiday/tab1.id=${payload.id}`);
+        history.push(ROUTE_PATH.HOLIDAY + `/tab1.id=${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

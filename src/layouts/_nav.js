@@ -1,4 +1,4 @@
-import { ROUTE_NAME } from 'src/constants/key';
+import { ROUTE_NAME, ROUTE_PATH } from 'src/constants/key';
 
 const _nav = [
   {
@@ -8,7 +8,7 @@ const _nav = [
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.COURSE,
-    to: '/course',
+    to: ROUTE_PATH.COURSE,
     icon: 'cil-newspaper',
   },
   // {
@@ -28,80 +28,80 @@ const _nav = [
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.ROLL_UP,
-    to: '/roll-up',
+    to: ROUTE_PATH.ROLL_UP,
     icon: 'cil-touch-app',
   },
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.PROPOSAL,
-    to: '/proposal',
+    to: ROUTE_PATH.PROPOSAL,
     icon: 'cil-description',
   },
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.PROFILE,
-    to: '/profile',
+    to: ROUTE_PATH.PROFILE,
     icon: 'cil-user',
   },
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.ACCOUNT,
-    to: '/account',
+    to: ROUTE_PATH.ACCOUNT,
     icon: 'cil-pencil',
   },
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.NOTIFICATION,
-    to: '/notification',
+    to: ROUTE_PATH.NOTIFICATION,
     icon: 'cil-bell',
   },
   {
     _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.REPORT,
-    to: '/report',
+    to: ROUTE_PATH.REPORT,
     icon: 'cil-print',
   },
   {
     _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.SETTING,
-    route: '/setting',
+    route: ROUTE_PATH.SETTING,
     icon: 'cil-puzzle',
     _children: [
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.GENERAL,
-        to: '/setting/general',
+        to: ROUTE_PATH.GENERAL,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.BRANCH,
-        to: '/setting/branch',
+        to: ROUTE_PATH.BRANCH,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.DEPARTMENT,
-        to: '/setting/department',
+        to: ROUTE_PATH.DEPARTMENT,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.POSITION,
-        to: '/setting/position',
+        to: ROUTE_PATH.POSITION,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.SHIFT,
-        to: '/setting/shift',
+        to: ROUTE_PATH.SHIFT,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.HOLIDAY,
-        to: '/setting/holiday',
+        to: ROUTE_PATH.HOLIDAY,
       },
 
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.ROLE,
-        to: '/setting/role',
+        to: ROUTE_PATH.ROLE,
       },
       // {
       //   _tag: "CSidebarNavDropdown",

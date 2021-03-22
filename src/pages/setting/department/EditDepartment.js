@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartment, resetDepartment, updateDepartment } from 'src/stores/actions/department';
 import DepartmentItemBody from './DepartmentItemBody';
@@ -29,7 +30,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/department');
+        history.push(ROUTE_PATH.DEPARTMENT);
       },
       name: 'Quay lại',
     },

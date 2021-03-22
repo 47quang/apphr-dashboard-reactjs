@@ -1,5 +1,5 @@
 import React from 'react';
-import { ROUTE_NAME } from '../constants/key';
+import { ROUTE_NAME, ROUTE_PATH } from '../constants/key';
 
 const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
@@ -47,136 +47,136 @@ const NewRole = React.lazy(() => import('src/pages/setting/authorization/role/Ne
 const EditRole = React.lazy(() => import('src/pages/setting/authorization/role/UpdateRole'));
 
 const routes = [
-  { path: '/', exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
-  { path: '/dashboard', name: ROUTE_NAME.DASHBOARD, component: Dashboard },
-  { path: '/course', name: ROUTE_NAME.COURSE, component: Course },
+  { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
+  { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
+  { path: ROUTE_PATH.COURSE, name: ROUTE_NAME.COURSE, component: Course },
 
-  { path: '/account/create', name: ROUTE_NAME.NEW_ACCOUNT, component: NewAccount },
-  { path: '/account/:id', name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
-  { path: '/account', name: ROUTE_NAME.ACCOUNT, component: Account },
+  { path: ROUTE_PATH.ACCOUNT_CREATE, name: ROUTE_NAME.NEW_ACCOUNT, component: NewAccount },
+  { path: ROUTE_PATH.ACCOUNT_UPDATE, name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
+  { path: ROUTE_PATH.ACCOUNT, name: ROUTE_NAME.ACCOUNT, component: Account },
 
-  { path: '/profile/contract/create', name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
-  { path: '/profile/contract/:id', name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
-  { path: '/profile/create', name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
-  { path: '/profile/:id', name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
-  { path: '/profile', name: ROUTE_NAME.PROFILE, component: Profile },
-  { path: '/proposal', name: ROUTE_NAME.PROPOSAL, component: Proposal },
-  { path: '/roll-up', name: ROUTE_NAME.ROLL_UP, component: RollUp },
+  { path: ROUTE_PATH.CONTRACT_CREATE, name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
+  { path: ROUTE_PATH.CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
+
+  { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
+  { path: ROUTE_PATH.PROFILE_UPDATE, name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
+  { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
+  { path: ROUTE_PATH.PROPOSAL, name: ROUTE_NAME.PROPOSAL, component: Proposal },
+  { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },
   {
-    path: '/notification',
+    path: ROUTE_PATH.NOTIFICATION,
     name: ROUTE_NAME.NOTIFICATION,
     component: Notification,
   },
-  { path: '/report', name: ROUTE_NAME.REPORT, component: Report },
+  { path: ROUTE_PATH.REPORT, name: ROUTE_NAME.REPORT, component: Report },
   {
-    path: '/setting',
+    path: ROUTE_PATH.SETTING,
     exact: true,
     name: ROUTE_NAME.SETTING,
     component: General,
   },
-  { path: '/setting/general', name: ROUTE_NAME.GENERAL, component: General },
+  { path: ROUTE_PATH.GENERAL, name: ROUTE_NAME.GENERAL, component: General },
   {
-    path: '/setting/position/create',
+    path: ROUTE_PATH.POSITION_CREATE,
     exact: true,
     name: ROUTE_NAME.NEW_POSITION,
     component: NewPosition,
   },
   {
-    path: '/setting/position/:id',
+    path: ROUTE_PATH.POSITION_UPDATE,
     name: ROUTE_NAME.POSITION_UPDATE,
     component: EditPosition,
   },
-  { path: '/setting/position', name: ROUTE_NAME.POSITION, component: Position },
+  { path: ROUTE_PATH.POSITION, name: ROUTE_NAME.POSITION, component: Position },
   {
-    path: '/setting/shift/create',
+    path: ROUTE_PATH.SHIFT_CREATE,
     exact: true,
     name: ROUTE_NAME.NEW_SHIFT,
     component: NewShift,
   },
   {
-    path: '/setting/shift/:id',
+    path: ROUTE_PATH.SHIFT_UPDATE,
     name: ROUTE_NAME.SHIFT_UPDATE,
     component: UpdateShift,
   },
-  { path: '/setting/shift', name: ROUTE_NAME.SHIFT, component: Shift },
+  { path: ROUTE_PATH.SHIFT, name: ROUTE_NAME.SHIFT, component: Shift },
   {
-    path: '/setting/branch/create',
+    path: ROUTE_PATH.BRANCH_CREATE,
     exact: true,
 
     name: ROUTE_NAME.NEW_BRANCH,
     component: NewBranch,
   },
   {
-    path: '/setting/branch/:id',
+    path: ROUTE_PATH.BRANCH_UPDATE,
     name: ROUTE_NAME.BRANCH_UPDATE,
     component: EditBranch,
   },
-  { path: '/setting/branch', name: ROUTE_NAME.BRANCH, component: Branch },
+  { path: ROUTE_PATH.BRANCH, name: ROUTE_NAME.BRANCH, component: Branch },
   {
-    path: '/setting/department/create',
+    path: ROUTE_PATH.DEPARTMENT_CREATE,
     exact: true,
 
     name: ROUTE_NAME.NEW_DEPARTMENT,
     component: NewDepartment,
   },
   {
-    path: '/setting/department/:id',
+    path: ROUTE_PATH.DEPARTMENT_UPDATE,
     name: ROUTE_NAME.DEPARTMENT_UPDATE,
     component: EditDepartment,
   },
   {
-    path: '/setting/department',
+    path: ROUTE_PATH.DEPARTMENT,
     name: ROUTE_NAME.DEPARTMENT,
     component: Department,
   },
   {
-    path: '/setting/holiday/create',
+    path: ROUTE_PATH.HOLIDAY_CREATE,
     exact: true,
-
     name: ROUTE_NAME.NEW_HOLIDAY,
     component: NewHoliday,
   },
   {
-    path: '/setting/holiday/tab2:id',
+    path: ROUTE_PATH.HOLIDAY_UPDATE_SETTING,
     exact: true,
     name: ROUTE_NAME.HOLIDAY_SETTINGS_UPDATE,
     component: EditHolidaySetting,
   },
   {
-    path: '/setting/holiday/tab1:id',
+    path: ROUTE_PATH.HOLIDAY_UPDATE,
     exact: true,
     name: ROUTE_NAME.HOLIDAY_UPDATE,
     component: EditHoliday,
   },
-  { path: '/setting/holiday', name: ROUTE_NAME.HOLIDAY, component: Holiday },
+  { path: ROUTE_PATH.HOLIDAY, name: ROUTE_NAME.HOLIDAY, component: Holiday },
+  // {
+  //   path: '/setting/authorization',
+  //   exact: true,
+  //   name: ROUTE_NAME.PERMISSION,
+  //   component: Permission,
+  // },
+  // {
+  //   path: '/setting/authorization/permission',
+  //   name: ROUTE_NAME.PERMISSION,
+  //   component: Permission,
+  // },
+  // {
+  //   path: '/setting/authorization/permission-group',
+  //   name: ROUTE_NAME.PERMISSION_GROUP,
+  //   component: PermissionGroup,
+  // },
   {
-    path: '/setting/authorization',
-    exact: true,
-    name: ROUTE_NAME.PERMISSION,
-    component: Permission,
-  },
-  {
-    path: '/setting/authorization/permission',
-    name: ROUTE_NAME.PERMISSION,
-    component: Permission,
-  },
-  {
-    path: '/setting/authorization/permission-group',
-    name: ROUTE_NAME.PERMISSION_GROUP,
-    component: PermissionGroup,
-  },
-  {
-    path: '/setting/role/create',
+    path: ROUTE_PATH.ROLE_CREATE,
     name: ROUTE_NAME.NEW_ROLE,
     component: NewRole,
   },
   {
-    path: '/setting/role/:id',
+    path: ROUTE_PATH.ROLE_UPDATE,
     name: ROUTE_NAME.ROLE_UPDATE,
     component: EditRole,
   },
   {
-    path: '/setting/role',
+    path: ROUTE_PATH.ROLE,
     name: ROUTE_NAME.ROLE,
     component: Role,
   },

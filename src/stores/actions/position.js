@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -33,7 +34,7 @@ export const createPosition = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
-        history.push(`/setting/position/${payload.id}`);
+        history.push(ROUTE_PATH.POSITION + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

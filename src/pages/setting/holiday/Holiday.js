@@ -2,6 +2,7 @@ import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } fr
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteHoliday, fetchAllRequest, fetchHolidays } from 'src/stores/actions/holiday';
 
 const columnDefOfRequestSetting = [
@@ -53,7 +54,7 @@ const HolidayPage = ({ t, location, history }) => {
             <QTable
               columnDef={columnDef}
               data={holidays}
-              route={'/setting/holiday/tab1.id='}
+              route={ROUTE_PATH.HOLIDAY + '/tab1.id='}
               idxColumnsFilter={[1]}
               dateCols={[3, 2]}
               deleteRow={deleteRow}
@@ -63,7 +64,7 @@ const HolidayPage = ({ t, location, history }) => {
             <QTable
               columnDef={columnDefOfRequestSetting}
               data={requests}
-              route={'/setting/holiday/tab2.id='}
+              route={ROUTE_PATH.HOLIDAY + '/tab2.id='}
               idxColumnsFilter={[0]}
               disableCreate={true}
               disableDelete={true}

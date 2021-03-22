@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { updateRole, setEmptyRole, fetchPermissions, fetchRole } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
@@ -29,7 +30,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/account');
+        history.push(ROUTE_PATH.ROLE);
       },
       name: 'Quay lại',
     },

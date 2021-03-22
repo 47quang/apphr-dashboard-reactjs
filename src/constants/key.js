@@ -38,3 +38,60 @@ export const ROUTE_NAME = {
   ROLE_UPDATE: 'Role Update',
   AUTHORIZATION: 'Authorization',
 };
+
+const ID = '/:id';
+const CREATE = '/create';
+export const ROUTE_PATH = {
+  ROOT: '/',
+  LOGIN: '/login',
+  DASHBOARD: '/dashboard',
+  COURSE: '/course',
+
+  ACCOUNT: '/account',
+  ACCOUNT_CREATE: '/account' + CREATE,
+  ACCOUNT_UPDATE: '/account' + ID,
+
+  PROFILE: '/profile',
+  PROFILE_UPDATE: '/profile' + ID,
+  PROFILE_CREATE: '/profile' + CREATE,
+  CONTRACT: '/profile/contract',
+  CONTRACT_CREATE: '/profile/contract/' + CREATE,
+  CONTRACT_UPDATE: '/profile/contract/' + ID,
+
+  PROPOSAL: '/proposal',
+
+  ROLL_UP: '/roll-up',
+
+  NOTIFICATION: '/notification',
+
+  REPORT: '/report',
+
+  SETTING: '/setting',
+
+  GENERAL: '/setting/general',
+
+  POSITION: '/setting/position',
+  POSITION_CREATE: '/setting/position' + CREATE,
+  POSITION_UPDATE: '/setting/position' + ID,
+
+  SHIFT: '/setting/shift',
+  SHIFT_CREATE: '/setting/shift' + CREATE,
+  SHIFT_UPDATE: '/setting/shift' + ID,
+
+  BRANCH: '/setting/branch',
+  BRANCH_CREATE: '/setting/branch' + CREATE,
+  BRANCH_UPDATE: '/setting/branch' + ID,
+
+  DEPARTMENT: '/setting/department',
+  DEPARTMENT_CREATE: '/setting/department' + CREATE,
+  DEPARTMENT_UPDATE: '/setting/department' + ID,
+
+  ROLE: '/setting/role',
+  ROLE_UPDATE: '/setting/role' + ID,
+  ROLE_CREATE: '/setting/role' + CREATE,
+
+  HOLIDAY: '/setting/holiday',
+  HOLIDAY_UPDATE_SETTING: '/setting/holiday/tab2:id',
+  HOLIDAY_UPDATE: '/setting/holiday/tab1:id',
+  HOLIDAY_CREATE: '/setting/holiday' + CREATE,
+};

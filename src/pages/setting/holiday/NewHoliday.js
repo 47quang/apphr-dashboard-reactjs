@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { changeActions } from 'src/stores/actions/header';
 import { createHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
@@ -31,7 +32,7 @@ const NewHolidayPage = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/holiday');
+        history.push(ROUTE_PATH.HOLIDAY);
       },
       name: 'Quay lại',
     },

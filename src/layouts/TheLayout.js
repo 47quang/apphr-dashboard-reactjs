@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { ROUTE_PATH } from 'src/constants/key';
 import { TheContent, TheSidebar } from './index';
 import TheHeader from './TheHeader';
 
@@ -11,7 +12,7 @@ const TheLayout = (props) => {
     return (
       <Redirect
         to={{
-          pathname: '/login',
+          pathname: ROUTE_PATH.LOGIN,
           state: { from: location },
         }}
       />

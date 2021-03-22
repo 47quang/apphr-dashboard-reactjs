@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CContainer } from '@coreui/react';
 import { deleteProfile, fetchAllProfiles } from 'src/stores/actions/account';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 
 const columnDefOfProfiles = [
   { name: 'shortname', title: 'Mã hồ sơ' },
@@ -31,7 +32,7 @@ const Profile = ({ t, location }) => {
       <QTable
         columnDef={columnDefOfProfiles}
         data={profiles}
-        route={'/profile/'}
+        route={ROUTE_PATH.PROFILE + '/'}
         idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
         deleteRow={deleteRow}
       />

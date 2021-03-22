@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import QTable from 'src/components/table/Table';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 
 const columnDef = [
   { name: 'id', title: 'Số thứ tự' },
@@ -26,14 +27,14 @@ const Contract = ({ isCreate }) => {
       <QTable
         columnDef={columnDef}
         data={contracts}
-        route={'/profile/contract/'}
+        route={ROUTE_PATH.CONTRACT + '/'}
         idxColumnsFilter={[0, 2, 6]}
         deleteRow={deleteRow}
         dateCols={[4, 5]}
       />
     );
   } else {
-    return <QTable columnDef={columnDef} data={contracts} route={'/profile/contract/'} idxColumnsFilter={[0, 1, 2]} deleteRow={deleteRow} />;
+    return <QTable columnDef={columnDef} data={contracts} route={ROUTE_PATH.CONTRACT + '/'} idxColumnsFilter={[0, 1, 2]} deleteRow={deleteRow} />;
   }
 };
 

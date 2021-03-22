@@ -2,6 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const columnDef = [
@@ -23,7 +24,7 @@ const Role = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={roles} route={'/setting/role/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable columnDef={columnDef} data={roles} route={ROUTE_PATH.ROLE + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { changeActions } from 'src/stores/actions/header';
 import { createProfile, setEmptyProfile } from 'src/stores/actions/profile';
 import ProfileTabs from './ProfileTabs';
@@ -22,7 +23,7 @@ const NewProfile = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/profile');
+        history.push(ROUTE_PATH.PROFILE);
       },
       name: 'Quay lại',
     },
