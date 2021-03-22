@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { createRole, setEmptyRole, fetchPermissions } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
@@ -26,7 +27,7 @@ const NewRole = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/role');
+        history.push(ROUTE_PATH.ROLE);
       },
       name: 'Quay lại',
       position: 'left',

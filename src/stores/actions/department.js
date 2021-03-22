@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -64,7 +65,8 @@ export const createDepartment = (data, history) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
-        history.push(`/setting/department/${payload.id}`);
+
+        history.push(ROUTE_PATH.DEPARTMENT + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

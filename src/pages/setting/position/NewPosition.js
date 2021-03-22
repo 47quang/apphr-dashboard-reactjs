@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { createPosition, setEmptyPosition } from 'src/stores/actions/position';
 import PositionItemBody from './PositionItemBody';
@@ -31,7 +32,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push(`/setting/position/`);
+        history.push(ROUTE_PATH.POSITION);
       },
       name: 'Quay lại',
       position: 'left',

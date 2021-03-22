@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { convertBranchesId, convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
@@ -42,7 +43,8 @@ export const createNewShift = (data, history) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
-        history.push(`/setting/shift/${payload.id}`);
+
+        history.push(ROUTE_PATH.SHIFT + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

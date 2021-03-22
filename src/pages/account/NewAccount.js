@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
 import { createAccount, setEmptyAccount, fetchRoles, fetchPermissionGroups } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
+import { ROUTE_PATH } from 'src/constants/key';
 
 //TODO: translate
 
@@ -33,7 +34,7 @@ const NewAccount = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/account');
+        history.push(ROUTE_PATH.ACCOUNT);
       },
       name: 'Quay lại',
       position: 'left',

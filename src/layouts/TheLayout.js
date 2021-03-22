@@ -3,6 +3,7 @@ import Alert from '@material-ui/lab/Alert';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { ROUTE_PATH } from 'src/constants/key';
 import { TheContent, TheSidebar } from './index';
 import TheHeader from './TheHeader';
 import { REDUX_STATE } from 'src/stores/states';
@@ -17,7 +18,7 @@ const TheLayout = (props) => {
     return (
       <Redirect
         to={{
-          pathname: '/login',
+          pathname: ROUTE_PATH.LOGIN,
           state: { from: location },
         }}
       />

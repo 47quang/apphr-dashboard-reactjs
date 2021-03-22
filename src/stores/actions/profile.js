@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -39,7 +40,7 @@ export const createProfile = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
-        history.push(`/setting/profile/${payload.id}`);
+        history.push(ROUTE_PATH.PROFILE + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

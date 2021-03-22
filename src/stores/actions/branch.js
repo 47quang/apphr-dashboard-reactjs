@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -34,7 +35,7 @@ export const createBranch = (params, history) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
-        history.push(`/setting/branch/${payload.id}`);
+        history.push(ROUTE_PATH.BRANCH + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

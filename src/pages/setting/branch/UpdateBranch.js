@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
@@ -46,7 +47,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push('/setting/branch');
+        history.push(ROUTE_PATH.BRANCH);
       },
       name: 'Quay lại',
       position: 'left',

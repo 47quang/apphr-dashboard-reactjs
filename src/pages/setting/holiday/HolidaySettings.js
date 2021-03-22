@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import BasicLoader from 'src/components/loader/BasicLoader';
 import FormHeader from 'src/components/text/FormHeader';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingHolidayLimitSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
 
@@ -33,7 +34,7 @@ const HolidaySettings = ({ t, location, match, history }) => {
       {
         type: 'primary',
         name: 'Tạo mới',
-        callback: () => history.push('/setting/shift/newShift'),
+        callback: () => history.push(ROUTE_PATH.SHIFT_CREATE),
       },
     ];
     dispatch(changeActions(actions));

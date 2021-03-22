@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -45,7 +46,7 @@ export const createAccount = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
-        history.push(`/account/${payload.id}`);
+        history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);

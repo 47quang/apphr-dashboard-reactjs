@@ -2,6 +2,7 @@ import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } fr
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deleteAccount, fetchAccounts, fetchAllProfiles } from 'src/stores/actions/account';
 
 const columnDefOfAccounts = [
@@ -29,7 +30,7 @@ const Account = () => {
       <QTable
         columnDef={columnDefOfAccounts}
         data={accounts}
-        route={'/account/'}
+        route={ROUTE_PATH.ACCOUNT + '/'}
         idxColumnsFilter={[0]}
         linkCols={[{ name: 'profileId', route: '/profile/' }]}
       />
