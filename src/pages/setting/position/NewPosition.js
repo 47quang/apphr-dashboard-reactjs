@@ -34,6 +34,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
         history.push(`/setting/position/`);
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

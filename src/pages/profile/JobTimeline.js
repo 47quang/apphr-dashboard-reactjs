@@ -1,6 +1,7 @@
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 
 const { CContainer } = require('@coreui/react');
 const { Formik } = require('formik');
@@ -22,6 +23,8 @@ const JobTimelineInfo = () => {
           <Formik initialValues={jobTimelineInfo}>
             {({ values, handleBlur, handleSubmit, handleChange, errors, touched }) => (
               <form>
+                <FormHeader text="Thông tin hợp đồng" />
+
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-4'}

@@ -35,6 +35,7 @@ const UpdateAccount = ({ t, location, history }) => {
         history.push('/account');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -42,7 +43,7 @@ const UpdateAccount = ({ t, location, history }) => {
       onClick: (e) => {
         accountInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

@@ -121,7 +121,7 @@ const AcademicLevel = () => {
                         handleReset();
                       }}
                     >
-                      Khôi phục
+                      Hoàn tác
                     </button>
                     <button
                       type="button"

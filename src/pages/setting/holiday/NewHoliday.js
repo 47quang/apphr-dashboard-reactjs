@@ -34,6 +34,7 @@ const NewHolidayPage = ({ t, location, history }) => {
         history.push('/setting/holiday');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

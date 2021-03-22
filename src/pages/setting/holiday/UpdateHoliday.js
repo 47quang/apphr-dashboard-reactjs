@@ -35,6 +35,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
         history.push('/setting/holiday');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -42,7 +43,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

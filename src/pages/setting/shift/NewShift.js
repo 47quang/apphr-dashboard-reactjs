@@ -46,6 +46,7 @@ const NewShift = ({ t, location, history }) => {
         history.push(`/setting/shift`);
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

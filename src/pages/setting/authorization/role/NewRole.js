@@ -29,6 +29,7 @@ const NewRole = ({ t, location, history }) => {
         history.push('/setting/role');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

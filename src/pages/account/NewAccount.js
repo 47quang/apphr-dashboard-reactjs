@@ -25,7 +25,7 @@ const NewAccount = ({ t, location, history }) => {
     let form = values;
     delete form.id;
     console.log(form);
-    //dispatch(createAccount(form, history));
+    dispatch(createAccount(form, history));
   };
 
   const buttons = [
@@ -36,6 +36,7 @@ const NewAccount = ({ t, location, history }) => {
         history.push('/account');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

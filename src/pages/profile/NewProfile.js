@@ -25,6 +25,7 @@ const NewProfile = ({ t, location, history }) => {
         history.push('/profile');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

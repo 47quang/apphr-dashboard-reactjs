@@ -44,10 +44,12 @@ const UpdateBranch = ({ t, location, history, match }) => {
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
+
       onClick: (e) => {
         history.push('/setting/branch');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -55,7 +57,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         branchInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

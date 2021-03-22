@@ -25,6 +25,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
         history.push('/profile');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -32,7 +33,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         profileInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

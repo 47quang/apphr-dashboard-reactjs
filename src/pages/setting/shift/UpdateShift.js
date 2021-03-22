@@ -43,6 +43,7 @@ const UpdateShift = ({ t, location, match, history }) => {
         history.push(`/setting/shift`);
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -50,7 +51,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         shiftRef.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

@@ -29,6 +29,7 @@ const UpdateRole = ({ t, location, history, match }) => {
         history.push('/setting/role');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -36,7 +37,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         roleInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

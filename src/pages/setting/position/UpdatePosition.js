@@ -42,6 +42,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
         history.push(`/setting/position/`);
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -49,7 +50,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

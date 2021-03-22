@@ -32,6 +32,7 @@ const EditDepartment = ({ t, location, match, history }) => {
         history.push('/setting/department');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'reset',
@@ -39,7 +40,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         departmentRef.current.handleReset(e);
       },
-      name: 'Reset',
+      name: 'Hoàn tác',
     },
     {
       type: 'button',

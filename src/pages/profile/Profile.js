@@ -5,7 +5,7 @@ import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 import QTable from 'src/components/table/Table';
 
 const columnDefOfProfiles = [
-  { name: 'shortname', title: 'Mã hồ sơ' },
+  { name: 'shortname', title: 'Mã nhân sự' },
   { name: 'fullname', title: 'Tên nhân viên' },
   { name: 'phone', title: 'Số điện thoại' },
   { name: 'gender', title: 'Giới tính' },

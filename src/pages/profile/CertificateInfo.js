@@ -126,7 +126,7 @@ const CertificateInfo = () => {
                         handleReset();
                       }}
                     >
-                      Khôi phục
+                      Hoàn tác
                     </button>
                     <button
                       type="button"

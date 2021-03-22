@@ -31,6 +31,7 @@ const NewDepartment = ({ t, location, history }) => {
         history.push('/setting/department');
       },
       name: 'Quay lại',
+      position: 'left',
     },
     {
       type: 'button',

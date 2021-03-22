@@ -18,7 +18,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="row px-4">
-        <div className="shadow bg-white rounded p-4 col-md-12">
+        <div className="shadow bg-white rounded p-4 col-md-9 m-auto">
           <Formik
             innerRef={accountRef}
             enableReinitialize
@@ -31,10 +31,10 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
           >
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
               <form>
-                <FormHeader text="Vị trí làm việc" />
-                <div className="row">
+                <FormHeader text="Thông tin tài khoản" />
+                <div className="row" style={{ paddingBottom: 40 }}>
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-lg-4'}
                     value={values.username}
                     onBlur={handleBlur('username')}
                     onChange={handleChange('username')}
@@ -49,7 +49,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     errorMessage={errors.username}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-lg-4'}
                     value={values.password}
                     onBlur={handleBlur('password')}
                     onChange={handleChange('password')}
@@ -63,8 +63,45 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     isError={errors.password && touched.password}
                     errorMessage={errors.password}
                   />
+
+                  <CommonTextInput
+                    containerClassName={'form-group col-lg-4'}
+                    value={values.email}
+                    onBlur={handleBlur('email')}
+                    onChange={handleChange('email')}
+                    inputID={'email'}
+                    labelText={'Email'}
+                    inputType={'email'}
+                    placeholder={'Nhập email'}
+                    inputClassName={'form-control'}
+                  />
+                  <CommonTextInput
+                    containerClassName={'form-group col-lg-4'}
+                    value={values.phone}
+                    onBlur={handleBlur('phone')}
+                    onChange={handleChange('phone')}
+                    inputID={'phone'}
+                    labelText={'Số điện thoại'}
+                    inputType={'text'}
+                    placeholder={'Nhập số điện thoại'}
+                    inputClassName={'form-control'}
+                  />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-lg-8'}
+                    value={values.profileId}
+                    labelText={'Nhân sự'}
+                    selectClassName={'form-control'}
+                    onBlur={handleBlur('profileId')}
+                    onChange={handleChange('profileId')}
+                    inputID={'profileId'}
+                    lstSelectOptions={profiles}
+                    placeholder={'Chọn nhân sự'}
+                  />
+                </div>
+                <FormHeader text="Phân quyền" />
+                <div className="row">
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-12'}
                     value={values.roleId}
                     labelText={'Vai trò'}
                     selectClassName={'form-control'}
@@ -87,61 +124,14 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     isError={errors.roleId && touched.roleId}
                     errorMessage={errors.roleId}
                   />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
-                    value={values.coefficient}
-                    onBlur={handleBlur('coefficient')}
-                    onChange={handleChange('coefficient')}
-                    inputID={'coefficient'}
-                    labelText={'Hệ số công'}
-                    inputType={'number'}
-                    inputClassName={'form-control'}
-                    placeholder={'Nhập hệ số công'}
-                    isRequiredField
-                    isTouched={touched.coefficient}
-                    isError={errors.coefficient && touched.coefficient}
-                    errorMessage={errors.coefficient}
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
-                    value={values.email}
-                    onBlur={handleBlur('email')}
-                    onChange={handleChange('email')}
-                    inputID={'email'}
-                    labelText={'Email'}
-                    inputType={'email'}
-                    placeholder={'Nhập email'}
-                    inputClassName={'form-control'}
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
-                    value={values.phone}
-                    onBlur={handleBlur('phone')}
-                    onChange={handleChange('phone')}
-                    inputID={'phone'}
-                    labelText={'Số điện thoại'}
-                    inputType={'text'}
-                    placeholder={'Nhập số điện thoại'}
-                    inputClassName={'form-control'}
-                  />
-                  <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.profileId}
-                    labelText={'Hồ sơ'}
-                    selectClassName={'form-control'}
-                    onBlur={handleBlur('profileId')}
-                    onChange={handleChange('profileId')}
-                    inputID={'profileId'}
-                    lstSelectOptions={profiles}
-                    placeholder={'Chọn hồ sơ'}
-                  />
                 </div>
                 <div className="row">
                   {permissionGroups.map((permissionGroup) => {
                     return (
-                      <div className="form-group col-lg-3">
+                      <div className="form-group col-lg-4">
                         <Field
                           component={Checkbox}
+                          disabled={true}
                           color={'primary'}
                           name={permissionGroup.group}
                           value={permissionGroup.group}
@@ -176,6 +166,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                                         color="primary"
                                         name="permissions_"
                                         type="checkbox"
+                                        disabled={true}
                                         value={per.id}
                                         checked={values.permissionIds.includes(per.id)}
                                         onChange={(e) => {
