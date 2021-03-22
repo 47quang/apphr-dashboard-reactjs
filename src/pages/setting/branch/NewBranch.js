@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_NAME, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { createBranch, setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
