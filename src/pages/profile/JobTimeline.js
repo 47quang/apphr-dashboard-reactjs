@@ -1,125 +1,132 @@
-import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
-import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import FormHeader from 'src/components/text/FormHeader';
+import { Switch } from '@material-ui/core';
+import { Add, Delete, Remove } from '@material-ui/icons';
+import Label from 'src/components/text/Label';
 
 const { CContainer } = require('@coreui/react');
-const { Formik } = require('formik');
+const { Formik, FieldArray, Field } = require('formik');
 
 const JobTimelineInfo = () => {
   const jobTimelineInfo = {
-    startDate: '',
-    contractDate: '',
-    endDate: '',
-    note: '',
-    isFired: false,
-    firedNote: '',
-    firedDate: '',
+    contractInfo: [
+      {
+        isMinimize: true,
+        isOpen: true,
+        contractCode: 'C1XOC',
+        probationaryPeriod: '',
+        contractType: 'partTime',
+        startDate: '',
+      },
+    ],
   };
+  const contractType = [
+    { id: 'partTime', name: 'Bán thời gian' },
+    { id: 'fullTime', name: 'Toàn thời gian' },
+  ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
+          {/* <FormHeader text="Thông tin hợp đồng" /> */}
           <Formik initialValues={jobTimelineInfo}>
-            {({ values, handleBlur, handleSubmit, handleChange, errors, touched }) => (
+            {({ values, handleBlur, handleSubmit, handleChange, errors, touched, setValues }) => (
               <form>
-                <FormHeader text="Thông tin hợp đồng" />
+                <FieldArray
+                  name="contractInfo"
+                  render={({ insert, remove, push, replace }) => (
+                    <div>
+                      {values.contractInfo.length > 0 &&
+                        values.contractInfo.map((friend, index) => {
+                          const changeMinimizeButton = () => {
+                            replace(index, {
+                              ...values.contractInfo[index],
+                              isMinimize: !values.contractInfo[index].isMinimize,
+                            });
+                          };
+                          return (
+                            <div key={index}>
+                              <div className={'d-flex flex-row justify-content-between'}>
+                                <div style={{ fontSize: 18 }}>
+                                  {values.contractInfo[index].isMinimize ? (
+                                    <Add onClick={(e) => changeMinimizeButton()} />
+                                  ) : (
+                                    <Remove onClick={(e) => changeMinimizeButton()} />
+                                  )}
+                                  {values.contractInfo[index].contractCode}{' '}
+                                  <Switch checked={values.contractInfo[index].isOpen} name={`contractInfo.${index}.contractCode`} />
+                                </div>
+                                <div className="pt-2">
+                                  <Delete onClick={() => remove(index)} style={{ color: 'red' }} />
+                                </div>
+                              </div>
+                              <hr className="mt-1" />
 
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
-                    value={values.startDate}
-                    onBlur={handleBlur('startDate')}
-                    onChange={handleChange('startDate')}
-                    inputID={'startDate'}
-                    labelText={'Ngày bắt đầu'}
-                    inputType={'date'}
-                    placeholder={'Ngày bắt đầu làm việc'}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.startDate}
-                    isError={errors.startDate && touched.startDate}
-                    errorMessage={errors.startDate}
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
-                    value={values.contractDate}
-                    onBlur={handleBlur('contractDate')}
-                    onChange={handleChange('contractDate')}
-                    inputID={'contractDate'}
-                    labelText={'Ngày ký hợp đồng'}
-                    inputType={'date'}
-                    placeholder={'Ngày ký hợp đồng'}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.contractDate}
-                    isError={errors.contractDate && touched.contractDate}
-                    errorMessage={errors.contractDate}
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
-                    value={values.endDate}
-                    onBlur={handleBlur('endDate')}
-                    onChange={handleChange('endDate')}
-                    inputID={'endDate'}
-                    labelText={'Ngày kết thúc'}
-                    inputType={'date'}
-                    placeholder={'Ngày kêt thúc làm việc'}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.endDate}
-                    isError={errors.startDate && touched.endDate}
-                    errorMessage={errors.endDate}
-                  />
-                </div>
-                <div className="row">
-                  <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
-                    inputClassName={'form-control'}
-                    value={values.note}
-                    inputID={'note'}
-                    onChange={handleChange('note')}
-                    onBlur={handleBlur('note')}
-                    labelText={'Ghi chú'}
-                  />
-                </div>
-                <div className={'row'}>
-                  <CommonCheckbox
-                    containerClassName={'col-lg-12'}
-                    inputClassName={''}
-                    checkboxId={'isFired'}
-                    label={'Nghỉ việc'}
-                    onChange={handleChange('isFired')}
-                    onBlur={handleBlur('isFired')}
-                    value={values.isFired}
-                  />
-                </div>
-                {values.isFired && (
-                  <>
-                    <div className={'row'}>
-                      <CommonMultipleTextInput
-                        containerClassName={'form-group col-lg-12'}
-                        inputClassName={'form-control'}
-                        value={values.firedNote}
-                        inputID={'reason'}
-                        onChange={handleChange('firedNote')}
-                        onBlur={handleBlur('firedNote')}
-                        labelText={'Lý do nghỉ việc'}
-                      />
-                      <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
-                        value={values.firedDate}
-                        onBlur={handleBlur('firedDate')}
-                        onChange={handleChange('firedDate')}
-                        inputID={'firedDate'}
-                        labelText={'Ngày nghỉ việc'}
-                        inputType={'date'}
-                        placeholder={'Ngày nghỉ việc'}
-                        inputClassName={'form-control'}
-                      />
+                              {!values.contractInfo[index].isMinimize && (
+                                <>
+                                  <div className="row">
+                                    <div className="form-group col-lg-6">
+                                      <Label text={'Số hợp đồng'} />
+                                      <Field
+                                        className={'form-control'}
+                                        name={`contractInfo.${index}.contractCode`}
+                                        placeholder="Nhập số hợp đồng"
+                                        type="text"
+                                      />
+                                    </div>
+                                    <div className="form-group col-lg-6">
+                                      <Label text={'Loại hợp đồng'} required />
+                                      <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
+                                        {contractType.map((ch, idx) => (
+                                          <option key={idx} value={ch.id}>
+                                            {ch.name}
+                                          </option>
+                                        ))}
+                                      </Field>
+                                    </div>
+                                  </div>
+                                  <div className="row">
+                                    <div className="form-group col-lg-6">
+                                      <Label text={'Ngày ký'} required />
+                                      <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.stateDate`} />
+                                    </div>
+                                  </div>
+                                  <div className="row">
+                                    <div className="form-group col-lg-6">
+                                      <Label text={'Thời gian thử việc'} />
+                                      <div className="input-group">
+                                        <input type="text" className={'form-control'} rows={5} name={`contractInfo.${index}.probationaryPeriod`} />
+                                        <span class="input-group-text" id="basic-addon2">
+                                          tháng
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })}
+                      <div className="d-flex justify-content-center">
+                        <button
+                          type="button"
+                          style={{ border: 'dotted 0.5px black' }}
+                          className="px-5 py-1 bg-white"
+                          onClick={() =>
+                            push({
+                              isMinimize: false,
+                              isOpen: false,
+                              contractCode: 'C1XOC',
+                              probationaryPeriod: '',
+                              contractType: 'partTime',
+                              startDate: '',
+                            })
+                          }
+                        >
+                          <Add /> Thêm
+                        </button>
+                      </div>
                     </div>
-                  </>
-                )}
+                  )}
+                />
               </form>
             )}
           </Formik>
