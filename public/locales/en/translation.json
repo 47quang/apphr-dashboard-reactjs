@@ -19,5 +19,8 @@
   "Permission group": "Permission group",
   "Course": "Course",
   "Timekeeping": "Timekeeping",
-  "Education": "Education"
+  "Education": "Education",
+  "button_title": {
+    "update": "Update"
+  }
 }

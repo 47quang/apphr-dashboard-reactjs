@@ -45,7 +45,7 @@ const SettingGeneralPage = ({ t, location }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: updateSetting,
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
@@ -63,9 +63,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên doanh nghiệp'}
+                    labelText={t('label.company_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên doanh nghiệp'}
+                    placeholder={t('placeholder.company_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -78,9 +78,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
                     inputID={'shortname'}
-                    labelText={'Tên viết tắt của doanh nghiệp'}
+                    labelText={t('label.company_short_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên viết tắt'}
+                    placeholder={t('placeholder.company_short_name')}
                     inputClassName={'form-control'}
                   />
                 </div>
@@ -91,9 +91,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('phone')}
                     onChange={handleChange('phone')}
                     inputID={'phone'}
-                    labelText={'Số điện thoại'}
+                    labelText={t('label.phone_number')}
                     inputType={'text'}
-                    placeholder={'Nhập số điện thoại'}
+                    placeholder={t('placeholder.phone_number')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.phone}
@@ -108,7 +108,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'email'}
                     labelText={'Email'}
                     inputType={'email'}
-                    placeholder={'Nhập email'}
+                    placeholder={t('placeholder.email')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.email}
@@ -123,9 +123,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
                     inputID={'taxCode'}
-                    labelText={'Mã số thuế'}
+                    labelText={t('label.tax_code')}
                     inputType={'text'}
-                    placeholder={'Nhập mã số thuế'}
+                    placeholder={t('placeholder.tax_code')}
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput
@@ -141,9 +141,9 @@ const SettingGeneralPage = ({ t, location }) => {
                       handleChange('provinceId')(e);
                     }}
                     inputID={'provinceId'}
-                    labelText={'Tỉnh/Thành phố'}
+                    labelText={t('label.province')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Tỉnh/Thành phố'}
+                    placeholder={t('placeholder.province')}
                     lstSelectOptions={provinces}
                   />
                 </div>
@@ -158,9 +158,9 @@ const SettingGeneralPage = ({ t, location }) => {
                       handleChange('districtId')(e);
                     }}
                     inputID={'districtId'}
-                    labelText={'Quận/Huyện'}
+                    labelText={t('label.district')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Quận/Huyện'}
+                    placeholder={t('placeholder.district')}
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput
@@ -169,9 +169,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('wardId')}
                     onChange={handleChange('wardId')}
                     inputID={'wardId'}
-                    labelText={'Phường/xã'}
+                    labelText={t('label.ward')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Phường/Xã'}
+                    placeholder={t('placeholder.ward')}
                     lstSelectOptions={wards}
                   />
                 </div>
@@ -183,9 +183,9 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('address')}
                     onChange={handleChange('address')}
                     inputID={'address'}
-                    labelText={'Địa chỉ cụ thể'}
+                    labelText={t('label.company_address')}
                     inputType={'text'}
-                    placeholder={'Nhập địa chỉ cụ thể'}
+                    placeholder={t('placeholder.company_address')}
                     inputClassName={'form-control'}
                   />
                 </div>
@@ -196,7 +196,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.note')}
                     inputClassName={'form-control'}
                   />
                 </div>

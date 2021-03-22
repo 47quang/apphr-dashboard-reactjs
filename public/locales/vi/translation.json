@@ -20,5 +20,28 @@
   "Education": "Đào tạo",
   "Course": "Khóa học",
   "Timekeeping": "Timekeeping",
-  "Holiday": "Ngày nghỉ"
+  "Holiday": "Ngày nghỉ",
+  "label": {
+    "update": "Cập nhật",
+    "company_name": "Tên doanh nghiệp",
+    "company_short_name": "Tên viêt tắt của doanh nghiệp",
+    "company_address": "Địa chỉ cụ thể",
+    "phone_number": "Số điện thoại",
+    "tax_code": "Mã số thuế doanh nghiệp",
+    "province": "Tỉnh/Thành phố",
+    "district": "Quận/Huyện",
+    "ward": "Phường/Xã/Thị trấn",
+    "note": "Ghi chú"
+  },
+  "placeholder": {
+    "company_name": "Nhập tên doanh nghiệp",
+    "company_short_name": "Nhập tên viết tắt",
+    "company_address": "Nhập địa chỉ cụ thể",
+    "phone_number": "Nhập số điện thoại",
+    "email": "Nhập email",
+    "tax_code": "Nhập mã số thuế",
+    "province": "Chọn Tỉnh/Thành phố",
+    "district": "Chọn Quận/Huyện",
+    "ward": "Chọn Phường/Xã/Thị trấn",
+  }
 }
