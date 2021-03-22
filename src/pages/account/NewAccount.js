@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
-import { createAccount, setEmptyAccount, fetchRoles, fetchPermissions } from 'src/stores/actions/account';
+import { createAccount, setEmptyAccount, fetchRoles, fetchPermissionGroups } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -10,15 +10,15 @@ const NewAccount = ({ t, location, history }) => {
   const accountInfoForm = useRef();
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account.account);
-  const permissions = useSelector((state) => state.account.permissions);
+  const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
-  const permissionIds = useSelector((state) => state.account.account.permissionIds);
+  //const permissionIds = useSelector((state) => state.account.account.permissionIds);
 
-  console.log('NEWACCount');
+  console.log('NEWACCount', account);
   useEffect(() => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
-    dispatch(fetchPermissions());
+    dispatch(fetchPermissionGroups());
   }, []);
 
   const submitForm = (values) => {
@@ -53,8 +53,8 @@ const NewAccount = ({ t, location, history }) => {
       account={account}
       buttons={buttons}
       submitForm={submitForm}
-      permissions={permissions}
-      permissionIds={permissionIds}
+      permissionGroups={permissionGroups}
+      //permissionIds={permissionIds}
       roles={roles}
     />
   );

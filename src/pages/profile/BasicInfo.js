@@ -11,6 +11,7 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
+import { getDateInput } from 'src/utils/datetimeUtils';
 
 const BasicInfo = ({ isCreate, profile }) => {
   const provinces = useSelector((state) => state.location.provinces);
@@ -19,80 +20,81 @@ const BasicInfo = ({ isCreate, profile }) => {
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
+
   const employeeInfo = {
-    name: profile.fullname,
-    code: profile.shortname,
+    fullname: profile.fullname,
+    shortname: profile.shortname ?? '',
     phone: profile.phone,
     email: profile.email,
-    birthday: profile.dateOfBirth.split('T')[0],
-    gender: profile.gender === 'male' ? 1 : 0,
-    id: profile.cmnd,
-    have_id: profile.cmnd ? true : false,
-    id_date: '',
-    id_place: '',
-    have_passport: profile.passport ? true : false,
-    passport: profile.passport,
+    dateOfBirth: getDateInput(profile.dateOfBirth),
+    gender: profile.gender === 'male' ? 1 : 2,
+    cmnd: profile.cmnd + '',
+    have_id: profile.cmnd !== null && profile.cmnd !== undefined,
+    cmnd_date: '',
+    cmnd_place: '',
+    have_passport: profile.passport !== null && profile.passport !== undefined,
+    passport: profile.passport ?? '',
     passport_start: '',
     passport_end: '',
     passport_place: '',
-    department: profile.departmentId,
-    position: profile.positionId,
-    role: profile.roleId,
-    branch: profile.branchId,
+    departmentId: +profile.departmentId,
+    positionId: +profile.positionId,
+    role: 0,
+    branch: +profile.branchId,
     manager: '',
   };
-
   useEffect(() => {
     dispatch(fetchProvinces());
     dispatch(fetchBranches());
   }, []);
   const genders = [
-    { id: 0, name: 'Nam' },
-    { id: 1, name: 'Nữ' },
+    { id: 1, name: 'Nam' },
+    { id: 2, name: 'Nữ' },
   ];
+  console.log('emp ', employeeInfo);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <FormHeader text="Thông tin cơ bản" />
-          <Formik initialValues={employeeInfo}>
+          <Formik initialValues={employeeInfo} enableReinitialize>
             {({ values, errors, touched, handleBlur, handleChange }) => (
               <form>
                 <div className="row">
-                  <div className="col-2">
+                  <div className="col-xl-2 text-center mb-4">
                     <img src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85" alt="Ảnh đại diện" height="200px" />
                   </div>
-                  <div className="col-10">
+                  <div className="col-xl-10">
                     <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.code}
-                        onBlur={handleBlur('code')}
-                        onChange={handleChange('code')}
-                        inputID={'code'}
+                        value={values.shortname}
+                        onBlur={handleBlur('shortname')}
+                        onChange={handleChange('shortname')}
+                        inputID={'shortname'}
                         labelText={'Mã nhân viên'}
                         inputType={'text'}
                         placeholder={'Nhập mã nhân viên'}
                         inputClassName={'form-control'}
                         isRequiredField
-                        isTouched={touched.code}
-                        isError={errors.code && touched.code}
-                        errorMessage={errors.code}
+                        isTouched={touched.shortname}
+                        isError={errors.shortname && touched.shortname}
+                        errorMessage={errors.shortname}
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.name}
-                        onBlur={handleBlur('name')}
-                        onChange={handleChange('name')}
-                        inputID={'name'}
+                        value={values.fullname}
+                        onBlur={handleBlur('fullname')}
+                        onChange={handleChange('fullname')}
+                        inputID={'fullname'}
                         labelText={'Tên nhân viên'}
                         inputType={'text'}
                         placeholder={'Nhập tên nhân viên'}
                         inputClassName={'form-control'}
                         isRequiredField
-                        isTouched={touched.name}
-                        isError={errors.name && touched.name}
-                        errorMessage={errors.name}
+                        isTouched={touched.fullname}
+                        isError={errors.fullname && touched.fullname}
+                        errorMessage={errors.fullname}
                       />
                     </div>
                     <div className="row">
@@ -130,18 +132,18 @@ const BasicInfo = ({ isCreate, profile }) => {
                     <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.birthday}
-                        onBlur={handleBlur('birthday')}
-                        onChange={handleChange('birthday')}
-                        inputID={'birthday'}
+                        value={values.dateOfBirth}
+                        onBlur={handleBlur('dateOfBirth')}
+                        onChange={handleChange('dateOfBirth')}
+                        inputID={'dateOfBirth'}
                         labelText={'Ngày sinh'}
                         inputType={'date'}
                         placeholder={'Chọn ngày sinh'}
                         inputClassName={'form-control'}
                         isRequiredField
-                        isTouched={touched.birthday}
-                        isError={errors.birthday && touched.birthday}
-                        errorMessage={errors.birthday}
+                        isTouched={touched.dateOfBirth}
+                        isError={errors.dateOfBirth && touched.dateOfBirth}
+                        errorMessage={errors.dateOfBirth}
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-lg-6'}
@@ -175,10 +177,10 @@ const BasicInfo = ({ isCreate, profile }) => {
                           <>
                             <CommonTextInput
                               containerClassName={'form-group'}
-                              value={values.id}
-                              onBlur={handleBlur('id')}
-                              onChange={handleChange('id')}
-                              inputID={'id'}
+                              value={values.cmnd}
+                              onBlur={handleBlur('cmnd')}
+                              onChange={handleChange('cmnd')}
+                              inputcmnd={'cmnd'}
                               labelText={'Số CMND/CCCD'}
                               inputType={'text'}
                               placeholder={'Nhập số CMND/CCCD'}
@@ -186,10 +188,10 @@ const BasicInfo = ({ isCreate, profile }) => {
                             />
                             <CommonTextInput
                               containerClassName={'form-group'}
-                              value={values.id_date}
-                              onBlur={handleBlur('id_date')}
-                              onChange={handleChange('id_date')}
-                              inputID={'id_date'}
+                              value={values.cmnd_date}
+                              onBlur={handleBlur('cmnd_date')}
+                              onChange={handleChange('cmnd_date')}
+                              inputID={'cmnd_date'}
                               labelText={'Ngày cấp'}
                               inputType={'date'}
                               placeholder={'Chọn ngày cấp'}
@@ -197,10 +199,10 @@ const BasicInfo = ({ isCreate, profile }) => {
                             />
                             <CommonSelectInput
                               containerClassName={'form-group'}
-                              value={values.id_place}
-                              onBlur={handleBlur('id_place')}
-                              onChange={handleChange('id_place')}
-                              inputID={'id_place'}
+                              value={values.cmnd_place}
+                              onBlur={handleBlur('cmnd_place')}
+                              onChange={handleChange('cmnd_place')}
+                              inputID={'cmnd_place'}
                               labelText={'Nơi cấp'}
                               selectClassName={'form-control'}
                               placeholder={'Chọn tỉnh/thành phố'}
@@ -270,16 +272,17 @@ const BasicInfo = ({ isCreate, profile }) => {
                         )}
                       </div>
                     </div>
+                    <hr />
                     <div className="row">
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.branch}
-                        onBlur={handleBlur('branch')}
+                        value={values.branchId}
+                        onBlur={handleBlur('branchId')}
                         onChange={(e) => {
                           dispatch(fetchDepartments({ branchId: e.target.value }));
-                          handleChange('branch')(e);
+                          handleChange('branchId')(e);
                         }}
-                        inputID={'branch'}
+                        inputID={'branchId'}
                         labelText={'Chi nhánh'}
                         selectClassName={'form-control'}
                         placeholder={'Chọn chi nhánh'}
@@ -287,13 +290,13 @@ const BasicInfo = ({ isCreate, profile }) => {
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.department}
-                        onBlur={handleBlur('department')}
+                        value={values.departmentId}
+                        onBlur={handleBlur('departmentId')}
                         onChange={(e) => {
                           dispatch(fetchPositions({ departmentId: e.target.value }));
-                          handleChange('department')(e);
+                          handleChange('departmentId')(e);
                         }}
-                        inputID={'department'}
+                        inputID={'departmentId'}
                         labelText={'Phòng ban'}
                         selectClassName={'form-control'}
                         placeholder={'Chọn phòng ban'}
@@ -301,10 +304,10 @@ const BasicInfo = ({ isCreate, profile }) => {
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.position}
-                        onBlur={handleBlur('position')}
-                        onChange={handleChange('position')}
-                        inputID={'position'}
+                        value={values.positionId}
+                        onBlur={handleBlur('positionId')}
+                        onChange={handleChange('positionId')}
+                        inputID={'positionId'}
                         labelText={'Vị trí'}
                         selectClassName={'form-control'}
                         placeholder={'Chọn vị trí làm việc'}

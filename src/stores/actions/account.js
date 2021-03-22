@@ -45,7 +45,7 @@ export const createAccount = (params, history) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
-        history.push(`/setting/account/tab1.id=${payload.id}`);
+        history.push(`/account/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
@@ -114,7 +114,7 @@ export const fetchRole = (id) => {
   };
 };
 
-export const fetchPermissions = () => {
+export const fetchPermissionGroups = () => {
   return (dispatch, getState) => {
     api.role
       .getAllPermission()

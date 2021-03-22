@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
-import { updateAccount, fetchAccount, fetchRoles, fetchRole, fetchPermissions } from 'src/stores/actions/account';
+import { updateAccount, fetchAccount, fetchRoles, fetchRole, fetchPermissionGroups } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -10,13 +10,14 @@ const UpdateAccount = ({ t, location, history }) => {
   const accountInfoForm = useRef();
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account.account);
-  const permissions = useSelector((state) => state.account.permissions);
+  const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
+
   useEffect(() => {
     //    dispatch(fetchAccount());
     dispatch(fetchRoles());
     if (account.roleId) dispatch(fetchRole(account.roleId));
-    dispatch(fetchPermissions());
+    dispatch(fetchPermissionGroups());
   }, []);
 
   const submitForm = (values) => {
@@ -59,7 +60,7 @@ const UpdateAccount = ({ t, location, history }) => {
       account={account}
       buttons={buttons}
       submitForm={submitForm}
-      permissions={permissions}
+      permissionGroups={permissionGroups}
       roles={roles}
     />
   );

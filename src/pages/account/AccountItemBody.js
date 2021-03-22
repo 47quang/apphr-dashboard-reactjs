@@ -10,21 +10,8 @@ import { renderButtons } from 'src/utils/formUtils';
 import { REDUX_STATE } from 'src/stores/states';
 import { useDispatch } from 'react-redux';
 
-const AccountItemBody = ({
-  accountRef,
-  account,
-  buttons,
-  submitForm,
-  branches,
-  departments,
-  positions,
-  permissions,
-  roles,
-  profiles,
-  permissionIds,
-}) => {
+const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
   const dispatch = useDispatch();
-
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -82,19 +69,13 @@ const AccountItemBody = ({
                     labelText={'Vai trò'}
                     selectClassName={'form-control'}
                     onBlur={handleBlur('roleId')}
-                    onChange={async (e) => {
+                    onChange={(e) => {
                       if (e.target.value == 0) {
-                        dispatch({
-                          type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
-                          payload: [],
-                        });
+                        setFieldValue('permissionIds', []);
                       } else {
                         let permissionIds = roles.filter((x) => x.id === parseInt(e.target.value))[0].permissionIds;
                         permissionIds = permissionIds.map((val) => +val);
-                        dispatch({
-                          type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
-                          payload: permissionIds,
-                        });
+                        setFieldValue('permissionIds', permissionIds);
                       }
                       handleChange('roleId')(e);
                     }}
@@ -156,46 +137,39 @@ const AccountItemBody = ({
                   />
                 </div>
                 <div className="row">
-                  {permissions.map((permission) => {
+                  {permissionGroups.map((permissionGroup) => {
                     return (
                       <div className="form-group col-lg-3">
                         <Field
                           component={Checkbox}
                           color={'primary'}
-                          name={permission.group}
-                          value={permission.group}
+                          name={permissionGroup.group}
+                          value={permissionGroup.group}
                           checked={initCheck(
-                            permission.children.map((per) => per.id),
-                            permissionIds,
+                            permissionGroup.children.map((per) => per.id),
+                            values.permissionIds,
                           )}
                           onChange={(event) => {
-                            const thisPermission = permission.children.map((per) => per.id);
-                            setFieldValue(permission.group, event.target.checked);
+                            const thisPermission = permissionGroup.children.map((per) => per.id);
+                            setFieldValue(permissionGroup.group, event.target.checked);
+                            let payload = Array.from(new Set([...values.permissionIds, ...thisPermission]));
                             if (event.target.checked) {
-                              setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
-                              dispatch({
-                                type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
-                                payload: Array.from(new Set([...values.permissionIds, ...thisPermission])),
-                              });
+                              setFieldValue('permissionIds', payload);
                             } else {
                               setFieldValue(
                                 'permissionIds',
                                 values.permissionIds.filter((x) => !thisPermission.includes(x)),
                               );
-                              dispatch({
-                                type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
-                                payload: values.permissionIds.filter((x) => !thisPermission.includes(x)),
-                              });
                             }
                           }}
                         />
-                        {permission.name}
+                        {permissionGroup.name}
                         <FieldArray
-                          name="permissions"
+                          name="permissionIds"
                           render={(arrayHelpers) => {
                             return (
                               <div className="mx-4 px-2">
-                                {permission.children.map((per) => (
+                                {permissionGroup.children.map((per) => (
                                   <div key={per.id}>
                                     <label>
                                       <Checkbox
@@ -203,12 +177,12 @@ const AccountItemBody = ({
                                         name="permissions_"
                                         type="checkbox"
                                         value={per.id}
-                                        checked={permissionIds.includes(per.id)}
+                                        checked={values.permissionIds.includes(per.id)}
                                         onChange={(e) => {
                                           if (e.target.checked) {
                                             arrayHelpers.push(per.id);
                                           } else {
-                                            const idx = permissionIds.indexOf(per.id);
+                                            const idx = values.permissionIds.indexOf(per.id);
                                             arrayHelpers.remove(idx);
                                           }
                                         }}

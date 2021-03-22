@@ -14,7 +14,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
   const roles = useSelector((state) => state.account.roles);
 
   useEffect(() => {
-    dispatch(fetchProfile());
+    dispatch(fetchProfile(match?.params?.id));
   }, []);
 
   const buttons = [
@@ -43,7 +43,6 @@ const UpdateProfile = ({ t, location, history, match }) => {
       name: 'Tạo mới',
     },
   ];
-
   return <ProfileTabs isCreate={false} buttons={buttons} profile={profile} />;
 };
 

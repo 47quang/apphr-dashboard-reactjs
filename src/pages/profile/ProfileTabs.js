@@ -167,7 +167,6 @@ const ProfileTabs = ({ isCreate, profile }) => {
   const handleChangeSubTab = (event, newValue) => {
     dispatch(setSubTabName(newValue));
   };
-
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">

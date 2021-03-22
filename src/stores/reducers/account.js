@@ -15,8 +15,7 @@ const initialState = {
     permissionIds: [],
   },
   roles: [],
-  permissionIds: [],
-  permissions: [],
+  permissionGroups: [],
 };
 
 const accountReducer = (state = initialState, { type, payload }) => {
@@ -43,13 +42,14 @@ const accountReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.account.GET_ALL_PERMISSION:
       return {
         ...state,
-        permissions: payload,
+        permissionGroups: payload,
       };
     case REDUX_STATE.account.GET_PERMISSION_ARRAY:
       return {
         ...state,
-        permissionIds: payload,
+        account: { ...state.account, permissionIds: payload },
       };
+
     case REDUX_STATE.account.SET_ROLE:
       return {
         ...state,
