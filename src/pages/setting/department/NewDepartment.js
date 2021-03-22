@@ -31,7 +31,7 @@ const NewDepartment = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.DEPARTMENT);
       },
-      name: 'Quay lại',
+      name: t('title.back'),
       position: 'left',
     },
     {
@@ -40,11 +40,13 @@ const NewDepartment = ({ t, location, history }) => {
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('title.create_new'),
     },
   ];
 
-  return <DepartmentItemBody departmentRef={departmentRef} department={department} branches={branches} buttons={buttons} submitForm={submitForm} />;
+  return (
+    <DepartmentItemBody t={t} departmentRef={departmentRef} department={department} branches={branches} buttons={buttons} submitForm={submitForm} />
+  );
 };
 
 export default NewDepartment;

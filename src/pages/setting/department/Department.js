@@ -7,10 +7,10 @@ import { deleteDepartment, fetchDepartments } from 'src/stores/actions/departmen
 
 const Department = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'shortname', title: 'Mã phòng ban' },
-    { name: 'name', title: 'Tên phòng ban' },
-    { name: 'branchname', title: 'Chi nhánh' },
-    { name: 'note', title: 'Ghi chú' },
+    { name: 'shortname', title: t('title.department_code') },
+    { name: 'name', title: t('title.department.name') },
+    { name: 'branchname', title: t('title.branch') },
+    { name: 'note', title: t('title.description') },
   ];
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);
@@ -26,6 +26,7 @@ const Department = ({ t, location, history }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
+        t={t}
         columnDef={columnDef}
         data={departments.map((d) => {
           d.branchname = d.branch?.name;

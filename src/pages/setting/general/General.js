@@ -160,7 +160,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'districtId'}
                     labelText={t('label.district')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.district')}
+                    placeholder={t('placeholder.select_district')}
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput

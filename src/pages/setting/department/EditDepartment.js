@@ -32,7 +32,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.DEPARTMENT);
       },
-      name: 'Quay lại',
+      name: t('title.back'),
       position: 'left',
     },
     {
@@ -41,7 +41,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         departmentRef.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('title.reset'),
     },
     {
       type: 'button',
@@ -49,10 +49,12 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('title.update'),
     },
   ];
-  return <DepartmentItemBody departmentRef={departmentRef} department={department} branches={branches} submitForm={submitForm} buttons={buttons} />;
+  return (
+    <DepartmentItemBody t={t} departmentRef={departmentRef} department={department} branches={branches} submitForm={submitForm} buttons={buttons} />
+  );
 };
 
 export default EditDepartment;

@@ -6,7 +6,7 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 
-const DepartmentItemBody = ({ departmentRef, department, branches, buttons, submitForm }) => {
+const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, submitForm }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -29,9 +29,9 @@ const DepartmentItemBody = ({ departmentRef, department, branches, buttons, subm
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
                     inputID={'shortname'}
-                    labelText={'Mã phòng ban'}
+                    labelText={t('label.department_code')}
                     inputType={'text'}
-                    placeholder={'Nhập mã phòng ban'}
+                    placeholder={t('placeholder.department_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -43,9 +43,9 @@ const DepartmentItemBody = ({ departmentRef, department, branches, buttons, subm
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên phòng ban'}
+                    labelText={t('label.depart_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên phòng ban'}
+                    placeholder={t('placeholder.department_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -60,10 +60,10 @@ const DepartmentItemBody = ({ departmentRef, department, branches, buttons, subm
                     onBlur={handleBlur('branchId')}
                     onChange={handleChange('branchId')}
                     inputID={'branchId'}
-                    labelText={'Chi nhánh'}
+                    labelText={t('label.branch')}
                     isRequiredField
                     selectClassName={'form-control'}
-                    placeholder={'Chọn chi nhánh'}
+                    placeholder={t('placeholder.select_branch')}
                     lstSelectOptions={branches}
                     isTouched={touched.branchId}
                     isError={errors.branchId && touched.branchId}
@@ -78,9 +78,9 @@ const DepartmentItemBody = ({ departmentRef, department, branches, buttons, subm
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.description')}
                     inputClassName={'form-control'}
-                    placeholder={'Nhập vào ghi chú'}
+                    placeholder={t('placeholder.description')}
                     isRequiredField
                     isTouched={touched.note}
                     isError={errors.note && touched.note}
