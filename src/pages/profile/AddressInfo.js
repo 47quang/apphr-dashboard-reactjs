@@ -1,4 +1,4 @@
-import { AddCircle, RemoveCircle, Replay } from '@material-ui/icons';
+import { AddCircle, RemoveCircle } from '@material-ui/icons';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -39,14 +39,7 @@ const AddressInfo = () => {
     },
     { id: 'facebook', name: 'Facebook' },
   ];
-  const channelContact = {
-    channelContacts: [
-      {
-        channel: 'skype',
-        link: 'skype://////',
-      },
-    ],
-  };
+
   const initialContactChannelValues = {
     contactChannels: [
       {

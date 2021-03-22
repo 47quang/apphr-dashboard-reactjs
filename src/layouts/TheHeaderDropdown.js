@@ -1,9 +1,7 @@
-import React from 'react';
-import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
+import { CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg } from '@coreui/react';
 import { ExitToApp } from '@material-ui/icons';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { REDUX_STATE } from 'src/stores/states';
 import { logout } from 'src/stores/actions/user';
 
 const TheHeaderDropdown = (props) => {

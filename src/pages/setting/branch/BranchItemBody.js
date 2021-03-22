@@ -1,7 +1,7 @@
-import { CAlert, CContainer } from '@coreui/react';
+import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
@@ -9,22 +9,20 @@ import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
-import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: '100%',
+//     '& > * + *': {
+//       marginTop: theme.spacing(2),
+//     },
+//   },
+// }));
 
 const BranchItemBody = ({ branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const dispatch = useDispatch();
-  const alert = useSelector((state) => state.branch.alert);
+  // const alert = useSelector((state) => state.branch.alert);
 
   return (
     <>

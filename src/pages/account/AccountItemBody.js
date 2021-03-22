@@ -1,17 +1,14 @@
 import { CContainer } from '@coreui/react';
-import { Formik, Field, FieldArray } from 'formik';
+import Checkbox from '@material-ui/core/Checkbox';
+import { Field, FieldArray, Formik } from 'formik';
 import React from 'react';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { AccountInfoSchema } from 'src/schema/formSchema';
-import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
-import { REDUX_STATE } from 'src/stores/states';
-import { useDispatch } from 'react-redux';
 
 const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
-  const dispatch = useDispatch();
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -107,7 +104,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     selectClassName={'form-control'}
                     onBlur={handleBlur('roleId')}
                     onChange={(e) => {
-                      if (e.target.value == 0) {
+                      if (e.target.value === 0) {
                         setFieldValue('permissionIds', []);
                       } else {
                         let permissionIds = roles.filter((x) => x.id === parseInt(e.target.value))[0].permissionIds;

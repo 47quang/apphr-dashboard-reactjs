@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeActions } from 'src/stores/actions/header';
-import { updateAccount, fetchAccount, fetchRoles, fetchRole, fetchPermissionGroups } from 'src/stores/actions/account';
-import AccountItemBody from './AccountItemBody';
 import { ROUTE_PATH } from 'src/constants/key';
+import { fetchPermissionGroups, fetchRole, fetchRoles } from 'src/stores/actions/account';
+import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import QTable from 'src/components/table/Table';
-import { useDispatch, useSelector } from 'react-redux';
 import { CContainer } from '@coreui/react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import QTable from 'src/components/table/Table';
 
 const columnDef = [
   { name: 'id', title: 'Số thứ tự' },

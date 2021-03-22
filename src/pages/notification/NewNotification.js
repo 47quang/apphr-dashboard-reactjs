@@ -1,7 +1,5 @@
 import { CContainer } from '@coreui/react';
 import React from 'react';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import FormHeader from 'src/components/text/FormHeader';
 import NotificationForm from './NotificationForm';
 
 const NewNotification = ({ t, location }) => {

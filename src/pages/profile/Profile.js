@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CContainer } from '@coreui/react';
-import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
+import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
 const columnDefOfProfiles = [
   { name: 'shortname', title: 'Mã nhân sự' },

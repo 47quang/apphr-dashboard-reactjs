@@ -40,8 +40,8 @@ const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const NewBranch = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
 const EditBranch = React.lazy(() => import('src/pages/setting/branch/UpdateBranch'));
 
-const Permission = React.lazy(() => import('src/pages/setting/authorization/permission/Permission'));
-const PermissionGroup = React.lazy(() => import('src/pages/setting/authorization/permission-group/PermissionGroup'));
+// const Permission = React.lazy(() => import('src/pages/setting/authorization/permission/Permission'));
+// const PermissionGroup = React.lazy(() => import('src/pages/setting/authorization/permission-group/PermissionGroup'));
 const Role = React.lazy(() => import('src/pages/setting/authorization/role/Role'));
 const NewRole = React.lazy(() => import('src/pages/setting/authorization/role/NewRole'));
 const EditRole = React.lazy(() => import('src/pages/setting/authorization/role/UpdateRole'));
