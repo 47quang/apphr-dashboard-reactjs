@@ -6,8 +6,6 @@ import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/br
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import BranchItemBody from './BranchItemBody';
 
-//TODO: translate
-
 const UpdateBranch = ({ t, location, history, match }) => {
   const branchInfoForm = useRef();
   const dispatch = useDispatch();
@@ -49,7 +47,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.BRANCH);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -58,7 +56,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         branchInfoForm.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -66,13 +64,14 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         branchInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
   return (
     <BranchItemBody
       branchRef={branchInfoForm}
       branch={branch}
+      t={t}
       validationSchema={SettingBranchInfoSchema}
       provinces={provinces}
       districts={districts}

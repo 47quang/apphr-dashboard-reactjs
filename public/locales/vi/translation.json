@@ -23,25 +23,42 @@
   "Holiday": "Ngày nghỉ",
   "label": {
     "update": "Cập nhật",
+    "back": "Quay lại",
+    "create_new": "Tạo mới",
+    "reset": "Hoàn tác",
     "company_name": "Tên doanh nghiệp",
     "company_short_name": "Tên viêt tắt của doanh nghiệp",
     "company_address": "Địa chỉ cụ thể",
+    "branch_code": "Mã chi nhánh",
+    "branch_name": "Tên chi nhánh",
+    "branch_address": "Địa chỉ chi nhánh",
+    "branch_ip_router": "Địa chỉ IP của Router",
+    "address": "Địa chỉ",
     "phone_number": "Số điện thoại",
     "tax_code": "Mã số thuế doanh nghiệp",
     "province": "Tỉnh/Thành phố",
     "district": "Quận/Huyện",
     "ward": "Phường/Xã/Thị trấn",
-    "note": "Ghi chú"
+    "note": "Ghi chú",
+    "description": "Mô tả"
   },
+  "title": {
+    "branch_create": "Thêm chi nhánh"
+  },
+  "message": {},
   "placeholder": {
     "company_name": "Nhập tên doanh nghiệp",
     "company_short_name": "Nhập tên viết tắt",
     "company_address": "Nhập địa chỉ cụ thể",
+    "branch_code": "Nhập mã chi nhánh",
+    "branch_name": "Nhập tên chi nhánh",
+    "branch_ip_router": "Nhập địa chỉ IP của router",
+    "branch_address": "Nhập địa chỉ chi nhánh",
     "phone_number": "Nhập số điện thoại",
     "email": "Nhập email",
     "tax_code": "Nhập mã số thuế",
     "province": "Chọn Tỉnh/Thành phố",
     "district": "Chọn Quận/Huyện",
-    "ward": "Chọn Phường/Xã/Thị trấn",
+    "ward": "Chọn Phường/Xã/Thị trấn"
   }
 }

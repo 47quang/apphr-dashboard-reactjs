@@ -6,8 +6,6 @@ import { createBranch, setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import BranchItemBody from './BranchItemBody';
 
-//TODO: translate
-
 const NewBranchPage = ({ t, location, history }) => {
   const branchInfoForm = useRef();
   const dispatch = useDispatch();
@@ -50,7 +48,7 @@ const NewBranchPage = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.BRANCH);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -59,7 +57,7 @@ const NewBranchPage = ({ t, location, history }) => {
       onClick: (e) => {
         branchInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
 
@@ -67,6 +65,7 @@ const NewBranchPage = ({ t, location, history }) => {
     <BranchItemBody
       branchRef={branchInfoForm}
       branch={branch}
+      t={t}
       validationSchema={SettingBranchInfoSchema}
       provinces={provinces}
       districts={districts}

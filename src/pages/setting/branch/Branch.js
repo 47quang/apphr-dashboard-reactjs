@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
-
-const columnDef = [
-  { name: 'shortname', title: 'Mã chi nhánh' },
-  { name: 'name', title: 'Tên chi nhánh' },
-  { name: 'address', title: 'Địa chỉ' },
-];
-const Branch = ({ t, location, history }) => {
+import PropTypes from 'prop-types';
+const Branch = ({ t }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
-
+  const columnDef = [
+    { name: 'shortname', title: t('label.branch_code') },
+    { name: 'name', title: t('label.branch_name') },
+    { name: 'address', title: t('label.address') },
+  ];
   useEffect(() => {
     dispatch(fetchBranches());
   }, []);
@@ -25,8 +24,11 @@ const Branch = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={branches} route={ROUTE_PATH.BRANCH + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable t={t} columnDef={columnDef} data={branches} route={ROUTE_PATH.BRANCH + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
+};
+Branch.propTypes = {
+  t: PropTypes.func,
 };
 export default Branch;

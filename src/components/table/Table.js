@@ -179,6 +179,7 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
 
 const QTable = (props) => {
   const {
+    t,
     columnDef,
     data,
     route,
