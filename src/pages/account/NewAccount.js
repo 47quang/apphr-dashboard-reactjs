@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
-import { createAccount, setEmptyAccount, fetchRoles } from 'src/stores/actions/account';
+import { createAccount, setEmptyAccount, fetchRoles, fetchPermissions } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -12,10 +12,13 @@ const NewAccount = ({ t, location, history }) => {
   const account = useSelector((state) => state.account.account);
   const permissions = useSelector((state) => state.account.permissions);
   const roles = useSelector((state) => state.account.roles);
+  const permissionIds = useSelector((state) => state.account.account.permissionIds);
 
+  console.log('NEWACCount');
   useEffect(() => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
+    dispatch(fetchPermissions());
   }, []);
 
   const submitForm = (values) => {
@@ -43,7 +46,7 @@ const NewAccount = ({ t, location, history }) => {
       name: 'Tạo mới',
     },
   ];
-
+  console.log(roles);
   return (
     <AccountItemBody
       accountRef={accountInfoForm}
@@ -51,6 +54,7 @@ const NewAccount = ({ t, location, history }) => {
       buttons={buttons}
       submitForm={submitForm}
       permissions={permissions}
+      permissionIds={permissionIds}
       roles={roles}
     />
   );

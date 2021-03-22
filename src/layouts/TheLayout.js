@@ -25,7 +25,6 @@ const TheLayout = (props) => {
   }
 
   const handleClose = (event, reason) => {
-    console.log('rs', reason);
     if (reason === 'timeout') {
       dispatch({ type: REDUX_STATE.notification.SET_OPEN });
     }

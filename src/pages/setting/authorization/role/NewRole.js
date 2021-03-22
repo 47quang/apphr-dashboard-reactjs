@@ -17,9 +17,8 @@ const NewRole = ({ t, location, history }) => {
   }, []);
 
   const submitForm = (values) => {
-    let { name, permissions } = values;
-    console.log('Submit value: ', permissions, name);
-    dispatch(createRole({ name, permissions }, history));
+    let { name, permissionIds } = values;
+    dispatch(createRole({ name, permissionIds }, history));
   };
 
   const buttons = [

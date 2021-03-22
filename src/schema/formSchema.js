@@ -104,7 +104,10 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
 //Account
 export const AccountInfoSchema = Yup.object().shape({
   username: Yup.string().required('Bắt buộc nhập vào tên đăng nhập'),
-  role: Yup.string().test('empty string', 'Bắt buộc phải chọn vai trò', function (value) {
+  password: Yup.string().test('empty string', 'Bắt buộc phải nhập mật khẩu', function (value) {
+    return value !== '0';
+  }),
+  roleId: Yup.string().test('empty string', 'Phải chọn vai trò', function (value) {
     return value !== '0';
   }),
   coefficient: Yup.number().min(0, 'Hệ số công phải là một số không âm').required('Bắt buộc phải nhập hệ số công'),

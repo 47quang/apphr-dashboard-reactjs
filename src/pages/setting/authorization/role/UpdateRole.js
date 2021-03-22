@@ -17,10 +17,8 @@ const UpdateRole = ({ t, location, history, match }) => {
   }, []);
 
   const submitForm = (values) => {
-    let form = values;
-    delete form.id;
-    // console.log(form);
-    dispatch(updateRole(form, history));
+    let { name, permissionIds } = values;
+    dispatch(updateRole({ name, permissionIds }, history));
   };
 
   const buttons = [
@@ -49,7 +47,6 @@ const UpdateRole = ({ t, location, history, match }) => {
       name: 'Cập nhật',
     },
   ];
-  console.log(role);
   return <RoleItemBody roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
 };
 

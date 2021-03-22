@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import QTable from 'src/components/table/Table';
 import { useDispatch, useSelector } from 'react-redux';
+import { CContainer } from '@coreui/react';
 
 const columnDef = [
   { name: 'id', title: 'Số thứ tự' },
@@ -33,7 +34,11 @@ const Contract = ({ isCreate }) => {
       />
     );
   } else {
-    return <QTable columnDef={columnDef} data={contracts} route={'/profile/contract/'} idxColumnsFilter={[0, 1, 2]} deleteRow={deleteRow} />;
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable columnDef={columnDef} data={contracts} route={'/profile/contract/'} idxColumnsFilter={[0, 1, 2]} deleteRow={deleteRow} />;
+      </CContainer>
+    );
   }
 };
 

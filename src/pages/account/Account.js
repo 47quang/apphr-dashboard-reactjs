@@ -16,12 +16,12 @@ const Account = () => {
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.account.accounts);
   useEffect(() => {
-    //dispatch(fetchAccounts());
+    dispatch(fetchAccounts());
   }, []);
 
   const deleteRow = async (rowId) => {
-    // dispatch(deleteAccount(rowId));
-    // dispatch(fetchAccounts());
+    dispatch(deleteAccount(rowId));
+    dispatch(fetchAccounts());
     console.log('RowId Delete: ', rowId);
   };
   return (

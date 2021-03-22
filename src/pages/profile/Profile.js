@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CContainer } from '@coreui/react';
-import { deleteProfile, fetchAllProfiles } from 'src/stores/actions/account';
+import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 import QTable from 'src/components/table/Table';
 
 const columnDefOfProfiles = [
   { name: 'shortname', title: 'Mã hồ sơ' },
-  { name: 'name', title: 'Tên nhân viên' },
+  { name: 'fullname', title: 'Tên nhân viên' },
   { name: 'phone', title: 'Số điện thoại' },
   { name: 'gender', title: 'Giới tính' },
   { name: 'email', title: 'Email' },
-  { name: 'positionName', title: 'Vị trí' },
-  { name: 'departmentName', title: 'Phòng ban' },
-  { name: 'branchName', title: 'Chi nhánh' },
+  { name: 'positionId', title: 'Vị trí' },
+  { name: 'departmentId', title: 'Phòng ban' },
+  { name: 'branchId', title: 'Chi nhánh' },
   { name: 'status', title: 'Trạng thái' },
 ];
 
 const Profile = ({ t, location }) => {
+  const dispatch = useDispatch();
   const profiles = useSelector((state) => state.profile.profiles);
   useEffect(() => {
-    // dispatch(fetchAllProfiles());
+    dispatch(fetchProfiles());
   }, []);
   const deleteRow = async (rowId) => {
-    // dispatch(deleteProfile(rowId));
-    // dispatch(fetchAllProfiles());
+    dispatch(deleteProfile(rowId));
+    dispatch(fetchProfiles());
     console.log('RowId Delete: ', rowId);
   };
   return (

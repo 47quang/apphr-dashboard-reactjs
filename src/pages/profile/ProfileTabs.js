@@ -119,6 +119,9 @@ import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import CertificateInfo from './CertificateInfo';
 import OtherInfo from './OtherInfo';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTabName, setSubTabName } from 'src/stores/actions/profile';
+import JobTimelineInfo from './JobTimeline';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -149,29 +152,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileTabs() {
+const ProfileTabs = ({ isCreate, profile }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
-  const [subValue, setSubValue] = React.useState(0);
+  const tabName = useSelector((state) => state.profile.tabName);
+  const subTabName = useSelector((state) => state.profile.subTabName);
+  const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(setTabName(newValue));
+    dispatch(setSubTabName(0));
   };
 
   const handleChangeSubTab = (event, newValue) => {
-    setSubValue(newValue);
-  };
-
-  const handleChangeIndex = (index) => {
-    setValue(index);
+    dispatch(setSubTabName(newValue));
   };
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
-          value={value}
+          value={tabName}
           onChange={handleChange}
           indicatorColor="primary"
           className="noselect"
@@ -180,15 +181,15 @@ export default function ProfileTabs() {
           aria-label="full width tabs example"
         >
           <Tab className="noselect" label="Hồ sơ cá nhân" {...a11yProps(0)} />
-          <Tab className="noselect" label="Đề xuất cá nhân" {...a11yProps(1)} />
-          <Tab className="noselect" label="Lịch sử công tác" {...a11yProps(2)} />
+          <Tab hidden={isCreate} className="noselect" label="Đề xuất cá nhân" {...a11yProps(1)} />
+          <Tab hidden={isCreate} className="noselect" label="Lịch sử công tác" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} dir={theme.direction}>
+      <TabPanel value={tabName} index={0} dir={theme.direction}>
         <div className={classes.root}>
           <AppBar position="static" color="default">
             <Tabs
-              value={subValue}
+              value={subTabName}
               onChange={handleChangeSubTab}
               indicatorColor="primary"
               className="noselect"
@@ -205,35 +206,36 @@ export default function ProfileTabs() {
               <Tab className="noselect" label="Thông tin khác" {...a11yProps(6)} />
             </Tabs>
           </AppBar>
-          <TabPanel value={subValue} index={0} dir={theme.direction}>
-            <BasicInfo />
+          <TabPanel value={subTabName} index={0} dir={theme.direction}>
+            <BasicInfo isCreate={isCreate} profile={profile} />
           </TabPanel>
-          <TabPanel value={subValue} index={1} dir={theme.direction}>
-            <Contract />
+          <TabPanel value={subTabName} index={1} dir={theme.direction}>
+            {isCreate ? <JobTimelineInfo /> : <Contract />}
           </TabPanel>
-          <TabPanel value={subValue} index={2} dir={theme.direction}>
+          <TabPanel value={subTabName} index={2} dir={theme.direction}>
             <AcademicLevel />
           </TabPanel>
-          <TabPanel value={subValue} index={3} dir={theme.direction}>
+          <TabPanel value={subTabName} index={3} dir={theme.direction}>
             <CertificateInfo />
           </TabPanel>
-          <TabPanel value={subValue} index={4} dir={theme.direction}>
+          <TabPanel value={subTabName} index={4} dir={theme.direction}>
             <AddressInfo />
           </TabPanel>
-          <TabPanel value={subValue} index={5} dir={theme.direction}>
+          <TabPanel value={subTabName} index={5} dir={theme.direction}>
             Tiền lươn / Trợ cấp
           </TabPanel>
-          <TabPanel value={subValue} index={6} dir={theme.direction}>
+          <TabPanel value={subTabName} index={6} dir={theme.direction}>
             <OtherInfo />
           </TabPanel>
         </div>
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={tabName} index={1}>
         Item Two
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={tabName} index={2}>
         <HistoryWorking />
       </TabPanel>
     </div>
   );
-}
+};
+export default ProfileTabs;

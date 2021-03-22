@@ -4,6 +4,7 @@ const initialState = {
   roles: [],
   role: {
     id: '',
+    shortname: '',
     name: '',
     permissionIds: [],
   },

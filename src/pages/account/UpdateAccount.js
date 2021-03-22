@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
-import { updateAccount, fetchAccount, fetchRoles } from 'src/stores/actions/account';
+import { updateAccount, fetchAccount, fetchRoles, fetchRole, fetchPermissions } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -15,6 +15,8 @@ const UpdateAccount = ({ t, location, history }) => {
   useEffect(() => {
     //    dispatch(fetchAccount());
     dispatch(fetchRoles());
+    if (account.roleId) dispatch(fetchRole(account.roleId));
+    dispatch(fetchPermissions());
   }, []);
 
   const submitForm = (values) => {

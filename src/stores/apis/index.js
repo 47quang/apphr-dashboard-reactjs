@@ -12,7 +12,7 @@ const API_PREFIX = {
   API_SETTING_HOLIDAY: '/api.holiday',
   API_USER: '/api.user',
   API_META: '/api.meta/__type_holiday',
-  API_ACCOUNT: 'API_ACCOUNT',
+  API_ACCOUNT: '/api.user',
   API_ROLE: '/api.role',
   API_PERMISSION: '/api.permission',
   API_PROFILE: '/api.profile',

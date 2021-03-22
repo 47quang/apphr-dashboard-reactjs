@@ -35,8 +35,8 @@ const NewProfile = ({ t, location, history }) => {
       name: 'Tạo mới',
     },
   ];
-
-  return <ProfileTabs isCreate={true} buttons={buttons} />;
+  console.log('NEW PROFILE');
+  return <ProfileTabs isCreate={true} buttons={buttons} profile={profile} />;
 };
 
 export default NewProfile;

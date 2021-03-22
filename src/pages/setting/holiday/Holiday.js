@@ -10,7 +10,7 @@ const columnDefOfRequestSetting = [
 ];
 
 const columnDef = [
-  { name: 'id', title: 'Mã ngày nghỉ' },
+  { name: 'shortname', title: 'Mã ngày nghỉ' },
   { name: 'title', title: 'Tiêu đề' },
   { name: 'startDate', title: 'Ngày bắt đầu' },
   { name: 'endDate', title: 'Ngày kế thúc' },

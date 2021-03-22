@@ -99,3 +99,30 @@ export const fetchRoles = (params) => {
       });
   };
 };
+
+export const fetchRole = (id) => {
+  return (dispatch, getState) => {
+    api.role
+      .get(id)
+      .then(({ payload }) => {
+        payload.permissionIds = payload.permissionIds.map((val) => +val);
+        dispatch({ type: REDUX_STATE.account.GET_PERMISSION_ARRAY, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchPermissions = () => {
+  return (dispatch, getState) => {
+    api.role
+      .getAllPermission()
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.account.GET_ALL_PERMISSION, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};

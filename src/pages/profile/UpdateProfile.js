@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeActions } from 'src/stores/actions/header';
-import { updateProfile, setEmptyProfile } from 'src/stores/actions/profile';
+import { updateProfile, setEmptyProfile, fetchProfile } from 'src/stores/actions/profile';
 import ProfileTabs from './ProfileTabs';
 
 //TODO: translate
@@ -13,7 +13,9 @@ const UpdateProfile = ({ t, location, history, match }) => {
   const permissions = useSelector((state) => state.account.permissions);
   const roles = useSelector((state) => state.account.roles);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, []);
 
   const buttons = [
     {
@@ -42,7 +44,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
     },
   ];
 
-  return <ProfileTabs isCreate={false} buttons={buttons} />;
+  return <ProfileTabs isCreate={false} buttons={buttons} profile={profile} />;
 };
 
 export default UpdateProfile;

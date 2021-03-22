@@ -7,180 +7,29 @@ import FormHeader from 'src/components/text/FormHeader';
 import { AccountInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
+import { REDUX_STATE } from 'src/stores/states';
+import { useDispatch } from 'react-redux';
 
-const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissions, roles }) => {
+const AccountItemBody = ({
+  accountRef,
+  account,
+  buttons,
+  submitForm,
+  branches,
+  departments,
+  positions,
+  permissions,
+  roles,
+  profiles,
+  permissionIds,
+}) => {
+  const dispatch = useDispatch();
+
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <div className="row">
-        <div className="col-8 px-4">
-          <div className="shadow bg-white rounded p-4 col-md-12">
-            <Formik enableReinitialize initialValues={account} key="formAccount1">
-              {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                <form>
-                  <FormHeader text="Thông tin cá nhân" />
-                  <div className="row">
-                    <div className="col-4">
-                      <img
-                        src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85"
-                        alt="alternatetext"
-                        height="150px"
-                      />
-                    </div>
-                    <div className="col-8">
-                      <div className="row">
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.name}
-                          onBlur={handleBlur('name')}
-                          onChange={handleChange('name')}
-                          inputID={'name'}
-                          labelText={'Họ và tên'}
-                          inputType={'text'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                          placeholder={'Hàn Giang Nhạn'}
-                        />
-                        <CommonSelectInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.gender}
-                          onBlur={handleBlur('gender')}
-                          onChange={handleChange('gender')}
-                          inputID={'gender'}
-                          labelText={'Giới tính'}
-                          selectClassName={'form-control'}
-                          placeholder={'Nam'}
-                          lstSelectOptions={[
-                            { id: 1, name: 'Nam' },
-                            { id: 2, name: 'Nữ' },
-                          ]}
-                          isDisable={true}
-                        />
-                      </div>
-                      <div className="row">
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.email}
-                          onBlur={handleBlur('email')}
-                          onChange={handleChange('email')}
-                          inputID={'email'}
-                          labelText={'Email'}
-                          inputType={'text'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                          placeholder={'nhan.han@gmail.com'}
-                        />
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.startDate}
-                          onBlur={handleBlur('startDate')}
-                          onChange={handleChange('startDate')}
-                          inputID={'startDate'}
-                          labelText={'Ngày bắt đầu'}
-                          inputType={'datetime-local'}
-                          placeholder={'Nhập ngày bắt đầu'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.role}
-                      onBlur={handleBlur('role')}
-                      onChange={handleChange('role')}
-                      inputID={'role'}
-                      labelText={'Vai trò'}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={[]}
-                      isDisable={true}
-                      placeholder={'Frontend Dev'}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.phone}
-                      onBlur={handleBlur('phone')}
-                      onChange={handleChange('phone')}
-                      inputID={'phone'}
-                      labelText={'Số điện thoại'}
-                      inputType={'text'}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                      placeholder={'0123456789'}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.endDate}
-                      onBlur={handleBlur('endDate')}
-                      onChange={handleChange('endDate')}
-                      inputID={'endDate'}
-                      labelText={'Ngày kết thúc'}
-                      inputType={'date'}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-        </div>
-        <div className="col-4 px-4">
-          <div className="shadow bg-white rounded p-4 col-md-12">
-            <Formik enableReinitialize initialValues={account} key="formAccount2">
-              {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                <form>
-                  <FormHeader text="Vị trí làm việc" />
-                  <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.branchId}
-                      labelText={'Chi nhánh'}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      onBlur={handleBlur('branchId')}
-                      onChange={handleChange('branchId')}
-                      inputID={'branchId'}
-                      lstSelectOptions={branches}
-                      placeholder={'APPHR Quận 1'}
-                      isDisable={true}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.departmentId}
-                      labelText={'Phòng ban'}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      onBlur={handleBlur('departmentId')}
-                      onChange={handleChange('departmentId')}
-                      inputID={'departmentId'}
-                      lstSelectOptions={departments}
-                      placeholder={'IT'}
-                      isDisable={true}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.positionId}
-                      onBlur={handleBlur('positionId')}
-                      onChange={handleChange('positionId')}
-                      inputID={'positionId'}
-                      labelText={'Vị trí'}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={positions}
-                      placeholder={'Front-end Intern'}
-                      isDisable={true}
-                    />
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-        </div>
-      </div>
       <div className="row px-4">
         <div className="shadow bg-white rounded p-4 col-md-12">
           <Formik
@@ -220,24 +69,42 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     inputID={'password'}
                     labelText={'Mật khẩu'}
                     inputType={'password'}
-                    placeholder={'123456'}
+                    placeholder={'Nhập tên mật khấu'}
                     inputClassName={'form-control'}
-                    isDisable={true}
+                    isRequiredField
+                    isTouched={touched.password}
+                    isError={errors.password && touched.password}
+                    errorMessage={errors.password}
                   />
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-3'}
-                    value={values.role}
+                    value={values.roleId}
                     labelText={'Vai trò'}
                     selectClassName={'form-control'}
-                    onBlur={handleBlur('role')}
-                    onChange={handleChange('role')}
-                    inputID={'role'}
+                    onBlur={handleBlur('roleId')}
+                    onChange={async (e) => {
+                      if (e.target.value == 0) {
+                        dispatch({
+                          type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
+                          payload: [],
+                        });
+                      } else {
+                        let permissionIds = roles.filter((x) => x.id === parseInt(e.target.value))[0].permissionIds;
+                        permissionIds = permissionIds.map((val) => +val);
+                        dispatch({
+                          type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
+                          payload: permissionIds,
+                        });
+                      }
+                      handleChange('roleId')(e);
+                    }}
+                    inputID={'roleId'}
                     lstSelectOptions={roles}
                     placeholder={'Chọn vai trò'}
                     isRequiredField
-                    isTouched={touched.role}
-                    isError={errors.role && touched.role}
-                    errorMessage={errors.role}
+                    isTouched={touched.roleId}
+                    isError={errors.roleId && touched.roleId}
+                    errorMessage={errors.roleId}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-3'}
@@ -248,11 +115,44 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     labelText={'Hệ số công'}
                     inputType={'number'}
                     inputClassName={'form-control'}
-                    placeholder={1.5}
+                    placeholder={'Nhập hệ số công'}
                     isRequiredField
                     isTouched={touched.coefficient}
                     isError={errors.coefficient && touched.coefficient}
                     errorMessage={errors.coefficient}
+                  />
+                  <CommonTextInput
+                    containerClassName={'form-group col-lg-3'}
+                    value={values.email}
+                    onBlur={handleBlur('email')}
+                    onChange={handleChange('email')}
+                    inputID={'email'}
+                    labelText={'Email'}
+                    inputType={'email'}
+                    placeholder={'Nhập email'}
+                    inputClassName={'form-control'}
+                  />
+                  <CommonTextInput
+                    containerClassName={'form-group col-lg-3'}
+                    value={values.phone}
+                    onBlur={handleBlur('phone')}
+                    onChange={handleChange('phone')}
+                    inputID={'phone'}
+                    labelText={'Số điện thoại'}
+                    inputType={'text'}
+                    placeholder={'Nhập số điện thoại'}
+                    inputClassName={'form-control'}
+                  />
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-6'}
+                    value={values.profileId}
+                    labelText={'Hồ sơ'}
+                    selectClassName={'form-control'}
+                    onBlur={handleBlur('profileId')}
+                    onChange={handleChange('profileId')}
+                    inputID={'profileId'}
+                    lstSelectOptions={profiles}
+                    placeholder={'Chọn hồ sơ'}
                   />
                 </div>
                 <div className="row">
@@ -266,18 +166,26 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                           value={permission.group}
                           checked={initCheck(
                             permission.children.map((per) => per.id),
-                            values.permissions,
+                            permissionIds,
                           )}
                           onChange={(event) => {
                             const thisPermission = permission.children.map((per) => per.id);
                             setFieldValue(permission.group, event.target.checked);
                             if (event.target.checked) {
-                              setFieldValue('permissions', Array.from(new Set([...values.permissions, ...thisPermission])));
+                              setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
+                              dispatch({
+                                type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
+                                payload: Array.from(new Set([...values.permissionIds, ...thisPermission])),
+                              });
                             } else {
                               setFieldValue(
-                                'permissions',
-                                values.permissions.filter((x) => !thisPermission.includes(x)),
+                                'permissionIds',
+                                values.permissionIds.filter((x) => !thisPermission.includes(x)),
                               );
+                              dispatch({
+                                type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
+                                payload: values.permissionIds.filter((x) => !thisPermission.includes(x)),
+                              });
                             }
                           }}
                         />
@@ -295,12 +203,12 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                                         name="permissions_"
                                         type="checkbox"
                                         value={per.id}
-                                        checked={values.permissions.includes(per.id)}
+                                        checked={permissionIds.includes(per.id)}
                                         onChange={(e) => {
                                           if (e.target.checked) {
                                             arrayHelpers.push(per.id);
                                           } else {
-                                            const idx = values.permissions.indexOf(per.id);
+                                            const idx = permissionIds.indexOf(per.id);
                                             arrayHelpers.remove(idx);
                                           }
                                         }}

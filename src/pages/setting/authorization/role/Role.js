@@ -5,7 +5,7 @@ import QTable from 'src/components/table/Table';
 import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const columnDef = [
-  { name: 'id', title: 'Mã vai trò' },
+  { name: 'shortname', title: 'Mã vai trò' },
   { name: 'name', title: 'Tên vai trò' },
 ];
 const Role = ({ t, location, history }) => {

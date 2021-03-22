@@ -130,7 +130,7 @@ const routes = [
     component: Department,
   },
   {
-    path: '/setting/holiday/create',
+    path: '/setting/holiday/tab1.id=create',
     exact: true,
 
     name: ROUTE_NAME.NEW_HOLIDAY,
