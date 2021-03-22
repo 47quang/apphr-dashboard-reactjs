@@ -33,7 +33,7 @@ const HolidaySettings = ({ t, location, match, history }) => {
     const actions = [
       {
         type: 'primary',
-        name: 'Tạo mới',
+        name: t('label.create_new'),
         callback: () => history.push(ROUTE_PATH.SHIFT_CREATE),
       },
     ];

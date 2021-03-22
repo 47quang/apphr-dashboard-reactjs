@@ -6,11 +6,19 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
 
-const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, submitForm }) => {
-  const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons, submitForm }) => {
+  const DAYS = [
+    t('label.sunday'),
+    t('label.monday'),
+    t('label.tuesday'),
+    t('label.wednesday'),
+    t('label.thursday'),
+    t('label.friday'),
+    t('label.saturday'),
+  ];
   const typeCC = [
-    { id: 'WIFI', name: 'WIFI' },
-    { id: 'QR_CODE', name: 'QR_CODE' },
+    { id: 'WIFI', name: t('label.wi_fi') },
+    { id: 'QR_CODE', name: t('label.qr_code') },
   ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -34,9 +42,9 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
                     inputID={'shortname'}
-                    labelText={'Mã ca làm'}
+                    labelText={t('label.shift_code')}
                     inputType={'text'}
-                    placeholder={'Mã ca làm'}
+                    placeholder={t('placeholder.shift_code')}
                     isDisable={true}
                     inputClassName={'form-control'}
                   />
@@ -48,9 +56,9 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên ca làm'}
+                    labelText={t('label.shift_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên ca làm'}
+                    placeholder={t('placeholder.shift_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -65,7 +73,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('startCC')}
                     onChange={handleChange('startCC')}
                     inputID={'startCC'}
-                    labelText={'Giờ check-in'}
+                    labelText={t('label.check_in_time')}
                     inputType={'Time'}
                     inputClassName={'form-control'}
                     isRequiredField
@@ -79,7 +87,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('endCC')}
                     onChange={handleChange('endCC')}
                     inputID={'endCC'}
-                    labelText={'Giờ check-out'}
+                    labelText={t('label.check_out_time')}
                     inputType={'Time'}
                     inputClassName={'form-control'}
                     isRequiredField
@@ -96,7 +104,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('coefficient')}
                     onChange={handleChange('coefficient')}
                     inputID={'coefficient'}
-                    labelText={'Hệ số giờ làm'}
+                    labelText={t('label.working_time_coefficient')}
                     inputType={'number'}
                     inputClassName={'form-control'}
                     isRequiredField
@@ -107,7 +115,7 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                 </div>
                 <div className="row">
                   <div className="form-group col-lg-12">
-                    <Label text="Thời gian hoạt động của ca làm" required={true} />
+                    <Label text={t('label.shift_time')} required={true} />
                     <div role="group" className="d-flex flex-row flex-wrap justify-content-around">
                       {DAYS.map((day, index) => (
                         <label key={index}>
@@ -126,14 +134,14 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
 
                 <div className="row">
                   <div className="form-group col-lg-12">
-                    <Label text="Chi nhánh" required={true} />
+                    <Label text={t('label.branch')} required={true} />
                     <div className="d-flex flex-row flex-wrap justify-content-between border">
                       <CommonMultiSelectInput
                         values={values.branchIds}
                         onChangeValues={handleChange('branchIds')}
                         listValues={branches}
                         setValues={setValues}
-                        placeholder={'Chọn chi nhánh'}
+                        placeholder={t('placeholder.select_branch')}
                       />
                     </div>
                     {touched.branchIds && errors.branchIds && (
@@ -151,14 +159,14 @@ const ShiftItemBody = ({ shiftRef, shift, validationSchema, branches, buttons, s
                     onBlur={handleBlur('typeCC')}
                     onChange={handleChange('typeCC')}
                     inputID={'typeCC'}
-                    labelText={'Hình thức điểm danh'}
+                    labelText={t('label.roll_call_type')}
                     selectClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.typeCC}
                     isError={errors.typeCC && touched.typeCC}
                     errorMessage={errors.typeCC}
                     lstSelectOptions={typeCC}
-                    placeholder={'Chọn hình thức điểm danh'}
+                    placeholder={t('placeholder.select_roll_call_type')}
                   />
                 </div>
                 {renderButtons(buttons)}

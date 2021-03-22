@@ -7,11 +7,11 @@ import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
 const Shifts = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'shortname', title: 'Mã ca làm' },
-    { name: 'name', title: 'Tên ca làm' },
-    { name: 'startCC', title: 'Giờ Check-in' },
-    { name: 'endCC', title: 'Giờ Check-out' },
-    { name: 'coefficient', title: 'Hệ số giờ làm' },
+    { name: 'shortname', title: t('label.shift_code') },
+    { name: 'name', title: t('label.shift_name') },
+    { name: 'startCC', title: t('label.check_in_time') },
+    { name: 'endCC', title: t('label.check_out_time') },
+    { name: 'coefficient', title: t('label.working_time_coefficient') },
   ];
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
@@ -31,7 +31,7 @@ const Shifts = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={shifts} route={ROUTE_PATH.SHIFT + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable t={t} columnDef={columnDef} data={shifts} route={ROUTE_PATH.SHIFT + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };

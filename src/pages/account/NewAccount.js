@@ -36,7 +36,7 @@ const NewAccount = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.ACCOUNT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -45,7 +45,7 @@ const NewAccount = ({ t, location, history }) => {
       onClick: (e) => {
         accountInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   console.log(roles);

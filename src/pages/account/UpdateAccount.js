@@ -34,7 +34,7 @@ const UpdateAccount = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.ACCOUNT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -43,7 +43,7 @@ const UpdateAccount = ({ t, location, history }) => {
       onClick: (e) => {
         accountInfoForm.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -51,7 +51,7 @@ const UpdateAccount = ({ t, location, history }) => {
       onClick: (e) => {
         accountInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 

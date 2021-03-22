@@ -35,7 +35,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.HOLIDAY);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -44,7 +44,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -52,7 +52,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 

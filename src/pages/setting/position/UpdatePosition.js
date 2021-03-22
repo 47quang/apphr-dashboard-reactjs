@@ -42,7 +42,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.POSITION);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -51,7 +51,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -59,7 +59,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 

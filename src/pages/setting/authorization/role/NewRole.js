@@ -29,7 +29,7 @@ const NewRole = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.ROLE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -38,7 +38,7 @@ const NewRole = ({ t, location, history }) => {
       onClick: (e) => {
         roleInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
 

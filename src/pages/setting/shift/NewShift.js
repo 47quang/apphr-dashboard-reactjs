@@ -46,7 +46,7 @@ const NewShift = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.SHIFT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -55,11 +55,12 @@ const NewShift = ({ t, location, history }) => {
       onClick: (e) => {
         shiftRef.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   return (
     <ShiftItemBody
+      t={t}
       shiftRef={shiftRef}
       shift={shift}
       validationSchema={SettingShiftInfoSchema}

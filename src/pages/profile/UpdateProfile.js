@@ -24,7 +24,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.PROFILE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -33,7 +33,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         profileInfoForm.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -41,7 +41,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         profileInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   return <ProfileTabs isCreate={false} buttons={buttons} profile={profile} />;

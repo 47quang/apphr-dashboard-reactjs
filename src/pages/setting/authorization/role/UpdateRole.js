@@ -29,7 +29,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.ROLE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -38,7 +38,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         roleInfoForm.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -46,7 +46,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         roleInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
   return <RoleItemBody roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;

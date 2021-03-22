@@ -43,7 +43,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.SHIFT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -52,7 +52,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         shiftRef.current.handleReset(e);
       },
-      name: 'Hoàn tác',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -60,12 +60,13 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         shiftRef.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
   return (
     <ShiftItemBody
+      t={t}
       shiftRef={shiftRef}
       shift={shift}
       validationSchema={SettingShiftInfoSchema}

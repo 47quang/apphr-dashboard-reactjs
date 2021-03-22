@@ -34,7 +34,7 @@ const NewHolidayPage = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.HOLIDAY);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -43,7 +43,7 @@ const NewHolidayPage = ({ t, location, history }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
 

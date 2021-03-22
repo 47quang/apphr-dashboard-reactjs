@@ -24,7 +24,7 @@ const NewProfile = ({ t, location, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.PROFILE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -33,7 +33,7 @@ const NewProfile = ({ t, location, history }) => {
       onClick: (e) => {
         profileInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   return <ProfileTabs isCreate={true} buttons={buttons} profile={profile} />;

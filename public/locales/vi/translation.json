@@ -36,6 +36,13 @@
     "branch_ip_router": "Địa chỉ IP của Router",
     "department_code": "Mã phòng ban",
     "department_name": "Tên chi nhánh",
+    "shift_name": "Tên ca làm",
+    "shift_code": "Mã ca làm",
+    "shift_time": "Thời gian hoạt động của ca làm",
+    "check_in_time": "Giờ check-in",
+    "check_out_time": "Giờ check-out",
+    "working_time_coefficient": "Hệ số giờ làm",
+    "roll_call_type": "Hình thức điểm danh",
     "address": "Địa chỉ",
     "phone_number": "Số điện thoại",
     "tax_code": "Mã số thuế doanh nghiệp",
@@ -43,7 +50,16 @@
     "district": "Quận/Huyện",
     "ward": "Phường/Xã/Thị trấn",
     "note": "Ghi chú",
-    "description": "Mô tả"
+    "description": "Mô tả",
+    "sunday": "Chủ nhật",
+    "monday": "Thứ hai",
+    "tuesday": "Thứ ba",
+    "wednesday": "Thứ tư",
+    "thursday": "Thứ năm",
+    "friday": "Thứ sáu",
+    "saturday": "Thứ bảy",
+    "wi_fi": "Wi-Fi",
+    "qr_code": "Mã QR"
   },
   "title": {
     "branch_create": "Thêm chi nhánh"
@@ -59,13 +75,16 @@
     "branch_address": "Nhập địa chỉ chi nhánh",
     "department_code": "Nhập mã phòng ban",
     "department_name": "Nhập tên phòng ban",
+    "shift_name": "Nhập tên ca làm",
+    "shift_code": "Nhập mã ca làm",
     "phone_number": "Nhập số điện thoại",
     "email": "Nhập email",
     "tax_code": "Nhập mã số thuế",
+    "description": "Nhập mô tả",
     "select_province": "Chọn Tỉnh/Thành phố",
     "select_district": "Chọn Quận/Huyện",
     "select_ward": "Chọn Phường/Xã/Thị trấn",
     "select_branch": "Chọn chi nhánh",
-    "description": "Nhập mô tả"
+    "select_roll_call_type": "Chọn hình thức điểm danh"
   }
 }

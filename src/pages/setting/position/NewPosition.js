@@ -34,7 +34,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.POSITION);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -43,7 +43,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   return (
