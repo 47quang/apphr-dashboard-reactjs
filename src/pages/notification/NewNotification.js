@@ -14,7 +14,7 @@ const NewNotification = ({ t, location }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto col-lg-8">
-        <NotificationForm notificationInfo={notificationInfo} />
+        <NotificationForm t={t} notificationInfo={notificationInfo} />
       </div>
     </CContainer>
   );

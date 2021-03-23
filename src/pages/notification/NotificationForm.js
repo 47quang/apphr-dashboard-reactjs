@@ -6,7 +6,7 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import FormHeader from 'src/components/text/FormHeader';
 
-const NotificationForm = ({ notificationInfo }) => {
+const NotificationForm = ({ t, notificationInfo }) => {
   return (
     <div className="shadow bg-white rounded p-4 container">
       <FormHeader text="Thông báo" />
@@ -25,9 +25,9 @@ const NotificationForm = ({ notificationInfo }) => {
               onBlur={handleBlur('title')}
               onChange={handleChange('title')}
               inputID={'title'}
-              labelText={'Tiêu đề'}
+              labelText={t('title.notification_title')}
               inputType={'text'}
-              placeholder={'Nhập tiêu đề'}
+              placeholder={t('placeholder.enter_notification_title')}
               inputClassName={'form-control'}
               isRequiredField
               isTouched={touched.title}
@@ -40,7 +40,7 @@ const NotificationForm = ({ notificationInfo }) => {
               onBlur={handleBlur('content')}
               onChange={handleChange('content')}
               inputID={'content'}
-              labelText={'Nội dung'}
+              labelText={t('placeholder.notification_content')}
               placeholder={''}
               inputClassName={'form-control'}
               rows={10}

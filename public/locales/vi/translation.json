@@ -134,7 +134,9 @@
     "ID_number": "Số CMND/CCCD",
     "passport": "Hộ chiếu",
     "passport_number": "Số hộ chiếu",
-    "direct_manager": "Quản lý trực tiếp"
+    "direct_manager": "Quản lý trực tiếp",
+    "notification_title": "Tiêu đề",
+    "notification_content": "Nội dung"
   },
   "title": {
     "role": "Vị trí làm việc",
@@ -201,6 +203,7 @@
     "passport_number": "Nhập số hộ chiếu",
     "ID_number": "Nhập số CMND/CCCD",
     "employee_full_name": "Nhập tên nhân viên",
-    "employee_code": "Nhập mã nhân viên"
+    "employee_code": "Nhập mã nhân viên",
+    "enter_notification_title": "Nhập tiêu đề"
   }
 }
