@@ -1,8 +1,10 @@
 import { HighlightOff } from '@material-ui/icons';
 import { FieldArray } from 'formik';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassName }) => {
+  const { t } = useTranslation();
   const uploadFileRef = useRef();
   return (
     <FieldArray
@@ -16,7 +18,7 @@ const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassNa
               uploadFileRef.current.click();
             }}
           >
-            Tải tệp lên
+            {t('label.upload_file')}
           </button>
 
           <input

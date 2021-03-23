@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from 'src/stores/actions/user';
 
-const TheHeaderDropdown = (props) => {
+const TheHeaderDropdown = ({ history, t }) => {
   const dispatch = useDispatch();
   return (
     <CDropdown inNav className="c-header-nav-items" direction="down">
@@ -73,7 +73,7 @@ const TheHeaderDropdown = (props) => {
         {/* <CDropdownItem divider /> */}
         <CDropdownItem
           onClick={(e) => {
-            dispatch(logout(props.history));
+            dispatch(logout(history));
           }}
         >
           {/* <CIcon name="cil-account-logout" className="mfe-2" /> */}

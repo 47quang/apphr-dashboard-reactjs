@@ -27,6 +27,11 @@
     "create_new": "Tạo mới",
     "add": "Thêm",
     "reset": "Hoàn tác",
+    "close_all_cap": "ĐÓNG",
+    "ok_all_cap": "OK",
+    "decline": "Từ chối",
+    "agree": "Đồng ý",
+    "upload_file": "Tải tệp lên",
     "company_name": "Tên doanh nghiệp",
     "company_short_name": "Tên viêt tắt của doanh nghiệp",
     "company_address": "Địa chỉ cụ thể",
@@ -136,21 +141,35 @@
     "passport_number": "Số hộ chiếu",
     "direct_manager": "Quản lý trực tiếp",
     "notification_title": "Tiêu đề",
-    "notification_content": "Nội dung"
+    "notification_content": "Nội dung",
+    "include": "Bao gồm",
+    "not_include": "Không bao gồm",
+    "correct": "Chính xác",
+    "keyword": "Từ khóa",
+    "filter_option": "Tùy chọn lọc",
+    "column_filter": "Cột cần lọc"
   },
   "title": {
     "role": "Vị trí làm việc",
     "permission": "Phân quyền",
     "login": "Đăng nhập",
+    "logout": "Đăng xuất",
     "permanent_address": "Địa chỉ thường trú",
     "urgent_contact_info": "Liên hệ khẩn cấp",
-    "contact_channel": "Kênh liên lạc"
+    "contact_channel": "Kênh liên lạc",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "delete_row": "Xóa hàng"
   },
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
     "successful_create": "Tạo mới thành công",
-    "successful_delete": "Xóa thành công"
+    "successful_delete": "Xóa thành công",
+    "empty_table": "Chưa có thông tin",
+    "delete_row": "Xóa hàng này",
+    "edit_row": "Chỉnh sửa hàng này",
+    "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?"
   },
   "placeholder": {
     "enter_company_name": "Nhập tên doanh nghiệp",
@@ -190,6 +209,9 @@
     "select_nationality": "Nhập quốc tịch",
     "select_direct_manager": "Chọn quản lý trực tiếp",
     "select_sex": "Chọn giới tính",
+    "select_column_filter": "Chọn cột cần lọc",
+    "select_filter_option": "Tùy chọn kiểu lọc",
+    "enter_keyword": "Nhập từ khóa",
     "enter_permanent_address": "Nhập địa chỉ thường trú",
     "enter_domicile": "Nhập nguyên quán",
     "enter_current_address": "Nhập địa chỉ hiện tại",
