@@ -37,7 +37,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'shortname'}
                     labelText={t('label.branch_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.branch_code')}
+                    placeholder={t('placeholder.enter_branch_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -49,7 +49,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'name'}
                     labelText={t('label.branch_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.branch_name')}
+                    placeholder={t('placeholder.enter_branch_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}

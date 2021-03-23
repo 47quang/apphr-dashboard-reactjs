@@ -73,7 +73,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         inputID={'shortname'}
                         labelText={t('label.employee_code')}
                         inputType={'text'}
-                        placeholder={t('placeholder.employee_code')}
+                        placeholder={t('placeholder.enter_employee_code')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.shortname}
@@ -88,7 +88,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         inputID={'fullname'}
                         labelText={t('label.employee_full_name')}
                         inputType={'text'}
-                        placeholder={t('placeholder.employee_full_name')}
+                        placeholder={t('placeholder.enter_employee_full_name')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.fullname}
@@ -105,7 +105,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         inputID={'phone'}
                         labelText={t('label.phone_number')}
                         inputType={'text'}
-                        placeholder={t('placeholder.phone_number')}
+                        placeholder={t('placeholder.enter_phone_number')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.phone}
@@ -120,7 +120,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         inputID={'email'}
                         labelText={t('label.email')}
                         inputType={'email'}
-                        placeholder={t('placeholder.email')}
+                        placeholder={t('placeholder.enter_email')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.email}
@@ -181,7 +181,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                               inputID={'cmnd'}
                               labelText={t('label.ID_number')}
                               inputType={'text'}
-                              placeholder={t('placeholder.ID_number')}
+                              placeholder={t('placeholder.enter_ID_number')}
                               inputClassName={'form-control'}
                             />
                             <CommonTextInput
@@ -227,7 +227,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                               inputID={'passport'}
                               labelText={t('label.passport')}
                               inputType={'text'}
-                              placeholder={t('placeholder.passport_number')}
+                              placeholder={t('placeholder.enter_passport_number')}
                               inputClassName={'form-control'}
                             />
                             <div className="row">

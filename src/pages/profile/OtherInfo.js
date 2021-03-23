@@ -38,7 +38,7 @@ const OtherInfo = ({ t }) => {
                     inputID={'nationality'}
                     labelText={t('label.nationality')}
                     inputType={'text'}
-                    placeholder={t('placeholder.nationality')}
+                    placeholder={t('placeholder.enter_nationality')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
@@ -49,7 +49,7 @@ const OtherInfo = ({ t }) => {
                     inputID={'religion'}
                     labelText={t('label.religion')}
                     inputType={'text'}
-                    placeholder={t('placeholder.religion')}
+                    placeholder={t('placeholder.enter_religion')}
                     inputClassName={'form-control'}
                   />
                 </div>

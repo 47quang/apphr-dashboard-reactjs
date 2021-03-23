@@ -38,7 +38,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputID={'username'}
                     labelText={t('label.username')}
                     inputType={'text'}
-                    placeholder={t('placeholder.username')}
+                    placeholder={t('placeholder.enter_username')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.username}
@@ -53,7 +53,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputID={'password'}
                     labelText={t('label.password')}
                     inputType={'password'}
-                    placeholder={t('placeholder.password')}
+                    placeholder={t('placeholder.enter_password')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.password}
@@ -69,7 +69,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputID={'email'}
                     labelText={t('label.email')}
                     inputType={'email'}
-                    placeholder={t('placeholder.email')}
+                    placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
@@ -80,7 +80,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputID={'phone'}
                     labelText={t('label.phone_number')}
                     inputType={'text'}
-                    placeholder={t('placeholder.phone_number')}
+                    placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput

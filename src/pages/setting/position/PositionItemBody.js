@@ -42,7 +42,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     inputID={'shortname'}
                     labelText={t('label.position_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.position_code')}
+                    placeholder={t('placeholder.enter_position_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -57,7 +57,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     inputID={'name'}
                     labelText={t('label.position_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.position_name')}
+                    placeholder={t('placeholder.enter_position_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}

@@ -65,7 +65,7 @@ const AcademicLevel = ({ t }) => {
                                   <Field
                                     className={'form-control'}
                                     name={`academicInfo.${index}.major`}
-                                    placeholder={t('placeholder.major')}
+                                    placeholder={t('placeholder.enter_major')}
                                     type="text"
                                   />
                                 </div>
@@ -74,7 +74,7 @@ const AcademicLevel = ({ t }) => {
                                   <Field
                                     className={'form-control'}
                                     name={`academicInfo.${index}.educationPlace`}
-                                    placeholder={t('placeholder.education_place')}
+                                    placeholder={t('placeholder.enter_education_place')}
                                     type="text"
                                   />
                                 </div>

@@ -65,7 +65,7 @@ const HolidaySettings = ({ t, location, match, history }) => {
                       onChange={handleChange('type')}
                       inputID={'type'}
                       labelText={t('label.proposal_type')}
-                      placeholder={t('placeholder.proposal_type')}
+                      placeholder={t('placeholder.enter_proposal_type')}
                       inputType={'text'}
                       inputClassName={'form-control'}
                       isDisable={true}

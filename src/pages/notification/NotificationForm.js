@@ -27,7 +27,7 @@ const NotificationForm = ({ t, notificationInfo }) => {
               inputID={'title'}
               labelText={t('title.notification_title')}
               inputType={'text'}
-              placeholder={t('placeholder.enter_notification_title')}
+              placeholder={t('placeholder.enter__notification_title')}
               inputClassName={'form-control'}
               isRequiredField
               isTouched={touched.title}

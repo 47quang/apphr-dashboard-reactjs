@@ -31,7 +31,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                     inputID={'shortname'}
                     labelText={t('label.department_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.department_code')}
+                    placeholder={t('placeholder.enter_department_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -45,7 +45,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                     inputID={'name'}
                     labelText={t('label.depart_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.department_name')}
+                    placeholder={t('placeholder.enter_department_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -80,7 +80,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                     inputID={'note'}
                     labelText={t('label.description')}
                     inputClassName={'form-control'}
-                    placeholder={t('placeholder.description')}
+                    placeholder={t('placeholder.enter_description')}
                     isRequiredField
                     isTouched={touched.note}
                     isError={errors.note && touched.note}

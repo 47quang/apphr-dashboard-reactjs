@@ -65,7 +65,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'name'}
                     labelText={t('label.company_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.company_name')}
+                    placeholder={t('placeholder.enter_company_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
@@ -80,7 +80,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'shortname'}
                     labelText={t('label.company_short_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.company_short_name')}
+                    placeholder={t('placeholder.enter_company_short_name')}
                     inputClassName={'form-control'}
                   />
                 </div>
@@ -93,7 +93,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'phone'}
                     labelText={t('label.phone_number')}
                     inputType={'text'}
-                    placeholder={t('placeholder.phone_number')}
+                    placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.phone}
@@ -108,7 +108,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'email'}
                     labelText={'Email'}
                     inputType={'email'}
-                    placeholder={t('placeholder.email')}
+                    placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.email}
@@ -125,7 +125,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'taxCode'}
                     labelText={t('label.tax_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.tax_code')}
+                    placeholder={t('placeholder.enter_tax_code')}
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput
@@ -143,7 +143,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'provinceId'}
                     labelText={t('label.province')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.province')}
+                    placeholder={t('placeholder.enter_province')}
                     lstSelectOptions={provinces}
                   />
                 </div>
@@ -171,7 +171,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'wardId'}
                     labelText={t('label.ward')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.ward')}
+                    placeholder={t('placeholder.enter_ward')}
                     lstSelectOptions={wards}
                   />
                 </div>
@@ -185,7 +185,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'address'}
                     labelText={t('label.company_address')}
                     inputType={'text'}
-                    placeholder={t('placeholder.company_address')}
+                    placeholder={t('placeholder.enter_company_address')}
                     inputClassName={'form-control'}
                   />
                 </div>

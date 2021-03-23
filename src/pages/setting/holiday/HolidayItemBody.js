@@ -32,7 +32,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                     inputID={'title'}
                     labelText={t('label.holiday_title')}
                     inputType={'text'}
-                    placeholder={t('placeholder.holiday_title')}
+                    placeholder={t('placeholder.enter_holiday_title')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.title}

@@ -36,7 +36,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                     inputID={'id'}
                     labelText={t('label.role_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.role_code')}
+                    placeholder={t('placeholder.enter_role_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -48,7 +48,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                     inputID={'name'}
                     labelText={t('label.role_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.role_name')}
+                    placeholder={t('placeholder.enter_role_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}

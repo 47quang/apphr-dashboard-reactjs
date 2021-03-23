@@ -51,7 +51,7 @@ const CertificateInfo = ({ t }) => {
                                     type="text"
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.academicLevel`}
-                                    placeholder={t('placeholder.certificate_name')}
+                                    placeholder={t('placeholder.enter_certificate_name')}
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
@@ -59,7 +59,7 @@ const CertificateInfo = ({ t }) => {
                                   <Field
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.certificateType`}
-                                    placeholder={t('placeholder.certificate_type')}
+                                    placeholder={t('placeholder.enter_certificate_type')}
                                     type="text"
                                   />
                                 </div>
@@ -68,7 +68,7 @@ const CertificateInfo = ({ t }) => {
                                   <Field
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.certificatePlace`}
-                                    placeholder={t('placeholder.grant_place')}
+                                    placeholder={t('placeholder.enter_grant_place')}
                                     type="text"
                                   />
                                 </div>

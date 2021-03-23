@@ -66,7 +66,7 @@ const AddressInfo = ({ t }) => {
                       onChange={handleChange('permanentAddress')}
                       onBlur={handleBlur('permanentAddress')}
                       inputID={'permanentAddress'}
-                      placeholder={t('placeholder.permanent_address')}
+                      placeholder={t('placeholder.enter_permanent_address')}
                     />
                   </div>
                   <div className={'row'}>
@@ -123,7 +123,7 @@ const AddressInfo = ({ t }) => {
                       inputID={'domicile'}
                       labelText={t('label.domicile')}
                       inputClassName={'form-control'}
-                      placeholder={t('placeholder.domicile')}
+                      placeholder={t('placeholder.enter_domicile')}
                     />
                   </div>
                   <div className={'row'}>
@@ -135,7 +135,7 @@ const AddressInfo = ({ t }) => {
                       onChange={handleChange('currentAddress')}
                       onBlur={handleBlur('currentAddress')}
                       inputID={'currentAddress'}
-                      placeholder={t('placeholder.current_address')}
+                      placeholder={t('placeholder.enter_current_address')}
                     />
                   </div>
                 </form>
@@ -157,7 +157,7 @@ const AddressInfo = ({ t }) => {
                       onChange={handleChange('name')}
                       onBlur={handleBlur('name')}
                       inputID={'name'}
-                      placeholder={t('placeholder.relative_full_name')}
+                      placeholder={t('placeholder.enter_relative_full_name')}
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-lg-6'}
@@ -167,7 +167,7 @@ const AddressInfo = ({ t }) => {
                       onChange={handleChange('employeeRelation')}
                       onBlur={handleBlur('employeeRelation')}
                       inputID={'employeeRelation'}
-                      placeholder={t('placeholder.employee_relation')}
+                      placeholder={t('placeholder.enter_employee_relation')}
                     />
                   </div>
                   <div className={'row'}>
@@ -179,7 +179,7 @@ const AddressInfo = ({ t }) => {
                       inputID={'phone'}
                       labelText={t('label.phone_number')}
                       inputType={'text'}
-                      placeholder={t('placeholder.phone_number')}
+                      placeholder={t('placeholder.enter_phone_number')}
                       inputClassName={'form-control'}
                     />
                   </div>
@@ -192,7 +192,7 @@ const AddressInfo = ({ t }) => {
                       onChange={handleChange('contactAddress')}
                       onBlur={handleBlur('contactAddress')}
                       inputID={'contactAddress'}
-                      placeholder={t('placeholder.contact_address')}
+                      placeholder={t('placeholder.enter_contact_address')}
                     />
                   </div>
                 </form>

@@ -44,7 +44,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     inputID={'shortname'}
                     labelText={t('label.shift_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.shift_code')}
+                    placeholder={t('placeholder.enter_shift_code')}
                     isDisable={true}
                     inputClassName={'form-control'}
                   />
@@ -58,7 +58,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     inputID={'name'}
                     labelText={t('label.shift_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.shift_name')}
+                    placeholder={t('placeholder.enter_shift_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
