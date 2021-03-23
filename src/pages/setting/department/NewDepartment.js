@@ -22,7 +22,7 @@ const NewDepartment = ({ t, location, history }) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
 
-    dispatch(createDepartment(form, history));
+    dispatch(createDepartment(form, history, t('message.successful_create')));
   };
   const buttons = [
     {

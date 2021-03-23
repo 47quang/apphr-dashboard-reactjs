@@ -23,7 +23,7 @@ const EditDepartment = ({ t, location, match, history }) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
 
-    dispatch(updateDepartment(form));
+    dispatch(updateDepartment(form, t('message.successful_update')));
   };
   const buttons = [
     {

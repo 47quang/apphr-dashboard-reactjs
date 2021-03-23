@@ -28,13 +28,13 @@ export const fetchPosition = (id) => {
   };
 };
 
-export const createPosition = (params, history) => {
+export const createPosition = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.position
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
 
         history.push(ROUTE_PATH.POSITION + `/${payload.id}`);
       })
@@ -45,13 +45,13 @@ export const createPosition = (params, history) => {
   };
 };
 
-export const updatePosition = (data, id) => {
+export const updatePosition = (data, id, success_msg) => {
   return (dispatch, getState) => {
     api.position
       .put(data, id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

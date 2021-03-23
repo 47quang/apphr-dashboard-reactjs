@@ -43,13 +43,13 @@ export const fetchDepartment = (params) => {
   };
 };
 
-export const updateDepartment = (data) => {
+export const updateDepartment = (data, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
@@ -58,13 +58,13 @@ export const updateDepartment = (data) => {
   };
 };
 
-export const createDepartment = (data, history) => {
+export const createDepartment = (data, history, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
 
         history.push(ROUTE_PATH.DEPARTMENT + `/${payload.id}`);
       })

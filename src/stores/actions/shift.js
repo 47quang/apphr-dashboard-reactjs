@@ -35,14 +35,14 @@ export const fetchShift = (id) => {
       });
   };
 };
-export const createNewShift = (data, history) => {
+export const createNewShift = (data, history, success_msg) => {
   return (dispatch, getState) => {
     api.shift
       .post(data)
       .then(({ payload }) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
 
         history.push(ROUTE_PATH.SHIFT + `/${payload.id}`);
       })
@@ -53,7 +53,7 @@ export const createNewShift = (data, history) => {
   };
 };
 
-export const updateShift = (data) => {
+export const updateShift = (data, success_msg) => {
   return (dispatch, getState) => {
     api.shift
       .put(data)
@@ -63,7 +63,7 @@ export const updateShift = (data) => {
           type: REDUX_STATE.shift.SET_SHIFT,
           payload: payload,
         });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

@@ -32,7 +32,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
     let form = values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(updatePosition(form, params.id));
+    dispatch(updatePosition(form, params.id, t('message.successful_update')));
   };
 
   const buttons = [

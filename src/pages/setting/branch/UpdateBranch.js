@@ -37,7 +37,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
     form.wardId = parseInt(form.wardId);
 
     // Call API UPDATE
-    dispatch(updateBranch(form));
+    dispatch(updateBranch(form, t('message.successful_update')));
   };
   const buttons = [
     {

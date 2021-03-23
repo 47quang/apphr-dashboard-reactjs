@@ -37,13 +37,13 @@ export const fetchRole = (id) => {
   };
 };
 
-export const createRole = (params, history) => {
+export const createRole = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Tạo mới thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
 
         history.push(ROUTE_PATH.ROLE + `/${payload.id}`);
       })
@@ -54,14 +54,13 @@ export const createRole = (params, history) => {
   };
 };
 
-export const updateRole = (data) => {
-  console.log('UPDATE: ', data);
+export const updateRole = (data, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

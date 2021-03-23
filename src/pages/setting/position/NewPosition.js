@@ -24,7 +24,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(createPosition(form, history));
+    dispatch(createPosition(form, history, t('message.successful_create')));
   };
 
   const buttons = [

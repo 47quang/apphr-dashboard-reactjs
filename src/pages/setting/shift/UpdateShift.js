@@ -33,7 +33,7 @@ const UpdateShift = ({ t, location, match, history }) => {
     form.operateLoop = enCodeChecked(form.operateLoop);
     form.startCC = convertTimeWithSecond(form.startCC);
     form.endCC = convertTimeWithSecond(form.endCC);
-    dispatch(updateShift(form));
+    dispatch(updateShift(form, t('message.successful_update')));
   };
 
   const buttons = [

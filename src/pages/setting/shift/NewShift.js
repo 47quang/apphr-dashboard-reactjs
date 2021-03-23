@@ -36,7 +36,7 @@ const NewShift = ({ t, location, history }) => {
     form.operateLoop = enCodeChecked(form.operateLoop);
     form.startCC = convertTimeWithSecond(form.startCC);
     form.endCC = convertTimeWithSecond(form.endCC);
-    dispatch(createNewShift(form, history));
+    dispatch(createNewShift(form, history, t('message.successful_create')));
   };
 
   const buttons = [

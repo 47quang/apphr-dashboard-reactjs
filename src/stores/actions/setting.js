@@ -14,13 +14,13 @@ export const fetchGeneral = (params) => {
   };
 };
 
-export const updateGeneral = (data) => {
+export const updateGeneral = (data, success_msg) => {
   return (dispatch, getState) => {
     api.setting
       .putGeneral(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.setting.SET_GENERAL, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Cập nhật thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

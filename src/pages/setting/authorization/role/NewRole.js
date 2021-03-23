@@ -19,7 +19,7 @@ const NewRole = ({ t, location, history }) => {
 
   const submitForm = (values) => {
     let { name, permissionIds } = values;
-    dispatch(createRole({ name, permissionIds }, history));
+    dispatch(createRole({ name, permissionIds }, history, t('message.successful_create')));
   };
 
   const buttons = [

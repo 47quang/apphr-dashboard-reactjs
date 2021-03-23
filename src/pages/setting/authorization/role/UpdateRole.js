@@ -19,7 +19,7 @@ const UpdateRole = ({ t, location, history, match }) => {
 
   const submitForm = (values) => {
     let { id, name, permissionIds } = values;
-    dispatch(updateRole({ id, name, permissionIds }, history));
+    dispatch(updateRole({ id, name, permissionIds }, t('message.successful_update')));
   };
 
   const buttons = [

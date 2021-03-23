@@ -25,7 +25,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
     form.coefficient = parseInt(form.coefficient);
     // Call API UPDATE
 
-    dispatch(updateHoliday(form));
+    dispatch(updateHoliday(form, t('message.successful_update')));
   };
 
   const buttons = [

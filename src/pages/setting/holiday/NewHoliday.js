@@ -24,7 +24,7 @@ const NewHolidayPage = ({ t, location, history }) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
     delete form.id;
-    dispatch(createHoliday(form, history));
+    dispatch(createHoliday(form, history, t('message.successful_create')));
   };
 
   const buttons = [

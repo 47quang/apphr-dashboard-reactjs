@@ -39,7 +39,7 @@ const NewBranchPage = ({ t, location, history }) => {
     console.log(form);
     // Call API CREATE
     delete form.id;
-    dispatch(createBranch(form, history));
+    dispatch(createBranch(form, history, t('message.successful_create')));
   };
   const buttons = [
     {
