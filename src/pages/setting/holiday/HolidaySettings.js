@@ -19,7 +19,7 @@ const HolidaySettings = ({ t, location, match, history }) => {
     type: '',
     total: '',
   });
-
+  //TODO:translating
   const getHolidayInfo = () => {
     setInitialValues({
       type: 'Nghỉ có phép',

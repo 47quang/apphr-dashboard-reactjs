@@ -42,7 +42,7 @@ const NewRole = ({ t, location, history }) => {
     },
   ];
 
-  return <RoleItemBody roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
+  return <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
 };
 
 export default NewRole;

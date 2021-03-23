@@ -7,7 +7,7 @@ import { RoleInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
 
-const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
+const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -26,7 +26,7 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
           >
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
               <form>
-                <FormHeader text="Vị trí làm việc" />
+                <FormHeader text={t('title.role')} />
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-3'}
@@ -34,9 +34,9 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                     onBlur={handleBlur('id')}
                     onChange={handleChange('id')}
                     inputID={'id'}
-                    labelText={'Mã vai trò'}
+                    labelText={t('label.role_code')}
                     inputType={'text'}
-                    placeholder={'Nhập tên vai trò'}
+                    placeholder={t('placeholder.role_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -46,9 +46,9 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên vai trò'}
+                    labelText={t('label.role_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên vai trò'}
+                    placeholder={t('placeholder.role_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}

@@ -47,6 +47,8 @@
     "holiday_code": "Mã ngày nghỉ",
     "holiday_title": "Tiêu đề",
     "proposal_type": "Loại đề xuất",
+    "role_code": "Mã vai trò",
+    "role_name": "Tiêu đề của vai trò",
     "start_date": "Ngày bắt đầu",
     "end_date": "Ngày kết thúc",
     "maximum_day_amount": "Số ngày tối đa",
@@ -80,7 +82,9 @@
     "experience_year": "Năm kinh nghiệp",
     "academic_level": "Trình độ"
   },
-  "title": {},
+  "title": {
+    "role": "Vị trí làm việc"
+  },
   "message": {},
   "placeholder": {
     "company_name": "Nhập tên doanh nghiệp",
@@ -96,6 +100,8 @@
     "proposal_type": "Nhập loại đề xuất",
     "position_code": "Nhập mã vị trí",
     "position_name": "Nhập tên vị trí",
+    "role_code": "Nhập mã vai trò",
+    "role_name": "Nhập tiêu đề của vai trò",
     "shift_name": "Nhập tên ca làm",
     "shift_code": "Nhập mã ca làm",
     "phone_number": "Nhập số điện thoại",

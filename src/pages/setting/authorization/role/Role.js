@@ -5,11 +5,11 @@ import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
-const columnDef = [
-  { name: 'shortname', title: 'Mã vai trò' },
-  { name: 'name', title: 'Tên vai trò' },
-];
 const Role = ({ t, location, history }) => {
+  const columnDef = [
+    { name: 'shortname', title: t('label.code') },
+    { name: 'name', title: t('label.role_name') },
+  ];
   const dispatch = useDispatch();
   const roles = useSelector((state) => state.role.roles);
 
@@ -24,7 +24,7 @@ const Role = ({ t, location, history }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable columnDef={columnDef} data={roles} route={ROUTE_PATH.ROLE + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable t={t} columnDef={columnDef} data={roles} route={ROUTE_PATH.ROLE + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
     </CContainer>
   );
 };
