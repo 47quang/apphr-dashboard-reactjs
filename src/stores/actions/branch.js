@@ -59,13 +59,13 @@ export const updateBranch = (data, success_msg) => {
   };
 };
 
-export const deleteBranch = (id) => {
+export const deleteBranch = (id, success_msg) => {
   return (dispatch, getState) => {
     api.branch
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

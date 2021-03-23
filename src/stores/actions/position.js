@@ -60,13 +60,13 @@ export const updatePosition = (data, id, success_msg) => {
   };
 };
 
-export const deletePosition = (params) => {
+export const deletePosition = (params, success_msg) => {
   return (dispatch, getState) => {
     api.position
       .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.DELETE_POSITION, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

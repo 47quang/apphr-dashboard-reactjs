@@ -18,7 +18,7 @@ const Role = ({ t, location, history }) => {
   }, []);
 
   const deleteRow = async (rowId) => {
-    dispatch(deleteRole(rowId));
+    dispatch(deleteRole(rowId, t('message.successful_delete')));
     dispatch(fetchRoles());
   };
 

@@ -34,7 +34,7 @@ const HolidayPage = ({ t, location, history }) => {
     }
   };
   const deleteRow = async (rowId) => {
-    dispatch(deleteHoliday(rowId));
+    dispatch(deleteHoliday(rowId, t('message.successful_delete')));
     dispatch(fetchHolidays());
   };
   return (

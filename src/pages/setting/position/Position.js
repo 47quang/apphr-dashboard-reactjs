@@ -20,7 +20,7 @@ const Position = ({ t, location, history }) => {
   }, []);
 
   const deleteRow = async (rowId) => {
-    dispatch(deletePosition({ id: rowId }));
+    dispatch(deletePosition({ id: rowId }, t('message.successful_delete')));
     dispatch(fetchPositions());
   };
 

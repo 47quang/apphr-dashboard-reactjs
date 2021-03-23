@@ -20,7 +20,7 @@ const Department = ({ t, location, history }) => {
   }, []);
 
   const deleteRow = (rowId) => {
-    dispatch(deleteDepartment({ id: rowId }));
+    dispatch(deleteDepartment({ id: rowId }, t('message.successful_delete')));
   };
 
   return (

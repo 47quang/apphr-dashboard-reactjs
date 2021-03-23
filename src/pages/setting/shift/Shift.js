@@ -26,7 +26,7 @@ const Shifts = ({ t, location, history }) => {
   }, []); // eslint-disable-next-line
 
   const deleteRow = (rowID) => {
-    dispatch(deleteShift({ id: rowID }));
+    dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));
   };
 
   return (

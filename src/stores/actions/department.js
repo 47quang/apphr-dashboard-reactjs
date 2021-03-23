@@ -15,13 +15,13 @@ export const fetchDepartments = (params) => {
   };
 };
 
-export const deleteDepartment = (params) => {
+export const deleteDepartment = (params, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.DELETE_DEPARTMENT, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);

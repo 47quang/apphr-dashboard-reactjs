@@ -149,7 +149,8 @@
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
-    "successful_create": "Tạo mới thành công"
+    "successful_create": "Tạo mới thành công",
+    "successful_delete": "Xóa thành công"
   },
   "placeholder": {
     "enter_company_name": "Nhập tên doanh nghiệp",

@@ -18,7 +18,7 @@ const Branch = ({ t }) => {
   }, []);
 
   const deleteRow = async (rowId) => {
-    dispatch(deleteBranch(rowId));
+    dispatch(deleteBranch(rowId, t('message.successful_delete')));
     dispatch(fetchBranches());
   };
 

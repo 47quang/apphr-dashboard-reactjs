@@ -69,13 +69,13 @@ export const updateRole = (data, success_msg) => {
   };
 };
 
-export const deleteRole = (id) => {
+export const deleteRole = (id, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: 'Xóa thành công' } });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
