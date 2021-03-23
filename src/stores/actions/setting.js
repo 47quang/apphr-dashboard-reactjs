@@ -24,6 +24,7 @@ export const updateGeneral = (data, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
