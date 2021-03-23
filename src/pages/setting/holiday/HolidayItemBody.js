@@ -6,7 +6,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import { SettingHolidayInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 
-const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
+const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -22,7 +22,7 @@ const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
           >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
               <form>
-                <FormHeader text="Thêm ngày nghỉ lễ" />
+                <FormHeader text={t('label.holiday')} />
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-lg-12'}
@@ -30,9 +30,9 @@ const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
                     onBlur={handleBlur('title')}
                     onChange={handleChange('title')}
                     inputID={'title'}
-                    labelText={'Tiêu đề'}
+                    labelText={t('label.holiday_title')}
                     inputType={'text'}
-                    placeholder={'Nhập tiêu đề cho ngày nghỉ'}
+                    placeholder={t('placeholder.holiday_title')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.title}
@@ -45,9 +45,8 @@ const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
                     onBlur={handleBlur('startDate')}
                     onChange={handleChange('startDate')}
                     inputID={'startDate'}
-                    labelText={'Ngày bắt đầu'}
+                    labelText={t('label.start_date')}
                     inputType={'datetime-local'}
-                    placeholder={'Nhập ngày bắt đầu'}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.startDate}
@@ -60,9 +59,8 @@ const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
                     onBlur={handleBlur('endDate')}
                     onChange={handleChange('endDate')}
                     inputID={'endDate'}
-                    labelText={'Ngày kết thúc'}
+                    labelText={t('label.end_date')}
                     inputType={'datetime-local'}
-                    placeholder={'Nhập ngày kết thúc'}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.endDate}
@@ -75,9 +73,8 @@ const HolidayItemBody = ({ holidayRef, holiday, buttons, submitForm }) => {
                     onBlur={handleBlur('coefficient')}
                     onChange={handleChange('coefficient')}
                     inputID={'coefficient'}
-                    labelText={'Hệ số giờ làm'}
+                    labelText={t('label.working_time_coefficient')}
                     inputType={'number'}
-                    placeholder={'Hệ số giờ làm'}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.coefficient}

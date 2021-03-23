@@ -56,7 +56,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
     },
   ];
 
-  return <HolidayItemBody holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+  return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
 };
 
 export default UpdateHoliday;

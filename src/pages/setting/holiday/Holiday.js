@@ -5,20 +5,19 @@ import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { deleteHoliday, fetchAllRequest, fetchHolidays } from 'src/stores/actions/holiday';
 
-const columnDefOfRequestSetting = [
-  { name: 'type', title: 'Loại đề xuất' },
-  { name: 'amount', title: 'Số ngày tối đa' },
-];
-
-const columnDef = [
-  { name: 'shortname', title: 'Mã ngày nghỉ' },
-  { name: 'title', title: 'Tiêu đề' },
-  { name: 'startDate', title: 'Ngày bắt đầu' },
-  { name: 'endDate', title: 'Ngày kế thúc' },
-  //{ name: 'coefficient', title: 'Hệ số giờ làm' },
-];
-
 const HolidayPage = ({ t, location, history }) => {
+  const columnDefOfRequestSetting = [
+    { name: 'type', title: t('label.proposal_type') },
+    { name: 'amount', title: t('label.maximum_day_amount') },
+  ];
+
+  const columnDef = [
+    { name: 'shortname', title: t('label.holiday_code') },
+    { name: 'title', title: t('label.holiday_title') },
+    { name: 'startDate', title: t('label.start_date') },
+    { name: 'endDate', title: t('label.end_date') },
+    //{ name: 'coefficient', title: 'Hệ số giờ làm' },
+  ];
   const dispatch = useDispatch();
   const holidays = useSelector((state) => state.holiday.holidays);
   const requests = useSelector((state) => state.holiday.requests);
@@ -43,15 +42,16 @@ const HolidayPage = ({ t, location, history }) => {
       <CTabs activeTab="holiday" onActiveTabChange={handleChangeTab}>
         <CNav variant="tabs">
           <CNavItem>
-            <CNavLink data-tab="holiday">Ngày nghỉ lễ</CNavLink>
+            <CNavLink data-tab="holiday">{t('label.holiday')}</CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink data-tab="holidaySettings">Thiết lập số ngày nghỉ</CNavLink>
+            <CNavLink data-tab="holidaySettings">{t('label.holiday_setting')}</CNavLink>
           </CNavItem>
         </CNav>
         <CTabContent>
           <CTabPane data-tab="holiday">
             <QTable
+              t={t}
               columnDef={columnDef}
               data={holidays}
               route={ROUTE_PATH.HOLIDAY + '/tab1.id='}
@@ -62,6 +62,7 @@ const HolidayPage = ({ t, location, history }) => {
           </CTabPane>
           <CTabPane data-tab="holidaySettings">
             <QTable
+              t={t}
               columnDef={columnDefOfRequestSetting}
               data={requests}
               route={ROUTE_PATH.HOLIDAY + '/tab2.id='}

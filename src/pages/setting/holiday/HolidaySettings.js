@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import BasicLoader from 'src/components/loader/BasicLoader';
-import FormHeader from 'src/components/text/FormHeader';
 import { ROUTE_PATH } from 'src/constants/key';
 import { SettingHolidayLimitSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
@@ -58,7 +57,6 @@ const HolidaySettings = ({ t, location, match, history }) => {
             >
               {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                 <form>
-                  <FormHeader text="Thêm ngày nghỉ lễ" />
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-lg-12'}
@@ -66,7 +64,8 @@ const HolidaySettings = ({ t, location, match, history }) => {
                       onBlur={handleBlur('type')}
                       onChange={handleChange('type')}
                       inputID={'type'}
-                      labelText={'Loại đề xuất'}
+                      labelText={t('label.proposal_type')}
+                      placeholder={t('placeholder.proposal_type')}
                       inputType={'text'}
                       inputClassName={'form-control'}
                       isDisable={true}
@@ -77,9 +76,8 @@ const HolidaySettings = ({ t, location, match, history }) => {
                       onBlur={handleBlur('total')}
                       onChange={handleChange('total')}
                       inputID={'total'}
-                      labelText={'Tổng số ngày tối đa'}
+                      labelText={t('label.maximum_day_amount')}
                       inputType={'number'}
-                      placeholder={'Nhập tổng số ngày tối đa'}
                       inputClassName={'form-control'}
                       isRequiredField
                       isTouched={touched.total}
