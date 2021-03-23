@@ -47,10 +47,17 @@
     "holiday_code": "Mã ngày nghỉ",
     "holiday_title": "Tiêu đề",
     "proposal_type": "Loại đề xuất",
+    "role": "Vai trò",
     "role_code": "Mã vai trò",
     "role_name": "Tiêu đề của vai trò",
+    "account_info": "Thông tin tài khoản",
+    "profile": "Hồ sơ",
+    "profileId": "Nhân sự",
+    "username": "Tên tài khoản",
+    "email": "Email",
     "start_date": "Ngày bắt đầu",
     "end_date": "Ngày kết thúc",
+    "password": "Mật khẩu",
     "maximum_day_amount": "Số ngày tối đa",
     "check_in_time": "Giờ check-in",
     "check_out_time": "Giờ check-out",
@@ -83,7 +90,8 @@
     "academic_level": "Trình độ"
   },
   "title": {
-    "role": "Vị trí làm việc"
+    "role": "Vị trí làm việc",
+    "permission": "Phân quyền"
   },
   "message": {},
   "placeholder": {
@@ -100,6 +108,8 @@
     "proposal_type": "Nhập loại đề xuất",
     "position_code": "Nhập mã vị trí",
     "position_name": "Nhập tên vị trí",
+    "username": "Nhập tên tài khoản",
+    "password": "Nhập mật khẩu",
     "role_code": "Nhập mã vai trò",
     "role_name": "Nhập tiêu đề của vai trò",
     "shift_name": "Nhập tên ca làm",
@@ -108,6 +118,8 @@
     "email": "Nhập email",
     "tax_code": "Nhập mã số thuế",
     "description": "Nhập mô tả",
+    "select_role": "Chọn vai trò",
+    "select_profile": "Chọn nhân sự",
     "select_province": "Chọn Tỉnh/Thành phố",
     "select_district": "Chọn Quận/Huyện",
     "select_ward": "Chọn Phường/Xã/Thị trấn",

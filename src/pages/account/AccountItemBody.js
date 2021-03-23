@@ -8,7 +8,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import { AccountInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 
-const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
+const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -28,7 +28,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
           >
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
               <form>
-                <FormHeader text="Thông tin tài khoản" />
+                <FormHeader text={t('label.account_info')} />
                 <div className="row" style={{ paddingBottom: 40 }}>
                   <CommonTextInput
                     containerClassName={'form-group col-lg-4'}
@@ -36,9 +36,9 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     onBlur={handleBlur('username')}
                     onChange={handleChange('username')}
                     inputID={'username'}
-                    labelText={'Tên tài khoản'}
+                    labelText={t('label.username')}
                     inputType={'text'}
-                    placeholder={'Nhập tên tài khoản'}
+                    placeholder={t('placeholder.username')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.username}
@@ -51,9 +51,9 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     onBlur={handleBlur('password')}
                     onChange={handleChange('password')}
                     inputID={'password'}
-                    labelText={'Mật khẩu'}
+                    labelText={t('label.password')}
                     inputType={'password'}
-                    placeholder={'Nhập tên mật khấu'}
+                    placeholder={t('placeholder.password')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.password}
@@ -67,9 +67,9 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     onBlur={handleBlur('email')}
                     onChange={handleChange('email')}
                     inputID={'email'}
-                    labelText={'Email'}
+                    labelText={t('label.email')}
                     inputType={'email'}
-                    placeholder={'Nhập email'}
+                    placeholder={t('placeholder.email')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
@@ -78,29 +78,29 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     onBlur={handleBlur('phone')}
                     onChange={handleChange('phone')}
                     inputID={'phone'}
-                    labelText={'Số điện thoại'}
+                    labelText={t('label.phone_number')}
                     inputType={'text'}
-                    placeholder={'Nhập số điện thoại'}
+                    placeholder={t('placeholder.phone_number')}
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-8'}
                     value={values.profileId}
-                    labelText={'Nhân sự'}
+                    labelText={t('label.profileId')}
                     selectClassName={'form-control'}
                     onBlur={handleBlur('profileId')}
                     onChange={handleChange('profileId')}
-                    inputID={'profileId'}
+                    inputID={t('label.profileId')}
                     lstSelectOptions={profiles}
-                    placeholder={'Chọn nhân sự'}
+                    placeholder={t('placeholder.select_profile')}
                   />
                 </div>
-                <FormHeader text="Phân quyền" />
+                <FormHeader text={t('title.permission')} />
                 <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-12'}
                     value={values.roleId}
-                    labelText={'Vai trò'}
+                    labelText={t('label.role')}
                     selectClassName={'form-control'}
                     onBlur={handleBlur('roleId')}
                     onChange={(e) => {
@@ -115,7 +115,7 @@ const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, d
                     }}
                     inputID={'roleId'}
                     lstSelectOptions={roles}
-                    placeholder={'Chọn vai trò'}
+                    placeholder={t('placeholder.select_role')}
                     isRequiredField
                     isTouched={touched.roleId}
                     isError={errors.roleId && touched.roleId}

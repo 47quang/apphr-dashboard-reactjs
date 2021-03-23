@@ -5,15 +5,14 @@ import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { fetchAccounts } from 'src/stores/actions/account';
 
-const columnDefOfAccounts = [
-  { name: 'username', title: 'Tên đăng nhập' },
-  { name: 'email', title: 'Email' },
-  { name: 'phone', title: 'Số điện thoại' },
-  { name: 'role', title: 'Vai trò' },
-  { name: 'profileId', title: 'Hồ sơ' },
-];
-
-const Account = () => {
+const Account = ({ t, location, history }) => {
+  const columnDefOfAccounts = [
+    { name: 'username', title: t('label.username') },
+    { name: 'email', title: t('label.email') },
+    { name: 'phone', title: t('label.phone_number') },
+    { name: 'role', title: t('label.role') },
+    { name: 'profileId', title: t('label.profile') },
+  ];
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.account.accounts);
   useEffect(() => {
@@ -28,6 +27,7 @@ const Account = () => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
+        t={t}
         columnDef={columnDefOfAccounts}
         data={accounts}
         route={ROUTE_PATH.ACCOUNT + '/'}

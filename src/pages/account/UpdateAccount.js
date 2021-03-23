@@ -23,7 +23,7 @@ const UpdateAccount = ({ t, location, history }) => {
   const submitForm = (values) => {
     let form = values;
     delete form.id;
-    console.log(form);
+
     //dispatch(updateAccount(form, history));
   };
 
@@ -57,6 +57,7 @@ const UpdateAccount = ({ t, location, history }) => {
 
   return (
     <AccountItemBody
+      t={t}
       accountRef={accountInfoForm}
       account={account}
       buttons={buttons}

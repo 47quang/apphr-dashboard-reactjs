@@ -15,7 +15,6 @@ const NewAccount = ({ t, location, history }) => {
   const roles = useSelector((state) => state.account.roles);
   //const permissionIds = useSelector((state) => state.account.account.permissionIds);
 
-  console.log('NEWACCount', account);
   useEffect(() => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
@@ -25,7 +24,6 @@ const NewAccount = ({ t, location, history }) => {
   const submitForm = (values) => {
     let form = values;
     delete form.id;
-    console.log(form);
     dispatch(createAccount(form, history));
   };
 
@@ -51,6 +49,7 @@ const NewAccount = ({ t, location, history }) => {
   console.log(roles);
   return (
     <AccountItemBody
+      t={t}
       accountRef={accountInfoForm}
       account={account}
       buttons={buttons}
