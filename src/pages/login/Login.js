@@ -33,8 +33,8 @@ const Login = ({ t, location, history }) => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm innerRef={formValue}>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <h1>{t('title.login')}</h1>
+                    <p className="text-muted">{t('message.sign_in')}</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -54,13 +54,13 @@ const Login = ({ t, location, history }) => {
                     <CRow>
                       <CCol xs="6">
                         <CButton color="primary" className="px-4" onClick={handleLogin}>
-                          Login
+                          {t('title.login')}
                         </CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">
+                        {/* <CButton color="link" className="px-0">
                           Forgot password?
-                        </CButton>
+                        </CButton> */}
                       </CCol>
                     </CRow>
                   </CForm>

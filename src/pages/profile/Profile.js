@@ -5,19 +5,18 @@ import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
-const columnDefOfProfiles = [
-  { name: 'shortname', title: 'Mã nhân sự' },
-  { name: 'fullname', title: 'Tên nhân viên' },
-  { name: 'phone', title: 'Số điện thoại' },
-  { name: 'gender', title: 'Giới tính' },
-  { name: 'email', title: 'Email' },
-  { name: 'positionId', title: 'Vị trí' },
-  { name: 'departmentId', title: 'Phòng ban' },
-  { name: 'branchId', title: 'Chi nhánh' },
-  { name: 'status', title: 'Trạng thái' },
-];
-
 const Profile = ({ t, location }) => {
+  const columnDefOfProfiles = [
+    { name: 'shortname', title: t('label.employee_code') },
+    { name: 'fullname', title: t('label.employee_full_name') },
+    { name: 'phone', title: t('label.phone_number') },
+    { name: 'gender', title: t('label.sex') },
+    { name: 'email', title: t('label.email') },
+    { name: 'positionId', title: t('label.position') },
+    { name: 'departmentId', title: t('label.department') },
+    { name: 'branchId', title: t('label.branch') },
+    { name: 'status', title: 'Trạng thái' },
+  ];
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.profile.profiles);
   useEffect(() => {
@@ -26,11 +25,11 @@ const Profile = ({ t, location }) => {
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId));
     dispatch(fetchProfiles());
-    console.log('RowId Delete: ', rowId);
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
+        t={t}
         columnDef={columnDefOfProfiles}
         data={profiles}
         route={ROUTE_PATH.PROFILE + '/'}

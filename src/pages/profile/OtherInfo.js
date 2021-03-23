@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 
-const OtherInfo = () => {
+const OtherInfo = ({ t }) => {
   const otherInfo = {
     taxCode: '',
     nationality: '',
@@ -24,9 +24,9 @@ const OtherInfo = () => {
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
                     inputID={'taxCode'}
-                    labelText={'Mã số thuế thu thập cá nhân'}
+                    labelText={t('label.personal_income_tax')}
                     inputType={'text'}
-                    placeholder={'Nhập mã số thuế'}
+                    placeholder={t('placeholder.select_personal_income_tax')}
                     inputClassName={'form-control'}
                   />
 
@@ -36,9 +36,9 @@ const OtherInfo = () => {
                     onBlur={handleBlur('nationality')}
                     onChange={handleChange('nationality')}
                     inputID={'nationality'}
-                    labelText={'Quốc tịch'}
+                    labelText={t('label.nationality')}
                     inputType={'text'}
-                    placeholder={'Nhập quốc tịch'}
+                    placeholder={t('placeholder.nationality')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
@@ -47,9 +47,9 @@ const OtherInfo = () => {
                     onBlur={handleBlur('religion')}
                     onChange={handleChange('religion')}
                     inputID={'religion'}
-                    labelText={'Tôn giáo'}
+                    labelText={t('label.religion')}
                     inputType={'text'}
-                    placeholder={'Nhập tôn giáo'}
+                    placeholder={t('placeholder.religion')}
                     inputClassName={'form-control'}
                   />
                 </div>
@@ -60,7 +60,7 @@ const OtherInfo = () => {
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.note')}
                     inputClassName={'form-control'}
                   />
                 </div>

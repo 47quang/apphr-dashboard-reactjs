@@ -1,10 +1,10 @@
-const { Formik } = require('formik');
-const { default: CommonMultipleTextInput } = require('src/components/input/CommonMultipleTextInput');
-const { default: CommonMultiSelectInput } = require('src/components/input/CommonMultiSelectInput');
-const { default: CommonTextInput } = require('src/components/input/CommonTextInput');
-const { default: CommonUploadFileButton } = require('src/components/input/CommonUploadFileButton');
-const { default: FormHeader } = require('src/components/text/FormHeader');
-const { default: Label } = require('src/components/text/Label');
+import { Label } from '@material-ui/icons';
+import { Formik } from 'formik';
+import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
+import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
+import FormHeader from 'src/components/text/FormHeader';
 
 const NotificationForm = ({ notificationInfo }) => {
   return (

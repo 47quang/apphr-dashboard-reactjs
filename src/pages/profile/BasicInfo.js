@@ -13,7 +13,7 @@ import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
 import { getDateInput } from 'src/utils/datetimeUtils';
 
-const BasicInfo = ({ isCreate, profile }) => {
+const BasicInfo = ({ t, isCreate, profile }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const branches = useSelector((state) => state.branch.branches);
   // const roles = useSelector((state) => state.role.roles);
@@ -48,15 +48,14 @@ const BasicInfo = ({ isCreate, profile }) => {
     dispatch(fetchBranches());
   }, []);
   const genders = [
-    { id: 1, name: 'Nam' },
-    { id: 2, name: 'Nữ' },
+    { id: 1, name: t('label.male') },
+    { id: 2, name: t('label.female') },
   ];
-  console.log('emp ', employeeInfo);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
-          <FormHeader text="Thông tin cơ bản" />
+          <FormHeader text={t('label.profile_basic_info')} />
           <Formik initialValues={employeeInfo} enableReinitialize>
             {({ values, errors, touched, handleBlur, handleChange }) => (
               <form>
@@ -72,9 +71,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('shortname')}
                         onChange={handleChange('shortname')}
                         inputID={'shortname'}
-                        labelText={'Mã nhân viên'}
+                        labelText={t('label.employee_code')}
                         inputType={'text'}
-                        placeholder={'Nhập mã nhân viên'}
+                        placeholder={t('placeholder.employee_code')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.shortname}
@@ -87,9 +86,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('fullname')}
                         onChange={handleChange('fullname')}
                         inputID={'fullname'}
-                        labelText={'Tên nhân viên'}
+                        labelText={t('label.employee_full_name')}
                         inputType={'text'}
-                        placeholder={'Nhập tên nhân viên'}
+                        placeholder={t('placeholder.employee_full_name')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.fullname}
@@ -104,9 +103,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('phone')}
                         onChange={handleChange('phone')}
                         inputID={'phone'}
-                        labelText={'Số điện thoại'}
+                        labelText={t('label.phone_number')}
                         inputType={'text'}
-                        placeholder={'Nhập số điện thoại'}
+                        placeholder={t('placeholder.phone_number')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.phone}
@@ -119,9 +118,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('email')}
                         onChange={handleChange('email')}
                         inputID={'email'}
-                        labelText={'Email'}
+                        labelText={t('label.email')}
                         inputType={'email'}
-                        placeholder={'Nhập email'}
+                        placeholder={t('placeholder.email')}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.email}
@@ -136,9 +135,8 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('dateOfBirth')}
                         onChange={handleChange('dateOfBirth')}
                         inputID={'dateOfBirth'}
-                        labelText={'Ngày sinh'}
+                        labelText={t('label.birthday')}
                         inputType={'date'}
-                        placeholder={'Chọn ngày sinh'}
                         inputClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.dateOfBirth}
@@ -151,23 +149,23 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('gender')}
                         onChange={handleChange('gender')}
                         inputID={'gender'}
-                        labelText={'Giới tính'}
+                        labelText={t('label.sex')}
                         selectClassName={'form-control'}
                         isRequiredField
                         isTouched={touched.gender}
                         isError={errors.gender && touched.gender}
                         errorMessage={errors.gender}
                         lstSelectOptions={genders}
-                        placeholder={'Chọn giới tính'}
+                        placeholder={t('placeholder.select_sex')}
                       />
                     </div>
-                    <Label text="Chứng minh thư / Hộ chiếu" labelID="checkbox-id-password" className="py-2" />
+                    <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                     <div className="row" role="group" aria-labelledby="checkbox-id-password"></div>
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="pl-12">
                           <CommonCheckbox
-                            label={'CMND/CCCD'}
+                            label={t('label.ID')}
                             value={values.have_id}
                             onBlur={handleBlur('have_id')}
                             onChange={handleChange('have_id')}
@@ -180,10 +178,10 @@ const BasicInfo = ({ isCreate, profile }) => {
                               value={values.cmnd}
                               onBlur={handleBlur('cmnd')}
                               onChange={handleChange('cmnd')}
-                              inputcmnd={'cmnd'}
-                              labelText={'Số CMND/CCCD'}
+                              inputID={'cmnd'}
+                              labelText={t('label.ID_number')}
                               inputType={'text'}
-                              placeholder={'Nhập số CMND/CCCD'}
+                              placeholder={t('placeholder.ID_number')}
                               inputClassName={'form-control'}
                             />
                             <CommonTextInput
@@ -192,9 +190,8 @@ const BasicInfo = ({ isCreate, profile }) => {
                               onBlur={handleBlur('cmnd_date')}
                               onChange={handleChange('cmnd_date')}
                               inputID={'cmnd_date'}
-                              labelText={'Ngày cấp'}
+                              labelText={t('label.start_date2')}
                               inputType={'date'}
-                              placeholder={'Chọn ngày cấp'}
                               inputClassName={'form-control'}
                             />
                             <CommonSelectInput
@@ -203,9 +200,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                               onBlur={handleBlur('cmnd_place')}
                               onChange={handleChange('cmnd_place')}
                               inputID={'cmnd_place'}
-                              labelText={'Nơi cấp'}
+                              labelText={t('label.grant_place')}
                               selectClassName={'form-control'}
-                              placeholder={'Chọn tỉnh/thành phố'}
+                              placeholder={t('placeholder.select_province')}
                               lstSelectOptions={provinces}
                             />
                           </>
@@ -214,7 +211,7 @@ const BasicInfo = ({ isCreate, profile }) => {
                       <div className="col-lg-6">
                         <div className="pl-2">
                           <CommonCheckbox
-                            label={'Hộ chiếu'}
+                            label={t('label.passport')}
                             value={values.have_passport}
                             onBlur={handleBlur('have_passport')}
                             onChange={handleChange('have_passport')}
@@ -228,9 +225,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                               onBlur={handleBlur('passport')}
                               onChange={handleChange('passport')}
                               inputID={'passport'}
-                              labelText={'Hộ chiếu'}
+                              labelText={t('label.passport')}
                               inputType={'text'}
-                              placeholder={'Nhập hộ chiếu'}
+                              placeholder={t('placeholder.passport_number')}
                               inputClassName={'form-control'}
                             />
                             <div className="row">
@@ -240,9 +237,8 @@ const BasicInfo = ({ isCreate, profile }) => {
                                 onBlur={handleBlur('passport_start')}
                                 onChange={handleChange('passport_start')}
                                 inputID={'passport_start'}
-                                labelText={'Ngày cấp'}
+                                labelText={t('label.start_date2')}
                                 inputType={'date'}
-                                placeholder={'Chọn ngày'}
                                 inputClassName={'form-control'}
                               />
                               <CommonTextInput
@@ -251,9 +247,8 @@ const BasicInfo = ({ isCreate, profile }) => {
                                 onBlur={handleBlur('passport_end')}
                                 onChange={handleChange('passport_end')}
                                 inputID={'passport_end'}
-                                labelText={'Ngày hết hạn'}
+                                labelText={t('label.expiration_date')}
                                 inputType={'date'}
-                                placeholder={'Chọn ngày'}
                                 inputClassName={'form-control'}
                               />
                             </div>
@@ -263,9 +258,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                               onBlur={handleBlur('passport_place')}
                               onChange={handleChange('passport_place')}
                               inputID={'passport_place'}
-                              labelText={'Nơi cấp'}
+                              labelText={t('label.grant_place')}
                               selectClassName={'form-control'}
-                              placeholder={'Chọn tỉnh/thành phố'}
+                              placeholder={t('placeholder.select_province')}
                               lstSelectOptions={provinces}
                             />
                           </>
@@ -283,9 +278,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                           handleChange('branchId')(e);
                         }}
                         inputID={'branchId'}
-                        labelText={'Chi nhánh'}
+                        labelText={t('label.branch')}
                         selectClassName={'form-control'}
-                        placeholder={'Chọn chi nhánh'}
+                        placeholder={t('placeholder.select_branch')}
                         lstSelectOptions={branches}
                       />
                       <CommonSelectInput
@@ -297,9 +292,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                           handleChange('departmentId')(e);
                         }}
                         inputID={'departmentId'}
-                        labelText={'Phòng ban'}
+                        labelText={t('label.department')}
                         selectClassName={'form-control'}
-                        placeholder={'Chọn phòng ban'}
+                        placeholder={t('placeholder.select_department')}
                         lstSelectOptions={departments}
                       />
                       <CommonSelectInput
@@ -308,9 +303,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('positionId')}
                         onChange={handleChange('positionId')}
                         inputID={'positionId'}
-                        labelText={'Vị trí'}
+                        labelText={t('label.position')}
                         selectClassName={'form-control'}
-                        placeholder={'Chọn vị trí làm việc'}
+                        placeholder={t('placeholder.select_position')}
                         lstSelectOptions={positions}
                       />
                       <CommonTextInput
@@ -319,9 +314,9 @@ const BasicInfo = ({ isCreate, profile }) => {
                         onBlur={handleBlur('manager')}
                         onChange={handleChange('manager')}
                         inputID={'manager'}
-                        labelText={'Quản lý trực tiếp'}
+                        labelText={t('label.direct_manager')}
                         inputType={'text'}
-                        placeholder={'Quản lý trước tiếp'}
+                        placeholder={t('placeholder.select_direct_manager')}
                         inputClassName={'form-control'}
                       />
                     </div>

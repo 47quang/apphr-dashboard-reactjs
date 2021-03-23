@@ -36,7 +36,7 @@ const NewProfile = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return <ProfileTabs isCreate={true} buttons={buttons} profile={profile} />;
+  return <ProfileTabs t={t} isCreate={true} buttons={buttons} profile={profile} />;
 };
 
 export default NewProfile;

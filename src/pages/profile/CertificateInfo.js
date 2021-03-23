@@ -3,14 +3,14 @@ import { Add, Delete } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import Label from 'src/components/text/Label';
 
-const CertificateInfo = () => {
+const CertificateInfo = ({ t }) => {
   const initialCertificateInfo = {
     certificateInfo: [
       {
-        name: 'skype',
-        certificateType: 'klaus@formik.com',
-        certificatePlace: 'ĐHBK',
-        note: 'ádkjfhakdjfh',
+        name: '',
+        certificateType: '',
+        certificatePlace: '',
+        note: '',
         startDate: '',
         endDate: '',
       },
@@ -46,46 +46,46 @@ const CertificateInfo = () => {
                               <hr className="mt-1" />
                               <div className="row">
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Tên chứng chỉ'} />
+                                  <Label text={t('label.certificate_name')} />
                                   <Field
                                     type="text"
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.academicLevel`}
-                                    placeholder="Nhập tên chứng chỉ"
+                                    placeholder={t('placeholder.certificate_name')}
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Loại chứng chỉ'} />
+                                  <Label text={t('placeholder.certificate_type')} />
                                   <Field
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.certificateType`}
-                                    placeholder="Nhập loại chứng chỉ"
+                                    placeholder={t('placeholder.certificate_type')}
                                     type="text"
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Nơi cấp'} />
+                                  <Label text={t('label.grant_place')} />
                                   <Field
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.certificatePlace`}
-                                    placeholder="Nhập nơi cấp"
+                                    placeholder={t('placeholder.grant_place')}
                                     type="text"
                                   />
                                 </div>
                               </div>
                               <div className="row">
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Ngày cấp bằng'} />
+                                  <Label text={t('label.start_date2')} />
                                   <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.stateDate`} />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={'Ngày hết hạn'} />
+                                  <Label text={t('label.expiration_date')} />
                                   <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.endDate`} />
                                 </div>
                               </div>
                               <div className="row">
                                 <div className="form-group col-lg-12">
-                                  <Label text={'Ghi chú'} />
+                                  <Label text={t('label.note')} />
                                   <textarea className={'form-control'} rows={5} name={`certificateInfo.${index}.note`} />
                                 </div>
                               </div>
@@ -101,16 +101,16 @@ const CertificateInfo = () => {
                             className="px-5 py-1 bg-white"
                             onClick={() =>
                               push({
-                                name: 'skype',
-                                certificateType: 'klaus@formik.com',
-                                certificatePlace: 'ĐHBK',
-                                note: 'ádkjfhakdjfh',
+                                name: '',
+                                certificateType: '',
+                                certificatePlace: '',
+                                note: '',
                                 startDate: '',
                                 endDate: '',
                               })
                             }
                           >
-                            <Add /> Thêm
+                            <Add /> {t('label.add')}
                           </button>
                         </div>
                       </div>
@@ -118,7 +118,7 @@ const CertificateInfo = () => {
                   />
                   <br />
                   <div className="row col-12">
-                    <button
+                    {/* <button
                       type="button"
                       className="btn btn-primary mr-3"
                       onClick={(event) => {
@@ -136,7 +136,7 @@ const CertificateInfo = () => {
                       }}
                     >
                       Lưu
-                    </button>
+                    </button> */}
                   </div>
                 </Form>
               );

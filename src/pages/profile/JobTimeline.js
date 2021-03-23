@@ -1,11 +1,10 @@
+import { CContainer } from '@coreui/react';
 import { Switch } from '@material-ui/core';
 import { Add, Delete, Remove } from '@material-ui/icons';
+import { Field, FieldArray, Formik } from 'formik';
 import Label from 'src/components/text/Label';
 
-const { CContainer } = require('@coreui/react');
-const { Formik, FieldArray, Field } = require('formik');
-
-const JobTimelineInfo = () => {
+const JobTimelineInfo = ({ t }) => {
   const jobTimelineInfo = {
     contractInfo: [
       {
@@ -121,7 +120,7 @@ const JobTimelineInfo = () => {
                             })
                           }
                         >
-                          <Add /> Thêm
+                          <Add /> {t('label.add')}
                         </button>
                       </div>
                     </div>
