@@ -55,7 +55,7 @@ const CertificateInfo = ({ t }) => {
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
-                                  <Label text={t('placeholder.certificate_type')} />
+                                  <Label text={t('label.certificate_type')} />
                                   <Field
                                     className={'form-control'}
                                     name={`certificateInfo.${index}.certificateType`}

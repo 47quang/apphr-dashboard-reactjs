@@ -66,7 +66,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'ipRouter'}
                     labelText={t('label.branch_ip_router')}
                     inputType={'text'}
-                    placeholder={t('placeholder.branch_ip_router')}
+                    placeholder={t('placeholder.enter_branch_ip_router')}
                     inputClassName={'form-control'}
                     isTouched={touched.ipRouter}
                     isError={errors.ip && touched.ipRouter}
@@ -87,7 +87,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'provinceId'}
                     labelText={t('label.province')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.province')}
+                    placeholder={t('placeholder.select_province')}
                     lstSelectOptions={provinces}
                   />
                 </div>
@@ -115,7 +115,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'wardId'}
                     labelText={t('label.ward')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.ward')}
+                    placeholder={t('placeholder.select_ward')}
                     lstSelectOptions={wards}
                   />
                 </div>
@@ -128,7 +128,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'address'}
                     labelText={t('label.branch_address')}
                     inputType={'text'}
-                    placeholder={t('placeholder.branch_address')}
+                    placeholder={t('placeholder.enter_branch_address')}
                     inputClassName={'form-control'}
                   />
                 </div>

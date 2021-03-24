@@ -7,7 +7,7 @@ import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const Role = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'shortname', title: t('label.code') },
+    { name: 'shortname', title: t('label.role_code') },
     { name: 'name', title: t('label.role_name') },
   ];
   const dispatch = useDispatch();

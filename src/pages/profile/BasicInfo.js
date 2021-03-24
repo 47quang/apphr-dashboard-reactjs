@@ -20,13 +20,12 @@ const BasicInfo = ({ t, isCreate, profile }) => {
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
-
   const employeeInfo = {
     fullname: profile.fullname,
     shortname: profile.shortname ?? '',
     phone: profile.phone,
     email: profile.email,
-    dateOfBirth: getDateInput(profile.dateOfBirth),
+    dateOfBirth: profile.dayOfBirth ? getDateInput(profile.dateOfBirth) : '',
     gender: profile.gender === 'male' ? 1 : 2,
     cmnd: profile.cmnd + '',
     have_id: profile.cmnd !== null && profile.cmnd !== undefined,

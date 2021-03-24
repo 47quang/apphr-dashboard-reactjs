@@ -229,7 +229,7 @@
     "enter_ID_number": "Nhập số CMND/CCCD",
     "enter_employee_full_name": "Nhập tên nhân viên",
     "enter_employee_code": "Nhập mã nhân viên",
-    "enter_enter_notification_title": "Nhập tiêu đề"
+    "enter_notification_title": "Nhập tiêu đề"
   },
   "validation": {
     "role_name": "Bắt buộc nhập vào tiêu đề vai trò"

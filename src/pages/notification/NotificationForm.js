@@ -1,10 +1,10 @@
-import { Label } from '@material-ui/icons';
 import { Formik } from 'formik';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import FormHeader from 'src/components/text/FormHeader';
+import Label from 'src/components/text/Label';
 
 const NotificationForm = ({ t, notificationInfo }) => {
   return (
@@ -25,9 +25,9 @@ const NotificationForm = ({ t, notificationInfo }) => {
               onBlur={handleBlur('title')}
               onChange={handleChange('title')}
               inputID={'title'}
-              labelText={t('title.notification_title')}
+              labelText={t('label.notification_title')}
               inputType={'text'}
-              placeholder={t('placeholder.enter__notification_title')}
+              placeholder={t('placeholder.enter_notification_title')}
               inputClassName={'form-control'}
               isRequiredField
               isTouched={touched.title}
@@ -40,7 +40,7 @@ const NotificationForm = ({ t, notificationInfo }) => {
               onBlur={handleBlur('content')}
               onChange={handleChange('content')}
               inputID={'content'}
-              labelText={t('placeholder.notification_content')}
+              labelText={t('label.notification_content')}
               placeholder={''}
               inputClassName={'form-control'}
               rows={10}

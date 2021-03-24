@@ -38,7 +38,7 @@ const SettingGeneralPage = ({ t, location }) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-    dispatch(updateGeneral(form));
+    dispatch(updateGeneral(form, t('message.successful_update')));
   };
   const buttons = [
     {
@@ -143,7 +143,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'provinceId'}
                     labelText={t('label.province')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.enter_province')}
+                    placeholder={t('placeholder.select_province')}
                     lstSelectOptions={provinces}
                   />
                 </div>
@@ -171,7 +171,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputID={'wardId'}
                     labelText={t('label.ward')}
                     selectClassName={'form-control'}
-                    placeholder={t('placeholder.enter_ward')}
+                    placeholder={t('placeholder.select_ward')}
                     lstSelectOptions={wards}
                   />
                 </div>

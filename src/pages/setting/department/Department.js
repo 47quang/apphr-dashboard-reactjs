@@ -7,10 +7,10 @@ import { deleteDepartment, fetchDepartments } from 'src/stores/actions/departmen
 
 const Department = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'shortname', title: t('title.department_code') },
-    { name: 'name', title: t('title.department.name') },
-    { name: 'branchname', title: t('title.branch') },
-    { name: 'note', title: t('title.description') },
+    { name: 'shortname', title: t('label.department_code') },
+    { name: 'name', title: t('label.department_name') },
+    { name: 'branchname', title: t('label.branch') },
+    { name: 'note', title: t('label.description') },
   ];
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);

@@ -26,7 +26,7 @@ const OtherInfo = ({ t }) => {
                     inputID={'taxCode'}
                     labelText={t('label.personal_income_tax')}
                     inputType={'text'}
-                    placeholder={t('placeholder.select_personal_income_tax')}
+                    placeholder={t('placeholder.enter_personal_income_tax')}
                     inputClassName={'form-control'}
                   />
 
@@ -38,7 +38,7 @@ const OtherInfo = ({ t }) => {
                     inputID={'nationality'}
                     labelText={t('label.nationality')}
                     inputType={'text'}
-                    placeholder={t('placeholder.enter_nationality')}
+                    placeholder={t('placeholder.select_nationality')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
