@@ -24,6 +24,8 @@ const NewAccount = ({ t, location, history }) => {
   const submitForm = (values) => {
     let form = values;
     delete form.id;
+    console.log(form);
+    form.roleId = parseInt(form.roleId);
     dispatch(createAccount(form, history));
   };
 

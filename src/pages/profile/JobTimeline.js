@@ -93,7 +93,7 @@ const JobTimelineInfo = ({ t }) => {
                                       <Label text={'Thời gian thử việc'} />
                                       <div className="input-group">
                                         <input type="text" className={'form-control'} rows={5} name={`contractInfo.${index}.probationaryPeriod`} />
-                                        <span class="input-group-text" id="basic-addon2">
+                                        <span className="input-group-text" id="basic-addon2">
                                           tháng
                                         </span>
                                       </div>

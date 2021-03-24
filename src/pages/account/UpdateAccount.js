@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchPermissionGroups, fetchRole, fetchRoles } from 'src/stores/actions/account';
+import { fetchPermissionGroups, fetchRole, fetchRoles, fetchAccount, setEmptyAccount } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
 
-const UpdateAccount = ({ t, location, history }) => {
+const UpdateAccount = ({ t, location, history, match }) => {
   const accountInfoForm = useRef();
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account.account);
@@ -14,16 +14,15 @@ const UpdateAccount = ({ t, location, history }) => {
   const roles = useSelector((state) => state.account.roles);
 
   useEffect(() => {
-    //    dispatch(fetchAccount());
+    dispatch(fetchAccount(match?.params?.id));
     dispatch(fetchRoles());
-    if (account.roleId) dispatch(fetchRole(account.roleId));
+    // if (account.roleId !== 0) dispatch(fetchRole(49));
     dispatch(fetchPermissionGroups());
   }, []);
 
   const submitForm = (values) => {
     let form = values;
-    delete form.id;
-
+    console.log(form);
     //dispatch(updateAccount(form, history));
   };
 

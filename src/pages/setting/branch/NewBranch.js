@@ -36,7 +36,6 @@ const NewBranchPage = ({ t, location, history }) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-    console.log(form);
     // Call API CREATE
     delete form.id;
     dispatch(createBranch(form, history, t('message.successful_create')));
@@ -55,12 +54,12 @@ const NewBranchPage = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
+        console.log(branchInfoForm.current);
         branchInfoForm.current.handleSubmit(e);
       },
       name: t('label.create_new'),
     },
   ];
-
   return (
     <BranchItemBody
       branchRef={branchInfoForm}

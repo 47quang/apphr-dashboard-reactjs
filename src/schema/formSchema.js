@@ -6,10 +6,8 @@ import moment from 'moment';
 //General Information
 export const SettingGeneralInfoSchema = Yup.object().shape({
   name: Yup.string().trim().required('Bắt buộc nhập tên công ty'),
-  phone: Yup.string()
-    .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'Nhập không đúng số điện thoại')
-    .required('Bắt buộc nhập số điện thoại'),
-  email: Yup.string().email('Email nhập sai').required('Bắt buộc nhập email'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'Số điện thoại không hợp lệ').required('Bắt buộc nhập số điện thoại'),
+  email: Yup.string().email('Email').required('Bắt buộc nhập email'),
   address: Yup.string().trim(),
   taxCode: Yup.string(),
   provinceId: Yup.number().required(),
@@ -104,13 +102,14 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
 //Account
 export const AccountInfoSchema = Yup.object().shape({
   username: Yup.string().required('Bắt buộc nhập vào tên đăng nhập'),
-  password: Yup.string().test('empty string', 'Bắt buộc phải nhập mật khẩu', function (value) {
-    return value !== '0';
+  password: Yup.string().test('empty string', 'Mật khẩu có độ dài tối thiểu 6 ký tự', function (value) {
+    return value ? value.length > 5 : false;
   }),
+  email: Yup.string().email('Email không hợp lệ'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'Số điện thoại không hợp lệ'),
   roleId: Yup.string().test('empty string', 'Phải chọn vai trò', function (value) {
     return value !== '0';
   }),
-  coefficient: Yup.number().min(0, 'Hệ số công phải là một số không âm').required('Bắt buộc phải nhập hệ số công'),
 });
 export const RoleInfoSchema = Yup.object().shape({
   name: Yup.string().required('Bắt buộc nhập vào tên vai trò'),

@@ -31,7 +31,7 @@ export const fetchAccount = (id) => {
     api.account
       .get(id)
       .then(({ payload }) => {
-        payload = convertTime(payload);
+        console.log(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {

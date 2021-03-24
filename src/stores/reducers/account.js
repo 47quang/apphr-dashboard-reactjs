@@ -7,9 +7,10 @@ const initialState = {
   account: {
     id: 0,
     username: '',
+    password: '',
     email: '',
     phone: '',
-    coefficient: '',
+    coefficient: 0,
     roleId: 0,
     profileId: 0,
     permissionIds: [],
@@ -23,7 +24,8 @@ const accountReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.account.SET_ACCOUNTS:
       return { ...state, accounts: payload };
     case REDUX_STATE.account.SET_ACCOUNT:
-      return { ...state, account: payload };
+      payload.roleId = payload.roleId ?? 0;
+      return { ...state, account: Object.assign({}, state.account, payload) };
     case REDUX_STATE.account.DELETE_ACCOUNT:
       return {
         ...state,

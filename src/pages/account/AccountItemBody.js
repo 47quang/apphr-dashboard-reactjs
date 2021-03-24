@@ -10,6 +10,7 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
   const initCheck = (groupPermission, checks) => {
+    // console.log(checks);
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
@@ -26,8 +27,8 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
               submitForm(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
-              <form>
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit }) => (
+              <form autoComplete="off">
                 <FormHeader text={t('label.account_info')} />
                 <div className="row" style={{ paddingBottom: 40 }}>
                   <CommonTextInput
@@ -71,6 +72,8 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputType={'email'}
                     placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
+                    isError={errors.email && touched.email}
+                    errorMessage={errors.email}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-4'}
@@ -82,6 +85,8 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputType={'text'}
                     placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
+                    isError={errors.phone && touched.phone}
+                    errorMessage={errors.phone}
                   />
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-8'}
@@ -104,7 +109,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     selectClassName={'form-control'}
                     onBlur={handleBlur('roleId')}
                     onChange={(e) => {
-                      if (e.target.value === 0) {
+                      if (e.target.value === '0') {
                         setFieldValue('permissionIds', []);
                       } else {
                         let permissionIds = roles.filter((x) => x.id === parseInt(e.target.value))[0].permissionIds;
@@ -125,7 +130,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                 <div className="row">
                   {permissionGroups.map((permissionGroup) => {
                     return (
-                      <div className="form-group col-lg-4">
+                      <div className="form-group col-lg-4" key={permissionGroup.id}>
                         <Field
                           component={Checkbox}
                           disabled={true}
