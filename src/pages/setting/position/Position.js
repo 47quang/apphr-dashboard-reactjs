@@ -17,6 +17,7 @@ const Position = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(fetchPositions());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteRow = async (rowId) => {

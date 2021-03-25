@@ -23,7 +23,8 @@ const Shifts = ({ t, location, history }) => {
         perpage: 1000,
       }),
     );
-  }, []); // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));

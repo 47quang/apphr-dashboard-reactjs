@@ -26,6 +26,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       dispatch(changeActions([]));
       dispatch(setEmptyPosition());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

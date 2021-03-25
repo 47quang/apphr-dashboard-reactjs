@@ -20,6 +20,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
     return () => {
       dispatch(setEmptyBranch());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
     if (branch.districtId) {
       dispatch(fetchWards({ districtId: branch.districtId }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branch.provinceId, branch.districtId]);
   const submitForm = (values) => {
     let form = values;

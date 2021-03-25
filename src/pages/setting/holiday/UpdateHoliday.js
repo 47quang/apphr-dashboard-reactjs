@@ -18,6 +18,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       dispatch(changeActions([]));
       dispatch(setEmptyHoliday());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

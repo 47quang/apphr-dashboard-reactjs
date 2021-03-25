@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 

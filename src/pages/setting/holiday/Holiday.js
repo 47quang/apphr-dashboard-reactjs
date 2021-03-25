@@ -26,6 +26,7 @@ const HolidayPage = ({ t, location, history }) => {
   useEffect(() => {
     dispatch(fetchHolidays());
     dispatch(fetchAllRequest());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChangeTab = (e) => {

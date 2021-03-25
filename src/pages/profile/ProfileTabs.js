@@ -85,8 +85,9 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
               indicatorColor="primary"
               className="noselect"
               textColor="primary"
-              variant="fullWidth"
               aria-label="full width tabs example"
+              variant="scrollable"
+              scrollButtons="auto"
             >
               <Tab className="noselect" label={t('label.profile_basic_info')} {...a11yProps(0)} />
               <Tab className="noselect" label={t('label.profile_contract')} {...a11yProps(1)} />

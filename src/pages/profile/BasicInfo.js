@@ -45,6 +45,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
   useEffect(() => {
     dispatch(fetchProvinces());
     dispatch(fetchBranches());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const genders = [
     { id: 1, name: t('label.male') },
@@ -77,7 +78,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.shortname}
                         isError={errors.shortname && touched.shortname}
-                        errorMessage={errors.shortname}
+                        errorMessage={t(errors.shortname)}
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
@@ -92,7 +93,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.fullname}
                         isError={errors.fullname && touched.fullname}
-                        errorMessage={errors.fullname}
+                        errorMessage={t(errors.fullname)}
                       />
                     </div>
                     <div className="row">
@@ -109,7 +110,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.phone}
                         isError={errors.phone && touched.phone}
-                        errorMessage={errors.phone}
+                        errorMessage={t(errors.phone)}
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
@@ -124,7 +125,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.email}
                         isError={errors.email && touched.email}
-                        errorMessage={errors.email}
+                        errorMessage={t(errors.email)}
                       />
                     </div>
                     <div className="row">
@@ -140,7 +141,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.dateOfBirth}
                         isError={errors.dateOfBirth && touched.dateOfBirth}
-                        errorMessage={errors.dateOfBirth}
+                        errorMessage={t(errors.dateOfBirth)}
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-lg-6'}
@@ -153,7 +154,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isRequiredField
                         isTouched={touched.gender}
                         isError={errors.gender && touched.gender}
-                        errorMessage={errors.gender}
+                        errorMessage={t(errors.gender)}
                         lstSelectOptions={genders}
                         placeholder={t('placeholder.select_sex')}
                       />

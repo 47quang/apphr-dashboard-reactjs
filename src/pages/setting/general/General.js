@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React, { useEffect, useRef } from 'react';
@@ -52,13 +53,13 @@ const SettingGeneralPage = ({ t, location }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-10">
+        <div className="shadow bg-white rounded p-4 container col-xl-10">
           <Formik innerRef={settingRef} enableReinitialize initialValues={general} validationSchema={SettingGeneralInfoSchema}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <form>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -70,10 +71,10 @@ const SettingGeneralPage = ({ t, location }) => {
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
@@ -86,7 +87,7 @@ const SettingGeneralPage = ({ t, location }) => {
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.phone}
                     onBlur={handleBlur('phone')}
                     onChange={handleChange('phone')}
@@ -98,10 +99,10 @@ const SettingGeneralPage = ({ t, location }) => {
                     isRequiredField
                     isTouched={touched.phone}
                     isError={errors.phone && touched.phone}
-                    errorMessage={errors.phone}
+                    errorMessage={t(errors.phone)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.email}
                     onBlur={handleBlur('email')}
                     onChange={handleChange('email')}
@@ -113,12 +114,12 @@ const SettingGeneralPage = ({ t, location }) => {
                     isRequiredField
                     isTouched={touched.email}
                     isError={errors.email && touched.email}
-                    errorMessage={errors.email}
+                    errorMessage={t(errors.email)}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.taxCode}
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
@@ -129,7 +130,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.provinceId}
                     onBlur={handleBlur('provinceId')}
                     onChange={(e) => {
@@ -150,7 +151,7 @@ const SettingGeneralPage = ({ t, location }) => {
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.districtId}
                     onBlur={handleBlur('districtId')}
                     onChange={(e) => {
@@ -164,7 +165,7 @@ const SettingGeneralPage = ({ t, location }) => {
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.wardId}
                     onBlur={handleBlur('wardId')}
                     onChange={handleChange('wardId')}
@@ -178,7 +179,7 @@ const SettingGeneralPage = ({ t, location }) => {
 
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.address}
                     onBlur={handleBlur('address')}
                     onChange={handleChange('address')}
@@ -191,7 +192,7 @@ const SettingGeneralPage = ({ t, location }) => {
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}

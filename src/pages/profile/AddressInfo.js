@@ -8,7 +8,6 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
-import { renderButtons } from 'src/utils/formUtils';
 
 const AddressInfo = ({ t }) => {
   const dispatch = useDispatch();
@@ -17,6 +16,7 @@ const AddressInfo = ({ t }) => {
   const wards = useSelector((state) => state.location.wards);
   useEffect(() => {
     dispatch(fetchProvinces());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const permanentAddressInfo = {
     permanentAddress: '',

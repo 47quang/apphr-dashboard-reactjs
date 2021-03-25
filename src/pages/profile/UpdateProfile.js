@@ -15,6 +15,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
 
   useEffect(() => {
     dispatch(fetchProfile(match?.params?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const buttons = [

@@ -18,6 +18,7 @@ const CommonTextInput = ({
   isTouched,
   minTime,
   isDisable,
+  maxLength,
 }) => {
   const checkInputClassName = () => {
     if (isError) return joinClassName([inputClassName, 'is-invalid']);
@@ -40,6 +41,7 @@ const CommonTextInput = ({
         autoComplete={'off'}
         min={minTime ?? null}
         disabled={isDisable}
+        maxLength={maxLength}
       />
       {isError && errorMessage && (
         <div>

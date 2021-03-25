@@ -19,7 +19,7 @@ const OtherInfo = ({ t }) => {
               <form>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.taxCode}
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
@@ -31,7 +31,7 @@ const OtherInfo = ({ t }) => {
                   />
 
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.nationality}
                     onBlur={handleBlur('nationality')}
                     onChange={handleChange('nationality')}
@@ -42,7 +42,7 @@ const OtherInfo = ({ t }) => {
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.religion}
                     onBlur={handleBlur('religion')}
                     onChange={handleChange('religion')}
@@ -55,7 +55,7 @@ const OtherInfo = ({ t }) => {
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}

@@ -18,6 +18,7 @@ const NewHolidayPage = ({ t, location, history }) => {
     return () => {
       dispatch(changeActions([]));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

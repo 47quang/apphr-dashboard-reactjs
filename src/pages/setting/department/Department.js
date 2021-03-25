@@ -17,6 +17,7 @@ const Department = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(fetchDepartments());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteRow = (rowId) => {

@@ -13,14 +13,14 @@ const NotificationForm = ({ t, notificationInfo }) => {
       <Formik initialValues={notificationInfo} enableReinitialize onSubmit={(values) => console.log(values)}>
         {({ values, handleChange, handleBlur, errors, touched, handleSubmit }) => (
           <form>
-            <div className="form-group col-lg-12">
+            <div className="form-group col-xl-12">
               <Label text="Đến" required={true} />
               <div className="d-flex flex-row flex-wrap justify-content-between border">
                 <CommonMultiSelectInput values={values.to} listValues={[]} onChangeValues={handleChange('to')} />
               </div>
             </div>
             <CommonTextInput
-              containerClassName={'form-group col-lg-12'}
+              containerClassName={'form-group col-xl-12'}
               value={values.title}
               onBlur={handleBlur('title')}
               onChange={handleChange('title')}
@@ -35,7 +35,7 @@ const NotificationForm = ({ t, notificationInfo }) => {
               errorMessage={errors.title}
             />
             <CommonMultipleTextInput
-              containerClassName={'form-group col-lg-12'}
+              containerClassName={'form-group col-xl-12'}
               value={values.content}
               onBlur={handleBlur('content')}
               onChange={handleChange('content')}
@@ -45,7 +45,7 @@ const NotificationForm = ({ t, notificationInfo }) => {
               inputClassName={'form-control'}
               rows={10}
             />
-            <CommonUploadFileButton name={'files'} containerClassName="form-group col-lg-12" buttonClassName="btn btn-primary" value={values.files} />
+            <CommonUploadFileButton name={'files'} containerClassName="form-group col-xl-12" buttonClassName="btn btn-primary" value={values.files} />
           </form>
         )}
       </Formik>

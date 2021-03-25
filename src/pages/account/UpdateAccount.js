@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchPermissionGroups, fetchRole, fetchRoles, fetchAccount, setEmptyAccount } from 'src/stores/actions/account';
+import { fetchAccount, fetchPermissionGroups, fetchRoles } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -18,6 +18,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
     dispatch(fetchRoles());
     // if (account.roleId !== 0) dispatch(fetchRole(49));
     dispatch(fetchPermissionGroups());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

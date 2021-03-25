@@ -25,7 +25,7 @@
     "update": "Cập nhật",
     "back": "Quay lại",
     "create_new": "Tạo mới",
-    "add": "Thêm",
+    "add": "Thêm mới",
     "reset": "Hoàn tác",
     "close_all_cap": "ĐÓNG",
     "ok_all_cap": "OK",
@@ -150,7 +150,7 @@
     "column_filter": "Cột cần lọc"
   },
   "title": {
-    "role": "Vị trí làm việc",
+    "role": "Vai trò",
     "permission": "Phân quyền",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
@@ -232,6 +232,38 @@
     "enter_notification_title": "Nhập tiêu đề"
   },
   "validation": {
-    "role_name": "Bắt buộc nhập vào tiêu đề vai trò"
+    "required_enter_role_name": "Bắt buộc nhập vào tiêu đề vai trò",
+    "required_enter_company_name": "Bắt buộc nhập tên của công ty",
+    "enter_valid_phone_number": "Số điện thoại đã nhập không hợp lệ",
+    "required_enter_phone_number": "Bắt buộc nhập số điện thoại",
+    "required_enter_email": "Bắt buộc nhập vào email",
+    "enter_valid_email": "Địa chỉ email không hợp lệ",
+    "required_enter_department_name": "Bắt buộc nhập tên phòng ban",
+    "required_select_branch_id": "Bắt buộc chọn chi nhánh",
+    "required_select_role_id": "Bắt buộc chọn vai trò",
+    "required_select_department_id": "Bắt buộc chọn phòng ban",
+    "required_select_academic_level": "Bắt buộc chọn trình độ học vấn",
+    "required_enter_position_name": "Bắt buộc nhập tên vị trí",
+    "required_enter_experience_year": "Bắt buộc nhập năm kinh nghiệm",
+    "experience_year_must_not_be_negative": "Năm kinh nghiệm là một số không âm",
+    "required_enter_shift_name": "Bắt buộc nhập tên ca làm",
+    "required_select_checkin_time": "Bắt buộc chọn giờ check-in",
+    "required_select_checkout_time": "Bắt buộc chọn giờ check-out",
+    "required_select_operator_loop": "Bắt buộc chọn thời gian làm việc",
+    "required_select_roll_call": "Bắt buộc chọn hình thức điểm danh",
+    "required_enter_working_time_coefficient": "Bắt buộc nhập hệ số giờ làm",
+    "working_time_coefficient_must_not_be_negative": "Hệ số giờ làm phải là một số không âm",
+    "checkout_time_must_be_greater_than_checkin_time": "Giờ check-out phải sau giờ check-in",
+    "required_select_start_date": "Ngày bắt đầu không được bỏ trống",
+    "required_select_end_date": "Ngày kết thúc không được bỏ trống",
+    "required_enter_holiday_title": "Bắt buộc nhập vào tiêu đề của ngày lễ",
+    "required_enter_total_proposal_day": "Bắt buộc nhập số ngày đề xuất tối đa",
+    "total_proposal_day_must_be_integer": "Số ngày đề xuất tối đa phải là một số nguyên",
+    "total_proposal_day_must_not_be_negative": "Số ngày đề xuất tối đa là một số không âm",
+    "required_enter_branch_name": "Bắt buộc nhập vào tên của chi nhánh",
+    "enter_valid_ip_v4_address": "Địa chỉ IP không hợp lệ",
+    "required_enter_usename": "Bắt buộc nhập tên đăng nhập",
+    "required_enter_password": "Bắt buộc nhập vào mật khẩu của tài khoản",
+    "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự"
   }
 }

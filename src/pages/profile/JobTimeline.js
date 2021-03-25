@@ -1,11 +1,10 @@
 import { CContainer } from '@coreui/react';
 import { Switch } from '@material-ui/core';
-import { Delete, Add } from '@material-ui/icons';
-import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import { Add, Delete } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { Field, FieldArray, Formik } from 'formik';
 import Label from 'src/components/text/Label';
-import FormHeader from 'src/components/text/FormHeader';
 
 const JobTimelineInfo = ({ t }) => {
   const jobTimelineInfo = {
