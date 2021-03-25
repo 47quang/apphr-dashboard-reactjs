@@ -127,3 +127,20 @@ export const fetchPermissionGroups = () => {
       });
   };
 };
+
+export const fetchProfiles = (params) => {
+  return (dispatch, getState) => {
+    api.profile
+      .getProfiles(params)
+      .then(({ payload }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((profile) => ({ id: profile.shortname, name: profile.shortname + ' - ' + profile.fullname }))
+            : [];
+        dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};

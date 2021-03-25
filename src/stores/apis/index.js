@@ -237,5 +237,10 @@ export const api = {
         params: params,
       });
     },
+    getProfiles: (params) => {
+      return client.get(API_PREFIX.API_PROFILE + '?', {
+        params: params,
+      });
+    },
   },
 };

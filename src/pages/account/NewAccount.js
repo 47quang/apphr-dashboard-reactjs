@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { createAccount, fetchPermissionGroups, fetchRoles, setEmptyAccount } from 'src/stores/actions/account';
+import { createAccount, fetchPermissionGroups, fetchRoles, setEmptyAccount, fetchProfiles } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -12,12 +12,13 @@ const NewAccount = ({ t, location, history }) => {
   const account = useSelector((state) => state.account.account);
   const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
-  //const permissionIds = useSelector((state) => state.account.account.permissionIds);
+  const profiles = useSelector((state) => state.account.account.profiles);
 
   useEffect(() => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
+    dispatch(fetchProfiles({ fields: ['firstname', 'shortname'] }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -57,7 +58,7 @@ const NewAccount = ({ t, location, history }) => {
       buttons={buttons}
       submitForm={submitForm}
       permissionGroups={permissionGroups}
-      //permissionIds={permissionIds}
+      profiles={profiles}
       roles={roles}
     />
   );

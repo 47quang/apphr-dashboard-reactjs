@@ -61,7 +61,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
               <form>
                 <div className="row">
                   <div className="col-xl-2 text-center mb-4">
-                    <img src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85" alt="Ảnh đại diện" height="200px" />
+                    <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="Ảnh đại diện" height="200px" />
                   </div>
                   <div className="col-xl-10">
                     <div className="row">
