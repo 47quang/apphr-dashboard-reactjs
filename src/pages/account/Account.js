@@ -17,6 +17,7 @@ const Account = ({ t, location, history }) => {
   const accounts = useSelector((state) => state.account.accounts);
   useEffect(() => {
     dispatch(fetchAccounts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const deleteRow = async (rowId) => {

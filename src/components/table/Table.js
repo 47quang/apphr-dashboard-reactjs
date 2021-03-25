@@ -31,6 +31,7 @@ import TableCell from '@material-ui/core/TableCell';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import classNames from 'classnames';
 import saveAs from 'file-saver';
 import { Formik } from 'formik';
 import React, { useCallback, useRef, useState } from 'react';
@@ -38,8 +39,6 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 
 /*
   Params:
@@ -249,17 +248,17 @@ const QTable = (props) => {
 
   const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
 
-  const DateTypeProvider = (props) => <DataTypeProvider formatterComponent={DateFormatter} {...props} />;
+  const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 
   const MultiValuesFormatter = ({ value }) => {
     return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
   };
-  const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
+  const MultiValuesTypeProvider = (p) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...p} />;
 
   const LinkFormatter = ({ value, column }) =>
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
-  const LinkTypeProvider = (props) => <DataTypeProvider formatterComponent={LinkFormatter} {...props} />;
+  const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
   return (
     <div>

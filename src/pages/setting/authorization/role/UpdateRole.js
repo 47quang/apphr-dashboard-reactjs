@@ -15,6 +15,7 @@ const UpdateRole = ({ t, location, history, match }) => {
   useEffect(() => {
     dispatch(fetchPermissions());
     dispatch(fetchRole(match?.params?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

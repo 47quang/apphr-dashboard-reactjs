@@ -17,6 +17,7 @@ const EditDepartment = ({ t, location, match, history }) => {
     return () => {
       dispatch(resetDepartment());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
@@ -32,7 +33,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         history.push(ROUTE_PATH.DEPARTMENT);
       },
-      name: t('title.back'),
+      name: t('label.back'),
       position: 'left',
     },
     {
@@ -41,7 +42,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         departmentRef.current.handleReset(e);
       },
-      name: t('title.reset'),
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -49,7 +50,7 @@ const EditDepartment = ({ t, location, match, history }) => {
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);
       },
-      name: t('title.update'),
+      name: t('label.update'),
     },
   ];
   return (

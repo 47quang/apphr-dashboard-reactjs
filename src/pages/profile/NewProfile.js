@@ -15,6 +15,7 @@ const NewProfile = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(setEmptyProfile());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const buttons = [

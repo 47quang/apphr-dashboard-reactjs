@@ -15,7 +15,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-7">
+        <div className="shadow bg-white rounded p-4 container col-xl-10">
           <Formik
             innerRef={branchRef}
             enableReinitialize
@@ -27,10 +27,9 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
               <form autoComplete="off">
-                {/* <FormHeader text={t('title.branch_create')} /> */}
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
@@ -42,7 +41,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     isDisable={true}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -54,12 +53,12 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.ipRouter}
                     onBlur={handleBlur('ipRouter')}
                     onChange={handleChange('ipRouter')}
@@ -69,11 +68,11 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     placeholder={t('placeholder.enter_branch_ip_router')}
                     inputClassName={'form-control'}
                     isTouched={touched.ipRouter}
-                    isError={errors.ip && touched.ipRouter}
-                    errorMessage={errors.ipRouter}
+                    isError={errors.ipRouter && touched.ipRouter}
+                    errorMessage={t(errors.ipRouter)}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.provinceId}
                     onBlur={handleBlur('provinceId')}
                     onChange={(e) => {
@@ -94,7 +93,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.districtId}
                     onBlur={handleBlur('districtId')}
                     onChange={(e) => {
@@ -108,7 +107,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.wardId}
                     onBlur={handleBlur('wardId')}
                     onChange={handleChange('wardId')}
@@ -121,7 +120,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.address}
                     onBlur={handleBlur('address')}
                     onChange={handleChange('address')}
@@ -134,7 +133,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}

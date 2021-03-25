@@ -10,7 +10,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-7">
+        <div className="shadow bg-white rounded p-4 container col-xl-8">
           <Formik
             innerRef={departmentRef}
             enableReinitialize
@@ -24,7 +24,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
@@ -38,7 +38,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -50,12 +50,12 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.branchId}
                     onBlur={handleBlur('branchId')}
                     onChange={handleChange('branchId')}
@@ -67,24 +67,21 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                     lstSelectOptions={branches}
                     isTouched={touched.branchId}
                     isError={errors.branchId && touched.branchId}
-                    errorMessage={errors.branchId}
+                    errorMessage={t(errors.branchId)}
                   />
                 </div>
 
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
+                    rows={10}
                     labelText={t('label.description')}
                     inputClassName={'form-control'}
                     placeholder={t('placeholder.enter_description')}
-                    isRequiredField
-                    isTouched={touched.note}
-                    isError={errors.note && touched.note}
-                    errorMessage={errors.note}
                   />
                 </div>
                 {renderButtons(buttons)}

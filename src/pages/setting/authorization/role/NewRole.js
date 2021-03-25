@@ -15,6 +15,7 @@ const NewRole = ({ t, location, history }) => {
   useEffect(() => {
     dispatch(setEmptyRole());
     dispatch(fetchPermissions());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

@@ -26,6 +26,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       dispatch(changeActions([]));
       dispatch(resetShift());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const submitForm = (values) => {
     let form = values;

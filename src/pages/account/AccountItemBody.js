@@ -44,7 +44,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     isRequiredField
                     isTouched={touched.username}
                     isError={errors.username && touched.username}
-                    errorMessage={errors.username}
+                    errorMessage={t(errors.username)}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-4'}
@@ -59,7 +59,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     isRequiredField
                     isTouched={touched.password}
                     isError={errors.password && touched.password}
-                    errorMessage={errors.password}
+                    errorMessage={t(errors.password)}
                   />
 
                   <CommonTextInput
@@ -73,7 +73,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
                     isError={errors.email && touched.email}
-                    errorMessage={errors.email}
+                    errorMessage={t(errors.email)}
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-lg-4'}
@@ -86,7 +86,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
                     isError={errors.phone && touched.phone}
-                    errorMessage={errors.phone}
+                    errorMessage={t(errors.phone)}
                   />
                   <CommonSelectInput
                     containerClassName={'form-group col-lg-8'}
@@ -124,7 +124,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     isRequiredField
                     isTouched={touched.roleId}
                     isError={errors.roleId && touched.roleId}
-                    errorMessage={errors.roleId}
+                    errorMessage={t(errors.roleId)}
                   />
                 </div>
                 <div className="row">

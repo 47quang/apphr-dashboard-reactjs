@@ -15,6 +15,7 @@ const Branch = ({ t }) => {
   ];
   useEffect(() => {
     dispatch(fetchBranches());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteRow = async (rowId) => {

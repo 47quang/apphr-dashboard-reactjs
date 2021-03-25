@@ -15,6 +15,7 @@ const Role = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(fetchRoles());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteRow = async (rowId) => {

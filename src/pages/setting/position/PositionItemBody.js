@@ -22,7 +22,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-7">
+        <div className="shadow bg-white rounded p-4 container col-xl-7">
           <Formik
             innerRef={positionRef}
             enableReinitialize
@@ -35,7 +35,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                 {/* <FormHeader text={t('label.position_create')} /> */}
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
@@ -50,7 +50,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
 
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -62,12 +62,12 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.branchId}
                     labelText={t('label.branch')}
                     selectClassName={'form-control'}
@@ -82,12 +82,12 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     placeholder={t('placeholder.select_branch')}
                     isTouched={touched.branchId}
                     isError={errors.branchId && touched.branchId}
-                    errorMessage={errors.branchId}
+                    errorMessage={t(errors.branchId)}
                   />
                 </div>
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.departmentId}
                     labelText={t('label.department')}
                     selectClassName={'form-control'}
@@ -99,30 +99,30 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     placeholder={t('placeholder.select_department')}
                     isTouched={touched.departmentId}
                     isError={errors.departmentId && touched.departmentId}
-                    errorMessage={errors.departmentId}
+                    errorMessage={t(errors.departmentId)}
                   />
                 </div>
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.academicLevel}
                     onBlur={handleBlur('academicLevel')}
                     onChange={handleChange('academicLevel')}
                     inputID={'academicLevel'}
                     labelText={t('label.academic_level')}
+                    placeholder={t('placeholder.select_academic_level')}
                     selectClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.academicLevel}
                     isError={errors.academicLevel && touched.academicLevel}
-                    errorMessage={errors.academicLevel}
+                    errorMessage={t(errors.academicLevel)}
                     lstSelectOptions={academicLevels}
-                    placeholder={t('placeholder.select_academic_level')}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.expYear}
                     onBlur={handleBlur('expYear')}
                     onChange={handleChange('expYear')}
@@ -133,12 +133,12 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                     isRequiredField
                     isTouched={touched.expYear}
                     isError={errors.expYear && touched.expYear}
-                    errorMessage={errors.expYear}
+                    errorMessage={t(errors.expYear)}
                   />
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}

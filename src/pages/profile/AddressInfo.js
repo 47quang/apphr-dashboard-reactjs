@@ -16,6 +16,7 @@ const AddressInfo = ({ t }) => {
   const wards = useSelector((state) => state.location.wards);
   useEffect(() => {
     dispatch(fetchProvinces());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const permanentAddressInfo = {
     permanentAddress: '',

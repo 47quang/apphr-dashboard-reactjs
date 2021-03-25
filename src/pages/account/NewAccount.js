@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeActions } from 'src/stores/actions/header';
-import { createAccount, setEmptyAccount, fetchRoles, fetchPermissionGroups } from 'src/stores/actions/account';
-import AccountItemBody from './AccountItemBody';
 import { ROUTE_PATH } from 'src/constants/key';
+import { createAccount, fetchPermissionGroups, fetchRoles, setEmptyAccount } from 'src/stores/actions/account';
+import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
 
@@ -19,6 +18,7 @@ const NewAccount = ({ t, location, history }) => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

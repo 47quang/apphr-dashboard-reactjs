@@ -21,6 +21,7 @@ const Profile = ({ t, location }) => {
   const profiles = useSelector((state) => state.profile.profiles);
   useEffect(() => {
     dispatch(fetchProfiles());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId));

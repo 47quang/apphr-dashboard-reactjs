@@ -29,7 +29,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                 <FormHeader text={t('title.role')} />
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-xl-3'}
                     value={values.id}
                     onBlur={handleBlur('id')}
                     onChange={handleChange('id')}
@@ -41,7 +41,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                     isDisable={true}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-xl-3'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -53,7 +53,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
@@ -61,7 +61,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                     permissions.length > 0 &&
                     permissions.map((permission) => {
                       return (
-                        <div className="form-group col-lg-3" key={permission.id + 'group'}>
+                        <div className="form-group col-xl-3" key={permission.id + 'group'}>
                           <Field
                             component={Checkbox}
                             color={'primary'}

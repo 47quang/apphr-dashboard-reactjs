@@ -23,7 +23,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-7">
+        <div className="shadow bg-white rounded p-4 container col-xl-8">
           <Formik
             innerRef={shiftRef}
             enableReinitialize
@@ -37,7 +37,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
@@ -51,7 +51,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -63,12 +63,12 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.startCC}
                     onBlur={handleBlur('startCC')}
                     onChange={handleChange('startCC')}
@@ -79,10 +79,10 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     isRequiredField
                     isTouched={touched.startCC}
                     isError={errors.startCC && touched.startCC}
-                    errorMessage={errors.startCC}
+                    errorMessage={t(errors.startCC)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.endCC}
                     onBlur={handleBlur('endCC')}
                     onChange={handleChange('endCC')}
@@ -93,13 +93,13 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     isRequiredField
                     isTouched={touched.endCC}
                     isError={errors.endCC && touched.endCC}
-                    errorMessage={errors.endCC}
+                    errorMessage={t(errors.endCC)}
                     minTime={values.startCC}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.coefficient}
                     onBlur={handleBlur('coefficient')}
                     onChange={handleChange('coefficient')}
@@ -110,11 +110,11 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     isRequiredField
                     isTouched={touched.coefficient}
                     isError={errors.coefficient && touched.coefficient}
-                    errorMessage={errors.coefficient}
+                    errorMessage={t(errors.coefficient)}
                   />
                 </div>
                 <div className="row">
-                  <div className="form-group col-lg-12">
+                  <div className="form-group col-xl-12">
                     <Label text={t('label.shift_time')} required={true} />
                     <div role="group" className="d-flex flex-row flex-wrap justify-content-around">
                       {DAYS.map((day, index) => (
@@ -126,14 +126,14 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     </div>
                     {touched.operateLoop && errors.operateLoop && (
                       <div>
-                        <small className={'text-danger'}>{errors.operateLoop}</small>
+                        <small className={'text-danger'}>{t(errors.operateLoop)}</small>
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="row">
-                  <div className="form-group col-lg-12">
+                  <div className="form-group col-xl-12">
                     <Label text={t('label.branch')} required={true} />
                     <div className="d-flex flex-row flex-wrap justify-content-between border">
                       <CommonMultiSelectInput
@@ -146,7 +146,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     </div>
                     {touched.branchIds && errors.branchIds && (
                       <div>
-                        <small className={'text-danger'}>{errors.branchIds}</small>
+                        <small className={'text-danger'}>{t(errors.branchIds)}</small>
                       </div>
                     )}
                   </div>
@@ -154,7 +154,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.typeCC}
                     onBlur={handleBlur('typeCC')}
                     onChange={handleChange('typeCC')}
@@ -164,7 +164,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     isRequiredField
                     isTouched={touched.typeCC}
                     isError={errors.typeCC && touched.typeCC}
-                    errorMessage={errors.typeCC}
+                    errorMessage={t(errors.typeCC)}
                     lstSelectOptions={typeCC}
                     placeholder={t('placeholder.select_roll_call_type')}
                   />

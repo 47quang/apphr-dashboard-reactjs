@@ -18,6 +18,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
     return () => {
       dispatch(setEmptyPosition());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {

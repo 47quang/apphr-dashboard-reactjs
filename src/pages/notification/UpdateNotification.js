@@ -16,10 +16,10 @@ const UpdateNotification = ({ t, location }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto row">
-        <div className="col-lg-8">
+        <div className="col-xl-8">
           <NotificationForm notificationInfo={notificationInfo} />
         </div>
-        <div className="col-lg-4">
+        <div className="col-xl-4">
           <div className="shadow bg-white rounded p-4 container">
             <FormHeader text="Người đăng" />
             <div className="text-center mb-3">
