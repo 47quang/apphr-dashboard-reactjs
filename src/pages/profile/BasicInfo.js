@@ -21,25 +21,25 @@ const BasicInfo = ({ t, isCreate, profile }) => {
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
   const employeeInfo = {
-    fullname: profile.fullname,
+    fullname: profile.fullname ?? '',
     shortname: profile.shortname ?? '',
-    phone: profile.phone,
-    email: profile.email,
+    phone: profile.phone ?? '',
+    email: profile.email ?? '',
     dateOfBirth: profile.dayOfBirth ? getDateInput(profile.dateOfBirth) : '',
     gender: profile.gender === 'male' ? 1 : 2,
-    cmnd: profile.cmnd + '',
-    have_id: profile.cmnd !== null && profile.cmnd !== undefined,
-    cmnd_date: '',
+    cmnd: profile.cmnd ?? '',
+    have_id: profile.cmnd !== '',
+    cmnd_date: profile.cmndIssuedDate ?? '',
     cmnd_place: '',
-    have_passport: profile.passport !== null && profile.passport !== undefined,
+    have_passport: profile.passport !== '',
     passport: profile.passport ?? '',
-    passport_start: '',
+    passport_start: profile.passportIssuedDate ?? '',
     passport_end: '',
     passport_place: '',
     departmentId: +profile.departmentId,
     positionId: +profile.positionId,
     role: 0,
-    branch: +profile.branchId,
+    branchId: +profile.branchId,
     manager: '',
   };
   useEffect(() => {
@@ -159,7 +159,6 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                     </div>
                     <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
-                    <div className="row" role="group" aria-labelledby="checkbox-id-password"></div>
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="pl-12">

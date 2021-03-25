@@ -14,22 +14,61 @@ const JobTimelineInfo = ({ t }) => {
         isMinimize: true,
         isOpen: true,
         contractCode: 'C1XOC',
-        probationaryPeriod: '',
         contractType: 'partTime',
+        pTaxType: '',
+        signee: '',
+        jobType: 'Văn phòng',
+        probationaryPeriod: 0,
+        signedDate: '',
+        effectiveDate: '',
+        expiredDate: '',
+        branchId: 0,
         startDate: '',
+        payType: 0,
+        salaryGroup: 0,
+        salary: 13000,
         subsidize: [
           {
-            type: 1,
+            id: 1,
+            name: 'Ăn trưa',
             amount: 1000,
           },
         ],
       },
     ],
   };
+  const subsidizes = [
+    { id: 1, name: 'Ăn trưa', amount: 1000000 },
+    { id: 2, name: 'Ăn sáng', amount: 1000000 },
+    { id: 3, name: 'Ăn vặt', amount: 1000000 },
+    { id: 4, name: 'Ăn chiều', amount: 1000000 },
+    { id: 5, name: 'Xăng xe', amount: 1000000 },
+    { id: 6, name: 'Nhà ở', amount: 1000000 },
+  ];
+  const salaryGroups = [
+    { id: 1, name: '13M' },
+    { id: 2, name: '15M' },
+    { id: 3, name: '23M' },
+  ];
+  const payTypes = [
+    { id: 1, name: 'Chi trả một lần' },
+    { id: 2, name: 'Chi trả theo giờ' },
+    { id: 3, name: 'Chi trả theo tháng' },
+    { id: 4, name: 'Chi trả theo ngày công' },
+  ];
+  const personalIncomeTaxType = [
+    { id: 1, name: 'Cư trú có hợp đồng lao động 3 tháng trở lên' },
+    { id: 2, name: 'Cá nhân không cư trú' },
+    { id: 3, name: 'Không tính thuế' },
+    { id: 4, name: 'Hợp đồng lao động dưới 3 tháng' },
+  ];
+
   const contractType = [
     { id: 'partTime', name: 'Bán thời gian' },
     { id: 'fullTime', name: 'Toàn thời gian' },
+    { id: 'season', name: 'Thời vụ' },
   ];
+  const employee = [{ shortname: 1, name: 'Nguyễn Văn An' }];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -92,7 +131,7 @@ const JobTimelineInfo = ({ t }) => {
                                     <div className="form-group col-lg-4">
                                       <Label text={'Loại thuế thu nhập cá nhân'} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
-                                        {contractType.map((ch, idx) => (
+                                        {personalIncomeTaxType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -104,7 +143,7 @@ const JobTimelineInfo = ({ t }) => {
                                     <div className="form-group col-lg-4">
                                       <Label text={'Người ký'} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
-                                        {contractType.map((ch, idx) => (
+                                        {employee.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -124,9 +163,9 @@ const JobTimelineInfo = ({ t }) => {
                                     <div className="form-group col-lg-4">
                                       <Label text={'Thời gian thử việc'} />
                                       <div className="input-group">
-                                        <input type="text" className={'form-control'} rows={5} name={`contractInfo.${index}.probationaryPeriod`} />
+                                        <input type="number" className={'form-control'} rows={5} name={`contractInfo.${index}.probationaryPeriod`} />
                                         <span className="input-group-text" id="basic-addon2">
-                                          tháng
+                                          ngày
                                         </span>
                                       </div>
                                     </div>

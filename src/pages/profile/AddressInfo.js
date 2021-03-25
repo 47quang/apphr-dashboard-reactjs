@@ -8,7 +8,6 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
-import { renderButtons } from 'src/utils/formUtils';
 
 const AddressInfo = ({ t }) => {
   const dispatch = useDispatch();
@@ -208,7 +207,8 @@ const AddressInfo = ({ t }) => {
               onSubmit={(values) => {
                 console.log(values);
               }}
-              render={({ values, errors, touched, handleReset, handleSubmit }) => {
+            >
+              {({ values, errors, touched, handleReset, handleSubmit }) => {
                 return (
                   <Form>
                     <FieldArray
@@ -274,7 +274,7 @@ const AddressInfo = ({ t }) => {
                   </Form>
                 );
               }}
-            />
+            </Formik>
           </div>
         </div>
       </div>
