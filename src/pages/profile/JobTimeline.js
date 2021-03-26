@@ -100,7 +100,7 @@ const JobTimelineInfo = ({ t }) => {
                                   {values.contractInfo[index].contractCode}{' '}
                                   <Switch checked={values.contractInfo[index].isOpen} name={`contractInfo.${index}.contractCode`} />
                                 </div>
-                                <div className="pt-2">
+                                <div className="pt-2" role="button">
                                   <Delete className="pb-1" onClick={() => remove(index)} style={{ color: 'red' }} />
                                 </div>
                               </div>
@@ -281,9 +281,9 @@ const JobTimelineInfo = ({ t }) => {
                                                       disabled
                                                     />
                                                   </div>
-                                                  <div className="form-group col-lg-4">
-                                                    <div className="d-flex align-items-center pt-4">
-                                                      <Delete className="pb-1" onClick={() => remove(index)} style={{ color: 'red' }} />
+                                                  <div className="form-group d-flex align-items-end">
+                                                    <div role="button" className="btn btn-white">
+                                                      <Delete className="pb-1" onClick={() => remove(subsidizeIdx)} style={{ color: 'red' }} />
                                                     </div>
                                                   </div>
                                                 </div>
