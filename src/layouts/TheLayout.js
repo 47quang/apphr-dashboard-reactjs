@@ -31,16 +31,16 @@ const TheLayout = (props) => {
     }
   };
   return (
-    <div className="c-app c-default-layout">
+    <div className="c-app c-default-layout" style={{ overflow: 'hidden' }}>
       <TheSidebar />
-      <div className="c-wrapper">
+      <div className="c-wrapper" style={{ overflow: 'hidden' }}>
         <TheHeader {...props} />
         <Snackbar open={notification.open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
           <Alert variant="filled" severity={notification.type}>
             {notification.message}
           </Alert>
         </Snackbar>
-        <div className="c-body">
+        <div className="c-body" style={{ overflow: 'hidden' }}>
           <TheContent />
         </div>
       </div>

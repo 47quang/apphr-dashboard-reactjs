@@ -126,7 +126,7 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
-          <div className={classes.root}>
+          <div className={joinClassName([classes.root, 'pb-5'])}>
             <AppBar position="static" color="default">
               <Tabs
                 value={subTabName}
