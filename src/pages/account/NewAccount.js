@@ -12,13 +12,13 @@ const NewAccount = ({ t, location, history }) => {
   const account = useSelector((state) => state.account.account);
   const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
-  const profiles = useSelector((state) => state.account.account.profiles);
+  const profiles = useSelector((state) => state.account.profiles);
 
   useEffect(() => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
-    dispatch(fetchProfiles({ fields: ['firstname', 'shortname'] }));
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'shortname'] }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -49,7 +49,7 @@ const NewAccount = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  console.log(roles);
+
   return (
     <AccountItemBody
       t={t}

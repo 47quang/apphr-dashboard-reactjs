@@ -14,6 +14,8 @@ import OtherInfo from './OtherInfo';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTabName, setSubTabName } from 'src/stores/actions/profile';
 import JobTimelineInfo from './JobTimeline';
+import Snackbar from '@material-ui/core/Snackbar';
+import { joinClassName } from 'src/utils/stringUtils';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -39,8 +41,17 @@ const a11yProps = (index) => {
 };
 
 const useStyles = makeStyles((theme) => ({
+  anchorOriginTopCenter: {
+    [theme.breakpoints.down('md')]: {
+      top: 0,
+      justifyContent: 'center',
+    },
+  },
   root: {
-    width: '100%',
+    [theme.breakpoints.down('md')]: {
+      borderRadius: 4,
+      minWidth: 200,
+    },
   },
 }));
 
@@ -127,6 +138,18 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
       <TabPanel value={tabName} index={2}>
         <HistoryWorking t={t} />
       </TabPanel>
+      <Snackbar
+        open={true}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        className={joinClassName([classes.root])}
+        style={{ bottom: 0, width: '75%' }}
+      >
+        <div>
+          <div role="button" className="btn btn-primary">
+            {t('label.create_new')}
+          </div>
+        </div>
+      </Snackbar>
     </div>
   );
 };

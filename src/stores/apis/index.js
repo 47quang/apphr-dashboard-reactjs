@@ -238,9 +238,7 @@ export const api = {
       });
     },
     getProfiles: (params) => {
-      return client.get(API_PREFIX.API_PROFILE + '?', {
-        params: params,
-      });
+      return client.get(API_PREFIX.API_PROFILE + '?fields=' + params.fields.join());
     },
   },
 };
