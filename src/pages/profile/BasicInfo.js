@@ -1,6 +1,6 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -12,6 +12,9 @@ import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
 import { getDateInput } from 'src/utils/datetimeUtils';
+import { joinClassName } from 'src/utils/stringUtils';
+import { REDUX_STATE } from 'src/stores/states/index';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 
 const BasicInfo = ({ t, isCreate, profile }) => {
   const provinces = useSelector((state) => state.location.provinces);
@@ -20,6 +23,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
+
   const employeeInfo = {
     fullname: profile.fullname ?? '',
     shortname: profile.shortname ?? '',
@@ -38,26 +42,40 @@ const BasicInfo = ({ t, isCreate, profile }) => {
     passport_place: '',
     departmentId: +profile.departmentId,
     positionId: +profile.positionId,
-    role: 0,
+    roleId: 0,
     branchId: +profile.branchId,
     manager: '',
   };
+
+  const basicInfoForm = useRef();
   useEffect(() => {
     dispatch(fetchProvinces());
     dispatch(fetchBranches());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const genders = [
     { id: 1, name: t('label.male') },
     { id: 2, name: t('label.female') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <FormHeader text={t('label.profile_basic_info')} />
-          <Formik initialValues={employeeInfo} enableReinitialize>
-            {({ values, errors, touched, handleBlur, handleChange }) => (
+          <Formik
+            innerRef={basicInfoForm}
+            initialValues={employeeInfo}
+            enableReinitialize
+            onSubmit={(values) => {
+              console.log(values);
+              dispatch({
+                type: REDUX_STATE.profile.SET_PROFILE,
+                payload: values,
+              });
+            }}
+          >
+            {({ values, errors, touched, handleBlur, handleChange, setFieldValue }) => (
               <form>
                 <div className="row">
                   <div className="col-xl-2 text-center mb-4">
@@ -320,6 +338,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                     </div>
                   </div>
+                  <AutoSubmitToken />
                 </div>
               </form>
             )}

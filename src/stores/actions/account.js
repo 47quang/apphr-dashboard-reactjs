@@ -31,7 +31,9 @@ export const fetchAccount = (id) => {
     api.account
       .get(id)
       .then(({ payload }) => {
-        console.log(payload);
+        payload.email = payload.email ?? '';
+        payload.phone = payload.phone ?? '';
+        payload.profileId = payload.profileId ?? 0;
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
@@ -59,7 +61,6 @@ export const updateAccount = (data) => {
     api.account
       .put(data)
       .then(({ payload }) => {
-        payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {

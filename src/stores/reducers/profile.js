@@ -167,7 +167,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      return { ...state, profile: payload };
+      console.log('payload', payload);
+      return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
         ...state,

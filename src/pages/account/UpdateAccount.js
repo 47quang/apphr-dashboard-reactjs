@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchAccount, fetchPermissionGroups, fetchRoles, fetchProfiles } from 'src/stores/actions/account';
+import { fetchAccount, fetchPermissionGroups, fetchRoles, fetchProfiles, updateAccount } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -27,7 +27,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
   const submitForm = (values) => {
     let form = values;
     console.log(form);
-    //dispatch(updateAccount(form, history));
+    dispatch(updateAccount(form, history));
   };
 
   const buttons = [

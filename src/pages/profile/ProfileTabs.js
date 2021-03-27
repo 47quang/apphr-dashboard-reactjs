@@ -3,8 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
@@ -55,10 +56,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTabs = ({ t, isCreate, profile }) => {
+const ProfileTabs = ({ t, isCreate, profile, history }) => {
   const [snackBarWidth, setSnackBarWidth] = useState(0);
   const classes = useStyles();
   const theme = useTheme();
+  // const basicInfoRef = createRef();
   const tabName = useSelector((state) => state.profile.tabName);
   const subTabName = useSelector((state) => state.profile.subTabName);
   const dispatch = useDispatch();
@@ -85,7 +87,7 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        // history.push(ROUTE_PATH.ROLE);
+        history.push(ROUTE_PATH.PROFILE);
       },
       name: t('label.back'),
       position: 'left',
@@ -107,6 +109,7 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
       name: t('label.update'),
     },
   ];
+
   return (
     <>
       <div className={classes.root} id="profile-tabs">
@@ -151,7 +154,7 @@ const ProfileTabs = ({ t, isCreate, profile }) => {
               <BasicInfo t={t} isCreate={isCreate} profile={profile} />
             </TabPanel>
             <TabPanel value={subTabName} index={1} dir={theme.direction}>
-              {isCreate ? <JobTimelineInfo t={t} /> : <Contract t={t} />}
+              {isCreate ? <JobTimelineInfo t={t} /> : <JobTimelineInfo t={t} />}
             </TabPanel>
             <TabPanel value={subTabName} index={2} dir={theme.direction}>
               <AcademicLevel t={t} />

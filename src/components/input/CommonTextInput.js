@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Label from '../text/Label';
 import { joinClassName } from 'src/utils/stringUtils';
 
@@ -26,6 +26,7 @@ const CommonTextInput = ({
       return joinClassName([inputClassName, 'is-valid']);
     } else return inputClassName;
   };
+
   return (
     <div className={containerClassName}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
