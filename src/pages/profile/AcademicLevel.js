@@ -1,21 +1,15 @@
 import { CContainer } from '@coreui/react';
 import { Add, Delete } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
+import { REDUX_STATE } from 'src/stores/states';
 
-const AcademicLevel = ({ t }) => {
-  const initialAcademicLevelInfo = {
-    academicInfo: [
-      {
-        academicLevel: '',
-        major: '',
-        educationPlace: '',
-        note: '',
-        date: '',
-      },
-    ],
-  };
+const AcademicLevel = ({ t, profile }) => {
+  const dispatch = useDispatch();
+  const initialAcademicLevelInfo = profile;
   const academicLevels = [
     { id: 'intermediate', name: t('label.intermediate') },
     { id: 'college', name: t('label.college') },
@@ -32,16 +26,21 @@ const AcademicLevel = ({ t }) => {
             enableReinitialize
             onSubmit={(values) => {
               console.log('Academic Level: ', values);
+              dispatch({
+                type: REDUX_STATE.profile.SET_ACADEMIC_LEVEL,
+                payload: values.academicInfo,
+              });
             }}
           >
-            {({ values, errors, touched, handleReset, handleSubmit }) => {
+            {({ values, errors, touched, handleReset, handleSubmit, handleChange }) => {
               return (
                 <Form>
                   <FieldArray
                     name="academicInfo"
                     render={({ insert, remove, push }) => (
                       <div>
-                        {values.academicInfo.length > 0 &&
+                        {values.academicInfo &&
+                          values.academicInfo.length > 0 &&
                           values.academicInfo.map((friend, index) => (
                             <div key={index}>
                               <div className={'d-flex justify-content-between'}>
@@ -92,6 +91,14 @@ const AcademicLevel = ({ t }) => {
                                   <Label text={t('label.note')} />
                                   <textarea className={'form-control'} rows={5} name={`academicInfo.${index}.note`} />
                                 </div>
+                              </div>
+                              <div className="row">
+                                <CommonUploadFileButton
+                                  name={`academicInfo.${index}.files`}
+                                  containerClassName="form-group col-xl-12"
+                                  buttonClassName="btn btn-primary"
+                                  value={values.academicInfo[index].files}
+                                />
                               </div>
                             </div>
                           ))}

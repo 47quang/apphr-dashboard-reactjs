@@ -3,7 +3,7 @@ import { FieldArray } from 'formik';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassName }) => {
+const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassName, onChange }) => {
   const { t } = useTranslation();
   const uploadFileRef = useRef();
   return (
@@ -33,12 +33,15 @@ const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassNa
             }}
           />
           <div className="form-group mt-2 row">
-            {value.length > 0 &&
+            {value &&
+              value.length > 0 &&
               value.map((f, idx) => {
                 return (
                   <div key={idx} className=" border border-primary rounded-pill px-2 py-1 mx-2 my-1">
-                    {`${f.file.name} `}
-                    <HighlightOff onClick={() => remove(idx)} />
+                    <div>{`${f.file.name} `}</div>
+                    <div role="button">
+                      <HighlightOff onClick={() => remove(idx)} />
+                    </div>
                   </div>
                 );
               })}

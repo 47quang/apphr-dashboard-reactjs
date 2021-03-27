@@ -15,7 +15,13 @@ const OtherInfo = ({ t }) => {
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
-          <Formik initialValues={otherInfo}>
+          <Formik
+            initialValues={otherInfo}
+            enableReinitialize
+            onSubmit={(values) => {
+              console.log('Address Info: ', values);
+            }}
+          >
             {({ values, handleBlur, handleSubmit, handleChange, errors, touched }) => (
               <form>
                 <div className="row">

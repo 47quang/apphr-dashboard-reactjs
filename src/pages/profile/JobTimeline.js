@@ -4,32 +4,16 @@ import { Add, AddCircle, Delete } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { Field, FieldArray, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
+import { REDUX_STATE } from 'src/stores/states';
 
-const JobTimelineInfo = ({ t }) => {
+const JobTimelineInfo = ({ t, profile }) => {
+  const dispatch = useDispatch();
   const jobTimelineInfo = {
-    contractInfo: [
-      {
-        isMinimize: false,
-        isOpen: true,
-        contractCode: '',
-        contractType: '',
-        pTaxType: '',
-        signee: '',
-        jobType: 0,
-        probationaryPeriod: 0,
-        signedDate: '',
-        effectiveDate: '',
-        expiredDate: '',
-        branchId: 0,
-        startDate: '',
-        payType: 0,
-        salaryGroup: 0,
-        salary: 0,
-        subsidize: [],
-      },
-    ],
+    contractInfo: profile?.contracts ?? [],
   };
   const subsidizes = [
     { id: 0, name: 'Chọn trợ cấp', amount: 0 },
@@ -78,6 +62,10 @@ const JobTimelineInfo = ({ t }) => {
             enableReinitialize
             onSubmit={(values) => {
               console.log('JobTimeline ', values);
+              dispatch({
+                type: REDUX_STATE.profile.SET_JOB_TIMELINE,
+                payload: values.contractInfo,
+              });
             }}
           >
             {({ values, handleBlur, handleSubmit, handleChange, errors, touched, setValues, setFieldValue }) => (
@@ -269,6 +257,7 @@ const JobTimelineInfo = ({ t }) => {
                                                             `contractInfo.${index}.subsidize.${subsidizeIdx}.amount`,
                                                             thisSubsidizes[0].amount,
                                                           );
+                                                        handleChange(`contractInfo.${index}.subsidize.${subsidizeIdx}.name`)(e);
                                                       }}
                                                     >
                                                       {subsidizes.map((ch, idx) => (
@@ -302,6 +291,12 @@ const JobTimelineInfo = ({ t }) => {
                                             <AddCircle /> {t('label.addSubsidize')}
                                           </button>
                                         </div>
+                                        <CommonUploadFileButton
+                                          name={`contractInfo.${index}.files`}
+                                          containerClassName="form-group col-xl-12"
+                                          buttonClassName="btn btn-primary"
+                                          value={values.contractInfo[index].files}
+                                        />
                                       </div>
                                     )}
                                   />

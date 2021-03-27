@@ -32,16 +32,38 @@ const initialState = {
     homeTown: '',
     status: '',
     manager: '',
-    // id: '',
-    // shortname: '',
-    // name: 'Trần Thanh Quang',
-    // phone: '0123456789',
-    // gender: 'Nam',
-    // email: 'ttt@gmail.com',
-    // positionName: 'Front-End Junior',
-    // departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-    // branchName: 'APPHR Hồ Chí Minh Quận 1',
-    // status: 'Intern',
+    contracts: [
+      {
+        isMinimize: false,
+        isOpen: true,
+        contractCode: '',
+        contractType: '',
+        pTaxType: '',
+        signee: '',
+        jobType: 0,
+        probationaryPeriod: 0,
+        signedDate: '',
+        effectiveDate: '',
+        expiredDate: '',
+        branchId: 0,
+        startDate: '',
+        payType: 0,
+        salaryGroup: 0,
+        salary: 0,
+        subsidize: [],
+        files: [],
+      },
+    ],
+    academicInfo: [
+      {
+        academicLevel: '',
+        major: '',
+        educationPlace: '',
+        note: '',
+        date: '',
+        files: [],
+      },
+    ],
   },
   roles: [],
   contracts: [
@@ -193,6 +215,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         subTabName: payload,
+      };
+    case REDUX_STATE.profile.SET_JOB_TIMELINE:
+      return {
+        ...state,
+        profile: { ...state.profile, contracts: payload },
+      };
+    case REDUX_STATE.profile.SET_ACADEMIC_LEVEL:
+      return {
+        ...state,
+        profile: { ...state.profile, academicInfo: payload },
       };
     default:
       return state;
