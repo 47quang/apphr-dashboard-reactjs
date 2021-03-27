@@ -1,8 +1,9 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -11,10 +12,9 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
+import { REDUX_STATE } from 'src/stores/states/index';
 import { getDateInput } from 'src/utils/datetimeUtils';
 import { joinClassName } from 'src/utils/stringUtils';
-import { REDUX_STATE } from 'src/stores/states/index';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 
 const BasicInfo = ({ t, isCreate, profile }) => {
   const provinces = useSelector((state) => state.location.provinces);
@@ -30,7 +30,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
     phone: profile.phone ?? '',
     email: profile.email ?? '',
     dateOfBirth: profile.dayOfBirth ? getDateInput(profile.dateOfBirth) : '',
-    gender: profile.gender === 'male' ? 1 : 2,
+    gender: profile.gender ?? 0,
     cmnd: profile.cmnd ?? '',
     have_id: profile.cmnd !== '',
     cmnd_date: profile.cmndIssuedDate ?? '',
@@ -47,7 +47,6 @@ const BasicInfo = ({ t, isCreate, profile }) => {
     manager: '',
   };
 
-  const basicInfoForm = useRef();
   useEffect(() => {
     dispatch(fetchProvinces());
     dispatch(fetchBranches());
@@ -64,7 +63,6 @@ const BasicInfo = ({ t, isCreate, profile }) => {
         <div className="shadow bg-white rounded p-4">
           <FormHeader text={t('label.profile_basic_info')} />
           <Formik
-            innerRef={basicInfoForm}
             initialValues={employeeInfo}
             enableReinitialize
             onSubmit={(values) => {

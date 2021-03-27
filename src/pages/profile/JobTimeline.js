@@ -1,22 +1,23 @@
 import { CContainer } from '@coreui/react';
 import { Switch } from '@material-ui/core';
-import { Add, Delete } from '@material-ui/icons';
+import { Add, AddCircle, Delete } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { Field, FieldArray, Formik } from 'formik';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import Label from 'src/components/text/Label';
 
 const JobTimelineInfo = ({ t }) => {
   const jobTimelineInfo = {
     contractInfo: [
       {
-        isMinimize: true,
+        isMinimize: false,
         isOpen: true,
-        contractCode: 'C1XOC',
-        contractType: 'partTime',
+        contractCode: '',
+        contractType: '',
         pTaxType: '',
         signee: '',
-        jobType: 1,
+        jobType: 0,
         probationaryPeriod: 0,
         signedDate: '',
         effectiveDate: '',
@@ -25,7 +26,7 @@ const JobTimelineInfo = ({ t }) => {
         startDate: '',
         payType: 0,
         salaryGroup: 0,
-        salary: 13000,
+        salary: 0,
         subsidize: [],
       },
     ],
@@ -72,7 +73,13 @@ const JobTimelineInfo = ({ t }) => {
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
-          <Formik initialValues={jobTimelineInfo}>
+          <Formik
+            initialValues={jobTimelineInfo}
+            enableReinitialize
+            onSubmit={(values) => {
+              console.log('JobTimeline ', values);
+            }}
+          >
             {({ values, handleBlur, handleSubmit, handleChange, errors, touched, setValues, setFieldValue }) => (
               <form>
                 <FieldArray
@@ -89,16 +96,16 @@ const JobTimelineInfo = ({ t }) => {
                             });
                           };
                           return (
-                            <div key={index}>
+                            <div key={index} className="pt-5">
                               <div className={'d-flex flex-row justify-content-between'}>
-                                <div style={{ fontSize: 18 }}>
+                                <div style={{ fontSize: 18, fontWeight: 'bold' }}>
                                   {values.contractInfo[index].isMinimize ? (
                                     <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
                                   ) : (
                                     <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
                                   )}
-                                  {values.contractInfo[index].contractCode}{' '}
                                   <Switch checked={values.contractInfo[index].isOpen} name={`contractInfo.${index}.contractCode`} />
+                                  {values.contractInfo[index].contractCode}{' '}
                                 </div>
                                 <div className="pt-2" role="button">
                                   <Delete className="pb-1" onClick={() => remove(index)} style={{ color: 'red' }} />
@@ -201,7 +208,7 @@ const JobTimelineInfo = ({ t }) => {
                                       <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.stateDate`} />
                                     </div>
                                   </div>
-                                  <h4 className="pt-4 p-4">Lương</h4>
+                                  <h5 className="px-3">Lương</h5>
                                   <hr className="mt-1" />
                                   <div className="row">
                                     <div className="form-group col-lg-4">
@@ -235,7 +242,7 @@ const JobTimelineInfo = ({ t }) => {
                                       />
                                     </div>
                                   </div>
-                                  <h5 className="p-4">Trợ cấp</h5>
+                                  <h5 className="px-3">Trợ cấp</h5>
                                   <hr className="mt-1" />
                                   <FieldArray
                                     name={`contractInfo.${index}.subsidize`}
@@ -290,20 +297,9 @@ const JobTimelineInfo = ({ t }) => {
                                               </div>
                                             );
                                           })}
-                                        <div className="d-flex justify-content-center">
-                                          <button
-                                            type="button"
-                                            style={{ border: 'dotted 0.5px black', width: '20%', paddingBottom: '20' }}
-                                            className="px-0 py-1 bg-white"
-                                            onClick={() => {
-                                              push({
-                                                name: 0,
-                                                amount: 0,
-                                              });
-                                              console.log(values);
-                                            }}
-                                          >
-                                            <Add /> {t('label.addSubsidize')}
+                                        <div className="d-flex justify-content-start">
+                                          <button type="button" className="btn btn-primary" onClick={() => push({ name: 0, amount: 0 })}>
+                                            <AddCircle /> {t('label.addSubsidize')}
                                           </button>
                                         </div>
                                       </div>
@@ -317,16 +313,26 @@ const JobTimelineInfo = ({ t }) => {
                       <div className="pt-4 d-flex justify-content-center">
                         <button
                           type="button"
-                          style={{ border: 'dotted 0.5px black', width: '40%' }}
+                          style={{ border: 'dotted 0.5px black' }}
                           className="px-5 py-1 bg-white"
                           onClick={() => {
                             push({
                               isMinimize: false,
                               isOpen: false,
-                              contractCode: 'C1XOC',
-                              probationaryPeriod: '',
-                              contractType: 'partTime',
+                              contractCode: '',
+                              contractType: '',
+                              pTaxType: '',
+                              signee: '',
+                              jobType: 0,
+                              probationaryPeriod: 0,
+                              signedDate: '',
+                              effectiveDate: '',
+                              expiredDate: '',
+                              branchId: 0,
                               startDate: '',
+                              payType: 0,
+                              salaryGroup: 0,
+                              salary: 0,
                               subsidize: [],
                             });
                           }}
@@ -337,6 +343,7 @@ const JobTimelineInfo = ({ t }) => {
                     </div>
                   )}
                 />
+                <AutoSubmitToken />
               </form>
             )}
           </Formik>

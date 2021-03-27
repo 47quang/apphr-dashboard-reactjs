@@ -1,6 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Add, Delete } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import Label from 'src/components/text/Label';
 
 const CertificateInfo = ({ t }) => {
@@ -23,8 +24,9 @@ const CertificateInfo = ({ t }) => {
         <div className="shadow bg-white rounded p-4">
           <Formik
             initialValues={initialCertificateInfo}
+            enableReinitialize
             onSubmit={(values) => {
-              console.log(values);
+              console.log('Certificate: ', values);
             }}
           >
             {({ values, errors, touched, handleReset, handleSubmit }) => {
@@ -138,6 +140,7 @@ const CertificateInfo = ({ t }) => {
                       Lưu
                     </button> */}
                   </div>
+                  <AutoSubmitToken />
                 </Form>
               );
             }}

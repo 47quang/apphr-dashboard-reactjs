@@ -2,11 +2,11 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const convertTime = (payload) => {
-  payload.startDate = payload.startDate.replace('Z', '');
-  payload.endDate = payload.endDate.replace('Z', '');
-  return payload;
-};
+// const convertTime = (payload) => {
+//   payload.startDate = payload.startDate.replace('Z', '');
+//   payload.endDate = payload.endDate.replace('Z', '');
+//   return payload;
+// };
 
 const handleAccounts = (payload) => {
   return payload;
