@@ -178,7 +178,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                     <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="pl-12">
+                        <div className="pl-2">
                           <CommonCheckbox
                             label={t('label.ID')}
                             value={values.have_id}

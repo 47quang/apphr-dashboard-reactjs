@@ -15,7 +15,7 @@ const Profile = ({ t, location }) => {
     { name: 'positionId', title: t('label.position') },
     { name: 'departmentId', title: t('label.department') },
     { name: 'branchId', title: t('label.branch') },
-    { name: 'status', title: 'Trạng thái' },
+    { name: 'status', title: t('label.status2') },
   ];
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.profile.profiles);

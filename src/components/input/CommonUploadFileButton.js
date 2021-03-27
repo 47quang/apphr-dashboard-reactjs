@@ -36,9 +36,11 @@ const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassNa
             {value.length > 0 &&
               value.map((f, idx) => {
                 return (
-                  <div key={idx} className=" border border-primary rounded-pill px-2 py-1 mx-2 my-1">
-                    {`${f.file.name} `}
-                    <HighlightOff onClick={() => remove(idx)} />
+                  <div key={idx} className="border border-primary rounded-pill px-2 py-1 mx-2 my-1 d-flex">
+                    <div>{`${f.file.name}`}</div>
+                    <div role="button" className="pl-1">
+                      <HighlightOff onClick={() => remove(idx)} />
+                    </div>
                   </div>
                 );
               })}

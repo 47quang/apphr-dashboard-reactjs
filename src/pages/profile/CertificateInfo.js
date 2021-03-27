@@ -1,6 +1,7 @@
 import { CContainer } from '@coreui/react';
-import { Add, Delete } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import Label from 'src/components/text/Label';
 
@@ -41,9 +42,7 @@ const CertificateInfo = ({ t }) => {
                             <div key={index}>
                               <div className={'d-flex justify-content-between'}>
                                 <h5>{index + 1}.</h5>
-                                <div className="pt-2">
-                                  <Delete onClick={() => remove(index)} style={{ color: 'red' }} />
-                                </div>
+                                <DeleteIconButton onClick={() => remove(index)} />
                               </div>
                               <hr className="mt-1" />
                               <div className="row">
@@ -119,27 +118,7 @@ const CertificateInfo = ({ t }) => {
                     )}
                   />
                   <br />
-                  <div className="row col-12">
-                    {/* <button
-                      type="button"
-                      className="btn btn-primary mr-3"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleReset();
-                      }}
-                    >
-                      Hoàn tác
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary mr-3"
-                      onClick={(event) => {
-                        handleSubmit();
-                      }}
-                    >
-                      Lưu
-                    </button> */}
-                  </div>
+
                   <AutoSubmitToken />
                 </Form>
               );

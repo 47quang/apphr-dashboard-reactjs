@@ -33,7 +33,7 @@ const Account = ({ t, location, history }) => {
         data={accounts}
         route={ROUTE_PATH.ACCOUNT + '/'}
         idxColumnsFilter={[0]}
-        linkCols={[{ name: 'profileId', route: '/profile/' }]}
+        linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
       />
     </CContainer>
   );
