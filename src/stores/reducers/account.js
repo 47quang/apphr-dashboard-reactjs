@@ -17,6 +17,7 @@ const initialState = {
   },
   roles: [],
   permissionGroups: [],
+  profiles: [],
 };
 
 const accountReducer = (state = initialState, { type, payload }) => {
@@ -56,6 +57,11 @@ const accountReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         account: { ...state.account, roleId: payload },
+      };
+    case REDUX_STATE.account.GET_PROFILES:
+      return {
+        ...state,
+        profiles: payload,
       };
     default:
       return state;

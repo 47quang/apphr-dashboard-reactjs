@@ -3,6 +3,7 @@ import { AddCircle, RemoveCircle } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -54,7 +55,13 @@ const AddressInfo = ({ t }) => {
         <div className="col-xl-7">
           <div className="shadow bg-white rounded p-4 mb-4">
             <FormHeader text={t('title.permanent_address')} />
-            <Formik initialValues={permanentAddressInfo}>
+            <Formik
+              initialValues={permanentAddressInfo}
+              enableReinitialize
+              onSubmit={(values) => {
+                console.log('Address Info: ', values);
+              }}
+            >
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
                 <form>
                   <div className="row">
@@ -208,7 +215,8 @@ const AddressInfo = ({ t }) => {
               onSubmit={(values) => {
                 console.log(values);
               }}
-              render={({ values, errors, touched, handleReset, handleSubmit }) => {
+            >
+              {({ values, errors, touched, handleReset, handleSubmit }) => {
                 return (
                   <Form>
                     <FieldArray
@@ -271,10 +279,11 @@ const AddressInfo = ({ t }) => {
                         Lưu
                       </button> */}
                     </div>
+                    <AutoSubmitToken />
                   </Form>
                 );
               }}
-            />
+            </Formik>
           </div>
         </div>
       </div>

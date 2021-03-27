@@ -4,7 +4,7 @@ const initialState = {
   profiles: [],
   profile: {
     id: 0,
-    shortname: 'NV001',
+    shortname: '',
     fullname: '',
     phone: '',
     dateOfBirth: '',
@@ -15,18 +15,21 @@ const initialState = {
     branchId: 0,
     departmentId: 0,
     positionId: 0,
-    avatar: null,
+    avatar: '',
     have_id: false,
-    cmnd: null,
-    cmnd_date: '',
+    cmnd: '',
+    cmndIssuedDate: '',
     cmnd_place: '',
     have_passport: '',
-    passport: null,
-    passport_start: '',
+    passport: '',
+    passportIssuedDate: '',
     passport_end: '',
     passport_place: '',
     firstname: '',
     lastname: '',
+    permanentAddress: '',
+    temporaryAddress: '',
+    homeTown: '',
     status: '',
     manager: '',
     // id: '',
@@ -164,7 +167,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      return { ...state, profile: payload };
+      console.log('payload', payload);
+      return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
         ...state,

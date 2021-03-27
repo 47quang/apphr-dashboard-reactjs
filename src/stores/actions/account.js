@@ -2,11 +2,11 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const convertTime = (payload) => {
-  payload.startDate = payload.startDate.replace('Z', '');
-  payload.endDate = payload.endDate.replace('Z', '');
-  return payload;
-};
+// const convertTime = (payload) => {
+//   payload.startDate = payload.startDate.replace('Z', '');
+//   payload.endDate = payload.endDate.replace('Z', '');
+//   return payload;
+// };
 
 const handleAccounts = (payload) => {
   return payload;
@@ -31,7 +31,9 @@ export const fetchAccount = (id) => {
     api.account
       .get(id)
       .then(({ payload }) => {
-        console.log(payload);
+        payload.email = payload.email ?? '';
+        payload.phone = payload.phone ?? '';
+        payload.profileId = payload.profileId ?? 0;
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
@@ -59,7 +61,6 @@ export const updateAccount = (data) => {
     api.account
       .put(data)
       .then(({ payload }) => {
-        payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
@@ -121,6 +122,23 @@ export const fetchPermissionGroups = () => {
       .getAllPermission()
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.GET_ALL_PERMISSION, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchProfiles = (params) => {
+  return (dispatch, getState) => {
+    api.profile
+      .getProfiles(params)
+      .then(({ payload }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((profile) => ({ id: profile.id ?? 0, name: (profile.shortname ?? 'NV001') + ' - ' + profile.fullname }))
+            : [];
+        dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
         console.log(err);

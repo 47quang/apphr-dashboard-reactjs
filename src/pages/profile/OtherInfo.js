@@ -1,5 +1,6 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 
@@ -64,6 +65,7 @@ const OtherInfo = ({ t }) => {
                     inputClassName={'form-control'}
                   />
                 </div>
+                <AutoSubmitToken />
               </form>
             )}
           </Formik>

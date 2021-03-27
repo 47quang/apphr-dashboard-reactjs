@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -11,7 +12,9 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
+import { REDUX_STATE } from 'src/stores/states/index';
 import { getDateInput } from 'src/utils/datetimeUtils';
+import { joinClassName } from 'src/utils/stringUtils';
 
 const BasicInfo = ({ t, isCreate, profile }) => {
   const provinces = useSelector((state) => state.location.provinces);
@@ -20,48 +23,61 @@ const BasicInfo = ({ t, isCreate, profile }) => {
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
+
   const employeeInfo = {
-    fullname: profile.fullname,
+    fullname: profile.fullname ?? '',
     shortname: profile.shortname ?? '',
-    phone: profile.phone,
-    email: profile.email,
+    phone: profile.phone ?? '',
+    email: profile.email ?? '',
     dateOfBirth: profile.dayOfBirth ? getDateInput(profile.dateOfBirth) : '',
-    gender: profile.gender === 'male' ? 1 : 2,
-    cmnd: profile.cmnd + '',
-    have_id: profile.cmnd !== null && profile.cmnd !== undefined,
-    cmnd_date: '',
+    gender: profile.gender ?? 0,
+    cmnd: profile.cmnd ?? '',
+    have_id: profile.cmnd !== '',
+    cmnd_date: profile.cmndIssuedDate ?? '',
     cmnd_place: '',
-    have_passport: profile.passport !== null && profile.passport !== undefined,
+    have_passport: profile.passport !== '',
     passport: profile.passport ?? '',
-    passport_start: '',
+    passport_start: profile.passportIssuedDate ?? '',
     passport_end: '',
     passport_place: '',
     departmentId: +profile.departmentId,
     positionId: +profile.positionId,
-    role: 0,
-    branch: +profile.branchId,
+    roleId: 0,
+    branchId: +profile.branchId,
     manager: '',
   };
+
   useEffect(() => {
     dispatch(fetchProvinces());
     dispatch(fetchBranches());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const genders = [
     { id: 1, name: t('label.male') },
     { id: 2, name: t('label.female') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <FormHeader text={t('label.profile_basic_info')} />
-          <Formik initialValues={employeeInfo} enableReinitialize>
-            {({ values, errors, touched, handleBlur, handleChange }) => (
+          <Formik
+            initialValues={employeeInfo}
+            enableReinitialize
+            onSubmit={(values) => {
+              console.log(values);
+              dispatch({
+                type: REDUX_STATE.profile.SET_PROFILE,
+                payload: values,
+              });
+            }}
+          >
+            {({ values, errors, touched, handleBlur, handleChange, setFieldValue }) => (
               <form>
                 <div className="row">
                   <div className="col-xl-2 text-center mb-4">
-                    <img src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85" alt="Ảnh đại diện" height="200px" />
+                    <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="Ảnh đại diện" height="200px" />
                   </div>
                   <div className="col-xl-10">
                     <div className="row">
@@ -160,7 +176,6 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                     </div>
                     <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
-                    <div className="row" role="group" aria-labelledby="checkbox-id-password"></div>
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="pl-12">
@@ -321,6 +336,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                     </div>
                   </div>
+                  <AutoSubmitToken />
                 </div>
               </form>
             )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchAccount, fetchPermissionGroups, fetchRoles } from 'src/stores/actions/account';
+import { fetchAccount, fetchPermissionGroups, fetchRoles, fetchProfiles, updateAccount } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
 
 //TODO: translate
@@ -12,19 +12,22 @@ const UpdateAccount = ({ t, location, history, match }) => {
   const account = useSelector((state) => state.account.account);
   const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
+  const profiles = useSelector((state) => state.account.profiles);
 
   useEffect(() => {
     dispatch(fetchAccount(match?.params?.id));
     dispatch(fetchRoles());
     // if (account.roleId !== 0) dispatch(fetchRole(49));
     dispatch(fetchPermissionGroups());
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'shortname'] }));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
     let form = values;
     console.log(form);
-    //dispatch(updateAccount(form, history));
+    dispatch(updateAccount(form, history));
   };
 
   const buttons = [
@@ -64,6 +67,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
       submitForm={submitForm}
       permissionGroups={permissionGroups}
       roles={roles}
+      profiles={profiles}
     />
   );
 };
