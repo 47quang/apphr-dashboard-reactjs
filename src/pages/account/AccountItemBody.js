@@ -5,10 +5,23 @@ import React from 'react';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { AccountInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 
-const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches, departments, positions, permissionGroups, roles, profiles }) => {
+const AccountItemBody = ({
+  t,
+  isCreate,
+  accountRef,
+  account,
+  buttons,
+  submitForm,
+  branches,
+  departments,
+  positions,
+  permissionGroups,
+  roles,
+  profiles,
+  schema,
+}) => {
   const initCheck = (groupPermission, checks) => {
     // console.log(checks);
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
@@ -20,7 +33,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
           <Formik
             innerRef={accountRef}
             enableReinitialize
-            validationSchema={AccountInfoSchema}
+            validationSchema={schema}
             initialValues={account}
             key="formAccount3"
             onSubmit={(values) => {
@@ -60,6 +73,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     isTouched={touched.password}
                     isError={errors.password && touched.password}
                     errorMessage={t(errors.password)}
+                    isDisable={!isCreate}
                   />
 
                   <CommonTextInput
@@ -70,6 +84,7 @@ const AccountItemBody = ({ t, accountRef, account, buttons, submitForm, branches
                     inputID={'email'}
                     labelText={t('label.email')}
                     inputType={'email'}
+                    isRequiredField
                     placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
                     isError={errors.email && touched.email}

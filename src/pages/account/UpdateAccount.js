@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
 import { fetchAccount, fetchPermissionGroups, fetchRoles, fetchProfiles, updateAccount } from 'src/stores/actions/account';
+import { REDUX_STATE } from 'src/stores/states';
 import AccountItemBody from './AccountItemBody';
+import { AccountUpdateInfoSchema } from 'src/schema/formSchema';
 
 //TODO: translate
 
@@ -13,16 +15,26 @@ const UpdateAccount = ({ t, location, history, match }) => {
   const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
   const profiles = useSelector((state) => state.account.profiles);
+  let permissionIds = [];
 
   useEffect(() => {
     dispatch(fetchAccount(match?.params?.id));
     dispatch(fetchRoles());
-    // if (account.roleId !== 0) dispatch(fetchRole(49));
     dispatch(fetchPermissionGroups());
     dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'shortname'] }));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (account.roleId !== 0) {
+      permissionIds = roles.filter((x) => x.id === account.roleId)[0]?.permissionIds;
+      permissionIds = permissionIds && permissionIds.length > 0 ? permissionIds.map((val) => +val) : [];
+      dispatch({
+        type: REDUX_STATE.account.GET_PERMISSION_ARRAY,
+        payload: permissionIds,
+      });
+    }
+  }, [account.roleId]);
 
   const submitForm = (values) => {
     let form = values;
@@ -61,6 +73,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
   return (
     <AccountItemBody
       t={t}
+      isCreate={false}
       accountRef={accountInfoForm}
       account={account}
       buttons={buttons}
@@ -68,6 +81,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
       permissionGroups={permissionGroups}
       roles={roles}
       profiles={profiles}
+      schema={AccountUpdateInfoSchema}
     />
   );
 };

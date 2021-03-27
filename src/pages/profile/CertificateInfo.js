@@ -1,6 +1,7 @@
 import { CContainer } from '@coreui/react';
-import { Add, Delete } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import Label from 'src/components/text/Label';
 
@@ -29,7 +30,7 @@ const CertificateInfo = ({ t }) => {
               console.log('Certificate: ', values);
             }}
           >
-            {({ values, errors, touched, handleReset, handleSubmit }) => {
+            {({ values, errors, touched, handleReset, handleSubmit, handleChange }) => {
               return (
                 <Form>
                   <FieldArray
@@ -41,9 +42,7 @@ const CertificateInfo = ({ t }) => {
                             <div key={index}>
                               <div className={'d-flex justify-content-between'}>
                                 <h5>{index + 1}.</h5>
-                                <div className="pt-2">
-                                  <Delete onClick={() => remove(index)} style={{ color: 'red' }} />
-                                </div>
+                                <DeleteIconButton onClick={() => remove(index)} />
                               </div>
                               <hr className="mt-1" />
                               <div className="row">
@@ -78,17 +77,37 @@ const CertificateInfo = ({ t }) => {
                               <div className="row">
                                 <div className="form-group col-lg-4">
                                   <Label text={t('label.start_date2')} />
-                                  <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.stateDate`} />
+                                  <input
+                                    type="date"
+                                    className={'form-control'}
+                                    rows={5}
+                                    name={`certificateInfo.${index}.stateDate`}
+                                    onChange={(e) => handleChange(`certificateInfo.${index}.stateDate`)(e)}
+                                    value={values.certificateInfo[index].stateDate}
+                                  />
                                 </div>
                                 <div className="form-group col-lg-4">
                                   <Label text={t('label.expiration_date')} />
-                                  <input type="date" className={'form-control'} rows={5} name={`certificateInfo.${index}.endDate`} />
+                                  <input
+                                    type="date"
+                                    className={'form-control'}
+                                    rows={5}
+                                    name={`certificateInfo.${index}.endDate`}
+                                    onChange={(e) => handleChange(`certificateInfo.${index}.endDate`)(e)}
+                                    value={values.certificateInfo[index].endDate}
+                                  />
                                 </div>
                               </div>
                               <div className="row">
                                 <div className="form-group col-lg-12">
                                   <Label text={t('label.note')} />
-                                  <textarea className={'form-control'} rows={5} name={`certificateInfo.${index}.note`} />
+                                  <textarea
+                                    className={'form-control'}
+                                    rows={5}
+                                    name={`certificateInfo.${index}.note`}
+                                    onChange={(e) => handleChange(`certificateInfo.${index}.note`)(e)}
+                                    value={values.certificateInfo[index].note}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -119,27 +138,7 @@ const CertificateInfo = ({ t }) => {
                     )}
                   />
                   <br />
-                  <div className="row col-12">
-                    {/* <button
-                      type="button"
-                      className="btn btn-primary mr-3"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleReset();
-                      }}
-                    >
-                      Hoàn tác
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary mr-3"
-                      onClick={(event) => {
-                        handleSubmit();
-                      }}
-                    >
-                      Lưu
-                    </button> */}
-                  </div>
+
                   <AutoSubmitToken />
                 </Form>
               );

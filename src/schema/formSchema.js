@@ -107,17 +107,46 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
   }),
 });
 //Account
-export const AccountInfoSchema = Yup.object().shape({
+export const AccountCreateInfoSchema = Yup.object().shape({
   username: Yup.string().required('validation.required_enter_usename'),
   password: Yup.string().test('empty string', 'validation.password_length_must_be_greater_than_6', function (value) {
     return value ? value.length > 5 : false;
   }),
-  email: Yup.string().email('validation.enter_valid_email'),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
   phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
-  roleId: Yup.string().test(VALIDATION_STRING.email, 'validation.required_select_role_id', function (value) {
+  roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
+    return value !== '0';
+  }),
+});
+export const AccountUpdateInfoSchema = Yup.object().shape({
+  username: Yup.string().required('validation.required_enter_usename'),
+  password: Yup.string(),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
+  roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
     return value !== '0';
   }),
 });
 export const RoleInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_role_name'),
+});
+
+export const BasicInfoCreateSchema = Yup.object().shape({
+  firstname: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_firstname', function (value) {
+      return value && value.length;
+    })
+    .required('validation.required_enter_firstname'),
+  lastname: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_lastname', function (value) {
+      return value && value.length;
+    })
+    .required('validation.required_enter_lastname'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
+  gender: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_gender', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_gender'),
 });

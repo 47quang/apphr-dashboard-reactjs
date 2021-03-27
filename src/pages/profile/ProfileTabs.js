@@ -3,7 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
@@ -81,34 +81,6 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
       resizeObserver.disconnect();
     };
   }, []);
-  const buttons = [
-    {
-      type: 'button',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        history.push(ROUTE_PATH.PROFILE);
-      },
-      name: t('label.back'),
-      position: 'left',
-    },
-    {
-      type: 'reset',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        // roleInfoForm.current.handleReset(e);
-      },
-      name: t('label.reset'),
-    },
-    {
-      type: 'button',
-      className: `btn btn-primary`,
-      onClick: (e) => {
-        // roleInfoForm.current.handleSubmit(e);
-      },
-      name: t('label.update'),
-    },
-  ];
-
   return (
     <>
       <div className={classes.root} id="profile-tabs">
@@ -141,16 +113,16 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
                 scrollButtons="auto"
               >
                 <Tab className="noselect" label={t('label.profile_basic_info')} {...a11yProps(0)} />
-                <Tab className="noselect" label={t('label.profile_contract')} {...a11yProps(1)} />
-                <Tab className="noselect" label={t('label.profile_academic_level')} {...a11yProps(2)} />
-                <Tab className="noselect" label={t('label.profile_certificate')} {...a11yProps(3)} />
-                <Tab className="noselect" label={t('label.profile_contact_address')} {...a11yProps(4)} />
-                <Tab className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(5)} />
-                <Tab className="noselect" label={t('label.profile_other_info')} {...a11yProps(6)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contract')} {...a11yProps(1)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(2)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(3)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(4)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(5)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(6)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
-              <BasicInfo t={t} isCreate={isCreate} profile={profile} />
+              <BasicInfo t={t} isCreate={isCreate} profile={profile} history={history} />
             </TabPanel>
             <TabPanel value={subTabName} index={1} dir={theme.direction}>
               <JobTimelineInfo t={t} profile={profile} />
@@ -179,12 +151,12 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
           <HistoryWorking t={t} />
         </TabPanel>
       </div>
-      <div
+      {/* <div
         className={joinClassName(['bg-white d-flex flex-column justify-content-center', 'px-4'])}
         style={{ position: 'fixed', right: 0, bottom: 0, width: `${snackBarWidth}px`, height: 50, borderTop: '0.5px solid #d8dbe0' }}
       >
         {renderButtons(buttons)}
-      </div>
+      </div> */}
     </>
   );
 };

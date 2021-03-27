@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { AddCircle, RemoveCircle } from '@material-ui/icons';
+import { AddCircle, CancelOutlined } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,8 +44,8 @@ const AddressInfo = ({ t }) => {
   const initialContactChannelValues = {
     contactChannels: [
       {
-        channelType: 'skype',
-        link: 'trungvuive1999',
+        channelType: '',
+        link: '',
       },
     ],
   };
@@ -226,7 +226,7 @@ const AddressInfo = ({ t }) => {
                           {values.contactChannels.length > 0 &&
                             values.contactChannels.map((friend, index) => (
                               <div className="row" key={index}>
-                                <div className="form-group col-lg-4">
+                                <div className="form-group col-4">
                                   <Field
                                     className={'form-control'}
                                     name={`contactChannels.${index}.channelType`}
@@ -240,16 +240,16 @@ const AddressInfo = ({ t }) => {
                                     ))}
                                   </Field>
                                 </div>
-                                <div className="form-group col-lg-7">
+                                <div className="form-group col-7">
                                   <Field className={'form-control'} name={`contactChannels.${index}.link`} placeholder="Nhập link" type="text" />
                                 </div>
                                 <div className="form-group pt-2">
-                                  <RemoveCircle onClick={() => remove(index)} />
+                                  <CancelOutlined onClick={() => remove(index)} style={{ color: 'red' }} />
                                 </div>
                               </div>
                             ))}
                           <div className="row col-12">
-                            <button type="button" className="btn btn-primary" onClick={() => push({ channelType: 'skype', link: '' })}>
+                            <button type="button" className="btn btn-primary" onClick={() => push({ channelType: '', link: '' })}>
                               <AddCircle /> {t('label.add')}
                             </button>
                           </div>
@@ -257,28 +257,7 @@ const AddressInfo = ({ t }) => {
                       )}
                     />
                     <br />
-                    <div className="row col-12">
-                      {/* {renderButtons([])}
-                      <button
-                        type="button"
-                        className="btn btn-primary mr-3"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleReset();
-                        }}
-                      >
-                        Hoàn tác
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary mr-3"
-                        onClick={(event) => {
-                          handleSubmit();
-                        }}
-                      >
-                        Lưu
-                      </button> */}
-                    </div>
+
                     <AutoSubmitToken />
                   </Form>
                 );

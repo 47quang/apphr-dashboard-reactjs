@@ -1,6 +1,6 @@
 import { CContainer } from '@coreui/react';
-import { Formik } from 'formik';
-import React, { useEffect } from 'react';
+import { Field, Formik } from 'formik';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
@@ -8,44 +8,49 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
+import { ROUTE_PATH } from 'src/constants/key';
+import { BasicInfoCreateSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { fetchPositions } from 'src/stores/actions/position';
 import { REDUX_STATE } from 'src/stores/states/index';
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
+import { createProfile, updateProfile } from 'src/stores/actions/profile';
 
-const BasicInfo = ({ t, isCreate, profile }) => {
+const BasicInfo = ({ t, isCreate, profile, history }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const branches = useSelector((state) => state.branch.branches);
   // const roles = useSelector((state) => state.role.roles);
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
+  const refInfo = useRef();
 
-  const employeeInfo = {
-    fullname: profile.fullname ?? '',
-    shortname: profile.shortname ?? '',
-    phone: profile.phone ?? '',
-    email: profile.email ?? '',
-    dateOfBirth: profile.dayOfBirth ? getDateInput(profile.dateOfBirth) : '',
-    gender: profile.gender ?? 0,
-    cmnd: profile.cmnd ?? '',
-    have_id: profile.cmnd !== '',
-    cmnd_date: profile.cmndIssuedDate ?? '',
-    cmnd_place: '',
-    have_passport: profile.passport !== '',
-    passport: profile.passport ?? '',
-    passport_start: profile.passportIssuedDate ?? '',
-    passport_end: '',
-    passport_place: '',
-    departmentId: +profile.departmentId,
-    positionId: +profile.positionId,
-    roleId: 0,
-    branchId: +profile.branchId,
-    manager: '',
-  };
+  // const employeeInfo = {
+  //   fullname: profile.fullname ?? '',
+  //   shortname: profile.shortname ?? '',
+  //   phone: profile.phone ?? '',
+  //   email: profile.email ?? '',
+  //   dateOfBirth: profile.dayOfBirth ?? '',
+  //   gender: profile.gender ?? 0,
+  //   cmnd: profile.cmnd ?? '',
+  //   have_id: profile.cmnd !== '',
+  //   cmnd_date: profile.cmndIssuedDate ?? '',
+  //   cmnd_place: '',
+  //   have_passport: profile.passport !== '',
+  //   passport: profile.passport ?? '',
+  //   passport_start: profile.passportIssuedDate ?? '',
+  //   passport_end: '',
+  //   passport_place: '',
+  //   departmentId: +profile.departmentId,
+  //   positionId: +profile.positionId,
+  //   roleId: 0,
+  //   branchId: +profile.branchId,
+  //   manager: '',
+  // };
+  // console.log(employeeInfo?.dateOfBirth ?? 'aa');
 
   useEffect(() => {
     dispatch(fetchProvinces());
@@ -53,20 +58,109 @@ const BasicInfo = ({ t, isCreate, profile }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    profile.have_id = profile.cmnd && profile.cmnd !== '';
+    profile.have_passport = profile.passport && profile.passport !== '';
+  }, [profile.cmnd, profile.passport]);
+
+  useEffect(() => {
+    if (profile.branchId) dispatch(fetchDepartments({ branchId: profile.branchId }));
+    if (profile.departmentId) dispatch(fetchDepartments({ departmentId: profile.departmentId }));
+  }, [profile.branchId, profile.departmentId]);
+
   const genders = [
-    { id: 1, name: t('label.male') },
-    { id: 2, name: t('label.female') },
+    { id: 'male', name: t('label.male') },
+    { id: 'female', name: t('label.female') },
   ];
+  const academicLevels = [
+    { id: 'not_require', name: t('label.not_require') },
+    { id: 'intermediate', name: t('label.intermediate') },
+    { id: 'college', name: t('label.college') },
+    { id: 'university', name: t('label.university') },
+    { id: 'master', name: t('label.master') },
+    { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
+  ];
+  const buttonsCreate = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        history.push(ROUTE_PATH.PROFILE);
+      },
+      name: t('label.back'),
+      position: 'left',
+    },
+    {
+      type: 'button',
+      className: `btn btn-primary`,
+      onClick: async (e) => {
+        refInfo.current.handleSubmit(e);
+        let errors = await refInfo.current.validateForm();
+        let a =
+          errors && // 👈 null and undefined check
+          Object.keys(errors).length === 0 &&
+          errors.constructor === Object;
+        if (!a) return;
+        dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
+
+        // if (refInfo.current.isValid) dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
+      },
+      name: t('label.create_new'),
+      position: 'right',
+    },
+  ];
+
+  const buttonsUpdate = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        history.push(ROUTE_PATH.PROFILE);
+      },
+      name: t('label.back'),
+      position: 'left',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        refInfo.current.handleReset(e);
+      },
+      name: t('label.reset'),
+    },
+    {
+      type: 'button',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        refInfo.current.handleSubmit(e);
+        refInfo.current.validateForm().then((errors) => {
+          let a =
+            errors && // 👈 null and undefined check
+            Object.keys(errors).length === 0 &&
+            errors.constructor === Object;
+          if (!a) return;
+          dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
+        });
+
+        // if (!refInfo.current.isValid) return;
+        dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
+      },
+      name: t('label.update'),
+      position: 'right',
+    },
+  ];
+
   return (
     <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <FormHeader text={t('label.profile_basic_info')} />
           <Formik
-            initialValues={employeeInfo}
+            initialValues={profile}
+            innerRef={refInfo}
+            validationSchema={BasicInfoCreateSchema}
             enableReinitialize
             onSubmit={(values) => {
-              console.log(values);
               dispatch({
                 type: REDUX_STATE.profile.SET_PROFILE,
                 payload: values,
@@ -83,7 +177,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                     <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.shortname}
+                        value={values.shortname ?? ''}
                         onBlur={handleBlur('shortname')}
                         onChange={handleChange('shortname')}
                         inputID={'shortname'}
@@ -91,31 +185,43 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         inputType={'text'}
                         placeholder={t('placeholder.enter_employee_code')}
                         inputClassName={'form-control'}
-                        isRequiredField
-                        isTouched={touched.shortname}
-                        isError={errors.shortname && touched.shortname}
-                        errorMessage={t(errors.shortname)}
+                        isDisable={true}
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.fullname}
-                        onBlur={handleBlur('fullname')}
-                        onChange={handleChange('fullname')}
-                        inputID={'fullname'}
-                        labelText={t('label.employee_full_name')}
+                        value={values.firstname ?? ''}
+                        onBlur={handleBlur('firstname')}
+                        onChange={handleChange('firstname')}
+                        inputID={'firstname'}
+                        labelText={t('label.employee_firstname')}
                         inputType={'text'}
-                        placeholder={t('placeholder.enter_employee_full_name')}
+                        placeholder={t('placeholder.enter_employee_firstname')}
                         inputClassName={'form-control'}
                         isRequiredField
-                        isTouched={touched.fullname}
-                        isError={errors.fullname && touched.fullname}
-                        errorMessage={t(errors.fullname)}
+                        isTouched={touched.firstname}
+                        isError={errors.firstname && touched.firstname}
+                        errorMessage={t(errors.firstname)}
                       />
                     </div>
                     <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.phone}
+                        value={values.lastname ?? ''}
+                        onBlur={handleBlur('lastname')}
+                        onChange={handleChange('lastname')}
+                        inputID={'lastname'}
+                        labelText={t('label.employee_lastname')}
+                        inputType={'text'}
+                        placeholder={t('placeholder.enter_employee_lastname')}
+                        inputClassName={'form-control'}
+                        isRequiredField
+                        isTouched={touched.lastname}
+                        isError={errors.lastname && touched.lastname}
+                        errorMessage={t(errors.lastname)}
+                      />
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-6'}
+                        value={values.phone ?? ''}
                         onBlur={handleBlur('phone')}
                         onChange={handleChange('phone')}
                         inputID={'phone'}
@@ -128,9 +234,11 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isError={errors.phone && touched.phone}
                         errorMessage={t(errors.phone)}
                       />
+                    </div>
+                    <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.email}
+                        value={values.email ?? ''}
                         onBlur={handleBlur('email')}
                         onChange={handleChange('email')}
                         inputID={'email'}
@@ -143,25 +251,10 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         isError={errors.email && touched.email}
                         errorMessage={t(errors.email)}
                       />
-                    </div>
-                    <div className="row">
-                      <CommonTextInput
-                        containerClassName={'form-group col-lg-6'}
-                        value={values.dateOfBirth}
-                        onBlur={handleBlur('dateOfBirth')}
-                        onChange={handleChange('dateOfBirth')}
-                        inputID={'dateOfBirth'}
-                        labelText={t('label.birthday')}
-                        inputType={'date'}
-                        inputClassName={'form-control'}
-                        isRequiredField
-                        isTouched={touched.dateOfBirth}
-                        isError={errors.dateOfBirth && touched.dateOfBirth}
-                        errorMessage={t(errors.dateOfBirth)}
-                      />
+
                       <CommonSelectInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.gender}
+                        value={values.gender ?? ''}
                         onBlur={handleBlur('gender')}
                         onChange={handleChange('gender')}
                         inputID={'gender'}
@@ -175,13 +268,35 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         placeholder={t('placeholder.select_sex')}
                       />
                     </div>
+                    <div className="row">
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-6'}
+                        value={values.dateOfBirth ?? ''}
+                        onBlur={handleBlur('dateOfBirth')}
+                        onChange={handleChange('dateOfBirth')}
+                        inputID={'dateOfBirth'}
+                        labelText={t('label.birthday')}
+                        inputType={'date'}
+                        inputClassName={'form-control'}
+                      />
+                      <div className="form-group col-lg-6">
+                        <Label text={t('label.academic_level')} />
+                        <Field className={'form-control'} name={`academicLevel`} component="select">
+                          {academicLevels.map((ch, idx) => (
+                            <option key={idx} value={ch.id}>
+                              {ch.name}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                    </div>
                     <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="pl-12">
+                        <div className="pl-2">
                           <CommonCheckbox
                             label={t('label.ID')}
-                            value={values.have_id}
+                            value={values.have_id ?? false}
                             onBlur={handleBlur('have_id')}
                             onChange={handleChange('have_id')}
                           />
@@ -190,7 +305,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                           <>
                             <CommonTextInput
                               containerClassName={'form-group'}
-                              value={values.cmnd}
+                              value={values.cmnd ?? ''}
                               onBlur={handleBlur('cmnd')}
                               onChange={handleChange('cmnd')}
                               inputID={'cmnd'}
@@ -201,20 +316,20 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                             />
                             <CommonTextInput
                               containerClassName={'form-group'}
-                              value={values.cmnd_date}
-                              onBlur={handleBlur('cmnd_date')}
-                              onChange={handleChange('cmnd_date')}
-                              inputID={'cmnd_date'}
+                              value={values.cmndIssuedDate ?? ''}
+                              onBlur={handleBlur('cmndIssuedDate')}
+                              onChange={handleChange('cmndIssuedDate')}
+                              inputID={'cmndIssuedDate'}
                               labelText={t('label.start_date2')}
                               inputType={'date'}
                               inputClassName={'form-control'}
                             />
                             <CommonSelectInput
                               containerClassName={'form-group'}
-                              value={values.cmnd_place}
-                              onBlur={handleBlur('cmnd_place')}
-                              onChange={handleChange('cmnd_place')}
-                              inputID={'cmnd_place'}
+                              value={values.cmndProvinceId ?? '0'}
+                              onBlur={handleBlur('cmndProvinceId')}
+                              onChange={handleChange('cmndProvinceId')}
+                              inputID={'cmndProvinceId'}
                               labelText={t('label.grant_place')}
                               selectClassName={'form-control'}
                               placeholder={t('placeholder.select_province')}
@@ -227,7 +342,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                         <div className="pl-2">
                           <CommonCheckbox
                             label={t('label.passport')}
-                            value={values.have_passport}
+                            value={values.have_passport ?? false}
                             onBlur={handleBlur('have_passport')}
                             onChange={handleChange('have_passport')}
                           />
@@ -236,7 +351,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                           <>
                             <CommonTextInput
                               containerClassName={'form-group'}
-                              value={values.passport}
+                              value={values.passport ?? ''}
                               onBlur={handleBlur('passport')}
                               onChange={handleChange('passport')}
                               inputID={'passport'}
@@ -248,17 +363,17 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                             <div className="row">
                               <CommonTextInput
                                 containerClassName={'form-group col-6'}
-                                value={values.passport_start}
-                                onBlur={handleBlur('passport_start')}
-                                onChange={handleChange('passport_start')}
-                                inputID={'passport_start'}
+                                value={values.passportIssuedDate ?? ''}
+                                onBlur={handleBlur('passportIssuedDate')}
+                                onChange={handleChange('passportIssuedDate')}
+                                inputID={'passportIssuedDate'}
                                 labelText={t('label.start_date2')}
                                 inputType={'date'}
                                 inputClassName={'form-control'}
                               />
                               <CommonTextInput
                                 containerClassName={'form-group col-6'}
-                                value={values.passport_end}
+                                value={values.passport_end ?? ''}
                                 onBlur={handleBlur('passport_end')}
                                 onChange={handleChange('passport_end')}
                                 inputID={'passport_end'}
@@ -269,10 +384,10 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                             </div>
                             <CommonSelectInput
                               containerClassName={'form-group'}
-                              value={values.passport_place}
-                              onBlur={handleBlur('passport_place')}
-                              onChange={handleChange('passport_place')}
-                              inputID={'passport_place'}
+                              value={values.passportProvinceId ?? '0'}
+                              onBlur={handleBlur('passportProvinceId')}
+                              onChange={handleChange('passportProvinceId')}
+                              inputID={'passportProvinceId'}
                               labelText={t('label.grant_place')}
                               selectClassName={'form-control'}
                               placeholder={t('placeholder.select_province')}
@@ -286,7 +401,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                     <div className="row">
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.branchId}
+                        value={values.branchId ?? 0}
                         onBlur={handleBlur('branchId')}
                         onChange={(e) => {
                           dispatch(fetchDepartments({ branchId: e.target.value }));
@@ -300,7 +415,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.departmentId}
+                        value={values.departmentId ?? 0}
                         onBlur={handleBlur('departmentId')}
                         onChange={(e) => {
                           dispatch(fetchPositions({ departmentId: e.target.value }));
@@ -314,9 +429,11 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.positionId}
+                        value={values.positionId ?? 0}
                         onBlur={handleBlur('positionId')}
-                        onChange={handleChange('positionId')}
+                        onChange={(e) => {
+                          handleChange('positionId')(e);
+                        }}
                         inputID={'positionId'}
                         labelText={t('label.position')}
                         selectClassName={'form-control'}
@@ -325,7 +442,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-6'}
-                        value={values.manager}
+                        value={values.manager ?? ''}
                         onBlur={handleBlur('manager')}
                         onChange={handleChange('manager')}
                         inputID={'manager'}
@@ -338,6 +455,7 @@ const BasicInfo = ({ t, isCreate, profile }) => {
                   </div>
                   <AutoSubmitToken />
                 </div>
+                {renderButtons(isCreate ? buttonsCreate : buttonsUpdate)}
               </form>
             )}
           </Formik>

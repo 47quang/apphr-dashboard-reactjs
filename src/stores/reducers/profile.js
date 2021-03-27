@@ -1,3 +1,4 @@
+import { getDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
@@ -9,22 +10,21 @@ const initialState = {
     phone: '',
     dateOfBirth: '',
     email: '',
-    gender: 'male',
+    gender: '',
     expYear: 0,
-    academicLevel: '',
     branchId: 0,
     departmentId: 0,
     positionId: 0,
     avatar: '',
     have_id: false,
     cmnd: '',
-    cmndIssuedDate: '',
-    cmnd_place: '',
-    have_passport: '',
+    cmndIssuedDate: null,
+    cmndProvinceId: null,
+    have_passport: false,
     passport: '',
     passportIssuedDate: '',
     passport_end: '',
-    passport_place: '',
+    passportProvinceId: null,
     firstname: '',
     lastname: '',
     permanentAddress: '',
@@ -32,6 +32,7 @@ const initialState = {
     homeTown: '',
     status: '',
     manager: '',
+    academicLevel: 'not_require',
     contracts: [
       {
         isMinimize: false,
@@ -50,7 +51,7 @@ const initialState = {
         payType: 0,
         salaryGroup: 0,
         salary: 0,
-        subsidize: [],
+        allowance: [],
         files: [],
       },
     ],
@@ -189,7 +190,7 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      console.log('payload', payload);
+      // console.log('payload', payload);
       return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
@@ -217,6 +218,18 @@ const profileReducer = (state = initialState, { type, payload }) => {
         subTabName: payload,
       };
     case REDUX_STATE.profile.SET_JOB_TIMELINE:
+      // console.log('payload contracts', payload);
+      payload =
+        payload && payload.length > 0
+          ? payload.map((contract) => {
+              contract.signedDate = getDateInput(contract.signedDate);
+              contract.effectiveDate = getDateInput(contract.effectiveDate);
+              contract.expiredDate = getDateInput(contract.expiredDate);
+              contract.startDate = getDateInput(contract.startDate);
+              return contract;
+            })
+          : [];
+
       return {
         ...state,
         profile: { ...state.profile, contracts: payload },

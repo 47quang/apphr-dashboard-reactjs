@@ -1,21 +1,23 @@
 import { CContainer } from '@coreui/react';
 import { Switch } from '@material-ui/core';
-import { Add, AddCircle, Delete } from '@material-ui/icons';
+import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { Field, FieldArray, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
+import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
 import { REDUX_STATE } from 'src/stores/states';
+import { joinClassName } from 'src/utils/stringUtils';
 
 const JobTimelineInfo = ({ t, profile }) => {
   const dispatch = useDispatch();
   const jobTimelineInfo = {
     contractInfo: profile?.contracts ?? [],
   };
-  const subsidizes = [
+  const allowances = [
     { id: 0, name: 'Chọn trợ cấp', amount: 0 },
     { id: 1, name: 'Ăn trưa', amount: 1000000 },
     { id: 2, name: 'Ăn sáng', amount: 1000000 },
@@ -56,12 +58,12 @@ const JobTimelineInfo = ({ t, profile }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4">
+        <div className="shadow bg-white rounded px-4 py-4">
           <Formik
             initialValues={jobTimelineInfo}
             enableReinitialize
             onSubmit={(values) => {
-              console.log('JobTimeline ', values);
+              // console.log('JobTimeline ', values);
               dispatch({
                 type: REDUX_STATE.profile.SET_JOB_TIMELINE,
                 payload: values.contractInfo,
@@ -84,20 +86,26 @@ const JobTimelineInfo = ({ t, profile }) => {
                             });
                           };
                           return (
-                            <div key={index} className="pt-5">
+                            <div key={index} className={joinClassName([`${index !== 0 ? 'pt-5' : ''}`])}>
                               <div className={'d-flex flex-row justify-content-between'}>
-                                <div style={{ fontSize: 18, fontWeight: 'bold' }}>
-                                  {values.contractInfo[index].isMinimize ? (
-                                    <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                  ) : (
-                                    <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                  )}
-                                  <Switch checked={values.contractInfo[index].isOpen} name={`contractInfo.${index}.contractCode`} />
-                                  {values.contractInfo[index].contractCode}{' '}
+                                <div style={{ fontSize: 18, fontWeight: 'bold' }} className="d-flex">
+                                  <div className="pt-1" role="button">
+                                    {values.contractInfo[index].isMinimize ? (
+                                      <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                    ) : (
+                                      <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                    )}
+                                  </div>
+                                  <Switch
+                                    checked={values.contractInfo[index].isOpen}
+                                    name={`contractInfo.${index}.isOpen`}
+                                    onChange={(e) => {
+                                      setFieldValue(`contractInfo.${index}.isOpen`, e.target.checked);
+                                    }}
+                                  />
+                                  {values.contractInfo[index].contractCode}
                                 </div>
-                                <div className="pt-2" role="button">
-                                  <Delete className="pb-1" onClick={() => remove(index)} style={{ color: 'red' }} />
-                                </div>
+                                <DeleteIconButton onClick={() => remove(index)} />
                               </div>
                               <hr className="mt-1" />
 
@@ -105,17 +113,17 @@ const JobTimelineInfo = ({ t, profile }) => {
                                 <>
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Số hợp đồng'} />
+                                      <Label text={t('label.contract_code')} />
                                       <Field
                                         className={'form-control'}
                                         name={`contractInfo.${index}.contractCode`}
-                                        placeholder="Nhập số hợp đồng"
+                                        placeholder={t('placeholder.enter_contract_code')}
                                         type="text"
                                         required
                                       />
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Loại hợp đồng'} required />
+                                      <Label text={t('label.contract_type')} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
                                         {contractType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -125,8 +133,8 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Loại thuế thu nhập cá nhân'} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
+                                      <Label text={t('label.personal_income_tax_type')} required />
+                                      <Field className={'form-control'} name={`contractInfo.${index}.pTaxType`} component="select">
                                         {personalIncomeTaxType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
@@ -137,7 +145,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                   </div>
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Người ký'} required />
+                                      <Label text={t('label.signer')} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
                                         {employee.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -147,7 +155,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Loại công việc'} required />
+                                      <Label text={t('label.job_type')} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.jobType`} component="select">
                                         {jobType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -157,32 +165,60 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Thời gian thử việc'} />
+                                      <Label text={t('label.trial_period')} />
                                       <div className="input-group">
-                                        <input type="number" className={'form-control'} rows={5} name={`contractInfo.${index}.probationaryPeriod`} />
+                                        <input
+                                          type="number"
+                                          className={'form-control'}
+                                          rows={5}
+                                          name={`contractInfo.${index}.probationaryPeriod`}
+                                          onChange={(e) => handleChange(`contractInfo.${index}.probationaryPeriod`)(e)}
+                                          value={values.contractInfo[index].probationaryPeriod}
+                                        />
                                         <span className="input-group-text" id="basic-addon2">
-                                          ngày
+                                          {t('label.day')}
                                         </span>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Ngày ký'} required />
-                                      <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.signedDate`} />
+                                      <Label text={t('label.signature_date')} required />
+                                      <input
+                                        type="date"
+                                        onChange={(e) => handleChange(`contractInfo.${index}.signedDate`)(e)}
+                                        className={'form-control'}
+                                        rows={5}
+                                        name={`contractInfo.${index}.signedDate`}
+                                        value={values.contractInfo[index].signedDate}
+                                      />
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Ngày có hiệu lực'} required />
-                                      <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.effectiveDate`} />
+                                      <Label text={t('label.effective_date')} required />
+                                      <input
+                                        type="date"
+                                        className={'form-control'}
+                                        rows={5}
+                                        name={`contractInfo.${index}.effectiveDate`}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.effectiveDate`)(e)}
+                                        value={values.contractInfo[index].effectiveDate}
+                                      />
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Ngày hết hạn'} />
-                                      <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.expiredDate`} />
+                                      <Label text={t('label.expiration_date')} />
+                                      <input
+                                        type="date"
+                                        className={'form-control'}
+                                        rows={5}
+                                        name={`contractInfo.${index}.expiredDate`}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.expiredDate`)(e)}
+                                        value={values.contractInfo[index].expiredDate}
+                                      />
                                     </div>
                                   </div>
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Địa điểm làm việc'} />
+                                      <Label text={t('label.job_place')} />
                                       <Field className={'form-control'} name={`contractInfo.${index}.branchId`} component="select">
                                         {branches.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -192,15 +228,22 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Ngày bắt đầu làm việc'} />
-                                      <input type="date" className={'form-control'} rows={5} name={`contractInfo.${index}.stateDate`} />
+                                      <Label text={t('label.job_start_date')} />
+                                      <input
+                                        type="date"
+                                        className={'form-control'}
+                                        rows={5}
+                                        name={`contractInfo.${index}.startDate`}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.startDate`)(e)}
+                                        value={values.contractInfo[index].startDate}
+                                      />
                                     </div>
                                   </div>
-                                  <h5 className="px-3">Lương</h5>
+                                  <h5 className="px-3">{t('label.gross_salary')}</h5>
                                   <hr className="mt-1" />
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Hình thức chi trả'} required />
+                                      <Label text={t('label.payment_method')} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.payType`} component="select">
                                         {payType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -210,7 +253,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Nhóm lương'} required />
+                                      <Label text={t('label.salary_group')} required />
                                       <Field className={'form-control'} name={`contractInfo.${index}.salaryGroup`} component="select">
                                         {salaryGroup.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
@@ -220,47 +263,47 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       </Field>
                                     </div>
                                     <div className="form-group col-lg-4">
-                                      <Label text={'Mức lương'} />
+                                      <Label text={t('label.salary_level')} />
                                       <Field
                                         className={'form-control'}
                                         name={`contractInfo.${index}.salary`}
-                                        placeholder="Nhập số hợp đồng"
+                                        placeholder={t('placeholder.enter_salary_level')}
                                         type="number"
                                         disabled
                                       />
                                     </div>
                                   </div>
-                                  <h5 className="px-3">Trợ cấp</h5>
-                                  <hr className="mt-1" />
+                                  <h5 className="px-3">{t('label.allowance')}</h5>
+                                  <hr className="mt-2" />
                                   <FieldArray
-                                    name={`contractInfo.${index}.subsidize`}
+                                    name={`contractInfo.${index}.allowance`}
                                     render={({ insert, remove, push, replace }) => (
                                       <div>
-                                        {values.contractInfo[index].subsidize &&
-                                          values.contractInfo[index].subsidize.length > 0 &&
-                                          values.contractInfo[index].subsidize.map((subsidize, subsidizeIdx) => {
+                                        {values.contractInfo[index].allowance &&
+                                          values.contractInfo[index].allowance.length > 0 &&
+                                          values.contractInfo[index].allowance.map((allowance, allowanceIdx) => {
                                             return (
-                                              <div key={`subsidize${subsidizeIdx}`}>
+                                              <div key={`allowance${allowanceIdx}`}>
                                                 <div className="row">
                                                   <div className="form-group col-lg-4">
-                                                    <Label text={'Trợ cấp'} required />
+                                                    <Label text={t('label.allowance')} required />
                                                     <Field
                                                       className={'form-control'}
-                                                      name={`contractInfo.${index}.subsidize.${subsidizeIdx}.name`}
+                                                      name={`contractInfo.${index}.allowance.${allowanceIdx}.name`}
                                                       component="select"
-                                                      placeholder="Chọn loại trợ cấp"
+                                                      placeholder={t('label.select_allowance_type')}
                                                       onChange={(e) => {
-                                                        let thisSubsidizes = subsidizes.filter((s) => s.id === parseInt(e.target.value));
-                                                        console.log(thisSubsidizes);
+                                                        let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
+                                                        // console.log(thisSubsidizes);
                                                         if (thisSubsidizes && thisSubsidizes.length > 0)
                                                           setFieldValue(
-                                                            `contractInfo.${index}.subsidize.${subsidizeIdx}.amount`,
+                                                            `contractInfo.${index}.allowance.${allowanceIdx}.amount`,
                                                             thisSubsidizes[0].amount,
                                                           );
-                                                        handleChange(`contractInfo.${index}.subsidize.${subsidizeIdx}.name`)(e);
+                                                        handleChange(`contractInfo.${index}.allowance.${allowanceIdx}.name`)(e);
                                                       }}
                                                     >
-                                                      {subsidizes.map((ch, idx) => (
+                                                      {allowances.map((ch, idx) => (
                                                         <option key={idx} value={ch.id}>
                                                           {ch.name}
                                                         </option>
@@ -268,37 +311,37 @@ const JobTimelineInfo = ({ t, profile }) => {
                                                     </Field>
                                                   </div>
                                                   <div className="form-group col-lg-4">
-                                                    <Label text={'Nhóm lương'} required />
+                                                    <Label text={t('label.salary_group')} required />
                                                     <Field
                                                       className={'form-control'}
-                                                      name={`contractInfo.${index}.subsidize.${subsidizeIdx}.amount`}
-                                                      placeholder="Khoảng trợ cấp"
+                                                      name={`contractInfo.${index}.allowance.${allowanceIdx}.amount`}
+                                                      placeholder={t('placeholder.pension')}
                                                       type="number"
                                                       disabled
                                                     />
                                                   </div>
                                                   <div className="form-group d-flex align-items-end">
-                                                    <div role="button" className="btn btn-white">
-                                                      <Delete className="pb-1" onClick={() => remove(subsidizeIdx)} style={{ color: 'red' }} />
-                                                    </div>
+                                                    <DeleteIconButton onClick={() => remove(allowanceIdx)} />
                                                   </div>
                                                 </div>
                                               </div>
                                             );
                                           })}
-                                        <div className="d-flex justify-content-start">
+                                        <div className="d-flex justify-content-start mb-4">
                                           <button type="button" className="btn btn-primary" onClick={() => push({ name: 0, amount: 0 })}>
-                                            <AddCircle /> {t('label.addSubsidize')}
+                                            <AddCircle /> {t('label.add_allowance')}
                                           </button>
                                         </div>
-                                        <CommonUploadFileButton
-                                          name={`contractInfo.${index}.files`}
-                                          containerClassName="form-group col-xl-12"
-                                          buttonClassName="btn btn-primary"
-                                          value={values.contractInfo[index].files}
-                                        />
                                       </div>
                                     )}
+                                  />
+                                  <hr className="mt-1" />
+
+                                  <CommonUploadFileButton
+                                    name={`contractInfo.${index}.files`}
+                                    containerClassName="mt-3 "
+                                    buttonClassName="btn btn-primary"
+                                    value={values.contractInfo[index].files}
                                   />
                                 </>
                               )}
@@ -328,7 +371,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                               payType: 0,
                               salaryGroup: 0,
                               salary: 0,
-                              subsidize: [],
+                              allowance: [],
                             });
                           }}
                         >

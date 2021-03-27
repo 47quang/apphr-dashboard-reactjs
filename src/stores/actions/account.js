@@ -47,6 +47,7 @@ export const createAccount = (params, history) => {
     api.account
       .post(params)
       .then(({ payload }) => {
+        payload.profileId = payload.profileId ?? 0;
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })

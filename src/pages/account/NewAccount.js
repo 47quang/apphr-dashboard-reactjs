@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
 import { createAccount, fetchPermissionGroups, fetchRoles, setEmptyAccount, fetchProfiles } from 'src/stores/actions/account';
 import AccountItemBody from './AccountItemBody';
+import { AccountCreateInfoSchema } from 'src/schema/formSchema';
 
 //TODO: translate
 
@@ -55,6 +56,7 @@ const NewAccount = ({ t, location, history }) => {
   return (
     <AccountItemBody
       t={t}
+      isCreate={true}
       accountRef={accountInfoForm}
       account={account}
       buttons={buttons}
@@ -62,6 +64,7 @@ const NewAccount = ({ t, location, history }) => {
       permissionGroups={permissionGroups}
       profiles={profiles}
       roles={roles}
+      schema={AccountCreateInfoSchema}
     />
   );
 };

@@ -5,7 +5,7 @@ import { REDUX_STATE } from '../states';
 export const fetchPositions = (params) => {
   return (dispatch, getState) => {
     api.position
-      .getAll()
+      .getAll(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
       })

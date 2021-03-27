@@ -29,6 +29,6 @@ export const logout = (history) => {
     });
     localStorage.setItem('token', payload.token);
     localStorage.setItem('user', payload.user);
-    history.push(ROUTE_PATH.ROOT);
+    history.push(ROUTE_PATH.LOGIN);
   };
 };
