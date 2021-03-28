@@ -134,7 +134,7 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
               <CertificateInfo t={t} profile={profile} />
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
-              <AddressInfo t={t} profile={profile} />
+              <AddressInfo t={t} profile={profile} history={history} />
             </TabPanel>
             <TabPanel value={subTabName} index={5} dir={theme.direction}>
               Tiền lương / Trợ cấp (TODO)

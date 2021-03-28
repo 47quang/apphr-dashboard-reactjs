@@ -16,9 +16,20 @@ const API_PREFIX = {
   API_ROLE: '/api.role',
   API_PERMISSION: '/api.permission',
   API_PROFILE: '/api.profile',
+  API_CONTACT: '/api.contact',
 };
 
 export const api = {
+  contact: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_CONTACT, {
+        params: params,
+      });
+    },
+    post: (params) => {
+      return client.post(API_PREFIX.API_CONTACT, params);
+    },
+  },
   general: {
     getGeneralInfo: (id) => {
       return client.get(API_PREFIX.API_GENERAL + `/${1}`);

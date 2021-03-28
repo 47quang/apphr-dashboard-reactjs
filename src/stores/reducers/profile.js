@@ -183,6 +183,7 @@ const initialState = {
   ],
   tabName: 0,
   subTabName: 0,
+  contacts: [],
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -238,6 +239,12 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         profile: { ...state.profile, academicInfo: payload },
+      };
+
+    case REDUX_STATE.profile.SET_CONTACTS:
+      return {
+        ...state,
+        contacts: [...payload],
       };
     default:
       return state;

@@ -26,6 +26,7 @@
     "employee_firstname": "Tên",
     "employee_full_name": "Họ và tên",
     "update": "Cập nhật",
+    "cancel": "Hủy",
     "back": "Quay lại",
     "create_new": "Tạo mới",
     "add": "Thêm mới",
@@ -289,6 +290,8 @@
     "enter_valid_ip_v4_address": "Địa chỉ IP không hợp lệ",
     "required_enter_usename": "Bắt buộc nhập tên đăng nhập",
     "required_enter_password": "Bắt buộc nhập vào mật khẩu của tài khoản",
-    "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự"
+    "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự",
+    "required_select_contact_type": "Phải chọn loại địa chỉ",
+    "required_enter_contact_url": "Phải nhập url"
   }
 }

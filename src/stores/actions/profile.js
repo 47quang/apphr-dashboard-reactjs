@@ -80,7 +80,61 @@ export const updateProfile = (data, history, success_msg) => {
     api.profile
       .put(data)
       .then(({ payload }) => {
-        console.log(payload);
+        dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const updatePermanentAddress = (data, provinces, districts, wards, success_msg) => {
+  const getName = (arr, id) => {
+    if (arr.length === 0) return null;
+    if (!id) return null;
+    if (id === '0') return null;
+    const lst = arr.filter((val) => val.id === parseInt(id));
+    return lst[0].name;
+  };
+  const getLocationId = (id) => (id === '0' ? null : parseInt(id));
+
+  const params = {
+    id: data.id,
+    permanentAddress: data.permanentAddress,
+    homeTown: data.homeTown,
+    temporaryAddress: data.temporaryAddress,
+    provinceId: data.provinceId ? getLocationId(data.provinceId) : null,
+    provinceName: getName(provinces, data.provinceId),
+    wardName: getName(wards, data.wardId),
+    districtName: getName(districts, data.districtId),
+    wardId: data.wardId ? getLocationId(data.wardId) : null,
+    districtId: data.districtId ? getLocationId(data.districtId) : null,
+  };
+  return (dispatch, getState) => {
+    api.profile
+      .put(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const updateRelationship = (data, profileId, success_msg) => {
+  const params = {
+    id: profileId,
+    relationship: {
+      ...data,
+    },
+  };
+  return (dispatch, getState) => {
+    api.profile
+      .put(params)
+      .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -133,5 +187,40 @@ export const setSubTabName = (params) => {
   return {
     type: REDUX_STATE.profile.SET_SUB_TAB_NAME,
     payload: params,
+  };
+};
+
+export const fetchContacts = (profileId) => {
+  const params = {
+    profileId: parseInt(profileId),
+  };
+  return (dispatch, getState) => {
+    api.contact
+      .getAll(params)
+      .then(({ payload }) => {
+        console.log('contacts', payload);
+        // dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const createNewContact = (data, profileId) => {
+  const params = {
+    ...data,
+    profileId: profileId,
+  };
+  return (dispatch, getState) => {
+    api.contact
+      .post(params)
+      .then(({ payload }) => {
+        console.log('new contact', payload);
+        // dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
