@@ -150,3 +150,15 @@ export const BasicInfoCreateSchema = Yup.object().shape({
     })
     .required('validation.required_select_gender'),
 });
+
+export const JobTimelineSchema = Yup.object().shape({
+  code: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_contract_code', function (value) {
+    return value && value.length;
+  }),
+  type: Yup.number()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_contract_code', function (value) {
+      return value !== '';
+    })
+    .required('validation.required_contract_code'),
+  probTime: Yup.number().required('validation.required_contract_code'),
+});

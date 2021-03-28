@@ -4,7 +4,7 @@ import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { Field, FieldArray, Formik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
@@ -13,37 +13,34 @@ import { REDUX_STATE } from 'src/stores/states';
 import { joinClassName } from 'src/utils/stringUtils';
 import AddIcon from '@material-ui/icons/Add';
 import { useEffect } from 'react';
+import { fetchBranches, fetchContracts, fetchWagesByType, fetchAllowances, createContract } from 'src/stores/actions/contract';
+import { fetchAccount, fetchProfiles } from 'src/stores/actions/account';
+import { JobTimelineSchema } from 'src/schema/formSchema';
 
-const JobTimelineInfo = ({ t, profile }) => {
+const JobTimelineInfo = ({ t, profileId }) => {
   const dispatch = useDispatch();
+  let branches = useSelector((state) => state.contract.branches);
+  let employee = useSelector((state) => state.account.profiles);
+  let wages = useSelector((state) => state.contract.wages);
   const jobTimelineInfo = {
-    contractInfo: profile?.contracts ?? [],
+    contractInfo: useSelector((state) => state.contract.contracts),
   };
-  const allowances = [
-    { id: 0, name: 'Chọn trợ cấp', amount: 0 },
-    { id: 1, name: 'Ăn trưa', amount: 1000000 },
-    { id: 2, name: 'Ăn sáng', amount: 1000000 },
-    { id: 3, name: 'Ăn vặt', amount: 1000000 },
-    { id: 4, name: 'Ăn chiều', amount: 1000000 },
-    { id: 5, name: 'Xăng xe', amount: 1000000 },
-    { id: 6, name: 'Nhà ở', amount: 1000000 },
-  ];
-  const wage = [
-    { id: 1, name: '13M' },
-    { id: 2, name: '15M' },
-    { id: 3, name: '23M' },
-  ];
+  const allowances = useSelector((state) => state.contract.allowances);
+
   const paymentType = [
-    { id: 1, name: 'Chi trả một lần' },
-    { id: 2, name: 'Chi trả theo giờ' },
-    { id: 3, name: 'Chi trả theo tháng' },
-    { id: 4, name: 'Chi trả theo ngày công' },
+    { id: '', name: 'Chọn hình thức chi trả' },
+    { id: 'one_time', name: 'Chi trả một lần' },
+    { id: 'by_hour', name: 'Chi trả theo giờ' },
+    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
   const typeWord = [
+    { id: '', name: 'Chọn loại công việc' },
     { id: 'office', name: 'Văn phòng' },
     { id: 'out_door', name: 'Làm việc ngoài trời' },
   ];
   const personalIncomeTaxType = [
+    { id: '', name: 'Chọn loại thuế thu nhập cá nhân' },
     { id: 'more_3_month', name: 'Cư trú có hợp đồng lao động 3 tháng trở lên' },
     { id: 'non_resident', name: 'Cá nhân không cư trú' },
     { id: 'no_tax', name: 'Không tính thuế' },
@@ -51,14 +48,18 @@ const JobTimelineInfo = ({ t, profile }) => {
   ];
 
   const type = [
+    { id: '', name: 'Chọn loại hợp đồng' },
     { id: 'partTime', name: 'Bán thời gian' },
     { id: 'fullTime', name: 'Toàn thời gian' },
     { id: 'season', name: 'Thời vụ' },
   ];
-  const employee = [{ shortname: 1, name: 'Nguyễn Văn An' }];
-  const branches = [{ id: 1, name: 'APPHR Q1 - 12 Bến Nghé ' }];
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(fetchContracts({ profileId: parseInt(profileId) }));
+    dispatch(fetchBranches());
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname'] }));
+    dispatch(fetchAllowances());
+  }, []);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -66,10 +67,11 @@ const JobTimelineInfo = ({ t, profile }) => {
           <Formik
             initialValues={jobTimelineInfo}
             enableReinitialize
+            validationSchema={JobTimelineSchema}
             onSubmit={(values) => {
               // console.log('JobTimeline ', values);
               dispatch({
-                type: REDUX_STATE.profile.SET_JOB_TIMELINE,
+                type: REDUX_STATE.contract.SET_CONTRACTS,
                 payload: values.contractInfo,
               });
             }}
@@ -114,7 +116,12 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     <div role="button" className="d-inline pb-1">
                                       <AddIcon
                                         className="d-inline"
-                                        onClick={() => console.log(values.contractInfo[index].id === null)}
+                                        onClick={() => {
+                                          let data = values.contractInfo[index];
+                                          data['branchName'] = branches.filter((br) => br.id === data.branchId)[0]?.branch;
+                                          console.log(data);
+                                          // dispatch(createContract(data));
+                                        }}
                                         style={{ color: 'blue' }}
                                       />
                                     </div>
@@ -128,13 +135,12 @@ const JobTimelineInfo = ({ t, profile }) => {
                                 <>
                                   <div className="row">
                                     <div className="form-group col-lg-4">
-                                      <Label text={t('label.contract_code')} />
+                                      <Label text={t('label.contract_code')} required />
                                       <Field
                                         className={'form-control'}
                                         name={`contractInfo.${index}.code`}
                                         placeholder={t('placeholder.enter_contract_code')}
                                         type="text"
-                                        required
                                       />
                                     </div>
                                     <div className="form-group col-lg-4">
@@ -259,7 +265,17 @@ const JobTimelineInfo = ({ t, profile }) => {
                                   <div className="row">
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.payment_method')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.paymentType`} component="select">
+                                      <Field
+                                        className={'form-control'}
+                                        name={`contractInfo.${index}.paymentType`}
+                                        component="select"
+                                        onChange={(e) => {
+                                          if (e.target.value !== '') {
+                                            dispatch(fetchWagesByType({ type: e.target.value }));
+                                            handleChange(`contractInfo.${index}.paymentType`)(e);
+                                          } else setFieldValue(`contractInfo.${index}.wageId`, 0);
+                                        }}
+                                      >
                                         {paymentType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
@@ -269,8 +285,17 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     </div>
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.salary_group')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.wage`} component="select">
-                                        {wage.map((ch, idx) => (
+                                      <Field
+                                        className={'form-control'}
+                                        name={`contractInfo.${index}.wageId`}
+                                        component="select"
+                                        onChange={(e) => {
+                                          let thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                                          setFieldValue(`contractInfo.${index}.amount`, thisWage[0].amount);
+                                          handleChange(`contractInfo.${index}.wageId`)(e);
+                                        }}
+                                      >
+                                        {wages.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -281,7 +306,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       <Label text={t('label.salary_level')} />
                                       <Field
                                         className={'form-control'}
-                                        name={`contractInfo.${index}.salary`}
+                                        name={`contractInfo.${index}.amount`}
                                         placeholder={t('placeholder.enter_salary_level')}
                                         type="number"
                                         disabled
@@ -370,7 +395,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                           className="px-5 py-1 bg-white"
                           onClick={() => {
                             push({
-                              id: 0,
+                              id: null,
                               isMinimize: false,
                               isOpen: false,
                               code: '',
@@ -384,9 +409,9 @@ const JobTimelineInfo = ({ t, profile }) => {
                               expiredDate: '',
                               branchId: 0,
                               startWork: '',
-                              paymentType: 0,
-                              wage: 0,
-                              salary: 0,
+                              paymentType: '',
+                              wageId: 0,
+                              amount: 0,
                               allowance: [],
                             });
                           }}

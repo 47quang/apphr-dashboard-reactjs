@@ -254,6 +254,7 @@
     "enter_salary_level": "Nhập mức lương"
   },
   "validation": {
+    "required_contract_code": "Bắt buộc phải nhập mã hợp đồng",
     "required_select_gender": "Bắt buộc phải chọn giới tính",
     "required_enter_firstname": "Bắt buộc nhập tên",
     "required_enter_lastname": "Bắt buộc nhập họ",

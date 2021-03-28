@@ -3,11 +3,12 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchContracts = () => {
+export const fetchContracts = (profileId) => {
   return (dispatch, getState) => {
     api.contract
-      .getAll()
+      .getAll(profileId)
       .then(({ payload }) => {
+        console.log('Contracts', payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
@@ -36,6 +37,16 @@ export const createContract = (params, history, success_msg) => {
   params.startWork = params.startWork === '' ? null : params.startWork;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
+  params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
+  params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
+  params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
+  params.allowanceIds =
+    params.allowance &&
+    params.allowance.length >= 0 &&
+    params.allowance.map((allowance) => {
+      if (allowance.name !== 0) return allowance.name;
+    });
+  console.log('params', params);
   return (dispatch, getState) => {
     api.contract
       .post(params)
@@ -57,6 +68,45 @@ export const deleteContract = (id, success_msg) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchBranches = () => {
+  return (dispatch, getState) => {
+    api.branch
+      .getAll()
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchWagesByType = (type) => {
+  return (dispatch, getState) => {
+    api.wage
+      .getAll(type)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.contract.GET_WAGES, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchAllowances = () => {
+  return (dispatch, getState) => {
+    api.allowance
+      .getAll()
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.contract.GET_ALLOWANCES, payload });
       })
       .catch((err) => {
         console.log(err);

@@ -21,7 +21,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
     dispatch(fetchAccount(match?.params?.id));
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
-    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'shortname'] }));
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

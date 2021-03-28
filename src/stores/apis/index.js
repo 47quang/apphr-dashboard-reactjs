@@ -17,6 +17,8 @@ const API_PREFIX = {
   API_PERMISSION: '/api.permission',
   API_PROFILE: '/api.profile',
   API_CONTRACT: '/api.contract',
+  API_WAGE: '/api.wage',
+  API_ALLOWANCE: '/api.allowance',
 };
 
 export const api = {
@@ -259,6 +261,44 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_CONTRACT + `/${id}`);
+    },
+  },
+  wage: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_WAGE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_WAGE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_WAGE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_WAGE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_WAGE + `/${id}`);
+    },
+  },
+  allowance: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ALLOWANCE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ALLOWANCE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ALLOWANCE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ALLOWANCE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ALLOWANCE + `/${id}`);
     },
   },
 };
