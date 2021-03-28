@@ -35,20 +35,21 @@ const initialState = {
     academicLevel: 'not_require',
     contracts: [
       {
+        id: 1,
         isMinimize: false,
         isOpen: true,
-        contractCode: '',
-        contractType: '',
+        code: '',
+        type: '',
         pTaxType: '',
         signee: '',
-        jobType: 0,
-        probationaryPeriod: 0,
-        signedDate: '',
-        effectiveDate: '',
+        typeWork: 0,
+        probTime: 0,
+        handleDate: '',
+        validDate: '',
         expiredDate: '',
         branchId: 0,
-        startDate: '',
-        payType: 0,
+        startWork: '',
+        paymentType: 0,
         salaryGroup: 0,
         salary: 0,
         allowance: [],
@@ -222,10 +223,10 @@ const profileReducer = (state = initialState, { type, payload }) => {
       payload =
         payload && payload.length > 0
           ? payload.map((contract) => {
-              contract.signedDate = getDateInput(contract.signedDate);
-              contract.effectiveDate = getDateInput(contract.effectiveDate);
+              contract.handleDate = getDateInput(contract.handleDate);
+              contract.validDate = getDateInput(contract.validDate);
               contract.expiredDate = getDateInput(contract.expiredDate);
-              contract.startDate = getDateInput(contract.startDate);
+              contract.startWork = getDateInput(contract.startWork);
               return contract;
             })
           : [];

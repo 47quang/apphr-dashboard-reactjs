@@ -42,43 +42,49 @@ export const fetchAccount = (id) => {
   };
 };
 
-export const createAccount = (params, history) => {
+export const createAccount = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.account
       .post(params)
       .then(({ payload }) => {
         payload.profileId = payload.profileId ?? 0;
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const updateAccount = (data) => {
+export const updateAccount = (data, success_msg) => {
   return (dispatch, getState) => {
     api.account
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const deleteAccount = (id) => {
+export const deleteAccount = (id, success_msg) => {
   return (dispatch, getState) => {
     api.account
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.DELETE_ACCOUNT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

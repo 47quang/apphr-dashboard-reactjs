@@ -30,7 +30,9 @@ const NewAccount = ({ t, location, history }) => {
     form.roleId = parseInt(form.roleId);
     if (form.profileId === 0) delete form.profileId;
     console.log(form);
-    dispatch(createAccount(form, history));
+    form.profileId = form.profileId ?? 0;
+    form.profileId = parseInt(form.profileId);
+    dispatch(createAccount(form, history, t('message.successful_create')));
   };
 
   const buttons = [
