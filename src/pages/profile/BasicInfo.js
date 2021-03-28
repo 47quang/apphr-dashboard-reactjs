@@ -271,7 +271,7 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                     <div className="row">
                       <CommonTextInput
                         containerClassName={'form-group col-lg-6'}
-                        value={values.dateOfBirth ?? ''}
+                        value={values.dateOfBirth ?? undefined}
                         onBlur={handleBlur('dateOfBirth')}
                         onChange={handleChange('dateOfBirth')}
                         inputID={'dateOfBirth'}
@@ -401,7 +401,7 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                     <div className="row">
                       <CommonSelectInput
                         containerClassName={'form-group col-6'}
-                        value={values.branchId ?? 0}
+                        value={values.branchId ?? undefined}
                         onBlur={handleBlur('branchId')}
                         onChange={(e) => {
                           dispatch(fetchDepartments({ branchId: e.target.value }));

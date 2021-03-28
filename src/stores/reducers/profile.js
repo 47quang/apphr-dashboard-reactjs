@@ -2,7 +2,7 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  profiles: [],
+  profiles: [[], 0],
   profile: {
     id: 0,
     shortname: '',
