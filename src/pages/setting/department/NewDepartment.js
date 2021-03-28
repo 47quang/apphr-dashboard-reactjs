@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { createDepartment, resetDepartment } from 'src/stores/actions/department';
 import DepartmentItemBody from './DepartmentItemBody';
@@ -15,22 +16,24 @@ const NewDepartment = ({ t, location, history }) => {
     return () => {
       dispatch(resetDepartment());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
 
-    dispatch(createDepartment(form, history));
+    dispatch(createDepartment(form, history, t('message.successful_create')));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/department');
+        history.push(ROUTE_PATH.DEPARTMENT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'button',
@@ -38,11 +41,13 @@ const NewDepartment = ({ t, location, history }) => {
       onClick: (e) => {
         departmentRef.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
 
-  return <DepartmentItemBody departmentRef={departmentRef} department={department} branches={branches} buttons={buttons} submitForm={submitForm} />;
+  return (
+    <DepartmentItemBody t={t} departmentRef={departmentRef} department={department} branches={branches} buttons={buttons} submitForm={submitForm} />
+  );
 };
 
 export default NewDepartment;

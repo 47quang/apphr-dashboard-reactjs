@@ -31,6 +31,7 @@ import TableCell from '@material-ui/core/TableCell';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import classNames from 'classnames';
 import saveAs from 'file-saver';
 import { Formik } from 'formik';
 import React, { useCallback, useRef, useState } from 'react';
@@ -38,7 +39,6 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import classNames from 'classnames';
 
 /*
   Params:
@@ -111,7 +111,7 @@ const AddRowPanel = ({ route, disableCreate }) => {
   );
 };
 
-const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit }) => {
+const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const handleConfirm = (e) => {
@@ -127,12 +127,12 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
     <Plugin>
       <WarningAlertDialog
         isVisible={openWarning}
-        title={'Xóa hàng'}
-        titleConfirm={'Đồng ý'}
+        title={t('title.delete_row')}
+        titleConfirm={t('label.agree')}
         handleConfirm={handleConfirm}
-        titleCancel={'Từ chối'}
+        titleCancel={t('label.decline')}
         handleCancel={handleCancel}
-        warningMessage={'Bạn có muốn xóa hàng này?'}
+        warningMessage={t('message.delete_warning_message')}
       />
       <Getter
         name="tableColumns"
@@ -153,7 +153,7 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
             {(getters, { deleteRows, commitDeletedRows }) => (
               <TableCell className="px-0 py-0">
                 <Link to={`${route}${params.tableRow.rowId}`}>
-                  <IconButton hidden={disableEdit}>
+                  <IconButton hidden={disableEdit} title={t('message.edit_row')}>
                     <EditIcon />
                   </IconButton>
                 </Link>
@@ -164,7 +164,7 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
                     setDeletingRowID(params.tableRow.rowId);
                     setOpenWarning(!openWarning);
                   }}
-                  title="Delete row"
+                  title={t('message.delete_row')}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -179,6 +179,7 @@ const CustomTableEditColumn = ({ route, deleteRow, disableDelete, disableEdit })
 
 const QTable = (props) => {
   const {
+    t,
     columnDef,
     data,
     route,
@@ -230,9 +231,9 @@ const QTable = (props) => {
     name: columnDef[idx].title,
   }));
   const filterTypes = [
-    { id: 1, name: 'Bao gồm' },
-    { id: 2, name: 'Chính xác' },
-    { id: 3, name: 'Không bao gồm' },
+    { id: 1, name: t('label.include') },
+    { id: 2, name: t('label.not_include') },
+    { id: 3, name: t('label.correct') },
   ];
   const filterValues = {
     columnsFilter: columnsFilter[0],
@@ -247,17 +248,17 @@ const QTable = (props) => {
 
   const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
 
-  const DateTypeProvider = (props) => <DataTypeProvider formatterComponent={DateFormatter} {...props} />;
+  const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 
   const MultiValuesFormatter = ({ value }) => {
     return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
   };
-  const MultiValuesTypeProvider = (props) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...props} />;
+  const MultiValuesTypeProvider = (p) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...p} />;
 
   const LinkFormatter = ({ value, column }) =>
-    value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : 'Chưa có hồ sơ';
+    value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
-  const LinkTypeProvider = (props) => <DataTypeProvider formatterComponent={LinkFormatter} {...props} />;
+  const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
   return (
     <div>
@@ -273,18 +274,18 @@ const QTable = (props) => {
                       value={values.columnsFilter}
                       onBlur={handleBlur('columnsFilter')}
                       onChange={handleChange('columnsFilter')}
-                      labelText={'Cột để lọc'}
+                      labelText={t('label.column_filter')}
                       selectClassName={'form-control'}
                       lstSelectOptions={columnsFilter}
-                      placeholder={'Chọn cột cần lọc'}
+                      placeholder={t('placeholder.select_column_filter')}
                     />
                     <CommonSelectInput
                       containerClassName={'form-group col-lg-3'}
                       value={values.filterTypes}
                       onBlur={handleBlur('filterTypes')}
                       onChange={handleChange('filterTypes')}
-                      labelText={'Tùy chọn lọc'}
-                      placeholder={'Chọn kiểu lọc'}
+                      labelText={t('label.filter_option')}
+                      placeholder={t('placeholder.select_filter_option')}
                       selectClassName={'form-control'}
                       lstSelectOptions={filterTypes}
                     />
@@ -293,9 +294,9 @@ const QTable = (props) => {
                       value={values.textFilter}
                       onBlur={handleBlur('textFilter')}
                       onChange={handleChange('textFilter')}
-                      labelText={'Từ khóa'}
+                      labelText={t('label.keyword')}
                       inputType={'text'}
-                      placeholder={'Nhập từ khóa'}
+                      placeholder={t('placeholder.enter_keyword')}
                       inputClassName={'form-control'}
                     />
                     <div className="d-flex align-items-end form-group col-lg-3">
@@ -361,7 +362,7 @@ const QTable = (props) => {
           <AddRowPanel route={route} disableCreate={disableCreate} />
           <ColumnChooser />
           <TableFixedColumns />
-          <CustomTableEditColumn route={route} deleteRow={deleteRow} disableDelete={disableDelete} disableEdit={disableEdit} />
+          <CustomTableEditColumn t={t} route={route} deleteRow={deleteRow} disableDelete={disableDelete} disableEdit={disableEdit} />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>

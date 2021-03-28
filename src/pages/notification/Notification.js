@@ -1,12 +1,8 @@
-import { CContainer } from "@coreui/react";
-import React from "react";
+import React from 'react';
+import NewNotification from './NewNotification';
 
 const Notification = ({ t, location }) => {
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <div>This is Notification setting page</div>
-    </CContainer>
-  );
+  return <NewNotification t={t} />;
 };
 
 export default Notification;

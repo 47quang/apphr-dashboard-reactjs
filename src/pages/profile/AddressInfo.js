@@ -1,22 +1,23 @@
-import { AddCircle, RemoveCircle, Replay } from '@material-ui/icons';
+import { CContainer } from '@coreui/react';
+import { AddCircle, CancelOutlined } from '@material-ui/icons';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
 
-const { CContainer } = require('@coreui/react');
-const { Formik, FieldArray, Field, Form } = require('formik');
-const { default: CommonTextInput } = require('src/components/input/CommonTextInput');
-const { default: FormHeader } = require('src/components/text/FormHeader');
-
-const AddressInfo = () => {
+const AddressInfo = ({ t }) => {
   const dispatch = useDispatch();
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
   useEffect(() => {
     dispatch(fetchProvinces());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const permanentAddressInfo = {
     permanentAddress: '',
@@ -39,23 +40,12 @@ const AddressInfo = () => {
     },
     { id: 'facebook', name: 'Facebook' },
   ];
-  const channelContact = {
-    channelContacts: [
-      {
-        channel: 'skype',
-        link: 'skype://////',
-      },
-    ],
-  };
+
   const initialContactChannelValues = {
     contactChannels: [
       {
-        channelType: 'skype',
-        link: 'klaus@formik.com',
-      },
-      {
-        channelType: 'facebook',
-        link: 'hans@formik.com',
+        channelType: '',
+        link: '',
       },
     ],
   };
@@ -64,20 +54,26 @@ const AddressInfo = () => {
       <div className="m-auto row">
         <div className="col-xl-7">
           <div className="shadow bg-white rounded p-4 mb-4">
-            <FormHeader text={'Địa chỉ thường trú'} />
-            <Formik initialValues={permanentAddressInfo}>
+            <FormHeader text={t('title.permanent_address')} />
+            <Formik
+              initialValues={permanentAddressInfo}
+              enableReinitialize
+              onSubmit={(values) => {
+                console.log('Address Info: ', values);
+              }}
+            >
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
                 <form>
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-lg-12'}
                       inputClassName={'form-control'}
-                      labelText={'Địa chỉ thường trú'}
+                      labelText={t('label.permanent_address')}
                       value={values.permanentAddress}
                       onChange={handleChange('permanentAddress')}
                       onBlur={handleBlur('permanentAddress')}
                       inputID={'permanentAddress'}
-                      placeholder={'Nhập địa chỉ thường trú'}
+                      placeholder={t('placeholder.enter_permanent_address')}
                     />
                   </div>
                   <div className={'row'}>
@@ -94,9 +90,9 @@ const AddressInfo = () => {
                         handleChange('provinceId')(e);
                       }}
                       inputID={'provinceId'}
-                      labelText={'Tỉnh/Thành phố'}
+                      labelText={t('label.province')}
                       selectClassName={'form-control'}
-                      placeholder={'Chọn Tỉnh/Thành phố'}
+                      placeholder={t('placeholder.select_province')}
                       lstSelectOptions={provinces}
                     />
                     <CommonSelectInput
@@ -108,9 +104,9 @@ const AddressInfo = () => {
                         handleChange('districtId')(e);
                       }}
                       inputID={'districtId'}
-                      labelText={'Quận/Huyện'}
+                      labelText={t('label.district')}
                       selectClassName={'form-control'}
-                      placeholder={'Chọn Quận/Huyện'}
+                      placeholder={t('placeholder.select_district')}
                       lstSelectOptions={districts}
                     />
                   </div>
@@ -121,9 +117,9 @@ const AddressInfo = () => {
                       onBlur={handleBlur('wardId')}
                       onChange={handleChange('wardId')}
                       inputID={'wardId'}
-                      labelText={'Phường/xã'}
+                      labelText={t('label.ward')}
                       selectClassName={'form-control'}
-                      placeholder={'Chọn Phường/Xã'}
+                      placeholder={t('placeholder.select_ward')}
                       lstSelectOptions={wards}
                     />
                     <CommonTextInput
@@ -132,21 +128,21 @@ const AddressInfo = () => {
                       onBlur={handleBlur('domicile')}
                       onChange={handleChange('domicile')}
                       inputID={'domicile'}
-                      labelText={'Nguyên quán'}
+                      labelText={t('label.domicile')}
                       inputClassName={'form-control'}
-                      placeholder={'Nhập nguyên quán'}
+                      placeholder={t('placeholder.enter_domicile')}
                     />
                   </div>
                   <div className={'row'}>
                     <CommonTextInput
                       containerClassName={'form-group col-lg-12'}
                       inputClassName={'form-control'}
-                      labelText={'Địa chỉ hiện tại'}
+                      labelText={t('label.current_address')}
                       value={values.currentAddress}
                       onChange={handleChange('currentAddress')}
                       onBlur={handleBlur('currentAddress')}
                       inputID={'currentAddress'}
-                      placeholder={'Nhập địa chỉ hiện tại'}
+                      placeholder={t('placeholder.enter_current_address')}
                     />
                   </div>
                 </form>
@@ -155,7 +151,7 @@ const AddressInfo = () => {
           </div>
 
           <div className="shadow bg-white rounded p-4 mb-4">
-            <FormHeader text={'Liên hệ khẩn cấp'} />
+            <FormHeader text={t('title.urgent_contact_info')} />
             <Formik initialValues={urgentContactInfo}>
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
                 <form>
@@ -163,22 +159,22 @@ const AddressInfo = () => {
                     <CommonTextInput
                       containerClassName={'form-group col-lg-6'}
                       inputClassName={'form-control'}
-                      labelText={'Họ và tên người liên hệ'}
+                      labelText={t('label.relative_full_name')}
                       value={values.name}
                       onChange={handleChange('name')}
                       onBlur={handleBlur('name')}
                       inputID={'name'}
-                      placeholder={'Nhập đầy đủ tên người liên hệ'}
+                      placeholder={t('placeholder.enter_relative_full_name')}
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-lg-6'}
                       inputClassName={'form-control'}
-                      labelText={'Quan hệ với nhân viên'}
+                      labelText={t('label.employee_relation')}
                       value={values.employeeRelation}
                       onChange={handleChange('employeeRelation')}
                       onBlur={handleBlur('employeeRelation')}
                       inputID={'employeeRelation'}
-                      placeholder={'Nhập quan hệ với nhân viên'}
+                      placeholder={t('placeholder.enter_employee_relation')}
                     />
                   </div>
                   <div className={'row'}>
@@ -188,9 +184,9 @@ const AddressInfo = () => {
                       onBlur={handleBlur('phone')}
                       onChange={handleChange('phone')}
                       inputID={'phone'}
-                      labelText={'Số điện thoại'}
+                      labelText={t('label.phone_number')}
                       inputType={'text'}
-                      placeholder={'Nhập số điện thoại'}
+                      placeholder={t('placeholder.enter_phone_number')}
                       inputClassName={'form-control'}
                     />
                   </div>
@@ -198,12 +194,12 @@ const AddressInfo = () => {
                     <CommonTextInput
                       containerClassName={'form-group col-lg-12'}
                       inputClassName={'form-control'}
-                      labelText={'Địa chỉ liên hệ'}
+                      labelText={t('label.contact_address')}
                       value={values.contactAddress}
                       onChange={handleChange('contactAddress')}
                       onBlur={handleBlur('contactAddress')}
                       inputID={'contactAddress'}
-                      placeholder={'Nhập địa chỉ liên hệ'}
+                      placeholder={t('placeholder.enter_contact_address')}
                     />
                   </div>
                 </form>
@@ -213,13 +209,14 @@ const AddressInfo = () => {
         </div>
         <div className={'col-xl-5'}>
           <div className="shadow bg-white rounded p-4">
-            <FormHeader text="Kênh liên lạc" />
+            <FormHeader text={t('title.contact_channel')} />
             <Formik
               initialValues={initialContactChannelValues}
               onSubmit={(values) => {
                 console.log(values);
               }}
-              render={({ values, errors, touched, handleReset, handleSubmit }) => {
+            >
+              {({ values, errors, touched, handleReset, handleSubmit }) => {
                 return (
                   <Form>
                     <FieldArray
@@ -229,11 +226,11 @@ const AddressInfo = () => {
                           {values.contactChannels.length > 0 &&
                             values.contactChannels.map((friend, index) => (
                               <div className="row" key={index}>
-                                <div className="form-group col-lg-4">
+                                <div className="form-group col-4">
                                   <Field
                                     className={'form-control'}
                                     name={`contactChannels.${index}.channelType`}
-                                    placeholder="Chọn kênh"
+                                    placeholder={t('placeholder.select_contact_channel')}
                                     component="select"
                                   >
                                     {channels.map((ch, idx) => (
@@ -243,48 +240,29 @@ const AddressInfo = () => {
                                     ))}
                                   </Field>
                                 </div>
-                                <div className="form-group col-lg-7">
+                                <div className="form-group col-7">
                                   <Field className={'form-control'} name={`contactChannels.${index}.link`} placeholder="Nhập link" type="text" />
                                 </div>
                                 <div className="form-group pt-2">
-                                  <RemoveCircle onClick={() => remove(index)} />
+                                  <CancelOutlined onClick={() => remove(index)} style={{ color: 'red' }} />
                                 </div>
                               </div>
                             ))}
                           <div className="row col-12">
-                            <button type="button" className="btn btn-primary" onClick={() => push({ channelType: 'skype', link: '' })}>
-                              <AddCircle /> Thêm kênh liên lạc
+                            <button type="button" className="btn btn-primary" onClick={() => push({ channelType: '', link: '' })}>
+                              <AddCircle /> {t('label.add')}
                             </button>
                           </div>
                         </div>
                       )}
                     />
                     <br />
-                    <div className="row col-12">
-                      <button
-                        type="button"
-                        className="btn btn-primary mr-3"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleReset();
-                        }}
-                      >
-                        Khôi phục
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary mr-3"
-                        onClick={(event) => {
-                          handleSubmit();
-                        }}
-                      >
-                        Lưu
-                      </button>
-                    </div>
+
+                    <AutoSubmitToken />
                   </Form>
                 );
               }}
-            />
+            </Formik>
           </div>
         </div>
       </div>

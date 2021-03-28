@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
@@ -25,6 +26,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       dispatch(changeActions([]));
       dispatch(resetShift());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const submitForm = (values) => {
     let form = values;
@@ -32,7 +34,7 @@ const UpdateShift = ({ t, location, match, history }) => {
     form.operateLoop = enCodeChecked(form.operateLoop);
     form.startCC = convertTimeWithSecond(form.startCC);
     form.endCC = convertTimeWithSecond(form.endCC);
-    dispatch(updateShift(form));
+    dispatch(updateShift(form, t('message.successful_update')));
   };
 
   const buttons = [
@@ -40,9 +42,10 @@ const UpdateShift = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push(`/setting/shift`);
+        history.push(ROUTE_PATH.SHIFT);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -50,7 +53,7 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         shiftRef.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -58,12 +61,13 @@ const UpdateShift = ({ t, location, match, history }) => {
       onClick: (e) => {
         shiftRef.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
   return (
     <ShiftItemBody
+      t={t}
       shiftRef={shiftRef}
       shift={shift}
       validationSchema={SettingShiftInfoSchema}

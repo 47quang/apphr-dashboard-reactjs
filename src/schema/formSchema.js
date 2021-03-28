@@ -2,19 +2,22 @@ import * as Yup from 'yup';
 import { getRegexExpression, VALIDATION_TYPE } from 'src/utils/validationUtils';
 import moment from 'moment';
 
+const VALIDATION_STRING = {
+  NOT_EMPTY: 'Not empty',
+};
 //SETTING
 //General Information
 export const SettingGeneralInfoSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Bắt buộc nhập tên công ty'),
+  name: Yup.string().trim().required('validation.required_enter_company_name'),
   phone: Yup.string()
-    .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'Nhập không đúng số điện thoại')
-    .required('Bắt buộc nhập số điện thoại'),
-  email: Yup.string().email('Email nhập sai').required('Bắt buộc nhập email'),
+    .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number')
+    .required('validation.required_enter_phone_number'),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
   address: Yup.string().trim(),
   taxCode: Yup.string(),
-  provinceId: Yup.number().required(),
-  districtId: Yup.number().required(),
-  wardId: Yup.number().required(),
+  provinceId: Yup.number(),
+  districtId: Yup.number(),
+  wardId: Yup.number(),
 });
 
 //Shift
@@ -22,94 +25,128 @@ const isBefore = (startTime, endTime) => {
   return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
 };
 export const SettingShiftInfoSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Bắt buộc nhập tên ca làm'),
-  startCC: Yup.string().test('not empty', 'Bắt buộc chọn giờ check-in', function (value) {
+  name: Yup.string().required('validation.required_enter_shift_name'),
+  startCC: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_checkin_time', function (value) {
     return !!value;
   }),
   endCC: Yup.string()
-    .test('not empty', 'Bắt buộc chọn giờ check-out', function (value) {
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_checkout_time', function (value) {
       return !!value;
     })
-    .test('end_time_test', 'Giờ check-out phải sau giờ check-in', function (value) {
+    .test('end_time_test', 'validation.checkout_time_must_be_greater_than_checkin_time', function (value) {
       const { startCC } = this.parent;
       return isBefore(startCC, value);
     }),
-  coefficient: Yup.number().min(0, 'Hệ số giờ làm phải là một số không âm').required('Bắt buộc phải nhập hệ số giờ làm'),
+  coefficient: Yup.number()
+    .min(0, 'validation.working_time_coefficient_must_not_be_negative')
+    .required('validation.required_enter_working_time_coefficient'),
   branchIds: Yup.array()
     .of(Yup.number())
-    .required('Bắt buộc chọn chi nhánh')
-    .test('empty string', 'Phải chọn chi nhánh', function (value) {
+    .required('validation.required_select_branch_id')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
       return value ? value.length > 0 : false;
     }),
 
   operateLoop: Yup.array()
     .of(Yup.number())
-    .required('Bắt buộc chọn thời gian làm việc')
-    .test('not choose', 'Phải chọn thời gian làm việc', function (value) {
+    .required('validation.required_select_operator_loop')
+    .test('not choose', 'validation.required_select_operator_loop', function (value) {
       return value ? value.length > 0 : false;
     }),
   typeCC: Yup.string()
     .required('Bắt buộc chọn hình thức điểm danh')
-    .test('not equal 0', 'Bắt buộc chọn hình thức điểm danh', function (value) {
+    .test('not equal 0', 'validation.required_select_roll_call', function (value) {
       return value !== '0';
     }),
 });
 
 //Holiday
 export const SettingHolidayInfoSchema = Yup.object().shape({
-  title: Yup.string().required('Bắt buộc nhập vào tiêu đề của ngày lễ'),
-  startDate: Yup.date().required('Ngày bắt đầu không được bỏ trống'),
-  endDate: Yup.date().required('Ngày kết thúc không được bỏ trống'),
-  coefficient: Yup.number().min(0, 'Hệ số giờ làm phải là một số không âm').required('Bắt buộc phải nhập hệ số giờ làm'),
+  title: Yup.string().required('validation.required_enter_holiday_title'),
+  startDate: Yup.date().required('validation.required_select_start_date'),
+  endDate: Yup.date().required('validation.required_select_end_date'),
+  coefficient: Yup.number()
+    .min(0, 'validation.working_time_coefficient_must_not_be_negative')
+    .required('validation.required_enter_working_time_coefficient'),
 });
 
 export const SettingHolidayLimitSchema = Yup.object().shape({
   total: Yup.number()
-    .integer('Số ngày đề xuất tối đa là một số nguyên')
-    .min(0, 'Số ngày đề xuất tối đa là một số không âm')
-    .required('Bắt buộc phải nhập số ngày đề  xuất tối đa'),
+    .integer('validation.total_proposal_day_must_be_integer"')
+    .min(0, 'validation.total_proposal_day_must_not_be_negative')
+    .required('validation.required_enter_total_proposal_day'),
 });
 
 //Position
 export const SettingPositionInfoSchema = Yup.object().shape({
-  name: Yup.string().required('Bắt buộc nhập vào tên vị trí'),
-  branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
+  name: Yup.string().required('validation.required_enter_position_name'),
+  branchId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
     return value !== '0';
   }),
-  departmentId: Yup.string().test('empty string', 'Phải chọn phòng ban', function (value) {
+  departmentId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_department_id', function (value) {
     return value !== '0';
   }),
-  academicLevel: Yup.string().test('empty string', 'Phải chọn trình độ cho vị trí', function (value) {
+  academicLevel: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
     return value !== '0';
   }),
-  expYear: Yup.number().required('Nhập vào năm kinh nghiệm').min(0, 'Năm kinh nghiệm là một số không âm'),
+  expYear: Yup.number().required('validation.required_enter_experience_year').min(0, 'validation.experience_year_must_not_be_negative'),
 });
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
-  name: Yup.string().required('Bắt buộc nhập vào tên của chi nhánh'),
-  ipRouter: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), 'Địa chỉ IP không hợp lệ.'),
+  name: Yup.string().required('validation.required_enter_branch_name'),
+  ipRouter: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), 'validation.enter_valid_ip_v4_address'),
   address: Yup.string(),
-  note: Yup.string(),
 });
 
 //Department
 export const SettingDepartmentInfoSchema = Yup.object().shape({
-  name: Yup.string().required('Bắt buộc nhập vào tên phòng ban'),
-  branchId: Yup.string().test('empty string', 'Phải chọn chi nhánh', function (value) {
+  name: Yup.string().required('validation.required_enter_department_name'),
+  branchId: Yup.string().test('empty string', 'validation.required_select_branch_id', function (value) {
     return value !== '0';
   }),
-  note: Yup.string().required('Ghi chú không được bỏ trống'),
 });
 //Account
-export const AccountInfoSchema = Yup.object().shape({
-  username: Yup.string().required('Bắt buộc nhập vào tên đăng nhập'),
-  role: Yup.string().test('empty string', 'Bắt buộc phải chọn vai trò', function (value) {
+export const AccountCreateInfoSchema = Yup.object().shape({
+  username: Yup.string().required('validation.required_enter_usename'),
+  password: Yup.string().test('empty string', 'validation.password_length_must_be_greater_than_6', function (value) {
+    return value ? value.length > 5 : false;
+  }),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
+  roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
     return value !== '0';
   }),
-  coefficient: Yup.number().min(0, 'Hệ số công phải là một số không âm').required('Bắt buộc phải nhập hệ số công'),
+});
+export const AccountUpdateInfoSchema = Yup.object().shape({
+  username: Yup.string().required('validation.required_enter_usename'),
+  password: Yup.string(),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
+  roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
+    return value !== '0';
+  }),
 });
 export const RoleInfoSchema = Yup.object().shape({
-  id: Yup.string().required('Bắt buộc nhập vào tên vai trò'),
-  name: Yup.string().required('Bắt buộc nhập vào tên vai trò'),
+  name: Yup.string().required('validation.required_enter_role_name'),
+});
+
+export const BasicInfoCreateSchema = Yup.object().shape({
+  firstname: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_firstname', function (value) {
+      return value && value.length;
+    })
+    .required('validation.required_enter_firstname'),
+  lastname: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_lastname', function (value) {
+      return value && value.length;
+    })
+    .required('validation.required_enter_lastname'),
+  phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
+  email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
+  gender: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_gender', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_gender'),
 });

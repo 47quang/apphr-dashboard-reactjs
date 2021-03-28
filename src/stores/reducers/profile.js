@@ -1,151 +1,71 @@
+import { getDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  profiles: [
-    {
-      id: 1,
-      shortname: 'E01',
-      name: 'Nguyễn Trọng T',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 2,
-      shortname: 'E02',
-      name: 'Nguyễn Trọng Tr',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 3,
-      shortname: 'E03',
-      name: 'Nguyễn Trọng Tru',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 4,
-      shortname: 'E04',
-      name: 'Nguyễn Trọng Trun',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 5,
-      shortname: 'E05',
-      name: 'Nguyễn Trọng Trung',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 6,
-      shortname: 'E06',
-      name: 'Nguyễn Trọng Đạt',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ntd@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Fresher',
-    },
-    {
-      id: 7,
-      shortname: 'E07',
-      name: 'Trần Thanh Q',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ttt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 8,
-      shortname: 'E08',
-      name: 'Trần Thanh Qu',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ttt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Junior',
-    },
-    {
-      id: 10,
-      shortname: 'E10',
-      name: 'Trần Thanh Qua',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ttt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 12,
-      shortname: 'E12',
-      name: 'Trần Thanh Quan',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ttt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-    {
-      id: 14,
-      shortname: 'E14',
-      name: 'Trần Thanh Quang',
-      phone: '0123456789',
-      gender: 'Nam',
-      email: 'ttt@gmail.com',
-      positionName: 'Front-End Junior',
-      departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-      branchName: 'APPHR Hồ Chí Minh Quận 1',
-      status: 'Intern',
-    },
-  ],
+  profiles: [],
   profile: {
-    id: '',
+    id: 0,
     shortname: '',
-    name: 'Trần Thanh Quang',
-    phone: '0123456789',
-    gender: 'Nam',
-    email: 'ttt@gmail.com',
-    positionName: 'Front-End Junior',
-    departmentName: 'IT APPHR Hồ Chí Minh Quận 1',
-    branchName: 'APPHR Hồ Chí Minh Quận 1',
-    status: 'Intern',
+    fullname: '',
+    phone: '',
+    dateOfBirth: '',
+    email: '',
+    gender: '',
+    expYear: 0,
+    branchId: 0,
+    departmentId: 0,
+    positionId: 0,
+    avatar: '',
+    have_id: false,
+    cmnd: '',
+    cmndIssuedDate: null,
+    cmndProvinceId: null,
+    have_passport: false,
+    passport: '',
+    passportIssuedDate: '',
+    passport_end: '',
+    passportProvinceId: null,
+    firstname: '',
+    lastname: '',
+    permanentAddress: '',
+    temporaryAddress: '',
+    homeTown: '',
+    status: '',
+    manager: '',
+    academicLevel: 'not_require',
+    contracts: [
+      {
+        id: 1,
+        isMinimize: false,
+        isOpen: true,
+        code: '',
+        type: '',
+        pTaxType: '',
+        signee: '',
+        typeWork: 0,
+        probTime: 0,
+        handleDate: '',
+        validDate: '',
+        expiredDate: '',
+        branchId: 0,
+        startWork: '',
+        paymentType: 0,
+        salaryGroup: 0,
+        salary: 0,
+        allowance: [],
+        files: [],
+      },
+    ],
+    academicInfo: [
+      {
+        academicLevel: '',
+        major: '',
+        educationPlace: '',
+        note: '',
+        date: '',
+        files: [],
+      },
+    ],
   },
   roles: [],
   contracts: [
@@ -262,8 +182,8 @@ const initialState = {
       countDay: 30,
     },
   ],
-  tabName: 'profile',
-  subTabName: 'basicInfo',
+  tabName: 0,
+  subTabName: 0,
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -271,7 +191,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      return { ...state, profile: payload };
+      // console.log('payload', payload);
+      return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
         ...state,
@@ -296,6 +217,28 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         subTabName: payload,
+      };
+    case REDUX_STATE.profile.SET_JOB_TIMELINE:
+      // console.log('payload contracts', payload);
+      payload =
+        payload && payload.length > 0
+          ? payload.map((contract) => {
+              contract.handleDate = getDateInput(contract.handleDate);
+              contract.validDate = getDateInput(contract.validDate);
+              contract.expiredDate = getDateInput(contract.expiredDate);
+              contract.startWork = getDateInput(contract.startWork);
+              return contract;
+            })
+          : [];
+
+      return {
+        ...state,
+        profile: { ...state.profile, contracts: payload },
+      };
+    case REDUX_STATE.profile.SET_ACADEMIC_LEVEL:
+      return {
+        ...state,
+        profile: { ...state.profile, academicInfo: payload },
       };
     default:
       return state;

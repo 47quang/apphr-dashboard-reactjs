@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -33,43 +34,50 @@ export const fetchHoliday = (id) => {
   };
 };
 
-export const createHoliday = (params, history) => {
+export const createHoliday = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.holiday
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        history.push(`/setting/holiday/tab1.id=${payload.id}`);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+
+        history.push(ROUTE_PATH.HOLIDAY + `/tab1.id=${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const updateHoliday = (data) => {
+export const updateHoliday = (data, success_msg) => {
   return (dispatch, getState) => {
     api.holiday
       .put(data)
       .then(({ payload }) => {
         payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const deleteHoliday = (id) => {
+export const deleteHoliday = (id, success_msg) => {
   return (dispatch, getState) => {
     api.holiday
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.DELETE_HOLIDAY, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

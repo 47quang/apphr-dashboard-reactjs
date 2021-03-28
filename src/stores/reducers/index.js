@@ -12,6 +12,8 @@ import holidayReducer from './holiday';
 import accountReducer from './account';
 import roleReducer from './role';
 import profileReducer from './profile';
+import notificationReducer from './notification';
+import contractReducer from './contract';
 
 export default combineReducers({
   style: styleReducer,
@@ -27,4 +29,6 @@ export default combineReducers({
   account: accountReducer,
   role: roleReducer,
   profile: profileReducer,
+  notification: notificationReducer,
+  contract: contractReducer,
 });

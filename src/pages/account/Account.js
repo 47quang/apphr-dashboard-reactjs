@@ -1,37 +1,39 @@
-import { CContainer, CNav, CNavItem, CNavLink, CTabContent, CTabPane, CTabs } from '@coreui/react';
-import React, { useEffect, useState } from 'react';
+import { CContainer } from '@coreui/react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { deleteAccount, fetchAccounts, fetchAllProfiles } from 'src/stores/actions/account';
+import { ROUTE_PATH } from 'src/constants/key';
+import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
 
-const columnDefOfAccounts = [
-  { name: 'username', title: 'Tên đăng nhập' },
-  { name: 'email', title: 'Email' },
-  { name: 'phone', title: 'Số điện thoại' },
-  { name: 'role', title: 'Vai trò' },
-  { name: 'profileId', title: 'Hồ sơ' },
-];
-
-const Account = () => {
+const Account = ({ t, location, history }) => {
+  const columnDefOfAccounts = [
+    { name: 'username', title: t('label.username') },
+    { name: 'email', title: t('label.email') },
+    { name: 'phone', title: t('label.phone_number') },
+    { name: 'role', title: t('label.role') },
+    { name: 'profileId', title: t('label.profile') },
+  ];
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.account.accounts);
   useEffect(() => {
-    //dispatch(fetchAccounts());
+    dispatch(fetchAccounts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteRow = async (rowId) => {
-    // dispatch(deleteAccount(rowId));
-    // dispatch(fetchAccounts());
-    console.log('RowId Delete: ', rowId);
+    dispatch(deleteAccount(rowId, t('message.successful_delete')));
+    dispatch(fetchAccounts());
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
+        t={t}
         columnDef={columnDefOfAccounts}
         data={accounts}
-        route={'/account/'}
+        route={ROUTE_PATH.ACCOUNT + '/'}
         idxColumnsFilter={[0]}
-        linkCols={[{ name: 'profileId', route: '/profile/' }]}
+        deleteRow={deleteRow}
+        linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
       />
     </CContainer>
   );

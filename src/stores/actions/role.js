@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -27,6 +28,7 @@ export const fetchRole = (id) => {
     api.role
       .get(id)
       .then(({ payload }) => {
+        payload.permissionIds = payload.permissionIds.map((val) => +val);
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
       })
       .catch((err) => {
@@ -35,42 +37,49 @@ export const fetchRole = (id) => {
   };
 };
 
-export const createRole = (params, history) => {
+export const createRole = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
-        history.push(`/setting/role/${payload.id}`);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+
+        history.push(ROUTE_PATH.ROLE + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const updateRole = (data) => {
+export const updateRole = (data, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const deleteRole = (id) => {
+export const deleteRole = (id, success_msg) => {
   return (dispatch, getState) => {
     api.role
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

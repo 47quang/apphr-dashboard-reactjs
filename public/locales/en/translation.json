@@ -19,5 +19,18 @@
   "Permission group": "Permission group",
   "Course": "Course",
   "Timekeeping": "Timekeeping",
-  "Education": "Education"
+  "Education": "Education",
+  "Holiday": "Holiday",
+  "label": {
+    "update": "Update",
+    "back": "Back",
+    "create_new": "Create",
+    "add": "Add",
+    "reset": "Reset",
+    "close_all_cap": "CLOSE",
+    "ok_all_cap": "OK",
+    "decline": "Decline",
+    "agree": "Agree",
+    "upload_file": "Upload File"
+  }
 }

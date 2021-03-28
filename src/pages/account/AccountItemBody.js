@@ -1,323 +1,220 @@
 import { CContainer } from '@coreui/react';
-import { Formik, Field, FieldArray } from 'formik';
+import Checkbox from '@material-ui/core/Checkbox';
+import { Field, FieldArray, Formik } from 'formik';
 import React from 'react';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { AccountInfoSchema } from 'src/schema/formSchema';
-import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
 
-const AccountItemBody = ({ accountRef, account, buttons, submitForm, branches, departments, positions, permissions, roles }) => {
+const AccountItemBody = ({
+  t,
+  isCreate,
+  accountRef,
+  account,
+  buttons,
+  submitForm,
+  branches,
+  departments,
+  positions,
+  permissionGroups,
+  roles,
+  profiles,
+  schema,
+}) => {
   const initCheck = (groupPermission, checks) => {
+    // console.log(checks);
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <div className="row">
-        <div className="col-8 px-4">
-          <div className="shadow bg-white rounded p-4 col-md-12">
-            <Formik enableReinitialize initialValues={account} key="formAccount1">
-              {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                <form>
-                  <FormHeader text="Thông tin cá nhân" />
-                  <div className="row">
-                    <div className="col-4">
-                      <img
-                        src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85"
-                        alt="alternatetext"
-                        height="150px"
-                      />
-                    </div>
-                    <div className="col-8">
-                      <div className="row">
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.name}
-                          onBlur={handleBlur('name')}
-                          onChange={handleChange('name')}
-                          inputID={'name'}
-                          labelText={'Họ và tên'}
-                          inputType={'text'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                          placeholder={'Hàn Giang Nhạn'}
-                        />
-                        <CommonSelectInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.gender}
-                          onBlur={handleBlur('gender')}
-                          onChange={handleChange('gender')}
-                          inputID={'gender'}
-                          labelText={'Giới tính'}
-                          selectClassName={'form-control'}
-                          placeholder={'Nam'}
-                          lstSelectOptions={[
-                            { id: 1, name: 'Nam' },
-                            { id: 2, name: 'Nữ' },
-                          ]}
-                          isDisable={true}
-                        />
-                      </div>
-                      <div className="row">
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.email}
-                          onBlur={handleBlur('email')}
-                          onChange={handleChange('email')}
-                          inputID={'email'}
-                          labelText={'Email'}
-                          inputType={'text'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                          placeholder={'nhan.han@gmail.com'}
-                        />
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-6'}
-                          value={values.startDate}
-                          onBlur={handleBlur('startDate')}
-                          onChange={handleChange('startDate')}
-                          inputID={'startDate'}
-                          labelText={'Ngày bắt đầu'}
-                          inputType={'datetime-local'}
-                          placeholder={'Nhập ngày bắt đầu'}
-                          inputClassName={'form-control'}
-                          isDisable={true}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.role}
-                      onBlur={handleBlur('role')}
-                      onChange={handleChange('role')}
-                      inputID={'role'}
-                      labelText={'Vai trò'}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={[]}
-                      isDisable={true}
-                      placeholder={'Frontend Dev'}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.phone}
-                      onBlur={handleBlur('phone')}
-                      onChange={handleChange('phone')}
-                      inputID={'phone'}
-                      labelText={'Số điện thoại'}
-                      inputType={'text'}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                      placeholder={'0123456789'}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.endDate}
-                      onBlur={handleBlur('endDate')}
-                      onChange={handleChange('endDate')}
-                      inputID={'endDate'}
-                      labelText={'Ngày kết thúc'}
-                      inputType={'datetime-local'}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-          ;
-        </div>
-        <div className="col-4 px-4">
-          <div className="shadow bg-white rounded p-4 col-md-12">
-            <Formik enableReinitialize initialValues={account} key="formAccount2">
-              {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                <form>
-                  <FormHeader text="Vị trí làm việc" />
-                  <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.branchId}
-                      labelText={'Chi nhánh'}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      onBlur={handleBlur('branchId')}
-                      onChange={handleChange('branchId')}
-                      inputID={'branchId'}
-                      lstSelectOptions={branches}
-                      placeholder={'APPHR Quận 1'}
-                      isDisable={true}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.departmentId}
-                      labelText={'Phòng ban'}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      onBlur={handleBlur('departmentId')}
-                      onChange={handleChange('departmentId')}
-                      inputID={'departmentId'}
-                      lstSelectOptions={departments}
-                      placeholder={'IT'}
-                      isDisable={true}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.positionId}
-                      onBlur={handleBlur('positionId')}
-                      onChange={handleChange('positionId')}
-                      inputID={'positionId'}
-                      labelText={'Vị trí'}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={positions}
-                      placeholder={'Front-end Intern'}
-                      isDisable={true}
-                    />
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-          ;
-        </div>
-      </div>
       <div className="row px-4">
-        <div className="shadow bg-white rounded p-4 col-md-12">
+        <div className="shadow bg-white rounded p-4 col-md-9 m-auto">
           <Formik
             innerRef={accountRef}
             enableReinitialize
-            validationSchema={AccountInfoSchema}
+            validationSchema={schema}
             initialValues={account}
             key="formAccount3"
             onSubmit={(values) => {
               submitForm(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
-              <form>
-                <FormHeader text="Vị trí làm việc" />
-                <div className="row">
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit }) => (
+              <form autoComplete="off">
+                <FormHeader text={t('label.account_info')} />
+                <div className="row" style={{ paddingBottom: 40 }}>
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-lg-4'}
                     value={values.username}
                     onBlur={handleBlur('username')}
                     onChange={handleChange('username')}
                     inputID={'username'}
-                    labelText={'Tên tài khoản'}
+                    labelText={t('label.username')}
                     inputType={'text'}
-                    placeholder={'Nhập tên tài khoản'}
+                    placeholder={t('placeholder.enter_username')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.username}
                     isError={errors.username && touched.username}
-                    errorMessage={errors.username}
+                    errorMessage={t(errors.username)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-lg-4'}
                     value={values.password}
                     onBlur={handleBlur('password')}
                     onChange={handleChange('password')}
                     inputID={'password'}
-                    labelText={'Mật khẩu'}
+                    labelText={t('label.password')}
                     inputType={'password'}
-                    placeholder={'123456'}
+                    placeholder={t('placeholder.enter_password')}
                     inputClassName={'form-control'}
-                    isDisable={true}
-                  />
-                  <CommonSelectInput
-                    containerClassName={'form-group col-lg-3'}
-                    value={values.role}
-                    labelText={'Vai trò'}
-                    selectClassName={'form-control'}
-                    onBlur={handleBlur('role')}
-                    onChange={handleChange('role')}
-                    inputID={'role'}
-                    lstSelectOptions={roles}
-                    placeholder={'Chọn vai trò'}
                     isRequiredField
-                    isTouched={touched.role}
-                    isError={errors.role && touched.role}
-                    errorMessage={errors.role}
+                    isTouched={touched.password}
+                    isError={errors.password && touched.password}
+                    errorMessage={t(errors.password)}
+                    isDisable={!isCreate}
+                  />
+
+                  <CommonTextInput
+                    containerClassName={'form-group col-lg-4'}
+                    value={values.email}
+                    onBlur={handleBlur('email')}
+                    onChange={handleChange('email')}
+                    inputID={'email'}
+                    labelText={t('label.email')}
+                    inputType={'email'}
+                    isRequiredField
+                    placeholder={t('placeholder.enter_email')}
+                    inputClassName={'form-control'}
+                    isError={errors.email && touched.email}
+                    errorMessage={t(errors.email)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
-                    value={values.coefficient}
-                    onBlur={handleBlur('coefficient')}
-                    onChange={handleChange('coefficient')}
-                    inputID={'coefficient'}
-                    labelText={'Hệ số công'}
-                    inputType={'number'}
+                    containerClassName={'form-group col-lg-4'}
+                    value={values.phone}
+                    onBlur={handleBlur('phone')}
+                    onChange={handleChange('phone')}
+                    inputID={'phone'}
+                    labelText={t('label.phone_number')}
+                    inputType={'text'}
+                    placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
-                    placeholder={1.5}
+                    isError={errors.phone && touched.phone}
+                    errorMessage={t(errors.phone)}
+                  />
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-8'}
+                    value={values.profileId}
+                    labelText={t('label.profileId')}
+                    selectClassName={'form-control'}
+                    onBlur={handleBlur('profileId')}
+                    onChange={handleChange('profileId')}
+                    inputID={t('label.profileId')}
+                    lstSelectOptions={profiles}
+                    placeholder={t('placeholder.select_profile')}
+                  />
+                </div>
+                <FormHeader text={t('title.permission')} />
+                <div className="row">
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-12'}
+                    value={values.roleId}
+                    labelText={t('label.role')}
+                    selectClassName={'form-control'}
+                    onBlur={handleBlur('roleId')}
+                    onChange={(e) => {
+                      if (e.target.value === '0') {
+                        setFieldValue('permissionIds', []);
+                      } else {
+                        let permissionIds = roles.filter((x) => x.id === parseInt(e.target.value))[0].permissionIds;
+                        permissionIds = permissionIds && permissionIds.length > 0 ? permissionIds.map((val) => +val) : [];
+                        setFieldValue('permissionIds', permissionIds);
+                      }
+                      handleChange('roleId')(e);
+                    }}
+                    inputID={'roleId'}
+                    lstSelectOptions={roles}
+                    placeholder={t('placeholder.select_role')}
                     isRequiredField
-                    isTouched={touched.coefficient}
-                    isError={errors.coefficient && touched.coefficient}
-                    errorMessage={errors.coefficient}
+                    isTouched={touched.roleId}
+                    isError={errors.roleId && touched.roleId}
+                    errorMessage={t(errors.roleId)}
                   />
                 </div>
                 <div className="row">
-                  {permissions.map((permission) => {
-                    return (
-                      <div className="form-group col-lg-3">
-                        <Field
-                          component={Checkbox}
-                          color={'primary'}
-                          name={permission.group}
-                          value={permission.group}
-                          checked={initCheck(
-                            permission.children.map((per) => per.id),
-                            values.permissions,
-                          )}
-                          onChange={(event) => {
-                            const thisPermission = permission.children.map((per) => per.id);
-                            setFieldValue(permission.group, event.target.checked);
-                            if (event.target.checked) {
-                              setFieldValue('permissions', Array.from(new Set([...values.permissions, ...thisPermission])));
-                            } else {
-                              setFieldValue(
-                                'permissions',
-                                values.permissions.filter((x) => !thisPermission.includes(x)),
-                              );
+                  {permissionGroups &&
+                    permissionGroups.length > 0 &&
+                    permissionGroups.map((permissionGroup) => {
+                      return (
+                        <div className="form-group col-lg-4" key={permissionGroup.id}>
+                          <Field
+                            component={Checkbox}
+                            disabled={true}
+                            color={'primary'}
+                            name={permissionGroup.group}
+                            value={permissionGroup.group}
+                            checked={
+                              permissionGroup.children &&
+                              permissionGroup.children.length > 0 &&
+                              initCheck(
+                                permissionGroup.children.map((per) => per.id),
+                                values.permissionIds,
+                              )
                             }
-                          }}
-                        />
-                        {permission.name}
-                        <FieldArray
-                          name="permissions"
-                          render={(arrayHelpers) => {
-                            return (
-                              <div className="mx-4 px-2">
-                                {permission.children.map((per) => (
-                                  <div key={per.id}>
-                                    <label>
-                                      <Checkbox
-                                        color="primary"
-                                        name="permissions_"
-                                        type="checkbox"
-                                        value={per.id}
-                                        checked={values.permissions.includes(per.id)}
-                                        onChange={(e) => {
-                                          if (e.target.checked) {
-                                            arrayHelpers.push(per.id);
-                                          } else {
-                                            const idx = values.permissions.indexOf(per.id);
-                                            arrayHelpers.remove(idx);
-                                          }
-                                        }}
-                                      />
-                                      {per.name}
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                            onChange={(event) => {
+                              const thisPermission =
+                                permissionGroup.children && permissionGroup.children.length > 0 ? permissionGroup.children.map((per) => per.id) : [];
+                              setFieldValue(permissionGroup.group, event.target.checked);
+                              let payload = Array.from(new Set([...values.permissionIds, ...thisPermission]));
+                              if (event.target.checked) {
+                                setFieldValue('permissionIds', payload);
+                              } else {
+                                setFieldValue(
+                                  'permissionIds',
+                                  values.permissionIds.filter((x) => !thisPermission.includes(x)),
+                                );
+                              }
+                            }}
+                          />
+                          {permissionGroup.name}
+                          <FieldArray
+                            name="permissionIds"
+                            render={(arrayHelpers) => {
+                              return (
+                                <div className="mx-4 px-2">
+                                  {permissionGroup.children &&
+                                    permissionGroup.children.length > 0 &&
+                                    permissionGroup.children.map((per) => (
+                                      <div key={per.id}>
+                                        <label>
+                                          <Checkbox
+                                            color="primary"
+                                            name="permissions_"
+                                            type="checkbox"
+                                            disabled={true}
+                                            value={per.id}
+                                            checked={values.permissionIds.includes(per.id)}
+                                            onChange={(e) => {
+                                              if (e.target.checked) {
+                                                arrayHelpers.push(per.id);
+                                              } else {
+                                                const idx = values.permissionIds.indexOf(per.id);
+                                                arrayHelpers.remove(idx);
+                                              }
+                                            }}
+                                          />
+                                          {per.name}
+                                        </label>
+                                      </div>
+                                    ))}
+                                </div>
+                              );
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
                 {renderButtons(buttons)}
               </form>

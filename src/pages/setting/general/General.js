@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React, { useEffect, useRef } from 'react';
@@ -38,98 +39,98 @@ const SettingGeneralPage = ({ t, location }) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-    dispatch(updateGeneral(form));
+    dispatch(updateGeneral(form, t('message.successful_update')));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary`,
       onClick: updateSetting,
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-md-10">
+        <div className="shadow bg-white rounded p-4 container col-xl-10">
           <Formik innerRef={settingRef} enableReinitialize initialValues={general} validationSchema={SettingGeneralInfoSchema}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <form>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên doanh nghiệp'}
+                    labelText={t('label.company_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên doanh nghiệp'}
+                    placeholder={t('placeholder.enter_company_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.shortname}
                     onBlur={handleBlur('shortname')}
                     onChange={handleChange('shortname')}
                     inputID={'shortname'}
-                    labelText={'Tên viết tắt của doanh nghiệp'}
+                    labelText={t('label.company_short_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên viết tắt'}
+                    placeholder={t('placeholder.enter_company_short_name')}
                     inputClassName={'form-control'}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.phone}
                     onBlur={handleBlur('phone')}
                     onChange={handleChange('phone')}
                     inputID={'phone'}
-                    labelText={'Số điện thoại'}
+                    labelText={t('label.phone_number')}
                     inputType={'text'}
-                    placeholder={'Nhập số điện thoại'}
+                    placeholder={t('placeholder.enter_phone_number')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.phone}
                     isError={errors.phone && touched.phone}
-                    errorMessage={errors.phone}
+                    errorMessage={t(errors.phone)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.email}
                     onBlur={handleBlur('email')}
                     onChange={handleChange('email')}
                     inputID={'email'}
                     labelText={'Email'}
                     inputType={'email'}
-                    placeholder={'Nhập email'}
+                    placeholder={t('placeholder.enter_email')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.email}
                     isError={errors.email && touched.email}
-                    errorMessage={errors.email}
+                    errorMessage={t(errors.email)}
                   />
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.taxCode}
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
                     inputID={'taxCode'}
-                    labelText={'Mã số thuế'}
+                    labelText={t('label.tax_code')}
                     inputType={'text'}
-                    placeholder={'Nhập mã số thuế'}
+                    placeholder={t('placeholder.enter_tax_code')}
                     inputClassName={'form-control'}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.provinceId}
                     onBlur={handleBlur('provinceId')}
                     onChange={(e) => {
@@ -141,16 +142,16 @@ const SettingGeneralPage = ({ t, location }) => {
                       handleChange('provinceId')(e);
                     }}
                     inputID={'provinceId'}
-                    labelText={'Tỉnh/Thành phố'}
+                    labelText={t('label.province')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Tỉnh/Thành phố'}
+                    placeholder={t('placeholder.select_province')}
                     lstSelectOptions={provinces}
                   />
                 </div>
 
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.districtId}
                     onBlur={handleBlur('districtId')}
                     onChange={(e) => {
@@ -158,45 +159,45 @@ const SettingGeneralPage = ({ t, location }) => {
                       handleChange('districtId')(e);
                     }}
                     inputID={'districtId'}
-                    labelText={'Quận/Huyện'}
+                    labelText={t('label.district')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Quận/Huyện'}
+                    placeholder={t('placeholder.select_district')}
                     lstSelectOptions={districts}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-lg-6'}
+                    containerClassName={'form-group col-xl-6'}
                     value={values.wardId}
                     onBlur={handleBlur('wardId')}
                     onChange={handleChange('wardId')}
                     inputID={'wardId'}
-                    labelText={'Phường/xã'}
+                    labelText={t('label.ward')}
                     selectClassName={'form-control'}
-                    placeholder={'Chọn Phường/Xã'}
+                    placeholder={t('placeholder.select_ward')}
                     lstSelectOptions={wards}
                   />
                 </div>
 
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.address}
                     onBlur={handleBlur('address')}
                     onChange={handleChange('address')}
                     inputID={'address'}
-                    labelText={'Địa chỉ cụ thể'}
+                    labelText={t('label.company_address')}
                     inputType={'text'}
-                    placeholder={'Nhập địa chỉ cụ thể'}
+                    placeholder={t('placeholder.enter_company_address')}
                     inputClassName={'form-control'}
                   />
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.note')}
                     inputClassName={'form-control'}
                   />
                 </div>

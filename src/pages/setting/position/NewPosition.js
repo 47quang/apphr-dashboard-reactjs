@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { createPosition, setEmptyPosition } from 'src/stores/actions/position';
 import PositionItemBody from './PositionItemBody';
@@ -17,13 +18,14 @@ const NewPositionPage = ({ t, location, match, history }) => {
     return () => {
       dispatch(setEmptyPosition());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
     const form = values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(createPosition(form, history));
+    dispatch(createPosition(form, history, t('message.successful_create')));
   };
 
   const buttons = [
@@ -31,9 +33,10 @@ const NewPositionPage = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push(`/setting/position/`);
+        history.push(ROUTE_PATH.POSITION);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'button',
@@ -41,11 +44,12 @@ const NewPositionPage = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
   return (
     <PositionItemBody
+      t={t}
       positionRef={positionRef}
       position={position}
       departments={departments}

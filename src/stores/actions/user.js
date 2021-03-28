@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -8,7 +9,7 @@ export const login = (params, history) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.user.SET_USER, payload });
         localStorage.setItem('token', payload.token);
-        history.push('/');
+        history.push(ROUTE_PATH.ROOT);
       })
       .catch((err) => {
         console.log(err);
@@ -28,6 +29,6 @@ export const logout = (history) => {
     });
     localStorage.setItem('token', payload.token);
     localStorage.setItem('user', payload.user);
-    history.push('/');
+    history.push(ROUTE_PATH.LOGIN);
   };
 };

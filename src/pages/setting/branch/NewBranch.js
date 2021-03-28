@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { createBranch, setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import BranchItemBody from './BranchItemBody';
-
-//TODO: translate
 
 const NewBranchPage = ({ t, location, history }) => {
   const branchInfoForm = useRef();
@@ -21,6 +20,7 @@ const NewBranchPage = ({ t, location, history }) => {
     return () => {
       dispatch(setEmptyBranch());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const NewBranchPage = ({ t, location, history }) => {
     if (branch.districtId) {
       dispatch(fetchWards({ districtId: branch.districtId }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branch.provinceId, branch.districtId]);
 
   const submitForm = (values) => {
@@ -37,34 +38,35 @@ const NewBranchPage = ({ t, location, history }) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-    console.log(form);
     // Call API CREATE
     delete form.id;
-    dispatch(createBranch(form, history));
+    dispatch(createBranch(form, history, t('message.successful_create')));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/branch');
+        history.push(ROUTE_PATH.BRANCH);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
+        console.log(branchInfoForm.current);
         branchInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
-
   return (
     <BranchItemBody
       branchRef={branchInfoForm}
       branch={branch}
+      t={t}
       validationSchema={SettingBranchInfoSchema}
       provinces={provinces}
       districts={districts}

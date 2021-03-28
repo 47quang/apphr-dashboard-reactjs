@@ -1,12 +1,12 @@
-import React from 'react';
-import { CBadge, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
+import { CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg } from '@coreui/react';
 import { ExitToApp } from '@material-ui/icons';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { REDUX_STATE } from 'src/stores/states';
 import { logout } from 'src/stores/actions/user';
 
-const TheHeaderDropdown = (props) => {
+const TheHeaderDropdown = ({ history }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   return (
     <CDropdown inNav className="c-header-nav-items" direction="down">
@@ -15,7 +15,7 @@ const TheHeaderDropdown = (props) => {
           <CImg src={'/avatars/6.jpg'} className="c-avatar-img" alt="admin@bootstrapmaster.com" />
         </div>
       </CDropdownToggle>
-      <CDropdownMenu className="pt-0" placement="bottom-start">
+      <CDropdownMenu>
         {/* <CDropdownItem header tag="div" color="light" className="text-center">
           <strong>Account</strong>
         </CDropdownItem> */}
@@ -75,11 +75,12 @@ const TheHeaderDropdown = (props) => {
         {/* <CDropdownItem divider /> */}
         <CDropdownItem
           onClick={(e) => {
-            dispatch(logout(props.history));
+            dispatch(logout(history));
           }}
+          className="d-flex flex-row justify-content-between"
         >
-          {/* <CIcon name="cil-account-logout" className="mfe-2" /> */}
-          Đăng xuất <ExitToApp className="ml-auto" style={{ color: 'red' }} />
+          <div>{t('title.logout')}</div>
+          <ExitToApp style={{ color: 'red' }} />
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

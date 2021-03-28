@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -14,15 +15,17 @@ export const fetchDepartments = (params) => {
   };
 };
 
-export const deleteDepartment = (params) => {
+export const deleteDepartment = (params, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .delete(params.id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.DELETE_DEPARTMENT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
@@ -40,29 +43,34 @@ export const fetchDepartment = (params) => {
   };
 };
 
-export const updateDepartment = (data) => {
+export const updateDepartment = (data, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .put(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };
 
-export const createDepartment = (data, history) => {
+export const createDepartment = (data, history, success_msg) => {
   return (dispatch, getState) => {
     api.department
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
-        history.push(`/setting/department/${payload.id}`);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+
+        history.push(ROUTE_PATH.DEPARTMENT + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

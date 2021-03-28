@@ -1,9 +1,10 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 
-const OtherInfo = () => {
+const OtherInfo = ({ t }) => {
   const otherInfo = {
     taxCode: '',
     nationality: '',
@@ -14,56 +15,63 @@ const OtherInfo = () => {
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
-          <Formik initialValues={otherInfo}>
+          <Formik
+            initialValues={otherInfo}
+            enableReinitialize
+            onSubmit={(values) => {
+              console.log('Address Info: ', values);
+            }}
+          >
             {({ values, handleBlur, handleSubmit, handleChange, errors, touched }) => (
               <form>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.taxCode}
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
                     inputID={'taxCode'}
-                    labelText={'Mã số thuế thu thập cá nhân'}
+                    labelText={t('label.personal_income_tax')}
                     inputType={'text'}
-                    placeholder={'Nhập mã số thuế'}
+                    placeholder={t('placeholder.enter_personal_income_tax')}
                     inputClassName={'form-control'}
                   />
 
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.nationality}
                     onBlur={handleBlur('nationality')}
                     onChange={handleChange('nationality')}
                     inputID={'nationality'}
-                    labelText={'Quốc tịch'}
+                    labelText={t('label.nationality')}
                     inputType={'text'}
-                    placeholder={'Nhập quốc tịch'}
+                    placeholder={t('placeholder.select_nationality')}
                     inputClassName={'form-control'}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-4'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.religion}
                     onBlur={handleBlur('religion')}
                     onChange={handleChange('religion')}
                     inputID={'religion'}
-                    labelText={'Tôn giáo'}
+                    labelText={t('label.religion')}
                     inputType={'text'}
-                    placeholder={'Nhập tôn giáo'}
+                    placeholder={t('placeholder.enter_religion')}
                     inputClassName={'form-control'}
                   />
                 </div>
                 <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.note}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
-                    labelText={'Ghi chú'}
+                    labelText={t('label.note')}
                     inputClassName={'form-control'}
                   />
                 </div>
+                <AutoSubmitToken />
               </form>
             )}
           </Formik>

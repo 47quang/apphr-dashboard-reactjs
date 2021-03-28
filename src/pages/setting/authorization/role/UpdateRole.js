@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateRole, setEmptyRole, fetchPermissions, fetchRole } from 'src/stores/actions/role';
+import { ROUTE_PATH } from 'src/constants/key';
+import { fetchPermissions, fetchRole, updateRole } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
 //TODO: translate
@@ -12,16 +13,14 @@ const UpdateRole = ({ t, location, history, match }) => {
   const permissions = useSelector((state) => state.role.permissions);
 
   useEffect(() => {
-    dispatch(setEmptyRole());
     dispatch(fetchPermissions());
     dispatch(fetchRole(match?.params?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
-    let form = values;
-    delete form.id;
-    // console.log(form);
-    dispatch(updateRole(form, history));
+    let { id, name, permissionIds } = values;
+    dispatch(updateRole({ id, name, permissionIds }, t('message.successful_update')));
   };
 
   const buttons = [
@@ -29,9 +28,10 @@ const UpdateRole = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/account');
+        history.push(ROUTE_PATH.ROLE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -39,7 +39,7 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         roleInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -47,11 +47,10 @@ const UpdateRole = ({ t, location, history, match }) => {
       onClick: (e) => {
         roleInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
-
-  return <RoleItemBody roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
+  return <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
 };
 
 export default UpdateRole;

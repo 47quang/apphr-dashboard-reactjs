@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { changeActions } from 'src/stores/actions/header';
 import { createHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
@@ -17,13 +18,14 @@ const NewHolidayPage = ({ t, location, history }) => {
     return () => {
       dispatch(changeActions([]));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
     delete form.id;
-    dispatch(createHoliday(form, history));
+    dispatch(createHoliday(form, history, t('message.successful_create')));
   };
 
   const buttons = [
@@ -31,9 +33,10 @@ const NewHolidayPage = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/holiday');
+        history.push(ROUTE_PATH.HOLIDAY);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'button',
@@ -41,11 +44,11 @@ const NewHolidayPage = ({ t, location, history }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
 
-  return <HolidayItemBody holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+  return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
 };
 
 export default NewHolidayPage;

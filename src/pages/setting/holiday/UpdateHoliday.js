@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchHoliday, setEmptyHoliday, updateHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
@@ -17,6 +18,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       dispatch(changeActions([]));
       dispatch(setEmptyHoliday());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
@@ -24,7 +26,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
     form.coefficient = parseInt(form.coefficient);
     // Call API UPDATE
 
-    dispatch(updateHoliday(form));
+    dispatch(updateHoliday(form, t('message.successful_update')));
   };
 
   const buttons = [
@@ -32,9 +34,10 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/setting/holiday');
+        history.push(ROUTE_PATH.HOLIDAY);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -42,7 +45,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -50,11 +53,11 @@ const UpdateHoliday = ({ t, location, history, match }) => {
       onClick: (e) => {
         holidayInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
-  return <HolidayItemBody holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+  return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
 };
 
 export default UpdateHoliday;

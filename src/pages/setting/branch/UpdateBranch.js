@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import BranchItemBody from './BranchItemBody';
-
-//TODO: translate
 
 const UpdateBranch = ({ t, location, history, match }) => {
   const branchInfoForm = useRef();
@@ -21,6 +20,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
     return () => {
       dispatch(setEmptyBranch());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
     if (branch.districtId) {
       dispatch(fetchWards({ districtId: branch.districtId }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branch.provinceId, branch.districtId]);
   const submitForm = (values) => {
     let form = values;
@@ -38,16 +39,18 @@ const UpdateBranch = ({ t, location, history, match }) => {
     form.wardId = parseInt(form.wardId);
 
     // Call API UPDATE
-    dispatch(updateBranch(form));
+    dispatch(updateBranch(form, t('message.successful_update')));
   };
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
+
       onClick: (e) => {
-        history.push('/setting/branch');
+        history.push(ROUTE_PATH.BRANCH);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -55,7 +58,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         branchInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -63,13 +66,14 @@ const UpdateBranch = ({ t, location, history, match }) => {
       onClick: (e) => {
         branchInfoForm.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
   return (
     <BranchItemBody
       branchRef={branchInfoForm}
       branch={branch}
+      t={t}
       validationSchema={SettingBranchInfoSchema}
       provinces={provinces}
       districts={districts}

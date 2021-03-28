@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { changeActions } from 'src/stores/actions/header';
@@ -25,13 +26,14 @@ const UpdatePosition = ({ t, location, match, history }) => {
       dispatch(changeActions([]));
       dispatch(setEmptyPosition());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
     let form = values;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
-    dispatch(updatePosition(form, params.id));
+    dispatch(updatePosition(form, params.id, t('message.successful_update')));
   };
 
   const buttons = [
@@ -39,9 +41,10 @@ const UpdatePosition = ({ t, location, match, history }) => {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push(`/setting/position/`);
+        history.push(ROUTE_PATH.POSITION);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -49,7 +52,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -57,12 +60,13 @@ const UpdatePosition = ({ t, location, match, history }) => {
       onClick: (e) => {
         positionRef.current.handleSubmit(e);
       },
-      name: 'Cập nhật',
+      name: t('label.update'),
     },
   ];
 
   return (
     <PositionItemBody
+      t={t}
       positionRef={positionRef}
       position={position}
       departments={departments}

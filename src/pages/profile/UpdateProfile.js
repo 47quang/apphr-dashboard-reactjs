@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeActions } from 'src/stores/actions/header';
-import { updateProfile, setEmptyProfile } from 'src/stores/actions/profile';
+import { ROUTE_PATH } from 'src/constants/key';
+import { fetchProfile } from 'src/stores/actions/profile';
 import ProfileTabs from './ProfileTabs';
 
 //TODO: translate
@@ -10,19 +10,23 @@ const UpdateProfile = ({ t, location, history, match }) => {
   const profileInfoForm = useRef();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.profile);
-  const permissions = useSelector((state) => state.account.permissions);
-  const roles = useSelector((state) => state.account.roles);
+  // const permissions = useSelector((state) => state.account.permissions);
+  // const roles = useSelector((state) => state.account.roles);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(fetchProfile(match?.params?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const buttons = [
     {
       type: 'button',
       className: `btn btn-primary mr-4`,
       onClick: (e) => {
-        history.push('/profile');
+        history.push(ROUTE_PATH.PROFILE);
       },
-      name: 'Quay lại',
+      name: t('label.back'),
+      position: 'left',
     },
     {
       type: 'reset',
@@ -30,7 +34,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         profileInfoForm.current.handleReset(e);
       },
-      name: 'Reset',
+      name: t('label.reset'),
     },
     {
       type: 'button',
@@ -38,11 +42,10 @@ const UpdateProfile = ({ t, location, history, match }) => {
       onClick: (e) => {
         profileInfoForm.current.handleSubmit(e);
       },
-      name: 'Tạo mới',
+      name: t('label.create_new'),
     },
   ];
-
-  return <ProfileTabs isCreate={false} buttons={buttons} />;
+  return <ProfileTabs t={t} isCreate={false} buttons={buttons} profile={profile} history={history} />;
 };
 
 export default UpdateProfile;

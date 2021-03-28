@@ -7,7 +7,7 @@ import { RoleInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
 
-const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
+const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -26,97 +26,106 @@ const RoleItemBody = ({ roleRef, role, buttons, submitForm, permissions }) => {
           >
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
               <form>
-                <FormHeader text="Vị trí làm việc" />
+                <FormHeader text={t('title.role')} />
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-xl-3'}
                     value={values.id}
                     onBlur={handleBlur('id')}
                     onChange={handleChange('id')}
                     inputID={'id'}
-                    labelText={'Mã vai trò'}
+                    labelText={t('label.role_code')}
                     inputType={'text'}
-                    placeholder={'Nhập tên vai trò'}
+                    placeholder={t('placeholder.enter_role_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-lg-3'}
+                    containerClassName={'form-group col-xl-3'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={'Tên vai trò'}
+                    labelText={t('label.role_name')}
                     inputType={'text'}
-                    placeholder={'Nhập tên vai trò'}
+                    placeholder={t('placeholder.enter_role_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
                     isError={errors.name && touched.name}
-                    errorMessage={errors.name}
+                    errorMessage={t(errors.name)}
                   />
                 </div>
                 <div className="row">
-                  {permissions.map((permission) => {
-                    return (
-                      <div className="form-group col-lg-3" key={permission.id + 'group'}>
-                        <Field
-                          component={Checkbox}
-                          color={'primary'}
-                          name={permission.group}
-                          value={permission.group}
-                          checked={initCheck(
-                            permission.children.map((per) => per.id),
-                            values.permissions,
-                          )}
-                          onChange={(event) => {
-                            const thisPermission = permission.children.map((per) => per.id);
-                            setFieldValue(permission.group, event.target.checked);
-                            if (event.target.checked) {
-                              setFieldValue('permissions', Array.from(new Set([...values.permissions, ...thisPermission])));
-                            } else {
-                              setFieldValue(
-                                'permissions',
-                                values.permissions.filter((x) => !thisPermission.includes(x)),
-                              );
+                  {permissions &&
+                    permissions.length > 0 &&
+                    permissions.map((permission) => {
+                      return (
+                        <div className="form-group col-xl-3" key={permission.id + 'group'}>
+                          <Field
+                            component={Checkbox}
+                            color={'primary'}
+                            name={permission.group}
+                            value={permission.group}
+                            checked={
+                              permission.children &&
+                              permission.children.length > 0 &&
+                              initCheck(
+                                permission.children.map((per) => per.id),
+                                values.permissionIds,
+                              )
                             }
-                          }}
-                        />
-                        {permission.name}
-                        <FieldArray
-                          name="permissions"
-                          render={(arrayHelpers) => {
-                            return (
-                              <div className="mx-4 px-2">
-                                {permission.children.map((per) => (
-                                  <div key={per.id + 'child'}>
-                                    <label>
-                                      <Checkbox
-                                        color="primary"
-                                        name="permissions_"
-                                        type="checkbox"
-                                        value={per.id}
-                                        checked={values.permissions.includes(per.id)}
-                                        onChange={(e) => {
-                                          if (e.target.checked) {
-                                            arrayHelpers.push(per.id);
-                                          } else {
-                                            const idx = values.permissions.indexOf(per.id);
-                                            arrayHelpers.remove(idx);
-                                          }
-                                        }}
-                                      />
-                                      {per.name}
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                            onChange={(event) => {
+                              const thisPermission =
+                                permission.children && permission.children.length > 0 ? permission.children.map((per) => per.id) : [];
+                              setFieldValue(permission.group, event.target.checked);
+                              if (event.target.checked) {
+                                setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
+                              } else {
+                                setFieldValue(
+                                  'permissionIds',
+                                  values.permissionIds.filter((x) => !thisPermission.includes(x)),
+                                );
+                              }
+                            }}
+                          />
+                          {permission.name}
+                          <FieldArray
+                            name="permissionIds"
+                            render={(arrayHelpers) => {
+                              return (
+                                <div className="mx-4 px-2">
+                                  {permission.children &&
+                                    permission.children.length > 0 &&
+                                    permission.children.map((per) => (
+                                      <div key={per.id + 'child'}>
+                                        <label>
+                                          <Checkbox
+                                            color="primary"
+                                            name="permissionIds"
+                                            type="checkbox"
+                                            value={per.id}
+                                            checked={values.permissionIds.includes(per.id)}
+                                            onChange={(e) => {
+                                              if (e.target.checked) {
+                                                arrayHelpers.push(per.id);
+                                              } else {
+                                                const idx = values.permissionIds.indexOf(per.id);
+                                                arrayHelpers.remove(idx);
+                                              }
+                                            }}
+                                          />
+                                          {per.name}
+                                        </label>
+                                      </div>
+                                    ))}
+                                </div>
+                              );
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
                 {renderButtons(buttons)}
               </form>
