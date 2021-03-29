@@ -205,9 +205,9 @@ const AddressInfo = ({ t, profile, history }) => {
                   >
                     <div className="bg-warning p-2" style={{ fontSize: 15 }}>
                       <WarningOutlined style={{ color: 'white', fontSize: 20 }} className="mr-2" />
-                      Xác nhận
+                      {t('title.confirm')}
                     </div>
-                    <div className={'p-2'}>Bạn thật sự muốn xóa kênh liên lạc này?</div>
+                    <div className={'p-2'}>{t('message.confirm_delete_contact')}</div>
                     <div className="p-2 d-flex flex-row justify-content-around">
                       <button
                         type="button"

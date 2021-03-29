@@ -168,6 +168,7 @@
     "allowance": "Trợ cấp"
   },
   "title": {
+    "confirm": "Xác nhận",
     "role": "Vai trò",
     "permission": "Phân quyền",
     "login": "Đăng nhập",
@@ -190,7 +191,8 @@
     "empty_table": "Chưa có thông tin",
     "delete_row": "Xóa hàng này",
     "edit_row": "Chỉnh sửa hàng này",
-    "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?"
+    "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
+    "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?"
   },
   "placeholder": {
     "enter_company_name": "Nhập tên doanh nghiệp",
