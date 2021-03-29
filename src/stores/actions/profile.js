@@ -27,7 +27,7 @@ export const fetchProfile = (id) => {
         payload.passport_end = getDateInput(payload.passport_end);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
-        console.log(payload);
+
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
@@ -230,7 +230,6 @@ export const updateContact = (data, profileId, success_msg) => {
     api.contact
       .put(data)
       .then(({ payload }) => {
-        console.log(payload);
         dispatch(fetchContacts(profileId));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -253,6 +252,27 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
       })
       .finally(() => {
         setClosePopOver();
+      });
+  };
+};
+
+export const updateOtherInfo = (profile, success_msg) => {
+  const params = {
+    id: profile.id,
+    taxCode: profile.taxCode,
+    nationality: profile.nationality,
+    religion: profile.religion,
+    note: profile.note,
+  };
+  return (dispatch, getState) => {
+    api.profile
+      .put(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 };

@@ -22,38 +22,14 @@ import { createProfile, updateProfile } from 'src/stores/actions/profile';
 const BasicInfo = ({ t, isCreate, profile, history }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const branches = useSelector((state) => state.branch.branches);
-  // const roles = useSelector((state) => state.role.roles);
+
   const positions = useSelector((state) => state.position.positions);
   const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
   const refInfo = useRef();
 
-  // const employeeInfo = {
-  //   fullname: profile.fullname ?? '',
-  //   shortname: profile.shortname ?? '',
-  //   phone: profile.phone ?? '',
-  //   email: profile.email ?? '',
-  //   dateOfBirth: profile.dayOfBirth ?? '',
-  //   gender: profile.gender ?? 0,
-  //   cmnd: profile.cmnd ?? '',
-  //   have_id: profile.cmnd !== '',
-  //   cmnd_date: profile.cmndIssuedDate ?? '',
-  //   cmnd_place: '',
-  //   have_passport: profile.passport !== '',
-  //   passport: profile.passport ?? '',
-  //   passport_start: profile.passportIssuedDate ?? '',
-  //   passport_end: '',
-  //   passport_place: '',
-  //   departmentId: +profile.departmentId,
-  //   positionId: +profile.positionId,
-  //   roleId: 0,
-  //   branchId: +profile.branchId,
-  //   manager: '',
-  // };
-  // console.log(employeeInfo?.dateOfBirth ?? 'aa');
-
   useEffect(() => {
-    dispatch(fetchProvinces());
+    if (provinces.length === 0) dispatch(fetchProvinces());
     dispatch(fetchBranches());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -61,11 +37,13 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
   useEffect(() => {
     profile.have_id = profile.cmnd && profile.cmnd !== '';
     profile.have_passport = profile.passport && profile.passport !== '';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.cmnd, profile.passport]);
 
   useEffect(() => {
     if (profile.branchId) dispatch(fetchDepartments({ branchId: profile.branchId }));
     if (profile.departmentId) dispatch(fetchDepartments({ departmentId: profile.departmentId }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.branchId, profile.departmentId]);
 
   const genders = [
@@ -102,8 +80,6 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
           errors.constructor === Object;
         if (!a) return;
         dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
-
-        // if (refInfo.current.isValid) dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
       },
       name: t('label.create_new'),
       position: 'right',
@@ -142,7 +118,6 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
           dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
         });
 
-        // if (!refInfo.current.isValid) return;
         dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
       },
       name: t('label.update'),

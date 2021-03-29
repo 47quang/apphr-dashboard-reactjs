@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
 import { setEmptyProfile } from 'src/stores/actions/profile';
 import ProfileTabs from './ProfileTabs';
 

@@ -192,7 +192,6 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      // console.log('payload', payload);
       return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
@@ -220,7 +219,6 @@ const profileReducer = (state = initialState, { type, payload }) => {
         subTabName: payload,
       };
     case REDUX_STATE.profile.SET_JOB_TIMELINE:
-      // console.log('payload contracts', payload);
       payload =
         payload && payload.length > 0
           ? payload.map((contract) => {

@@ -3,11 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
@@ -56,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileTabs = ({ t, isCreate, profile, history }) => {
-  const [snackBarWidth, setSnackBarWidth] = useState(0);
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
@@ -72,15 +69,7 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
   const handleChangeSubTab = (event, newValue) => {
     dispatch(setSubTabName(newValue));
   };
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver((entry) => {
-      setSnackBarWidth(entry[0].borderBoxSize[0].inlineSize);
-    });
-    resizeObserver.observe(document.getElementById('profile-tabs'));
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
+
   return (
     <>
       <div className={classes.root} id="profile-tabs">

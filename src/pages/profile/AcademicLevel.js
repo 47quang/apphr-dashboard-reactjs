@@ -27,7 +27,6 @@ const AcademicLevel = ({ t, profile }) => {
             initialValues={initialAcademicLevelInfo}
             enableReinitialize
             onSubmit={(values) => {
-              console.log('Academic Level: ', values);
               dispatch({
                 type: REDUX_STATE.profile.SET_ACADEMIC_LEVEL,
                 payload: values.academicInfo,

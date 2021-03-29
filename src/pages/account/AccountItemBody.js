@@ -23,7 +23,6 @@ const AccountItemBody = ({
   schema,
 }) => {
   const initCheck = (groupPermission, checks) => {
-    // console.log(checks);
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
