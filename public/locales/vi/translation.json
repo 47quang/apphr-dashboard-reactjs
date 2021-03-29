@@ -22,6 +22,7 @@
   "Timekeeping": "Timekeeping",
   "Holiday": "Ngày nghỉ",
   "label": {
+    "avatar": "Hình đại diện",
     "employee_lastname": "Họ và tên lót",
     "employee_firstname": "Tên",
     "employee_full_name": "Họ và tên",
