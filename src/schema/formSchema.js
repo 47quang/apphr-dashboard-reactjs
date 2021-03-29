@@ -152,13 +152,28 @@ export const BasicInfoCreateSchema = Yup.object().shape({
 });
 
 export const JobTimelineSchema = Yup.object().shape({
-  code: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_contract_code', function (value) {
-    return value && value.length;
-  }),
-  type: Yup.number()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_contract_code', function (value) {
-      return value !== '';
-    })
-    .required('validation.required_contract_code'),
-  probTime: Yup.number().required('validation.required_contract_code'),
+  contractInfo: Yup.array().of(
+    Yup.object().shape({
+      code: Yup.string().required('validation.required_contract_code'),
+      type: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type'),
+      typeTax: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type_tax'),
+      typeWord: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_work', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type_work'),
+      probTime: Yup.number()
+        .positive('Thời gian thử việc là một số dương')
+        .integer('Thời gian thử  việc là số nguyên')
+        .required('Bắt buộc nhập thời gian thử việc'),
+    }),
+  ),
 });

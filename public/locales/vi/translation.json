@@ -212,6 +212,9 @@
     "enter_email": "Nhập email",
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
+    "select_contract_type_work":"Chọn loại công việc",
+    "select_contract_type_tax":"Chọn loại thuế thu nhập cá nhân",
+    "select_contract_type": "Chọn loại hợp đồng",
     "select_role": "Chọn vai trò",
     "select_profile": "Chọn nhân sự",
     "select_province": "Chọn Tỉnh/Thành phố",
@@ -254,6 +257,9 @@
     "enter_salary_level": "Nhập mức lương"
   },
   "validation": {
+    "required_select_contract_type_work": "Bắt buộc phải chọn loại công việc",
+    "required_select_contract_type_tax": "Bắt buộc phải chọn loại thuế thu nhập cá nhân",
+    "required_select_contract_type": "Bắt buộc phải chọn loại hợp đồng",
     "required_contract_code": "Bắt buộc phải nhập mã hợp đồng",
     "required_select_gender": "Bắt buộc phải chọn giới tính",
     "required_enter_firstname": "Bắt buộc nhập tên",

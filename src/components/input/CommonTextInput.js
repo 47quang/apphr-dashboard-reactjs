@@ -17,8 +17,10 @@ const CommonTextInput = ({
   inputID,
   isTouched,
   minTime,
+  maxTime,
   isDisable,
   maxLength,
+  name,
 }) => {
   const checkInputClassName = () => {
     if (isError) return joinClassName([inputClassName, 'is-invalid']);
@@ -38,9 +40,11 @@ const CommonTextInput = ({
         onBlur={onBlur}
         value={value}
         id={inputID}
+        name={name}
         required={isRequiredField}
         autoComplete={'off'}
         min={minTime ?? null}
+        max={maxTime ?? null}
         disabled={isDisable}
         maxLength={maxLength}
       />

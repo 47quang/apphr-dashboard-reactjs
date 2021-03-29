@@ -16,11 +16,13 @@ import { useEffect } from 'react';
 import { fetchBranches, fetchContracts, fetchWagesByType, fetchAllowances, createContract } from 'src/stores/actions/contract';
 import { fetchAccount, fetchProfiles } from 'src/stores/actions/account';
 import { JobTimelineSchema } from 'src/schema/formSchema';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import { getCurrentDate } from 'src/utils/datetimeUtils';
 
 const JobTimelineInfo = ({ t, profileId }) => {
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
-  let employee = useSelector((state) => state.account.profiles);
   let wages = useSelector((state) => state.contract.wages);
   const jobTimelineInfo = {
     contractInfo: useSelector((state) => state.contract.contracts),
@@ -35,12 +37,10 @@ const JobTimelineInfo = ({ t, profileId }) => {
     { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
   const typeWord = [
-    { id: '', name: 'Chọn loại công việc' },
     { id: 'office', name: 'Văn phòng' },
     { id: 'out_door', name: 'Làm việc ngoài trời' },
   ];
   const personalIncomeTaxType = [
-    { id: '', name: 'Chọn loại thuế thu nhập cá nhân' },
     { id: 'more_3_month', name: 'Cư trú có hợp đồng lao động 3 tháng trở lên' },
     { id: 'non_resident', name: 'Cá nhân không cư trú' },
     { id: 'no_tax', name: 'Không tính thuế' },
@@ -48,7 +48,6 @@ const JobTimelineInfo = ({ t, profileId }) => {
   ];
 
   const type = [
-    { id: '', name: 'Chọn loại hợp đồng' },
     { id: 'partTime', name: 'Bán thời gian' },
     { id: 'fullTime', name: 'Toàn thời gian' },
     { id: 'season', name: 'Thời vụ' },
@@ -57,7 +56,6 @@ const JobTimelineInfo = ({ t, profileId }) => {
   useEffect(() => {
     dispatch(fetchContracts({ profileId: parseInt(profileId) }));
     dispatch(fetchBranches());
-    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname'] }));
     dispatch(fetchAllowances());
   }, []);
   return (
@@ -76,7 +74,19 @@ const JobTimelineInfo = ({ t, profileId }) => {
               });
             }}
           >
-            {({ values, handleBlur, handleSubmit, handleChange, errors, touched, setValues, setFieldValue }) => (
+            {({
+              values,
+              handleBlur,
+              handleSubmit,
+              handleChange,
+              errors,
+              touched,
+              setTouched,
+              setFieldTouched,
+              setValues,
+              setFieldValue,
+              validateForm,
+            }) => (
               <form>
                 <FieldArray
                   name="contractInfo"
@@ -116,7 +126,15 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                     <div role="button" className="d-inline pb-1">
                                       <AddIcon
                                         className="d-inline"
-                                        onClick={() => {
+                                        onClick={async () => {
+                                          let a = await validateForm();
+                                          a = a.contractInfo;
+                                          if (!Array.isArray(a)) return;
+                                          let err_fields = Object.keys(a[index]);
+                                          err_fields &&
+                                            err_fields.length &&
+                                            err_fields.forEach((val) => setFieldTouched(`contractInfo.${index}.${val}`, true));
+
                                           let data = values.contractInfo[index];
                                           data['branchName'] = branches.filter((br) => br.id === data.branchId)[0]?.branch;
                                           console.log(data);
@@ -134,57 +152,97 @@ const JobTimelineInfo = ({ t, profileId }) => {
                               {!values.contractInfo[index].isMinimize && (
                                 <>
                                   <div className="row">
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.contract_code')} required />
-                                      <Field
-                                        className={'form-control'}
-                                        name={`contractInfo.${index}.code`}
-                                        placeholder={t('placeholder.enter_contract_code')}
-                                        type="text"
-                                      />
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.contract_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.type`} component="select">
-                                        {type.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.personal_income_tax_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.typeTax`} component="select">
-                                        {personalIncomeTaxType.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.code ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.code`)}
+                                      onChange={handleChange(`contractInfo.${index}.code`)}
+                                      inputID={`contractInfo.${index}.code`}
+                                      labelText={t('label.contract_type')}
+                                      inputType={'text'}
+                                      placeholder={t('placeholder.enter_contract_code')}
+                                      inputClassName={'form-control'}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.code}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.code &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.code
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.code)}
+                                    />
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.type ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.type`)}
+                                      onChange={handleChange(`contractInfo.${index}.type`)}
+                                      inputID={`contractInfo.${index}.type`}
+                                      labelText={t('label.contract_type')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_contract_type')}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.type}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.type &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.type
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.type)}
+                                      lstSelectOptions={type}
+                                    />
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.typeTax ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.typeTax`)}
+                                      onChange={handleChange(`contractInfo.${index}.typeTax`)}
+                                      inputID={`contractInfo.${index}.typeTax`}
+                                      labelText={t('label.personal_income_tax_type')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_contract_type_tax')}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.typeTax}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.typeTax &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.typeTax
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.typeTax)}
+                                      lstSelectOptions={personalIncomeTaxType}
+                                    />
                                   </div>
                                   <div className="row">
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.signer')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.type`} component="select">
-                                        {employee.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.job_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.typeWord`} component="select">
-                                        {typeWord.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.typeWord ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.typeWord`)}
+                                      onChange={handleChange(`contractInfo.${index}.typeWord`)}
+                                      inputID={`contractInfo.${index}.typeWord`}
+                                      labelText={t('label.job_type')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_contract_type_work')}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.typeWord}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.typeWord &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.typeWord
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.typeWord)}
+                                      lstSelectOptions={typeWord}
+                                    />
+
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.trial_period')} />
                                       <div className="input-group">
@@ -200,6 +258,20 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                           {t('label.day')}
                                         </span>
                                       </div>
+                                      {errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.probTime &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.probTime &&
+                                        t(errors && errors.contractInfo && errors.contractInfo[index]?.probTime) && (
+                                          <div>
+                                            <small className={'text-danger'}>
+                                              {' '}
+                                              {t(errors && errors.contractInfo && errors.contractInfo[index]?.probTime)}
+                                            </small>
+                                          </div>
+                                        )}
                                     </div>
                                   </div>
                                   <div className="row">
@@ -212,6 +284,7 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                         rows={5}
                                         name={`contractInfo.${index}.handleDate`}
                                         value={values.contractInfo[index].handleDate}
+                                        max={getCurrentDate()}
                                       />
                                     </div>
                                     <div className="form-group col-lg-4">
