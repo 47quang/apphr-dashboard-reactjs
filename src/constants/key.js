@@ -95,3 +95,11 @@ export const ROUTE_PATH = {
   HOLIDAY_UPDATE: '/setting/holiday/tab1:id',
   HOLIDAY_CREATE: '/setting/holiday' + CREATE,
 };
+
+export const CONTACT_TYPE = {
+  SKYPE: 'skype',
+  FACEBOOK: 'facebook',
+  INSTAGRAM: 'instagram',
+  LINKEDIN: 'linkedin',
+  ZALO: 'zalo',
+};

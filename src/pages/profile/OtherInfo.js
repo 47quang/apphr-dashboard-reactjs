@@ -1,33 +1,55 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
+import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { updateOtherInfo } from 'src/stores/actions/profile';
+import { renderButtons } from 'src/utils/formUtils';
 
-const OtherInfo = ({ t }) => {
-  const otherInfo = {
-    taxCode: '',
-    nationality: '',
-    religion: '',
-    note: '',
+const OtherInfo = ({ t, profile }) => {
+  const otherInfoRef = useRef();
+  const dispatch = useDispatch();
+  const getButtonsUpdate = (action) => {
+    return [
+      {
+        type: 'reset',
+        className: `btn btn-primary mr-4`,
+        onClick: (e) => {
+          otherInfoRef.current.handleReset(e);
+        },
+        name: t('label.reset'),
+      },
+      {
+        type: 'button',
+        className: `btn btn-primary`,
+        onClick: (e) => {
+          otherInfoRef.current.handleSubmit(e);
+        },
+        name: t('label.update'),
+        position: 'right',
+      },
+    ];
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
           <Formik
-            initialValues={otherInfo}
+            initialValues={profile}
             enableReinitialize
+            innerRef={otherInfoRef}
             onSubmit={(values) => {
-              console.log('Address Info: ', values);
+              dispatch(updateOtherInfo(values, t('message.successful_update')));
             }}
           >
-            {({ values, handleBlur, handleSubmit, handleChange, errors, touched }) => (
+            {({ values, handleBlur, handleChange }) => (
               <form>
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-4'}
-                    value={values.taxCode}
+                    value={values.taxCode ?? ''}
                     onBlur={handleBlur('taxCode')}
                     onChange={handleChange('taxCode')}
                     inputID={'taxCode'}
@@ -39,7 +61,7 @@ const OtherInfo = ({ t }) => {
 
                   <CommonTextInput
                     containerClassName={'form-group col-xl-4'}
-                    value={values.nationality}
+                    value={values.nationality ?? ''}
                     onBlur={handleBlur('nationality')}
                     onChange={handleChange('nationality')}
                     inputID={'nationality'}
@@ -50,7 +72,7 @@ const OtherInfo = ({ t }) => {
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-4'}
-                    value={values.religion}
+                    value={values.religion ?? ''}
                     onBlur={handleBlur('religion')}
                     onChange={handleChange('religion')}
                     inputID={'religion'}
@@ -63,7 +85,7 @@ const OtherInfo = ({ t }) => {
                 <div className="row">
                   <CommonMultipleTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.note}
+                    value={values.note ?? ''}
                     onBlur={handleBlur('note')}
                     onChange={handleChange('note')}
                     inputID={'note'}
@@ -72,6 +94,7 @@ const OtherInfo = ({ t }) => {
                   />
                 </div>
                 <AutoSubmitToken />
+                {renderButtons(getButtonsUpdate())}
               </form>
             )}
           </Formik>

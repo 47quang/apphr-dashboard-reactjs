@@ -155,6 +155,7 @@ export const JobTimelineSchema = Yup.object().shape({
   contractInfo: Yup.array().of(
     Yup.object().shape({
       code: Yup.string().required('validation.required_contract_code'),
+      fullname: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_enter_contract_full_name'),
       type: Yup.string()
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {
           return value !== '0';
@@ -165,7 +166,7 @@ export const JobTimelineSchema = Yup.object().shape({
           return value !== '0';
         })
         .required('validation.required_select_contract_type_tax'),
-      typeWord: Yup.string()
+      typeWork: Yup.string()
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_work', function (value) {
           return value !== '0';
         })
@@ -199,4 +200,16 @@ export const JobTimelineSchema = Yup.object().shape({
       ),
     }),
   ),
+});
+export const ContactSchema = Yup.object().shape({
+  type: Yup.string()
+    .required('validation.required_select_contact_type')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contact_type', function (value) {
+      return value && value !== '' && value !== 0;
+    }),
+  url: Yup.string()
+    .required('validation.required_enter_contact_url')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_contact_url', function (value) {
+      return value && value !== '';
+    }),
 });

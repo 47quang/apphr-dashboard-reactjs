@@ -8,7 +8,6 @@ export const fetchContracts = (profileId) => {
     api.contract
       .getAll(profileId)
       .then(({ payload }) => {
-        console.log('Contracts', payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
@@ -22,7 +21,6 @@ export const fetchContract = (id) => {
     api.contract
       .get(id)
       .then(({ payload }) => {
-        console.log(payload);
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {

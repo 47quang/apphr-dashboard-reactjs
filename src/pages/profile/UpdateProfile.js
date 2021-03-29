@@ -45,7 +45,7 @@ const UpdateProfile = ({ t, location, history, match }) => {
       name: t('label.create_new'),
     },
   ];
-  return <ProfileTabs t={t} isCreate={false} buttons={buttons} profile={profile} history={history} />;
+  return <ProfileTabs t={t} isCreate={false} buttons={buttons} profile={profile} history={history} match={match} />;
 };
 
 export default UpdateProfile;

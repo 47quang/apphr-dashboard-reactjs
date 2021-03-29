@@ -26,13 +26,12 @@ const NewAccount = ({ t, location, history }) => {
   const submitForm = (values) => {
     let form = values;
     delete form.id;
-    console.log(form);
+
     form.roleId = parseInt(form.roleId);
     if (form.profileId === 0) delete form.profileId;
-    console.log(form);
     form.profileId = form.profileId ?? 0;
     form.profileId = parseInt(form.profileId);
-    dispatch(createAccount(form, history, t('message.successful_create')));
+    dispatch(createAccount(form, history, t('message.successful_delete_account')));
   };
 
   const buttons = [

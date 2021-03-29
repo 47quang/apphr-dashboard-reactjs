@@ -29,14 +29,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
     contractInfo: useSelector((state) => state.contract.contracts),
   };
   const allowances = useSelector((state) => state.contract.allowances);
-  console.log(match);
   const paymentType = [
     { id: 'one_time', name: 'Chi trả một lần' },
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
     { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
-  const typeWord = [
+  const typeWork = [
     { id: 'office', name: 'Văn phòng' },
     { id: 'out_door', name: 'Làm việc ngoài trời' },
   ];
@@ -48,8 +47,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   const type = [
-    { id: 'partTime', name: 'Bán thời gian' },
-    { id: 'fullTime', name: 'Toàn thời gian' },
+    { id: 'parttime', name: 'Bán thời gian' },
+    { id: 'fulltime', name: 'Toàn thời gian' },
+    { id: 'probationary', name: 'Thực tập' },
     { id: 'season', name: 'Thời vụ' },
   ];
 
@@ -67,7 +67,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             enableReinitialize
             validationSchema={JobTimelineSchema}
             onSubmit={(values) => {
-              // console.log('JobTimeline ', values);
               dispatch({
                 type: REDUX_STATE.contract.SET_CONTRACTS,
                 payload: values.contractInfo,
@@ -129,15 +128,17 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         onClick={async () => {
                                           let a = await validateForm();
                                           a = a.contractInfo;
+                                          console.log('a', a);
                                           if (!Array.isArray(a)) {
                                             let data = values.contractInfo[index];
                                             if (data.branchId === '0') delete data.branchId;
                                             else data['branchName'] = branches.filter((br) => br.id === parseInt(data.branchId))[0]?.branch;
-                                            console.log(data);
+                                            console.log('create: ', data);
 
                                             dispatch(createContract(data, history, t('message.successful_create')));
                                             return;
                                           }
+                                          console.log('a1', a);
                                           let err_fields = Object.keys(a[index]);
                                           err_fields &&
                                             err_fields.length &&
@@ -161,7 +162,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                       onBlur={handleBlur(`contractInfo.${index}.code`)}
                                       onChange={handleChange(`contractInfo.${index}.code`)}
                                       inputID={`contractInfo.${index}.code`}
-                                      labelText={t('label.contract_type')}
+                                      labelText={t('label.contract_code')}
                                       inputType={'text'}
                                       placeholder={t('placeholder.enter_contract_code')}
                                       inputClassName={'form-control'}
@@ -176,6 +177,28 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         touched.contractInfo[index]?.code
                                       }
                                       errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.code)}
+                                    />
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.fullname ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.fullname`)}
+                                      onChange={handleChange(`contractInfo.${index}.fullname`)}
+                                      inputID={`contractInfo.${index}.fullname`}
+                                      labelText={t('label.contract_fullname')}
+                                      inputType={'text'}
+                                      placeholder={t('placeholder.enter_contract_fullname')}
+                                      inputClassName={'form-control'}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.fullname}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.fullname &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.fullname
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.fullname)}
                                     />
                                     <CommonSelectInput
                                       containerClassName={'form-group col-lg-4'}
@@ -199,6 +222,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                       errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.type)}
                                       lstSelectOptions={type}
                                     />
+                                  </div>
+                                  <div className="row">
                                     <CommonSelectInput
                                       containerClassName={'form-group col-lg-4'}
                                       value={values?.contractInfo[index]?.typeTax ?? ''}
@@ -221,29 +246,27 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                       errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.typeTax)}
                                       lstSelectOptions={personalIncomeTaxType}
                                     />
-                                  </div>
-                                  <div className="row">
                                     <CommonSelectInput
                                       containerClassName={'form-group col-lg-4'}
-                                      value={values?.contractInfo[index]?.typeWord ?? ''}
-                                      onBlur={handleBlur(`contractInfo.${index}.typeWord`)}
-                                      onChange={handleChange(`contractInfo.${index}.typeWord`)}
-                                      inputID={`contractInfo.${index}.typeWord`}
+                                      value={values?.contractInfo[index]?.typeWork ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.typeWork`)}
+                                      onChange={handleChange(`contractInfo.${index}.typeWork`)}
+                                      inputID={`contractInfo.${index}.typeWork`}
                                       labelText={t('label.job_type')}
                                       selectClassName={'form-control'}
                                       placeholder={t('placeholder.select_contract_type_work')}
                                       isRequiredField
-                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.typeWord}
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.typeWork}
                                       isError={
                                         errors &&
                                         errors.contractInfo &&
-                                        errors.contractInfo[index]?.typeWord &&
+                                        errors.contractInfo[index]?.typeWork &&
                                         touched &&
                                         touched.contractInfo &&
-                                        touched.contractInfo[index]?.typeWord
+                                        touched.contractInfo[index]?.typeWork
                                       }
-                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.typeWord)}
-                                      lstSelectOptions={typeWord}
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.typeWork)}
+                                      lstSelectOptions={typeWork}
                                     />
 
                                     <div className="form-group col-lg-4">
@@ -344,28 +367,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     />
                                   </div>
                                   <div className="row">
-                                    <CommonSelectInput
-                                      containerClassName={'form-group col-lg-4'}
-                                      value={values?.contractInfo[index]?.branchId ?? ''}
-                                      onBlur={handleBlur(`contractInfo.${index}.branchId`)}
-                                      onChange={handleChange(`contractInfo.${index}.branchId`)}
-                                      inputID={`contractInfo.${index}.branchId`}
-                                      labelText={t('label.job_place')}
-                                      selectClassName={'form-control'}
-                                      placeholder={t('placeholder.select_branch')}
-                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.branchId}
-                                      isError={
-                                        errors &&
-                                        errors.contractInfo &&
-                                        errors.contractInfo[index]?.branchId &&
-                                        touched &&
-                                        touched.contractInfo &&
-                                        touched.contractInfo[index]?.branchId
-                                      }
-                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.branchId)}
-                                      lstSelectOptions={branches}
-                                    />
-
                                     <CommonTextInput
                                       containerClassName={'form-group col-lg-4'}
                                       value={values?.contractInfo[index]?.startWork ?? ''}
@@ -386,6 +387,27 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         touched.contractInfo[index]?.startWork
                                       }
                                       errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.startWork)}
+                                    />
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.branchId ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.branchId`)}
+                                      onChange={handleChange(`contractInfo.${index}.branchId`)}
+                                      inputID={`contractInfo.${index}.branchId`}
+                                      labelText={t('label.job_place')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_branch')}
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.branchId}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.branchId &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.branchId
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.branchId)}
+                                      lstSelectOptions={branches}
                                     />
                                   </div>
                                   <h5 className="px-3">{t('label.gross_salary')}</h5>
@@ -485,7 +507,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                                     onBlur={handleBlur(`contractInfo.${index}.allowance.${allowanceIdx}.name`)}
                                                     onChange={(e) => {
                                                       let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
-                                                      // console.log(thisSubsidizes);
                                                       if (thisSubsidizes && thisSubsidizes.length > 0)
                                                         setFieldValue(
                                                           `contractInfo.${index}.allowance.${allowanceIdx}.amount`,
@@ -575,10 +596,10 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                   <hr className="mt-1" />
 
                                   <CommonUploadFileButton
-                                    name={`contractInfo.${index}.files`}
+                                    name={`contractInfo.${index}.attaches`}
                                     containerClassName="mt-3 "
                                     buttonClassName="btn btn-primary"
-                                    value={values.contractInfo[index].files}
+                                    value={values.contractInfo[index].attaches}
                                   />
                                 </>
                               )}
@@ -599,7 +620,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                               type: '',
                               typeTax: '',
                               signee: '',
-                              typeWord: 0,
+                              typeWork: 0,
                               probTime: 0,
                               handleDate: '',
                               validDate: '',
@@ -610,6 +631,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
                               wageId: 0,
                               amount: 0,
                               allowance: [],
+                              profileId: profileId,
+                              attaches: [],
                             });
                           }}
                         >

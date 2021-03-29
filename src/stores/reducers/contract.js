@@ -24,8 +24,8 @@ const initialState = {
     files: [],
   },
   branches: [],
-  wages: [{ id: 0, name: 'Chọn nhóm lương' }],
-  allowances: [{ id: 0, name: 'Chọn phụ cập', amount: 0 }],
+  wages: [],
+  allowances: [],
 };
 
 const contractReducer = (state = initialState, { type, payload }) => {
@@ -49,7 +49,6 @@ const contractReducer = (state = initialState, { type, payload }) => {
         payload && payload.length > 0
           ? payload.map((branch) => ({ id: branch.id ?? 0, name: (branch.name ?? '') + ' - ' + (branch.address ?? ''), branch: branch.name }))
           : [];
-      console.log('branches', payload);
       return { ...state, branches: payload };
     case REDUX_STATE.contract.GET_WAGES:
       return {
