@@ -56,16 +56,8 @@ const initialState = {
         files: [],
       },
     ],
-    academicInfo: [
-      {
-        academicLevel: '',
-        major: '',
-        educationPlace: '',
-        note: '',
-        date: '',
-        files: [],
-      },
-    ],
+    degrees: [],
+    certificates: [],
   },
   roles: [],
   contracts: [
@@ -184,6 +176,7 @@ const initialState = {
   ],
   tabName: 0,
   subTabName: 0,
+  contacts: [],
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -191,7 +184,6 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.profile.SET_PROFILES:
       return { ...state, profiles: payload };
     case REDUX_STATE.profile.SET_PROFILE:
-      // console.log('payload', payload);
       return { ...state, profile: Object.assign({}, state.profile, payload) };
     case REDUX_STATE.profile.DELETE_PROFILE:
       return {
@@ -219,7 +211,6 @@ const profileReducer = (state = initialState, { type, payload }) => {
         subTabName: payload,
       };
     case REDUX_STATE.profile.SET_JOB_TIMELINE:
-      // console.log('payload contracts', payload);
       payload =
         payload && payload.length > 0
           ? payload.map((contract) => {
@@ -235,10 +226,37 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profile: { ...state.profile, contracts: payload },
       };
-    case REDUX_STATE.profile.SET_ACADEMIC_LEVEL:
+    case REDUX_STATE.diploma.SET_DEGREES:
       return {
         ...state,
-        profile: { ...state.profile, academicInfo: payload },
+        profile: Object.assign({}, state.profile, { degrees: payload }),
+      };
+
+    case REDUX_STATE.diploma.SET_CERTIFICATES:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: payload }),
+      };
+
+    case REDUX_STATE.profile.SET_CONTACTS:
+      return {
+        ...state,
+        contacts: [...payload],
+      };
+    case REDUX_STATE.profile.CREATE_NEW_CONTACTS:
+      return {
+        ...state,
+        contacts: [...state.contacts, payload],
+      }
+    case REDUX_STATE.diploma.DELETE_CERTIFICATE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: state.profile.certificates.filter((c) => c.id !== payload.id) }),
+      };
+    case REDUX_STATE.diploma.DELETE_DEGREE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { degrees: state.profile.degrees.filter((c) => c.id !== payload.id) }),
       };
     default:
       return state;

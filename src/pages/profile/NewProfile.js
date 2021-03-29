@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
 import { setEmptyProfile } from 'src/stores/actions/profile';
 import ProfileTabs from './ProfileTabs';
 
 //TODO: translate
 
-const NewProfile = ({ t, location, history }) => {
+const NewProfile = ({ t, location, history, match }) => {
   // const profileInfoForm = useRef();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.profile);
@@ -37,7 +36,7 @@ const NewProfile = ({ t, location, history }) => {
   //     position: 'right',
   //   },
   // ];
-  return <ProfileTabs t={t} isCreate={true} profile={profile} history={history} />;
+  return <ProfileTabs t={t} isCreate={true} profile={profile} history={history} match={match} />;
 };
 
 export default NewProfile;

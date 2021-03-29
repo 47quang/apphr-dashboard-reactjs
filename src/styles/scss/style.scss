@@ -1,11 +1,112 @@
 // If you want to override variables do it here
-@import "variables";
+@import 'variables';
 
 // Import CoreUI styles
-@import "~@coreui/coreui/scss/coreui.scss";
+@import '~@coreui/coreui/scss/coreui.scss';
 
 // Some temp fixes
-@import "fixes";
+@import 'fixes';
 
 // If you want to add something do it here
-@import "custom";
+@import 'custom';
+
+.w-100 {
+  width: 100px !important;
+}
+.ipt-with-btn {
+  width: calc(100% - 100px) !important;
+}
+i {
+  position: absolute;
+  font-size: 30px;
+  top: calc(50% - 15px);
+  left: calc(50% - 15px);
+  width: unset;
+  height: unset;
+  line-height: 1;
+}
+.image-uploader {
+  margin: auto;
+  width: 160px;
+  height: 190px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+}
+
+.image-uploader.none-border {
+  border: none !important;
+}
+
+.image-uploader:hover {
+  // border: 2px dashed #74767a !important;
+  border-color: #74767a !important;
+  .icon-upload {
+    color: #74767a;
+  }
+}
+
+.icon-upload {
+  color: #ccc;
+}
+
+.image-uploader .el-upload {
+  width: 100%;
+  height: 100%;
+}
+label.image-detail {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin-bottom: 0px;
+  justify-content: center;
+  align-items: center;
+}
+.image-uploaded {
+  width: 160px;
+  height: 190px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .btn-delete-image {
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    display: none;
+  }
+
+  &:hover {
+    .btn-delete-image {
+      display: inline-block;
+      border-radius: 0%;
+    }
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+.image-uploader:focus {
+  outline: none !important;
+}
+
+.el-upload:focus {
+  outline: none !important;
+}
+
+.image-uploaded:focus {
+  outline: none !important;
+}

@@ -22,10 +22,12 @@
   "Timekeeping": "Timekeeping",
   "Holiday": "Ngày nghỉ",
   "label": {
+    "avatar": "Hình đại diện",
     "employee_lastname": "Họ và tên lót",
     "employee_firstname": "Tên",
     "employee_full_name": "Họ và tên",
     "update": "Cập nhật",
+    "cancel": "Hủy",
     "back": "Quay lại",
     "create_new": "Tạo mới",
     "add": "Thêm mới",
@@ -167,6 +169,7 @@
     "allowance": "Trợ cấp"
   },
   "title": {
+    "confirm": "Xác nhận",
     "role": "Vai trò",
     "permission": "Phân quyền",
     "login": "Đăng nhập",
@@ -181,12 +184,18 @@
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
+    "successful_create_contact": "Tạo kênh liên lạc thành công",
+    "successful_update_contact": "Cập nhật kênh liên lạc thành công",
+    "successful_delete_contact": "Xóa kênh liên lạc thành công",
+    "successful_delete_account": "Tạo tài khoản thành công",
+    "successful_update_account": "Cập nhật tài khoản thành công",
     "successful_create": "Tạo mới thành công",
     "successful_delete": "Xóa thành công",
     "empty_table": "Chưa có thông tin",
     "delete_row": "Xóa hàng này",
     "edit_row": "Chỉnh sửa hàng này",
-    "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?"
+    "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
+    "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?"
   },
   "placeholder": {
     "enter_company_name": "Nhập tên doanh nghiệp",
@@ -289,6 +298,8 @@
     "enter_valid_ip_v4_address": "Địa chỉ IP không hợp lệ",
     "required_enter_usename": "Bắt buộc nhập tên đăng nhập",
     "required_enter_password": "Bắt buộc nhập vào mật khẩu của tài khoản",
-    "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự"
+    "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự",
+    "required_select_contact_type": "Phải chọn loại địa chỉ",
+    "required_enter_contact_url": "Phải nhập url"
   }
 }

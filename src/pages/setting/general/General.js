@@ -21,7 +21,7 @@ const SettingGeneralPage = ({ t, location }) => {
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
   useEffect(() => {
-    dispatch(fetchProvinces());
+    if (provinces.length === 0) dispatch(fetchProvinces());
     dispatch(fetchGeneral(1));
   }, []);
 

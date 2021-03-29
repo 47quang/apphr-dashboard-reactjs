@@ -150,3 +150,16 @@ export const BasicInfoCreateSchema = Yup.object().shape({
     })
     .required('validation.required_select_gender'),
 });
+
+export const ContactSchema = Yup.object().shape({
+  type: Yup.string()
+    .required('validation.required_select_contact_type')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contact_type', function (value) {
+      return value && value !== '' && value !== 0;
+    }),
+  url: Yup.string()
+    .required('validation.required_enter_contact_url')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_contact_url', function (value) {
+      return value && value !== '';
+    }),
+});

@@ -67,7 +67,6 @@ const JobTimelineInfo = ({ t, profile }) => {
             initialValues={jobTimelineInfo}
             enableReinitialize
             onSubmit={(values) => {
-              // console.log('JobTimeline ', values);
               dispatch({
                 type: REDUX_STATE.profile.SET_JOB_TIMELINE,
                 payload: values.contractInfo,
@@ -309,7 +308,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                                       placeholder={t('label.select_allowance_type')}
                                                       onChange={(e) => {
                                                         let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
-                                                        // console.log(thisSubsidizes);
+
                                                         if (thisSubsidizes && thisSubsidizes.length > 0)
                                                           setFieldValue(
                                                             `contractInfo.${index}.allowance.${allowanceIdx}.amount`,

@@ -21,7 +21,6 @@ export const fetchContract = (id) => {
     api.contract
       .get(id)
       .then(({ payload }) => {
-        console.log(payload);
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {

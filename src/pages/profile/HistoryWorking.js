@@ -19,7 +19,6 @@ const HistoryWorking = ({ t, isCreate }) => {
   const deleteRow = async (rowId) => {
     // dispatch(deleteProfile(rowId));
     // dispatch(fetchAllProfiles());
-    console.log('RowId Delete: ', rowId);
   };
   // if (isCreate) {
   // } else {

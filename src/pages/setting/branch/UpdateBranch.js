@@ -16,7 +16,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
 
   useEffect(() => {
     dispatch(fetchBranch(match.params?.id));
-    dispatch(fetchProvinces());
+    if (provinces.length === 0) dispatch(fetchProvinces());
     return () => {
       dispatch(setEmptyBranch());
     };

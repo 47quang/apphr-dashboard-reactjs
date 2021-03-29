@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchAccount, fetchPermissionGroups, fetchRoles, fetchProfiles, updateAccount } from 'src/stores/actions/account';
+import { AccountUpdateInfoSchema } from 'src/schema/formSchema';
+import { fetchAccount, fetchPermissionGroups, fetchProfiles, fetchRoles, updateAccount } from 'src/stores/actions/account';
 import { REDUX_STATE } from 'src/stores/states';
 import AccountItemBody from './AccountItemBody';
-import { AccountUpdateInfoSchema } from 'src/schema/formSchema';
 
 //TODO: translate
 
@@ -38,8 +38,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
 
   const submitForm = (values) => {
     let form = values;
-    console.log(form);
-    dispatch(updateAccount(form, history, t('message.successful_update')));
+    dispatch(updateAccount(form, history, t('message.successful_update_account')));
   };
 
   const buttons = [

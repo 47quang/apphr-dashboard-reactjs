@@ -16,7 +16,7 @@ const NewBranchPage = ({ t, location, history }) => {
 
   useEffect(() => {
     dispatch(setEmptyBranch());
-    dispatch(fetchProvinces());
+    if (provinces.length === 0) dispatch(fetchProvinces());
     return () => {
       dispatch(setEmptyBranch());
     };
@@ -56,7 +56,6 @@ const NewBranchPage = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
-        console.log(branchInfoForm.current);
         branchInfoForm.current.handleSubmit(e);
       },
       name: t('label.create_new'),
