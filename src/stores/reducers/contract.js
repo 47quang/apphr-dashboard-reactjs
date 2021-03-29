@@ -52,13 +52,11 @@ const contractReducer = (state = initialState, { type, payload }) => {
       console.log('branches', payload);
       return { ...state, branches: payload };
     case REDUX_STATE.contract.GET_WAGES:
-      payload && payload.length >= 0 && payload.splice(0, 0, { id: 0, name: 'Chọn nhóm lương', amount: 0 });
       return {
         ...state,
         wages: payload,
       };
     case REDUX_STATE.contract.GET_ALLOWANCES:
-      payload.splice(0, 0, { id: 0, name: 'Chọn phụ cập', amount: 0 });
       return {
         ...state,
         allowances: payload,

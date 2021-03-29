@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTabs = ({ t, isCreate, profile, history }) => {
+const ProfileTabs = (props) => {
   const [snackBarWidth, setSnackBarWidth] = useState(0);
   const classes = useStyles();
   const theme = useTheme();
@@ -94,9 +94,9 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab className="noselect" label={t('label.profile_personal')} {...a11yProps(0)} />
-            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_proposal')} {...a11yProps(1)} />
-            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(2)} />
+            <Tab className="noselect" label={props.t('label.profile_personal')} {...a11yProps(0)} />
+            <Tab hidden={props.isCreate} className="noselect" label={props.t('label.profile_personal_proposal')} {...a11yProps(1)} />
+            <Tab hidden={props.isCreate} className="noselect" label={props.t('label.profile_personal_schedule')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
@@ -112,35 +112,35 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
                 variant="scrollable"
                 scrollButtons="auto"
               >
-                <Tab className="noselect" label={t('label.profile_basic_info')} {...a11yProps(0)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contract')} {...a11yProps(1)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(2)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(3)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(4)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(5)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(6)} />
+                <Tab className="noselect" label={props.t('label.profile_basic_info')} {...a11yProps(0)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_contract')} {...a11yProps(1)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_academic_level')} {...a11yProps(2)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_certificate')} {...a11yProps(3)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_contact_address')} {...a11yProps(4)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_salary_allowance')} {...a11yProps(5)} />
+                <Tab disabled={props.isCreate} className="noselect" label={props.t('label.profile_other_info')} {...a11yProps(6)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
-              <BasicInfo t={t} isCreate={isCreate} profile={profile} history={history} />
+              <BasicInfo {...props} />
             </TabPanel>
             <TabPanel value={subTabName} index={1} dir={theme.direction}>
-              <JobTimelineInfo t={t} profileId={profile.id} />
+              <JobTimelineInfo {...props} />
             </TabPanel>
             <TabPanel value={subTabName} index={2} dir={theme.direction}>
-              <AcademicLevel t={t} profile={profile} />
+              <AcademicLevel {...props} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <CertificateInfo t={t} profile={profile} />
+              <CertificateInfo {...props} />
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
-              <AddressInfo t={t} profile={profile} />
+              <AddressInfo {...props} />
             </TabPanel>
             <TabPanel value={subTabName} index={5} dir={theme.direction}>
               Tiền lương / Trợ cấp (TODO)
             </TabPanel>
             <TabPanel value={subTabName} index={6} dir={theme.direction}>
-              <OtherInfo t={t} profile={profile} />
+              <OtherInfo {...props} />
             </TabPanel>
           </div>
         </TabPanel>
@@ -148,7 +148,7 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
           (TODO)
         </TabPanel>
         <TabPanel value={tabName} index={2}>
-          <HistoryWorking t={t} />
+          <HistoryWorking {...props} />
         </TabPanel>
       </div>
       {/* <div

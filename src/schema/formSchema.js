@@ -171,9 +171,32 @@ export const JobTimelineSchema = Yup.object().shape({
         })
         .required('validation.required_select_contract_type_work'),
       probTime: Yup.number()
-        .positive('Thời gian thử việc là một số dương')
-        .integer('Thời gian thử  việc là số nguyên')
-        .required('Bắt buộc nhập thời gian thử việc'),
+        .positive('validation.required_positive_prob_time')
+        .integer('validation.required_integer_prob_time')
+        .required('validation.required_enter_prob_time'),
+      handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
+      validDate: Yup.string().required('validation.required_select_contract_valid_date'),
+      expiredDate: Yup.string().required('validation.required_select_contract_expired_date'),
+      startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
+      paymentType: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_payment'),
+      wageId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_wage'),
+      allowance: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string()
+            .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+              return value !== '0';
+            })
+            .required('validation.required_select_allowance'),
+        }),
+      ),
     }),
   ),
 });

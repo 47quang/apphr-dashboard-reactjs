@@ -20,7 +20,8 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
 
-const JobTimelineInfo = ({ t, profileId }) => {
+const JobTimelineInfo = ({ t, history, match }) => {
+  const profileId = match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
@@ -28,9 +29,8 @@ const JobTimelineInfo = ({ t, profileId }) => {
     contractInfo: useSelector((state) => state.contract.contracts),
   };
   const allowances = useSelector((state) => state.contract.allowances);
-
+  console.log(match);
   const paymentType = [
-    { id: '', name: 'Chọn hình thức chi trả' },
     { id: 'one_time', name: 'Chi trả một lần' },
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
@@ -129,16 +129,19 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                         onClick={async () => {
                                           let a = await validateForm();
                                           a = a.contractInfo;
-                                          if (!Array.isArray(a)) return;
+                                          if (!Array.isArray(a)) {
+                                            let data = values.contractInfo[index];
+                                            if (data.branchId === '0') delete data.branchId;
+                                            else data['branchName'] = branches.filter((br) => br.id === parseInt(data.branchId))[0]?.branch;
+                                            console.log(data);
+
+                                            dispatch(createContract(data, history, t('message.successful_create')));
+                                            return;
+                                          }
                                           let err_fields = Object.keys(a[index]);
                                           err_fields &&
                                             err_fields.length &&
                                             err_fields.forEach((val) => setFieldTouched(`contractInfo.${index}.${val}`, true));
-
-                                          let data = values.contractInfo[index];
-                                          data['branchName'] = branches.filter((br) => br.id === data.branchId)[0]?.branch;
-                                          console.log(data);
-                                          // dispatch(createContract(data));
                                         }}
                                         style={{ color: 'blue' }}
                                       />
@@ -275,116 +278,194 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                     </div>
                                   </div>
                                   <div className="row">
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.signature_date')} required />
-                                      <input
-                                        type="date"
-                                        onChange={(e) => handleChange(`contractInfo.${index}.handleDate`)(e)}
-                                        className={'form-control'}
-                                        rows={5}
-                                        name={`contractInfo.${index}.handleDate`}
-                                        value={values.contractInfo[index].handleDate}
-                                        max={getCurrentDate()}
-                                      />
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.effective_date')} required />
-                                      <input
-                                        type="date"
-                                        className={'form-control'}
-                                        rows={5}
-                                        name={`contractInfo.${index}.validDate`}
-                                        onChange={(e) => handleChange(`contractInfo.${index}.validDate`)(e)}
-                                        value={values.contractInfo[index].validDate}
-                                      />
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.expiration_date')} />
-                                      <input
-                                        type="date"
-                                        className={'form-control'}
-                                        rows={5}
-                                        name={`contractInfo.${index}.expiredDate`}
-                                        onChange={(e) => handleChange(`contractInfo.${index}.expiredDate`)(e)}
-                                        value={values.contractInfo[index].expiredDate}
-                                      />
-                                    </div>
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.handleDate ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.handleDate`)}
+                                      onChange={handleChange(`contractInfo.${index}.handleDate`)}
+                                      inputID={`contractInfo.${index}.handleDate`}
+                                      labelText={t('label.signature_date')}
+                                      inputType={'date'}
+                                      inputClassName={'form-control'}
+                                      maxTime={getCurrentDate()}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.handleDate}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.handleDate &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.handleDate
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.handleDate)}
+                                    />
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.validDate ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.validDate`)}
+                                      onChange={handleChange(`contractInfo.${index}.validDate`)}
+                                      inputID={`contractInfo.${index}.validDate`}
+                                      labelText={t('label.effective_date')}
+                                      inputType={'date'}
+                                      inputClassName={'form-control'}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.validDate}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.validDate &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.validDate
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.validDate)}
+                                    />
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.expiredDate ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.expiredDate`)}
+                                      onChange={handleChange(`contractInfo.${index}.expiredDate`)}
+                                      inputID={`contractInfo.${index}.expiredDate`}
+                                      labelText={t('label.expiration_date')}
+                                      inputType={'date'}
+                                      inputClassName={'form-control'}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.expiredDate}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.expiredDate &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.expiredDate
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.expiredDate)}
+                                    />
                                   </div>
                                   <div className="row">
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.job_place')} />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.branchId`} component="select">
-                                        {branches.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.job_start_date')} />
-                                      <input
-                                        type="date"
-                                        className={'form-control'}
-                                        rows={5}
-                                        name={`contractInfo.${index}.startWork`}
-                                        onChange={(e) => handleChange(`contractInfo.${index}.startWork`)(e)}
-                                        value={values.contractInfo[index].startWork}
-                                      />
-                                    </div>
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.branchId ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.branchId`)}
+                                      onChange={handleChange(`contractInfo.${index}.branchId`)}
+                                      inputID={`contractInfo.${index}.branchId`}
+                                      labelText={t('label.job_place')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_branch')}
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.branchId}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.branchId &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.branchId
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.branchId)}
+                                      lstSelectOptions={branches}
+                                    />
+
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.startWork ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.startWork`)}
+                                      onChange={handleChange(`contractInfo.${index}.startWork`)}
+                                      inputID={`contractInfo.${index}.startWork`}
+                                      labelText={t('label.job_start_date')}
+                                      inputType={'date'}
+                                      inputClassName={'form-control'}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.startWork}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.startWork &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.startWork
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.startWork)}
+                                    />
                                   </div>
                                   <h5 className="px-3">{t('label.gross_salary')}</h5>
                                   <hr className="mt-1" />
                                   <div className="row">
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.payment_method')} required />
-                                      <Field
-                                        className={'form-control'}
-                                        name={`contractInfo.${index}.paymentType`}
-                                        component="select"
-                                        onChange={(e) => {
-                                          if (e.target.value !== '') {
-                                            dispatch(fetchWagesByType({ type: e.target.value }));
-                                            handleChange(`contractInfo.${index}.paymentType`)(e);
-                                          } else setFieldValue(`contractInfo.${index}.wageId`, 0);
-                                        }}
-                                      >
-                                        {paymentType.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.salary_group')} required />
-                                      <Field
-                                        className={'form-control'}
-                                        name={`contractInfo.${index}.wageId`}
-                                        component="select"
-                                        onChange={(e) => {
-                                          let thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
-                                          setFieldValue(`contractInfo.${index}.amount`, thisWage[0].amount);
-                                          handleChange(`contractInfo.${index}.wageId`)(e);
-                                        }}
-                                      >
-                                        {wages.map((ch, idx) => (
-                                          <option key={idx} value={ch.id}>
-                                            {ch.name}
-                                          </option>
-                                        ))}
-                                      </Field>
-                                    </div>
-                                    <div className="form-group col-lg-4">
-                                      <Label text={t('label.salary_level')} />
-                                      <Field
-                                        className={'form-control'}
-                                        name={`contractInfo.${index}.amount`}
-                                        placeholder={t('placeholder.enter_salary_level')}
-                                        type="number"
-                                        disabled
-                                      />
-                                    </div>
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.paymentType ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.paymentType`)}
+                                      onChange={(e) => {
+                                        if (e.target.value !== '0') {
+                                          dispatch(fetchWagesByType({ type: e.target.value }));
+                                          handleChange(`contractInfo.${index}.paymentType`)(e);
+                                        } else setFieldValue(`contractInfo.${index}.wageId`, 0);
+                                      }}
+                                      inputID={`contractInfo.${index}.paymentType`}
+                                      labelText={t('label.payment_method')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_contract_payment_method')}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.paymentType}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.paymentType &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.paymentType
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.paymentType)}
+                                      lstSelectOptions={paymentType}
+                                    />
+                                    <CommonSelectInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.wageId ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.wageId`)}
+                                      onChange={(e) => {
+                                        let thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                                        setFieldValue(`contractInfo.${index}.amount`, thisWage[0].amount);
+                                        handleChange(`contractInfo.${index}.wageId`)(e);
+                                      }}
+                                      inputID={`contractInfo.${index}.wageId`}
+                                      labelText={t('label.salary_group')}
+                                      selectClassName={'form-control'}
+                                      placeholder={t('placeholder.select_contract_payment_method')}
+                                      isRequiredField
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.wageId}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.wageId &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.wageId
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.wageId)}
+                                      lstSelectOptions={wages}
+                                    />
+                                    <CommonTextInput
+                                      containerClassName={'form-group col-lg-4'}
+                                      value={values?.contractInfo[index]?.amount ?? ''}
+                                      onBlur={handleBlur(`contractInfo.${index}.amount`)}
+                                      onChange={handleChange(`contractInfo.${index}.amount`)}
+                                      inputID={`contractInfo.${index}.amount`}
+                                      labelText={t('label.salary_level')}
+                                      inputType={'number'}
+                                      inputClassName={'form-control'}
+                                      placeholder={t('placeholder.enter_salary_level')}
+                                      isDisable
+                                      isTouched={touched && touched.contractInfo && touched.contractInfo[index]?.amount}
+                                      isError={
+                                        errors &&
+                                        errors.contractInfo &&
+                                        errors.contractInfo[index]?.amount &&
+                                        touched &&
+                                        touched.contractInfo &&
+                                        touched.contractInfo[index]?.amount
+                                      }
+                                      errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.amount)}
+                                    />
                                   </div>
                                   <h5 className="px-3">{t('label.allowance')}</h5>
                                   <hr className="mt-2" />
@@ -398,41 +479,84 @@ const JobTimelineInfo = ({ t, profileId }) => {
                                             return (
                                               <div key={`allowance${allowanceIdx}`}>
                                                 <div className="row">
-                                                  <div className="form-group col-lg-4">
-                                                    <Label text={t('label.allowance')} required />
-                                                    <Field
-                                                      className={'form-control'}
-                                                      name={`contractInfo.${index}.allowance.${allowanceIdx}.name`}
-                                                      component="select"
-                                                      placeholder={t('label.select_allowance_type')}
-                                                      onChange={(e) => {
-                                                        let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
-                                                        // console.log(thisSubsidizes);
-                                                        if (thisSubsidizes && thisSubsidizes.length > 0)
-                                                          setFieldValue(
-                                                            `contractInfo.${index}.allowance.${allowanceIdx}.amount`,
-                                                            thisSubsidizes[0].amount,
-                                                          );
-                                                        handleChange(`contractInfo.${index}.allowance.${allowanceIdx}.name`)(e);
-                                                      }}
-                                                    >
-                                                      {allowances.map((ch, idx) => (
-                                                        <option key={idx} value={ch.id}>
-                                                          {ch.name}
-                                                        </option>
-                                                      ))}
-                                                    </Field>
-                                                  </div>
-                                                  <div className="form-group col-lg-4">
-                                                    <Label text={t('label.salary_group')} required />
-                                                    <Field
-                                                      className={'form-control'}
-                                                      name={`contractInfo.${index}.allowance.${allowanceIdx}.amount`}
-                                                      placeholder={t('placeholder.pension')}
-                                                      type="number"
-                                                      disabled
-                                                    />
-                                                  </div>
+                                                  <CommonSelectInput
+                                                    containerClassName={'form-group col-lg-4'}
+                                                    value={values?.contractInfo[index]?.allowance[allowanceIdx].name ?? ''}
+                                                    onBlur={handleBlur(`contractInfo.${index}.allowance.${allowanceIdx}.name`)}
+                                                    onChange={(e) => {
+                                                      let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
+                                                      // console.log(thisSubsidizes);
+                                                      if (thisSubsidizes && thisSubsidizes.length > 0)
+                                                        setFieldValue(
+                                                          `contractInfo.${index}.allowance.${allowanceIdx}.amount`,
+                                                          thisSubsidizes[0].amount,
+                                                        );
+                                                      handleChange(`contractInfo.${index}.allowance.${allowanceIdx}.name`)(e);
+                                                    }}
+                                                    inputID={`contractInfo.${index}.allowance.${allowanceIdx}.name`}
+                                                    labelText={t('label.allowance')}
+                                                    selectClassName={'form-control'}
+                                                    placeholder={t('placeholder.select_allowance_type')}
+                                                    isRequiredField
+                                                    isTouched={
+                                                      touched &&
+                                                      touched.contractInfo &&
+                                                      touched.contractInfo[index]?.allowance &&
+                                                      touched.contractInfo[index]?.allowance[allowanceIdx]?.name
+                                                    }
+                                                    isError={
+                                                      errors &&
+                                                      errors.contractInfo &&
+                                                      errors.contractInfo[index]?.allowance &&
+                                                      errors.contractInfo[index]?.allowance[allowanceIdx]?.name &&
+                                                      touched &&
+                                                      touched.contractInfo &&
+                                                      touched.contractInfo[index]?.allowance &&
+                                                      touched.contractInfo[index]?.allowance[allowanceIdx]?.name
+                                                    }
+                                                    errorMessage={t(
+                                                      errors &&
+                                                        errors.contractInfo &&
+                                                        errors.contractInfo[index]?.allowance &&
+                                                        errors.contractInfo[index]?.allowance[allowanceIdx]?.name,
+                                                    )}
+                                                    lstSelectOptions={allowances}
+                                                  />
+                                                  <CommonTextInput
+                                                    containerClassName={'form-group col-lg-4'}
+                                                    value={values?.contractInfo[index]?.allowance[allowanceIdx]?.amount ?? ''}
+                                                    onBlur={handleBlur(`contractInfo.${index}.allowance.${allowanceIdx}.amount`)}
+                                                    onChange={handleChange(`contractInfo.${index}.allowance.${allowanceIdx}.amount`)}
+                                                    inputID={`contractInfo.${index}.allowance.${allowanceIdx}.amount`}
+                                                    labelText={t('label.allowance_level')}
+                                                    inputType={'number'}
+                                                    inputClassName={'form-control'}
+                                                    placeholder={t('placeholder.pension')}
+                                                    isDisable
+                                                    isTouched={
+                                                      touched &&
+                                                      touched.contractInfo &&
+                                                      touched.contractInfo[index]?.allowance &&
+                                                      touched.contractInfo[index]?.allowance[allowanceIdx]?.amount
+                                                    }
+                                                    isError={
+                                                      errors &&
+                                                      errors.contractInfo &&
+                                                      errors.contractInfo[index]?.allowance &&
+                                                      errors.contractInfo[index]?.allowance[allowanceIdx]?.amount &&
+                                                      touched &&
+                                                      touched.contractInfo &&
+                                                      touched.contractInfo[index]?.allowance &&
+                                                      touched.contractInfo[index]?.allowance[allowanceIdx]?.amount
+                                                    }
+                                                    errorMessage={t(
+                                                      errors &&
+                                                        errors.contractInfo &&
+                                                        errors.contractInfo[index]?.allowance &&
+                                                        errors.contractInfo[index]?.allowance[allowanceIdx]?.amount,
+                                                    )}
+                                                  />
+
                                                   <div className="form-group d-flex align-items-end">
                                                     <DeleteIconButton onClick={() => remove(allowanceIdx)} />
                                                   </div>
