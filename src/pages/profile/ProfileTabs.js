@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTabs = ({ t, isCreate, profile, history }) => {
+const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
+  const [snackBarWidth, setSnackBarWidth] = useState(0);
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
@@ -117,10 +118,10 @@ const ProfileTabs = ({ t, isCreate, profile, history }) => {
               <JobTimelineInfo t={t} profile={profile} />
             </TabPanel>
             <TabPanel value={subTabName} index={2} dir={theme.direction}>
-              <AcademicLevel t={t} profile={profile} />
+              <AcademicLevel t={t} profile={profile} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <CertificateInfo t={t} profile={profile} />
+              <CertificateInfo t={t} profile={profile} match={match}/>
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
               <AddressInfo t={t} profile={profile} history={history} />
