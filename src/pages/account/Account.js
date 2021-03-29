@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
-import { fetchAccounts } from 'src/stores/actions/account';
+import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
 
 const Account = ({ t, location, history }) => {
   const columnDefOfAccounts = [
@@ -20,11 +20,10 @@ const Account = ({ t, location, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const deleteRow = async (rowId) => {
-  //   dispatch(deleteAccount(rowId));
-  //   dispatch(fetchAccounts());
-  //   console.log('RowId Delete: ', rowId);
-  // };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteAccount(rowId, t('message.successful_delete')));
+    dispatch(fetchAccounts());
+  };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
@@ -33,6 +32,7 @@ const Account = ({ t, location, history }) => {
         data={accounts}
         route={ROUTE_PATH.ACCOUNT + '/'}
         idxColumnsFilter={[0]}
+        deleteRow={deleteRow}
         linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
       />
     </CContainer>

@@ -39,7 +39,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
   const submitForm = (values) => {
     let form = values;
     console.log(form);
-    dispatch(updateAccount(form, history));
+    dispatch(updateAccount(form, history, t('message.successful_update')));
   };
 
   const buttons = [

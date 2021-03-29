@@ -11,6 +11,8 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Label from 'src/components/text/Label';
 import { REDUX_STATE } from 'src/stores/states';
 import { joinClassName } from 'src/utils/stringUtils';
+import AddIcon from '@material-ui/icons/Add';
+import { useEffect } from 'react';
 
 const JobTimelineInfo = ({ t, profile }) => {
   const dispatch = useDispatch();
@@ -26,35 +28,37 @@ const JobTimelineInfo = ({ t, profile }) => {
     { id: 5, name: 'Xăng xe', amount: 1000000 },
     { id: 6, name: 'Nhà ở', amount: 1000000 },
   ];
-  const salaryGroup = [
+  const wage = [
     { id: 1, name: '13M' },
     { id: 2, name: '15M' },
     { id: 3, name: '23M' },
   ];
-  const payType = [
+  const paymentType = [
     { id: 1, name: 'Chi trả một lần' },
     { id: 2, name: 'Chi trả theo giờ' },
     { id: 3, name: 'Chi trả theo tháng' },
     { id: 4, name: 'Chi trả theo ngày công' },
   ];
-  const jobType = [
-    { id: 1, name: 'Văn phòng' },
-    { id: 2, name: 'Làm việc ngoài trời' },
+  const typeWord = [
+    { id: 'office', name: 'Văn phòng' },
+    { id: 'out_door', name: 'Làm việc ngoài trời' },
   ];
   const personalIncomeTaxType = [
-    { id: 1, name: 'Cư trú có hợp đồng lao động 3 tháng trở lên' },
-    { id: 2, name: 'Cá nhân không cư trú' },
-    { id: 3, name: 'Không tính thuế' },
-    { id: 4, name: 'Hợp đồng lao động dưới 3 tháng' },
+    { id: 'more_3_month', name: 'Cư trú có hợp đồng lao động 3 tháng trở lên' },
+    { id: 'non_resident', name: 'Cá nhân không cư trú' },
+    { id: 'no_tax', name: 'Không tính thuế' },
+    { id: 'less_3_month', name: 'Hợp đồng lao động dưới 3 tháng' },
   ];
 
-  const contractType = [
+  const type = [
     { id: 'partTime', name: 'Bán thời gian' },
     { id: 'fullTime', name: 'Toàn thời gian' },
     { id: 'season', name: 'Thời vụ' },
   ];
   const employee = [{ shortname: 1, name: 'Nguyễn Văn An' }];
   const branches = [{ id: 1, name: 'APPHR Q1 - 12 Bến Nghé ' }];
+
+  useEffect(() => {}, []);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -103,9 +107,20 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       setFieldValue(`contractInfo.${index}.isOpen`, e.target.checked);
                                     }}
                                   />
-                                  {values.contractInfo[index].contractCode}
+                                  {values.contractInfo[index].code}
                                 </div>
-                                <DeleteIconButton onClick={() => remove(index)} />
+                                <div>
+                                  {values.contractInfo[index].id === null && (
+                                    <div role="button" className="d-inline pb-1">
+                                      <AddIcon
+                                        className="d-inline"
+                                        onClick={() => console.log(values.contractInfo[index].id === null)}
+                                        style={{ color: 'blue' }}
+                                      />
+                                    </div>
+                                  )}
+                                  <DeleteIconButton onClick={() => remove(index)} />
+                                </div>
                               </div>
                               <hr className="mt-1" />
 
@@ -116,7 +131,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       <Label text={t('label.contract_code')} />
                                       <Field
                                         className={'form-control'}
-                                        name={`contractInfo.${index}.contractCode`}
+                                        name={`contractInfo.${index}.code`}
                                         placeholder={t('placeholder.enter_contract_code')}
                                         type="text"
                                         required
@@ -124,8 +139,8 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     </div>
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.contract_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
-                                        {contractType.map((ch, idx) => (
+                                      <Field className={'form-control'} name={`contractInfo.${index}.type`} component="select">
+                                        {type.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -134,7 +149,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     </div>
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.personal_income_tax_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.pTaxType`} component="select">
+                                      <Field className={'form-control'} name={`contractInfo.${index}.typeTax`} component="select">
                                         {personalIncomeTaxType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
@@ -146,7 +161,7 @@ const JobTimelineInfo = ({ t, profile }) => {
                                   <div className="row">
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.signer')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.contractType`} component="select">
+                                      <Field className={'form-control'} name={`contractInfo.${index}.type`} component="select">
                                         {employee.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
@@ -156,8 +171,8 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     </div>
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.job_type')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.jobType`} component="select">
-                                        {jobType.map((ch, idx) => (
+                                      <Field className={'form-control'} name={`contractInfo.${index}.typeWord`} component="select">
+                                        {typeWord.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -171,9 +186,9 @@ const JobTimelineInfo = ({ t, profile }) => {
                                           type="number"
                                           className={'form-control'}
                                           rows={5}
-                                          name={`contractInfo.${index}.probationaryPeriod`}
-                                          onChange={(e) => handleChange(`contractInfo.${index}.probationaryPeriod`)(e)}
-                                          value={values.contractInfo[index].probationaryPeriod}
+                                          name={`contractInfo.${index}.probTime`}
+                                          onChange={(e) => handleChange(`contractInfo.${index}.probTime`)(e)}
+                                          value={values.contractInfo[index].probTime}
                                         />
                                         <span className="input-group-text" id="basic-addon2">
                                           {t('label.day')}
@@ -186,11 +201,11 @@ const JobTimelineInfo = ({ t, profile }) => {
                                       <Label text={t('label.signature_date')} required />
                                       <input
                                         type="date"
-                                        onChange={(e) => handleChange(`contractInfo.${index}.signedDate`)(e)}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.handleDate`)(e)}
                                         className={'form-control'}
                                         rows={5}
-                                        name={`contractInfo.${index}.signedDate`}
-                                        value={values.contractInfo[index].signedDate}
+                                        name={`contractInfo.${index}.handleDate`}
+                                        value={values.contractInfo[index].handleDate}
                                       />
                                     </div>
                                     <div className="form-group col-lg-4">
@@ -199,9 +214,9 @@ const JobTimelineInfo = ({ t, profile }) => {
                                         type="date"
                                         className={'form-control'}
                                         rows={5}
-                                        name={`contractInfo.${index}.effectiveDate`}
-                                        onChange={(e) => handleChange(`contractInfo.${index}.effectiveDate`)(e)}
-                                        value={values.contractInfo[index].effectiveDate}
+                                        name={`contractInfo.${index}.validDate`}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.validDate`)(e)}
+                                        value={values.contractInfo[index].validDate}
                                       />
                                     </div>
                                     <div className="form-group col-lg-4">
@@ -233,9 +248,9 @@ const JobTimelineInfo = ({ t, profile }) => {
                                         type="date"
                                         className={'form-control'}
                                         rows={5}
-                                        name={`contractInfo.${index}.startDate`}
-                                        onChange={(e) => handleChange(`contractInfo.${index}.startDate`)(e)}
-                                        value={values.contractInfo[index].startDate}
+                                        name={`contractInfo.${index}.startWork`}
+                                        onChange={(e) => handleChange(`contractInfo.${index}.startWork`)(e)}
+                                        value={values.contractInfo[index].startWork}
                                       />
                                     </div>
                                   </div>
@@ -244,8 +259,8 @@ const JobTimelineInfo = ({ t, profile }) => {
                                   <div className="row">
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.payment_method')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.payType`} component="select">
-                                        {payType.map((ch, idx) => (
+                                      <Field className={'form-control'} name={`contractInfo.${index}.paymentType`} component="select">
+                                        {paymentType.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -254,8 +269,8 @@ const JobTimelineInfo = ({ t, profile }) => {
                                     </div>
                                     <div className="form-group col-lg-4">
                                       <Label text={t('label.salary_group')} required />
-                                      <Field className={'form-control'} name={`contractInfo.${index}.salaryGroup`} component="select">
-                                        {salaryGroup.map((ch, idx) => (
+                                      <Field className={'form-control'} name={`contractInfo.${index}.wage`} component="select">
+                                        {wage.map((ch, idx) => (
                                           <option key={idx} value={ch.id}>
                                             {ch.name}
                                           </option>
@@ -355,21 +370,22 @@ const JobTimelineInfo = ({ t, profile }) => {
                           className="px-5 py-1 bg-white"
                           onClick={() => {
                             push({
+                              id: 0,
                               isMinimize: false,
                               isOpen: false,
-                              contractCode: '',
-                              contractType: '',
-                              pTaxType: '',
+                              code: '',
+                              type: '',
+                              typeTax: '',
                               signee: '',
-                              jobType: 0,
-                              probationaryPeriod: 0,
-                              signedDate: '',
-                              effectiveDate: '',
+                              typeWord: 0,
+                              probTime: 0,
+                              handleDate: '',
+                              validDate: '',
                               expiredDate: '',
                               branchId: 0,
-                              startDate: '',
-                              payType: 0,
-                              salaryGroup: 0,
+                              startWork: '',
+                              paymentType: 0,
+                              wage: 0,
                               salary: 0,
                               allowance: [],
                             });
