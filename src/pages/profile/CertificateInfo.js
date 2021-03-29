@@ -1,48 +1,65 @@
 import { CContainer } from '@coreui/react';
+import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
+import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
 
-const CertificateInfo = ({ t }) => {
-  const initialCertificateInfo = {
-    certificateInfo: [
-      {
-        name: '',
-        certificateType: '',
-        certificatePlace: '',
-        note: '',
-        startDate: '',
-        endDate: '',
-      },
-    ],
-  };
+const CertificateInfo = ({ t, profile, match }) => {
+  const initialValues = profile;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'certificate' }));
+  }, []);
+
+  function create(form) {
+    form.type = 'certificate';
+    form.provinceId = form.provinceId || null;
+    form.profileId = +match.params.id;
+    console.log({ form });
+    // if (form.id) {
+    //   dispatch(updateDiploma(form, t('message.successful_create')));
+    // } else {
+    //   dispatch(createDiploma(form, t('message.successful_create')));
+    // }
+  }
+
+  function removeCertificate(form, cb) {
+    if (form.id) {
+      dispatch(deleteDiploma(form.id));
+    } else {
+      cb();
+    }
+  }
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4">
-          <Formik
-            initialValues={initialCertificateInfo}
-            enableReinitialize
-            onSubmit={(values) => {
-              console.log('Certificate: ', values);
-            }}
-          >
+          <Formik initialValues={initialValues} enableReinitialize onSubmit={() => {}}>
             {({ values, errors, touched, handleReset, handleSubmit, handleChange }) => {
               return (
                 <Form>
                   <FieldArray
-                    name="certificateInfo"
+                    name="certificates"
                     render={({ insert, remove, push }) => (
                       <div>
-                        {values.certificateInfo.length > 0 &&
-                          values.certificateInfo.map((friend, index) => (
+                        {values.certificates.length > 0 &&
+                          values.certificates.map((friend, index) => (
                             <div key={index}>
                               <div className={'d-flex justify-content-between'}>
                                 <h5>{index + 1}.</h5>
-                                <DeleteIconButton onClick={() => remove(index)} />
+                                <div>
+                                  <Button size="small" variant="contained" color="primary" onClick={() => create(friend)} style={{marginRight: 10}}>
+                                    {friend.id ? 'Cập nhật' : 'Tạo'}
+                                  </Button>
+                                  <Button size="small" variant="contained" color="secondary" onClick={() => removeCertificate(friend, () => remove(index))}>Xóa</Button>
+                                </div>
                               </div>
                               <hr className="mt-1" />
                               <div className="row">
@@ -51,7 +68,7 @@ const CertificateInfo = ({ t }) => {
                                   <Field
                                     type="text"
                                     className={'form-control'}
-                                    name={`certificateInfo.${index}.academicLevel`}
+                                    name={`certificates.${index}.name`}
                                     placeholder={t('placeholder.enter_certificate_name')}
                                   />
                                 </div>
@@ -59,7 +76,7 @@ const CertificateInfo = ({ t }) => {
                                   <Label text={t('label.certificate_type')} />
                                   <Field
                                     className={'form-control'}
-                                    name={`certificateInfo.${index}.certificateType`}
+                                    name={`certificates.${index}.certificateType`}
                                     placeholder={t('placeholder.enter_certificate_type')}
                                     type="text"
                                   />
@@ -68,7 +85,7 @@ const CertificateInfo = ({ t }) => {
                                   <Label text={t('label.grant_place')} />
                                   <Field
                                     className={'form-control'}
-                                    name={`certificateInfo.${index}.certificatePlace`}
+                                    name={`certificates.${index}.provinceId`}
                                     placeholder={t('placeholder.enter_grant_place')}
                                     type="text"
                                   />
@@ -81,9 +98,9 @@ const CertificateInfo = ({ t }) => {
                                     type="date"
                                     className={'form-control'}
                                     rows={5}
-                                    name={`certificateInfo.${index}.stateDate`}
-                                    onChange={(e) => handleChange(`certificateInfo.${index}.stateDate`)(e)}
-                                    value={values.certificateInfo[index].stateDate}
+                                    name={`certificates.${index}.issuedDate`}
+                                    onChange={(e) => handleChange(`certificates.${index}.issuedDate`)(e)}
+                                    value={values.certificates[index].issuedDate}
                                   />
                                 </div>
                                 <div className="form-group col-lg-4">
@@ -92,9 +109,9 @@ const CertificateInfo = ({ t }) => {
                                     type="date"
                                     className={'form-control'}
                                     rows={5}
-                                    name={`certificateInfo.${index}.endDate`}
-                                    onChange={(e) => handleChange(`certificateInfo.${index}.endDate`)(e)}
-                                    value={values.certificateInfo[index].endDate}
+                                    name={`certificates.${index}.expiredDate`}
+                                    onChange={(e) => handleChange(`certificates.${index}.expiredDate`)(e)}
+                                    value={values.certificates[index].expiredDate}
                                   />
                                 </div>
                               </div>
@@ -104,18 +121,23 @@ const CertificateInfo = ({ t }) => {
                                   <textarea
                                     className={'form-control'}
                                     rows={5}
-                                    name={`certificateInfo.${index}.note`}
-                                    onChange={(e) => handleChange(`certificateInfo.${index}.note`)(e)}
-                                    value={values.certificateInfo[index].note}
+                                    name={`certificates.${index}.note`}
+                                    onChange={(e) => handleChange(`certificates.${index}.note`)(e)}
+                                    value={values.certificates[index].note}
                                   />
                                 </div>
+                              </div>
+                              <div className="row">
+                                <CommonUploadFileButton
+                                  name={`certificates.${index}.attaches`}
+                                  containerClassName="form-group col-xl-12"
+                                  buttonClassName="btn btn-primary"
+                                  value={values.certificates[index].attaches}
+                                />
                               </div>
                             </div>
                           ))}
                         <div className="d-flex justify-content-center">
-                          {/* <button type="button" className="btn btn-primary" onClick={() => push({name: 'skype', certificateType: '' })}>
-                            <AddCircle /> Thêm kênh liên lạc
-                          </button> */}
                           <button
                             type="button"
                             style={{ border: 'dotted 0.5px black' }}
@@ -124,10 +146,11 @@ const CertificateInfo = ({ t }) => {
                               push({
                                 name: '',
                                 certificateType: '',
-                                certificatePlace: '',
+                                provinceId: 0,
                                 note: '',
-                                startDate: '',
-                                endDate: '',
+                                issuedDate: '',
+                                expiredDate: '',
+                                attaches: [],
                               })
                             }
                           >

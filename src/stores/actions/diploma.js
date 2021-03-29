@@ -47,3 +47,20 @@ export const fetchDiplomaByType = (params) => {
       });
   };
 };
+
+export const deleteDiploma = (id) => {
+  return (dispatch, getState) => {
+    api.diploma
+      .delete(id)
+      .then(({ payload }) => {
+        if (payload.type === 'certificate') {
+          dispatch({ type: REDUX_STATE.diploma.DELETE_CERTIFICATE, payload });
+        } else {
+          dispatch({ type: REDUX_STATE.diploma.DELETE_DEGREE, payload });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+};

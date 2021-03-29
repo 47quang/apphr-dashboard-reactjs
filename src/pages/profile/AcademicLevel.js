@@ -4,11 +4,10 @@ import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
-import { createDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
+import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
 
 const AcademicLevel = ({ t, profile, match }) => {
   const dispatch = useDispatch();
@@ -36,6 +35,14 @@ const AcademicLevel = ({ t, profile, match }) => {
     }
   }
 
+  function removeCertificate(form, cb) {
+    if (form.id) {
+      dispatch(deleteDiploma(form.id));
+    } else {
+      cb();
+    }
+  }
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -55,10 +62,17 @@ const AcademicLevel = ({ t, profile, match }) => {
                               <div className={'d-flex justify-content-between'}>
                                 <h5>{index + 1}.</h5>
                                 <div>
-                                  <Button variant="contained" color="primary" onClick={() => create(friend)}>
-                                    Tạo mới
+                                  <Button size="small" variant="contained" color="primary" onClick={() => create(friend)} style={{ marginRight: 10 }}>
+                                    {friend.id ? 'Cập nhật' : 'Tạo'}
                                   </Button>
-                                  <DeleteIconButton onClick={() => remove(index)} />
+                                  <Button
+                                    size="small"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => removeCertificate(friend, () => remove(index))}
+                                  >
+                                    Xóa
+                                  </Button>
                                 </div>
                               </div>
                               <hr className="mt-1" />
@@ -119,10 +133,10 @@ const AcademicLevel = ({ t, profile, match }) => {
                               </div>
                               <div className="row">
                                 <CommonUploadFileButton
-                                  name={`degrees.${index}.files`}
+                                  name={`degrees.${index}.attaches`}
                                   containerClassName="form-group col-xl-12"
                                   buttonClassName="btn btn-primary"
-                                  value={values.degrees[index].files}
+                                  value={values.degrees[index].attaches}
                                 />
                               </div>
                             </div>

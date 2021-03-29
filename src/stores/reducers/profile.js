@@ -247,6 +247,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         contacts: [...state.contacts, payload],
+      }
+    case REDUX_STATE.diploma.DELETE_CERTIFICATE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: state.profile.certificates.filter((c) => c.id !== payload.id) }),
+      };
+    case REDUX_STATE.diploma.DELETE_DEGREE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { degrees: state.profile.degrees.filter((c) => c.id !== payload.id) }),
       };
     default:
       return state;
