@@ -4,7 +4,6 @@ import { Add } from '@material-ui/icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
@@ -21,12 +20,11 @@ const CertificateInfo = ({ t, profile, match }) => {
     form.type = 'certificate';
     form.provinceId = form.provinceId || null;
     form.profileId = +match.params.id;
-    console.log({ form });
-    // if (form.id) {
-    //   dispatch(updateDiploma(form, t('message.successful_create')));
-    // } else {
-    //   dispatch(createDiploma(form, t('message.successful_create')));
-    // }
+    if (form.id) {
+      dispatch(updateDiploma(form, t('message.successful_create')));
+    } else {
+      dispatch(createDiploma(form, t('message.successful_create')));
+    }
   }
 
   function removeCertificate(form, cb) {
