@@ -246,6 +246,11 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         contacts: [...payload],
       };
+    case REDUX_STATE.profile.CREATE_NEW_CONTACTS:
+      return {
+        ...state,
+        contacts: [...state.contacts, payload],
+      };
     default:
       return state;
   }

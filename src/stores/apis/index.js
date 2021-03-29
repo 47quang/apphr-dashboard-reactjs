@@ -29,6 +29,12 @@ export const api = {
     post: (params) => {
       return client.post(API_PREFIX.API_CONTACT, params);
     },
+    put: (data) => {
+      return client.put(API_PREFIX.API_CONTACT + `/${data.id}`, data);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_CONTACT + `/${id}`);
+    },
   },
   general: {
     getGeneralInfo: (id) => {

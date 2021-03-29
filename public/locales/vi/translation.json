@@ -182,6 +182,9 @@
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
+    "successful_create_contact": "Tạo kênh liên lạc thành công",
+    "successful_update_contact": "Cập nhật kênh liên lạc thành công",
+    "successful_delete_contact": "Xóa kênh liên lạc thành công",
     "successful_create": "Tạo mới thành công",
     "successful_delete": "Xóa thành công",
     "empty_table": "Chưa có thông tin",

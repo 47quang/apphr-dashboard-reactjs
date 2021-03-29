@@ -198,8 +198,8 @@ export const fetchContacts = (profileId) => {
     api.contact
       .getAll(params)
       .then(({ payload }) => {
-        console.log('contacts', payload);
-        // dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
+        payload.sort((first, second) => (first.id < second.id ? -1 : first.id > second.id ? 1 : 0));
+        dispatch({ type: REDUX_STATE.profile.SET_CONTACTS, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -207,7 +207,7 @@ export const fetchContacts = (profileId) => {
   };
 };
 
-export const createNewContact = (data, profileId) => {
+export const createNewContact = (data, profileId, success_msg) => {
   const params = {
     ...data,
     profileId: profileId,
@@ -216,11 +216,43 @@ export const createNewContact = (data, profileId) => {
     api.contact
       .post(params)
       .then(({ payload }) => {
-        console.log('new contact', payload);
-        // dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
+        dispatch({ type: REDUX_STATE.profile.CREATE_NEW_CONTACTS, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+};
+
+export const updateContact = (data, profileId, success_msg) => {
+  return (dispatch, getState) => {
+    api.contact
+      .put(data)
+      .then(({ payload }) => {
+        console.log(payload);
+        dispatch(fetchContacts(profileId));
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const deleteContact = (contactId, profileId, setClosePopOver, success_msg) => {
+  return (dispatch, getState) => {
+    api.contact
+      .delete(contactId)
+      .then(({ payload }) => {
+        dispatch(fetchContacts(profileId));
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setClosePopOver();
       });
   };
 };
