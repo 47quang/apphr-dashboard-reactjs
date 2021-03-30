@@ -56,16 +56,8 @@ const initialState = {
         files: [],
       },
     ],
-    academicInfo: [
-      {
-        academicLevel: '',
-        major: '',
-        educationPlace: '',
-        note: '',
-        date: '',
-        files: [],
-      },
-    ],
+    degrees: [],
+    certificates: [],
   },
   roles: [],
   contracts: [
@@ -234,10 +226,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profile: { ...state.profile, contracts: payload },
       };
-    case REDUX_STATE.profile.SET_ACADEMIC_LEVEL:
+    case REDUX_STATE.diploma.SET_DEGREES:
       return {
         ...state,
-        profile: { ...state.profile, academicInfo: payload },
+        profile: Object.assign({}, state.profile, { degrees: payload }),
+      };
+
+    case REDUX_STATE.diploma.SET_CERTIFICATES:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: payload }),
       };
 
     case REDUX_STATE.profile.SET_CONTACTS:
@@ -249,6 +247,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         contacts: [...state.contacts, payload],
+      }
+    case REDUX_STATE.diploma.DELETE_CERTIFICATE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: state.profile.certificates.filter((c) => c.id !== payload.id) }),
+      };
+    case REDUX_STATE.diploma.DELETE_DEGREE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { degrees: state.profile.degrees.filter((c) => c.id !== payload.id) }),
       };
     default:
       return state;

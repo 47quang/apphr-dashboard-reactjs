@@ -18,6 +18,8 @@ const API_PREFIX = {
   API_PROFILE: '/api.profile',
   API_CONTACT: '/api.contact',
   API_CONTRACT: '/api.contract',
+  API_DIPLOMA: '/api.diploma',
+  API_UPLOAD: 'api.upload',
 };
 
 export const api = {
@@ -276,6 +278,34 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_CONTRACT + `/${id}`);
+    },
+  },
+  diploma: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_DIPLOMA, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_DIPLOMA, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_DIPLOMA + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_DIPLOMA + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_DIPLOMA + `/${id}`);
+    },
+  },
+  upload: {
+    postForm: (data) => {
+      return client.post(API_PREFIX.API_UPLOAD, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
     },
   },
 };
