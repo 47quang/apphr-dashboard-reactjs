@@ -93,7 +93,6 @@ const OtherInfo = ({ t, profile }) => {
                     inputClassName={'form-control'}
                   />
                 </div>
-                <AutoSubmitToken />
                 {renderButtons(getButtonsUpdate())}
               </form>
             )}

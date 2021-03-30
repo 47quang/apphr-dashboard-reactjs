@@ -8,6 +8,19 @@ export const fetchContracts = (profileId) => {
     api.contract
       .getAll(profileId)
       .then(({ payload }) => {
+        payload =
+          payload &&
+          payload.length &&
+          payload.map((contract) => {
+            contract.handleDate = getDateInput(contract.handleDate);
+            contract.expiredDate = getDateInput(contract.expiredDate);
+            contract.validDate = getDateInput(contract.validDate);
+            contract.startWork = getDateInput(contract.startWork);
+            contract['paymentType'] = contract?.wage?.type;
+            contract['wageId'] = contract?.wage?.id;
+            contract['amount'] = contract?.wage?.amount;
+            return contract;
+          });
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
