@@ -207,7 +207,7 @@ export const fetchContacts = (profileId) => {
   };
 };
 
-export const createNewContact = (data, profileId, success_msg) => {
+export const createNewContact = (data, profileId, success_msg, ref) => {
   const params = {
     ...data,
     profileId: profileId,
@@ -218,6 +218,7 @@ export const createNewContact = (data, profileId, success_msg) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.CREATE_NEW_CONTACTS, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        ref.current.handleReset();
       })
       .catch((err) => {
         console.log(err);

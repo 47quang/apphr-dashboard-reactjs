@@ -15,7 +15,6 @@ const UpdateAccount = ({ t, location, history, match }) => {
   const permissionGroups = useSelector((state) => state.account.permissionGroups);
   const roles = useSelector((state) => state.account.roles);
   const profiles = useSelector((state) => state.account.profiles);
-  let permissionIds = [];
 
   useEffect(() => {
     dispatch(fetchAccount(match?.params?.id));
@@ -27,6 +26,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
   }, []);
   useEffect(() => {
     if (account.roleId !== 0) {
+      let permissionIds = [];
       permissionIds = roles.filter((x) => x.id === account.roleId)[0]?.permissionIds;
       permissionIds = permissionIds && permissionIds.length > 0 ? permissionIds.map((val) => +val) : [];
       dispatch({
@@ -34,6 +34,7 @@ const UpdateAccount = ({ t, location, history, match }) => {
         payload: permissionIds,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account.roleId]);
 
   const submitForm = (values) => {

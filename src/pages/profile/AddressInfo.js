@@ -29,6 +29,7 @@ const AddressInfo = ({ t, profile, history }) => {
   };
   const permanentAddressRef = useRef();
   const relationInfoRef = useRef();
+  const contactFormRef = useRef();
   const dispatch = useDispatch();
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
@@ -127,9 +128,10 @@ const AddressInfo = ({ t, profile, history }) => {
       <Formik
         initialValues={initialContact}
         validationSchema={ContactSchema}
+        innerRef={contactFormRef}
         onSubmit={(values) => {
-          dispatch(createNewContact(values, profile.id, t('message.successful_create_contact')));
-          setShowCreateContact(true);
+          dispatch(createNewContact(values, profile.id, t('message.successful_create_contact'), contactFormRef));
+          // setShowCreateContact(true);
         }}
       >
         {({ values, errors, touched, handleReset, handleSubmit, handleBlur, handleChange }) => {
@@ -181,7 +183,7 @@ const AddressInfo = ({ t, profile, history }) => {
           dispatch(updateContact(values, profile.id, t('message.successful_update_contact')));
         }}
       >
-        {({ values, errors, touched, handleReset, handleSubmit, handleBlur, handleChange }) => {
+        {({ values, errors, touched, handleSubmit, handleBlur, handleChange }) => {
           return (
             <form>
               <div className="row">
@@ -192,7 +194,7 @@ const AddressInfo = ({ t, profile, history }) => {
                   </div>
                   <div role="button" onClick={handleDelete} aria-describedby={'deleteContact'}>
                     <Delete style={{ color: 'red' }} />
-                  </div>{' '}
+                  </div>
                   <Popover
                     id={'deleteContact'}
                     open={Boolean(anchorEl)}
@@ -252,7 +254,7 @@ const AddressInfo = ({ t, profile, history }) => {
                 dispatch(updatePermanentAddress(values, provinces, districts, wards, t('message.successful_update')));
               }}
             >
-              {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (
+              {({ values, handleBlur, handleChange }) => (
                 <form>
                   <div className="row">
                     <CommonTextInput
