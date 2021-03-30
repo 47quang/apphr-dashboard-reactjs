@@ -80,6 +80,10 @@ export const updateProfile = (data, history, success_msg) => {
     api.profile
       .put(data)
       .then(({ payload }) => {
+        payload.dateOfBirth = getDateInput(payload.dateOfBirth);
+        payload.cmndIssuedDate = getDateInput(payload.cmndIssuedDate);
+        payload.passportIssuedDate = getDateInput(payload.passportIssuedDate);
+
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -207,7 +211,7 @@ export const fetchContacts = (profileId) => {
   };
 };
 
-export const createNewContact = (data, profileId, success_msg) => {
+export const createNewContact = (data, profileId, success_msg, ref) => {
   const params = {
     ...data,
     profileId: profileId,
@@ -218,6 +222,7 @@ export const createNewContact = (data, profileId, success_msg) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.CREATE_NEW_CONTACTS, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        ref.current.handleReset();
       })
       .catch((err) => {
         console.log(err);

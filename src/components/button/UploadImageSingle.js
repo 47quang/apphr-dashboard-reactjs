@@ -20,7 +20,7 @@ function UploadImageSingle(props) {
   return (
     <div className={`image-uploader ${src ? 'none-border' : ''}`}>
       {!src ? (
-        <div tabindex="0" className="el-upload el-upload--text">
+        <div tabIndex="0" className="el-upload el-upload--text">
           <label className="image-detail">
             <CloudUploadIcon className="icon-upload" />
             <input type="file" accept="image/*" className="el-upload__input" onChange={(e) => browserUpload(e.target.files[0])} />

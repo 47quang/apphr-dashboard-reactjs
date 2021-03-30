@@ -151,6 +151,56 @@ export const BasicInfoCreateSchema = Yup.object().shape({
     .required('validation.required_select_gender'),
 });
 
+export const JobTimelineSchema = Yup.object().shape({
+  contractInfo: Yup.array().of(
+    Yup.object().shape({
+      code: Yup.string().required('validation.required_contract_code'),
+      fullname: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_enter_contract_full_name'),
+      type: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type'),
+      typeTax: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type_tax'),
+      typeWork: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_work', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_type_work'),
+      probTime: Yup.number()
+        .positive('validation.required_positive_prob_time')
+        .integer('validation.required_integer_prob_time')
+        .required('validation.required_enter_prob_time'),
+      handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
+      validDate: Yup.string().required('validation.required_select_contract_valid_date'),
+      expiredDate: Yup.string().required('validation.required_select_contract_expired_date'),
+      startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
+      paymentType: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_payment'),
+      wageId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_contract_wage'),
+      allowance: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string()
+            .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+              return value !== '0';
+            })
+            .required('validation.required_select_allowance'),
+        }),
+      ),
+    }),
+  ),
+});
 export const ContactSchema = Yup.object().shape({
   type: Yup.string()
     .required('validation.required_select_contact_type')

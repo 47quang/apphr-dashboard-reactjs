@@ -8,10 +8,13 @@ import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
+import { renderButtons } from 'src/utils/formUtils';
 
-const AcademicLevel = ({ t, profile, match }) => {
+const AcademicLevel = ({ t, match }) => {
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
+  const newDegree = useSelector((state) => state.profile.profile.newDegree);
+
   const academicLevels = [
     { id: 'intermediate', name: t('label.intermediate') },
     { id: 'college', name: t('label.college') },
@@ -44,9 +47,94 @@ const AcademicLevel = ({ t, profile, match }) => {
   }
 
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4">
+        <div className="">
+          <div className="d-flex justify-content-center">
+            <button type="button" className="btn btn-success" onClick={() => (document.getElementById('newDegree').hidden = false)}>
+              <Add /> {t('label.add')}
+            </button>
+          </div>
+          <Formik initialValues={newDegree} enableReinitialize onSubmit={() => {}}>
+            {({ values, errors, touched, handleReset, handleSubmit, handleChange }) => {
+              return (
+                <Form id="newDegree" hidden={true}>
+                  <div className="shadow bg-white rounded m-4 p-4">
+                    <h5>{'New' + 1}.</h5>
+                    <hr className="mt-1" />
+                    <div className="row">
+                      <div className="form-group col-lg-4">
+                        <Label text={t('label.academic_level')} />
+                        <Field className={'form-control'} name={`level`} component="select">
+                          {academicLevels.map((ch, idx) => (
+                            <option key={idx} value={ch.id}>
+                              {ch.name}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <div className="form-group col-lg-4">
+                        <Label text={t('label.major')} />
+                        <Field className={'form-control'} name={`name`} placeholder={t('placeholder.enter_major')} type="text" />
+                      </div>
+                      <div className="form-group col-lg-4">
+                        <Label text={t('label.education_place')} />
+                        <Field className={'form-control'} name={`provinceId`} placeholder={t('placeholder.enter_education_place')} type="text" />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-group col-lg-4">
+                        <Label text={t('label.start_date2')} />
+                        <input
+                          type="date"
+                          className={'form-control'}
+                          rows={5}
+                          name={`issuedDate`}
+                          onChange={(e) => handleChange(`issuedDate`)(e)}
+                          value={values.issuedDate}
+                        />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-group col-lg-12">
+                        <Label text={t('label.note')} />
+                        <textarea className={'form-control'} rows={5} name={`note`} onChange={(e) => handleChange(`note`)(e)} value={values.note} />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <CommonUploadFileButton
+                        name={`attaches`}
+                        containerClassName="form-group col-xl-12"
+                        buttonClassName="btn btn-primary"
+                        value={values.attaches}
+                      />
+                    </div>
+                    <hr className="mt-1" />
+                    {renderButtons([
+                      {
+                        type: 'button',
+                        className: `btn btn-primary px-4 mx-4`,
+                        onClick: () => (document.getElementById('newDegree').hidden = true),
+                        name: t('label.cancel'),
+                        position: 'right',
+                      },
+
+                      {
+                        type: 'button',
+                        className: `btn btn-primary px-4 ml-4`,
+                        onClick: () => create(values),
+                        name: t('label.save'),
+                      },
+                    ])}
+                  </div>
+
+                  <br />
+
+                  <AutoSubmitToken />
+                </Form>
+              );
+            }}
+          </Formik>
           <Formik initialValues={initialValues} enableReinitialize onSubmit={() => {}}>
             {({ values, errors, touched, handleReset, handleSubmit, handleChange }) => {
               return (
@@ -58,23 +146,8 @@ const AcademicLevel = ({ t, profile, match }) => {
                         {values.degrees &&
                           values.degrees.length > 0 &&
                           values.degrees.map((friend, index) => (
-                            <div key={index}>
-                              <div className={'d-flex justify-content-between'}>
-                                <h5>{index + 1}.</h5>
-                                <div>
-                                  <Button size="small" variant="contained" color="primary" onClick={() => create(friend)} style={{ marginRight: 10 }}>
-                                    {friend.id ? 'Cập nhật' : 'Tạo'}
-                                  </Button>
-                                  <Button
-                                    size="small"
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => removeCertificate(friend, () => remove(index))}
-                                  >
-                                    Xóa
-                                  </Button>
-                                </div>
-                              </div>
+                            <div key={index} className="shadow bg-white rounded m-4 p-4">
+                              <h5>{index + 1}.</h5>
                               <hr className="mt-1" />
                               <div className="row">
                                 <div className="form-group col-lg-4">
@@ -139,18 +212,31 @@ const AcademicLevel = ({ t, profile, match }) => {
                                   value={values.degrees[index].attaches}
                                 />
                               </div>
+                              <hr className="mt-1" />
+                              {renderButtons([
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 mx-4`,
+                                  onClick: () => removeCertificate(friend, () => remove(index)),
+                                  name: t('label.cancel'),
+                                  position: 'right',
+                                },
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 mx-4`,
+                                  onClick: () => console.log(index),
+                                  name: t('label.reset'),
+                                  position: 'right',
+                                },
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 ml-4`,
+                                  onClick: () => create(friend),
+                                  name: friend.id ? t('label.save') : t('label.create_new'),
+                                },
+                              ])}
                             </div>
                           ))}
-                        <div className="d-flex justify-content-center">
-                          <button
-                            type="button"
-                            style={{ border: 'dotted 0.5px black' }}
-                            className="px-5 py-1 bg-white"
-                            onClick={() => push({ level: '', name: '', provinceId: 0, note: '', issuedDate: '', attaches: [] })}
-                          >
-                            <Add /> {t('label.add')}
-                          </button>
-                        </div>
                       </div>
                     )}
                   />

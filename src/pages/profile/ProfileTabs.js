@@ -114,10 +114,10 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               <BasicInfo t={t} isCreate={isCreate} profile={profile} history={history} />
             </TabPanel>
             <TabPanel value={subTabName} index={1} dir={theme.direction}>
-              <JobTimelineInfo t={t} profile={profile} />
+              <JobTimelineInfo t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={2} dir={theme.direction}>
-              <AcademicLevel t={t} profile={profile} match={match} />
+              <AcademicLevel t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
               <CertificateInfo t={t} profile={profile} match={match} />

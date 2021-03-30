@@ -19,7 +19,7 @@ const NewAccount = ({ t, location, history }) => {
     dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
-    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'shortname'] }));
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

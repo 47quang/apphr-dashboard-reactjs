@@ -7,7 +7,7 @@ import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
 const Profile = ({ t, location }) => {
   const columnDefOfProfiles = [
-    { name: 'shortname', title: t('label.employee_code') },
+    { name: 'code', title: t('label.employee_code') },
     { name: 'fullname', title: t('label.employee_full_name') },
     { name: 'phone', title: t('label.phone_number') },
     { name: 'gender', title: t('label.sex') },

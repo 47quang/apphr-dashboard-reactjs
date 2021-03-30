@@ -18,11 +18,14 @@ const initialState = {
     branchId: 0,
     startWork: '',
     paymentType: 0,
-    salaryGroup: 0,
-    salary: 0,
+    wageId: 0,
+    amount: 0,
     allowance: [],
     files: [],
   },
+  branches: [],
+  wages: [],
+  allowances: [],
 };
 
 const contractReducer = (state = initialState, { type, payload }) => {
@@ -40,6 +43,22 @@ const contractReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         contract: initialState.contract,
+      };
+    case REDUX_STATE.contract.GET_BRANCHES:
+      payload =
+        payload && payload.length > 0
+          ? payload.map((branch) => ({ id: branch.id ?? 0, name: (branch.name ?? '') + ' - ' + (branch.address ?? ''), branch: branch.name }))
+          : [];
+      return { ...state, branches: payload };
+    case REDUX_STATE.contract.GET_WAGES:
+      return {
+        ...state,
+        wages: payload,
+      };
+    case REDUX_STATE.contract.GET_ALLOWANCES:
+      return {
+        ...state,
+        allowances: payload,
       };
     default:
       return state;

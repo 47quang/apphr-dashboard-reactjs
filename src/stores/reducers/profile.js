@@ -57,6 +57,14 @@ const initialState = {
       },
     ],
     degrees: [],
+    newDegree: {
+      level: '',
+      name: '',
+      provinceId: 0,
+      issuedDate: '',
+      note: '',
+      attaches: [],
+    },
     certificates: [],
   },
   roles: [],
@@ -247,7 +255,7 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         contacts: [...state.contacts, payload],
-      }
+      };
     case REDUX_STATE.diploma.DELETE_CERTIFICATE:
       return {
         ...state,
@@ -258,6 +266,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profile: Object.assign({}, state.profile, { degrees: state.profile.degrees.filter((c) => c.id !== payload.id) }),
       };
+    case REDUX_STATE.diploma.SET_DIPLOMA:
+      return { ...state, newDegree: payload };
     default:
       return state;
   }

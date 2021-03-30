@@ -22,11 +22,13 @@
   "Timekeeping": "Timekeeping",
   "Holiday": "Ngày nghỉ",
   "label": {
+    "contract_fullname": "Tên hợp đồng",
     "avatar": "Hình đại diện",
     "employee_lastname": "Họ và tên lót",
     "employee_firstname": "Tên",
     "employee_full_name": "Họ và tên",
     "update": "Cập nhật",
+    "save": "Lưu",
     "cancel": "Hủy",
     "back": "Quay lại",
     "create_new": "Tạo mới",
@@ -166,7 +168,8 @@
     "payment_method": "Hình thức chi trả",
     "salary_group": "Nhóm lương",
     "salary_level": "Mức lương",
-    "allowance": "Trợ cấp"
+    "allowance": "Trợ cấp",
+    "allowance_level": "Mức trợ cấp"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -198,6 +201,7 @@
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?"
   },
   "placeholder": {
+    "enter_contract_fullname": "Nhập tên hợp đồng",
     "enter_company_name": "Nhập tên doanh nghiệp",
     "enter_company_short_name": "Nhập tên viết tắt",
     "enter_company_address": "Nhập địa chỉ cụ thể",
@@ -221,6 +225,10 @@
     "enter_email": "Nhập email",
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
+    "select_contract_payment_method":"Chọn hình thức chi trả",
+    "select_contract_type_work":"Chọn loại công việc",
+    "select_contract_type_tax":"Chọn loại thuế thu nhập cá nhân",
+    "select_contract_type": "Chọn loại hợp đồng",
     "select_role": "Chọn vai trò",
     "select_profile": "Chọn nhân sự",
     "select_province": "Chọn Tỉnh/Thành phố",
@@ -263,6 +271,20 @@
     "enter_salary_level": "Nhập mức lương"
   },
   "validation": {
+    "required_enter_contract_full_name": "Bắt buộc phải nhập tên hợp đồng",
+    "required_select_allowance": "Bắt buộc phải chọn trợ cấp",
+    "required_integer_prob_time": "Thời gian thử  việc là số nguyên",
+    "required_positive_prob_time": "Thời gian thử việc là một số dương",
+    "required_select_contract_expired_date":"Bắt buộc chọn ngày hợp đồng hết hạn",
+    "required_select_contract_valid_date":"Bắt buộc chọn ngày bắt đầu hiệu lực hợp đồng",
+    "required_select_contract_handle_date": "Bắt buộc chọn ngày ký hợp đồng",
+    "required_enter_prob_time":"Bắt buộc nhập thời gian thử việc",
+    "required_select_contract_wage": "Bắt buộc phải chọn nhóm lương",
+    "required_select_contract_payment": "Bắt buộc phải chọn hình thức chi trả",
+    "required_select_contract_type_work": "Bắt buộc phải chọn loại công việc",
+    "required_select_contract_type_tax": "Bắt buộc phải chọn loại thuế thu nhập cá nhân",
+    "required_select_contract_type": "Bắt buộc phải chọn loại hợp đồng",
+    "required_contract_code": "Bắt buộc phải nhập mã hợp đồng",
     "required_select_gender": "Bắt buộc phải chọn giới tính",
     "required_enter_firstname": "Bắt buộc nhập tên",
     "required_enter_lastname": "Bắt buộc nhập họ",

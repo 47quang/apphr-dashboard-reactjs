@@ -18,6 +18,8 @@ const API_PREFIX = {
   API_PROFILE: '/api.profile',
   API_CONTACT: '/api.contact',
   API_CONTRACT: '/api.contract',
+  API_WAGE: '/api.wage',
+  API_ALLOWANCE: '/api.allowance',
   API_DIPLOMA: '/api.diploma',
   API_UPLOAD: 'api.upload',
 };
@@ -280,6 +282,45 @@ export const api = {
       return client.delete(API_PREFIX.API_CONTRACT + `/${id}`);
     },
   },
+  wage: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_WAGE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_WAGE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_WAGE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_WAGE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_WAGE + `/${id}`);
+    },
+  },
+  allowance: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ALLOWANCE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ALLOWANCE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ALLOWANCE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ALLOWANCE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ALLOWANCE + `/${id}`);
+    },
+  },
+
   diploma: {
     getAll: (params) => {
       return client.get(API_PREFIX.API_DIPLOMA, {

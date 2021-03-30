@@ -10,10 +10,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { ROUTE_PATH } from 'src/constants/key';
 import { BasicInfoCreateSchema } from 'src/schema/formSchema';
-import { fetchBranches } from 'src/stores/actions/branch';
-import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchProvinces } from 'src/stores/actions/location';
-import { fetchPositions } from 'src/stores/actions/position';
 import { REDUX_STATE } from 'src/stores/states/index';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
@@ -22,16 +19,12 @@ import UploadImageSingle from 'src/components/button/UploadImageSingle';
 
 const BasicInfo = ({ t, isCreate, profile, history }) => {
   const provinces = useSelector((state) => state.location.provinces);
-  const branches = useSelector((state) => state.branch.branches);
 
-  const positions = useSelector((state) => state.position.positions);
-  const departments = useSelector((state) => state.department.departments);
   const dispatch = useDispatch();
   const refInfo = useRef();
 
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
-    dispatch(fetchBranches());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,12 +33,6 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
     profile.have_passport = profile.passport && profile.passport !== '';
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.cmnd, profile.passport]);
-
-  useEffect(() => {
-    if (profile.branchId) dispatch(fetchDepartments({ branchId: profile.branchId }));
-    if (profile.departmentId) dispatch(fetchDepartments({ departmentId: profile.departmentId }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile.branchId, profile.departmentId]);
 
   const genders = [
     { id: 'male', name: t('label.male') },
@@ -275,60 +262,7 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                           </Field>
                         </div>
                       </div>
-                      <div className="row">
-                        <CommonSelectInput
-                          containerClassName={'form-group col-6'}
-                          value={values.branchId ?? undefined}
-                          onBlur={handleBlur('branchId')}
-                          onChange={(e) => {
-                            dispatch(fetchDepartments({ branchId: e.target.value }));
-                            handleChange('branchId')(e);
-                          }}
-                          inputID={'branchId'}
-                          labelText={t('label.branch')}
-                          selectClassName={'form-control'}
-                          placeholder={t('placeholder.select_branch')}
-                          lstSelectOptions={branches}
-                        />
-                        <CommonSelectInput
-                          containerClassName={'form-group col-6'}
-                          value={values.departmentId ?? 0}
-                          onBlur={handleBlur('departmentId')}
-                          onChange={(e) => {
-                            dispatch(fetchPositions({ departmentId: e.target.value }));
-                            handleChange('departmentId')(e);
-                          }}
-                          inputID={'departmentId'}
-                          labelText={t('label.department')}
-                          selectClassName={'form-control'}
-                          placeholder={t('placeholder.select_department')}
-                          lstSelectOptions={departments}
-                        />
-                        <CommonSelectInput
-                          containerClassName={'form-group col-6'}
-                          value={values.positionId ?? 0}
-                          onBlur={handleBlur('positionId')}
-                          onChange={(e) => {
-                            handleChange('positionId')(e);
-                          }}
-                          inputID={'positionId'}
-                          labelText={t('label.position')}
-                          selectClassName={'form-control'}
-                          placeholder={t('placeholder.select_position')}
-                          lstSelectOptions={positions}
-                        />
-                        <CommonTextInput
-                          containerClassName={'form-group col-6'}
-                          value={values.manager ?? ''}
-                          onBlur={handleBlur('manager')}
-                          onChange={handleChange('manager')}
-                          inputID={'manager'}
-                          labelText={t('label.direct_manager')}
-                          inputType={'text'}
-                          placeholder={t('placeholder.select_direct_manager')}
-                          inputClassName={'form-control'}
-                        />
-                      </div>
+                      <div className="row"></div>
                       <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                       <div className="row">
                         <div className="col-lg-6">
