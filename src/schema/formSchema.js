@@ -213,3 +213,43 @@ export const ContactSchema = Yup.object().shape({
       return value && value !== '';
     }),
 });
+export const NewDegreeSchema = Yup.object().shape({
+  level: Yup.string()
+    .required('validation.required_select_academic_level')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
+      return value && value !== '' && value !== '0';
+    }),
+  name: Yup.string()
+    .required('validation.required_enter_academic_name')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+      return value && value !== '';
+    }),
+  provinceId: Yup.string()
+    .required('validation.required_enter_academic_provincedId')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
+      return value && value !== '';
+    }),
+  issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+});
+export const DegreesSchema = Yup.object().shape({
+  contractInfo: Yup.array().of(
+    Yup.object().shape({
+      level: Yup.string()
+        .required('validation.required_select_academic_level')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
+          return value && value !== '' && value !== '0';
+        }),
+      name: Yup.string()
+        .required('validation.required_enter_academic_name')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+          return value && value !== '';
+        }),
+      provinceId: Yup.string()
+        .required('validation.required_enter_academic_provincedId')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
+          return value && value !== '';
+        }),
+      issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+    }),
+  ),
+});
