@@ -19,11 +19,15 @@ import { JobTimelineSchema } from 'src/schema/formSchema';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
+import { fetchDepartments } from 'src/stores/actions/department';
+import { fetchPositions } from 'src/stores/actions/position';
 
 const JobTimelineInfo = ({ t, history, match }) => {
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
+  const positions = useSelector((state) => state.position.positions);
+  const departments = useSelector((state) => state.department.departments);
   let wages = useSelector((state) => state.contract.wages);
   const jobTimelineInfo = {
     contractInfo: useSelector((state) => state.contract.contracts),
@@ -61,6 +65,11 @@ const JobTimelineInfo = ({ t, history, match }) => {
       dispatch(fetchWagesByType({ type: jobTimelineInfo.contractInfo.paymentType }));
     }
   }, []);
+  useEffect(() => {
+    if (jobTimelineInfo.contractInfo.branchId) dispatch(fetchDepartments({ branchId: jobTimelineInfo.contractInfo.branchId }));
+    if (jobTimelineInfo.contractInfo.departmentId) dispatch(fetchDepartments({ departmentId: jobTimelineInfo.contractInfo.departmentId }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -412,6 +421,33 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         }
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.branchId)}
                                         lstSelectOptions={branches}
+                                      />
+                                      <CommonSelectInput
+                                        containerClassName={'form-group col-4'}
+                                        value={values.departmentId ?? 0}
+                                        onBlur={handleBlur('departmentId')}
+                                        onChange={(e) => {
+                                          dispatch(fetchPositions({ departmentId: e.target.value }));
+                                          handleChange('departmentId')(e);
+                                        }}
+                                        inputID={'departmentId'}
+                                        labelText={t('label.department')}
+                                        selectClassName={'form-control'}
+                                        placeholder={t('placeholder.select_department')}
+                                        lstSelectOptions={departments}
+                                      />
+                                      <CommonSelectInput
+                                        containerClassName={'form-group col-4'}
+                                        value={values.positionId ?? 0}
+                                        onBlur={handleBlur('positionId')}
+                                        onChange={(e) => {
+                                          handleChange('positionId')(e);
+                                        }}
+                                        inputID={'positionId'}
+                                        labelText={t('label.position')}
+                                        selectClassName={'form-control'}
+                                        placeholder={t('placeholder.select_position')}
+                                        lstSelectOptions={positions}
                                       />
                                     </div>
                                     <h5 className="px-3">{t('label.gross_salary')}</h5>
