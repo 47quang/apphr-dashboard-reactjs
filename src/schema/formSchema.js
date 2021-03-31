@@ -224,7 +224,7 @@ export const NewDegreeSchema = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
       return value && value !== '';
     }),
-  provinceId: Yup.string()
+  issuedPlace: Yup.string()
     .required('validation.required_enter_academic_provincedId')
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
       return value && value !== '';
@@ -232,7 +232,7 @@ export const NewDegreeSchema = Yup.object().shape({
   issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
 });
 export const DegreesSchema = Yup.object().shape({
-  contractInfo: Yup.array().of(
+  degrees: Yup.array().of(
     Yup.object().shape({
       level: Yup.string()
         .required('validation.required_select_academic_level')
@@ -244,7 +244,7 @@ export const DegreesSchema = Yup.object().shape({
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
           return value && value !== '';
         }),
-      provinceId: Yup.string()
+      issuedPlace: Yup.string()
         .required('validation.required_enter_academic_provincedId')
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
           return value && value !== '';

@@ -18,7 +18,14 @@ import { REDUX_STATE } from 'src/stores/states';
 const AcademicLevel = ({ t, match }) => {
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
-  const newDegree = useSelector((state) => state.profile.profile.newDegree);
+  const newDegree = {
+    level: '',
+    name: '',
+    issuedPlace: '',
+    issuedDate: '',
+    note: '',
+    attaches: [],
+  };
 
   const academicLevels = [
     { id: 'intermediate', name: t('label.intermediate') },
@@ -29,16 +36,17 @@ const AcademicLevel = ({ t, match }) => {
   ];
   useEffect(() => {
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+    console.log(initialValues.degrees);
   }, []);
 
-  function create(form) {
+  async function create(form) {
     form.type = 'degree';
     // form.provinceId = form.provinceId || null;
     form.profileId = +match.params.id;
     if (form.id) {
-      dispatch(updateDiploma(form, t('message.successful_update')));
+      await dispatch(updateDiploma(form, t('message.successful_update')));
     } else {
-      dispatch(createDiploma(form, t('message.successful_create')));
+      await dispatch(createDiploma(form, t('message.successful_create')));
     }
   }
 
@@ -175,10 +183,13 @@ const AcademicLevel = ({ t, match }) => {
                         className: `btn btn-primary px-4 ml-4`,
                         onClick: async () => {
                           let err = await validateForm();
-                          if (err !== undefined) setTouched(err);
+                          console.log(err);
+                          if (err !== undefined && Object.keys(err).length !== 0) {
+                            setTouched(err);
+                            return;
+                          }
                           console.log(values);
-                          create(values);
-                          dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+                          await create(values).then(() => dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' })));
                           handleReset();
                           document.getElementById('newDegree').hidden = true;
                           document.getElementById('addBtn').disabled = false;
@@ -196,7 +207,7 @@ const AcademicLevel = ({ t, match }) => {
             }}
           </Formik>
           <Formik initialValues={initialValues} enableReinitialize validationSchema={DegreesSchema} onSubmit={() => {}}>
-            {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange, validateForm, setFieldValue }) => {
+            {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange, validateForm, setFieldValue, setFieldTouched }) => {
               return (
                 <Form>
                   <FieldArray
@@ -346,9 +357,24 @@ const AcademicLevel = ({ t, match }) => {
                                 {
                                   type: 'button',
                                   className: `btn btn-primary px-4 ml-4`,
-                                  onClick: () => {
+                                  onClick: async () => {
+                                    let err = await validateForm();
+                                    console.log(err);
+                                    let err_fields = err.degrees && Object.keys(err.degrees[index]);
+                                    if (err.degrees && err.degrees[index] !== undefined && err_fields.length !== 0) {
+                                      console.log(err.degrees[index]);
+                                      err_fields &&
+                                        err_fields.length &&
+                                        err_fields.forEach((val) => setFieldTouched(`degrees.${index}.${val}`, true));
+                                      return;
+                                    }
+                                    console.log(friend);
                                     create(friend);
-                                    dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+                                    initialValues.degrees[index] = friend;
+                                    setFieldValue(`degrees.${index}`, friend);
+                                    //dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+                                    document.getElementById('newDegree').hidden = true;
+                                    document.getElementById('addBtn').disabled = false;
                                   },
                                   name: friend.id ? t('label.save') : t('label.create_new'),
                                 },
