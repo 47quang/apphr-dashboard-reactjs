@@ -46,6 +46,13 @@ export const fetchDiplomaByType = (params) => {
             });
           dispatch({ type: REDUX_STATE.diploma.SET_DEGREES, payload });
         } else {
+          payload =
+            payload &&
+            payload.map((dip) => {
+              dip.issuedDate = getDateInput(dip.issuedDate);
+              dip.expiredDate = getDateInput(dip.expiredDate);
+              return dip;
+            });
           dispatch({ type: REDUX_STATE.diploma.SET_CERTIFICATES, payload });
         }
       })

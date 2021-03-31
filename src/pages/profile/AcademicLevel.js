@@ -1,23 +1,22 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
-import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import { Field, FieldArray, Form, Formik } from 'formik';
+import { FieldArray, Form, Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
-import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
-import Label from 'src/components/text/Label';
-import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
-import { renderButtons } from 'src/utils/formUtils';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import { NewDegreeSchema, DegreesSchema } from 'src/schema/formSchema';
-import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
+import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
+import { DegreesSchema, NewDegreeSchema } from 'src/schema/formSchema';
+import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
 import { REDUX_STATE } from 'src/stores/states';
+import { renderButtons } from 'src/utils/formUtils';
 
 const AcademicLevel = ({ t, match }) => {
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
+
   const newDegree = {
     level: '',
     name: '',
@@ -36,7 +35,6 @@ const AcademicLevel = ({ t, match }) => {
   ];
   useEffect(() => {
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
-    console.log(initialValues.degrees);
   }, []);
 
   async function create(form) {
@@ -183,12 +181,10 @@ const AcademicLevel = ({ t, match }) => {
                         className: `btn btn-primary px-4 ml-4`,
                         onClick: async () => {
                           let err = await validateForm();
-                          console.log(err);
                           if (err !== undefined && Object.keys(err).length !== 0) {
                             setTouched(err);
                             return;
                           }
-                          console.log(values);
                           await create(values).then(() => dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' })));
                           handleReset();
                           document.getElementById('newDegree').hidden = true;
@@ -217,175 +213,174 @@ const AcademicLevel = ({ t, match }) => {
                         {values.degrees &&
                           values.degrees.length > 0 &&
                           values.degrees.map((friend, index) => (
-                            <div key={index} className="shadow bg-white rounded m-4 p-4">
-                              <h5>{index + 1}.</h5>
-                              <hr className="mt-1" />
-                              <div className="row">
-                                <CommonSelectInput
-                                  containerClassName={'form-group col-lg-4'}
-                                  value={friend.level ?? ''}
-                                  onBlur={handleBlur(`degrees.${index}.level`)}
-                                  onChange={handleChange(`degrees.${index}.level`)}
-                                  inputID={`degrees.${index}.level`}
-                                  labelText={t('label.academic_level')}
-                                  selectClassName={'form-control'}
-                                  placeholder={t('placeholder.select_academic_level')}
-                                  isRequiredField
-                                  isTouched={touched && touched.degrees && touched.degrees[index]?.level}
-                                  isError={
-                                    errors &&
-                                    errors.degrees &&
-                                    errors.degrees[index]?.level &&
-                                    touched &&
-                                    touched.degrees &&
-                                    touched.degrees[index]?.level
-                                  }
-                                  errorMessage={t(errors && errors.degrees && errors.degrees[index]?.level)}
-                                  lstSelectOptions={academicLevels}
-                                />
-                                <CommonTextInput
-                                  containerClassName={'form-group col-lg-4'}
-                                  value={friend.name ?? ''}
-                                  onBlur={handleBlur(`degrees.${index}.name`)}
-                                  onChange={handleChange(`degrees.${index}.name`)}
-                                  inputID={`degrees.${index}.name`}
-                                  labelText={t('label.major')}
-                                  inputType={'text'}
-                                  placeholder={t('placeholder.enter_academic_major')}
-                                  inputClassName={'form-control'}
-                                  isRequiredField
-                                  isTouched={touched && touched.degrees && touched.degrees[index]?.name}
-                                  isError={
-                                    errors &&
-                                    errors.degrees &&
-                                    errors.degrees[index]?.name &&
-                                    touched &&
-                                    touched.degrees &&
-                                    touched.degrees[index]?.name
-                                  }
-                                  errorMessage={t(errors && errors.degrees && errors.degrees[index]?.name)}
-                                />
-                                <CommonTextInput
-                                  containerClassName={'form-group col-lg-4'}
-                                  value={friend.issuedPlace ?? ''}
-                                  onBlur={handleBlur(`degrees.${index}.issuedPlace`)}
-                                  onChange={handleChange(`degrees.${index}.issuedPlace`)}
-                                  inputID={`degrees.${index}.issuedPlace`}
-                                  labelText={t('label.education_place')}
-                                  inputType={'text'}
-                                  placeholder={t('placeholder.enter_education_place')}
-                                  inputClassName={'form-control'}
-                                  isRequiredField
-                                  isTouched={touched && touched.degrees && touched.degrees[index]?.issuedPlace}
-                                  isError={
-                                    errors &&
-                                    errors.degrees &&
-                                    errors.degrees[index]?.issuedPlace &&
-                                    touched &&
-                                    touched.degrees &&
-                                    touched.degrees[index]?.issuedPlace
-                                  }
-                                  errorMessage={t(errors && errors.degrees && errors.degrees[index]?.issuedPlace)}
-                                />
-                              </div>
-                              <div className="row">
-                                <CommonTextInput
-                                  containerClassName={'form-group col-lg-4'}
-                                  value={friend.issuedDate ?? ''}
-                                  onBlur={handleBlur(`degrees.${index}.issuedDate`)}
-                                  onChange={handleChange(`degrees.${index}.issuedDate`)}
-                                  inputID={`degrees.${index}.issuedDate`}
-                                  labelText={t('label.start_date2')}
-                                  inputType={'date'}
-                                  inputClassName={'form-control'}
-                                  isRequiredField
-                                  isTouched={touched && touched.degrees && touched.degrees[index]?.issuedDate}
-                                  isError={
-                                    errors &&
-                                    errors.degrees &&
-                                    errors.degrees[index]?.issuedDate &&
-                                    touched &&
-                                    touched.degrees &&
-                                    touched.degrees[index]?.issuedDate
-                                  }
-                                  errorMessage={t(errors && errors.degrees && errors.degrees[index]?.issuedDate)}
-                                />
-                              </div>
-                              <div className="row">
-                                <CommonMultipleTextInput
-                                  containerClassName={'form-group col-xl-12'}
-                                  value={friend.note}
-                                  onBlur={handleBlur(`degrees.${index}.note`)}
-                                  onChange={handleChange(`degrees.${index}.note`)}
-                                  inputID={`degrees.${index}.note`}
-                                  labelText={t('label.note')}
-                                  inputClassName={'form-control'}
-                                />
-                              </div>
-                              <div className="row">
-                                <CommonUploadFileButton
-                                  name={`degrees.${index}.attaches`}
-                                  containerClassName="form-group col-xl-12"
-                                  buttonClassName="btn btn-primary"
-                                  value={values.degrees[index].attaches}
-                                />
-                              </div>
-                              <hr className="mt-1" />
-                              {renderButtons([
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 mx-4`,
-                                  onClick: () => {
-                                    removeCertificate(friend, () => remove(index));
-                                    dispatch({
-                                      type: REDUX_STATE.notification.SET_NOTI,
-                                      payload: { open: true, type: 'success', message: t('message.successful_delete') },
-                                    });
-                                  },
-                                  name: t('label.delete'),
-                                  position: 'right',
-                                },
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 mx-4`,
-                                  onClick: () => {
-                                    setFieldValue(`degrees.${index}`, initialValues.degrees[index]);
-                                  },
-                                  name: t('label.reset'),
-                                  position: 'right',
-                                },
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 ml-4`,
-                                  onClick: async () => {
-                                    let err = await validateForm();
-                                    console.log(err);
-                                    let err_fields = err.degrees && Object.keys(err.degrees[index]);
-                                    if (err.degrees && err.degrees[index] !== undefined && err_fields.length !== 0) {
-                                      console.log(err.degrees[index]);
-                                      err_fields &&
-                                        err_fields.length &&
-                                        err_fields.forEach((val) => setFieldTouched(`degrees.${index}.${val}`, true));
-                                      return;
+                            <div>
+                              <div key={'degree' + index} className="shadow bg-white rounded m-4 p-4">
+                                <h5>{index + 1}.</h5>
+                                <hr className="mt-1" />
+                                <div className="row">
+                                  <CommonSelectInput
+                                    containerClassName={'form-group col-lg-4'}
+                                    value={friend.level ?? ''}
+                                    onBlur={handleBlur(`degrees.${index}.level`)}
+                                    onChange={handleChange(`degrees.${index}.level`)}
+                                    inputID={`degrees.${index}.level`}
+                                    labelText={t('label.academic_level')}
+                                    selectClassName={'form-control'}
+                                    placeholder={t('placeholder.select_academic_level')}
+                                    isRequiredField
+                                    isTouched={touched && touched.degrees && touched.degrees[index]?.level}
+                                    isError={
+                                      errors &&
+                                      errors.degrees &&
+                                      errors.degrees[index]?.level &&
+                                      touched &&
+                                      touched.degrees &&
+                                      touched.degrees[index]?.level
                                     }
-                                    console.log(friend);
-                                    create(friend);
-                                    initialValues.degrees[index] = friend;
-                                    setFieldValue(`degrees.${index}`, friend);
-                                    //dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
-                                    document.getElementById('newDegree').hidden = true;
-                                    document.getElementById('addBtn').disabled = false;
+                                    errorMessage={t(errors && errors.degrees && errors.degrees[index]?.level)}
+                                    lstSelectOptions={academicLevels}
+                                  />
+                                  <CommonTextInput
+                                    containerClassName={'form-group col-lg-4'}
+                                    value={friend.name ?? ''}
+                                    onBlur={handleBlur(`degrees.${index}.name`)}
+                                    onChange={handleChange(`degrees.${index}.name`)}
+                                    inputID={`degrees.${index}.name`}
+                                    labelText={t('label.major')}
+                                    inputType={'text'}
+                                    placeholder={t('placeholder.enter_academic_major')}
+                                    inputClassName={'form-control'}
+                                    isRequiredField
+                                    isTouched={touched && touched.degrees && touched.degrees[index]?.name}
+                                    isError={
+                                      errors &&
+                                      errors.degrees &&
+                                      errors.degrees[index]?.name &&
+                                      touched &&
+                                      touched.degrees &&
+                                      touched.degrees[index]?.name
+                                    }
+                                    errorMessage={t(errors && errors.degrees && errors.degrees[index]?.name)}
+                                  />
+                                  <CommonTextInput
+                                    containerClassName={'form-group col-lg-4'}
+                                    value={friend.issuedPlace ?? ''}
+                                    onBlur={handleBlur(`degrees.${index}.issuedPlace`)}
+                                    onChange={handleChange(`degrees.${index}.issuedPlace`)}
+                                    inputID={`degrees.${index}.issuedPlace`}
+                                    labelText={t('label.education_place')}
+                                    inputType={'text'}
+                                    placeholder={t('placeholder.enter_education_place')}
+                                    inputClassName={'form-control'}
+                                    isRequiredField
+                                    isTouched={touched && touched.degrees && touched.degrees[index]?.issuedPlace}
+                                    isError={
+                                      errors &&
+                                      errors.degrees &&
+                                      errors.degrees[index]?.issuedPlace &&
+                                      touched &&
+                                      touched.degrees &&
+                                      touched.degrees[index]?.issuedPlace
+                                    }
+                                    errorMessage={t(errors && errors.degrees && errors.degrees[index]?.issuedPlace)}
+                                  />
+                                </div>
+                                <div className="row">
+                                  <CommonTextInput
+                                    containerClassName={'form-group col-lg-4'}
+                                    value={friend.issuedDate ?? ''}
+                                    onBlur={handleBlur(`degrees.${index}.issuedDate`)}
+                                    onChange={handleChange(`degrees.${index}.issuedDate`)}
+                                    inputID={`degrees.${index}.issuedDate`}
+                                    labelText={t('label.start_date2')}
+                                    inputType={'date'}
+                                    inputClassName={'form-control'}
+                                    isRequiredField
+                                    isTouched={touched && touched.degrees && touched.degrees[index]?.issuedDate}
+                                    isError={
+                                      errors &&
+                                      errors.degrees &&
+                                      errors.degrees[index]?.issuedDate &&
+                                      touched &&
+                                      touched.degrees &&
+                                      touched.degrees[index]?.issuedDate
+                                    }
+                                    errorMessage={t(errors && errors.degrees && errors.degrees[index]?.issuedDate)}
+                                  />
+                                </div>
+                                <div className="row">
+                                  <CommonMultipleTextInput
+                                    containerClassName={'form-group col-xl-12'}
+                                    value={friend.note}
+                                    onBlur={handleBlur(`degrees.${index}.note`)}
+                                    onChange={handleChange(`degrees.${index}.note`)}
+                                    inputID={`degrees.${index}.note`}
+                                    labelText={t('label.note')}
+                                    inputClassName={'form-control'}
+                                  />
+                                </div>
+                                <div className="row">
+                                  <CommonUploadFileButton
+                                    name={`degrees.${index}.attaches`}
+                                    containerClassName="form-group col-xl-12"
+                                    buttonClassName="btn btn-primary"
+                                    value={values.degrees[index].attaches}
+                                  />
+                                </div>
+                                <hr className="mt-1" />
+
+                                {renderButtons([
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-4`,
+                                    onClick: (e) => {
+                                      removeCertificate(friend, () => remove(index));
+                                      dispatch({
+                                        type: REDUX_STATE.notification.SET_NOTI,
+                                        payload: { open: true, type: 'success', message: t('message.successful_delete') },
+                                      });
+                                    },
+                                    name: t('label.delete'),
+                                    position: 'right',
                                   },
-                                  name: friend.id ? t('label.save') : t('label.create_new'),
-                                },
-                              ])}
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-4`,
+                                    onClick: () => {
+                                      setFieldValue(`degrees.${index}`, initialValues.degrees[index]);
+                                    },
+                                    name: t('label.reset'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-4`,
+                                    onClick: async () => {
+                                      let err = await validateForm();
+                                      let err_fields = err.degrees && Object.keys(err.degrees[index]);
+                                      if (err.degrees && err.degrees[index] !== undefined && err_fields.length !== 0) {
+                                        err_fields &&
+                                          err_fields.length &&
+                                          err_fields.forEach((val) => setFieldTouched(`degrees.${index}.${val}`, true));
+                                        return;
+                                      }
+                                      create(friend);
+                                      initialValues.degrees[index] = friend;
+                                      setFieldValue(`degrees.${index}`, friend);
+                                      //dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+                                      document.getElementById('newDegree').hidden = true;
+                                      document.getElementById('addBtn').disabled = false;
+                                    },
+                                    name: friend.id ? t('label.save') : t('label.create_new'),
+                                  },
+                                ])}
+                              </div>
                             </div>
                           ))}
                       </div>
                     )}
                   />
                   <br />
-
                   <AutoSubmitToken />
                 </Form>
               );
