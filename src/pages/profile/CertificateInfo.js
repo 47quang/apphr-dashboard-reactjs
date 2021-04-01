@@ -1,18 +1,15 @@
 import { CContainer } from '@coreui/react';
-import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import { Field, FieldArray, Form, Formik } from 'formik';
+import { FieldArray, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
-import Label from 'src/components/text/Label';
+import { CertificatesSchema, NewCertificateSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
-import { CertificatesSchema, NewCertificateSchema } from 'src/schema/formSchema';
-import { REDUX_STATE } from 'src/stores/states';
 
 const CertificateInfo = ({ t, match }) => {
   const initialValues = useSelector((state) => state.profile.profile);
@@ -27,6 +24,7 @@ const CertificateInfo = ({ t, match }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'certificate' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function create(form) {

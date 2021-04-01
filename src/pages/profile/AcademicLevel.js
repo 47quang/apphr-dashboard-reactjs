@@ -1,7 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Add } from '@material-ui/icons';
 import { FieldArray, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
@@ -10,7 +10,6 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import { DegreesSchema, NewDegreeSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
-import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
 const AcademicLevel = ({ t, match }) => {
@@ -35,6 +34,7 @@ const AcademicLevel = ({ t, match }) => {
   ];
   useEffect(() => {
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function create(form) {
