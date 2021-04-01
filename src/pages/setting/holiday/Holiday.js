@@ -12,7 +12,7 @@ const HolidayPage = ({ t, location, history }) => {
   ];
 
   const columnDef = [
-    { name: 'shortname', title: t('label.holiday_code') },
+    { name: 'code', title: t('label.holiday_code') },
     { name: 'title', title: t('label.holiday_title') },
     { name: 'startDate', title: t('label.start_date') },
     { name: 'endDate', title: t('label.end_date') },

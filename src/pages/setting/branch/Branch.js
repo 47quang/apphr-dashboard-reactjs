@@ -9,7 +9,7 @@ const Branch = ({ t }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const columnDef = [
-    { name: 'shortname', title: t('label.branch_code') },
+    { name: 'code', title: t('label.branch_code') },
     { name: 'name', title: t('label.branch_name') },
     { name: 'address', title: t('label.address') },
   ];

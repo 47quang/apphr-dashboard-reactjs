@@ -3,15 +3,13 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSubTabName, setTabName } from 'src/stores/actions/profile';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { joinClassName } from 'src/utils/stringUtils';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
 import CertificateInfo from './CertificateInfo';
-import HistoryWorking from './HistoryWorking';
 import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
@@ -58,17 +56,17 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
-  const tabName = useSelector((state) => state.profile.tabName);
-  const subTabName = useSelector((state) => state.profile.subTabName);
+  const [tabName, setTabName] = useState(0);
+  const [subTabName, setSubTabName] = useState(0);
   const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
-    dispatch(setTabName(newValue));
-    dispatch(setSubTabName(0));
+    setTabName(newValue);
+    setSubTabName(0);
   };
 
   const handleChangeSubTab = (event, newValue) => {
-    dispatch(setSubTabName(newValue));
+    setSubTabName(newValue);
   };
 
   return (
@@ -121,7 +119,7 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               <AcademicLevel t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <CertificateInfo t={t} profile={profile} match={match} />
+              <CertificateInfo t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
               <AddressInfo t={t} history={history} match={match} />

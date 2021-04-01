@@ -62,7 +62,7 @@ export const fetchDiplomaByType = (params) => {
   };
 };
 
-export const deleteDiploma = (id) => {
+export const deleteDiploma = (id, msg) => {
   return (dispatch, getState) => {
     api.diploma
       .delete(id)
@@ -72,9 +72,17 @@ export const deleteDiploma = (id) => {
         } else {
           dispatch({ type: REDUX_STATE.diploma.DELETE_DEGREE, payload });
         }
+        dispatch({
+          type: REDUX_STATE.notification.SET_NOTI,
+          payload: { open: true, type: 'success', message: msg },
+        });
       })
       .catch((error) => {
         console.log(error);
+        dispatch({
+          type: REDUX_STATE.notification.SET_NOTI,
+          payload: { open: true, type: 'error', message: error },
+        });
       });
   };
 };

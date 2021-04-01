@@ -105,9 +105,10 @@ const AddressInfo = ({ t, history, match }) => {
           selectClassName={'form-control'}
           onBlur={handleBlur('type')}
           onChange={handleChange('type')}
-          inputID={t('label.profileId')}
-          placeholder={t('placeholder.select_contact_chanels')}
+          inputID={'type'}
+          placeholder={t('placeholder.select_contact_channels')}
           lstSelectOptions={channels}
+          isRequiredField
           isTouched={touched.type}
           isError={errors.type && touched.type}
           errorMessage={t(errors.type)}
@@ -119,6 +120,7 @@ const AddressInfo = ({ t, history, match }) => {
           onBlur={handleBlur('url')}
           onChange={handleChange('url')}
           inputID={'url'}
+          isRequiredField
           isTouched={touched.url}
           isError={errors.url && touched.url}
           errorMessage={t(errors.url)}
@@ -133,6 +135,7 @@ const AddressInfo = ({ t, history, match }) => {
         validationSchema={ContactSchema}
         innerRef={contactFormRef}
         onSubmit={(values) => {
+          console.log(values);
           dispatch(createNewContact(values, profileId, t('message.successful_create_contact'), contactFormRef));
           // setShowCreateContact(true);
         }}
