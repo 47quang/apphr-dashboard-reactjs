@@ -8,6 +8,13 @@ export const fetchProfiles = () => {
     api.profile
       .getAll()
       .then(({ payload }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((profile) => {
+                profile.gender = profile.gender === 'male' ? 'Nam' : 'Nữ';
+                return profile;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
       })
       .catch((err) => {

@@ -40,16 +40,12 @@ const CertificateInfo = ({ t, match }) => {
     }
   }
 
-  function removeCertificate(form, cb) {
-    if (form.id) {
-      dispatch(deleteDiploma(form.id));
-    } else {
-      cb();
-    }
+  function removeCertificate(certificateId) {
+    dispatch(deleteDiploma(certificateId.id, t('message.successful_delete')));
   }
 
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main">
       <div className="m-auto">
         <div>
           <div className="d-flex justify-content-center mb-4">
@@ -313,12 +309,8 @@ const CertificateInfo = ({ t, match }) => {
                                 {
                                   type: 'button',
                                   className: `btn btn-primary px-4 mx-4`,
-                                  onClick: (e) => {
-                                    removeCertificate(friend, () => remove(index));
-                                    dispatch({
-                                      type: REDUX_STATE.notification.SET_NOTI,
-                                      payload: { open: true, type: 'success', message: t('message.successful_delete') },
-                                    });
+                                  onClick: async (e) => {
+                                    await removeCertificate(friend.id).then(() => remove(index));
                                   },
                                   name: t('label.delete'),
                                   position: 'right',

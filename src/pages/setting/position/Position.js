@@ -7,7 +7,7 @@ import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 
 const Position = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'shortname', title: t('label.position_code') },
+    { name: 'code', title: t('label.position_code') },
     { name: 'name', title: t('label.position_name') },
     { name: 'branchName', title: t('label.branch') },
     { name: 'departmentName', title: t('label.department') },

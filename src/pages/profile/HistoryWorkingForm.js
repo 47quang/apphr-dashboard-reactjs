@@ -48,12 +48,8 @@ const HistoryWorkingForm = ({ t, match }) => {
     }
   }
 
-  function removeCertificate(form, cb) {
-    if (form.id) {
-      dispatch(deleteDiploma(form.id));
-    } else {
-      cb();
-    }
+  async function removeCertificate(form) {
+    await dispatch(deleteDiploma(form.id, t('message.successful_delete')));
   }
 
   return (
@@ -388,8 +384,8 @@ const HistoryWorkingForm = ({ t, match }) => {
                                   {
                                     type: 'button',
                                     className: `btn btn-primary px-4 mx-4`,
-                                    onClick: (e) => {
-                                      removeCertificate(friend, () => remove(index));
+                                    onClick: async (e) => {
+                                      await removeCertificate(friend.id).then(() => remove(index));
                                       dispatch({
                                         type: REDUX_STATE.notification.SET_NOTI,
                                         payload: { open: true, type: 'success', message: t('message.successful_delete') },
