@@ -22,6 +22,7 @@
   "Timekeeping": "Timekeeping",
   "Holiday": "Ngày nghỉ",
   "label": {
+    "delete": "Xóa",
     "contract_fullname": "Tên hợp đồng",
     "avatar": "Hình đại diện",
     "employee_lastname": "Họ và tên lót",
@@ -73,7 +74,7 @@
     "profile_other_info": "Thông tin khác",
     "profile_personal": "Hồ sơ cá nhân",
     "profile_personal_proposal": "Đề xuất cá nhân",
-    "profile_personal_schedule": "Lịch sử công tác",
+    "profile_personal_schedule": "Công tác",
     "role": "Vai trò",
     "role_code": "Mã vai trò",
     "role_name": "Tiêu đề của vai trò",
@@ -182,7 +183,10 @@
     "contact_channel": "Kênh liên lạc",
     "error": "Lỗi",
     "success": "Thành công",
-    "delete_row": "Xóa hàng"
+    "delete_row": "Xóa hàng",
+    "delete_academic": "Xóa trình độ chuyên môn",
+    "delete_contract": "Xóa hợp đồng",
+    "delete_certificate": "Xóa chứng chỉ"
   },
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
@@ -198,9 +202,12 @@
     "delete_row": "Xóa hàng này",
     "edit_row": "Chỉnh sửa hàng này",
     "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
-    "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?"
+    "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
+    "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?"
+
   },
   "placeholder": {
+    "enter_academic_major": "Nhập tên chuyên ngành",
     "enter_contract_fullname": "Nhập tên hợp đồng",
     "enter_company_name": "Nhập tên doanh nghiệp",
     "enter_company_short_name": "Nhập tên viết tắt",
@@ -225,6 +232,7 @@
     "enter_email": "Nhập email",
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
+    "select_contact_chanels":"Chọn kênh liên lạc",
     "select_contract_payment_method":"Chọn hình thức chi trả",
     "select_contract_type_work":"Chọn loại công việc",
     "select_contract_type_tax":"Chọn loại thuế thu nhập cá nhân",
@@ -271,6 +279,10 @@
     "enter_salary_level": "Nhập mức lương"
   },
   "validation": {
+    "required_select_academic_issuedDate": "Bắt buộc phải chọn ngày cấp",
+    "required_enter_academic_provincedId": "Bắt buộc phải nhập nơi đào tạo",
+    "required_enter_academic_name": "Bắt buộc phải nhập chuyên ngành",
+    "required_select_academic_level": "Bắt buộc phải chọn trình độ",
     "required_enter_contract_full_name": "Bắt buộc phải nhập tên hợp đồng",
     "required_select_allowance": "Bắt buộc phải chọn trợ cấp",
     "required_integer_prob_time": "Thời gian thử  việc là số nguyên",
@@ -298,6 +310,7 @@
     "required_select_branch_id": "Bắt buộc chọn chi nhánh",
     "required_select_role_id": "Bắt buộc chọn vai trò",
     "required_select_department_id": "Bắt buộc chọn phòng ban",
+    "required_select_position": "Bắt buộc chọn vị trí",
     "required_select_academic_level": "Bắt buộc chọn trình độ học vấn",
     "required_enter_position_name": "Bắt buộc nhập tên vị trí",
     "required_enter_experience_year": "Bắt buộc nhập năm kinh nghiệm",

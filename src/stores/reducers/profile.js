@@ -58,14 +58,16 @@ const initialState = {
     ],
     degrees: [],
     newDegree: {
+      isOpen: false,
       level: '',
       name: '',
-      provinceId: 0,
+      issuedPlace: '',
       issuedDate: '',
       note: '',
       attaches: [],
     },
     certificates: [],
+    historyWorkings: [],
   },
   roles: [],
   contracts: [

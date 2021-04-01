@@ -213,3 +213,116 @@ export const ContactSchema = Yup.object().shape({
       return value && value !== '';
     }),
 });
+export const NewDegreeSchema = Yup.object().shape({
+  level: Yup.string()
+    .required('validation.required_select_academic_level')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
+      return value && value !== '' && value !== '0';
+    }),
+  name: Yup.string()
+    .required('validation.required_enter_academic_name')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+      return value && value !== '';
+    }),
+  issuedPlace: Yup.string()
+    .required('validation.required_enter_academic_provincedId')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
+      return value && value !== '';
+    }),
+  issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+});
+export const DegreesSchema = Yup.object().shape({
+  degrees: Yup.array().of(
+    Yup.object().shape({
+      level: Yup.string()
+        .required('validation.required_select_academic_level')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
+          return value && value !== '' && value !== '0';
+        }),
+      name: Yup.string()
+        .required('validation.required_enter_academic_name')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+          return value && value !== '';
+        }),
+      issuedPlace: Yup.string()
+        .required('validation.required_enter_academic_provincedId')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
+          return value && value !== '';
+        }),
+      issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+    }),
+  ),
+});
+
+export const NewCertificateSchema = Yup.object().shape({
+  name: Yup.string()
+    .required('validation.required_enter_academic_name')
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+      return value && value !== '';
+    }),
+  issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+});
+export const CertificatesSchema = Yup.object().shape({
+  certificates: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string()
+        .required('validation.required_enter_academic_name')
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
+          return value && value !== '';
+        }),
+      issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+    }),
+  ),
+});
+export const NewHistoryWorkingSchema = Yup.object().shape({
+  branchId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_branch_id'),
+  departmentId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_department_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_department_id'),
+  positionId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_position', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_position'),
+  roleId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_role_id'),
+  startDate: Yup.string().required('validation.required_select_start_date'),
+  endDate: Yup.string().required('validation.required_select_end_date'),
+});
+export const HistoryWorkingsSchema = Yup.object().shape({
+  historyWorkings: Yup.array().of(
+    Yup.object().shape({
+      branchId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_branch_id'),
+      departmentId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_department_id', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_department_id'),
+      positionId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_position', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_position'),
+      roleId: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_role_id'),
+      startDate: Yup.string().required('validation.required_select_start_date'),
+      endDate: Yup.string().required('validation.required_select_end_date'),
+    }),
+  ),
+});
