@@ -4,11 +4,11 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { joinClassName } from 'src/utils/stringUtils';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
+import Benefit from './Benefit';
 import CertificateInfo from './CertificateInfo';
 import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
@@ -58,7 +58,6 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
   // const basicInfoRef = createRef();
   const [tabName, setTabName] = useState(0);
   const [subTabName, setSubTabName] = useState(0);
-  const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
     setTabName(newValue);
@@ -125,7 +124,7 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               <AddressInfo t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={5} dir={theme.direction}>
-              Tiền lương / Trợ cấp (TODO)
+              <Benefit t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={6} dir={theme.direction}>
               <OtherInfo t={t} profile={profile} />

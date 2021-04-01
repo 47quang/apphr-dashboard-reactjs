@@ -2,7 +2,6 @@ import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { updateOtherInfo } from 'src/stores/actions/profile';

@@ -56,7 +56,7 @@ export const createContract = (params, history, success_msg) => {
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
   params.allowanceIds =
     params.allowance &&
-    params.allowance.length >= 0 &&
+    params.allowance.length > 0 &&
     params.allowance.map((allowance) => {
       if (allowance.name !== 0) return allowance.name;
     });

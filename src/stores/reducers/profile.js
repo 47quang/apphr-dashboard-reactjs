@@ -67,6 +67,7 @@ const initialState = {
       attaches: [],
     },
     certificates: [],
+
     historyWorkings: [],
   },
   roles: [],

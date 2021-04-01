@@ -1,13 +1,11 @@
 import { CContainer } from '@coreui/react';
 import { Add } from '@material-ui/icons';
 import { FieldArray, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
-import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import { HistoryWorkingsSchema, NewHistoryWorkingSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
@@ -37,6 +35,7 @@ const HistoryWorkingForm = ({ t, match }) => {
   useEffect(() => {
     dispatch(fetchBranches());
     dispatch(fetchRoles());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function create(form) {
@@ -47,7 +46,6 @@ const HistoryWorkingForm = ({ t, match }) => {
       await dispatch(createDiploma(form, t('message.successful_create')));
     }
   }
-
   async function removeCertificate(form) {
     await dispatch(deleteDiploma(form.id, t('message.successful_delete')));
   }

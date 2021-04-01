@@ -3,24 +3,21 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { Field, FieldArray, Form, Formik } from 'formik';
+import { FieldArray, Form, Formik } from 'formik';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
+import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
-import { REDUX_STATE } from 'src/stores/states';
-import { joinClassName } from 'src/utils/stringUtils';
-import AddIcon from '@material-ui/icons/Add';
-import { useEffect } from 'react';
-import { fetchBranches, fetchContracts, fetchWagesByType, fetchAllowances, createContract, deleteContract } from 'src/stores/actions/contract';
-import { fetchAccount, fetchProfiles } from 'src/stores/actions/account';
 import { JobTimelineSchema, NewContractSchema } from 'src/schema/formSchema';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
-import { getCurrentDate } from 'src/utils/datetimeUtils';
+import { createContract, deleteContract, fetchAllowances, fetchBranches, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchPositions } from 'src/stores/actions/position';
+import { REDUX_STATE } from 'src/stores/states';
+import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const JobTimelineInfo = ({ t, history, match }) => {
@@ -86,6 +83,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
     if (jobTimelineInfo.contractInfo.paymentType !== '0') {
       dispatch(fetchWagesByType({ type: jobTimelineInfo.contractInfo.paymentType }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (jobTimelineInfo.contractInfo.branchId) dispatch(fetchDepartments({ branchId: jobTimelineInfo.contractInfo.branchId }));
@@ -116,21 +114,21 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   return (
     <CContainer fluid className="c-main">
+      <div className="d-flex justify-content-center mb-4">
+        <button
+          type="button"
+          className="btn btn-success"
+          id="addBtn"
+          onClick={() => {
+            document.getElementById('newContract').hidden = false;
+            document.getElementById('addBtn').disabled = true;
+          }}
+        >
+          <Add /> {t('label.add')}
+        </button>
+      </div>
       <div className="m-auto">
         <div>
-          <div className="d-flex justify-content-center mb-4">
-            <button
-              type="button"
-              className="btn btn-success"
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newContract').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add /> {t('label.add')}
-            </button>
-          </div>
           <Formik initialValues={newContract} validationSchema={NewContractSchema} enableReinitialize onSubmit={() => {}}>
             {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange, validateForm, setTouched, setFieldValue }) => {
               return (
@@ -573,10 +571,10 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
                             return (
                               <div key={index} className="shadow bg-white rounded m-4 p-4">
-                                <div className={'d-flex flex-row justify-content-between'}>
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="d-flex">
-                                    <div className="pt-1" role="button">
-                                      {values.contractInfo[index].isMinimize ? (
+                                <div>
+                                  <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                                    <div className="pt-1 d-inline" role="button">
+                                      {!values.contractInfo[index].isMinimize ? (
                                         <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
                                       ) : (
                                         <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
@@ -589,7 +587,11 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         setFieldValue(`contractInfo.${index}.isOpen`, e.target.checked);
                                       }}
                                     />
-                                    {values.contractInfo[index].code}
+                                    {values.contractInfo[index].code + ' - ' + values.contractInfo[index].fullname}
+                                  </div>
+
+                                  <div style={{ fontSize: 14 }}>
+                                    {'Từ ' + values.contractInfo[index].handleDate + ' đến ' + values.contractInfo[index].expiredDate}
                                   </div>
                                   {/* <div>
                                     {!values.contractInfo[index]?.id && (
