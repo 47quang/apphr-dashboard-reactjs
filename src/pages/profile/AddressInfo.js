@@ -22,7 +22,7 @@ import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
 import { ContactSchema } from '../../schema/formSchema';
 
-const AddressInfo = ({ t, profile, history }) => {
+const AddressInfo = ({ t, history, match }) => {
   const ADDRESS_INFO = {
     PERMANENT_INFO: 'Permanent Info',
     RELATION_INFO: 'Relation Info',
@@ -31,14 +31,16 @@ const AddressInfo = ({ t, profile, history }) => {
   const relationInfoRef = useRef();
   const contactFormRef = useRef();
   const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile.profile);
+
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
   const contacts = useSelector((state) => state.profile.contacts);
-
+  const profileId = match?.params?.id;
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
-    dispatch(fetchContacts(profile.id));
+    dispatch(fetchContacts(profileId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -103,8 +105,10 @@ const AddressInfo = ({ t, profile, history }) => {
           selectClassName={'form-control'}
           onBlur={handleBlur('type')}
           onChange={handleChange('type')}
-          inputID={t('label.profileId')}
+          inputID={'type'}
+          placeholder={t('placeholder.select_contact_channels')}
           lstSelectOptions={channels}
+          isRequiredField
           isTouched={touched.type}
           isError={errors.type && touched.type}
           errorMessage={t(errors.type)}
@@ -116,6 +120,7 @@ const AddressInfo = ({ t, profile, history }) => {
           onBlur={handleBlur('url')}
           onChange={handleChange('url')}
           inputID={'url'}
+          isRequiredField
           isTouched={touched.url}
           isError={errors.url && touched.url}
           errorMessage={t(errors.url)}
@@ -130,7 +135,8 @@ const AddressInfo = ({ t, profile, history }) => {
         validationSchema={ContactSchema}
         innerRef={contactFormRef}
         onSubmit={(values) => {
-          dispatch(createNewContact(values, profile.id, t('message.successful_create_contact'), contactFormRef));
+          console.log(values);
+          dispatch(createNewContact(values, profileId, t('message.successful_create_contact'), contactFormRef));
           // setShowCreateContact(true);
         }}
       >
@@ -180,7 +186,7 @@ const AddressInfo = ({ t, profile, history }) => {
         enableReinitialize
         validationSchema={ContactSchema}
         onSubmit={(values) => {
-          dispatch(updateContact(values, profile.id, t('message.successful_update_contact')));
+          dispatch(updateContact(values, profileId, t('message.successful_update_contact')));
         }}
       >
         {({ values, errors, touched, handleSubmit, handleBlur, handleChange }) => {
@@ -225,7 +231,7 @@ const AddressInfo = ({ t, profile, history }) => {
                         type="button"
                         className="btn btn-warning mx-auto text-white"
                         onClick={(e) => {
-                          dispatch(deleteContact(contactValues.id, profile.id, setClosePopOver, t('message.successful_delete_contact')));
+                          dispatch(deleteContact(contactValues.id, profileId, setClosePopOver, t('message.successful_delete_contact')));
                         }}
                       >
                         {t('label.agree')}
@@ -350,7 +356,7 @@ const AddressInfo = ({ t, profile, history }) => {
               enableReinitialize
               innerRef={relationInfoRef}
               onSubmit={(values) => {
-                dispatch(updateRelationship(values, profile.id, t('message.successful_update')));
+                dispatch(updateRelationship(values, profileId, t('message.successful_update')));
               }}
             >
               {({ values, handleBlur, handleSubmit, errors, touched, handleChange }) => (

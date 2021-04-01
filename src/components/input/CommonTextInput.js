@@ -36,12 +36,13 @@ const CommonTextInput = ({
         type={inputType}
         className={checkInputClassName()}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={(e) => {
+          onChange(e);
+        }}
         onBlur={onBlur}
         value={value}
         id={inputID}
         name={name}
-        required={isRequiredField}
         autoComplete={'off'}
         min={minTime ?? null}
         max={maxTime ?? null}

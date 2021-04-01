@@ -3,15 +3,14 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSubTabName, setTabName } from 'src/stores/actions/profile';
+import React, { useState } from 'react';
 import { joinClassName } from 'src/utils/stringUtils';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
+import Benefit from './Benefit';
 import CertificateInfo from './CertificateInfo';
-import HistoryWorking from './HistoryWorking';
+import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
 
@@ -57,17 +56,16 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
-  const tabName = useSelector((state) => state.profile.tabName);
-  const subTabName = useSelector((state) => state.profile.subTabName);
-  const dispatch = useDispatch();
+  const [tabName, setTabName] = useState(0);
+  const [subTabName, setSubTabName] = useState(0);
 
   const handleChange = (event, newValue) => {
-    dispatch(setTabName(newValue));
-    dispatch(setSubTabName(0));
+    setTabName(newValue);
+    setSubTabName(0);
   };
 
   const handleChangeSubTab = (event, newValue) => {
-    dispatch(setSubTabName(newValue));
+    setSubTabName(newValue);
   };
 
   return (
@@ -85,7 +83,6 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
           >
             <Tab className="noselect" label={t('label.profile_personal')} {...a11yProps(0)} />
             <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_proposal')} {...a11yProps(1)} />
-            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
@@ -108,6 +105,7 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
                 <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(4)} />
                 <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(5)} />
                 <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(6)} />
+                <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(7)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
@@ -120,24 +118,24 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               <AcademicLevel t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <CertificateInfo t={t} profile={profile} match={match} />
+              <CertificateInfo t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
-              <AddressInfo t={t} profile={profile} history={history} />
+              <AddressInfo t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={5} dir={theme.direction}>
-              Tiền lương / Trợ cấp (TODO)
+              <Benefit t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={6} dir={theme.direction}>
               <OtherInfo t={t} profile={profile} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={7} dir={theme.direction}>
+              <HistoryWorkingForm t={t} history={history} match={match} />
             </TabPanel>
           </div>
         </TabPanel>
         <TabPanel value={tabName} index={1}>
           (TODO)
-        </TabPanel>
-        <TabPanel value={tabName} index={2}>
-          <HistoryWorking t={t} />
         </TabPanel>
       </div>
       {/* <div

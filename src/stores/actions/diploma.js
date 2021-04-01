@@ -1,3 +1,4 @@
+import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -37,8 +38,21 @@ export const fetchDiplomaByType = (params) => {
       .getAll(params)
       .then(({ payload }) => {
         if (params.type === 'degree') {
+          payload =
+            payload &&
+            payload.map((dip) => {
+              dip.issuedDate = getDateInput(dip.issuedDate);
+              return dip;
+            });
           dispatch({ type: REDUX_STATE.diploma.SET_DEGREES, payload });
         } else {
+          payload =
+            payload &&
+            payload.map((dip) => {
+              dip.issuedDate = getDateInput(dip.issuedDate);
+              dip.expiredDate = getDateInput(dip.expiredDate);
+              return dip;
+            });
           dispatch({ type: REDUX_STATE.diploma.SET_CERTIFICATES, payload });
         }
       })
@@ -48,7 +62,7 @@ export const fetchDiplomaByType = (params) => {
   };
 };
 
-export const deleteDiploma = (id) => {
+export const deleteDiploma = (id, msg) => {
   return (dispatch, getState) => {
     api.diploma
       .delete(id)
@@ -58,9 +72,17 @@ export const deleteDiploma = (id) => {
         } else {
           dispatch({ type: REDUX_STATE.diploma.DELETE_DEGREE, payload });
         }
+        dispatch({
+          type: REDUX_STATE.notification.SET_NOTI,
+          payload: { open: true, type: 'success', message: msg },
+        });
       })
       .catch((error) => {
         console.log(error);
+        dispatch({
+          type: REDUX_STATE.notification.SET_NOTI,
+          payload: { open: true, type: 'error', message: error },
+        });
       });
   };
 };

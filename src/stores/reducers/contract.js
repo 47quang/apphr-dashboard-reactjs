@@ -21,8 +21,34 @@ const initialState = {
     wageId: 0,
     amount: 0,
     allowance: [],
+    benefits: [
+      {
+        id: 1,
+        wageId: 1,
+        allowanceIds: [1, 2, 3],
+        allowances: [],
+      },
+    ],
     files: [],
   },
+  _contracts: [
+    {
+      id: 1,
+      code: 'HD001',
+      fullname: 'Hợp đồng lao động ',
+      handleDate: '2021-01-10',
+      expiredDate: '2022-01-10',
+      benefits: [
+        {
+          id: 1,
+          wageId: 1,
+          allowanceIds: [1, 2, 3],
+          allowances: [],
+        },
+      ],
+      files: [],
+    },
+  ],
   branches: [],
   wages: [],
   allowances: [],
@@ -60,6 +86,8 @@ const contractReducer = (state = initialState, { type, payload }) => {
         ...state,
         allowances: payload,
       };
+    case REDUX_STATE.contract.SET_BENEFITS:
+      return { ...state, _contracts: payload };
     default:
       return state;
   }
