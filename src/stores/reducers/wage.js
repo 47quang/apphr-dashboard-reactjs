@@ -23,7 +23,7 @@ const wageReducer = (state = initialState, { type, payload }) => {
         ...state,
         wages: state.wages.filter((b) => b.id !== payload.id),
       };
-    case REDUX_STATE.allowance.EMPTY_VALUE:
+    case REDUX_STATE.wage.EMPTY_VALUE:
       return {
         ...state,
         wage: initialState.wage,

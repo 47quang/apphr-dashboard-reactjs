@@ -12,6 +12,8 @@ export const ROUTE_NAME = {
   PROPOSAL: 'Proposal',
   ROLL_UP: 'Roll up',
   NOTIFICATION: 'Notification',
+  NEW_NOTIFICATION: 'New Notification',
+  NOTIFICATION_UPDATE: 'Notification Update',
   REPORT: 'Report',
   SETTING: 'Setting',
   GENERAL: 'General',
@@ -68,6 +70,8 @@ export const ROUTE_PATH = {
 
   ROLL_UP: '/roll-up',
 
+  NOTIFICATION_CREATE: '/notification' + CREATE,
+  NOTIFICATION_UPDATE: '/notification' + ID,
   NOTIFICATION: '/notification',
 
   REPORT: '/report',
@@ -108,6 +112,9 @@ export const ROUTE_PATH = {
   ALLOWANCE: '/setting/allowance',
   ALLOWANCE_CREATE: '/setting/allowance' + CREATE,
   ALLOWANCE_UPDATE: '/setting/allowance' + ID,
+  ARTICLE_TYPE: '/setting/articleType',
+  ARTICLE_TYPE_CREATE: '/setting/articleType' + CREATE,
+  ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
 };
 
 export const CONTACT_TYPE = {

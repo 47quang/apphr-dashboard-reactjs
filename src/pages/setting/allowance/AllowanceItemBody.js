@@ -1,7 +1,6 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React from 'react';
-import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { renderButtons } from 'src/utils/formUtils';
 

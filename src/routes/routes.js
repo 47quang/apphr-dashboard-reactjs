@@ -17,6 +17,9 @@ const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
+const NewNotification = React.lazy(() => import('src/pages/notification/NewNotification'));
+const EditNotification = React.lazy(() => import('src/pages/notification/UpdateNotification'));
+
 const Report = React.lazy(() => import('src/pages/report/Report'));
 const General = React.lazy(() => import('src/pages/setting/general/General'));
 const Position = React.lazy(() => import('src/pages/setting/position/Position'));
@@ -71,6 +74,16 @@ const routes = [
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
   { path: ROUTE_PATH.PROPOSAL, name: ROUTE_NAME.PROPOSAL, component: Proposal },
   { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },
+  {
+    path: ROUTE_PATH.NOTIFICATION_CREATE,
+    name: ROUTE_NAME.NEW_NOTIFICATION,
+    component: NewNotification,
+  },
+  {
+    path: ROUTE_PATH.NOTIFICATION_UPDATE,
+    name: ROUTE_NAME.NOTIFICATION_UPDATE,
+    component: EditNotification,
+  },
   {
     path: ROUTE_PATH.NOTIFICATION,
     name: ROUTE_NAME.NOTIFICATION,

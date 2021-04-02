@@ -24,6 +24,9 @@
   "Wage": "Nhóm lương",
   "Allowance": "Trợ cấp",
   "label": {
+    "notification_code": "Mã thông báo",
+    "notification_description": "Mô tả",
+    "notification_type": "Loại thông báo",
     "allowance_code": "Mã trợ cấp",
     "allowance_name": "Tên trợ cấp",
     "allowance_amount": "Mức trợ cấp",
@@ -166,7 +169,7 @@
     "passport_number": "Số hộ chiếu",
     "direct_manager": "Quản lý trực tiếp",
     "notification_title": "Tiêu đề",
-    "notification_content": "Nội khoảng dung",
+    "notification_content": "Nội dung",
     "include": "Bao gồm",
     "not_include": "Không bao gồm",
     "correct": "Chính xác",
@@ -219,6 +222,8 @@
 
   },
   "placeholder": {
+    "enter_notification_description": "Nhập mô tả",
+    "enter_notification_content": "Nhập nội dung thông báo",
     "enter_dayOff": "Nhập số ngày nghỉ cho phép",
     "enter_academic_major": "Nhập tên chuyên ngành",
     "enter_contract_fullname": "Nhập tên hợp đồng",
@@ -245,6 +250,7 @@
     "enter_email": "Nhập email",
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
+    "select_notification_type": "Chọn loại thông báo",
     "select_contact_channels":"Chọn kênh liên lạc",
     "select_contract_payment_method":"Chọn hình thức chi trả",
     "select_contract_type_work":"Chọn loại công việc",

@@ -1,46 +1,59 @@
 import { CContainer } from '@coreui/react';
-import React from 'react';
-import CommonTextInput from 'src/components/input/CommonTextInput';
-import FormHeader from 'src/components/text/FormHeader';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ROUTE_PATH } from 'src/constants/key';
+import { createArticle, fetchArticle, setEmptyArticle, updateArticle } from 'src/stores/actions/article';
 import NotificationForm from './NotificationForm';
 
-const UpdateNotification = ({ t, location }) => {
-  const notificationInfo = {
-    title: '',
-    content: '',
-    to: [],
-    files: [],
-    createDate: new Date(2019, 5, 11, 5, 23, 59),
-  };
+const UpdateNotification = ({ t, location, history, match }) => {
+  const articleInfoForm = useRef();
+  const dispatch = useDispatch();
+  const article = useSelector((state) => state.article.article);
 
+  useEffect(() => {
+    dispatch(fetchArticle(match?.params?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const submitForm = (values) => {
+    let form = values;
+    // Call API CREATE
+    form.typeId = parseInt(form.typeId);
+    console.log('values', form);
+    dispatch(updateArticle(form, history, t('message.successful_create')));
+  };
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary mr-4`,
+
+      onClick: (e) => {
+        history.push(ROUTE_PATH.NOTIFICATION);
+      },
+      name: t('label.back'),
+      position: 'left',
+    },
+    {
+      type: 'reset',
+      className: `btn btn-primary mr-4`,
+      onClick: (e) => {
+        articleInfoForm.current.handleReset(e);
+      },
+      name: t('label.reset'),
+    },
+    {
+      type: 'button',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        articleInfoForm.current.handleSubmit(e);
+      },
+      name: t('label.update'),
+    },
+  ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <div className="m-auto row">
-        <div className="col-xl-8">
-          <NotificationForm notificationInfo={notificationInfo} />
-        </div>
-        <div className="col-xl-4">
-          <div className="shadow bg-white rounded p-4 container">
-            <FormHeader text="Người đăng" />
-            <div className="text-center mb-3">
-              <img src="https://api.time.com/wp-content/uploads/2014/07/301386_full1.jpg?w=800&quality=85" alt="alternatetext" height="200px" />
-            </div>
-            <CommonTextInput
-              containerClassName="form-group"
-              inputClassName="form-control"
-              isDisable
-              value={'Nguyễn Lê Tiến Đạt'}
-              labelText="Người tạo"
-            />
-            <CommonTextInput
-              containerClassName="form-group"
-              inputClassName="form-control"
-              isDisable
-              value={notificationInfo.createDate.toLocaleString()}
-              labelText="Thời gian tạo"
-            />
-          </div>
-        </div>
+      <div className="m-auto col-lg-12">
+        <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} />
       </div>
     </CContainer>
   );

@@ -11,7 +11,7 @@ import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { JobTimelineSchema } from 'src/schema/formSchema';
-import { createContract, fetchAllowances, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
+import { fetchAllowances, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
@@ -60,17 +60,6 @@ const Benefit = ({ t, history, match }) => {
     contracts: _contracts,
   };
   console.log('benefit', benefitTab);
-  const newBenefit = {
-    benefits: [
-      {
-        id: '',
-        paymentType: '',
-        wageId: '',
-        allowances: [],
-        allowanceIds: [],
-      },
-    ],
-  };
 
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
@@ -86,20 +75,20 @@ const Benefit = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function create(form) {
-    // form.provinceId = form.provinceId || null;
-    form.profileId = +match.params.id;
+  // async function create(form) {
+  //   // form.provinceId = form.provinceId || null;
+  //   form.profileId = +match.params.id;
 
-    if (form.id) {
-      // await dispatch(updateContract(form, t('message.successful_update')));
-    } else {
-      await dispatch(createContract(form, t('message.successful_create')));
-    }
-  }
+  //   if (form.id) {
+  //     // await dispatch(updateContract(form, t('message.successful_update')));
+  //   } else {
+  //     await dispatch(createContract(form, t('message.successful_create')));
+  //   }
+  // }
 
-  async function removeBenefit(contractId) {
-    // await dispatch(deleteContract(contractId, t('message.successful_delete')));
-  }
+  // async function removeBenefit(contractId) {
+  //   // await dispatch(deleteContract(contractId, t('message.successful_delete')));
+  // }
 
   return (
     <CContainer fluid className="c-main">

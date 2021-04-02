@@ -149,10 +149,10 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                       <div className="row">
                         <CommonTextInput
                           containerClassName={'form-group col-lg-6'}
-                          value={values.shortname ?? ''}
-                          onBlur={handleBlur('shortname')}
-                          onChange={handleChange('shortname')}
-                          inputID={'shortname'}
+                          value={values.code ?? ''}
+                          onBlur={handleBlur('code')}
+                          onChange={handleChange('code')}
+                          inputID={'code'}
                           labelText={t('label.employee_code')}
                           inputType={'text'}
                           placeholder={t('placeholder.enter_employee_code')}
