@@ -37,6 +37,12 @@ export const ROUTE_NAME = {
   NEW_ROLE: 'New Role',
   ROLE_UPDATE: 'Role Update',
   AUTHORIZATION: 'Authorization',
+  WAGE: 'Wage',
+  NEW_WAGE: 'New Wage',
+  WAGE_UPDATE: 'Wage Update',
+  ALLOWANCE: 'Allowance',
+  NEW_ALLOWANCE: 'New Allowance',
+  ALLOWANCE_UPDATE: 'Allowance Update',
 };
 
 const ID = '/:id';
@@ -94,6 +100,14 @@ export const ROUTE_PATH = {
   HOLIDAY_UPDATE_SETTING: '/setting/holiday/tab2:id',
   HOLIDAY_UPDATE: '/setting/holiday/tab1:id',
   HOLIDAY_CREATE: '/setting/holiday' + CREATE,
+
+  WAGE: '/setting/wage',
+  WAGE_CREATE: '/setting/wage' + CREATE,
+  WAGE_UPDATE: '/setting/wage' + ID,
+
+  ALLOWANCE: '/setting/allowance',
+  ALLOWANCE_CREATE: '/setting/allowance' + CREATE,
+  ALLOWANCE_UPDATE: '/setting/allowance' + ID,
 };
 
 export const CONTACT_TYPE = {

@@ -372,3 +372,26 @@ export const HistoryWorkingsSchema = Yup.object().shape({
     }),
   ),
 });
+export const WageSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_salary_group').required('validation.required_enter_salary_group'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_payment'),
+  amount: Yup.number()
+    .integer('validation.salary_level_must_be_integer"')
+    .min(0, 'validation.salary_level_must_not_be_negative')
+    .required('validation.required_enter_salary_level'),
+  dayOff: Yup.number()
+    .integer('validation.dayOff_must_be_integer"')
+    .min(0, 'validation.dayOff_must_not_be_negative')
+    .required('validation.required_enter_dayOff'),
+});
+export const AllowanceSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_allowance_name').required('validation.required_enter_allowance_name'),
+  amount: Yup.number()
+    .integer('validation.allowance_level_must_be_integer"')
+    .min(0, 'validation.allowance_level_must_not_be_negative')
+    .required('validation.required_enter_allowance_level'),
+});

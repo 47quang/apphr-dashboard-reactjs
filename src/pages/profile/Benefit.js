@@ -159,31 +159,27 @@ const Benefit = ({ t, history, match }) => {
 
                             return (
                               <div key={'contract:' + index} className="shadow bg-white rounded m-4 p-4">
-                                <div className="row">
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-3">
-                                    <div className="pt-1 d-inline" role="button">
-                                      {!values.contracts[index].isMinimize ? (
-                                        <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                      ) : (
-                                        <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                      )}
-                                    </div>
-                                    <Switch
-                                      checked={values.contracts[index].isOpen}
-                                      name={`contracts.${index}.isOpen`}
-                                      onChange={(e) => {
-                                        setFieldValue(`contracts.${index}.isOpen`, e.target.checked);
-                                      }}
-                                    />
-                                    {values.contracts[index].code}
+                                <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                                  <div className="pt-1 d-inline" role="button">
+                                    {!values.contracts[index].isMinimize ? (
+                                      <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                    ) : (
+                                      <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                    )}
                                   </div>
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-4">
-                                    {values.contracts[index].fullname}
-                                  </div>
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-5 d-flex justify-content-end">
-                                    {'Từ ' + values.contracts[index].handleDate + ' đến ' + values.contracts[index].expiredDate}
-                                  </div>
+                                  <Switch
+                                    checked={values.contracts[index].isOpen}
+                                    name={`contracts.${index}.isOpen`}
+                                    onChange={(e) => {
+                                      setFieldValue(`contracts.${index}.isOpen`, e.target.checked);
+                                    }}
+                                  />
+                                  {values.contracts[index].code + ' - ' + values.contracts[index].fullname}
                                 </div>
+                                <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                                  {'Từ ' + values.contracts[index].handleDate + ' đến ' + values.contracts[index].expiredDate}
+                                </div>
+
                                 <hr className="mt-1" />
 
                                 {values.contracts[index].isMinimize && (

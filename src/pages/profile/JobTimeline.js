@@ -590,8 +590,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     {values.contractInfo[index].code + ' - ' + values.contractInfo[index].fullname}
                                   </div>
 
-                                  <div style={{ fontSize: 14 }}>
-                                    {'Từ ' + values.contractInfo[index].handleDate + ' đến ' + values.contractInfo[index].expiredDate}
+                                  <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                                    {t('label.from') + values.contractInfo[index].handleDate + t('label.to') + values.contractInfo[index].expiredDate}
                                   </div>
                                   {/* <div>
                                     {!values.contractInfo[index]?.id && (
