@@ -46,6 +46,14 @@ const Role = React.lazy(() => import('src/pages/setting/authorization/role/Role'
 const NewRole = React.lazy(() => import('src/pages/setting/authorization/role/NewRole'));
 const EditRole = React.lazy(() => import('src/pages/setting/authorization/role/UpdateRole'));
 
+const Wage = React.lazy(() => import('src/pages/setting/wage/Wage'));
+const NewWage = React.lazy(() => import('src/pages/setting/wage/NewWage'));
+const EditWage = React.lazy(() => import('src/pages/setting/wage/UpdateWage'));
+
+const Allowance = React.lazy(() => import('src/pages/setting/allowance/Allowance'));
+const NewAllowance = React.lazy(() => import('src/pages/setting/allowance/NewAllowance'));
+const EditAllowance = React.lazy(() => import('src/pages/setting/allowance/UpdateAllowance'));
+
 const routes = [
   { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -180,6 +188,32 @@ const routes = [
     name: ROUTE_NAME.ROLE,
     component: Role,
   },
+  {
+    path: ROUTE_PATH.WAGE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.WAGE_CREATE,
+    component: NewWage,
+  },
+  {
+    path: ROUTE_PATH.WAGE_UPDATE,
+    name: ROUTE_NAME.WAGE_UPDATE,
+    component: EditWage,
+  },
+  { path: ROUTE_PATH.WAGE, name: ROUTE_NAME.WAGE, component: Wage },
+  {
+    path: ROUTE_PATH.ALLOWANCE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.ALLOWANCE_CREATE,
+    component: NewAllowance,
+  },
+  {
+    path: ROUTE_PATH.ALLOWANCE_UPDATE,
+    name: ROUTE_NAME.ALLOWANCE_UPDATE,
+    component: EditAllowance,
+  },
+  { path: ROUTE_PATH.ALLOWANCE, name: ROUTE_NAME.ALLOWANCE, component: Allowance },
 ];
 
 export default routes;

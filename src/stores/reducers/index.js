@@ -14,6 +14,8 @@ import roleReducer from './role';
 import profileReducer from './profile';
 import notificationReducer from './notification';
 import contractReducer from './contract';
+import wageReducer from './wage';
+import allowanceReducer from './allowance';
 
 export default combineReducers({
   style: styleReducer,
@@ -31,4 +33,6 @@ export default combineReducers({
   profile: profileReducer,
   notification: notificationReducer,
   contract: contractReducer,
+  wage: wageReducer,
+  allowance: allowanceReducer,
 });
