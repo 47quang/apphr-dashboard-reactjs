@@ -395,3 +395,11 @@ export const AllowanceSchema = Yup.object().shape({
     .min(0, 'validation.allowance_level_must_not_be_negative')
     .required('validation.required_enter_allowance_level'),
 });
+export const NotificationSchema = Yup.object().shape({
+  title: Yup.string().min(1, 'validation.required_enter_notification_title').required('validation.required_enter_notification_title'),
+  typeId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_notification_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_notification_type'),
+});
