@@ -30,10 +30,10 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-6'}
-                    value={values.shortname}
-                    onBlur={handleBlur('shortname')}
-                    onChange={handleChange('shortname')}
-                    inputID={'shortname'}
+                    value={values.code}
+                    onBlur={handleBlur('code')}
+                    onChange={handleChange('code')}
+                    inputID={'code'}
                     labelText={t('label.branch_code')}
                     inputType={'text'}
                     placeholder={t('placeholder.enter_branch_code')}
