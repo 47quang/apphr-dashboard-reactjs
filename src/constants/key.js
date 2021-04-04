@@ -45,6 +45,9 @@ export const ROUTE_NAME = {
   ALLOWANCE: 'Allowance',
   NEW_ALLOWANCE: 'New Allowance',
   ALLOWANCE_UPDATE: 'Allowance Update',
+  ARTICLE_TYPE: 'Article Type',
+  NEW_ARTICLE_TYPE: 'New Article Type',
+  ARTICLE_TYPE_UPDATE: ' Article Type Update',
 };
 
 const ID = '/:id';
@@ -112,6 +115,7 @@ export const ROUTE_PATH = {
   ALLOWANCE: '/setting/allowance',
   ALLOWANCE_CREATE: '/setting/allowance' + CREATE,
   ALLOWANCE_UPDATE: '/setting/allowance' + ID,
+
   ARTICLE_TYPE: '/setting/articleType',
   ARTICLE_TYPE_CREATE: '/setting/articleType' + CREATE,
   ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,

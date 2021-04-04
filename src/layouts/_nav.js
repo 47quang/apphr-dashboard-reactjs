@@ -113,6 +113,11 @@ const _nav = [
         name: ROUTE_NAME.ALLOWANCE,
         to: ROUTE_PATH.ALLOWANCE,
       },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.ARTICLE_TYPE,
+        to: ROUTE_PATH.ARTICLE_TYPE,
+      },
       // {
       //   _tag: "CSidebarNavDropdown",
       //   name: ROUTE_NAME.AUTHORIZATION,

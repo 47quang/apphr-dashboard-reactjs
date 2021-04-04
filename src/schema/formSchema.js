@@ -403,3 +403,6 @@ export const NotificationSchema = Yup.object().shape({
     })
     .required('validation.required_select_notification_type'),
 });
+export const ArticleTypeSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_article_type').required('validation.required_enter_article_type'),
+});

@@ -57,6 +57,10 @@ const Allowance = React.lazy(() => import('src/pages/setting/allowance/Allowance
 const NewAllowance = React.lazy(() => import('src/pages/setting/allowance/NewAllowance'));
 const EditAllowance = React.lazy(() => import('src/pages/setting/allowance/UpdateAllowance'));
 
+const ArticleType = React.lazy(() => import('src/pages/setting/articleType/ArticleType'));
+const NewArticleType = React.lazy(() => import('src/pages/setting/articleType/NewType'));
+const EditArticleType = React.lazy(() => import('src/pages/setting/articleType/UpdateType'));
+
 const routes = [
   { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -227,6 +231,19 @@ const routes = [
     component: EditAllowance,
   },
   { path: ROUTE_PATH.ALLOWANCE, name: ROUTE_NAME.ALLOWANCE, component: Allowance },
+  {
+    path: ROUTE_PATH.ARTICLE_TYPE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.NEW_ARTICLE_TYPE,
+    component: NewArticleType,
+  },
+  {
+    path: ROUTE_PATH.ARTICLE_TYPE_UPDATE,
+    name: ROUTE_NAME.ARTICLE_TYPE_UPDATE,
+    component: EditArticleType,
+  },
+  { path: ROUTE_PATH.ARTICLE_TYPE, name: ROUTE_NAME.ARTICLE_TYPE, component: ArticleType },
 ];
 
 export default routes;
