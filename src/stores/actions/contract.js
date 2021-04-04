@@ -19,10 +19,20 @@ export const fetchContracts = (params) => {
             contract['paymentType'] = contract?.wage?.type;
             contract['wageId'] = contract?.wage?.id;
             contract['amount'] = contract?.wage?.amount;
-            contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => payload);
+            contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => {
+              payload = payload.map(async (p) => {
+                p.startDate = getDateInput(p.startDate);
+                p.expiredDate = getDateInput(p.expiredDate);
+                p.wages = await api.wage.getAll({ type: p?.wage?.type }).then(({ payload }) => payload);
+                return p;
+              });
+              return payload;
+            });
+            contract['benefits'] = await Promise.all(contract['benefits']);
             return contract;
           });
         payload = await Promise.all(payload);
+        console.log(payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
@@ -44,7 +54,7 @@ export const fetchContract = (id) => {
   };
 };
 
-export const createContract = (params, history, success_msg) => {
+export const createContract = (params, success_msg) => {
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
@@ -57,18 +67,17 @@ export const createContract = (params, history, success_msg) => {
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
   params.allowanceIds =
-    params.allowance &&
-    params.allowance.length > 0 &&
-    params.allowance.map((allowance) => {
-      if (allowance.name !== 0) return allowance.name;
-    });
+    params.allowance && params.allowance.length > 0
+      ? params.allowance.map((allowance) => {
+          if (allowance.name !== 0) return +allowance.name;
+        })
+      : [];
   console.log('params', params);
   return (dispatch, getState) => {
     api.contract
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
-        history.push(ROUTE_PATH.PROFILE + `/${payload.id}`);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -144,7 +153,7 @@ export const fetchAllowances = () => {
 };
 
 export const createWageHistory = (params, success_msg) => {
-  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.name)) : [];
+  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.id)) : [];
   return (dispatch, getState) => {
     api.wageHistory
       .post(params)
@@ -155,5 +164,11 @@ export const createWageHistory = (params, success_msg) => {
         console.log(err);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
+  };
+};
+export const setEmptyContract = () => {
+  return {
+    type: REDUX_STATE.contract.EMPTY_VALUE,
+    payload: [],
   };
 };

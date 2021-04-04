@@ -69,7 +69,7 @@ const contractReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.contract.EMPTY_VALUE:
       return {
         ...state,
-        contract: initialState.contract,
+        contracts: [],
       };
     case REDUX_STATE.contract.GET_BRANCHES:
       payload =

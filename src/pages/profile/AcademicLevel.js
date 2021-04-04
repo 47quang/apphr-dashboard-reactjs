@@ -9,7 +9,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import { DegreesSchema, NewDegreeSchema } from 'src/schema/formSchema';
-import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
+import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyAcademic, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 
 const AcademicLevel = ({ t, match }) => {
@@ -33,6 +33,7 @@ const AcademicLevel = ({ t, match }) => {
     { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
   ];
   useEffect(() => {
+    dispatch(setEmptyAcademic());
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

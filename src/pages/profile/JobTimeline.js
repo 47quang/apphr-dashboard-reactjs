@@ -13,7 +13,15 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
 import { JobTimelineSchema, NewContractSchema } from 'src/schema/formSchema';
-import { createContract, deleteContract, fetchAllowances, fetchBranches, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
+import {
+  createContract,
+  deleteContract,
+  fetchAllowances,
+  fetchBranches,
+  fetchContracts,
+  fetchWagesByType,
+  setEmptyContract,
+} from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchPositions } from 'src/stores/actions/position';
 import { REDUX_STATE } from 'src/stores/states';
@@ -77,6 +85,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   useEffect(() => {
+    dispatch(setEmptyContract());
     dispatch(fetchContracts({ profileId: +profileId }));
     dispatch(fetchBranches());
     dispatch(fetchAllowances());

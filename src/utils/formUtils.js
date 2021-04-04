@@ -10,7 +10,6 @@ export const renderButtons = (buttons, isNeedFlex = true) => {
         {button.name}
       </button>
     ));
-
   return (
     <div className={isNeedFlex ? joinClassName(['d-flex flex-row', `justify-content-${leftButtons.length > 0 ? 'between' : 'end'}`]) : ''}>
       <div>{mapButtons(leftButtons)}</div>
