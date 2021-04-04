@@ -9,13 +9,13 @@ const Notification = ({ t }) => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.article.articles);
   const columnDef = [
-    { name: 'code', title: t('label.notification_code') },
-    { name: 'typeId', title: t('label.notification_type') },
-    { name: 'title', title: t('label.notification_title') },
+    { name: 'code', title: t('label.notification_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'typeId', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
     // { name: 'branchIds', title: t('label.notification_branches') },
     // { name: 'departmentIds', title: t('label.notification_departments') },
     // { name: 'positionIds', title: t('label.notification_positions') },
-    { name: 'description', title: t('label.notification_description') },
+    { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
   useEffect(() => {
     dispatch(fetchArticles());

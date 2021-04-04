@@ -40,7 +40,9 @@ const NewType = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return <ArticleTypeItemBody ref={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />;
+  return (
+    <ArticleTypeItemBody typeRef={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />
+  );
 };
 
 export default NewType;

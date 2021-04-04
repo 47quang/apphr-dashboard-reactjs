@@ -9,11 +9,11 @@ const Wage = ({ t }) => {
   const dispatch = useDispatch();
   const wages = useSelector((state) => state.wage.wages);
   const columnDef = [
-    { name: 'code', title: t('label.wage_code') },
-    { name: 'type', title: t('label.payment_method') },
-    { name: 'name', title: t('label.wage_name') },
-    { name: 'amount', title: t('label.wage_amount') },
-    { name: 'dayOff', title: t('label.wage_dayOff') },
+    { name: 'code', title: t('label.wage_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.payment_method'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.wage_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'dayOff', title: t('label.wage_dayOff'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   useEffect(() => {
     dispatch(fetchWages());

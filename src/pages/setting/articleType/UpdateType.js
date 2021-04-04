@@ -49,7 +49,9 @@ const UpdateType = ({ t, location, history, match }) => {
       name: t('label.update'),
     },
   ];
-  return <ArticleTypeItemBody ref={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />;
+  return (
+    <ArticleTypeItemBody typeRef={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />
+  );
 };
 
 export default UpdateType;

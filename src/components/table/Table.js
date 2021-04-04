@@ -141,7 +141,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
             {
               key: 'behavior' + route,
               type: 'behavior',
-              width: !disableEdit ? '10%' : '0%',
+              width: !disableEdit ? '15%' : '0%',
               align: 'center',
             },
           ]);
@@ -215,16 +215,15 @@ const QTable = (props) => {
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
-  const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
+  // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
   const tableColumnExtensions = columnDef.map((col, idx) => {
     return {
       columnName: col.name,
-      align: 'left',
-      width: colHeight + '%',
-      wordWrapEnabled: true,
+      align: col.align,
+      width: col.width,
+      wordWrapEnabled: col.wordWrapEnabled,
     };
   });
-  tableColumnExtensions[0]['width'] = 15 + '%';
 
   const columnsFilter = idxColumnsFilter.map((idx) => ({
     id: idx,

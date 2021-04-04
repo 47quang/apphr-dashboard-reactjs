@@ -25,6 +25,8 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "article_type_code": "Mã loại thông báo",
+    "article_type_name": "Tên loại thông báo",
     "notification_code": "Mã thông báo",
     "notification_description": "Mô tả",
     "notification_type": "Loại thông báo",
@@ -67,7 +69,7 @@
     "branch_ip_router": "Địa chỉ IP của Router",
     "department": "Phòng ban",
     "department_code": "Mã phòng ban",
-    "department_name": "Tên chi nhánh",
+    "department_name": "Tên phòng ban",
     "position": "Vị trí",
     "position_name": "Tên vị trí",
     "position_code": "Mã vị trí",
@@ -223,6 +225,8 @@
 
   },
   "placeholder": {
+    "enter_article_type_name": "Nhập tên loại thông báo",
+    "enter_article_type_code": "Nhập mã loại thông báo",
     "enter_notification_description": "Nhập mô tả",
     "enter_notification_content": "Nhập nội dung thông báo",
     "enter_dayOff": "Nhập số ngày nghỉ cho phép",

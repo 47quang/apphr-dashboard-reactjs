@@ -9,9 +9,9 @@ const Allowance = ({ t }) => {
   const dispatch = useDispatch();
   const allowances = useSelector((state) => state.allowance.allowances);
   const columnDef = [
-    { name: 'code', title: t('label.allowance_code') },
-    { name: 'name', title: t('label.allowance_name') },
-    { name: 'amount', title: t('label.allowance_amount') },
+    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.allowance_name'), align: 'left', width: '35%', wordWrapEnabled: true },
+    { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   useEffect(() => {
     dispatch(fetchAllowances());

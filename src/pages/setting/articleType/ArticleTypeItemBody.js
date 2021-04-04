@@ -4,13 +4,13 @@ import React from 'react';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { renderButtons } from 'src/utils/formUtils';
 
-const ArticleTypeItemBody = ({ t, ref, type, validationSchema, submitForm, buttons }) => {
+const ArticleTypeItemBody = ({ t, typeRef, type, validationSchema, submitForm, buttons }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-xl-10">
           <Formik
-            innerRef={ref}
+            innerRef={typeRef}
             enableReinitialize
             initialValues={type}
             validationSchema={validationSchema}
@@ -27,9 +27,9 @@ const ArticleTypeItemBody = ({ t, ref, type, validationSchema, submitForm, butto
                     onBlur={handleBlur('code')}
                     onChange={handleChange('code')}
                     inputID={'code'}
-                    labelText={t('label.wage_code')}
+                    labelText={t('label.article_type_code')}
                     inputType={'text'}
-                    placeholder={t('placeholder.enter_wage_code')}
+                    placeholder={t('placeholder.enter_article_type_code')}
                     inputClassName={'form-control'}
                     isDisable={true}
                   />
@@ -39,9 +39,9 @@ const ArticleTypeItemBody = ({ t, ref, type, validationSchema, submitForm, butto
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
-                    labelText={t('label.wage_name')}
+                    labelText={t('label.article_type_name')}
                     inputType={'text'}
-                    placeholder={t('placeholder.enter_wage_name')}
+                    placeholder={t('placeholder.enter_article_type_name')}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.name}
