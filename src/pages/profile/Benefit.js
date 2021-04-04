@@ -11,7 +11,7 @@ import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { JobTimelineSchema } from 'src/schema/formSchema';
-import { fetchAllowances, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
+import { createWageHistory, fetchAllowances, fetchContracts, fetchHistoriesWage, fetchWagesByType } from 'src/stores/actions/contract';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
@@ -19,47 +19,48 @@ const Benefit = ({ t, history, match }) => {
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
   let wages = useSelector((state) => state.contract.wages);
-  let _contracts = [
-    {
-      id: 1,
-      code: 'HD001',
-      fullname: 'Hợp đồng lao động ',
-      handleDate: '2021-01-10',
-      expiredDate: '2022-01-10',
-      newBenefit: {
-        paymentType: '',
-        wageId: '',
-        allowances: [],
-        allowanceIds: [],
-        startDate: '2021-01-01',
-        expiredDate: '2021-12-12',
-      },
-      benefits: [
-        {
-          id: 1,
-          wageId: 1,
-          allowanceIds: [1, 2, 3],
-          allowances: [],
-          startDate: '2021-01-01',
-          expiredDate: '2021-12-12',
-        },
-        {
-          id: 2,
-          wageId: 2,
-          allowanceIds: [1, 2, 3],
-          allowances: [],
-          startDate: '2021-01-01',
-          expiredDate: '2021-12-12',
-        },
-      ],
-      files: [],
-    },
-  ];
+  let benefits = useSelector((state) => state.contract.benefits);
+  // let _contracts = [
+  //   {
+  //     id: 1,
+  //     code: 'HD001',
+  //     fullname: 'Hợp đồng lao động ',
+  //     handleDate: '2021-01-10',
+  //     expiredDate: '2022-01-10',
+  //     newBenefit: {
+  //       paymentType: '',
+  //       wageId: '',
+  //       allowances: [],
+  //       allowanceIds: [],
+  //       startDate: '2021-01-01',
+  //       expiredDate: '2021-12-12',
+  //     },
+  //     benefits: [
+  //       {
+  //         id: 1,
+  //         wageId: 1,
+  //         allowanceIds: [1, 2, 3],
+  //         allowances: [],
+  //         startDate: '2021-01-01',
+  //         expiredDate: '2021-12-12',
+  //       },
+  //       {
+  //         id: 2,
+  //         wageId: 2,
+  //         allowanceIds: [1, 2, 3],
+  //         allowances: [],
+  //         startDate: '2021-01-01',
+  //         expiredDate: '2021-12-12',
+  //       },
+  //     ],
+  //     files: [],
+  //   },
+  // ];
+
   const benefitTab = {
-    // contracts: useSelector((state) => state.contract.contracts),
-    contracts: _contracts,
+    contracts: useSelector((state) => state.contract.contracts),
+    // contracts: _contracts,
   };
-  console.log('benefit', benefitTab);
 
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
@@ -71,20 +72,24 @@ const Benefit = ({ t, history, match }) => {
   useEffect(() => {
     dispatch(fetchAllowances());
     dispatch(fetchContracts({ profileId: +profileId }));
+    dispatch(fetchHistoriesWage());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // async function create(form) {
-  //   // form.provinceId = form.provinceId || null;
-  //   form.profileId = +match.params.id;
+  async function create(form, contractId) {
+    // form.provinceId = form.provinceId || null;
+    form.profileId = +match.params.id;
+    form.contractId = contractId;
+    form.wageId = parseInt(form.wageId);
 
-  //   if (form.id) {
-  //     // await dispatch(updateContract(form, t('message.successful_update')));
-  //   } else {
-  //     await dispatch(createContract(form, t('message.successful_create')));
-  //   }
-  // }
+    if (form.id) {
+      // await dispatch(updateContract(form, t('message.successful_update')));
+    } else {
+      delete form.id;
+      await dispatch(createWageHistory(form, t('message.successful_create')));
+    }
+  }
 
   // async function removeBenefit(contractId) {
   //   // await dispatch(deleteContract(contractId, t('message.successful_delete')));
@@ -145,13 +150,17 @@ const Benefit = ({ t, history, match }) => {
                                 isMinimize: !values.contracts[index].isMinimize,
                               });
                             };
-
                             return (
                               <div key={'contract:' + index} className="shadow bg-white rounded m-4 p-4">
                                 <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                                   <div className="pt-1 d-inline" role="button">
                                     {!values.contracts[index].isMinimize ? (
-                                      <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                      <AddBoxOutlinedIcon
+                                        className="pb-1"
+                                        onClick={(e) => {
+                                          changeMinimizeButton();
+                                        }}
+                                      />
                                     ) : (
                                       <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
                                     )}
@@ -171,7 +180,7 @@ const Benefit = ({ t, history, match }) => {
 
                                 <hr className="mt-1" />
 
-                                {values.contracts[index].isMinimize && (
+                                {contract.isMinimize && (
                                   <div>
                                     {/* <div className="shadow bg-pink rounded m-4 p-4">
                                       <>
@@ -491,8 +500,8 @@ const Benefit = ({ t, history, match }) => {
                                               </button>
                                             </div>
 
-                                            {values.contracts[index].benefits && values.contracts[index].benefits.length > 0 ? (
-                                              values.contracts[index].benefits.map((benefit, benefitIndex) => {
+                                            {contract.benefits && contract.benefits.length > 0 ? (
+                                              contract.benefits.map((benefit, benefitIndex) => {
                                                 return (
                                                   <div
                                                     key={'benefit:' + benefitIndex}
@@ -761,7 +770,7 @@ const Benefit = ({ t, history, match }) => {
                                                                 className="btn btn-primary"
                                                                 onClick={() => {
                                                                   push({ name: '', amount: 0 });
-                                                                  console.log(values);
+                                                                  // console.log(values);
                                                                 }}
                                                               >
                                                                 <AddCircle /> {t('label.add_allowance')}
@@ -797,7 +806,7 @@ const Benefit = ({ t, history, match }) => {
                                                                 type: 'button',
                                                                 className: `btn btn-primary px-4 ml-4`,
                                                                 onClick: async () => {
-                                                                  console.log(values);
+                                                                  // console.log('be', benefit);
                                                                 },
                                                                 name: benefit.id ? t('label.save') : t('label.create_new'),
                                                               },
@@ -818,9 +827,38 @@ const Benefit = ({ t, history, match }) => {
                                                                 type: 'button',
                                                                 className: `btn btn-primary px-4 ml-4`,
                                                                 onClick: async () => {
-                                                                  console.log(values);
+                                                                  create(benefit, contract.id).then(() =>
+                                                                    renderButtons([
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 mx-4`,
+                                                                        onClick: async (e) => {
+                                                                          // await removeBenefit(benefit.id).then(() => remove(index));
+                                                                        },
+                                                                        name: t('label.delete'),
+                                                                        position: 'right',
+                                                                      },
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 mx-4`,
+                                                                        onClick: () => {
+                                                                          // setFieldValue(`contracts.${index}`, benefitTab.contracts[index]);
+                                                                        },
+                                                                        name: t('label.reset'),
+                                                                        position: 'right',
+                                                                      },
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 ml-4`,
+                                                                        onClick: async () => {
+                                                                          // console.log('be', benefit);
+                                                                        },
+                                                                        name: benefit.id ? t('label.save') : t('label.create_new'),
+                                                                      },
+                                                                    ]),
+                                                                  );
                                                                 },
-                                                                name: benefit.id ? t('label.save') : t('label.create_new'),
+                                                                name: t('label.create_new'),
                                                               },
                                                             ],
                                                       )}

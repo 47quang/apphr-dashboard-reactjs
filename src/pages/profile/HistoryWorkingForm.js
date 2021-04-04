@@ -6,48 +6,65 @@ import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import { HistoryWorkingsSchema, NewHistoryWorkingSchema } from 'src/schema/formSchema';
+import { NewHistoryWorkingSchema, HistoryWorkingsSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
-import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
+import {
+  createHistoryWork,
+  deleteHistoryWork,
+  fetchHistoriesWork,
+  updateHistoryWork,
+  onChangeDepartment,
+  onChangePosition,
+} from 'src/stores/actions/historyWork';
 import { fetchPositions } from 'src/stores/actions/position';
-import { fetchRoles } from 'src/stores/actions/role';
+import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
 const HistoryWorkingForm = ({ t, match }) => {
   const dispatch = useDispatch();
-  const initialValues = useSelector((state) => state.profile.profile);
   let branches = useSelector((state) => state.contract.branches);
   const positions = useSelector((state) => state.position.positions);
+  const historyWorkingForm = {
+    histories: useSelector((state) => state.historyWork.histories),
+  };
   const departments = useSelector((state) => state.department.departments);
-  const roles = useSelector((state) => state.role.roles);
   const profileId = +match?.params?.id;
   const newHistory = {
     profileId: profileId,
     branchId: '',
     departmentId: '',
     positionId: '',
-    roleId: '',
-    startDate: '',
-    endDate: '',
+    from: '',
+    to: '',
   };
   useEffect(() => {
     dispatch(fetchBranches());
-    dispatch(fetchRoles());
+    dispatch(
+      fetchHistoriesWork({
+        profileId: profileId,
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function create(form) {
     // form.provinceId = form.provinceId || null;
+    form.profileId = profileId;
+    form.branchId = parseInt(form.branchId);
+    form.departmentId = parseInt(form.departmentId);
+    form.positionId = parseInt(form.positionId);
+
+    console.log(form);
     if (form.id) {
-      await dispatch(updateDiploma(form, t('message.successful_update')));
+      await dispatch(updateHistoryWork(form, t('message.successful_update')));
     } else {
-      await dispatch(createDiploma(form, t('message.successful_create')));
+      await dispatch(createHistoryWork(form, t('message.successful_create')));
     }
   }
-  async function removeCertificate(form) {
-    await dispatch(deleteDiploma(form.id, t('message.successful_delete')));
+  async function removeHistoryWork(id) {
+    await dispatch(deleteHistoryWork(id, t('message.successful_delete')));
   }
 
   return (
@@ -130,50 +147,33 @@ const HistoryWorkingForm = ({ t, match }) => {
                       />
                     </div>
                     <div className="row">
-                      <CommonSelectInput
-                        containerClassName={'form-group col-lg-4'}
-                        value={values.roleId ?? ''}
-                        onBlur={handleBlur(`roleId`)}
-                        onChange={(e) => {
-                          handleChange('roleId')(e);
-                        }}
-                        inputID={`roleId`}
-                        labelText={t('label.role')}
-                        selectClassName={'form-control'}
-                        placeholder={t('placeholder.select_role')}
-                        isRequiredField
-                        isTouched={touched.roleId}
-                        isError={errors.roleId && touched.roleId}
-                        errorMessage={t(errors.roleId)}
-                        lstSelectOptions={roles}
-                      />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-4'}
-                        value={values.startDate ?? ''}
-                        onBlur={handleBlur(`startDate`)}
-                        onChange={handleChange(`startDate`)}
-                        inputID={`startDate`}
+                        value={values.from ?? ''}
+                        onBlur={handleBlur(`from`)}
+                        onChange={handleChange(`from`)}
+                        inputID={`from`}
                         labelText={t('label.start_date')}
                         inputType={'date'}
                         inputClassName={'form-control'}
                         isRequiredField
-                        isTouched={touched.startDate}
-                        isError={errors.startDate && touched.startDate}
-                        errorMessage={t(errors.startDate)}
+                        isTouched={touched.from}
+                        isError={errors.from && touched.from}
+                        errorMessage={t(errors.from)}
                       />
                       <CommonTextInput
                         containerClassName={'form-group col-lg-4'}
-                        value={values.endDate ?? ''}
-                        onBlur={handleBlur(`endDate`)}
-                        onChange={handleChange(`endDate`)}
-                        inputID={`endDate`}
+                        value={values.to ?? ''}
+                        onBlur={handleBlur(`to`)}
+                        onChange={handleChange(`to`)}
+                        inputID={`to`}
                         labelText={t('label.end_date')}
                         inputType={'date'}
                         inputClassName={'form-control'}
-                        isRequiredField
-                        isTouched={touched.endDate}
-                        isError={errors.endDate && touched.endDate}
-                        errorMessage={t(errors.endDate)}
+                        //isRequiredField
+                        isTouched={touched.to}
+                        isError={errors.to && touched.to}
+                        errorMessage={t(errors.to)}
                       />
                     </div>
                     <hr className="mt-1" />
@@ -199,7 +199,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                             setTouched(err);
                             return;
                           }
-                          await create(values).then(() => dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' })));
+                          await create(values).then(() => dispatch(fetchHistoriesWork({ profileId: profileId })));
                           handleReset();
                           document.getElementById('newHistory').hidden = true;
                           document.getElementById('addBtn').disabled = false;
@@ -216,17 +216,17 @@ const HistoryWorkingForm = ({ t, match }) => {
               );
             }}
           </Formik>
-          <Formik initialValues={initialValues} enableReinitialize validationSchema={HistoryWorkingsSchema} onSubmit={() => {}}>
+          <Formik initialValues={historyWorkingForm} enableReinitialize validationSchema={HistoryWorkingsSchema} onSubmit={() => {}}>
             {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange, validateForm, setFieldValue, setFieldTouched }) => {
               return (
                 <Form>
                   <FieldArray
-                    name="historyWorkings"
+                    name="histories"
                     render={({ insert, remove, push }) => (
                       <div>
-                        {values.historyWorkings &&
-                          values.historyWorkings.length > 0 &&
-                          values.historyWorkings.map((friend, index) => (
+                        {values.histories &&
+                          values.histories.length > 0 &&
+                          values.histories.map((friend, index) => (
                             <div>
                               <div key={'degree' + index} className="shadow bg-white rounded m-4 p-4">
                                 <h5>{index + 1}.</h5>
@@ -235,144 +235,140 @@ const HistoryWorkingForm = ({ t, match }) => {
                                   <CommonSelectInput
                                     containerClassName={'form-group col-lg-4'}
                                     value={friend.branchId ?? ''}
-                                    onBlur={handleBlur(`historyWorkings.${index}.branchId`)}
-                                    onChange={(e) => {
-                                      dispatch(fetchDepartments({ branchId: e.target.value }));
-                                      handleChange(`historyWorkings.${index}.branchId`)(e);
+                                    onBlur={handleBlur(`histories.${index}.branchId`)}
+                                    onChange={async (e) => {
+                                      handleChange(`histories.${index}.branchId`)(e);
+                                      if (+e.target.value !== 0) {
+                                        let x = await api.department.getAll({ branchId: e.target.value }).then(({ payload }) => payload);
+                                        console.log(x);
+                                        setFieldValue(`histories.${index}.departments`, x);
+                                      } else {
+                                        setFieldValue(`histories.${index}.departments`, []);
+                                      }
+                                      setFieldValue(`histories.${index}.departmentId`, 0);
+                                      setFieldValue(`histories.${index}.positionId`, 0);
+                                      // dispatch(onChangeDepartment({ branchId: e.target.value }, index));
+
+                                      // handleChange(`histories.${index}.departments`)(x);
                                     }}
-                                    inputID={`historyWorkings.${index}.branchId`}
+                                    inputID={`histories.${index}.branchId`}
                                     labelText={t('label.branch')}
                                     selectClassName={'form-control'}
                                     placeholder={t('placeholder.select_branch')}
                                     isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.branchId}
+                                    isTouched={touched && touched.histories && touched.histories[index]?.branchId}
                                     isError={
                                       errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].branchId &&
+                                      errors.histories &&
+                                      errors.histories[index]?.branchId &&
                                       touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.branchId
+                                      touched.histories &&
+                                      touched.histories[index]?.branchId
                                     }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].branchId)}
-                                    lstSelectOptions={branches}
+                                    errorMessage={t(errors && errors.histories && errors.histories[index]?.branchId)}
+                                    lstSelectOptions={friend.branches}
                                   />
                                   <CommonSelectInput
                                     containerClassName={'form-group col-lg-4'}
                                     value={friend.departmentId ?? ''}
-                                    onBlur={handleBlur(`historyWorkings.${index}.departmentId`)}
-                                    onChange={(e) => {
-                                      dispatch(fetchPositions({ departmentId: e.target.value }));
-                                      handleChange(`historyWorkings.${index}.departmentId`)(e);
+                                    onBlur={handleBlur(`histories.${index}.departmentId`)}
+                                    onChange={async (e) => {
+                                      // dispatch(onChangePosition({ departmentId: e.target.value }, index));
+                                      handleChange(`histories.${index}.departmentId`)(e);
+                                      if (+e.target.value !== 0) {
+                                        let x = await api.position.getAll({ departmentId: e.target.value }).then(({ payload }) => payload);
+                                        setFieldValue(`histories.${index}.positions`, x);
+                                      } else {
+                                        setFieldValue(`histories.${index}.positions`, []);
+                                      }
+                                      setFieldValue(`histories.${index}.positionId`, 0);
                                     }}
-                                    inputID={`historyWorkings.${index}.departmentId`}
+                                    inputID={`histories.${index}.departmentId`}
                                     labelText={t('label.department')}
                                     selectClassName={'form-control'}
                                     placeholder={t('placeholder.select_department')}
                                     isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.departmentId}
+                                    isTouched={touched && touched.histories && touched.histories[index]?.departmentId}
                                     isError={
                                       errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].departmentId &&
+                                      errors.histories &&
+                                      errors.histories[index]?.departmentId &&
                                       touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.departmentId
+                                      touched.histories &&
+                                      touched.histories[index]?.departmentId
                                     }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].departmentId)}
-                                    lstSelectOptions={departments}
+                                    errorMessage={t(errors && errors.histories && errors.histories[index]?.departmentId)}
+                                    lstSelectOptions={friend.departments}
                                   />
                                   <CommonSelectInput
                                     containerClassName={'form-group col-lg-4'}
                                     value={friend.positionId ?? ''}
                                     onBlur={handleBlur(`positionId`)}
                                     onChange={(e) => {
-                                      handleChange('positionId')(e);
+                                      console.log(e.target.value);
+                                      // handleChange('positionId')(e);
+                                      setFieldValue(`histories.${index}.positionId`, +e.target.value);
                                     }}
                                     inputID={`positionId`}
                                     labelText={t('label.position')}
                                     selectClassName={'form-control'}
                                     placeholder={t('placeholder.select_position')}
                                     isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.positionId}
+                                    isTouched={touched && touched.histories && touched.histories[index]?.positionId}
                                     isError={
                                       errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].positionId &&
+                                      errors.histories &&
+                                      errors.histories[index]?.positionId &&
                                       touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.positionId
+                                      touched.histories &&
+                                      touched.histories[index]?.positionId
                                     }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].positionId)}
-                                    lstSelectOptions={positions}
+                                    errorMessage={t(errors && errors.histories && errors.histories[index]?.positionId)}
+                                    lstSelectOptions={friend.positions}
                                   />
                                 </div>
                                 <div className="row">
-                                  <CommonSelectInput
-                                    containerClassName={'form-group col-lg-4'}
-                                    value={friend.roleId ?? ''}
-                                    onBlur={handleBlur(`roleId`)}
-                                    onChange={(e) => {
-                                      handleChange('roleId')(e);
-                                    }}
-                                    inputID={`roleId`}
-                                    labelText={t('label.role')}
-                                    selectClassName={'form-control'}
-                                    placeholder={t('placeholder.select_role')}
-                                    isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.roleId}
-                                    isError={
-                                      errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].roleId &&
-                                      touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.roleId
-                                    }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].roleId)}
-                                    lstSelectOptions={roles}
-                                  />
                                   <CommonTextInput
                                     containerClassName={'form-group col-lg-4'}
-                                    value={friend.startDate ?? ''}
-                                    onBlur={handleBlur(`startDate`)}
-                                    onChange={handleChange(`startDate`)}
-                                    inputID={`startDate`}
+                                    value={friend.from ?? ''}
+                                    onBlur={handleBlur(`from`)}
+                                    onChange={handleChange(`from`)}
+                                    inputID={`from`}
                                     labelText={t('label.start_date')}
                                     inputType={'date'}
                                     inputClassName={'form-control'}
                                     isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.startDate}
+                                    isTouched={touched && touched.histories && touched.histories[index]?.from}
                                     isError={
                                       errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].startDate &&
+                                      errors.histories &&
+                                      errors.histories[index]?.from &&
                                       touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.startDate
+                                      touched.histories &&
+                                      touched.histories[index]?.from
                                     }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].startDate)}
+                                    errorMessage={t(errors && errors.histories && errors.histories[index]?.from)}
                                   />
                                   <CommonTextInput
                                     containerClassName={'form-group col-lg-4'}
-                                    value={friend.endDate ?? ''}
-                                    onBlur={handleBlur(`endDate`)}
-                                    onChange={handleChange(`endDate`)}
-                                    inputID={`endDate`}
+                                    value={friend.to ?? ''}
+                                    onBlur={handleBlur(`to`)}
+                                    onChange={handleChange(`to`)}
+                                    inputID={`to`}
                                     labelText={t('label.end_date')}
                                     inputType={'date'}
                                     inputClassName={'form-control'}
-                                    isRequiredField
-                                    isTouched={touched && touched.historyWorkings && touched.historyWorkings[index]?.endDate}
+                                    //isRequiredField
+                                    isTouched={touched && touched.histories && touched.histories[index]?.to}
                                     isError={
                                       errors &&
-                                      errors.historyWorkings &&
-                                      errors.historyWorkings[index].endDate &&
+                                      errors.histories &&
+                                      errors.histories[index]?.to &&
                                       touched &&
-                                      touched.historyWorkings &&
-                                      touched.historyWorkings[index]?.endDate
+                                      touched.histories &&
+                                      touched.histories[index]?.to
                                     }
-                                    errorMessage={t(errors && errors.historyWorkings && errors.historyWorkings[index].endDate)}
+                                    errorMessage={t(errors && errors.histories && errors.histories[index]?.to)}
                                   />
                                 </div>
 
@@ -383,7 +379,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                     type: 'button',
                                     className: `btn btn-primary px-4 mx-4`,
                                     onClick: async (e) => {
-                                      await removeCertificate(friend.id).then(() => remove(index));
+                                      await removeHistoryWork(friend.id).then(() => remove(index));
                                       dispatch({
                                         type: REDUX_STATE.notification.SET_NOTI,
                                         payload: { open: true, type: 'success', message: t('message.successful_delete') },
@@ -396,7 +392,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                     type: 'button',
                                     className: `btn btn-primary px-4 mx-4`,
                                     onClick: () => {
-                                      setFieldValue(`degrees.${index}`, initialValues.historyWorkings[index]);
+                                      setFieldValue(`histories.${index}`, historyWorkingForm.histories[index]);
                                     },
                                     name: t('label.reset'),
                                     position: 'right',
@@ -406,21 +402,21 @@ const HistoryWorkingForm = ({ t, match }) => {
                                     className: `btn btn-primary px-4 ml-4`,
                                     onClick: async () => {
                                       let err = await validateForm();
-                                      let err_fields = err.historyWorkings && Object.keys(err.historyWorkings[index]);
-                                      if (err.historyWorkings && err.historyWorkings[index] !== undefined && err_fields.length !== 0) {
+                                      let err_fields = err.histories && Object.keys(err.histories[index]);
+                                      if (err.histories && err.histories[index] !== undefined && err_fields.length !== 0) {
                                         err_fields &&
                                           err_fields.length &&
-                                          err_fields.forEach((val) => setFieldTouched(`historyWorkings.${index}.${val}`, true));
+                                          err_fields.forEach((val) => setFieldTouched(`histories.${index}.${val}`, true));
                                         return;
                                       }
                                       create(friend);
-                                      initialValues.historyWorkings[index] = friend;
-                                      setFieldValue(`historyWorkings.${index}`, friend);
+                                      historyWorkingForm.histories[index] = friend;
+                                      setFieldValue(`histories.${index}`, friend);
                                       //dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
                                       document.getElementById('newHistory').hidden = true;
                                       document.getElementById('addBtn').disabled = false;
                                     },
-                                    name: friend.id ? t('label.save') : t('label.create_new'),
+                                    name: t('label.save'),
                                   },
                                 ])}
                               </div>

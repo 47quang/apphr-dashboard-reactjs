@@ -16,10 +16,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
     t('label.friday'),
     t('label.saturday'),
   ];
-  const typeCC = [
-    { id: 'WIFI', name: t('label.wi_fi') },
-    { id: 'QR_CODE', name: t('label.qr_code') },
-  ];
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -152,23 +149,6 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                   </div>
                 </div>
 
-                <div className="row">
-                  <CommonSelectInput
-                    containerClassName={'form-group col-xl-12'}
-                    value={values.typeCC}
-                    onBlur={handleBlur('typeCC')}
-                    onChange={handleChange('typeCC')}
-                    inputID={'typeCC'}
-                    labelText={t('label.roll_call_type')}
-                    selectClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.typeCC}
-                    isError={errors.typeCC && touched.typeCC}
-                    errorMessage={t(errors.typeCC)}
-                    lstSelectOptions={typeCC}
-                    placeholder={t('placeholder.select_roll_call_type')}
-                  />
-                </div>
                 {renderButtons(buttons)}
               </form>
             )}

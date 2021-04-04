@@ -11,7 +11,10 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons }) => {
   const dispatch = useDispatch();
-
+  const typeCC = [
+    { id: 'WIFI', name: t('label.wi_fi') },
+    { id: 'QR_CODE', name: t('label.qr_code') },
+  ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -57,6 +60,21 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                   />
                 </div>
                 <div className="row">
+                  <CommonSelectInput
+                    containerClassName={'form-group col-xl-6'}
+                    value={values.typeCC}
+                    onBlur={handleBlur('typeCC')}
+                    onChange={handleChange('typeCC')}
+                    inputID={'typeCC'}
+                    labelText={t('label.roll_call_type')}
+                    selectClassName={'form-control'}
+                    isRequiredField
+                    isTouched={touched.typeCC}
+                    isError={errors.typeCC && touched.typeCC}
+                    errorMessage={t(errors.typeCC)}
+                    lstSelectOptions={typeCC}
+                    placeholder={t('placeholder.select_roll_call_type')}
+                  />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-6'}
                     value={values.ipRouter}
@@ -71,6 +89,9 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     isError={errors.ipRouter && touched.ipRouter}
                     errorMessage={t(errors.ipRouter)}
                   />
+                </div>
+
+                <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-xl-6'}
                     value={values.provinceId}
@@ -89,9 +110,6 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     placeholder={t('placeholder.select_province')}
                     lstSelectOptions={provinces}
                   />
-                </div>
-
-                <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-xl-6'}
                     value={values.districtId}
@@ -106,6 +124,8 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     placeholder={t('placeholder.select_district')}
                     lstSelectOptions={districts}
                   />
+                </div>
+                <div className="row">
                   <CommonSelectInput
                     containerClassName={'form-group col-xl-6'}
                     value={values.wardId}
@@ -117,8 +137,6 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     placeholder={t('placeholder.select_ward')}
                     lstSelectOptions={wards}
                   />
-                </div>
-                <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
                     value={values.address}

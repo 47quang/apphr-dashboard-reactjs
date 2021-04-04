@@ -7,8 +7,8 @@ import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const Role = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'code', title: t('label.role_code') },
-    { name: 'name', title: t('label.role_name') },
+    { name: 'code', title: t('label.role_code'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.role_name'), align: 'left', width: '60%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const roles = useSelector((state) => state.role.roles);

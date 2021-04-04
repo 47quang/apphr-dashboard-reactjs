@@ -3,15 +3,15 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchContracts = (profileId) => {
+export const fetchContracts = (params) => {
   return (dispatch, getState) => {
     api.contract
-      .getAll(profileId)
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(async ({ payload }) => {
         payload =
           payload &&
           payload.length &&
-          payload.map((contract) => {
+          payload.map(async (contract) => {
             contract.handleDate = getDateInput(contract.handleDate);
             contract.expiredDate = getDateInput(contract.expiredDate);
             contract.validDate = getDateInput(contract.validDate);
@@ -19,8 +19,10 @@ export const fetchContracts = (profileId) => {
             contract['paymentType'] = contract?.wage?.type;
             contract['wageId'] = contract?.wage?.id;
             contract['amount'] = contract?.wage?.amount;
+            contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => payload);
             return contract;
           });
+        payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
@@ -115,6 +117,18 @@ export const fetchWagesByType = (type) => {
       });
   };
 };
+export const fetchHistoriesWage = (params) => {
+  return (dispatch, getState) => {
+    api.wageHistory
+      .getAll(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.contract.SET_BENEFITS, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 export const fetchAllowances = () => {
   return (dispatch, getState) => {
@@ -125,6 +139,21 @@ export const fetchAllowances = () => {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+};
+
+export const createWageHistory = (params, success_msg) => {
+  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.name)) : [];
+  return (dispatch, getState) => {
+    api.wageHistory
+      .post(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
       });
   };
 };

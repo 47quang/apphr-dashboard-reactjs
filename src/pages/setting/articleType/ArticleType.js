@@ -10,7 +10,7 @@ const ArticleType = ({ t }) => {
   const types = useSelector((state) => state.articleType.types);
   const columnDef = [
     { name: 'code', title: t('label.article_type_code'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.article_type_name'), align: 'left', width: '55%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.article_type_name'), align: 'left', width: '60%', wordWrapEnabled: true },
   ];
   useEffect(() => {
     dispatch(fetchTypes());

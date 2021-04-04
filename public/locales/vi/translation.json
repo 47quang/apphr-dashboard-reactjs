@@ -25,6 +25,7 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+
     "article_type_code": "Mã loại thông báo",
     "article_type_name": "Tên loại thông báo",
     "notification_code": "Mã thông báo",
@@ -43,8 +44,8 @@
     "delete": "Xóa",
     "contract_fullname": "Tên hợp đồng",
     "avatar": "Hình đại diện",
-    "employee_lastname": "Họ và tên lót",
-    "employee_firstname": "Tên",
+    "employee_last_name": "Họ và tên lót",
+    "employee_first_name": "Tên",
     "employee_full_name": "Họ và tên",
     "update": "Cập nhật",
     "save": "Lưu",

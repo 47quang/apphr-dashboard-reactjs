@@ -18,6 +18,7 @@ import wageReducer from './wage';
 import allowanceReducer from './allowance';
 import articleReducer from './article';
 import articleTypeReducer from './articleType';
+import historyWorkReducer from './historyWork';
 
 export default combineReducers({
   style: styleReducer,
@@ -39,4 +40,5 @@ export default combineReducers({
   allowance: allowanceReducer,
   article: articleReducer,
   articleType: articleTypeReducer,
+  historyWork: historyWorkReducer,
 });

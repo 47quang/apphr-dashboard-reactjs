@@ -11,7 +11,7 @@ const Wage = ({ t }) => {
   const columnDef = [
     { name: 'code', title: t('label.wage_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_method'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.wage_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.wage_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'dayOff', title: t('label.wage_dayOff'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];

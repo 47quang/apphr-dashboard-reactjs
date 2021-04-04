@@ -165,7 +165,7 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                           onBlur={handleBlur('firstname')}
                           onChange={handleChange('firstname')}
                           inputID={'firstname'}
-                          labelText={t('label.employee_firstname')}
+                          labelText={t('label.employee_first_name')}
                           inputType={'text'}
                           placeholder={t('placeholder.enter_employee_firstname')}
                           inputClassName={'form-control'}
@@ -182,7 +182,7 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                           onBlur={handleBlur('lastname')}
                           onChange={handleChange('lastname')}
                           inputID={'lastname'}
-                          labelText={t('label.employee_lastname')}
+                          labelText={t('label.employee_last_name')}
                           inputType={'text'}
                           placeholder={t('placeholder.enter_employee_lastname')}
                           inputClassName={'form-control'}

@@ -7,7 +7,7 @@ import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
 const Shifts = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'code', title: t('label.shift_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.shift_code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.shift_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startCC', title: t('label.check_in_time'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'endCC', title: t('label.check_out_time'), align: 'left', width: '15%', wordWrapEnabled: true },

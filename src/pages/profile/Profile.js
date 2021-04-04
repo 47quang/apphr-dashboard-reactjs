@@ -8,14 +8,16 @@ import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 const Profile = ({ t, location }) => {
   const columnDefOfProfiles = [
     { name: 'code', title: t('label.employee_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'lastname', title: t('label.employee_last_name'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'firstname', title: t('label.employee_first_name'), align: 'left', width: '10%', wordWrapEnabled: true },
+    // { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'gender', title: t('label.sex'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'positionId', title: t('label.position'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'departmentId', title: t('label.department'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
+    // { name: 'positionId', title: t('label.position'), align: 'left', width: '15%', wordWrapEnabled: true },
+    // { name: 'departmentId', title: t('label.department'), align: 'left', width: '15%', wordWrapEnabled: true },
+    // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
+    // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.profile.profiles);

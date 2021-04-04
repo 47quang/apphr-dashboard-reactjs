@@ -10,7 +10,7 @@ const Department = ({ t, location, history }) => {
     { name: 'code', title: t('label.department_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'name', title: t('label.department_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'branchname', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'note', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'note', title: t('label.description'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);

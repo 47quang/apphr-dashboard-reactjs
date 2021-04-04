@@ -24,6 +24,8 @@ const API_PREFIX = {
   API_UPLOAD: 'api.upload',
   API_ARTICLE: '/api.article',
   API_ARTICLE_TYPE: '/api.type-article',
+  API_HISTORY_WORK: '/api.work-history',
+  API_WAGE_HISTORY: '/api.wage-history',
 };
 
 export const api = {
@@ -387,6 +389,44 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_ARTICLE_TYPE + `/${id}`);
+    },
+  },
+  historyWork: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_HISTORY_WORK, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_HISTORY_WORK, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_HISTORY_WORK + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_HISTORY_WORK + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_HISTORY_WORK + `/${id}`);
+    },
+  },
+  wageHistory: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_WAGE_HISTORY, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_WAGE_HISTORY, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_WAGE_HISTORY + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_WAGE_HISTORY + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_WAGE_HISTORY + `/${id}`);
     },
   },
 };
