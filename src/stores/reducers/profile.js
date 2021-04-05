@@ -242,7 +242,16 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profile: Object.assign({}, state.profile, { degrees: payload }),
       };
-
+    case REDUX_STATE.diploma.EMPTY_DEGREE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { degrees: payload }),
+      };
+    case REDUX_STATE.diploma.EMPTY_CERTIFICATE:
+      return {
+        ...state,
+        profile: Object.assign({}, state.profile, { certificates: payload }),
+      };
     case REDUX_STATE.diploma.SET_CERTIFICATES:
       return {
         ...state,

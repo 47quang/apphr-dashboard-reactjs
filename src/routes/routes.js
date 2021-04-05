@@ -17,6 +17,9 @@ const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
+const NewNotification = React.lazy(() => import('src/pages/notification/NewNotification'));
+const EditNotification = React.lazy(() => import('src/pages/notification/UpdateNotification'));
+
 const Report = React.lazy(() => import('src/pages/report/Report'));
 const General = React.lazy(() => import('src/pages/setting/general/General'));
 const Position = React.lazy(() => import('src/pages/setting/position/Position'));
@@ -46,6 +49,18 @@ const Role = React.lazy(() => import('src/pages/setting/authorization/role/Role'
 const NewRole = React.lazy(() => import('src/pages/setting/authorization/role/NewRole'));
 const EditRole = React.lazy(() => import('src/pages/setting/authorization/role/UpdateRole'));
 
+const Wage = React.lazy(() => import('src/pages/setting/wage/Wage'));
+const NewWage = React.lazy(() => import('src/pages/setting/wage/NewWage'));
+const EditWage = React.lazy(() => import('src/pages/setting/wage/UpdateWage'));
+
+const Allowance = React.lazy(() => import('src/pages/setting/allowance/Allowance'));
+const NewAllowance = React.lazy(() => import('src/pages/setting/allowance/NewAllowance'));
+const EditAllowance = React.lazy(() => import('src/pages/setting/allowance/UpdateAllowance'));
+
+const ArticleType = React.lazy(() => import('src/pages/setting/articleType/ArticleType'));
+const NewArticleType = React.lazy(() => import('src/pages/setting/articleType/NewType'));
+const EditArticleType = React.lazy(() => import('src/pages/setting/articleType/UpdateType'));
+
 const routes = [
   { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -63,6 +78,16 @@ const routes = [
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
   { path: ROUTE_PATH.PROPOSAL, name: ROUTE_NAME.PROPOSAL, component: Proposal },
   { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },
+  {
+    path: ROUTE_PATH.NOTIFICATION_CREATE,
+    name: ROUTE_NAME.NEW_NOTIFICATION,
+    component: NewNotification,
+  },
+  {
+    path: ROUTE_PATH.NOTIFICATION_UPDATE,
+    name: ROUTE_NAME.NOTIFICATION_UPDATE,
+    component: EditNotification,
+  },
   {
     path: ROUTE_PATH.NOTIFICATION,
     name: ROUTE_NAME.NOTIFICATION,
@@ -180,6 +205,45 @@ const routes = [
     name: ROUTE_NAME.ROLE,
     component: Role,
   },
+  {
+    path: ROUTE_PATH.WAGE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.WAGE_CREATE,
+    component: NewWage,
+  },
+  {
+    path: ROUTE_PATH.WAGE_UPDATE,
+    name: ROUTE_NAME.WAGE_UPDATE,
+    component: EditWage,
+  },
+  { path: ROUTE_PATH.WAGE, name: ROUTE_NAME.WAGE, component: Wage },
+  {
+    path: ROUTE_PATH.ALLOWANCE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.ALLOWANCE_CREATE,
+    component: NewAllowance,
+  },
+  {
+    path: ROUTE_PATH.ALLOWANCE_UPDATE,
+    name: ROUTE_NAME.ALLOWANCE_UPDATE,
+    component: EditAllowance,
+  },
+  { path: ROUTE_PATH.ALLOWANCE, name: ROUTE_NAME.ALLOWANCE, component: Allowance },
+  {
+    path: ROUTE_PATH.ARTICLE_TYPE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.NEW_ARTICLE_TYPE,
+    component: NewArticleType,
+  },
+  {
+    path: ROUTE_PATH.ARTICLE_TYPE_UPDATE,
+    name: ROUTE_NAME.ARTICLE_TYPE_UPDATE,
+    component: EditArticleType,
+  },
+  { path: ROUTE_PATH.ARTICLE_TYPE, name: ROUTE_NAME.ARTICLE_TYPE, component: ArticleType },
 ];
 
 export default routes;

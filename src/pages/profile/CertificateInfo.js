@@ -8,7 +8,7 @@ import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInpu
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import { CertificatesSchema, NewCertificateSchema } from 'src/schema/formSchema';
-import { createDiploma, deleteDiploma, fetchDiplomaByType, updateDiploma } from 'src/stores/actions/diploma';
+import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyCertificate, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 
 const CertificateInfo = ({ t, match }) => {
@@ -23,6 +23,7 @@ const CertificateInfo = ({ t, match }) => {
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setEmptyCertificate());
     dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'certificate' }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

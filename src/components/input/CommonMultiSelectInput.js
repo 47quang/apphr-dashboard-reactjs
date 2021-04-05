@@ -43,7 +43,7 @@ function getStyles(id, values, theme) {
     };
 }
 
-export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues }) {
+export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues, key }) {
   values = [...new Set(values)];
   const classes = useStyles();
   const theme = useTheme();
@@ -65,8 +65,8 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
       </InputLabel> */}
       <Select
         labelId="demo-mutiple-chip-label"
-        id="demo-mutiple-chip"
         multiple
+        key={key}
         displayEmpty={true}
         disableUnderline
         value={values}

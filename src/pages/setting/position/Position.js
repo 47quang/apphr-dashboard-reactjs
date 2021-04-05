@@ -7,10 +7,10 @@ import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 
 const Position = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'code', title: t('label.position_code') },
-    { name: 'name', title: t('label.position_name') },
-    { name: 'branchName', title: t('label.branch') },
-    { name: 'departmentName', title: t('label.department') },
+    { name: 'code', title: t('label.position_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.position_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'branchName', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'departmentName', title: t('label.department'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const positions = useSelector((state) => state.position.positions);

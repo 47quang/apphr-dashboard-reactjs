@@ -30,10 +30,10 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) =>
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-3'}
-                    value={values.id}
-                    onBlur={handleBlur('id')}
-                    onChange={handleChange('id')}
-                    inputID={'id'}
+                    value={values.code}
+                    onBlur={handleBlur('code')}
+                    onChange={handleChange('code')}
+                    inputID={'code'}
                     labelText={t('label.role_code')}
                     inputType={'text'}
                     placeholder={t('placeholder.enter_role_code')}

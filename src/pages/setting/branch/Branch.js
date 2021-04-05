@@ -9,9 +9,9 @@ const Branch = ({ t }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const columnDef = [
-    { name: 'code', title: t('label.branch_code') },
-    { name: 'name', title: t('label.branch_name') },
-    { name: 'address', title: t('label.address') },
+    { name: 'code', title: t('label.branch_code'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.branch_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'address', title: t('label.address'), align: 'left', width: '35%', wordWrapEnabled: true },
   ];
   useEffect(() => {
     dispatch(fetchBranches());

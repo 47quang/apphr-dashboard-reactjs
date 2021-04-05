@@ -26,6 +26,18 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
+                    value={values.code}
+                    onBlur={handleBlur('code')}
+                    onChange={handleChange('code')}
+                    inputID={'code'}
+                    labelText={t('label.role_code')}
+                    inputType={'text'}
+                    placeholder={t('placeholder.enter_role_code')}
+                    inputClassName={'form-control'}
+                    isDisable={true}
+                  />
+                  <CommonTextInput
+                    containerClassName={'form-group col-xl-12'}
                     value={values.title}
                     onBlur={handleBlur('title')}
                     onChange={handleChange('title')}

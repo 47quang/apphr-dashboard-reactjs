@@ -86,3 +86,15 @@ export const deleteDiploma = (id, msg) => {
       });
   };
 };
+export const setEmptyAcademic = () => {
+  return {
+    type: REDUX_STATE.diploma.EMPTY_DEGREE,
+    payload: [],
+  };
+};
+export const setEmptyCertificate = () => {
+  return {
+    type: REDUX_STATE.diploma.EMPTY_CERTIFICATE,
+    payload: [],
+  };
+};

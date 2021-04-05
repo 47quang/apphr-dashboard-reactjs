@@ -25,10 +25,10 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.shortname}
-                    onBlur={handleBlur('shortname')}
-                    onChange={handleChange('shortname')}
-                    inputID={'shortname'}
+                    value={values.code}
+                    onBlur={handleBlur('code')}
+                    onChange={handleChange('code')}
+                    inputID={'code'}
                     labelText={t('label.department_code')}
                     inputType={'text'}
                     placeholder={t('placeholder.enter_department_code')}

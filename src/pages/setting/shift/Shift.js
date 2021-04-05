@@ -7,11 +7,11 @@ import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
 const Shifts = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'code', title: t('label.shift_code') },
-    { name: 'name', title: t('label.shift_name') },
-    { name: 'startCC', title: t('label.check_in_time') },
-    { name: 'endCC', title: t('label.check_out_time') },
-    { name: 'coefficient', title: t('label.working_time_coefficient') },
+    { name: 'code', title: t('label.shift_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.shift_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'startCC', title: t('label.check_in_time'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'endCC', title: t('label.check_out_time'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'coefficient', title: t('label.working_time_coefficient'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);

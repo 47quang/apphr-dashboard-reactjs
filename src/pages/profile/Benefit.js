@@ -11,7 +11,8 @@ import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { JobTimelineSchema } from 'src/schema/formSchema';
-import { createContract, fetchAllowances, fetchContracts, fetchWagesByType } from 'src/stores/actions/contract';
+import { createWageHistory, fetchAllowances, fetchContracts, fetchHistoriesWage, fetchWagesByType } from 'src/stores/actions/contract';
+import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
@@ -19,62 +20,52 @@ const Benefit = ({ t, history, match }) => {
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
   let wages = useSelector((state) => state.contract.wages);
-  let _contracts = [
-    {
-      id: 1,
-      code: 'HD001',
-      fullname: 'Hợp đồng lao động ',
-      handleDate: '2021-01-10',
-      expiredDate: '2022-01-10',
-      newBenefit: {
-        paymentType: '',
-        wageId: '',
-        allowances: [],
-        allowanceIds: [],
-        startDate: '2021-01-01',
-        expiredDate: '2021-12-12',
-      },
-      benefits: [
-        {
-          id: 1,
-          wageId: 1,
-          allowanceIds: [1, 2, 3],
-          allowances: [],
-          startDate: '2021-01-01',
-          expiredDate: '2021-12-12',
-        },
-        {
-          id: 2,
-          wageId: 2,
-          allowanceIds: [1, 2, 3],
-          allowances: [],
-          startDate: '2021-01-01',
-          expiredDate: '2021-12-12',
-        },
-      ],
-      files: [],
-    },
-  ];
+  let benefits = useSelector((state) => state.contract.benefits);
+  // let _contracts = [
+  //   {
+  //     id: 1,
+  //     code: 'HD001',
+  //     fullname: 'Hợp đồng lao động ',
+  //     handleDate: '2021-01-10',
+  //     expiredDate: '2022-01-10',
+  //     newBenefit: {
+  //       paymentType: '',
+  //       wageId: '',
+  //       allowances: [],
+  //       allowanceIds: [],
+  //       startDate: '2021-01-01',
+  //       expiredDate: '2021-12-12',
+  //     },
+  //     benefits: [
+  //       {
+  //         id: 1,
+  //         wageId: 1,
+  //         allowanceIds: [1, 2, 3],
+  //         allowances: [],
+  //         startDate: '2021-01-01',
+  //         expiredDate: '2021-12-12',
+  //       },
+  //       {
+  //         id: 2,
+  //         wageId: 2,
+  //         allowanceIds: [1, 2, 3],
+  //         allowances: [],
+  //         startDate: '2021-01-01',
+  //         expiredDate: '2021-12-12',
+  //       },
+  //     ],
+  //     files: [],
+  //   },
+  // ];
+
   const benefitTab = {
-    // contracts: useSelector((state) => state.contract.contracts),
-    contracts: _contracts,
-  };
-  console.log('benefit', benefitTab);
-  const newBenefit = {
-    benefits: [
-      {
-        id: '',
-        paymentType: '',
-        wageId: '',
-        allowances: [],
-        allowanceIds: [],
-      },
-    ],
+    contracts: useSelector((state) => state.contract.contracts),
+    // contracts: _contracts,
   };
 
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'one_time', name: 'Chi trả một lần' },
+    { id: 'one_time', name: 'Chi trả một lần', value: 'one_time' },
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
     { id: 'by_date', name: 'Chi trả theo ngày công' },
@@ -86,20 +77,25 @@ const Benefit = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function create(form) {
+  async function create(form, contractId) {
     // form.provinceId = form.provinceId || null;
     form.profileId = +match.params.id;
+    form.contractId = contractId;
+    form.wageId = parseInt(form.wageId);
 
     if (form.id) {
       // await dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      await dispatch(createContract(form, t('message.successful_create')));
+      delete form.id;
+      delete form.wage;
+      delete form.wages;
+      await dispatch(createWageHistory(form, t('message.successful_create')));
     }
   }
 
-  async function removeBenefit(contractId) {
-    // await dispatch(deleteContract(contractId, t('message.successful_delete')));
-  }
+  // async function removeBenefit(contractId) {
+  //   // await dispatch(deleteContract(contractId, t('message.successful_delete')));
+  // }
 
   return (
     <CContainer fluid className="c-main">
@@ -156,37 +152,37 @@ const Benefit = ({ t, history, match }) => {
                                 isMinimize: !values.contracts[index].isMinimize,
                               });
                             };
-
                             return (
                               <div key={'contract:' + index} className="shadow bg-white rounded m-4 p-4">
-                                <div className="row">
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-3">
-                                    <div className="pt-1 d-inline" role="button">
-                                      {!values.contracts[index].isMinimize ? (
-                                        <AddBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                      ) : (
-                                        <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                      )}
-                                    </div>
-                                    <Switch
-                                      checked={values.contracts[index].isOpen}
-                                      name={`contracts.${index}.isOpen`}
-                                      onChange={(e) => {
-                                        setFieldValue(`contracts.${index}.isOpen`, e.target.checked);
-                                      }}
-                                    />
-                                    {values.contracts[index].code}
+                                <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                                  <div className="pt-1 d-inline" role="button">
+                                    {!values.contracts[index].isMinimize ? (
+                                      <AddBoxOutlinedIcon
+                                        className="pb-1"
+                                        onClick={(e) => {
+                                          changeMinimizeButton();
+                                        }}
+                                      />
+                                    ) : (
+                                      <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
+                                    )}
                                   </div>
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-4">
-                                    {values.contracts[index].fullname}
-                                  </div>
-                                  <div style={{ fontSize: 18, fontWeight: 'bold' }} className="form-group col-lg-5 d-flex justify-content-end">
-                                    {'Từ ' + values.contracts[index].handleDate + ' đến ' + values.contracts[index].expiredDate}
-                                  </div>
+                                  <Switch
+                                    checked={values.contracts[index].isOpen}
+                                    name={`contracts.${index}.isOpen`}
+                                    onChange={(e) => {
+                                      setFieldValue(`contracts.${index}.isOpen`, e.target.checked);
+                                    }}
+                                  />
+                                  {values.contracts[index].code + ' - ' + values.contracts[index].fullname}
                                 </div>
+                                <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                                  {'Từ ' + values.contracts[index].handleDate + ' đến ' + values.contracts[index].expiredDate}
+                                </div>
+
                                 <hr className="mt-1" />
 
-                                {values.contracts[index].isMinimize && (
+                                {contract.isMinimize && (
                                   <div>
                                     {/* <div className="shadow bg-pink rounded m-4 p-4">
                                       <>
@@ -506,8 +502,8 @@ const Benefit = ({ t, history, match }) => {
                                               </button>
                                             </div>
 
-                                            {values.contracts[index].benefits && values.contracts[index].benefits.length > 0 ? (
-                                              values.contracts[index].benefits.map((benefit, benefitIndex) => {
+                                            {contract.benefits && contract.benefits.length > 0 ? (
+                                              contract.benefits.map((benefit, benefitIndex) => {
                                                 return (
                                                   <div
                                                     key={'benefit:' + benefitIndex}
@@ -521,16 +517,23 @@ const Benefit = ({ t, history, match }) => {
                                                       <div className="row">
                                                         <CommonSelectInput
                                                           containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.paymentType ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.paymentType`)}
-                                                          onChange={(e) => {
+                                                          value={benefit?.wage?.type ?? ''}
+                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wage.type`)}
+                                                          onChange={async (e) => {
                                                             if (e.target.value !== '0') {
-                                                              dispatch(fetchWagesByType({ type: e.target.value }));
-                                                              setFieldValue(`contracts.${index}.benefits.${benefitIndex}.amount`, 0);
-                                                              handleChange(`contracts.${index}.benefits.${benefitIndex}.paymentType`)(e);
-                                                            } else setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wageId`, 0);
+                                                              handleChange(`contracts.${index}.benefits.${benefitIndex}.wage.type`)(e);
+                                                              let wages = await api.wage
+                                                                .getAll({ type: e.target.value })
+                                                                .then(({ payload }) => payload);
+                                                              console.log('wages', wages);
+
+                                                              setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, wages);
+                                                            } else setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, []);
+                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wageId`, 0);
+                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wageId`, 0);
+                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wage.amount`, 0);
                                                           }}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.paymentType`}
+                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.wage.type`}
                                                           labelText={t('label.payment_method')}
                                                           selectClassName={'form-control'}
                                                           placeholder={t('placeholder.select_contract_payment_method')}
@@ -539,23 +542,23 @@ const Benefit = ({ t, history, match }) => {
                                                             touched &&
                                                             touched.contracts &&
                                                             touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.paymentType
+                                                            touched.contracts[index].benefits[benefitIndex]?.wage?.type
                                                           }
                                                           isError={
                                                             errors &&
                                                             errors.contracts &&
                                                             errors.contracts[index].benefits &&
-                                                            errors.contracts[index].benefits[benefitIndex]?.paymentType &&
+                                                            errors.contracts[index].benefits[benefitIndex]?.wage?.type &&
                                                             touched &&
                                                             touched.contracts &&
                                                             touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.paymentType
+                                                            touched.contracts[index].benefits[benefitIndex]?.wage?.type
                                                           }
                                                           errorMessage={t(
                                                             errors &&
                                                               errors.contracts &&
                                                               errors.contracts[index].benefits &&
-                                                              errors.contracts[index].benefits[benefitIndex]?.paymentType,
+                                                              errors.contracts[index].benefits[benefitIndex]?.wage?.type,
                                                           )}
                                                           lstSelectOptions={paymentType}
                                                         />
@@ -564,8 +567,12 @@ const Benefit = ({ t, history, match }) => {
                                                           value={benefit?.wageId ?? ''}
                                                           onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wageId`)}
                                                           onChange={(e) => {
-                                                            let thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
-                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.amount`, thisWage[0].amount);
+                                                            let thisWage = benefit.wages.filter((s) => s.id === parseInt(e.target.value));
+                                                            console.log('am', thisWage);
+                                                            setFieldValue(
+                                                              `contracts.${index}.benefits.${benefitIndex}.wage.amount`,
+                                                              thisWage[0].amount,
+                                                            );
                                                             handleChange(`contracts.${index}.benefits.${benefitIndex}.wageId`)(e);
                                                           }}
                                                           inputID={`contracts.${index}.benefits.${benefitIndex}.wageId`}
@@ -595,14 +602,14 @@ const Benefit = ({ t, history, match }) => {
                                                               errors.contracts[index].benefits &&
                                                               errors.contracts[index].benefits[benefitIndex]?.wageId,
                                                           )}
-                                                          lstSelectOptions={wages}
+                                                          lstSelectOptions={benefit.wages}
                                                         />
                                                         <CommonTextInput
                                                           containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.amount ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.amount`)}
-                                                          onChange={handleChange(`contracts.${index}.benefits.${benefitIndex}.amount`)}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.amount`}
+                                                          value={benefit?.wage?.amount ?? ''}
+                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wage.amount`)}
+                                                          onChange={handleChange(`contracts.${index}.benefits.${benefitIndex}.wage.amount`)}
+                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.wage.amount`}
                                                           labelText={t('label.salary_level')}
                                                           inputType={'number'}
                                                           inputClassName={'form-control'}
@@ -692,9 +699,9 @@ const Benefit = ({ t, history, match }) => {
                                                                     <div className="row">
                                                                       <CommonSelectInput
                                                                         containerClassName={'form-group col-lg-4'}
-                                                                        value={allowance?.name ?? ''}
+                                                                        value={allowance?.id ?? ''}
                                                                         onBlur={handleBlur(
-                                                                          `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.name`,
+                                                                          `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`,
                                                                         )}
                                                                         onChange={(e) => {
                                                                           let thisSubsidizes = allowances.filter(
@@ -706,10 +713,10 @@ const Benefit = ({ t, history, match }) => {
                                                                               thisSubsidizes[0].amount,
                                                                             );
                                                                           handleChange(
-                                                                            `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.name`,
+                                                                            `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`,
                                                                           )(e);
                                                                         }}
-                                                                        inputID={`contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.name`}
+                                                                        inputID={`contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`}
                                                                         labelText={t('label.allowance')}
                                                                         selectClassName={'form-control'}
                                                                         placeholder={t('placeholder.select_allowance_type')}
@@ -718,31 +725,31 @@ const Benefit = ({ t, history, match }) => {
                                                                           touched &&
                                                                           touched.contracts &&
                                                                           touched.contracts[index].benefits &&
-                                                                          touched.contracts[index].benefits[benefitIndex].allowances &&
-                                                                          touched.contracts[index].benefits[benefitIndex].allowances[allowanceIdx]
-                                                                            ?.name
+                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances &&
+                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
+                                                                            ?.id
                                                                         }
                                                                         isError={
                                                                           errors &&
                                                                           errors.contracts &&
                                                                           errors.contracts[index].benefits &&
-                                                                          errors.contracts[index].benefits[benefitIndex].allowances &&
-                                                                          errors.contracts[index].benefits[benefitIndex].allowances[allowanceIdx]
-                                                                            ?.name &&
+                                                                          errors.contracts[index].benefits[benefitIndex]?.allowances &&
+                                                                          errors.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
+                                                                            ?.id &&
                                                                           touched &&
                                                                           touched.contracts &&
                                                                           touched.contracts[index].benefits &&
-                                                                          touched.contracts[index].benefits[benefitIndex].allowances &&
-                                                                          touched.contracts[index].benefits[benefitIndex].allowances[allowanceIdx]
-                                                                            ?.name
+                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances &&
+                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
+                                                                            ?.id
                                                                         }
                                                                         errorMessage={t(
                                                                           errors &&
                                                                             errors.contracts &&
                                                                             errors.contracts[index].benefits &&
-                                                                            errors.contracts[index].benefits[benefitIndex].allowances &&
-                                                                            errors.contracts[index].benefits[benefitIndex].allowances[allowanceIdx]
-                                                                              ?.name,
+                                                                            errors.contracts[index].benefits[benefitIndex]?.allowances &&
+                                                                            errors.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
+                                                                              ?.id,
                                                                         )}
                                                                         lstSelectOptions={allowances}
                                                                       />
@@ -776,7 +783,7 @@ const Benefit = ({ t, history, match }) => {
                                                                 className="btn btn-primary"
                                                                 onClick={() => {
                                                                   push({ name: '', amount: 0 });
-                                                                  console.log(values);
+                                                                  // console.log(values);
                                                                 }}
                                                               >
                                                                 <AddCircle /> {t('label.add_allowance')}
@@ -812,7 +819,7 @@ const Benefit = ({ t, history, match }) => {
                                                                 type: 'button',
                                                                 className: `btn btn-primary px-4 ml-4`,
                                                                 onClick: async () => {
-                                                                  console.log(values);
+                                                                  // console.log('be', benefit);
                                                                 },
                                                                 name: benefit.id ? t('label.save') : t('label.create_new'),
                                                               },
@@ -833,9 +840,38 @@ const Benefit = ({ t, history, match }) => {
                                                                 type: 'button',
                                                                 className: `btn btn-primary px-4 ml-4`,
                                                                 onClick: async () => {
-                                                                  console.log(values);
+                                                                  await create(benefit, contract.id).then(() =>
+                                                                    renderButtons([
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 mx-4`,
+                                                                        onClick: async (e) => {
+                                                                          // await removeBenefit(benefit.id).then(() => remove(index));
+                                                                        },
+                                                                        name: t('label.delete'),
+                                                                        position: 'right',
+                                                                      },
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 mx-4`,
+                                                                        onClick: () => {
+                                                                          // setFieldValue(`contracts.${index}`, benefitTab.contracts[index]);
+                                                                        },
+                                                                        name: t('label.reset'),
+                                                                        position: 'right',
+                                                                      },
+                                                                      {
+                                                                        type: 'button',
+                                                                        className: `btn btn-primary px-4 ml-4`,
+                                                                        onClick: async () => {
+                                                                          // console.log('be', benefit);
+                                                                        },
+                                                                        name: benefit.id ? t('label.save') : t('label.create_new'),
+                                                                      },
+                                                                    ]),
+                                                                  );
                                                                 },
-                                                                name: benefit.id ? t('label.save') : t('label.create_new'),
+                                                                name: t('label.create_new'),
                                                               },
                                                             ],
                                                       )}

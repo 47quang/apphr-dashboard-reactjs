@@ -39,6 +39,8 @@ const UpdateAccount = ({ t, location, history, match }) => {
 
   const submitForm = (values) => {
     let form = values;
+    form.profileId = match?.params?.id;
+    console.log(form);
     dispatch(updateAccount(form, history, t('message.successful_update_account')));
   };
 

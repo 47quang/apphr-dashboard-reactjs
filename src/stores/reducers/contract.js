@@ -52,6 +52,7 @@ const initialState = {
   branches: [],
   wages: [],
   allowances: [],
+  benefits: [],
 };
 
 const contractReducer = (state = initialState, { type, payload }) => {
@@ -68,7 +69,7 @@ const contractReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.contract.EMPTY_VALUE:
       return {
         ...state,
-        contract: initialState.contract,
+        contracts: [],
       };
     case REDUX_STATE.contract.GET_BRANCHES:
       payload =
@@ -87,7 +88,8 @@ const contractReducer = (state = initialState, { type, payload }) => {
         allowances: payload,
       };
     case REDUX_STATE.contract.SET_BENEFITS:
-      return { ...state, _contracts: payload };
+      return { ...state, benefits: payload };
+
     default:
       return state;
   }

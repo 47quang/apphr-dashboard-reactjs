@@ -12,10 +12,10 @@ const HolidayPage = ({ t, location, history }) => {
   ];
 
   const columnDef = [
-    { name: 'code', title: t('label.holiday_code') },
-    { name: 'title', title: t('label.holiday_title') },
-    { name: 'startDate', title: t('label.start_date') },
-    { name: 'endDate', title: t('label.end_date') },
+    { name: 'code', title: t('label.holiday_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'endDate', title: t('label.end_date'), align: 'left', width: '20%', wordWrapEnabled: true },
     //{ name: 'coefficient', title: 'Hệ số giờ làm' },
   ];
   const dispatch = useDispatch();

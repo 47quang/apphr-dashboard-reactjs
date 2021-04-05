@@ -53,11 +53,6 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     .test('not choose', 'validation.required_select_operator_loop', function (value) {
       return value ? value.length > 0 : false;
     }),
-  typeCC: Yup.string()
-    .required('Bắt buộc chọn hình thức điểm danh')
-    .test('not equal 0', 'validation.required_select_roll_call', function (value) {
-      return value !== '0';
-    }),
 });
 
 //Holiday
@@ -97,6 +92,11 @@ export const SettingBranchInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_branch_name'),
   ipRouter: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), 'validation.enter_valid_ip_v4_address'),
   address: Yup.string(),
+  typeCC: Yup.string()
+    .required('Bắt buộc chọn hình thức điểm danh')
+    .test('not equal 0', 'validation.required_select_roll_call', function (value) {
+      return value !== '0';
+    }),
 });
 
 //Department
@@ -336,16 +336,11 @@ export const NewHistoryWorkingSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_position'),
-  roleId: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
-      return value !== '0';
-    })
-    .required('validation.required_select_role_id'),
-  startDate: Yup.string().required('validation.required_select_start_date'),
-  endDate: Yup.string().required('validation.required_select_end_date'),
+  from: Yup.string().required('validation.required_select_start_date'),
+  to: Yup.string(), //.required('validation.required_select_end_date'),
 });
 export const HistoryWorkingsSchema = Yup.object().shape({
-  historyWorkings: Yup.array().of(
+  histories: Yup.array().of(
     Yup.object().shape({
       branchId: Yup.string()
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
@@ -362,13 +357,42 @@ export const HistoryWorkingsSchema = Yup.object().shape({
           return value !== '0';
         })
         .required('validation.required_select_position'),
-      roleId: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_role_id'),
-      startDate: Yup.string().required('validation.required_select_start_date'),
-      endDate: Yup.string().required('validation.required_select_end_date'),
+      from: Yup.string().required('validation.required_select_start_date'),
+      to: Yup.string(), //.required('validation.required_select_end_date'),
     }),
   ),
+});
+export const WageSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_salary_group').required('validation.required_enter_salary_group'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_payment'),
+  amount: Yup.number()
+    .integer('validation.salary_level_must_be_integer"')
+    .min(0, 'validation.salary_level_must_not_be_negative')
+    .required('validation.required_enter_salary_level'),
+  dayOff: Yup.number()
+    .integer('validation.dayOff_must_be_integer"')
+    .min(0, 'validation.dayOff_must_not_be_negative')
+    .required('validation.required_enter_dayOff'),
+});
+export const AllowanceSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_allowance_name').required('validation.required_enter_allowance_name'),
+  amount: Yup.number()
+    .integer('validation.allowance_level_must_be_integer"')
+    .min(0, 'validation.allowance_level_must_not_be_negative')
+    .required('validation.required_enter_allowance_level'),
+});
+export const NotificationSchema = Yup.object().shape({
+  title: Yup.string().min(1, 'validation.required_enter_notification_title').required('validation.required_enter_notification_title'),
+  typeId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_notification_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_notification_type'),
+});
+export const ArticleTypeSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_article_type').required('validation.required_enter_article_type'),
 });

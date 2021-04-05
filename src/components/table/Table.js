@@ -137,7 +137,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
       <Getter
         name="tableColumns"
         computed={({ tableColumns }) => {
-          return tableColumns.concat([
+          tableColumns = tableColumns.concat([
             {
               key: 'behavior' + route,
               type: 'behavior',
@@ -145,33 +145,38 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
               align: 'center',
             },
           ]);
+          // console.log(tableColumns);
+          return tableColumns;
         }}
       />
       <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
-        {(params) => (
-          <TemplateConnector>
-            {(getters, { deleteRows, commitDeletedRows }) => (
-              <TableCell className="px-0 py-0">
-                <Link to={`${route}${params.tableRow.rowId}`}>
-                  <IconButton hidden={disableEdit} title={t('message.edit_row')}>
-                    <EditIcon />
-                  </IconButton>
-                </Link>
+        {(params) => {
+          // console.log(params);
+          return (
+            <TemplateConnector>
+              {(getters, { deleteRows, commitDeletedRows }) => (
+                <TableCell className="px-0 py-0">
+                  <Link to={`${route}${params.tableRow.rowId}`}>
+                    <IconButton hidden={disableEdit} title={t('message.edit_row')}>
+                      <EditIcon />
+                    </IconButton>
+                  </Link>
 
-                <IconButton
-                  hidden={disableDelete}
-                  onClick={() => {
-                    setDeletingRowID(params.tableRow.rowId);
-                    setOpenWarning(!openWarning);
-                  }}
-                  title={t('message.delete_row')}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            )}
-          </TemplateConnector>
-        )}
+                  <IconButton
+                    hidden={disableDelete}
+                    onClick={() => {
+                      setDeletingRowID(params.tableRow.rowId);
+                      setOpenWarning(!openWarning);
+                    }}
+                    title={t('message.delete_row')}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              )}
+            </TemplateConnector>
+          );
+        }}
       </Template>
     </Plugin>
   );
@@ -215,20 +220,19 @@ const QTable = (props) => {
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
-  const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
+  // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
   const tableColumnExtensions = columnDef.map((col, idx) => {
     return {
       columnName: col.name,
-      align: 'left',
-      width: colHeight + '%',
-      wordWrapEnabled: true,
+      align: col.align,
+      width: col.width,
+      wordWrapEnabled: col.wordWrapEnabled,
     };
   });
-  tableColumnExtensions[0]['width'] = 15 + '%';
 
   const columnsFilter = idxColumnsFilter.map((idx) => ({
     id: idx,
-    name: columnDef[idx].title,
+    name: columnDef[idx]?.title,
   }));
   const filterTypes = [
     { id: 1, name: t('label.include') },
