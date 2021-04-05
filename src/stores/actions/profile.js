@@ -31,7 +31,7 @@ export const fetchProfile = (id) => {
         payload.dateOfBirth = getDateInput(payload.dateOfBirth);
         payload.cmndIssuedDate = getDateInput(payload.cmndIssuedDate);
         payload.passportIssuedDate = getDateInput(payload.passportIssuedDate);
-        payload.passport_end = getDateInput(payload.passport_end);
+        payload.passportExpiredDate = getDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
 

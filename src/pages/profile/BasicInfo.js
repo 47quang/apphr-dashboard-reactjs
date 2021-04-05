@@ -346,10 +346,10 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                                 />
                                 <CommonTextInput
                                   containerClassName={'form-group col-6'}
-                                  value={values.passport_end ?? ''}
-                                  onBlur={handleBlur('passport_end')}
-                                  onChange={handleChange('passport_end')}
-                                  inputID={'passport_end'}
+                                  value={values.passportExpiredDate ?? ''}
+                                  onBlur={handleBlur('passportExpiredDate')}
+                                  onChange={handleChange('passportExpiredDate')}
+                                  inputID={'passportExpiredDate'}
                                   labelText={t('label.expiration_date')}
                                   inputType={'date'}
                                   inputClassName={'form-control'}
