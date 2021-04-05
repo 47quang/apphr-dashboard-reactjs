@@ -6,17 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import { NewHistoryWorkingSchema, HistoryWorkingsSchema } from 'src/schema/formSchema';
+import { HistoryWorkingsSchema, NewHistoryWorkingSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
-import {
-  createHistoryWork,
-  deleteHistoryWork,
-  fetchHistoriesWork,
-  updateHistoryWork,
-  onChangeDepartment,
-  onChangePosition,
-} from 'src/stores/actions/historyWork';
+import { createHistoryWork, deleteHistoryWork, fetchHistoriesWork, updateHistoryWork } from 'src/stores/actions/historyWork';
 import { fetchPositions } from 'src/stores/actions/position';
 import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
@@ -56,7 +49,6 @@ const HistoryWorkingForm = ({ t, match }) => {
     form.departmentId = parseInt(form.departmentId);
     form.positionId = parseInt(form.positionId);
 
-    console.log(form);
     if (form.id) {
       await dispatch(updateHistoryWork(form, t('message.successful_update')));
     } else {
@@ -240,7 +232,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                       handleChange(`histories.${index}.branchId`)(e);
                                       if (+e.target.value !== 0) {
                                         let x = await api.department.getAll({ branchId: e.target.value }).then(({ payload }) => payload);
-                                        console.log(x);
+
                                         setFieldValue(`histories.${index}.departments`, x);
                                       } else {
                                         setFieldValue(`histories.${index}.departments`, []);
@@ -305,7 +297,6 @@ const HistoryWorkingForm = ({ t, match }) => {
                                     value={friend.positionId ?? ''}
                                     onBlur={handleBlur(`positionId`)}
                                     onChange={(e) => {
-                                      console.log(e.target.value);
                                       // handleChange('positionId')(e);
                                       setFieldValue(`histories.${index}.positionId`, +e.target.value);
                                     }}

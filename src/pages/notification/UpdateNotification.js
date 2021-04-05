@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTE_PATH } from 'src/constants/key';
-import { createArticle, fetchArticle, setEmptyArticle, updateArticle } from 'src/stores/actions/article';
+import { fetchArticle, updateArticle } from 'src/stores/actions/article';
 import NotificationForm from './NotificationForm';
 
 const UpdateNotification = ({ t, location, history, match }) => {
@@ -19,7 +19,6 @@ const UpdateNotification = ({ t, location, history, match }) => {
     let form = values;
     // Call API CREATE
     form.typeId = parseInt(form.typeId);
-    console.log('values', form);
     dispatch(updateArticle(form, history, t('message.successful_create')));
   };
   const buttons = [

@@ -12,7 +12,7 @@ export const createDiploma = (data, success_msg) => {
       })
       .catch((error) => {
         console.log(error);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
+        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
       });
   };
 };
@@ -27,7 +27,7 @@ export const updateDiploma = (data, success_msg) => {
       })
       .catch((error) => {
         console.log(error);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
+        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
       });
   };
 };

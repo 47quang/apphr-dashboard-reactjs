@@ -27,9 +27,7 @@ const historyWorkReducer = (state = initialState, { type, payload }) => {
       state.histories[index].departments = payload;
       return { ...state };
     case REDUX_STATE.historyWork.SET_POSITIONS:
-      console.log(payload);
       delete payload.index;
-      console.log('s', state.histories[index]);
       state.histories[index].positions = payload;
       return { ...state };
     default:

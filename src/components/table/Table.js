@@ -145,7 +145,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
               align: 'center',
             },
           ]);
-          // console.log(tableColumns);
           return tableColumns;
         }}
       />

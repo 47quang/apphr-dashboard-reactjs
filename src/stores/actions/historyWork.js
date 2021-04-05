@@ -48,7 +48,7 @@ export const fetchHistoriesWork = (params) => {
             return h;
           });
         payload = await Promise.all(payload).then((values) => values);
-        console.log('h', payload);
+
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
       })
       .catch((error) => {

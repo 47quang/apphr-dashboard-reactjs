@@ -1,4 +1,3 @@
-import { ROUTE_PATH } from 'src/constants/key';
 import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
@@ -32,7 +31,7 @@ export const fetchContracts = (params) => {
             return contract;
           });
         payload = await Promise.all(payload);
-        console.log(payload);
+
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
@@ -66,13 +65,14 @@ export const createContract = (params, success_msg) => {
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
+  console.log('params contract', params);
+
   params.allowanceIds =
     params.allowance && params.allowance.length > 0
       ? params.allowance.map((allowance) => {
           if (allowance.name !== 0) return +allowance.name;
         })
       : [];
-  console.log('params', params);
   return (dispatch, getState) => {
     api.contract
       .post(params)

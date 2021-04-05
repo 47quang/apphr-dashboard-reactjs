@@ -221,7 +221,7 @@ export const fetchContacts = (profileId) => {
 export const createNewContact = (data, profileId, success_msg, ref) => {
   const params = {
     ...data,
-    profileId: profileId,
+    profileId: parseInt(profileId),
   };
   return (dispatch, getState) => {
     api.contact
@@ -256,7 +256,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
     api.contact
       .delete(contactId)
       .then(({ payload }) => {
-        dispatch(fetchContacts(profileId));
+        dispatch(fetchContacts(parseInt(profileId)));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -270,7 +270,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
 
 export const updateOtherInfo = (profile, success_msg) => {
   const params = {
-    id: profile.id,
+    id: parseInt(profile.id),
     taxCode: profile.taxCode,
     nationality: profile.nationality,
     religion: profile.religion,

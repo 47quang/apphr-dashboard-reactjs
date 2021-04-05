@@ -11,7 +11,7 @@ import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { JobTimelineSchema } from 'src/schema/formSchema';
-import { createWageHistory, fetchAllowances, fetchContracts, fetchHistoriesWage, fetchWagesByType } from 'src/stores/actions/contract';
+import { createWageHistory, fetchAllowances, fetchContracts } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
@@ -19,8 +19,8 @@ import { renderButtons } from 'src/utils/formUtils';
 const Benefit = ({ t, history, match }) => {
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
-  let wages = useSelector((state) => state.contract.wages);
-  let benefits = useSelector((state) => state.contract.benefits);
+  // let wages = useSelector((state) => state.contract.wages);
+  // let benefits = useSelector((state) => state.contract.benefits);
   // let _contracts = [
   //   {
   //     id: 1,
@@ -525,7 +525,6 @@ const Benefit = ({ t, history, match }) => {
                                                               let wages = await api.wage
                                                                 .getAll({ type: e.target.value })
                                                                 .then(({ payload }) => payload);
-                                                              console.log('wages', wages);
 
                                                               setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, wages);
                                                             } else setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, []);
