@@ -9,11 +9,10 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Editor from 'src/components/input/Editor';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
+import { fetchTypes } from 'src/stores/actions/articleType';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { renderButtons } from 'src/utils/formUtils';
-import { Multiselect } from 'multiselect-react-dropdown';
-import { fetchTypes } from 'src/stores/actions/articleType';
 
 const NotificationForm = ({ t, articleRef, article, buttons, submitForm }) => {
   const dispatch = useDispatch();
@@ -25,6 +24,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm }) => {
     dispatch(fetchBranches());
     dispatch(fetchDepartments());
     dispatch(fetchTypes());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

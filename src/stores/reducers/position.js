@@ -19,7 +19,6 @@ const positionReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.position.GET_POSITION:
       return { ...state, position: Object.assign({}, state.position, payload) };
     case REDUX_STATE.position.GET_POSITIONS:
-      console.log('ps', payload);
       return { ...state, positions: payload };
     case REDUX_STATE.position.UPDATE_POSITION:
       return { ...state, position: payload };

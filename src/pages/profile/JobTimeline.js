@@ -148,7 +148,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     <>
                       <div className="row">
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.code ?? ''}
                           onBlur={handleBlur(`code`)}
                           onChange={handleChange(`code`)}
@@ -163,7 +163,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           errorMessage={t(errors.code)}
                         />
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.fullname ?? ''}
                           onBlur={handleBlur(`fullname`)}
                           onChange={handleChange(`fullname`)}
@@ -178,7 +178,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           errorMessage={t(errors.fullname)}
                         />
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.type ?? ''}
                           onBlur={handleBlur(`type`)}
                           onChange={handleChange(`type`)}
@@ -195,7 +195,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       </div>
                       <div className="row">
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.typeTax ?? ''}
                           onBlur={handleBlur(`typeTax`)}
                           onChange={handleChange(`typeTax`)}
@@ -210,7 +210,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           lstSelectOptions={personalIncomeTaxType}
                         />
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.typeWork ?? ''}
                           onBlur={handleBlur(`typeWork`)}
                           onChange={handleChange(`typeWork`)}
@@ -225,7 +225,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           lstSelectOptions={typeWork}
                         />
 
-                        <div className="form-group col-lg-4">
+                        <div className="form-group col-xl-4">
                           <Label text={t('label.trial_period')} required />
                           <div className="input-group">
                             <input
@@ -249,7 +249,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       </div>
                       <div className="row">
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.handleDate ?? ''}
                           onBlur={handleBlur(`handleDate`)}
                           onChange={handleChange(`handleDate`)}
@@ -264,7 +264,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           errorMessage={t(errors?.handleDate)}
                         />
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.validDate ?? ''}
                           onBlur={handleBlur(`validDate`)}
                           onChange={handleChange(`validDate`)}
@@ -278,7 +278,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           errorMessage={t(errors?.validDate)}
                         />
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.expiredDate ?? ''}
                           onBlur={handleBlur(`expiredDate`)}
                           onChange={handleChange(`expiredDate`)}
@@ -294,7 +294,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       </div>
                       <div className="row">
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.startWork ?? ''}
                           onBlur={handleBlur(`startWork`)}
                           onChange={handleChange(`startWork`)}
@@ -308,7 +308,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           errorMessage={t(errors?.startWork)}
                         />
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.branchId ?? ''}
                           onBlur={handleBlur(`branchId`)}
                           onChange={(e) => {
@@ -356,7 +356,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       <hr className="mt-1" />
                       <div className="row">
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.paymentType ?? ''}
                           onBlur={handleBlur(`paymentType`)}
                           onChange={(e) => {
@@ -377,7 +377,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           lstSelectOptions={paymentType}
                         />
                         <CommonSelectInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.wageId ?? ''}
                           onBlur={handleBlur(`wageId`)}
                           onChange={(e) => {
@@ -396,7 +396,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           lstSelectOptions={wages}
                         />
                         <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
+                          containerClassName={'form-group col-xl-4'}
                           value={values?.amount ?? ''}
                           onBlur={handleBlur(`amount`)}
                           onChange={handleChange(`amount`)}
@@ -424,7 +424,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                   <div key={`allowance${allowanceIdx}`}>
                                     <div className="row">
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={allowance.name ?? ''}
                                         onBlur={handleBlur(`allowance.${allowanceIdx}.name`)}
                                         onChange={(e) => {
@@ -451,7 +451,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         lstSelectOptions={allowances}
                                       />
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={allowance.amount ?? ''}
                                         onBlur={handleBlur(`allowance.${allowanceIdx}.amount`)}
                                         onChange={handleChange(`allowance.${allowanceIdx}.amount`)}
@@ -642,7 +642,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                   <>
                                     <div className="row">
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.code ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.code`)}
                                         onChange={handleChange(`contractInfo.${index}.code`)}
@@ -664,7 +664,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.code)}
                                       />
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.fullname ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.fullname`)}
                                         onChange={handleChange(`contractInfo.${index}.fullname`)}
@@ -686,7 +686,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.fullname)}
                                       />
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.type ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.type`)}
                                         onChange={handleChange(`contractInfo.${index}.type`)}
@@ -710,7 +710,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     </div>
                                     <div className="row">
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.typeTax ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.typeTax`)}
                                         onChange={handleChange(`contractInfo.${index}.typeTax`)}
@@ -732,7 +732,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         lstSelectOptions={personalIncomeTaxType}
                                       />
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.typeWork ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.typeWork`)}
                                         onChange={handleChange(`contractInfo.${index}.typeWork`)}
@@ -754,7 +754,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         lstSelectOptions={typeWork}
                                       />
 
-                                      <div className="form-group col-lg-4">
+                                      <div className="form-group col-xl-4">
                                         <Label text={t('label.trial_period')} required />
                                         <div className="input-group">
                                           <input
@@ -784,7 +784,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     </div>
                                     <div className="row">
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.handleDate ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.handleDate`)}
                                         onChange={handleChange(`contractInfo.${index}.handleDate`)}
@@ -806,7 +806,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.handleDate)}
                                       />
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.validDate ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.validDate`)}
                                         onChange={handleChange(`contractInfo.${index}.validDate`)}
@@ -827,7 +827,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.validDate)}
                                       />
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.expiredDate ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.expiredDate`)}
                                         onChange={handleChange(`contractInfo.${index}.expiredDate`)}
@@ -850,7 +850,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     </div>
                                     <div className="row">
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.startWork ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.startWork`)}
                                         onChange={handleChange(`contractInfo.${index}.startWork`)}
@@ -871,7 +871,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         errorMessage={t(errors && errors.contractInfo && errors.contractInfo[index]?.startWork)}
                                       />
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.branchId ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.branchId`)}
                                         onChange={handleChange(`contractInfo.${index}.branchId`)}
@@ -923,7 +923,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     <hr className="mt-1" />
                                     <div className="row">
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.paymentType ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.paymentType`)}
                                         onChange={(e) => {
@@ -951,7 +951,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         lstSelectOptions={paymentType}
                                       />
                                       <CommonSelectInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.wageId ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.wageId`)}
                                         onChange={(e) => {
@@ -977,7 +977,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                         lstSelectOptions={wages}
                                       />
                                       <CommonTextInput
-                                        containerClassName={'form-group col-lg-4'}
+                                        containerClassName={'form-group col-xl-4'}
                                         value={friend?.amount ?? ''}
                                         onBlur={handleBlur(`contractInfo.${index}.amount`)}
                                         onChange={handleChange(`contractInfo.${index}.amount`)}
@@ -1012,7 +1012,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                                 <div key={`allowance${allowanceIdx}`}>
                                                   <div className="row">
                                                     <CommonSelectInput
-                                                      containerClassName={'form-group col-lg-4'}
+                                                      containerClassName={'form-group col-xl-4'}
                                                       value={friend?.allowance[allowanceIdx].name ?? ''}
                                                       onBlur={handleBlur(`contractInfo.${index}.allowance.${allowanceIdx}.name`)}
                                                       onChange={(e) => {
@@ -1054,7 +1054,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                                       lstSelectOptions={allowances}
                                                     />
                                                     <CommonTextInput
-                                                      containerClassName={'form-group col-lg-4'}
+                                                      containerClassName={'form-group col-xl-4'}
                                                       value={friend?.allowance[allowanceIdx]?.amount ?? ''}
                                                       onBlur={handleBlur(`contractInfo.${index}.allowance.${allowanceIdx}.amount`)}
                                                       onChange={handleChange(`contractInfo.${index}.allowance.${allowanceIdx}.amount`)}

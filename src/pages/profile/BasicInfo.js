@@ -114,14 +114,13 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
   ];
 
   function handleChangeUpload(fileUrl) {
-    console.log(fileUrl);
     dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { avatar: fileUrl } });
   }
 
   return (
     <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="row">
-        <div className="col-xl-2">
+        <div className="col-xl-2 mb-4">
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('label.avatar')} />
             <UploadImageSingle src={profile.avatar} handleChangeUpload={handleChangeUpload} />

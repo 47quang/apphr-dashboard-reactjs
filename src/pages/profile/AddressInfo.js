@@ -119,6 +119,7 @@ const AddressInfo = ({ t, history, match }) => {
           value={values.url}
           onBlur={handleBlur('url')}
           onChange={handleChange('url')}
+          placeholder={t('placeholder.enter_contact_link')}
           inputID={'url'}
           isRequiredField
           isTouched={touched.url}
@@ -135,7 +136,6 @@ const AddressInfo = ({ t, history, match }) => {
         validationSchema={ContactSchema}
         innerRef={contactFormRef}
         onSubmit={(values) => {
-          console.log(values);
           dispatch(createNewContact(values, profileId, t('message.successful_create_contact'), contactFormRef));
           // setShowCreateContact(true);
         }}
