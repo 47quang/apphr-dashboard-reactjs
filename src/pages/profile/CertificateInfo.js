@@ -32,6 +32,7 @@ const CertificateInfo = ({ t, match }) => {
     form.type = 'certificate';
     form.provinceId = form.provinceId || null;
     form.profileId = +match.params.id;
+    if (form.expiredDate === '') delete form.expiredDate;
     if (form.id) {
       await dispatch(updateDiploma(form, t('message.successful_update')));
     } else {
@@ -39,8 +40,8 @@ const CertificateInfo = ({ t, match }) => {
     }
   }
 
-  function removeCertificate(certificateId) {
-    dispatch(deleteDiploma(certificateId.id, t('message.successful_delete')));
+  async function removeCertificate(certificateId) {
+    dispatch(deleteDiploma(certificateId, t('message.successful_delete')));
   }
 
   return (
@@ -281,6 +282,15 @@ const CertificateInfo = ({ t, match }) => {
                                   labelText={t('label.expiration_date')}
                                   inputType={'date'}
                                   inputClassName={'form-control'}
+                                  isError={
+                                    errors &&
+                                    errors.certificates &&
+                                    errors.certificates[index]?.expiredDate &&
+                                    touched &&
+                                    touched.certificates &&
+                                    touched.certificates[index]?.expiredDate
+                                  }
+                                  errorMessage={t(errors && errors.certificates && errors.certificates[index]?.expiredDate)}
                                 />
                               </div>
                               <div className="row">

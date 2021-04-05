@@ -321,6 +321,7 @@
     "required_integer_prob_time": "Thời gian thử  việc là số nguyên",
     "required_positive_prob_time": "Thời gian thử việc là một số dương",
     "required_select_contract_expired_date":"Bắt buộc chọn ngày hợp đồng hết hạn",
+    "required_select_certificate_expired_date": "Bắt buộc chọn ngày hết hạn của chứng chỉ",
     "required_select_contract_valid_date":"Bắt buộc chọn ngày bắt đầu hiệu lực hợp đồng",
     "required_select_contract_handle_date": "Bắt buộc chọn ngày ký hợp đồng",
     "required_enter_prob_time":"Bắt buộc nhập thời gian thử việc",

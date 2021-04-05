@@ -128,3 +128,63 @@ export const CONTACT_TYPE = {
   LINKEDIN: 'linkedin',
   ZALO: 'zalo',
 };
+export const RESPONSE_CODE = {
+  ///The server cannot or will not process the request due to an
+  ///apparent client error
+  CE_BAD_REQUEST: 400,
+
+  ///Similar to 403 Forbidden, but specifically for use when
+  ///authentication is required and has failed or has not yet been
+  ///provided. The user does not have the necessary credentials
+  CE_UNAUTHORIZED: 401,
+
+  ///The request was a valid request, but the server is refusing to
+  ///respond to it. The user might be logged in but does not have
+  ///the necessary permissions for the resource.
+  CE_FORBIDDEN: 403,
+
+  ///The requested resource could not be found but may be
+  ///available in the future.
+  CE_NOT_FOUND: 404,
+
+  ///The requested resource is capable of generating only
+  ///content not acceptable according to the Accept headers sent
+  ///in the request
+  CE_NOT_ACCEPTABLE: 406,
+
+  ///The server timed out waiting for the request.
+  CE_REQUEST_TIME_OUT: 408,
+
+  ///A generic error message, given when an unexpected
+  ///condition was encountered and no more specific message is
+  ///suitable
+  ///500
+  SE_INTERNAL_SERVER_ERROR: 500,
+
+  ///The server either does not recognize the request method, or
+  ///it lacks the ability to fulfill the request. Usually this implies
+  ///future availability
+  SE_NOT_IMPLEMENTED: 501,
+
+  ///The server was acting as a gateway or proxy and received an
+  ///invalid response from the upstream server
+  SE_BAD_GATEWAY: 502,
+
+  ///ResponseCode = 200
+  ///Standard response for successful HTTP requests
+  SUCCESS_OK: 200,
+
+  ///ResponseCode = 201
+  ///The request has been fulfilled, resulting in the creation of a new resource
+  SUCCESS_CREATED: 201,
+
+  ///ResponseCode = 202
+  ///The request has been accepted for processing, but the processing
+  ///has not been completed
+  SUCCESS_ACCEPTED: 202,
+
+  ///ResponseCode = 204
+  ///The server successfully processed the request and is not
+  ///returning any content
+  SUCCESS_NO_CONTENT: 204,
+};

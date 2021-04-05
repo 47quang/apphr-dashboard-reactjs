@@ -69,7 +69,8 @@ export const createContract = (params, success_msg) => {
   params.allowanceIds =
     params.allowance && params.allowance.length > 0
       ? params.allowance.map((allowance) => {
-          if (allowance.name !== 0) return +allowance.name;
+          //if (allowance.name !== 0) return +allowance.name;
+          return +allowance.name;
         })
       : [];
   console.log('params', params);
