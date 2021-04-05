@@ -227,8 +227,8 @@ const HistoryWorkingForm = ({ t, match }) => {
                         {values.histories &&
                           values.histories.length > 0 &&
                           values.histories.map((friend, index) => (
-                            <div>
-                              <div key={'degree' + index} className="shadow bg-white rounded m-4 p-4">
+                            <div key={'workHistory' + index}>
+                              <div className="shadow bg-white rounded m-4 p-4">
                                 <h5>{index + 1}.</h5>
                                 <hr className="mt-1" />
                                 <div className="row">
