@@ -8,6 +8,7 @@ export const createDiploma = (data, success_msg) => {
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.diploma.SET_DIPLOMA, payload });
+        dispatch(fetchDiplomaByType({ profileId: data.profileId, type: data.type }));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((error) => {
@@ -79,10 +80,6 @@ export const deleteDiploma = (id, msg) => {
       })
       .catch((error) => {
         console.log(error);
-        dispatch({
-          type: REDUX_STATE.notification.SET_NOTI,
-          payload: { open: true, type: 'error', message: error },
-        });
       });
   };
 };
