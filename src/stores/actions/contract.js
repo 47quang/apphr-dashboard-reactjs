@@ -27,6 +27,8 @@ export const fetchContracts = (params) => {
               });
               return payload;
             });
+            contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
+            contract['wages'] = await Promise.all(contract['wages']);
             contract['benefits'] = await Promise.all(contract['benefits']);
             return contract;
           });
@@ -77,6 +79,41 @@ export const createContract = (params, success_msg) => {
   return (dispatch, getState) => {
     api.contract
       .post(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+      });
+  };
+};
+
+export const updateContract = (params, success_msg) => {
+  params.handleDate = params.handleDate === '' ? null : params.handleDate;
+  params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
+  params.startWork = params.startWork === '' ? null : params.startWork;
+  params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
+  params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
+  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
+  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+
+  params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
+  params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
+  params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
+  console.log('params contract', params);
+
+  params.allowanceIds =
+    params.allowance && params.allowance.length > 0
+      ? params.allowance.map((allowance) => {
+          //if (allowance.name !== 0) return +allowance.name;
+          return +allowance.name;
+        })
+      : [];
+  return (dispatch, getState) => {
+    api.contract
+      .put(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });

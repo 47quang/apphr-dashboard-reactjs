@@ -187,9 +187,9 @@ export const NewContractSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_contract_wage'),
-  allowance: Yup.array().of(
+  allowances: Yup.array().of(
     Yup.object().shape({
-      name: Yup.string()
+      id: Yup.string()
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
           return value !== '0';
         })
