@@ -3,7 +3,7 @@ import React from 'react';
 
 const DeleteIconButton = ({ onClick, color }) => {
   return (
-    <div role="button" className="pt-1 d-inline">
+    <div role="button" className="pt-1 d-flex align-items-end">
       <Delete className="pb-1" onClick={onClick} style={{ color: color ?? 'red' }} />
     </div>
   );

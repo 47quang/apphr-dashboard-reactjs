@@ -7,8 +7,9 @@ import { FieldArray, Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
+import DynamicField from 'src/components/dialog/DynamicField';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
@@ -31,7 +32,7 @@ import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const JobTimelineInfo = ({ t, history, match }) => {
-  const profileId = match?.params?.id;
+  const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   const positions = useSelector((state) => state.position.positions);
@@ -59,6 +60,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
     salary: 0,
     allowance: [],
     files: [],
+    attributes: [],
   };
 
   const allowances = useSelector((state) => state.contract.allowances);
@@ -99,7 +101,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
 
-  function create(values) {
+  async function create(values) {
     let form = values;
     form.profileId = +match.params.id;
     console.log('form');
@@ -117,8 +119,19 @@ const JobTimelineInfo = ({ t, history, match }) => {
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
+    const [isOpenDynamicFieldForm, setIsOpenDynamicFieldForm] = useState(false);
+    const handleConfirm = (val) => {
+      values.attributes.push(val);
+      console.log('d', values.attributes);
+      setFieldValue('attributes', values.attributes);
+      setIsOpenDynamicFieldForm(false);
+    };
+    const handleCancel = () => {
+      setIsOpenDynamicFieldForm(false);
+    };
     return (
       <>
+        <DynamicField isOpen={isOpenDynamicFieldForm} handleCancel={handleCancel} handleConfirm={handleConfirm} t={t} />
         <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
@@ -324,7 +337,62 @@ const JobTimelineInfo = ({ t, history, match }) => {
             placeholder={t('placeholder.select_position')}
             lstSelectOptions={positions}
           />
+          {values.attributes &&
+            values.attributes.length > 0 &&
+            values.attributes.map((attribute, attributeIdx) => {
+              return (
+                <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
+                  {attribute.type !== 'textArea' ? (
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      value={attribute?.value ?? ''}
+                      onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
+                      onChange={handleChange(`attributes.${attributeIdx}.value`)}
+                      inputID={`attributes.${attributeIdx}.value`}
+                      labelText={attribute.label}
+                      inputType={attribute.type}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      isTouched={touched?.attributes && touched.attributes[attributeIdx]?.value}
+                      isError={
+                        errors?.attributes && errors.attributes[attributeIdx]?.value && touched?.attributes && touched.attributes[attributeIdx]?.value
+                      }
+                      errorMessage={t(errors?.attributes && errors.attributes[attributeIdx]?.value)}
+                    />
+                  ) : (
+                    <CommonMultipleTextInput
+                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      value={attribute.value ?? ''}
+                      onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
+                      onChange={handleChange(`attributes.${attributeIdx}.value`)}
+                      inputID={attribute.type}
+                      labelText={attribute.label}
+                      inputClassName={'form-control'}
+                    />
+                  )}
+                  <DeleteIconButton
+                    onClick={() => {
+                      values.attributes.splice(attributeIdx, 1);
+                      console.log('d', values.attributes);
+                      setFieldValue('attributes', values.attributes);
+                    }}
+                  />
+                </div>
+              );
+            })}
+          <div className="d-flex align-items-center form-group p-3 m-0">
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={() => {
+                setIsOpenDynamicFieldForm(true);
+              }}
+            >
+              <Add color="primary" />
+            </button>
+          </div>
         </div>
+        <div className="row"></div>
         <h5 className="px-3">{t('label.gross_salary')}</h5>
         <hr className="mt-1" />
         <div className="row">
@@ -483,6 +551,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   };
 
   const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
@@ -515,17 +584,23 @@ const JobTimelineInfo = ({ t, history, match }) => {
           initialValues={newContract}
           validationSchema={NewContractSchema}
           enableReinitialize
-          onSubmit={(values) => {
-            create(values);
+          onSubmit={async (values) => {
+            await create(values).then(() =>
+              dispatch(
+                fetchContracts({
+                  profileId: profileId,
+                }),
+              ),
+            );
           }}
         >
-          {({ values, handleChange, handleBlur, touched, errors, handleReset, handleSubmit }) => {
+          {(props) => {
             return (
               <form id="newContract" hidden={true} className="p-0 m-0">
                 <div className="shadow bg-white rounded mx-4 p-4">
                   <h5>{t('label.create_new')}.</h5>
                   <hr className="mt-1" />
-                  <BodyContract values={values} handleBlur={handleBlur} handleChange={handleChange} touched={touched} errors={errors} isNew={true} />
+                  <BodyContract {...props} />
 
                   <hr className="mt-1" />
                   {renderButtons([
@@ -542,14 +617,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       type: 'button',
                       className: `btn btn-primary px-4 ml-2`,
                       onClick: (e) => {
-                        handleSubmit(e);
+                        props.handleSubmit(e);
                       },
                       name: t('label.create_new'),
                     },
                   ])}
                 </div>
                 <br />
-                <AutoSubmitToken />
               </form>
             );
           }}
@@ -563,46 +637,48 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 initialValues={contract}
                 validationSchema={NewContractSchema}
                 enableReinitialize
-                onSubmit={(values) => {
-                  create(values);
+                onSubmit={async (values) => {
+                  await create(values).then(() =>
+                    dispatch(
+                      fetchContracts({
+                        profileId: profileId,
+                      }),
+                    ),
+                  );
                 }}
               >
-                {({ values, handleChange, handleBlur, setFieldValue, touched, errors, handleReset, handleSubmit }) => {
+                {(props) => {
                   return (
                     <form className="p-0 m-0">
                       <div className="shadow bg-white rounded mx-4 p-4 mb-4">
                         <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                           <div className="pt-1 d-inline" role="button">
-                            {!values.isMinimize ? (
-                              <AddBoxOutlinedIcon className="pb-1" onClick={(e) => setFieldValue(`isMinimize`, !values.isMinimize)} />
+                            {!props.values.isMinimize ? (
+                              <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)} />
                             ) : (
-                              <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => setFieldValue('isMinimize', !values.isMinimize)} />
+                              <IndeterminateCheckBoxOutlinedIcon
+                                className="pb-1"
+                                onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+                              />
                             )}
                           </div>
                           <Switch
-                            checked={values.isOpen}
+                            checked={props.values.isOpen}
                             name={`isOpen ${index}`}
                             onChange={(e) => {
-                              setFieldValue(`isOpen ${index}`, e.target.checked);
+                              props.setFieldValue(`isOpen ${index}`, e.target.checked);
                             }}
                           />
-                          {values.code + ' - ' + values.fullname}
+                          {props.values.code + ' - ' + props.values.fullname}
                         </div>
 
                         <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                          {t('label.from') + values.handleDate + t('label.to') + values.expiredDate}
+                          {t('label.from') + props.values.handleDate + t('label.to') + props.values.expiredDate}
                         </div>
                         <hr className="mt-1" />
-                        {values.isMinimize && (
+                        {props.values.isMinimize && (
                           <div>
-                            <BodyContract
-                              values={values}
-                              handleBlur={handleBlur}
-                              handleChange={handleChange}
-                              touched={touched}
-                              errors={errors}
-                              isNew={false}
-                            />
+                            <BodyContract {...props} />
                             <hr className="mt-1" />
                             <WarningAlertDialog
                               isVisible={isVisibleDeleteAlert}
@@ -631,7 +707,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 type: 'button',
                                 className: `btn btn-primary px-4 mx-2`,
                                 onClick: (e) => {
-                                  handleReset(e);
+                                  props.handleReset(e);
                                 },
                                 name: t('label.reset'),
                                 position: 'right',
@@ -640,7 +716,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 type: 'button',
                                 className: `btn btn-primary px-4 ml-2`,
                                 onClick: (e) => {
-                                  handleSubmit(e);
+                                  props.handleSubmit(e);
                                 },
                                 name: t('label.save'),
                               },

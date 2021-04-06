@@ -25,6 +25,9 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "field_label": "Nhãn của trường",
+    "field_type": "Loại",
+    "field_name": "Tên trường",
     "article_type_code": "Mã loại thông báo",
     "article_type_name": "Tên loại thông báo",
     "notification_code": "Mã thông báo",
@@ -225,6 +228,8 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_field_name": "Nhập tên trường",
+    "enter_field_label": "Nhập nhãn của trường",
     "enter_article_type_name": "Nhập tên loại thông báo",
     "enter_article_type_code": "Nhập mã loại thông báo",
     "enter_notification_description": "Nhập mô tả",
@@ -256,6 +261,7 @@
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
     "enter_contact_link": "Nhập link",
+    "select_field_type": "Chọn loại trường",
     "select_notification_type": "Chọn loại thông báo",
     "select_contact_channels": "Chọn kênh liên lạc",
     "select_contract_payment_method": "Chọn hình thức chi trả",

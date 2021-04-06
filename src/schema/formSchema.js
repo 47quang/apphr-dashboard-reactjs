@@ -152,7 +152,7 @@ export const BasicInfoCreateSchema = Yup.object().shape({
 });
 
 export const NewContractSchema = Yup.object().shape({
-  code: Yup.string().required('validation.required_contract_code'),
+  code: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_contract_code'),
   fullname: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_enter_contract_full_name'),
   type: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {

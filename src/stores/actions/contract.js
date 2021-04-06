@@ -3,35 +3,36 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 export const fetchContracts = (params) => {
+  console.log('fetchContract');
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
       .then(async ({ payload }) => {
         payload =
-          payload &&
-          payload.length &&
-          payload.map(async (contract) => {
-            contract.handleDate = getDateInput(contract.handleDate);
-            contract.expiredDate = getDateInput(contract.expiredDate);
-            contract.validDate = getDateInput(contract.validDate);
-            contract.startWork = getDateInput(contract.startWork);
-            contract['paymentType'] = contract?.wage?.type;
-            contract['wageId'] = contract?.wage?.id;
-            contract['amount'] = contract?.wage?.amount;
-            contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => {
-              payload = payload.map(async (p) => {
-                p.startDate = getDateInput(p.startDate);
-                p.expiredDate = getDateInput(p.expiredDate);
-                p.wages = await api.wage.getAll({ type: p?.wage?.type }).then(({ payload }) => payload);
-                return p;
-              });
-              return payload;
-            });
-            contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
-            contract['wages'] = await Promise.all(contract['wages']);
-            contract['benefits'] = await Promise.all(contract['benefits']);
-            return contract;
-          });
+          payload && payload.length > 0
+            ? payload.map(async (contract) => {
+                contract.handleDate = getDateInput(contract.handleDate);
+                contract.expiredDate = getDateInput(contract.expiredDate);
+                contract.validDate = getDateInput(contract.validDate);
+                contract.startWork = getDateInput(contract.startWork);
+                contract['paymentType'] = contract?.wage?.type;
+                contract['wageId'] = contract?.wage?.id;
+                contract['amount'] = contract?.wage?.amount;
+                contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => {
+                  payload = payload.map(async (p) => {
+                    p.startDate = getDateInput(p.startDate);
+                    p.expiredDate = getDateInput(p.expiredDate);
+                    p.wages = await api.wage.getAll({ type: p?.wage?.type }).then(({ payload }) => payload);
+                    return p;
+                  });
+                  return payload;
+                });
+                contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
+                contract['wages'] = await Promise.all(contract['wages']);
+                contract['benefits'] = await Promise.all(contract['benefits']);
+                return contract;
+              })
+            : [];
         payload = await Promise.all(payload);
 
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
