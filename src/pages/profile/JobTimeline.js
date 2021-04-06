@@ -3,7 +3,7 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { FieldArray, Form, Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
@@ -334,7 +334,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             onBlur={handleBlur(`paymentType`)}
             onChange={async (e) => {
               if (isNew) {
-                if (e.target.value !== '0' && isNew) {
+                if (e.target.value !== '0') {
                   dispatch(fetchWagesByType({ type: e.target.value }));
                   setFieldValue(`amount`, 0);
                   handleChange(`paymentType`)(e);
@@ -342,9 +342,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
               } else {
                 if (e.target.value !== '0') {
                   handleChange(`paymentType`)(e);
-                  let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                  let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
 
-                  setFieldValue(`wages`, wages);
+                  setFieldValue(`wages`, wage);
                 } else setFieldValue(`wages`, []);
                 setFieldValue(`wageId`, 0);
                 setFieldValue(`amount`, 0);
