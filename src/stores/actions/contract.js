@@ -55,7 +55,7 @@ export const fetchContract = (id) => {
   };
 };
 
-export const createContract = (params, success_msg) => {
+export const createContract = (params, success_msg, handleResetNewContract) => {
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
@@ -80,6 +80,7 @@ export const createContract = (params, success_msg) => {
       .post(params)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        handleResetNewContract();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -124,11 +125,12 @@ export const updateContract = (params, success_msg) => {
   };
 };
 
-export const deleteContract = (id, success_msg) => {
+export const deleteContract = (id, success_msg, handleAfterSuccess) => {
   return (dispatch, getState) => {
     api.contract
       .delete(id)
       .then(({ payload }) => {
+        handleAfterSuccess();
         dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

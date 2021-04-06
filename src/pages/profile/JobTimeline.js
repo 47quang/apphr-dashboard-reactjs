@@ -3,31 +3,30 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { FieldArray, Form, Formik } from 'formik';
-import { useEffect } from 'react';
+import { FieldArray, Formik } from 'formik';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
-import { JobTimelineSchema, NewContractSchema } from 'src/schema/formSchema';
+import { NewContractSchema } from 'src/schema/formSchema';
 import {
   createContract,
-  updateContract,
   deleteContract,
   fetchAllowances,
   fetchBranches,
   fetchContracts,
   fetchWagesByType,
   setEmptyContract,
+  updateContract,
 } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { fetchPositions } from 'src/stores/actions/position';
-import { fetchWages } from 'src/stores/actions/wage';
 import { api } from 'src/stores/apis';
-import { REDUX_STATE } from 'src/stores/states';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
@@ -100,27 +99,24 @@ const JobTimelineInfo = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
 
-  async function create(form) {
-    // form.provinceId = form.provinceId || null;
+  function create(values) {
+    let form = values;
     form.profileId = +match.params.id;
+    console.log('form');
     if (form.branchId === '0') delete form.branchId;
     else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
     if (form.departmentId === '0') delete form.departmentId;
-    else form['departmantName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
+    else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
     if (form.positionId === '0') delete form.positionId;
     else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
 
     if (form.id) {
-      await dispatch(updateContract(form, t('message.successful_update')));
+      dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      await dispatch(createContract(form, t('message.successful_create')));
+      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
-
-  async function removeContract(contractId) {
-    await dispatch(deleteContract(contractId, t('message.successful_delete')));
-  }
-  const BodyContract = ({ values, handleBlur, handleChange, t, touched, errors, setFieldValue, isNew }) => {
+  const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
     return (
       <>
         <div className="row">
@@ -338,7 +334,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             onBlur={handleBlur(`paymentType`)}
             onChange={async (e) => {
               if (isNew) {
-                if (e.target.value !== '0' && isNew) {
+                if (e.target.value !== '0') {
                   dispatch(fetchWagesByType({ type: e.target.value }));
                   setFieldValue(`amount`, 0);
                   handleChange(`paymentType`)(e);
@@ -346,9 +342,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
               } else {
                 if (e.target.value !== '0') {
                   handleChange(`paymentType`)(e);
-                  let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                  let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
 
-                  setFieldValue(`wages`, wages);
+                  setFieldValue(`wages`, wage);
                 } else setFieldValue(`wages`, []);
                 setFieldValue(`wageId`, 0);
                 setFieldValue(`amount`, 0);
@@ -485,159 +481,190 @@ const JobTimelineInfo = ({ t, history, match }) => {
       </>
     );
   };
+
+  const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+  const handleCloseDeleteAlert = () => {
+    setIsVisibleDeleteAlert(false);
+  };
+  const [isDisableCreateButton, setIsDisableCreateButton] = useState(false);
+  const newContractRef = useRef();
+
+  const handleResetNewContract = () => {
+    newContractRef.current.handleReset();
+    setIsDisableCreateButton(false);
+  };
   return (
     <CContainer fluid className="c-main">
       <div className="d-flex justify-content-center mb-4">
         <button
           type="button"
+          disabled={isDisableCreateButton}
           className="btn btn-success"
           id="addBtn"
           onClick={() => {
-            document.getElementById('newContract').hidden = false;
-            document.getElementById('addBtn').disabled = true;
+            setIsDisableCreateButton(true);
           }}
         >
           <Add /> {t('label.add')}
         </button>
       </div>
       <div className="m-auto">
-        <div>
-          <Formik initialValues={newContract} validationSchema={NewContractSchema} enableReinitialize onSubmit={() => {}}>
-            {(props) => {
-              props.t = t;
-              props.isNew = true;
+        {isDisableCreateButton && (
+          <Formik
+            innerRef={newContractRef}
+            initialValues={newContract}
+            validationSchema={NewContractSchema}
+            enableReinitialize
+            onSubmit={(values) => {
+              create(values);
+            }}
+          >
+            {({ values, handleChange, handleBlur, touched, errors, handleReset, handleSubmit }) => {
               return (
-                <Form id="newContract" hidden={true} className="p-0 m-0">
+                <form id="newContract" className="p-0 m-0">
                   <div className="shadow bg-white rounded mx-4 p-4">
-                    <h5>{'Tạo mới'}.</h5>
+                    <h5>{t('label.create_new')}.</h5>
                     <hr className="mt-1" />
-                    <BodyContract {...props} />
+                    <BodyContract
+                      values={values}
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      touched={touched}
+                      errors={errors}
+                      isNew={true}
+                    />
+
                     <hr className="mt-1" />
                     {renderButtons([
                       {
                         type: 'button',
                         className: `btn btn-primary  mx-2`,
-                        onClick: () => {
-                          props.handleReset();
-                          document.getElementById('newContract').hidden = true;
-                          document.getElementById('addBtn').disabled = false;
+                        onClick: (e) => {
+                          handleResetNewContract();
                         },
                         name: t('label.cancel'),
                         position: 'right',
                       },
                       {
                         type: 'button',
-                        className: `btn btn-primary px-4 ml-4`,
-                        onClick: async () => {
-                          let err = await props.validateForm();
-                          if (err !== undefined && Object.keys(err).length !== 0) {
-                            props.setTouched(err);
-                            return;
-                          }
-                          let data = props.values;
-                          await create(data).then(() => dispatch(fetchContracts({ profileId: +profileId })));
-                          props.handleReset();
-                          document.getElementById('newContract').hidden = true;
-                          document.getElementById('addBtn').disabled = false;
+                        className: `btn btn-primary px-4 ml-2`,
+                        onClick: (e) => {
+                          handleSubmit(e);
                         },
-                        name: t('label.save'),
+                        name: t('label.create_new'),
                       },
                     ])}
                   </div>
-
                   <br />
-
                   <AutoSubmitToken />
-                </Form>
+                </form>
               );
             }}
           </Formik>
-          {jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
-            jobTimelineInfo.contractInfo.map((friend, index) => {
-              friend.isMinimize = false;
-              return (
-                <Formik key={index} initialValues={friend} validationSchema={NewContractSchema} enableReinitialize onSubmit={() => {}}>
-                  {(props) => {
-                    props.t = t;
-                    props.isNew = false;
-                    return (
-                      <Form className="p-0 m-0">
-                        <div className="shadow bg-white rounded mx-4 p-4">
-                          <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                            <div className="pt-1 d-inline" role="button">
-                              {!props.values.isMinimize ? (
-                                <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)} />
-                              ) : (
-                                <IndeterminateCheckBoxOutlinedIcon
-                                  className="pb-1"
-                                  onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
-                                />
-                              )}
-                            </div>
-                            <Switch
-                              checked={props.values.isOpen}
-                              name={`isOpen`}
-                              onChange={(e) => {
-                                props.setFieldValue(`isOpen`, e.target.checked);
-                              }}
-                            />
-                            {props.values.code + ' - ' + props.values.fullname}
+        )}
+        {jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
+          jobTimelineInfo.contractInfo.map((contract, index) => {
+            contract.isMinimize = false;
+            return (
+              <Formik
+                key={index}
+                initialValues={contract}
+                validationSchema={NewContractSchema}
+                enableReinitialize
+                onSubmit={(values) => {
+                  create(values);
+                }}
+              >
+                {({ values, handleChange, handleBlur, setFieldValue, touched, errors, handleReset, handleSubmit }) => {
+                  return (
+                    <form className="p-0 m-0">
+                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                        <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                          <div className="pt-1 d-inline" role="button">
+                            {!values.isMinimize ? (
+                              <AddBoxOutlinedIcon className="pb-1" onClick={(e) => setFieldValue(`isMinimize`, !values.isMinimize)} />
+                            ) : (
+                              <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => setFieldValue('isMinimize', !values.isMinimize)} />
+                            )}
                           </div>
-
-                          <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                            {t('label.from') + props.values.handleDate + t('label.to') + props.values.expiredDate}
-                          </div>
-                          <hr className="mt-1" />
-                          {props.values.isMinimize && (
-                            <div>
-                              <BodyContract {...props} />
-                              <hr className="mt-1" />
-                              {renderButtons([
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 mx-4`,
-                                  onClick: async (e) => {
-                                    await removeContract(props.values.id);
-                                  },
-                                  name: t('label.delete'),
-                                  position: 'right',
-                                },
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 mx-4`,
-                                  onClick: () => {
-                                    jobTimelineInfo.contractInfo[index].isMinimize = true;
-                                    props.setValues(jobTimelineInfo.contractInfo[index]);
-                                  },
-                                  name: t('label.reset'),
-                                  position: 'right',
-                                },
-                                {
-                                  type: 'button',
-                                  className: `btn btn-primary px-4 ml-4`,
-                                  onClick: async () => {
-                                    await create(props.values);
-                                  },
-                                  name: t('label.save'),
-                                },
-                              ])}
-                            </div>
-                          )}
+                          <Switch
+                            checked={values.isOpen}
+                            name={`isOpen ${index}`}
+                            onChange={(e) => {
+                              setFieldValue(`isOpen ${index}`, e.target.checked);
+                            }}
+                          />
+                          {values.code + ' - ' + values.fullname}
                         </div>
 
-                        <br />
-
-                        <AutoSubmitToken />
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              );
-            })
-          ) : (
-            <div />
-          )}
-        </div>
+                        <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                          {t('label.from') + values.handleDate + t('label.to') + values.expiredDate}
+                        </div>
+                        <hr className="mt-1" />
+                        {values.isMinimize && (
+                          <div>
+                            <BodyContract
+                              values={values}
+                              handleBlur={handleBlur}
+                              handleChange={handleChange}
+                              touched={touched}
+                              errors={errors}
+                              isNew={false}
+                            />
+                            <hr className="mt-1" />
+                            <WarningAlertDialog
+                              isVisible={isVisibleDeleteAlert}
+                              title={t('title.confirm')}
+                              warningMessage={t('message.confirm_delete_contract')}
+                              titleConfirm={t('label.agree')}
+                              titleCancel={t('label.cancel')}
+                              handleCancel={(e) => {
+                                handleCloseDeleteAlert();
+                              }}
+                              handleConfirm={(e) => {
+                                dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
+                              }}
+                            />
+                            {renderButtons([
+                              {
+                                type: 'button',
+                                className: `btn btn-primary px-4 mx-2`,
+                                onClick: (e) => {
+                                  setIsVisibleDeleteAlert(true);
+                                },
+                                name: t('label.delete'),
+                                position: 'right',
+                              },
+                              {
+                                type: 'button',
+                                className: `btn btn-primary px-4 mx-2`,
+                                onClick: (e) => {
+                                  handleReset(e);
+                                },
+                                name: t('label.reset'),
+                                position: 'right',
+                              },
+                              {
+                                type: 'button',
+                                className: `btn btn-primary px-4 ml-2`,
+                                onClick: (e) => {
+                                  handleSubmit(e);
+                                },
+                                name: t('label.save'),
+                              },
+                            ])}
+                          </div>
+                        )}
+                      </div>
+                    </form>
+                  );
+                }}
+              </Formik>
+            );
+          })
+        ) : (
+          <div />
+        )}
       </div>
     </CContainer>
   );

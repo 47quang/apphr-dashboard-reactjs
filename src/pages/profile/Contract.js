@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
@@ -15,12 +15,7 @@ const Contract = ({ t, isCreate }) => {
     { name: 'status', title: t('label.status') },
   ];
   const contracts = useSelector((state) => state.profile.contracts);
-  useEffect(() => {
-    // dispatch(fetchAllContract());
-  }, []);
   const deleteRow = async (rowId) => {
-    // dispatch(deleteProfile(rowId));
-    // dispatch(fetchAllProfiles());
     console.log('RowId Delete: ', rowId);
   };
   if (isCreate) {
