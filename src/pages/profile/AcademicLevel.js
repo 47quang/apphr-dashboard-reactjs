@@ -1,8 +1,10 @@
 import { CContainer } from '@coreui/react';
 import { Add } from '@material-ui/icons';
 import { Formik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
+import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
@@ -37,8 +39,15 @@ const AcademicLevel = ({ t, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const removeCertificate = (academicId) => {
-    dispatch(deleteDiploma(academicId, t('message.successful_delete')));
+  const createDegree = (values) => {
+    let form = values;
+    form.type = 'degree';
+    form.profileId = +match.params.id;
+    if (form.id) {
+      dispatch(updateDiploma(form, t('message.successful_update')));
+    } else {
+      dispatch(createDiploma(form, t('message.successful_create'), handleResetNewDegree));
+    }
   };
   const getFormBody = (title, values, handleChange, handleBlur, touched, errors) => {
     return (
@@ -106,7 +115,7 @@ const AcademicLevel = ({ t, match }) => {
         </div>
         <div className="row">
           <CommonMultipleTextInput
-            containerClassName={'form-group col-xl-12'}
+            containerClassName={'form-group col-lg-12'}
             value={values.note}
             onBlur={handleBlur(`note`)}
             onChange={handleChange(`note`)}
@@ -117,7 +126,7 @@ const AcademicLevel = ({ t, match }) => {
         <div className="row">
           <CommonUploadFileButton
             name={`attaches`}
-            containerClassName="form-group col-xl-12"
+            containerClassName="form-group col-lg-12"
             buttonClassName="btn btn-primary"
             value={values.attaches}
           />
@@ -125,6 +134,16 @@ const AcademicLevel = ({ t, match }) => {
         <hr className="mt-1" />
       </>
     );
+  };
+  const newDegreeRef = useRef();
+  const handleResetNewDegree = () => {
+    newDegreeRef.current.handleReset();
+    document.getElementById('newDegree').hidden = true;
+    document.getElementById('addBtn').disabled = false;
+  };
+  const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+  const handleCloseDeleteAlert = () => {
+    setIsVisibleDeleteAlert(false);
   };
   return (
     <CContainer fluid className="c-main">
@@ -135,7 +154,7 @@ const AcademicLevel = ({ t, match }) => {
               type="button"
               className="btn btn-success"
               id="addBtn"
-              onClick={() => {
+              onClick={(e) => {
                 document.getElementById('newDegree').hidden = false;
                 document.getElementById('addBtn').disabled = true;
               }}
@@ -145,21 +164,18 @@ const AcademicLevel = ({ t, match }) => {
           </div>
           <Formik
             initialValues={newDegree}
+            innerRef={newDegreeRef}
             validationSchema={NewDegreeSchema}
             enableReinitialize
             onSubmit={(values) => {
-              let form = values;
-              form.type = 'degree';
-              form.profileId = +match.params.id;
-
-              dispatch(createDiploma(form, t('message.successful_create')));
+              createDegree(values);
             }}
           >
             {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange }) => {
               return (
                 <form id="newDegree" hidden={true} className="p-0 m-0">
                   <div className="shadow bg-white rounded mx-4 p-4">
-                    {getFormBody('Tạo mới', values, handleChange, handleBlur, touched, errors)}
+                    {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors)}
                     {renderButtons([
                       {
                         type: 'button',
@@ -178,52 +194,63 @@ const AcademicLevel = ({ t, match }) => {
                         onClick: (e) => {
                           handleSubmit(e);
                         },
-                        name: t('label.save'),
+                        name: t('label.create_new'),
                       },
                     ])}
                   </div>
+                  <br />
+                  <AutoSubmitToken />
                 </form>
               );
             }}
           </Formik>
           {initialValues.degrees && initialValues.degrees.length > 0 ? (
-            initialValues.degrees.map((friend, index) => (
+            initialValues.degrees.map((degree, index) => (
               <Formik
-                initialValues={friend}
+                initialValues={degree}
                 key={'degree' + index}
                 validationSchema={NewDegreeSchema}
                 onSubmit={(values) => {
-                  let form = values;
-                  form.type = 'degree';
-                  form.profileId = +match.params.id;
-                  dispatch(updateDiploma(form, t('message.successful_update')));
+                  createDegree(values);
                 }}
               >
                 {({ values, errors, touched, handleBlur, handleSubmit, handleChange, handleReset }) => (
                   <div className="shadow bg-white rounded m-4 p-4">
                     {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
+                    <WarningAlertDialog
+                      isVisible={isVisibleDeleteAlert}
+                      title={t('title.confirm')}
+                      warningMessage={t('message.confirm_delete_academic')}
+                      titleConfirm={t('label.agree')}
+                      titleCancel={t('label.cancel')}
+                      handleCancel={(e) => {
+                        handleCloseDeleteAlert();
+                      }}
+                      handleConfirm={(e) => {
+                        dispatch(deleteDiploma(degree.id, t('message.successful_delete'), handleCloseDeleteAlert));
+                      }}
+                    />
+
                     {renderButtons([
                       {
                         type: 'button',
-                        className: `btn btn-primary px-4 mx-4`,
-                        onClick: async (e) => {
-                          removeCertificate(values.id);
+                        className: `btn btn-primary px-4 mx-2`,
+                        onClick: (e) => {
+                          setIsVisibleDeleteAlert(true);
                         },
                         name: t('label.delete'),
-                        position: 'right',
                       },
                       {
                         type: 'button',
-                        className: `btn btn-primary px-4 mx-4`,
+                        className: `btn btn-primary px-4 mx-2`,
                         onClick: (e) => {
                           handleReset(e);
                         },
                         name: t('label.reset'),
-                        position: 'right',
                       },
                       {
                         type: 'button',
-                        className: `btn btn-primary px-4 ml-4`,
+                        className: `btn btn-primary px-4 ml-2`,
                         onClick: (e) => {
                           handleSubmit(e);
                         },
