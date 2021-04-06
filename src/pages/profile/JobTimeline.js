@@ -3,7 +3,7 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { FieldArray, Formik } from 'formik';
+import { FieldArray, Form, Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
@@ -334,7 +334,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             onBlur={handleBlur(`paymentType`)}
             onChange={async (e) => {
               if (isNew) {
-                if (e.target.value !== '0') {
+                if (e.target.value !== '0' && isNew) {
                   dispatch(fetchWagesByType({ type: e.target.value }));
                   setFieldValue(`amount`, 0);
                   handleChange(`paymentType`)(e);
@@ -342,9 +342,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
               } else {
                 if (e.target.value !== '0') {
                   handleChange(`paymentType`)(e);
-                  let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                  let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
 
-                  setFieldValue(`wages`, wage);
+                  setFieldValue(`wages`, wages);
                 } else setFieldValue(`wages`, []);
                 setFieldValue(`wageId`, 0);
                 setFieldValue(`amount`, 0);
@@ -486,82 +486,74 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
-  const [isDisableCreateButton, setIsDisableCreateButton] = useState(false);
+
   const newContractRef = useRef();
 
   const handleResetNewContract = () => {
     newContractRef.current.handleReset();
-    setIsDisableCreateButton(false);
+    document.getElementById('newContract').hidden = true;
+    document.getElementById('addBtn').disabled = false;
   };
   return (
     <CContainer fluid className="c-main">
       <div className="d-flex justify-content-center mb-4">
         <button
           type="button"
-          disabled={isDisableCreateButton}
           className="btn btn-success"
           id="addBtn"
           onClick={() => {
-            setIsDisableCreateButton(true);
+            document.getElementById('newContract').hidden = false;
+            document.getElementById('addBtn').disabled = true;
           }}
         >
           <Add /> {t('label.add')}
         </button>
       </div>
       <div className="m-auto">
-        {isDisableCreateButton && (
-          <Formik
-            innerRef={newContractRef}
-            initialValues={newContract}
-            validationSchema={NewContractSchema}
-            enableReinitialize
-            onSubmit={(values) => {
-              create(values);
-            }}
-          >
-            {({ values, handleChange, handleBlur, touched, errors, handleReset, handleSubmit }) => {
-              return (
-                <form id="newContract" className="p-0 m-0">
-                  <div className="shadow bg-white rounded mx-4 p-4">
-                    <h5>{t('label.create_new')}.</h5>
-                    <hr className="mt-1" />
-                    <BodyContract
-                      values={values}
-                      handleBlur={handleBlur}
-                      handleChange={handleChange}
-                      touched={touched}
-                      errors={errors}
-                      isNew={true}
-                    />
+        <Formik
+          innerRef={newContractRef}
+          initialValues={newContract}
+          validationSchema={NewContractSchema}
+          enableReinitialize
+          onSubmit={(values) => {
+            create(values);
+          }}
+        >
+          {({ values, handleChange, handleBlur, touched, errors, handleReset, handleSubmit }) => {
+            return (
+              <form id="newContract" hidden={true} className="p-0 m-0">
+                <div className="shadow bg-white rounded mx-4 p-4">
+                  <h5>{t('label.create_new')}.</h5>
+                  <hr className="mt-1" />
+                  <BodyContract values={values} handleBlur={handleBlur} handleChange={handleChange} touched={touched} errors={errors} isNew={true} />
 
-                    <hr className="mt-1" />
-                    {renderButtons([
-                      {
-                        type: 'button',
-                        className: `btn btn-primary  mx-2`,
-                        onClick: (e) => {
-                          handleResetNewContract();
-                        },
-                        name: t('label.cancel'),
-                        position: 'right',
+                  <hr className="mt-1" />
+                  {renderButtons([
+                    {
+                      type: 'button',
+                      className: `btn btn-primary  mx-2`,
+                      onClick: (e) => {
+                        handleResetNewContract();
                       },
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 ml-2`,
-                        onClick: (e) => {
-                          handleSubmit(e);
-                        },
-                        name: t('label.create_new'),
+                      name: t('label.cancel'),
+                      position: 'right',
+                    },
+                    {
+                      type: 'button',
+                      className: `btn btn-primary px-4 ml-2`,
+                      onClick: (e) => {
+                        handleSubmit(e);
                       },
-                    ])}
-                  </div>
-                  <br />
-                  <AutoSubmitToken />
-                </form>
-              );
-            }}
-          </Formik>
-        )}
+                      name: t('label.create_new'),
+                    },
+                  ])}
+                </div>
+                <br />
+                <AutoSubmitToken />
+              </form>
+            );
+          }}
+        </Formik>
         {jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
           jobTimelineInfo.contractInfo.map((contract, index) => {
             contract.isMinimize = false;
