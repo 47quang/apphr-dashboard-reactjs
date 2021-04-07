@@ -52,12 +52,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
+const ProfileTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
   const [tabName, setTabName] = useState(0);
   const [subTabName, setSubTabName] = useState(0);
+  const isCreate = match.params.id ? false : true;
 
   const handleChange = (event, newValue) => {
     setTabName(newValue);
@@ -109,7 +110,7 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
-              <BasicInfo t={t} isCreate={isCreate} profile={profile} history={history} />
+              <BasicInfo t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={7} dir={theme.direction}>
               <HistoryWorkingForm t={t} history={history} match={match} />
@@ -130,7 +131,7 @@ const ProfileTabs = ({ t, isCreate, profile, history, match }) => {
               <Benefit t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={6} dir={theme.direction}>
-              <OtherInfo t={t} profile={profile} />
+              <OtherInfo t={t} history={history} match={match} />
             </TabPanel>
           </div>
         </TabPanel>

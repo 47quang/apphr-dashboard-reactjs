@@ -16,15 +16,25 @@ import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
 import { createProfile, updateProfile } from 'src/stores/actions/profile';
 import UploadImageSingle from 'src/components/button/UploadImageSingle';
+import { fetchContract, setEmptyContract } from 'src/stores/actions/contract';
 
-const BasicInfo = ({ t, isCreate, profile, history }) => {
+const BasicInfo = ({ t, history, match }) => {
   const provinces = useSelector((state) => state.location.provinces);
-
+  const profile = useSelector((state) => state.profile.profile);
+  const profileId = match?.param?.id;
+  const isCreate = match?.param?.id ? true : false;
   const dispatch = useDispatch();
   const refInfo = useRef();
 
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
+    if (profileId)
+      dispatch(
+        fetchContract({
+          profileId: profileId,
+        }),
+      );
+    else dispatch(setEmptyContract());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

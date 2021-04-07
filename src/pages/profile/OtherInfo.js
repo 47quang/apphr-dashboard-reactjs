@@ -1,15 +1,25 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
-import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { fetchContract } from 'src/stores/actions/contract';
 import { updateOtherInfo } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
 
-const OtherInfo = ({ t, profile }) => {
+const OtherInfo = ({ t, match, history }) => {
   const otherInfoRef = useRef();
+  const profile = useSelector((state) => state.profile.profile);
+
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchContract({
+        profileId: +match?.params?.id,
+      }),
+    );
+  }, []);
   const getButtonsUpdate = (action) => {
     return [
       {
