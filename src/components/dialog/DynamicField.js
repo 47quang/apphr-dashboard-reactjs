@@ -2,6 +2,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
+import { NewFieldContract } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
@@ -14,6 +15,7 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
     name: '',
     type: '',
     label: '',
+    value: '',
   });
   const typeOptions = [
     {
@@ -35,10 +37,11 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
         <DialogContent>
           <Formik
             initialValues={newField}
-            // validationSchema={NewContractSchema}
+            validationSchema={NewFieldContract}
             enableReinitialize
             onSubmit={(values) => {
-              setNewField(values);
+              // setNewField(values);
+              handleConfirm(values);
             }}
           >
             {(props) => {
@@ -106,7 +109,7 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
                       type: 'button',
                       className: `btn btn-primary px-4 ml-2`,
                       onClick: (e) => {
-                        handleConfirm(props.values);
+                        props.handleSubmit();
                       },
                       name: t('label.create_new'),
                     },
