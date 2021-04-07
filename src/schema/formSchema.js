@@ -374,3 +374,11 @@ export const NotificationSchema = Yup.object().shape({
 export const ArticleTypeSchema = Yup.object().shape({
   name: Yup.string().min(1, 'validation.required_enter_article_type').required('validation.required_enter_article_type'),
 });
+
+export const NewFieldContract = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_field_name').required('validation.required_enter_field_name'),
+  label: Yup.string().min(1, 'validation.required_enter_field_label').required('validation.required_enter_field_label'),
+  type: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_field_type', function (value) {
+    return value !== '0';
+  }),
+});

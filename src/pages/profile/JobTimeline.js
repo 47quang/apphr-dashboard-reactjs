@@ -115,7 +115,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
     if (form.id) {
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
+      console.log('create', form);
+      //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
