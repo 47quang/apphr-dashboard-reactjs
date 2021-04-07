@@ -21,6 +21,7 @@ const initialState = {
     wageId: 0,
     amount: 0,
     allowance: [],
+    attributes: [],
     benefits: [
       {
         id: 1,
