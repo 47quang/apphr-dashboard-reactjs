@@ -54,8 +54,19 @@ export const createProfile = (params, history, success_msg) => {
   params.passportProvinceId =
     params.passportProvinceId !== null && parseInt(params.passportProvinceId) !== 0 ? parseInt(params.passportProvinceId) : null;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  // params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
+  // params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  if (!params.have_id) {
+    params.cmnd = null;
+    params.cmndIssuedDate = null;
+    params.cmndProvinceId = null;
+  }
+  if (!params.have_passport) {
+    params.passport = null;
+    params.passportIssuedDate = null;
+    params.passportExpiredDate = null;
+    params.passportProvinceId = null;
+  }
   return (dispatch, getState) => {
     api.profile
       .post(params)
@@ -81,8 +92,20 @@ export const updateProfile = (data, history, success_msg) => {
   data.passportExpiredDate = data.passportExpiredDate === '' ? null : data.passportExpiredDate;
   data.passportProvinceId = data.passportProvinceId !== null && parseInt(data.passportProvinceId) !== 0 ? parseInt(data.passportProvinceId) : null;
   data.branchId = data.branchId !== null && parseInt(data.branchId) !== 0 ? parseInt(data.branchId) : null;
-  data.departmentId = data.departmentId !== null && parseInt(data.departmentId) !== 0 ? parseInt(data.departmentId) : null;
-  data.positionId = data.positionId !== null && parseInt(data.positionId) !== 0 ? parseInt(data.positionId) : null;
+  // data.departmentId = data.departmentId !== null && parseInt(data.departmentId) !== 0 ? parseInt(data.departmentId) : null;
+  // data.positionId = data.positionId !== null && parseInt(data.positionId) !== 0 ? parseInt(data.positionId) : null;
+  if (!data.have_id) {
+    data.cmnd = null;
+    data.cmndIssuedDate = null;
+    data.cmndProvinceId = null;
+  }
+  if (!data.have_passport) {
+    data.passport = null;
+    data.passportIssuedDate = null;
+    data.passportExpiredDate = null;
+    data.passportProvinceId = null;
+  }
+
   return (dispatch, getState) => {
     api.profile
       .put(data)

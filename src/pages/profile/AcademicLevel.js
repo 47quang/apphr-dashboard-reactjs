@@ -4,7 +4,6 @@ import { Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
@@ -199,7 +198,6 @@ const AcademicLevel = ({ t, match }) => {
                     ])}
                   </div>
                   <br />
-                  <AutoSubmitToken />
                 </form>
               );
             }}

@@ -4,7 +4,6 @@ import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
@@ -106,6 +105,8 @@ const CertificateInfo = ({ t, match }) => {
             labelText={t('label.expiration_date')}
             inputType={'date'}
             inputClassName={'form-control'}
+            isError={errors.expiredDate && touched.expiredDate}
+            errorMessage={t(errors.expiredDate)}
           />
         </div>
         <div className="row">
@@ -195,7 +196,6 @@ const CertificateInfo = ({ t, match }) => {
                     ])}
                   </div>
                   <br />
-                  <AutoSubmitToken />
                 </form>
               );
             }}

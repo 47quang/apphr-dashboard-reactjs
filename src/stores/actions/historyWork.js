@@ -2,12 +2,13 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const createHistoryWork = (data, success_msg) => {
+export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
   return (dispatch, getState) => {
     api.historyWork
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORY, payload });
+        handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((error) => {
@@ -57,12 +58,13 @@ export const fetchHistoriesWork = (params) => {
   };
 };
 
-export const deleteHistoryWork = (id, msg) => {
+export const deleteHistoryWork = (id, msg, handleAfterSuccess) => {
   return (dispatch, getState) => {
     api.historyWork
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.historyWork.DELETE_HISTORY, payload });
+        handleAfterSuccess();
         dispatch({
           type: REDUX_STATE.notification.SET_NOTI,
           payload: { open: true, type: 'success', message: msg },

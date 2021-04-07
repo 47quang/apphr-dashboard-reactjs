@@ -192,7 +192,8 @@
     "salary_group": "Nhóm lương",
     "salary_level": "Mức lương",
     "allowance": "Trợ cấp",
-    "allowance_level": "Mức trợ cấp"
+    "allowance_level": "Mức trợ cấp",
+    "add_new_field": "Thêm trường mới"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -316,6 +317,11 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "expired_date_must_be_greater_than_handle_date": "Ngày hết hạn phải lớn hơn ngày ký",
+    "expired_date_must_be_greater_than_valid_date": "Ngày hết hạn phải lớn hơn ngày có hiệu lực",
+    "expired_date_must_be_greater_than_start_work": "Ngày hết hạn phải lớn hơn ngày bắt đầu làm việc",
+    "expired_date_must_be_great_issued_start_date": "Ngày hết hạn phải lớn hơn ngày cấp",
+    "expired_date_must_be_great_than_start_date": "Ngày bắt đầu phải lớn hơn ngày kết thúc",
     "required_enter_field_name": "Bắt buộc nhập tên trường",
     "required_select_field_type": "Bắt buộc chọn kiểu của trường",
     "required_enter_article_type": "Bắt buộc phải nhập loại thông báo",

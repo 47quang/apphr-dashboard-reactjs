@@ -1,7 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
-import { fetchProfile } from 'src/stores/actions/profile';
+import React from 'react';
 import ProfileTabs from './ProfileTabs';
 
 //TODO: translate

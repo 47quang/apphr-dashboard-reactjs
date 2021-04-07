@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setEmptyProfile } from 'src/stores/actions/profile';
+import React from 'react';
 import ProfileTabs from './ProfileTabs';
 
 //TODO: translate

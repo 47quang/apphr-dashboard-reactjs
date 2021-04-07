@@ -103,7 +103,6 @@ export const updateContract = (params, success_msg) => {
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
-  console.log('params contract', params);
 
   params.allowanceIds =
     params.allowances && params.allowances.length > 0

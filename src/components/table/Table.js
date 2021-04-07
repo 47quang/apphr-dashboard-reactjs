@@ -150,7 +150,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
       />
       <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
         {(params) => {
-          // console.log(params);
           return (
             <TemplateConnector>
               {(getters, { deleteRows, commitDeletedRows }) => (

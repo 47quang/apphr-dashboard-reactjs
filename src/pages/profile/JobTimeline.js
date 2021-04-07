@@ -16,7 +16,6 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Label from 'src/components/text/Label';
 import { NewContractSchema } from 'src/schema/formSchema';
 import {
-  addField,
   createContract,
   deleteContract,
   fetchAllowances,
@@ -27,7 +26,6 @@ import {
   updateContract,
 } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
-import { fetchPositions } from 'src/stores/actions/position';
 import { api } from 'src/stores/apis';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
@@ -36,8 +34,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
-  const positions = useSelector((state) => state.position.positions);
-  const departments = useSelector((state) => state.department.departments);
+  // const positions = useSelector((state) => state.position.positions);
+  // const departments = useSelector((state) => state.department.departments);
   let wages = useSelector((state) => state.contract.wages);
   const jobTimelineInfo = {
     contractInfo: useSelector((state) => state.contract.contracts),
@@ -105,7 +103,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   async function create(values) {
     let form = values;
     form.profileId = +match.params.id;
-    console.log('form');
+
     if (form.branchId === '0') delete form.branchId;
     else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
     // if (form.departmentId === '0') delete form.departmentId;
@@ -124,7 +122,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     const [isOpenDynamicFieldForm, setIsOpenDynamicFieldForm] = useState(false);
     const handleConfirm = (val) => {
       values.attributes.push(val);
-      console.log('d', values.attributes);
       setFieldValue('attributes', values.attributes);
       // dispatch(addField(values));
       setIsOpenDynamicFieldForm(false);
@@ -347,7 +344,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
                   {attribute.type !== 'textArea' ? (
                     <CommonTextInput
-                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute?.value ?? ''}
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
@@ -364,7 +361,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     />
                   ) : (
                     <CommonMultipleTextInput
-                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute.value ?? ''}
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
@@ -374,19 +371,20 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     />
                   )}
                   <DeleteIconButton
+                    className="pl-2"
                     onClick={() => {
                       values.attributes.splice(attributeIdx, 1);
-                      console.log('d', values.attributes);
                       setFieldValue('attributes', values.attributes);
                     }}
                   />
                 </div>
               );
             })}
-          <div className="d-flex align-items-center form-group p-3 m-0">
+          <div className="form-group px-3">
+            <Label text={t('label.add_new_field')} />
             <button
               type="button"
-              className="btn btn-light"
+              className="btn btn-light form-control"
               onClick={() => {
                 setIsOpenDynamicFieldForm(true);
               }}
