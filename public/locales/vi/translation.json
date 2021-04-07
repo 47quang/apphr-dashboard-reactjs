@@ -54,6 +54,7 @@
     "cancel": "Hủy",
     "back": "Quay lại",
     "create_new": "Tạo mới",
+    "new_field": "Trường mới",
     "add": "Thêm mới",
     "add_allowance": "Thêm mới trợ cấp",
     "reset": "Hoàn tác",
@@ -230,7 +231,6 @@
   },
   "placeholder": {
     "enter_field_name": "Nhập tên trường",
-    "enter_field_label": "Nhập nhãn của trường",
     "enter_article_type_name": "Nhập tên loại thông báo",
     "enter_article_type_code": "Nhập mã loại thông báo",
     "enter_notification_description": "Nhập mô tả",
@@ -318,7 +318,6 @@
   },
   "validation": {
     "required_enter_field_name": "Bắt buộc nhập tên trường",
-    "required_enter_field_label": "Bắt buộc nhập nhãn của trường",
     "required_select_field_type": "Bắt buộc chọn kiểu của trường",
     "required_enter_article_type": "Bắt buộc phải nhập loại thông báo",
     "required_enter_allowance_name": "Bắt buộc phải nhập tên phụ cấp",

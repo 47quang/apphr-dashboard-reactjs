@@ -35,6 +35,7 @@ export const fetchContracts = (params) => {
         payload = await Promise.all(payload);
 
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        console.log('payload', payload);
       })
       .catch((err) => {
         console.log(err);
@@ -61,18 +62,18 @@ export const createContract = (params, success_msg, handleResetNewContract) => {
   params.startWork = params.startWork === '' ? null : params.startWork;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  //params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
+  //params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
 
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
 
   params.allowanceIds =
-    params.allowance && params.allowance.length > 0
-      ? params.allowance.map((allowance) => {
+    params.allowances && params.allowances.length > 0
+      ? params.allowances.map((allowance) => {
           //if (allowance.name !== 0) return +allowance.name;
-          return +allowance.name;
+          return +allowance.id;
         })
       : [];
   return (dispatch, getState) => {
@@ -96,18 +97,18 @@ export const updateContract = (params, success_msg) => {
   params.startWork = params.startWork === '' ? null : params.startWork;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  //params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
+  //params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
 
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : null;
 
   params.allowanceIds =
-    params.allowance && params.allowance.length > 0
-      ? params.allowance.map((allowance) => {
+    params.allowances && params.allowances.length > 0
+      ? params.allowances.map((allowance) => {
           //if (allowance.name !== 0) return +allowance.name;
-          return +allowance.name;
+          return +allowance.id;
         })
       : [];
   return (dispatch, getState) => {
@@ -208,5 +209,20 @@ export const setEmptyContract = () => {
   return {
     type: REDUX_STATE.contract.EMPTY_VALUE,
     payload: [],
+  };
+};
+
+export const addField = (params, success_msg) => {
+  return (dispatch, getState) => {
+    api.contract
+      .putField(params)
+      .then(({ payload }) => {
+        //dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+      });
   };
 };

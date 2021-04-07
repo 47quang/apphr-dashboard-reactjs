@@ -14,7 +14,6 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
   const newField = {
     name: '',
     type: '',
-    label: '',
     value: '',
   };
   const typeOptions = [
@@ -33,7 +32,7 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
   ];
   return (
     <div>
-      <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title">
+      <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
         <DialogContent>
           <Formik
             initialValues={newField}
@@ -47,39 +46,26 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
             {(props) => {
               return (
                 <form className="p-0 m-0">
-                  <h5>{t('label.create_new')}.</h5>
+                  <h5>{t('label.new_field')}.</h5>
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonTextInput
-                      containerClassName={'form-group col-xl-4'}
+                      containerClassName={'form-group col-xl-6'}
                       value={props.values.name ?? ''}
                       onBlur={props.handleBlur(`name`)}
                       onChange={props.handleChange(`name`)}
                       inputID={`name`}
                       labelText={t('label.field_name')}
                       inputType={'text'}
+                      isRequiredField
                       inputClassName={'form-control'}
                       placeholder={t('placeholder.enter_field_name')}
                       isTouched={props.touched.name}
                       isError={props.errors.name && props.touched.name}
                       errorMessage={t(props.errors.name)}
                     />
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-4'}
-                      value={props.values.label ?? ''}
-                      onBlur={props.handleBlur(`label`)}
-                      onChange={props.handleChange(`label`)}
-                      inputID={`label`}
-                      labelText={t('label.field_label')}
-                      inputType={'text'}
-                      inputClassName={'form-control'}
-                      placeholder={t('placeholder.enter_field_label')}
-                      isTouched={props.touched.label}
-                      isError={props.errors.label && props.touched.label}
-                      errorMessage={t(props.errors.label)}
-                    />
                     <CommonSelectInput
-                      containerClassName={'form-group col-xl-4'}
+                      containerClassName={'form-group col-xl-6'}
                       value={props.values.type ?? ''}
                       onBlur={props.handleBlur(`type`)}
                       onChange={props.handleChange(`type`)}
@@ -88,9 +74,9 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_field_type')}
                       isRequiredField
-                      isTouched={props.touched.label}
-                      isError={props.errors.label && props.touched.label}
-                      errorMessage={t(props.errors.label)}
+                      isTouched={props.touched.type}
+                      isError={props.errors.type && props.touched.type}
+                      errorMessage={t(props.errors.type)}
                       lstSelectOptions={typeOptions}
                     />
                   </div>

@@ -279,6 +279,9 @@ export const api = {
     put: (data) => {
       return client.put(API_PREFIX.API_CONTRACT + `/${data.id}`, data);
     },
+    putField: (data) => {
+      return client.put(API_PREFIX.API_CONTRACT + `/${data.id}` + '/add-attribute', data);
+    },
     get: (id) => {
       return client.get(API_PREFIX.API_CONTRACT + `/${id}`);
     },

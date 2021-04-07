@@ -16,6 +16,8 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Label from 'src/components/text/Label';
 import { NewContractSchema } from 'src/schema/formSchema';
 import {
+  addField,
+  createContract,
   deleteContract,
   fetchAllowances,
   fetchBranches,
@@ -94,11 +96,11 @@ const JobTimelineInfo = ({ t, history, match }) => {
     dispatch(fetchAllowances());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    if (jobTimelineInfo.contractInfo.branchId) dispatch(fetchDepartments({ branchId: jobTimelineInfo.contractInfo.branchId }));
-    if (jobTimelineInfo.contractInfo.departmentId) dispatch(fetchDepartments({ departmentId: jobTimelineInfo.contractInfo.departmentId }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
+  // useEffect(() => {
+  //   if (jobTimelineInfo.contractInfo.branchId) dispatch(fetchDepartments({ branchId: jobTimelineInfo.contractInfo.branchId }));
+  //   if (jobTimelineInfo.contractInfo.departmentId) dispatch(fetchDepartments({ departmentId: jobTimelineInfo.contractInfo.departmentId }));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
 
   async function create(values) {
     let form = values;
@@ -106,15 +108,16 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
     if (form.branchId === '0') delete form.branchId;
     else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
-    if (form.departmentId === '0') delete form.departmentId;
-    else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
-    if (form.positionId === '0') delete form.positionId;
-    else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
+    // if (form.departmentId === '0') delete form.departmentId;
+    // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
+    // if (form.positionId === '0') delete form.positionId;
+    // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
 
     if (form.id) {
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
+      //console.log('create', form);
+      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
@@ -123,6 +126,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       values.attributes.push(val);
       console.log('d', values.attributes);
       setFieldValue('attributes', values.attributes);
+      // dispatch(addField(values));
       setIsOpenDynamicFieldForm(false);
     };
     const handleCancel = () => {
@@ -309,7 +313,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             errorMessage={t(errors?.branchId)}
             lstSelectOptions={branches}
           />
-          <CommonSelectInput
+          {/* <CommonSelectInput
             containerClassName={'form-group col-4'}
             value={values.departmentId ?? 0}
             onBlur={handleBlur('departmentId')}
@@ -335,7 +339,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_position')}
             lstSelectOptions={positions}
-          />
+          /> */}
           {values.attributes &&
             values.attributes.length > 0 &&
             values.attributes.map((attribute, attributeIdx) => {
@@ -348,7 +352,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
                       inputID={`attributes.${attributeIdx}.value`}
-                      labelText={attribute.label}
+                      labelText={attribute.name}
                       inputType={attribute.type}
                       inputClassName={'form-control'}
                       isRequiredField
@@ -365,7 +369,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
                       inputID={attribute.type}
-                      labelText={attribute.label}
+                      labelText={attribute.name}
                       inputClassName={'form-control'}
                     />
                   )}
