@@ -191,7 +191,8 @@
     "salary_group": "Nhóm lương",
     "salary_level": "Mức lương",
     "allowance": "Trợ cấp",
-    "allowance_level": "Mức trợ cấp"
+    "allowance_level": "Mức trợ cấp",
+    "add_new_field": "Thêm trường mới"
   },
   "title": {
     "confirm": "Xác nhận",

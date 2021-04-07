@@ -120,13 +120,13 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
   return (
     <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="row">
-        <div className="col-xl-2 mb-4">
+        <div className="col-xl-3 mb-4">
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('label.avatar')} />
             <UploadImageSingle src={profile.avatar} handleChangeUpload={handleChangeUpload} />
           </div>
         </div>
-        <div className=" col-xl-10">
+        <div className=" col-xl-9">
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('label.profile_basic_info')} />
             <Formik

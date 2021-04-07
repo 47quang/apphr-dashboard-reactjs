@@ -1,7 +1,7 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { NewFieldContract } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonSelectInput from '../input/CommonSelectInput';
@@ -11,12 +11,12 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
   // const handleChange = (event) => {
   //   setType(event.target.value);
   // };
-  const [newField, setNewField] = useState({
+  const newField = {
     name: '',
     type: '',
     label: '',
     value: '',
-  });
+  };
   const typeOptions = [
     {
       id: 'date',

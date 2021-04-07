@@ -16,7 +16,6 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Label from 'src/components/text/Label';
 import { NewContractSchema } from 'src/schema/formSchema';
 import {
-  createContract,
   deleteContract,
   fetchAllowances,
   fetchBranches,
@@ -104,7 +103,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   async function create(values) {
     let form = values;
     form.profileId = +match.params.id;
-    console.log('form');
+
     if (form.branchId === '0') delete form.branchId;
     else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
     if (form.departmentId === '0') delete form.departmentId;
@@ -115,7 +114,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     if (form.id) {
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      console.log('create', form);
       //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
@@ -345,7 +343,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
                   {attribute.type !== 'textArea' ? (
                     <CommonTextInput
-                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute?.value ?? ''}
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
@@ -362,7 +360,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     />
                   ) : (
                     <CommonMultipleTextInput
-                      containerClassName={'form-group col-xl-11 p-0 m-0'}
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute.value ?? ''}
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
@@ -372,6 +370,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     />
                   )}
                   <DeleteIconButton
+                    className="pl-2"
                     onClick={() => {
                       values.attributes.splice(attributeIdx, 1);
                       console.log('d', values.attributes);
@@ -381,10 +380,11 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 </div>
               );
             })}
-          <div className="d-flex align-items-center form-group p-3 m-0">
+          <div className="form-group px-3">
+            <Label text={t('label.add_new_field')} />
             <button
               type="button"
-              className="btn btn-light"
+              className="btn btn-light form-control"
               onClick={() => {
                 setIsOpenDynamicFieldForm(true);
               }}
