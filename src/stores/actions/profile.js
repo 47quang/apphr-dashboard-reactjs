@@ -31,7 +31,7 @@ export const fetchProfile = (id) => {
         payload.dateOfBirth = getDateInput(payload.dateOfBirth);
         payload.cmndIssuedDate = getDateInput(payload.cmndIssuedDate);
         payload.passportIssuedDate = getDateInput(payload.passportIssuedDate);
-        payload.passport_end = getDateInput(payload.passport_end);
+        payload.passportExpiredDate = getDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
 
@@ -54,8 +54,19 @@ export const createProfile = (params, history, success_msg) => {
   params.passportProvinceId =
     params.passportProvinceId !== null && parseInt(params.passportProvinceId) !== 0 ? parseInt(params.passportProvinceId) : null;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  // params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
+  // params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
+  if (!params.have_id) {
+    params.cmnd = null;
+    params.cmndIssuedDate = null;
+    params.cmndProvinceId = null;
+  }
+  if (!params.have_passport) {
+    params.passport = null;
+    params.passportIssuedDate = null;
+    params.passportExpiredDate = null;
+    params.passportProvinceId = null;
+  }
   return (dispatch, getState) => {
     api.profile
       .post(params)
@@ -81,8 +92,20 @@ export const updateProfile = (data, history, success_msg) => {
   data.passportExpiredDate = data.passportExpiredDate === '' ? null : data.passportExpiredDate;
   data.passportProvinceId = data.passportProvinceId !== null && parseInt(data.passportProvinceId) !== 0 ? parseInt(data.passportProvinceId) : null;
   data.branchId = data.branchId !== null && parseInt(data.branchId) !== 0 ? parseInt(data.branchId) : null;
-  data.departmentId = data.departmentId !== null && parseInt(data.departmentId) !== 0 ? parseInt(data.departmentId) : null;
-  data.positionId = data.positionId !== null && parseInt(data.positionId) !== 0 ? parseInt(data.positionId) : null;
+  // data.departmentId = data.departmentId !== null && parseInt(data.departmentId) !== 0 ? parseInt(data.departmentId) : null;
+  // data.positionId = data.positionId !== null && parseInt(data.positionId) !== 0 ? parseInt(data.positionId) : null;
+  if (!data.have_id) {
+    data.cmnd = null;
+    data.cmndIssuedDate = null;
+    data.cmndProvinceId = null;
+  }
+  if (!data.have_passport) {
+    data.passport = null;
+    data.passportIssuedDate = null;
+    data.passportExpiredDate = null;
+    data.passportProvinceId = null;
+  }
+
   return (dispatch, getState) => {
     api.profile
       .put(data)
@@ -221,7 +244,7 @@ export const fetchContacts = (profileId) => {
 export const createNewContact = (data, profileId, success_msg, ref) => {
   const params = {
     ...data,
-    profileId: profileId,
+    profileId: parseInt(profileId),
   };
   return (dispatch, getState) => {
     api.contact
@@ -256,7 +279,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
     api.contact
       .delete(contactId)
       .then(({ payload }) => {
-        dispatch(fetchContacts(profileId));
+        dispatch(fetchContacts(parseInt(profileId)));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -270,7 +293,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
 
 export const updateOtherInfo = (profile, success_msg) => {
   const params = {
-    id: profile.id,
+    id: parseInt(profile.id),
     taxCode: profile.taxCode,
     nationality: profile.nationality,
     religion: profile.religion,

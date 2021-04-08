@@ -25,7 +25,11 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
-
+    "roll_up": "Điểm danh",
+    "reset_roll_up": "Hoàn tác",
+    "field_label": "Nhãn của trường",
+    "field_type": "Loại",
+    "field_name": "Tên trường",
     "article_type_code": "Mã loại thông báo",
     "article_type_name": "Tên loại thông báo",
     "notification_code": "Mã thông báo",
@@ -52,6 +56,7 @@
     "cancel": "Hủy",
     "back": "Quay lại",
     "create_new": "Tạo mới",
+    "new_field": "Trường mới",
     "add": "Thêm mới",
     "add_allowance": "Thêm mới trợ cấp",
     "reset": "Hoàn tác",
@@ -189,7 +194,8 @@
     "salary_group": "Nhóm lương",
     "salary_level": "Mức lương",
     "allowance": "Trợ cấp",
-    "allowance_level": "Mức trợ cấp"
+    "allowance_level": "Mức trợ cấp",
+    "add_new_field": "Thêm trường mới"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -222,10 +228,11 @@
     "edit_row": "Chỉnh sửa hàng này",
     "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
-    "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?"
-
+    "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
+    "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_field_name": "Nhập tên trường",
     "enter_article_type_name": "Nhập tên loại thông báo",
     "enter_article_type_code": "Nhập mã loại thông báo",
     "enter_notification_description": "Nhập mô tả",
@@ -256,11 +263,13 @@
     "enter_email": "Nhập email",
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
+    "enter_contact_link": "Nhập link",
+    "select_field_type": "Chọn loại trường",
     "select_notification_type": "Chọn loại thông báo",
-    "select_contact_channels":"Chọn kênh liên lạc",
-    "select_contract_payment_method":"Chọn hình thức chi trả",
-    "select_contract_type_work":"Chọn loại công việc",
-    "select_contract_type_tax":"Chọn loại thuế thu nhập cá nhân",
+    "select_contact_channels": "Chọn kênh liên lạc",
+    "select_contract_payment_method": "Chọn hình thức chi trả",
+    "select_contract_type_work": "Chọn loại công việc",
+    "select_contract_type_tax": "Chọn loại thuế thu nhập cá nhân",
     "select_contract_type": "Chọn loại hợp đồng",
     "select_role": "Chọn vai trò",
     "select_profile": "Chọn nhân sự",
@@ -310,6 +319,13 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "expired_date_must_be_greater_than_handle_date": "Ngày hết hạn phải lớn hơn ngày ký",
+    "expired_date_must_be_greater_than_valid_date": "Ngày hết hạn phải lớn hơn ngày có hiệu lực",
+    "expired_date_must_be_greater_than_start_work": "Ngày hết hạn phải lớn hơn ngày bắt đầu làm việc",
+    "expired_date_must_be_great_issued_start_date": "Ngày hết hạn phải lớn hơn ngày cấp",
+    "expired_date_must_be_great_than_start_date": "Ngày bắt đầu phải lớn hơn ngày kết thúc",
+    "required_enter_field_name": "Bắt buộc nhập tên trường",
+    "required_select_field_type": "Bắt buộc chọn kiểu của trường",
     "required_enter_article_type": "Bắt buộc phải nhập loại thông báo",
     "required_enter_allowance_name": "Bắt buộc phải nhập tên phụ cấp",
     "required_enter_salary_group": "Bắt buộc phải nhập tên nhóm lương",
@@ -320,10 +336,11 @@
     "required_select_allowance": "Bắt buộc phải chọn trợ cấp",
     "required_integer_prob_time": "Thời gian thử  việc là số nguyên",
     "required_positive_prob_time": "Thời gian thử việc là một số dương",
-    "required_select_contract_expired_date":"Bắt buộc chọn ngày hợp đồng hết hạn",
-    "required_select_contract_valid_date":"Bắt buộc chọn ngày bắt đầu hiệu lực hợp đồng",
+    "required_select_contract_expired_date": "Bắt buộc chọn ngày hợp đồng hết hạn",
+    "required_select_contract_valid_date": "Bắt buộc chọn ngày bắt đầu hiệu lực hợp đồng",
+    "required_select_certificate_expired_date": "Bắt buộc chọn ngày hết hạn của chứng chỉ",
     "required_select_contract_handle_date": "Bắt buộc chọn ngày ký hợp đồng",
-    "required_enter_prob_time":"Bắt buộc nhập thời gian thử việc",
+    "required_enter_prob_time": "Bắt buộc nhập thời gian thử việc",
     "required_select_contract_wage": "Bắt buộc phải chọn nhóm lương",
     "required_select_contract_payment": "Bắt buộc phải chọn hình thức chi trả",
     "required_select_contract_type_work": "Bắt buộc phải chọn loại công việc",

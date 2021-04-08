@@ -20,7 +20,6 @@ const NewNotification = ({ t, location, history }) => {
     // Call API CREATE
     delete form.id;
     form.typeId = parseInt(form.typeId);
-    console.log('values', form);
     dispatch(createArticle(form, history, t('message.successful_create')));
   };
   const buttons = [

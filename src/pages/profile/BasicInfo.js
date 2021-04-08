@@ -3,7 +3,6 @@ import { Field, Formik } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -14,17 +13,21 @@ import { fetchProvinces } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states/index';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
-import { createProfile, updateProfile } from 'src/stores/actions/profile';
+import { createProfile, fetchProfile, setEmptyProfile, updateProfile } from 'src/stores/actions/profile';
 import UploadImageSingle from 'src/components/button/UploadImageSingle';
 
-const BasicInfo = ({ t, isCreate, profile, history }) => {
+const BasicInfo = ({ t, history, match }) => {
   const provinces = useSelector((state) => state.location.provinces);
-
+  const profile = useSelector((state) => state.profile.profile);
+  const profileId = +match?.params?.id;
+  const isCreate = match?.param?.id ? true : false;
   const dispatch = useDispatch();
   const refInfo = useRef();
 
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
+    if (profileId) dispatch(fetchProfile(profileId));
+    else dispatch(setEmptyProfile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -61,13 +64,13 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
       className: `btn btn-primary`,
       onClick: async (e) => {
         refInfo.current.handleSubmit(e);
-        let errors = await refInfo.current.validateForm();
-        let a =
-          errors && // 👈 null and undefined check
-          Object.keys(errors).length === 0 &&
-          errors.constructor === Object;
-        if (!a) return;
-        dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
+        // let errors = await refInfo.current.validateForm();
+        // let a =
+        //   errors && // 👈 null and undefined check
+        //   Object.keys(errors).length === 0 &&
+        //   errors.constructor === Object;
+        // if (!a) return;
+        // dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
       },
       name: t('label.create_new'),
       position: 'right',
@@ -97,16 +100,16 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
       className: `btn btn-primary`,
       onClick: (e) => {
         refInfo.current.handleSubmit(e);
-        refInfo.current.validateForm().then((errors) => {
-          let a =
-            errors && // 👈 null and undefined check
-            Object.keys(errors).length === 0 &&
-            errors.constructor === Object;
-          if (!a) return;
-          dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
-        });
+        // refInfo.current.validateForm().then((errors) => {
+        //   let a =
+        //     errors && // 👈 null and undefined check
+        //     Object.keys(errors).length === 0 &&
+        //     errors.constructor === Object;
+        //   if (!a) return;
+        //   dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
+        // });
 
-        dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
+        // dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
       },
       name: t('label.update'),
       position: 'right',
@@ -114,20 +117,19 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
   ];
 
   function handleChangeUpload(fileUrl) {
-    console.log(fileUrl);
     dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { avatar: fileUrl } });
   }
 
   return (
     <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="row">
-        <div className="col-xl-2">
+        <div className="col-xl-3 mb-4">
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('label.avatar')} />
             <UploadImageSingle src={profile.avatar} handleChangeUpload={handleChangeUpload} />
           </div>
         </div>
-        <div className=" col-xl-10">
+        <div className=" col-xl-9">
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('label.profile_basic_info')} />
             <Formik
@@ -136,10 +138,8 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
               validationSchema={BasicInfoCreateSchema}
               enableReinitialize
               onSubmit={(values) => {
-                dispatch({
-                  type: REDUX_STATE.profile.SET_PROFILE,
-                  payload: values,
-                });
+                if (isCreate) dispatch(createProfile(values, history, t('message.successful_create')));
+                else dispatch(updateProfile(values, history, t('message.successful_update')));
               }}
             >
               {({ values, errors, touched, handleBlur, handleChange, setFieldValue }) => (
@@ -346,13 +346,15 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                                 />
                                 <CommonTextInput
                                   containerClassName={'form-group col-6'}
-                                  value={values.passport_end ?? ''}
-                                  onBlur={handleBlur('passport_end')}
-                                  onChange={handleChange('passport_end')}
-                                  inputID={'passport_end'}
+                                  value={values.passportExpiredDate ?? ''}
+                                  onBlur={handleBlur('passportExpiredDate')}
+                                  onChange={handleChange('passportExpiredDate')}
+                                  inputID={'passportExpiredDate'}
                                   labelText={t('label.expiration_date')}
                                   inputType={'date'}
                                   inputClassName={'form-control'}
+                                  isError={errors.passportExpiredDate && touched.passportExpiredDate}
+                                  errorMessage={t(errors.passportExpiredDate)}
                                 />
                               </div>
                               <CommonSelectInput
@@ -371,7 +373,6 @@ const BasicInfo = ({ t, isCreate, profile, history }) => {
                         </div>
                       </div>
                     </div>
-                    <AutoSubmitToken />
                   </div>
                   {renderButtons(isCreate ? buttonsCreate : buttonsUpdate)}
                 </form>

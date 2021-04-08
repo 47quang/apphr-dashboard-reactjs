@@ -2,17 +2,19 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const createDiploma = (data, success_msg) => {
+export const createDiploma = (data, success_msg, handleReset) => {
   return (dispatch, getState) => {
     api.diploma
       .post(data)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.diploma.SET_DIPLOMA, payload });
+        dispatch(fetchDiplomaByType({ profileId: data.profileId, type: data.type }));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        handleReset();
       })
       .catch((error) => {
         console.log(error);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
+        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
       });
   };
 };
@@ -27,7 +29,7 @@ export const updateDiploma = (data, success_msg) => {
       })
       .catch((error) => {
         console.log(error);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
+        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: error } });
       });
   };
 };
@@ -62,7 +64,7 @@ export const fetchDiplomaByType = (params) => {
   };
 };
 
-export const deleteDiploma = (id, msg) => {
+export const deleteDiploma = (id, msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.diploma
       .delete(id)
@@ -72,6 +74,7 @@ export const deleteDiploma = (id, msg) => {
         } else {
           dispatch({ type: REDUX_STATE.diploma.DELETE_DEGREE, payload });
         }
+        handleAfterDelete();
         dispatch({
           type: REDUX_STATE.notification.SET_NOTI,
           payload: { open: true, type: 'success', message: msg },
@@ -79,10 +82,6 @@ export const deleteDiploma = (id, msg) => {
       })
       .catch((error) => {
         console.log(error);
-        dispatch({
-          type: REDUX_STATE.notification.SET_NOTI,
-          payload: { open: true, type: 'error', message: error },
-        });
       });
   };
 };

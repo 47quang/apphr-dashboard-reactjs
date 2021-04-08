@@ -21,8 +21,11 @@ export const SettingGeneralInfoSchema = Yup.object().shape({
 });
 
 //Shift
-const isBefore = (startTime, endTime) => {
+const isBeforeTypeHour = (startTime, endTime) => {
   return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
+};
+const isBeforeTypeDate = (startTime, endTime) => {
+  return moment(startTime).isBefore(moment(endTime));
 };
 export const SettingShiftInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_shift_name'),
@@ -35,7 +38,7 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     })
     .test('end_time_test', 'validation.checkout_time_must_be_greater_than_checkin_time', function (value) {
       const { startCC } = this.parent;
-      return isBefore(startCC, value);
+      return isBeforeTypeHour(startCC, value);
     }),
   coefficient: Yup.number()
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
@@ -149,10 +152,15 @@ export const BasicInfoCreateSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_gender'),
+  passportIssuedDate: Yup.string(),
+  passportExpiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_great_issued_start_date', function (value) {
+    const { passportIssuedDate } = this.parent;
+    return isBeforeTypeDate(passportIssuedDate, value);
+  }),
 });
 
 export const NewContractSchema = Yup.object().shape({
-  code: Yup.string().required('validation.required_contract_code'),
+  code: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_contract_code'),
   fullname: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_enter_contract_full_name'),
   type: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {
@@ -175,8 +183,21 @@ export const NewContractSchema = Yup.object().shape({
     .required('validation.required_enter_prob_time'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
-  expiredDate: Yup.string().required('validation.required_select_contract_expired_date'),
   startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
+  expiredDate: Yup.string()
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
+      const { handleDate } = this.parent;
+      return isBeforeTypeDate(handleDate, value);
+    })
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_valid_date', function (value) {
+      const { validDate } = this.parent;
+      return isBeforeTypeDate(validDate, value);
+    })
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_start_work', function (value) {
+      const { startWork } = this.parent;
+      return isBeforeTypeDate(startWork, value);
+    })
+    .required('validation.required_select_contract_expired_date'),
   paymentType: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
       return value !== '0';
@@ -187,9 +208,9 @@ export const NewContractSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_contract_wage'),
-  allowance: Yup.array().of(
+  allowances: Yup.array().of(
     Yup.object().shape({
-      name: Yup.string()
+      id: Yup.string()
         .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
           return value !== '0';
         })
@@ -277,28 +298,6 @@ export const NewDegreeSchema = Yup.object().shape({
     }),
   issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
 });
-export const DegreesSchema = Yup.object().shape({
-  degrees: Yup.array().of(
-    Yup.object().shape({
-      level: Yup.string()
-        .required('validation.required_select_academic_level')
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
-          return value && value !== '' && value !== '0';
-        }),
-      name: Yup.string()
-        .required('validation.required_enter_academic_name')
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_name', function (value) {
-          return value && value !== '';
-        }),
-      issuedPlace: Yup.string()
-        .required('validation.required_enter_academic_provincedId')
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_academic_provincedId', function (value) {
-          return value && value !== '';
-        }),
-      issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
-    }),
-  ),
-});
 
 export const NewCertificateSchema = Yup.object().shape({
   name: Yup.string()
@@ -307,6 +306,10 @@ export const NewCertificateSchema = Yup.object().shape({
       return value && value !== '';
     }),
   issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
+  expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_great_issued_start_date', function (value) {
+    const { issuedDate } = this.parent;
+    return isBeforeTypeDate(issuedDate, value);
+  }),
 });
 export const CertificatesSchema = Yup.object().shape({
   certificates: Yup.array().of(
@@ -337,7 +340,12 @@ export const NewHistoryWorkingSchema = Yup.object().shape({
     })
     .required('validation.required_select_position'),
   from: Yup.string().required('validation.required_select_start_date'),
-  to: Yup.string(), //.required('validation.required_select_end_date'),
+  to: Yup.string()
+    .test('end_time_test', 'validation.expired_date_must_be_great_than_start_date', function (value) {
+      const { from } = this.parent;
+      return isBeforeTypeDate(from, value);
+    })
+    .required('validation.required_select_end_date'),
 });
 export const HistoryWorkingsSchema = Yup.object().shape({
   histories: Yup.array().of(
@@ -395,4 +403,11 @@ export const NotificationSchema = Yup.object().shape({
 });
 export const ArticleTypeSchema = Yup.object().shape({
   name: Yup.string().min(1, 'validation.required_enter_article_type').required('validation.required_enter_article_type'),
+});
+
+export const NewFieldContract = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_field_name').required('validation.required_enter_field_name'),
+  type: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_field_type', function (value) {
+    return value !== '0';
+  }),
 });

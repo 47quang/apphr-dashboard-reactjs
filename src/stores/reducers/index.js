@@ -19,6 +19,7 @@ import allowanceReducer from './allowance';
 import articleReducer from './article';
 import articleTypeReducer from './articleType';
 import historyWorkReducer from './historyWork';
+import rollUpReducer from './rollUp';
 
 export default combineReducers({
   style: styleReducer,
@@ -41,4 +42,5 @@ export default combineReducers({
   article: articleReducer,
   articleType: articleTypeReducer,
   historyWork: historyWorkReducer,
+  rollUp: rollUpReducer,
 });
