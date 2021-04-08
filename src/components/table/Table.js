@@ -42,6 +42,7 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import RollUpInfo from '../dialog/RollUpInfo';
 
 /*
   Params:
@@ -133,25 +134,6 @@ const Label = (props) => {
     </TableHeaderRow.Title>
   );
 };
-const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
-  // console.log('value', value);
-  // console.log('row', row);
-  //console.log('column', column);
-  // console.log('children', children);
-  const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  return (
-    <Table.Cell
-      className={classNames(className)}
-      {...restProps}
-      onClick={(e) => console.log(row.id, column.name)}
-      value={value}
-      row={row}
-      column={column}
-      children={children}
-      role={dateCol.includes(column.name) ? 'button' : 'layout'}
-    ></Table.Cell>
-  );
-};
 
 const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum }) => {
   const [openWarning, setOpenWarning] = useState(false);
@@ -240,7 +222,6 @@ const QTable = (props) => {
     disableDelete,
     disableEdit,
     disableEditColum,
-    headerDateCols,
   } = props;
   const exporterRef = useRef(null);
 
@@ -250,7 +231,6 @@ const QTable = (props) => {
 
   const [defaultHiddenColumnNames] = useState([]);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
-  let headerDateColumns = Array.isArray(headerDateCols) ? headerDateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
 
@@ -309,6 +289,46 @@ const QTable = (props) => {
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
+
+  const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+    // console.log('value', value);
+    // console.log('row', row);
+    //console.log('column', column);
+    // console.log('children', children);
+    const [cell, setCell] = useState({
+      rowId: '',
+      columnName: '',
+      isOpen: false,
+    });
+
+    const handleClose = () => {
+      setCell({ ...cell, isOpen: false });
+    };
+    const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+    return (
+      <>
+        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} />
+        <Table.Cell
+          className={classNames(className)}
+          {...restProps}
+          onClick={(e) => {
+            setCell((prevState) => ({
+              ...prevState,
+              rowId: row.id,
+              columnName: column.name,
+              isOpen: true,
+            }));
+          }}
+          value={value}
+          row={row}
+          column={column}
+          children={children}
+          role={dateCol.includes(column.name) ? 'button' : 'layout'}
+        />
+      </>
+    );
+  };
 
   return (
     <div>

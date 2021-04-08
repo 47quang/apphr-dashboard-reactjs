@@ -25,6 +25,8 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "roll_up": "Điểm danh",
+    "reset_roll_up": "Hoàn tác",
     "field_label": "Nhãn của trường",
     "field_type": "Loại",
     "field_name": "Tên trường",
