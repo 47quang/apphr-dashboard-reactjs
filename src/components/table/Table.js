@@ -23,11 +23,14 @@ import {
   TableHeaderRow,
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
+import { Button } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
+
+import { isArray } from '@material-ui/data-grid';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -68,6 +71,9 @@ const styles = (theme) => ({
     float: 'left',
     display: 'inline-flex',
   },
+  MuiTableCell: {
+    padding: 'none',
+  },
 });
 
 const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
@@ -80,6 +86,7 @@ const ToolbarRootBase = ({ classes, className, ...restProps }) => (
   <Toolbar.Root className={classNames(className, classes.customToolbar)} {...restProps} />
 );
 const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
+
 const filteringColumnExtensions = [
   {
     columnName: 'saleDate',
@@ -110,8 +117,43 @@ const AddRowPanel = ({ route, disableCreate }) => {
     </Plugin>
   );
 };
+const Label = (props) => {
+  return (
+    <TableHeaderRow.Title className="p-0 m-0">
+      {Array.isArray(props.children) ? (
+        <div>
+          <p className="p-0 m-0">{props.children[0]}</p>
+          <p className="p-0 m-0  d-flex justify-content-center">{props.children[1]}</p>
+        </div>
+      ) : (
+        <div className="p-0 m-0">
+          <p className="p-0 m-0">{props.children}</p>
+        </div>
+      )}
+    </TableHeaderRow.Title>
+  );
+};
+const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+  // console.log('value', value);
+  // console.log('row', row);
+  //console.log('column', column);
+  // console.log('children', children);
+  const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  return (
+    <Table.Cell
+      className={classNames(className)}
+      {...restProps}
+      onClick={(e) => console.log(row.id, column.name)}
+      value={value}
+      row={row}
+      column={column}
+      children={children}
+      role={dateCol.includes(column.name) ? 'button' : 'layout'}
+    ></Table.Cell>
+  );
+};
 
-const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit }) => {
+const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const handleConfirm = (e) => {
@@ -141,14 +183,17 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
             {
               key: 'behavior' + route,
               type: 'behavior',
-              width: !disableEdit ? '10%' : '0%',
+              width: !disableEditColum ? '10%' : '0%',
               align: 'center',
             },
           ]);
           return tableColumns;
         }}
       />
-      <Template name="tableCell" predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE}>
+      <Template
+        name="tableCell"
+        predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE && !disableEditColum}
+      >
         {(params) => {
           return (
             <TemplateConnector>
@@ -194,6 +239,8 @@ const QTable = (props) => {
     disableCreate,
     disableDelete,
     disableEdit,
+    disableEditColum,
+    headerDateCols,
   } = props;
   const exporterRef = useRef(null);
 
@@ -203,6 +250,7 @@ const QTable = (props) => {
 
   const [defaultHiddenColumnNames] = useState([]);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
+  let headerDateColumns = Array.isArray(headerDateCols) ? headerDateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
 
@@ -266,7 +314,7 @@ const QTable = (props) => {
     <div>
       <Paper>
         <div className="m-auto">
-          <div className="rounded p-4 container col-md-12">
+          <div className="rounded container col-md-12 pt-4 m-2">
             <Formik enableReinitialize initialValues={filterValues}>
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                 <form autoComplete="off">
@@ -355,16 +403,23 @@ const QTable = (props) => {
           />
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <DragDropProvider />
-          <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
+          <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={CustomTableCell} />
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          <TableHeaderRow showSortingControls />
+          <TableHeaderRow showSortingControls titleComponent={Label} className="m-0 p-0" />
           <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
           <Toolbar rootComponent={ToolbarRoot} />
           <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} />
           <ColumnChooser />
           <TableFixedColumns />
-          <CustomTableEditColumn t={t} route={route} deleteRow={deleteRow} disableDelete={disableDelete} disableEdit={disableEdit} />
+          <CustomTableEditColumn
+            t={t}
+            route={route}
+            deleteRow={deleteRow}
+            disableDelete={disableDelete}
+            disableEdit={disableEdit}
+            disableEditColum={disableEditColum}
+          />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>
