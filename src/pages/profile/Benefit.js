@@ -47,7 +47,7 @@ const Benefit = ({ t, history, match }) => {
     if (form.id) {
       form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
       form.expiredDate = form.expiredDate === '' ? null : form.expiredDate;
-      api.wageHistory
+      await api.wageHistory
         .put(form)
         .then(({ payload }) => {
           dispatch({
@@ -87,8 +87,8 @@ const Benefit = ({ t, history, match }) => {
     }
   }
 
-  async function removeWageHistory(wageHistoryId) {
-    await dispatch(deleteWageHistory(wageHistoryId, t('message.successful_delete')));
+  function removeWageHistory(wageHistoryId, handleRemove) {
+    dispatch(deleteWageHistory(wageHistoryId, handleRemove, t('message.successful_delete')));
   }
   const BodyItem = ({ values, handleChange, handleBlur, touched, errors, index, setFieldValue, validateForm, setFieldTouched, setTouched }) => {
     const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
@@ -103,6 +103,10 @@ const Benefit = ({ t, history, match }) => {
         <FieldArray
           name={`wageHistories`}
           render={({ insert, remove, push, replace, unshift }) => {
+            const handleRemove = () => {
+              handleCloseDeleteAlert();
+              remove(deleteWageHistoryIndex);
+            };
             return (
               <div>
                 <div className="d-flex justify-content-center mb-4">
@@ -316,10 +320,7 @@ const Benefit = ({ t, history, match }) => {
                             }}
                             handleConfirm={async (e) => {
                               console.log(deleteWageHistoryId);
-                              await removeWageHistory(deleteWageHistoryId).then(() => {
-                                handleCloseDeleteAlert();
-                                remove(deleteWageHistoryIndex);
-                              });
+                              removeWageHistory(deleteWageHistoryId, handleRemove);
                             }}
                           />
                           {renderButtons(

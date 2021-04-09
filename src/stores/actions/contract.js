@@ -226,12 +226,12 @@ export const addField = (params, success_msg) => {
       });
   };
 };
-export const deleteWageHistory = (id, success_msg, handleAfterSuccess) => {
+export const deleteWageHistory = (id, handleAfterSuccess, success_msg) => {
   return (dispatch, getState) => {
     api.wageHistory
       .delete(id)
       .then(({ payload }) => {
-        //handleAfterSuccess();
+        handleAfterSuccess();
         // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

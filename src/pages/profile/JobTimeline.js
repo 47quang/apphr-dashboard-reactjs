@@ -3,7 +3,7 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { FieldArray, Formik } from 'formik';
+import { FieldArray, Formik, getIn } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
@@ -353,11 +353,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       inputType={attribute.type}
                       inputClassName={'form-control'}
                       isRequiredField
-                      isTouched={touched?.attributes && touched.attributes[attributeIdx]?.value}
-                      isError={
-                        errors?.attributes && errors.attributes[attributeIdx]?.value && touched?.attributes && touched.attributes[attributeIdx]?.value
-                      }
-                      errorMessage={t(errors?.attributes && errors.attributes[attributeIdx]?.value)}
+                      isTouched={getIn(touched, `attributes.${attributeIdx}.value`)}
+                      isError={getIn(errors, `attributes.${attributeIdx}.value`) && getIn(touched, `attributes.${attributeIdx}.value`)}
+                      errorMessage={t(getIn(errors, `attributes.${attributeIdx}.value`))}
                     />
                   ) : (
                     <CommonMultipleTextInput
@@ -494,16 +492,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           selectClassName={'form-control'}
                           placeholder={t('placeholder.select_allowance_type')}
                           isRequiredField
-                          isTouched={touched && touched?.allowance && touched?.allowances[allowanceIdx]?.id}
-                          isError={
-                            errors &&
-                            errors?.allowances &&
-                            errors?.allowances[allowanceIdx]?.id &&
-                            touched &&
-                            touched?.allowances &&
-                            touched?.allowances[allowanceIdx]?.id
-                          }
-                          errorMessage={t(errors && errors?.allowances && errors?.allowances[allowanceIdx]?.id)}
+                          isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
+                          isError={getIn(errors, `allowances.${allowanceIdx}.id`) && getIn(touched, `allowances.${allowanceIdx}.id`)}
+                          errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
                           lstSelectOptions={allowances}
                         />
                         <CommonTextInput
@@ -517,16 +508,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           inputClassName={'form-control'}
                           placeholder={t('placeholder.pension')}
                           isDisable
-                          isTouched={touched && touched?.allowances && touched?.allowances[allowanceIdx]?.amount}
-                          isError={
-                            errors &&
-                            errors?.allowances &&
-                            errors?.allowances[allowanceIdx]?.amount &&
-                            touched &&
-                            touched?.allowances &&
-                            touched?.allowances[allowanceIdx]?.amount
-                          }
-                          errorMessage={t(errors && errors?.allowances && errors?.allowances[allowanceIdx]?.amount)}
                         />
 
                         <div className="form-group d-flex align-items-end">
