@@ -19,7 +19,7 @@ const UpdateNotification = ({ t, location, history, match }) => {
     let form = values;
     // Call API CREATE
     form.typeId = parseInt(form.typeId);
-    dispatch(updateArticle(form, history, t('message.successful_create')));
+    dispatch(updateArticle(form, t('message.successful_update')));
   };
   const buttons = [
     {

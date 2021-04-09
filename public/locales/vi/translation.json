@@ -319,6 +319,8 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "min_length_phone_number": "Số điện thoại tối thiểu 8 chữ số",
+    "max_length_phone_number": "Số điện thoại tối đa 13 chữ số",
     "expired_date_must_be_greater_than_handle_date": "Ngày hết hạn phải lớn hơn ngày ký",
     "expired_date_must_be_greater_than_valid_date": "Ngày hết hạn phải lớn hơn ngày có hiệu lực",
     "expired_date_must_be_greater_than_start_work": "Ngày hết hạn phải lớn hơn ngày bắt đầu làm việc",

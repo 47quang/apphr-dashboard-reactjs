@@ -22,7 +22,7 @@ import {
   fetchBranches,
   fetchContracts,
   fetchWagesByType,
-  setEmptyContract,
+  setEmptyContracts,
   updateContract,
 } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
@@ -88,7 +88,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   useEffect(() => {
-    dispatch(setEmptyContract());
+    dispatch(setEmptyContracts());
     dispatch(fetchContracts({ profileId: +profileId }));
     dispatch(fetchBranches());
     dispatch(fetchAllowances());

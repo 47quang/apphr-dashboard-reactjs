@@ -17,25 +17,25 @@ export const fetchContracts = (params) => {
                 contract['paymentType'] = contract?.wage?.type;
                 contract['wageId'] = contract?.wage?.id;
                 contract['amount'] = contract?.wage?.amount;
-                contract['benefits'] = await api.wageHistory.getAll({ contractId: contract.id }).then(({ payload }) => {
-                  payload = payload.map(async (p) => {
-                    p.startDate = getDateInput(p.startDate);
-                    p.expiredDate = getDateInput(p.expiredDate);
-                    p.wages = await api.wage.getAll({ type: p?.wage?.type }).then(({ payload }) => payload);
-                    return p;
-                  });
-                  return payload;
-                });
-                contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
-                contract['wages'] = await Promise.all(contract['wages']);
-                contract['benefits'] = await Promise.all(contract['benefits']);
+                contract['wageHistories'] =
+                  contract.wageHistories && contract.wageHistories.length > 0
+                    ? contract.wageHistories.map(async (wage) => {
+                        wage.type = wage.wage.type;
+                        wage.amount = wage.wage.amount;
+                        wage.startDate = getDateInput(wage.startDate);
+                        wage.expiredDate = getDateInput(wage.expiredDate);
+                        wage.wages = await api.wage.getAll({ type: wage?.wage?.type }).then(({ payload }) => payload);
+                        return wage;
+                      })
+                    : [];
+                contract['wageHistories'] = await Promise.all(contract['wageHistories']);
                 return contract;
               })
             : [];
         payload = await Promise.all(payload);
 
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        console.log('payload', payload);
+        console.log('fetchContracts', payload);
       })
       .catch((err) => {
         console.log(err);
@@ -205,7 +205,7 @@ export const createWageHistory = (params, success_msg) => {
       });
   };
 };
-export const setEmptyContract = () => {
+export const setEmptyContracts = () => {
   return {
     type: REDUX_STATE.contract.EMPTY_VALUE,
     payload: [],
@@ -223,6 +223,20 @@ export const addField = (params, success_msg) => {
       .catch((err) => {
         console.log(err);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+      });
+  };
+};
+export const deleteWageHistory = (id, success_msg, handleAfterSuccess) => {
+  return (dispatch, getState) => {
+    api.wageHistory
+      .delete(id)
+      .then(({ payload }) => {
+        //handleAfterSuccess();
+        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 };
