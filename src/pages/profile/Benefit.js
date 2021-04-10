@@ -139,7 +139,7 @@ const Benefit = ({ t, history, match }) => {
                         className="shadow bg-white border border-secondary rounded m-4 p-4"
                       >
                         <>
-                          <h5 className="px-3">{t('label.payroll')}</h5>
+                          <h5>{t('label.payroll')}</h5>
                           <div style={{ fontSize: 14 }}>{'Từ ' + benefit.startDate + ' đến ' + benefit.expiredDate}</div>
                           <hr className="mt-1" />
                           <div className="row">

@@ -570,17 +570,17 @@ const JobTimelineInfo = ({ t, history, match }) => {
   };
   return (
     <CContainer fluid className="c-main">
-      <div className="d-flex justify-content-center mb-4">
+      <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
         <button
           type="button"
-          className="btn btn-success"
+          className="btn btn-success rounded-circle p-3"
           id="addBtn"
           onClick={() => {
             document.getElementById('newContract').hidden = false;
             document.getElementById('addBtn').disabled = true;
           }}
         >
-          <Add /> {t('label.add')}
+          <Add fontSize="large" />
         </button>
       </div>
       <div className="m-auto">
