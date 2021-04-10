@@ -8,7 +8,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-xl-10">
+        <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik
             innerRef={allowanceRef}
             enableReinitialize
@@ -22,7 +22,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.code}
                     onBlur={handleBlur('code')}
                     onChange={handleChange('code')}
@@ -34,7 +34,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
                     isDisable={true}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -51,7 +51,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
                 </div>
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.amount}
                     onBlur={handleBlur('amount')}
                     onChange={handleChange('amount')}

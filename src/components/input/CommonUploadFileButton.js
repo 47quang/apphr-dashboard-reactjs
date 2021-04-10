@@ -1,4 +1,4 @@
-import { HighlightOff } from '@material-ui/icons';
+import { AttachFile, Attachment, HighlightOff } from '@material-ui/icons';
 import { FieldArray } from 'formik';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +31,7 @@ const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassNa
               uploadFileRef.current.click();
             }}
           >
-            {t('label.upload_file')}
+            <Attachment /> {t('label.upload_file')}
           </button>
 
           <input

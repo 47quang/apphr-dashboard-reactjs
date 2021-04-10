@@ -144,21 +144,21 @@ const CertificateInfo = ({ t, match }) => {
   };
   return (
     <CContainer fluid className="c-main">
+      <div className="fixed-bottom fixed-right">
+        <button
+          type="button"
+          className="btn btn-success"
+          id="addBtn"
+          onClick={() => {
+            document.getElementById('newCertificate').hidden = false;
+            document.getElementById('addBtn').disabled = true;
+          }}
+        >
+          <Add /> {t('label.add')}
+        </button>
+      </div>
       <div className="m-auto">
         <div>
-          <div className="d-flex justify-content-center mb-4">
-            <button
-              type="button"
-              className="btn btn-success"
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newCertificate').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add /> {t('label.add')}
-            </button>
-          </div>
           <Formik
             innerRef={newCertificateRef}
             initialValues={newCertificate}

@@ -93,7 +93,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_branch_name'),
-  ipRouter: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.IP_V4_ADDRESS), 'validation.enter_valid_ip_v4_address'),
+  bssid: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address'),
   address: Yup.string(),
   typeCC: Yup.string()
     .required('Bắt buộc chọn hình thức điểm danh')
@@ -173,23 +173,33 @@ export const NewContractSchema = Yup.object().shape({
     })
     .required('validation.required_select_contract_type'),
   typeTax: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return ['un_limitation', 'limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_type_tax'),
+    })
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
       return value !== '0';
-    })
-    .required('validation.required_select_contract_type_tax'),
-  typeWork: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_work', function (value) {
-      return value !== '0';
-    })
-    .required('validation.required_select_contract_type_work'),
+    }),
   probTime: Yup.number()
     .positive('validation.required_positive_prob_time')
     .integer('validation.required_integer_prob_time')
     .required('validation.required_enter_prob_time'),
+  probPayRates: Yup.number()
+    .positive('validation.required_positive_prob_pay_rates')
+    .integer('validation.required_integer_prob_pay_rates')
+    .required('validation.required_enter_prob_pay_rates'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
   expiredDate: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return value === 'limitation';
+      },
+      then: Yup.string().required('validation.required_select_contract_expired_date'),
+    })
     .test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
       const { handleDate } = this.parent;
       return isBeforeTypeDate(handleDate, value);
@@ -201,18 +211,36 @@ export const NewContractSchema = Yup.object().shape({
     .test('end_time_test', 'validation.expired_date_must_be_greater_than_start_work', function (value) {
       const { startWork } = this.parent;
       return isBeforeTypeDate(startWork, value);
-    })
-    .required('validation.required_select_contract_expired_date'),
+    }),
   paymentType: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
       return value !== '0';
     })
-    .required('validation.required_select_contract_payment'),
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_payment'),
+    }),
   wageId: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
       return value !== '0';
     })
-    .required('validation.required_select_contract_wage'),
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_wage'),
+    }),
+  probPay: Yup.number()
+    .positive('validation.required_positive_prob_pay')
+    .integer('validation.required_integer_prob_pay')
+    .when('type', {
+      is: (value) => {
+        return value === 'season';
+      },
+      then: Yup.number().required('validation.required_enter_prob_pay'),
+    }),
   allowances: Yup.array().of(
     Yup.object().shape({
       id: Yup.string()
@@ -223,6 +251,7 @@ export const NewContractSchema = Yup.object().shape({
     }),
   ),
 });
+
 export const JobTimelineSchema = Yup.object().shape({
   contractInfo: Yup.array().of(
     Yup.object().shape({
