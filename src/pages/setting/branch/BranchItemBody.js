@@ -77,17 +77,17 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-6'}
-                    value={values.ipRouter}
-                    onBlur={handleBlur('ipRouter')}
-                    onChange={handleChange('ipRouter')}
-                    inputID={'ipRouter'}
+                    value={values.bssid}
+                    onBlur={handleBlur('bssid')}
+                    onChange={handleChange('bssid')}
+                    inputID={'bssid'}
                     labelText={t('label.branch_ip_router')}
                     inputType={'text'}
                     placeholder={t('placeholder.enter_branch_ip_router')}
                     inputClassName={'form-control'}
-                    isTouched={touched.ipRouter}
-                    isError={errors.ipRouter && touched.ipRouter}
-                    errorMessage={t(errors.ipRouter)}
+                    isTouched={touched.bssid}
+                    isError={errors.bssid && touched.bssid}
+                    errorMessage={t(errors.bssid)}
                   />
                 </div>
 

@@ -3,15 +3,15 @@ import { Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { FieldArray, Formik } from 'formik';
-import { useEffect } from 'react';
+import { FieldArray, Formik, getIn } from 'formik';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
-import AutoSubmitToken from 'src/components/form/AutoSubmitToken';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import { JobTimelineSchema } from 'src/schema/formSchema';
-import { createWageHistory, fetchAllowances, fetchContracts } from 'src/stores/actions/contract';
+import { BenefitsSchema } from 'src/schema/formSchema';
+import { deleteWageHistory, fetchAllowances, fetchContracts, setEmptyContracts } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
@@ -19,48 +19,9 @@ import { renderButtons } from 'src/utils/formUtils';
 const Benefit = ({ t, history, match }) => {
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
-  // let wages = useSelector((state) => state.contract.wages);
-  // let benefits = useSelector((state) => state.contract.benefits);
-  // let _contracts = [
-  //   {
-  //     id: 1,
-  //     code: 'HD001',
-  //     fullname: 'Hợp đồng lao động ',
-  //     handleDate: '2021-01-10',
-  //     expiredDate: '2022-01-10',
-  //     newBenefit: {
-  //       paymentType: '',
-  //       wageId: '',
-  //       allowances: [],
-  //       allowanceIds: [],
-  //       startDate: '2021-01-01',
-  //       expiredDate: '2021-12-12',
-  //     },
-  //     benefits: [
-  //       {
-  //         id: 1,
-  //         wageId: 1,
-  //         allowanceIds: [1, 2, 3],
-  //         allowances: [],
-  //         startDate: '2021-01-01',
-  //         expiredDate: '2021-12-12',
-  //       },
-  //       {
-  //         id: 2,
-  //         wageId: 2,
-  //         allowanceIds: [1, 2, 3],
-  //         allowances: [],
-  //         startDate: '2021-01-01',
-  //         expiredDate: '2021-12-12',
-  //       },
-  //     ],
-  //     files: [],
-  //   },
-  // ];
 
   const benefitTab = {
     contracts: useSelector((state) => state.contract.contracts),
-    // contracts: _contracts,
   };
 
   const allowances = useSelector((state) => state.contract.allowances);
@@ -71,9 +32,9 @@ const Benefit = ({ t, history, match }) => {
     { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
   useEffect(() => {
+    dispatch(setEmptyContracts());
     dispatch(fetchAllowances());
     dispatch(fetchContracts({ profileId: +profileId }));
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,823 +45,453 @@ const Benefit = ({ t, history, match }) => {
     form.wageId = parseInt(form.wageId);
 
     if (form.id) {
-      // await dispatch(updateContract(form, t('message.successful_update')));
+      form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
+      form.expiredDate = form.expiredDate === '' ? null : form.expiredDate;
+      await api.wageHistory
+        .put(form)
+        .then(({ payload }) => {
+          dispatch({
+            type: REDUX_STATE.notification.SET_NOTI,
+            payload: { open: true, type: 'success', message: t('message.successful_update') },
+          });
+          return payload;
+        })
+        .catch((err) => {
+          dispatch({
+            type: REDUX_STATE.notification.SET_NOTI,
+            payload: { open: true, type: 'error', message: err },
+          });
+        });
+      return;
     } else {
       delete form.id;
       delete form.wage;
       delete form.wages;
-      await dispatch(createWageHistory(form, t('message.successful_create')));
+      form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
+      let newWage = await api.wageHistory
+        .post(form)
+        .then(({ payload }) => {
+          dispatch({
+            type: REDUX_STATE.notification.SET_NOTI,
+            payload: { open: true, type: 'success', message: t('message.successful_create') },
+          });
+          return payload;
+        })
+        .catch((err) => {
+          dispatch({
+            type: REDUX_STATE.notification.SET_NOTI,
+            payload: { open: true, type: 'error', message: err },
+          });
+        });
+      return newWage.id;
     }
   }
 
-  // async function removeBenefit(contractId) {
-  //   // await dispatch(deleteContract(contractId, t('message.successful_delete')));
-  // }
+  function removeWageHistory(wageHistoryId, handleRemove) {
+    dispatch(deleteWageHistory(wageHistoryId, handleRemove, t('message.successful_delete')));
+  }
+  const BodyItem = ({ values, handleChange, handleBlur, touched, errors, index, setFieldValue, validateForm, setFieldTouched, setTouched }) => {
+    const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+    const [deleteWageHistoryId, setDeleteWageHistoryId] = useState();
+    const [deleteWageHistoryIndex, setDeleteWageHistoryIndex] = useState();
 
+    const handleCloseDeleteAlert = () => {
+      setIsVisibleDeleteAlert(false);
+    };
+    return (
+      <>
+        <FieldArray
+          name={`wageHistories`}
+          render={({ insert, remove, push, replace, unshift }) => {
+            const handleRemove = () => {
+              handleCloseDeleteAlert();
+              remove(deleteWageHistoryIndex);
+            };
+            return (
+              <div>
+                <div className="d-flex justify-content-center mb-4">
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    id={`addBtn${index}`}
+                    onClick={() => {
+                      insert(0, {
+                        id: '',
+                        wageId: '',
+                        allowanceIds: [],
+                        allowances: [],
+                        startDate: '',
+                        expiredDate: '',
+                      });
+                      document.getElementById(`addBtn${index}`).disabled = true;
+                    }}
+                  >
+                    <Add /> {t('label.add')}
+                  </button>
+                </div>
+
+                {values.wageHistories && values.wageHistories.length > 0 ? (
+                  values.wageHistories.map((benefit, benefitIndex) => {
+                    return (
+                      <div
+                        key={'benefit:' + benefitIndex}
+                        id={values.id + benefitIndex}
+                        className="shadow bg-white border border-secondary rounded m-4 p-4"
+                      >
+                        <>
+                          <h5>{t('label.payroll')}</h5>
+                          <div style={{ fontSize: 14 }}>{'Từ ' + benefit.startDate + ' đến ' + benefit.expiredDate}</div>
+                          <hr className="mt-1" />
+                          <div className="row">
+                            <CommonSelectInput
+                              containerClassName={'form-group col-lg-4'}
+                              value={benefit?.type ?? ''}
+                              onBlur={handleBlur(`wageHistories.${benefitIndex}.type`)}
+                              onChange={async (e) => {
+                                handleChange(`wageHistories.${benefitIndex}.type`)(e);
+                                if (e.target.value !== '0') {
+                                  let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                                  setFieldValue(`wageHistories.${benefitIndex}.wages`, wages);
+                                } else setFieldValue(`wageHistories.${benefitIndex}.wages`, []);
+                                setFieldValue(`wageHistories.${benefitIndex}.wageId`, 0);
+                                setFieldValue(`wageHistories.${benefitIndex}.amount`, 0);
+                              }}
+                              inputID={`wageHistories.${benefitIndex}.type`}
+                              labelText={t('label.payment_method')}
+                              selectClassName={'form-control'}
+                              placeholder={t('placeholder.select_contract_payment_method')}
+                              isRequiredField
+                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.type`)}
+                              isError={getIn(errors, `wageHistories.${benefitIndex}.type`) && getIn(touched, `wageHistories.${benefitIndex}.type`)}
+                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.type`))}
+                              lstSelectOptions={paymentType}
+                            />
+                            <CommonSelectInput
+                              containerClassName={'form-group col-lg-4'}
+                              value={benefit?.wageId ?? ''}
+                              onBlur={handleBlur(`wageHistories.${benefitIndex}.wageId`)}
+                              onChange={(e) => {
+                                let thisWage = benefit.wages.filter((s) => s.id === parseInt(e.target.value));
+                                thisWage.length > 0
+                                  ? setFieldValue(`wageHistories.${benefitIndex}.amount`, thisWage[0].amount)
+                                  : setFieldValue(`wageHistories.${benefitIndex}.amount`, 0);
+                                handleChange(`wageHistories.${benefitIndex}.wageId`)(e);
+                              }}
+                              inputID={`wageHistories.${benefitIndex}.wageId`}
+                              labelText={t('label.salary_group')}
+                              selectClassName={'form-control'}
+                              placeholder={t('placeholder.select_contract_payment_method')}
+                              isRequiredField
+                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.wageId`)}
+                              isError={
+                                getIn(errors, `wageHistories.${benefitIndex}.wageId`) && getIn(touched, `wageHistories.${benefitIndex}.wageId`)
+                              }
+                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.wageId`))}
+                              lstSelectOptions={benefit.wages}
+                            />
+                            <CommonTextInput
+                              containerClassName={'form-group col-lg-4'}
+                              value={benefit?.amount ?? ''}
+                              onBlur={handleBlur(`wageHistories.${benefitIndex}.wage.amount`)}
+                              onChange={handleChange(`wageHistories.${benefitIndex}.wage.amount`)}
+                              inputID={`wageHistories.${benefitIndex}.wage.amount`}
+                              labelText={t('label.salary_level')}
+                              inputType={'number'}
+                              inputClassName={'form-control'}
+                              placeholder={t('placeholder.enter_salary_level')}
+                              isDisable
+                            />
+                          </div>
+                          <div className="row">
+                            <CommonTextInput
+                              containerClassName={'form-group col-lg-4'}
+                              value={benefit?.startDate ?? ''}
+                              onBlur={handleBlur(`wageHistories.${benefitIndex}.startDate`)}
+                              onChange={handleChange(`wageHistories.${benefitIndex}.startDate`)}
+                              inputID={`wageHistories.${benefitIndex}.startDate`}
+                              labelText={t('label.signature_date')}
+                              inputType={'date'}
+                              inputClassName={'form-control'}
+                              isRequiredField
+                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.startDate`)}
+                              isError={
+                                getIn(errors, `wageHistories.${benefitIndex}.startDate`) && getIn(touched, `wageHistories.${benefitIndex}.startDate`)
+                              }
+                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.startDate`))}
+                            />
+                            <CommonTextInput
+                              containerClassName={'form-group col-lg-4'}
+                              value={benefit?.expiredDate ?? ''}
+                              onBlur={handleBlur(`wageHistories.${benefitIndex}.expiredDate`)}
+                              onChange={handleChange(`wageHistories.${benefitIndex}.expiredDate`)}
+                              inputID={`wageHistories.${benefitIndex}.expiredDate`}
+                              labelText={t('label.expiration_date')}
+                              inputType={'date'}
+                              inputClassName={'form-control'}
+                              isRequiredField
+                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.expiredDate`)}
+                              isError={
+                                getIn(errors, `wageHistories.${benefitIndex}.expiredDate`) &&
+                                getIn(touched, `wageHistories.${benefitIndex}.expiredDate`)
+                              }
+                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.expiredDate`))}
+                            />
+                          </div>
+                          <h5 className="px-3">{t('label.allowance')}</h5>
+                          <hr className="mt-2" />
+                          <FieldArray
+                            name={`wageHistories.${benefitIndex}.allowances`}
+                            render={({ insert, remove, push, replace }) => (
+                              <div>
+                                {benefit.allowances &&
+                                  benefit.allowances.length > 0 &&
+                                  benefit.allowances.map((allowance, allowanceIdx) => {
+                                    return (
+                                      <div key={`allowance${allowanceIdx}`}>
+                                        <div className="row">
+                                          <CommonSelectInput
+                                            containerClassName={'form-group col-lg-4'}
+                                            value={allowance?.id ?? ''}
+                                            onBlur={handleBlur(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)}
+                                            onChange={(e) => {
+                                              let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
+                                              if (thisSubsidizes && thisSubsidizes.length > 0)
+                                                setFieldValue(
+                                                  `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`,
+                                                  thisSubsidizes[0].amount,
+                                                );
+                                              handleChange(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)(e);
+                                            }}
+                                            inputID={`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`}
+                                            labelText={t('label.allowance')}
+                                            selectClassName={'form-control'}
+                                            placeholder={t('placeholder.select_allowance_type')}
+                                            isRequiredField
+                                            isTouched={getIn(touched, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)}
+                                            isError={
+                                              getIn(touched, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`) &&
+                                              getIn(errors, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)
+                                            }
+                                            errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`))}
+                                            lstSelectOptions={allowances}
+                                          />
+                                          <CommonTextInput
+                                            containerClassName={'form-group col-lg-4'}
+                                            value={allowance?.amount ?? ''}
+                                            onBlur={handleBlur(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`)}
+                                            onChange={handleChange(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`)}
+                                            inputID={`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`}
+                                            labelText={t('label.allowance_level')}
+                                            inputType={'number'}
+                                            inputClassName={'form-control'}
+                                            placeholder={t('placeholder.pension')}
+                                            isDisable
+                                          />
+                                          <div className="form-group pt-4 mt-1">
+                                            <DeleteIconButton onClick={() => remove(allowanceIdx)} />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                <div className="d-flex justify-content-start mb-4">
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                      push({ name: '', amount: 0 });
+                                    }}
+                                  >
+                                    <AddCircle /> {t('label.add_allowance')}
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          />
+                          <hr className="mt-1" />
+                          <WarningAlertDialog
+                            isVisible={isVisibleDeleteAlert}
+                            title={t('title.confirm')}
+                            warningMessage={t('message.confirm_delete_academic')}
+                            titleConfirm={t('label.agree')}
+                            titleCancel={t('label.cancel')}
+                            handleCancel={(e) => {
+                              handleCloseDeleteAlert();
+                            }}
+                            handleConfirm={async (e) => {
+                              console.log(deleteWageHistoryId);
+                              removeWageHistory(deleteWageHistoryId, handleRemove);
+                            }}
+                          />
+                          {renderButtons(
+                            benefit.id // Update
+                              ? [
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-4`,
+                                    onClick: async (e) => {
+                                      setIsVisibleDeleteAlert(true);
+                                      setDeleteWageHistoryId(benefit.id);
+                                      setDeleteWageHistoryIndex(benefitIndex);
+                                    },
+                                    name: t('label.delete'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-4`,
+                                    onClick: () => {
+                                      setFieldValue(`wageHistories.${benefitIndex}`, benefitTab.contracts[index]?.wageHistories[benefitIndex]);
+                                    },
+                                    name: t('label.reset'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-4`,
+                                    onClick: async () => {
+                                      let err = await validateForm();
+                                      err.wageHistories = err.wageHistories.map((wage, idx) => {
+                                        return idx === benefitIndex ? wage : undefined;
+                                      });
+
+                                      if (
+                                        err &&
+                                        err.wageHistories && // 👈 null and undefined check
+                                        Object.keys(err.wageHistories).length !== 0 &&
+                                        err.wageHistories.constructor === Array
+                                      )
+                                        setTouched(err);
+                                      else {
+                                        await create(benefit, values.id);
+                                        benefit.expiredDate = benefit.expiredDate ?? '';
+                                        benefitTab.contracts[index].wageHistories[benefitIndex] = benefit;
+                                      }
+                                    },
+                                    name: benefit.id ? t('label.save') : t('label.create_new'),
+                                  },
+                                ]
+                              : [
+                                  //Create
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-4`,
+                                    onClick: async (e) => {
+                                      remove(benefitIndex);
+                                      document.getElementById(`addBtn${index}`).disabled = false;
+                                    },
+                                    name: t('label.delete'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-4`,
+                                    onClick: async () => {
+                                      let err = await validateForm();
+                                      err && err.wageHistories && err.wageHistories.splice(1);
+                                      if (
+                                        err &&
+                                        err.wageHistories && // 👈 null and undefined check
+                                        Object.keys(err.wageHistories).length !== 0 &&
+                                        err.wageHistories.constructor === Array
+                                      )
+                                        setTouched(err);
+                                      else {
+                                        let wages = benefit.wages;
+                                        let newWage = await create(benefit, values.id);
+                                        benefit.id = newWage;
+                                        benefit.wages = wages;
+                                        setFieldValue(`wageHistories.${0}`, benefit);
+                                        document.getElementById(`addBtn${index}`).disabled = true;
+                                      }
+                                    },
+                                    name: t('label.create_new'),
+                                  },
+                                ],
+                          )}
+                        </>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            );
+          }}
+        />
+      </>
+    );
+  };
   return (
     <CContainer fluid className="c-main">
       <div className="m-auto">
         <div>
-          {/* <div className="d-flex justify-content-center mb-4">
-            <button
-              type="button"
-              className="btn btn-success"
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newContract').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add /> {t('label.add')}
-            </button>
-          </div> */}
-          <Formik
-            initialValues={benefitTab}
-            enableReinitialize
-            validationSchema={JobTimelineSchema}
-            onSubmit={(values) => {
-              dispatch({
-                type: REDUX_STATE.contract.SET_BENEFITS,
-                payload: values.benefits,
-              });
-            }}
-          >
-            {({
-              values,
-              handleBlur,
-              handleSubmit,
-              handleChange,
-              errors,
-              touched,
-              setTouched,
-              setFieldTouched,
-              setValues,
-              setFieldValue,
-              validateForm,
-            }) => (
-              <form>
-                <FieldArray
-                  name="contracts"
-                  render={({ insert, remove, push, replace }) => {
+          {benefitTab.contracts && benefitTab.contracts.length > 0 ? (
+            benefitTab.contracts.map((contract, index) => {
+              contract.isMinimize = false;
+              return (
+                <Formik
+                  key={index}
+                  initialValues={contract}
+                  validationSchema={BenefitsSchema}
+                  enableReinitialize
+                  onSubmit={async (values) => {
+                    // await create(values).then(() =>
+                    //   dispatch(
+                    //     fetchContracts({
+                    //       profileId: profileId,
+                    //     }),
+                    //   ),
+                    // );
+                  }}
+                >
+                  {(props) => {
+                    props.index = index;
                     return (
-                      <div>
-                        {values.contracts && values.contracts.length > 0 ? (
-                          values.contracts.map((contract, index) => {
-                            const changeMinimizeButton = () => {
-                              replace(index, {
-                                ...values.contracts[index],
-                                isMinimize: !values.contracts[index].isMinimize,
-                              });
-                            };
-                            return (
-                              <div key={'contract:' + index} className="shadow bg-white rounded m-4 p-4">
-                                <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                                  <div className="pt-1 d-inline" role="button">
-                                    {!values.contracts[index].isMinimize ? (
-                                      <AddBoxOutlinedIcon
-                                        className="pb-1"
-                                        onClick={(e) => {
-                                          changeMinimizeButton();
-                                        }}
-                                      />
-                                    ) : (
-                                      <IndeterminateCheckBoxOutlinedIcon className="pb-1" onClick={(e) => changeMinimizeButton()} />
-                                    )}
-                                  </div>
-                                  <Switch
-                                    checked={values.contracts[index].isOpen}
-                                    name={`contracts.${index}.isOpen`}
-                                    onChange={(e) => {
-                                      setFieldValue(`contracts.${index}.isOpen`, e.target.checked);
-                                    }}
-                                  />
-                                  {values.contracts[index].code + ' - ' + values.contracts[index].fullname}
-                                </div>
-                                <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                                  {'Từ ' + values.contracts[index].handleDate + ' đến ' + values.contracts[index].expiredDate}
-                                </div>
+                      <form className="p-0 m-0">
+                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                          <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                            <div className="pt-1 d-inline" role="button">
+                              {!props.values.isMinimize ? (
+                                <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)} />
+                              ) : (
+                                <IndeterminateCheckBoxOutlinedIcon
+                                  className="pb-1"
+                                  onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+                                />
+                              )}
+                            </div>
+                            <Switch
+                              checked={props.values.isOpen}
+                              name={`isOpen ${index}`}
+                              onChange={(e) => {
+                                props.setFieldValue(`isOpen ${index}`, e.target.checked);
+                              }}
+                            />
+                            {props.values.code + ' - ' + props.values.fullname}
+                          </div>
 
-                                <hr className="mt-1" />
-
-                                {contract.isMinimize && (
-                                  <div>
-                                    {/* <div className="shadow bg-pink rounded m-4 p-4">
-                                      <>
-                                        <h5 className="px-3">{t('label.payroll')}</h5>
-                                        <div style={{ fontSize: 14 }}>
-                                          {'Từ ' + contract[index]?.newBenefit.startDate + ' đến ' + contract[index]?.newBenefit.expiredDate}
-                                        </div>
-                                        <hr className="mt-1" />
-                                        <div className="row">
-                                          <CommonSelectInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={contract[index]?.newBenefit?.paymentType ?? ''}
-                                            onBlur={handleBlur(`contracts.${index}?.newBenefit.paymentType`)}
-                                            onChange={(e) => {
-                                              if (e.target.value !== '0') {
-                                                dispatch(fetchWagesByType({ type: e.target.value }));
-                                                setFieldValue(`contracts.${index}?.newBenefit.amount`, 0);
-                                                handleChange(`contracts.${index}?.newBenefit.paymentType`)(e);
-                                              } else setFieldValue(`contracts.${index}?.newBenefit.wageId`, 0);
-                                            }}
-                                            inputID={`contracts.${index}?.newBenefit.paymentType`}
-                                            labelText={t('label.payment_method')}
-                                            selectClassName={'form-control'}
-                                            placeholder={t('placeholder.select_contract_payment_method')}
-                                            isRequiredField
-                                            isTouched={
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.paymentType
-                                            }
-                                            isError={
-                                              errors &&
-                                              errors.contracts &&
-                                              errors.contracts[index]?.newBenefit &&
-                                              errors.contracts[index]?.newBenefit?.paymentType &&
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.paymentType
-                                            }
-                                            errorMessage={t(
-                                              errors &&
-                                                errors.contracts &&
-                                                errors.contracts[index]?.newBenefit &&
-                                                errors.contracts[index]?.newBenefit?.paymentType,
-                                            )}
-                                            lstSelectOptions={paymentType}
-                                          />
-                                          <CommonSelectInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={contract[index]?.newBenefit?.wageId ?? ''}
-                                            onBlur={handleBlur(`contracts.${index}.newBenefit.wageId`)}
-                                            onChange={(e) => {
-                                              let thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
-                                              setFieldValue(`contracts.${index}.newBenefit.amount`, thisWage[0].amount);
-                                              handleChange(`contracts.${index}.newBenefit.wageId`)(e);
-                                            }}
-                                            inputID={`contracts.${index}.newBenefit.wageId`}
-                                            labelText={t('label.salary_group')}
-                                            selectClassName={'form-control'}
-                                            placeholder={t('placeholder.select_contract_payment_method')}
-                                            isRequiredField
-                                            isTouched={
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.wageId
-                                            }
-                                            isError={
-                                              errors &&
-                                              errors.contracts &&
-                                              errors.contracts[index]?.newBenefit &&
-                                              errors.contracts[index]?.newBenefit?.wageId &&
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.wageId
-                                            }
-                                            errorMessage={t(
-                                              errors &&
-                                                errors.contracts &&
-                                                errors.contracts[index].benefits &&
-                                                errors.contracts[index].benefits?.wageId,
-                                            )}
-                                            lstSelectOptions={wages}
-                                          />
-                                          <CommonTextInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={values.contracts[index]?.newBenefit?.amount ?? ''}
-                                            onBlur={handleBlur(`contracts.${index}.newBenefit.amount`)}
-                                            onChange={handleChange(`contracts.${index}.newBenefit.amount`)}
-                                            inputID={`contracts.${index}.newBenefit.amount`}
-                                            labelText={t('label.salary_level')}
-                                            inputType={'number'}
-                                            inputClassName={'form-control'}
-                                            placeholder={t('placeholder.enter_salary_level')}
-                                            isDisable
-                                          />
-                                        </div>
-                                        <div className="row">
-                                          <CommonTextInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={values.contracts[index]?.newBenefit?.startDate ?? ''}
-                                            onBlur={handleBlur(`contracts.${index}.newBenefit.startDate`)}
-                                            onChange={handleChange(`contracts.${index}.newBenefit.startDate`)}
-                                            inputID={`contracts.${index}.newBenefit.startDate`}
-                                            labelText={t('label.signature_date')}
-                                            inputType={'date'}
-                                            inputClassName={'form-control'}
-                                            isRequiredField
-                                            isTouched={
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.startDate
-                                            }
-                                            isError={
-                                              errors &&
-                                              errors.contracts &&
-                                              errors.contracts[index].benefits &&
-                                              errors.contracts[index].newBenefit?.startDate &&
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.startDate
-                                            }
-                                            errorMessage={t(
-                                              errors &&
-                                                errors.contracts &&
-                                                errors.contracts[index]?.newBenefit &&
-                                                errors.contracts[index]?.newBenefit?.startDate,
-                                            )}
-                                          />
-                                          <CommonTextInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={values.contracts[index].newBenefit?.expiredDate ?? ''}
-                                            onBlur={handleBlur(`contracts.${index}.newBenefit.expiredDate`)}
-                                            onChange={handleChange(`contracts.${index}.newBenefit.expiredDate`)}
-                                            inputID={`contracts.${index}.newBenefit.expiredDate`}
-                                            labelText={t('label.effective_date')}
-                                            inputType={'date'}
-                                            inputClassName={'form-control'}
-                                            isRequiredField
-                                            isTouched={
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.expiredDate
-                                            }
-                                            isError={
-                                              errors &&
-                                              errors.contracts &&
-                                              errors.contracts[index]?.newBenefit &&
-                                              errors.contracts[index]?.newBenefit?.expiredDate &&
-                                              touched &&
-                                              touched.contracts &&
-                                              touched.contracts[index]?.newBenefit &&
-                                              touched.contracts[index]?.newBenefit?.expiredDate
-                                            }
-                                            errorMessage={t(
-                                              errors &&
-                                                errors.contracts &&
-                                                errors.contracts[index]?.newBenefit &&
-                                                errors.contracts[index]?.newBenefit?.expiredDate,
-                                            )}
-                                          />
-                                        </div>
-                                        <h5 className="px-3">{t('label.allowance')}</h5>
-                                        <hr className="mt-2" />
-                                        <FieldArray
-                                          name={`contracts.${index}.newBenefits.allowances`}
-                                          render={({ insert, remove, push, replace }) => (
-                                            <div>
-                                              {values.contracts[index]?.newBenefit.allowances &&
-                                                values.contracts[index]?.newBenefit.allowances.length > 0 &&
-                                                values.contracts[index]?.newBenefit.allowances.map((allowance, allowanceIdx) => {
-                                                  return (
-                                                    <div key={`allowance${allowanceIdx}`}>
-                                                      <div className="row">
-                                                        <CommonSelectInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={allowance?.name ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.newBenefit.allowances.${allowanceIdx}.name`)}
-                                                          onChange={(e) => {
-                                                            let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
-                                                            if (thisSubsidizes && thisSubsidizes.length > 0)
-                                                              setFieldValue(
-                                                                `contracts.${index}.newBenefit.allowances.${allowanceIdx}.amount`,
-                                                                thisSubsidizes[0].amount,
-                                                              );
-                                                            handleChange(`contracts.${index}.newBenefit.allowances.${allowanceIdx}.name`)(e);
-                                                          }}
-                                                          inputID={`contracts.${index}.newBenefit.allowances.${allowanceIdx}.name`}
-                                                          labelText={t('label.allowance')}
-                                                          selectClassName={'form-control'}
-                                                          placeholder={t('placeholder.select_allowance_type')}
-                                                          isRequiredField
-                                                          isTouched={
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index]?.newBenefit &&
-                                                            touched.contracts[index]?.newBenefit.allowances &&
-                                                            touched.contracts[index]?.newBenefit.allowances[allowanceIdx]?.name
-                                                          }
-                                                          isError={
-                                                            errors &&
-                                                            errors.contracts &&
-                                                            errors.contracts[index]?.newBenefit &&
-                                                            errors.contracts[index]?.newBenefit.allowances &&
-                                                            errors.contracts[index]?.newBenefit.allowances[allowanceIdx]?.name &&
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index]?.newBenefit &&
-                                                            touched.contracts[index]?.newBenefit.allowances &&
-                                                            touched.contracts[index]?.newBenefit.allowances[allowanceIdx]?.name
-                                                          }
-                                                          errorMessage={t(
-                                                            errors &&
-                                                              errors.contracts &&
-                                                              errors.contracts[index]?.newBenefit &&
-                                                              errors.contracts[index]?.newBenefit.allowances &&
-                                                              errors.contracts[index]?.newBenefit.allowances[allowanceIdx]?.name,
-                                                          )}
-                                                          lstSelectOptions={allowances}
-                                                        />
-                                                        <CommonTextInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={contract.newBenefit.allowance?.amount ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.newBenefit.allowances.${allowanceIdx}.amount`)}
-                                                          onChange={handleChange(`contracts.${index}.newBenefit.allowances.${allowanceIdx}.amount`)}
-                                                          inputID={`contracts.${index}.newBenefit.allowances.${allowanceIdx}.amount`}
-                                                          labelText={t('label.allowance_level')}
-                                                          inputType={'number'}
-                                                          inputClassName={'form-control'}
-                                                          placeholder={t('placeholder.pension')}
-                                                          isDisable
-                                                        />
-
-                                                        <div className="form-group d-flex align-items-end">
-                                                          <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  );
-                                                })}
-                                              <div className="d-flex justify-content-start mb-4">
-                                                <button
-                                                  type="button"
-                                                  className="btn btn-primary"
-                                                  onClick={() => {
-                                                    push({ name: '', amount: 0 });
-                                                    console.log(values);
-                                                  }}
-                                                >
-                                                  <AddCircle /> {t('label.add_allowance')}
-                                                </button>
-                                              </div>
-                                            </div>
-                                          )}
-                                        />
-                                        <hr className="mt-1" />
-
-                                        {renderButtons([
-                                          {
-                                            type: 'button',
-                                            className: `btn btn-primary px-4 mx-4`,
-                                            onClick: async (e) => {
-                                              // await removeBenefit(benefit.id).then(() => remove(index));
-                                            },
-                                            name: t('label.delete'),
-                                            position: 'right',
-                                          },
-                                          {
-                                            type: 'button',
-                                            className: `btn btn-primary px-4 mx-4`,
-                                            onClick: () => {
-                                              // setFieldValue(`contracts.${index}`, benefitTab.contracts[index]);
-                                            },
-                                            name: t('label.reset'),
-                                            position: 'right',
-                                          },
-                                          {
-                                            type: 'button',
-                                            className: `btn btn-primary px-4 ml-4`,
-                                            onClick: async () => {
-                                              console.log(values);
-                                            },
-                                            name: t('label.save'),
-                                          },
-                                        ])}
-                                      </>
-                                    </div> */}
-                                    <FieldArray
-                                      name={`contracts.${index}.benefits`}
-                                      render={({ insert, remove, push, replace }) => {
-                                        return (
-                                          <div>
-                                            <div className="d-flex justify-content-center mb-4">
-                                              <button
-                                                type="button"
-                                                className="btn btn-success"
-                                                id={`addBtn${index}`}
-                                                onClick={() => {
-                                                  insert(0, {
-                                                    id: '',
-                                                    wageId: '',
-                                                    allowanceIds: [],
-                                                    allowances: [],
-                                                    startDate: '',
-                                                    expiredDate: '',
-                                                  });
-                                                  document.getElementById(`addBtn${index}`).disabled = true;
-                                                }}
-                                              >
-                                                <Add /> {t('label.add')}
-                                              </button>
-                                            </div>
-
-                                            {contract.benefits && contract.benefits.length > 0 ? (
-                                              contract.benefits.map((benefit, benefitIndex) => {
-                                                return (
-                                                  <div
-                                                    key={'benefit:' + benefitIndex}
-                                                    id={contract.id + benefitIndex}
-                                                    className="shadow bg-white border border-secondary rounded m-4 p-4"
-                                                  >
-                                                    <>
-                                                      <h5 className="px-3">{t('label.payroll')}</h5>
-                                                      <div style={{ fontSize: 14 }}>{'Từ ' + benefit.startDate + ' đến ' + benefit.expiredDate}</div>
-                                                      <hr className="mt-1" />
-                                                      <div className="row">
-                                                        <CommonSelectInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.wage?.type ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wage.type`)}
-                                                          onChange={async (e) => {
-                                                            if (e.target.value !== '0') {
-                                                              handleChange(`contracts.${index}.benefits.${benefitIndex}.wage.type`)(e);
-                                                              let wages = await api.wage
-                                                                .getAll({ type: e.target.value })
-                                                                .then(({ payload }) => payload);
-
-                                                              setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, wages);
-                                                            } else setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wages`, []);
-                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wageId`, 0);
-                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wageId`, 0);
-                                                            setFieldValue(`contracts.${index}.benefits.${benefitIndex}.wage.amount`, 0);
-                                                          }}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.wage.type`}
-                                                          labelText={t('label.payment_method')}
-                                                          selectClassName={'form-control'}
-                                                          placeholder={t('placeholder.select_contract_payment_method')}
-                                                          isRequiredField
-                                                          isTouched={
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.wage?.type
-                                                          }
-                                                          isError={
-                                                            errors &&
-                                                            errors.contracts &&
-                                                            errors.contracts[index].benefits &&
-                                                            errors.contracts[index].benefits[benefitIndex]?.wage?.type &&
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.wage?.type
-                                                          }
-                                                          errorMessage={t(
-                                                            errors &&
-                                                              errors.contracts &&
-                                                              errors.contracts[index].benefits &&
-                                                              errors.contracts[index].benefits[benefitIndex]?.wage?.type,
-                                                          )}
-                                                          lstSelectOptions={paymentType}
-                                                        />
-                                                        <CommonSelectInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.wageId ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wageId`)}
-                                                          onChange={(e) => {
-                                                            let thisWage = benefit.wages.filter((s) => s.id === parseInt(e.target.value));
-                                                            console.log('am', thisWage);
-                                                            setFieldValue(
-                                                              `contracts.${index}.benefits.${benefitIndex}.wage.amount`,
-                                                              thisWage[0].amount,
-                                                            );
-                                                            handleChange(`contracts.${index}.benefits.${benefitIndex}.wageId`)(e);
-                                                          }}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.wageId`}
-                                                          labelText={t('label.salary_group')}
-                                                          selectClassName={'form-control'}
-                                                          placeholder={t('placeholder.select_contract_payment_method')}
-                                                          isRequiredField
-                                                          isTouched={
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.wageId
-                                                          }
-                                                          isError={
-                                                            errors &&
-                                                            errors.contracts &&
-                                                            errors.contracts[index].benefits &&
-                                                            errors.contracts[index].benefits[benefitIndex]?.wageId &&
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.wageId
-                                                          }
-                                                          errorMessage={t(
-                                                            errors &&
-                                                              errors.contracts &&
-                                                              errors.contracts[index].benefits &&
-                                                              errors.contracts[index].benefits[benefitIndex]?.wageId,
-                                                          )}
-                                                          lstSelectOptions={benefit.wages}
-                                                        />
-                                                        <CommonTextInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.wage?.amount ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.wage.amount`)}
-                                                          onChange={handleChange(`contracts.${index}.benefits.${benefitIndex}.wage.amount`)}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.wage.amount`}
-                                                          labelText={t('label.salary_level')}
-                                                          inputType={'number'}
-                                                          inputClassName={'form-control'}
-                                                          placeholder={t('placeholder.enter_salary_level')}
-                                                          isDisable
-                                                        />
-                                                      </div>
-                                                      <div className="row">
-                                                        <CommonTextInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.startDate ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.startDate`)}
-                                                          onChange={handleChange(`contracts.${index}.benefits.${benefitIndex}.startDate`)}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.startDate`}
-                                                          labelText={t('label.signature_date')}
-                                                          inputType={'date'}
-                                                          inputClassName={'form-control'}
-                                                          isRequiredField
-                                                          isTouched={
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.startDate
-                                                          }
-                                                          isError={
-                                                            errors &&
-                                                            errors.contracts &&
-                                                            errors.contracts[index].benefits &&
-                                                            errors.contracts[index].benefits[benefitIndex]?.startDate &&
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.startDate
-                                                          }
-                                                          errorMessage={t(
-                                                            errors &&
-                                                              errors.contracts &&
-                                                              errors.contracts[index].benefits &&
-                                                              errors.contracts[index].benefits[benefitIndex]?.startDate,
-                                                          )}
-                                                        />
-                                                        <CommonTextInput
-                                                          containerClassName={'form-group col-lg-4'}
-                                                          value={benefit?.expiredDate ?? ''}
-                                                          onBlur={handleBlur(`contracts.${index}.benefits.${benefitIndex}.expiredDate`)}
-                                                          onChange={handleChange(`contracts.${index}.benefits.${benefitIndex}.expiredDate`)}
-                                                          inputID={`contracts.${index}.benefits.${benefitIndex}.expiredDate`}
-                                                          labelText={t('label.effective_date')}
-                                                          inputType={'date'}
-                                                          inputClassName={'form-control'}
-                                                          isRequiredField
-                                                          isTouched={
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.expiredDate
-                                                          }
-                                                          isError={
-                                                            errors &&
-                                                            errors.contracts &&
-                                                            errors.contracts[index].benefits &&
-                                                            errors.contracts[index].benefits[benefitIndex]?.expiredDate &&
-                                                            touched &&
-                                                            touched.contracts &&
-                                                            touched.contracts[index].benefits &&
-                                                            touched.contracts[index].benefits[benefitIndex]?.expiredDate
-                                                          }
-                                                          errorMessage={t(
-                                                            errors &&
-                                                              errors.contracts &&
-                                                              errors.contracts[index].benefits &&
-                                                              errors.contracts[index].benefits[benefitIndex]?.expiredDate,
-                                                          )}
-                                                        />
-                                                      </div>
-                                                      <h5 className="px-3">{t('label.allowance')}</h5>
-                                                      <hr className="mt-2" />
-                                                      <FieldArray
-                                                        name={`contracts.${index}.benefits.${benefitIndex}.allowances`}
-                                                        render={({ insert, remove, push, replace }) => (
-                                                          <div>
-                                                            {benefit.allowances &&
-                                                              benefit.allowances.length > 0 &&
-                                                              benefit.allowances.map((allowance, allowanceIdx) => {
-                                                                return (
-                                                                  <div key={`allowance${allowanceIdx}`}>
-                                                                    <div className="row">
-                                                                      <CommonSelectInput
-                                                                        containerClassName={'form-group col-lg-4'}
-                                                                        value={allowance?.id ?? ''}
-                                                                        onBlur={handleBlur(
-                                                                          `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`,
-                                                                        )}
-                                                                        onChange={(e) => {
-                                                                          let thisSubsidizes = allowances.filter(
-                                                                            (s) => s.id === parseInt(e.target.value),
-                                                                          );
-                                                                          if (thisSubsidizes && thisSubsidizes.length > 0)
-                                                                            setFieldValue(
-                                                                              `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.amount`,
-                                                                              thisSubsidizes[0].amount,
-                                                                            );
-                                                                          handleChange(
-                                                                            `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`,
-                                                                          )(e);
-                                                                        }}
-                                                                        inputID={`contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.id`}
-                                                                        labelText={t('label.allowance')}
-                                                                        selectClassName={'form-control'}
-                                                                        placeholder={t('placeholder.select_allowance_type')}
-                                                                        isRequiredField
-                                                                        isTouched={
-                                                                          touched &&
-                                                                          touched.contracts &&
-                                                                          touched.contracts[index].benefits &&
-                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances &&
-                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
-                                                                            ?.id
-                                                                        }
-                                                                        isError={
-                                                                          errors &&
-                                                                          errors.contracts &&
-                                                                          errors.contracts[index].benefits &&
-                                                                          errors.contracts[index].benefits[benefitIndex]?.allowances &&
-                                                                          errors.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
-                                                                            ?.id &&
-                                                                          touched &&
-                                                                          touched.contracts &&
-                                                                          touched.contracts[index].benefits &&
-                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances &&
-                                                                          touched.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
-                                                                            ?.id
-                                                                        }
-                                                                        errorMessage={t(
-                                                                          errors &&
-                                                                            errors.contracts &&
-                                                                            errors.contracts[index].benefits &&
-                                                                            errors.contracts[index].benefits[benefitIndex]?.allowances &&
-                                                                            errors.contracts[index].benefits[benefitIndex]?.allowances[allowanceIdx]
-                                                                              ?.id,
-                                                                        )}
-                                                                        lstSelectOptions={allowances}
-                                                                      />
-                                                                      <CommonTextInput
-                                                                        containerClassName={'form-group col-lg-4'}
-                                                                        value={allowance?.amount ?? ''}
-                                                                        onBlur={handleBlur(
-                                                                          `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.amount`,
-                                                                        )}
-                                                                        onChange={handleChange(
-                                                                          `contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.amount`,
-                                                                        )}
-                                                                        inputID={`contracts.${index}.benefits.${benefitIndex}.allowances.${allowanceIdx}.amount`}
-                                                                        labelText={t('label.allowance_level')}
-                                                                        inputType={'number'}
-                                                                        inputClassName={'form-control'}
-                                                                        placeholder={t('placeholder.pension')}
-                                                                        isDisable
-                                                                      />
-
-                                                                      <div className="form-group d-flex align-items-end">
-                                                                        <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                );
-                                                              })}
-                                                            <div className="d-flex justify-content-start mb-4">
-                                                              <button
-                                                                type="button"
-                                                                className="btn btn-primary"
-                                                                onClick={() => {
-                                                                  push({ name: '', amount: 0 });
-                                                                  // console.log(values);
-                                                                }}
-                                                              >
-                                                                <AddCircle /> {t('label.add_allowance')}
-                                                              </button>
-                                                            </div>
-                                                          </div>
-                                                        )}
-                                                      />
-                                                      <hr className="mt-1" />
-
-                                                      {renderButtons(
-                                                        benefit.id
-                                                          ? [
-                                                              {
-                                                                type: 'button',
-                                                                className: `btn btn-primary px-4 mx-4`,
-                                                                onClick: async (e) => {
-                                                                  // await removeBenefit(benefit.id).then(() => remove(index));
-                                                                },
-                                                                name: t('label.delete'),
-                                                                position: 'right',
-                                                              },
-                                                              {
-                                                                type: 'button',
-                                                                className: `btn btn-primary px-4 mx-4`,
-                                                                onClick: () => {
-                                                                  // setFieldValue(`contracts.${index}`, benefitTab.contracts[index]);
-                                                                },
-                                                                name: t('label.reset'),
-                                                                position: 'right',
-                                                              },
-                                                              {
-                                                                type: 'button',
-                                                                className: `btn btn-primary px-4 ml-4`,
-                                                                onClick: async () => {
-                                                                  // console.log('be', benefit);
-                                                                },
-                                                                name: benefit.id ? t('label.save') : t('label.create_new'),
-                                                              },
-                                                            ]
-                                                          : [
-                                                              {
-                                                                type: 'button',
-                                                                className: `btn btn-primary px-4 mx-4`,
-                                                                onClick: async (e) => {
-                                                                  remove(benefitIndex);
-                                                                  document.getElementById(`addBtn${index}`).disabled = false;
-                                                                  // await removeBenefit(benefit.id).then(() => remove(index));
-                                                                },
-                                                                name: t('label.delete'),
-                                                                position: 'right',
-                                                              },
-                                                              {
-                                                                type: 'button',
-                                                                className: `btn btn-primary px-4 ml-4`,
-                                                                onClick: async () => {
-                                                                  await create(benefit, contract.id).then(() =>
-                                                                    renderButtons([
-                                                                      {
-                                                                        type: 'button',
-                                                                        className: `btn btn-primary px-4 mx-4`,
-                                                                        onClick: async (e) => {
-                                                                          // await removeBenefit(benefit.id).then(() => remove(index));
-                                                                        },
-                                                                        name: t('label.delete'),
-                                                                        position: 'right',
-                                                                      },
-                                                                      {
-                                                                        type: 'button',
-                                                                        className: `btn btn-primary px-4 mx-4`,
-                                                                        onClick: () => {
-                                                                          // setFieldValue(`contracts.${index}`, benefitTab.contracts[index]);
-                                                                        },
-                                                                        name: t('label.reset'),
-                                                                        position: 'right',
-                                                                      },
-                                                                      {
-                                                                        type: 'button',
-                                                                        className: `btn btn-primary px-4 ml-4`,
-                                                                        onClick: async () => {
-                                                                          // console.log('be', benefit);
-                                                                        },
-                                                                        name: benefit.id ? t('label.save') : t('label.create_new'),
-                                                                      },
-                                                                    ]),
-                                                                  );
-                                                                },
-                                                                name: t('label.create_new'),
-                                                              },
-                                                            ],
-                                                      )}
-                                                    </>
-                                                  </div>
-                                                );
-                                              })
-                                            ) : (
-                                              <div></div>
-                                            )}
-                                          </div>
-                                        );
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <div />
-                        )}
-                      </div>
+                          <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                            {t('label.from') + props.values.handleDate + t('label.to') + props.values.expiredDate}
+                          </div>
+                          <hr className="mt-1" />
+                          {props.values.isMinimize && (
+                            <div>
+                              <BodyItem {...props} />
+                              <hr className="mt-1" />
+                            </div>
+                          )}
+                        </div>
+                      </form>
                     );
                   }}
-                />
-                <AutoSubmitToken />
-              </form>
-            )}
-          </Formik>
+                </Formik>
+              );
+            })
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </CContainer>

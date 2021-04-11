@@ -20,10 +20,9 @@ const BasicInfo = ({ t, history, match }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const profile = useSelector((state) => state.profile.profile);
   const profileId = +match?.params?.id;
-  const isCreate = match?.param?.id ? true : false;
+  const isCreate = match?.params.id ? true : false;
   const dispatch = useDispatch();
   const refInfo = useRef();
-
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
     if (profileId) dispatch(fetchProfile(profileId));
@@ -62,15 +61,8 @@ const BasicInfo = ({ t, history, match }) => {
     {
       type: 'button',
       className: `btn btn-primary`,
-      onClick: async (e) => {
+      onClick: (e) => {
         refInfo.current.handleSubmit(e);
-        // let errors = await refInfo.current.validateForm();
-        // let a =
-        //   errors && // 👈 null and undefined check
-        //   Object.keys(errors).length === 0 &&
-        //   errors.constructor === Object;
-        // if (!a) return;
-        // dispatch(createProfile(refInfo.current.values, history, t('message.successful_create')));
       },
       name: t('label.create_new'),
       position: 'right',
@@ -100,16 +92,6 @@ const BasicInfo = ({ t, history, match }) => {
       className: `btn btn-primary`,
       onClick: (e) => {
         refInfo.current.handleSubmit(e);
-        // refInfo.current.validateForm().then((errors) => {
-        //   let a =
-        //     errors && // 👈 null and undefined check
-        //     Object.keys(errors).length === 0 &&
-        //     errors.constructor === Object;
-        //   if (!a) return;
-        //   dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
-        // });
-
-        // dispatch(updateProfile(refInfo.current.values, history, t('message.successful_update')));
       },
       name: t('label.update'),
       position: 'right',
@@ -138,7 +120,7 @@ const BasicInfo = ({ t, history, match }) => {
               validationSchema={BasicInfoCreateSchema}
               enableReinitialize
               onSubmit={(values) => {
-                if (isCreate) dispatch(createProfile(values, history, t('message.successful_create')));
+                if (!isCreate) dispatch(createProfile(values, history, t('message.successful_create')));
                 else dispatch(updateProfile(values, history, t('message.successful_update')));
               }}
             >
@@ -374,7 +356,7 @@ const BasicInfo = ({ t, history, match }) => {
                       </div>
                     </div>
                   </div>
-                  {renderButtons(isCreate ? buttonsCreate : buttonsUpdate)}
+                  {renderButtons(!isCreate ? buttonsCreate : buttonsUpdate)}
                 </form>
               )}
             </Formik>

@@ -10,7 +10,6 @@ const initialState = {
     endCC: '',
     branchIds: [],
     operateLoop: [],
-    typeCC: '',
     isOvertime: true,
   },
 };
@@ -22,7 +21,7 @@ export const shiftReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.shift.GET_SHIFT:
       return { ...state, shift: Object.assign({}, state.shift, payload) };
     case REDUX_STATE.shift.SET_SHIFT:
-      return { ...state, shift: Object.assign({},state.shift, payload) };
+      return { ...state, shift: Object.assign({}, state.shift, payload) };
     case REDUX_STATE.shift.EMPTY_VALUE:
       return { ...state, shift: initialState.shift };
 

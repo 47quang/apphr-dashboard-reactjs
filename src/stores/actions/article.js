@@ -49,6 +49,7 @@ export const updateArticle = (data, success_msg) => {
     api.article
       .put(data)
       .then(({ payload }) => {
+        console.log('article', payload);
         dispatch({ type: REDUX_STATE.article.SET_ARTICLE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

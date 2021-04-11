@@ -27,7 +27,7 @@ const UpdateType = ({ t, location, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.WAGE);
+        history.push(ROUTE_PATH.ARTICLE_TYPE);
       },
       name: t('label.back'),
       position: 'left',

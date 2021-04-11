@@ -1,19 +1,7 @@
-import {
-  Avatar,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Popover,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
-import { ArrowDropDown, Cancel, Lens } from '@material-ui/icons';
+import { Avatar, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Cancel, Lens } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { COLORS } from 'src/constants/theme';
 const RollUpInfo = ({ t, isOpen, handleClose }) => {
   const [dropdownSuccess, setDropdownSuccess] = useState(false);
@@ -22,16 +10,16 @@ const RollUpInfo = ({ t, isOpen, handleClose }) => {
   const toggleSuccess = () => setDropdownSuccess((prevState) => !prevState);
   const toggleDanger = () => setDropdownDanger((prevState) => !prevState);
 
-  const createData = (rollupType, time, type) => {
-    return { rollupType, type, time };
+  const createData = (rollupType, shift, time, type) => {
+    return { rollupType, shift, type, time };
   };
   const rows = [
-    createData('Mạng nội bộ', '08:30', 'Check-in'),
-    createData('Mạng nội bộ', '11:30', 'Check-out'),
-    createData('Mạng nội bộ', '13:30', 'Check-in'),
-    createData('Mạng nội bộ', '15:30', 'Check-out'),
-    createData('Mạng nội bộ', '15:45', 'Check-in'),
-    createData('Mạng nội bộ', '18:00', 'Check-out'),
+    createData('Mạng nội bộ', 'Ca sáng 1', '08:30', 'Check-in'),
+    createData('Mạng nội bộ', 'Ca sáng 1', '11:30', 'Check-out'),
+    createData('Mạng nội bộ', 'Ca chiều 1', '13:30', 'Check-in'),
+    createData('Mạng nội bộ', 'Ca chiều 1', '15:30', 'Check-out'),
+    createData('Mạng nội bộ', 'Ca chiều 1', '15:45', 'Check-in'),
+    createData('Mạng nội bộ', 'Ca chiều 1', '18:00', 'Check-out'),
   ];
 
   return (
@@ -66,6 +54,7 @@ const RollUpInfo = ({ t, isOpen, handleClose }) => {
             {rows.map((row, index) => (
               <TableRow key={`row ${index}`} className={`${index % 2 === 0 ? 'table-row-background' : ''}`}>
                 <TableCell>{row.rollupType}</TableCell>
+                <TableCell>{row.shift}</TableCell>
                 <TableCell>{row.type}</TableCell>
                 <TableCell>{row.time}</TableCell>
               </TableRow>

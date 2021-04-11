@@ -15,7 +15,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
-        <div className="shadow bg-white rounded p-4 container col-xl-10">
+        <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik
             innerRef={wageRef}
             enableReinitialize
@@ -29,7 +29,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.code}
                     onBlur={handleBlur('code')}
                     onChange={handleChange('code')}
@@ -41,7 +41,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
                     isDisable={true}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.name}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
@@ -58,7 +58,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
                 </div>
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.type}
                     onBlur={handleBlur('type')}
                     onChange={(e) => {
@@ -75,7 +75,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
                     errorMessage={t(errors.type)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.amount}
                     onBlur={handleBlur('amount')}
                     onChange={handleChange('amount')}
@@ -93,7 +93,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
 
                 <div className="row">
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-12'}
                     value={values.dayOff}
                     onBlur={handleBlur('dayOff')}
                     onChange={handleChange('dayOff')}
