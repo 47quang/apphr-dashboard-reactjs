@@ -25,6 +25,9 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "start_time": "Giờ bắt đầu",
+    "end_time": "Giờ kết thúc",
+    "new_task": "Phân công",
     "roll_up": "Điểm danh",
     "reset_roll_up": "Hoàn tác",
     "field_label": "Nhãn của trường",
@@ -82,6 +85,7 @@
     "position_name": "Tên vị trí",
     "position_code": "Mã vị trí",
     "shift_name": "Tên ca làm",
+    "shift": "Ca làm việc",
     "shift_code": "Mã ca làm",
     "shift_time": "Thời gian hoạt động của ca làm",
     "holiday": "Ngày nghỉ lễ",
@@ -105,6 +109,7 @@
     "role_code": "Mã vai trò",
     "role_name": "Tiêu đề của vai trò",
     "account_info": "Thông tin tài khoản",
+    "scheduler": "Phân công công việc",
     "profile": "Hồ sơ",
     "profileId": "Nhân sự",
     "username": "Tên tài khoản",
@@ -321,6 +326,9 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_select_start_time": "Bắt buộc chọn giờ bắt đầu",
+    "required_select_end_time": "Bắt buộc chọn giờ kết thúc",
+    "required_select_shift": "Bắt buộc chọn ca làm việc",
     "min_length_phone_number": "Số điện thoại tối thiểu 8 chữ số",
     "max_length_phone_number": "Số điện thoại tối đa 13 chữ số",
     "expired_date_must_be_greater_than_handle_date": "Ngày hết hạn phải lớn hơn ngày ký",

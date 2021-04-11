@@ -20,6 +20,7 @@ import articleReducer from './article';
 import articleTypeReducer from './articleType';
 import historyWorkReducer from './historyWork';
 import rollUpReducer from './rollUp';
+import assignmentReducer from './assignment';
 
 export default combineReducers({
   style: styleReducer,
@@ -43,4 +44,5 @@ export default combineReducers({
   articleType: articleTypeReducer,
   historyWork: historyWorkReducer,
   rollUp: rollUpReducer,
+  assignment: assignmentReducer,
 });

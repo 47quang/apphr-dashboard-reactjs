@@ -1,4 +1,4 @@
-import { AttachFile, Attachment, HighlightOff } from '@material-ui/icons';
+import { Attachment, HighlightOff } from '@material-ui/icons';
 import { FieldArray } from 'formik';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
