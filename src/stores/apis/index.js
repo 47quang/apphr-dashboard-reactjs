@@ -27,6 +27,7 @@ const API_PREFIX = {
   API_HISTORY_WORK: '/api.work-history',
   API_WAGE_HISTORY: '/api.wage-history',
   API_ROLL_UP: '/api.roll-up',
+  API_ASSIGNMENT: '/api.assignment',
 };
 
 export const api = {
@@ -450,6 +451,25 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_ROLL_UP + `/${id}`);
+    },
+  },
+  assignment: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ASSIGNMENT, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ASSIGNMENT + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ASSIGNMENT + `/${id}`);
     },
   },
 };

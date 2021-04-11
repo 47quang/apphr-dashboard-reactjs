@@ -23,8 +23,9 @@ export const fetchAccounts = () => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -33,17 +34,19 @@ export const fetchAccount = (id) => {
   return (dispatch, getState) => {
     api.account
       .get(id)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         payload.email = payload.email ?? '';
         payload.phone = payload.phone ?? '';
         payload.profileId = payload.profileId ?? 0;
+        payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -52,17 +55,22 @@ export const createAccount = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.account
       .post(params)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         payload.profileId = payload.profileId ?? 0;
+        payload.resetCode = payload.resetCode ?? '';
+        payload.rollUp = payload.rollUp ?? '';
+        payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
       .catch((err) => {
+        console.log('err', err);
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -72,14 +80,21 @@ export const updateAccount = (data, success_msg) => {
     api.account
       .put(data)
       .then(({ payload }) => {
+        payload.profileId = payload.profileId ?? 0;
+        payload.resetCode = payload.resetCode ?? '';
+        payload.rollUp = payload.rollUp ?? '';
+        payload.salt = payload.salt ?? '';
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
+        console.log('err', err);
+
         if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Server Error' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -95,8 +110,9 @@ export const deleteAccount = (id, success_msg) => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -118,8 +134,9 @@ export const fetchRoles = (params) => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -135,8 +152,9 @@ export const fetchRole = (id) => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -151,8 +169,9 @@ export const fetchPermissionGroups = () => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -171,8 +190,9 @@ export const fetchProfiles = (params) => {
       .catch((err) => {
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

@@ -10,7 +10,6 @@ const initialState = {
     password: '',
     email: '',
     phone: '',
-    coefficient: 0,
     roleId: 0,
     profileId: 0,
     permissionIds: [],
