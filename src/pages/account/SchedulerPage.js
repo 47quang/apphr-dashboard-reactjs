@@ -10,16 +10,17 @@ import {
   Toolbar,
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
+import { IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import { Delete } from '@material-ui/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarForm from 'src/components/calendar/CalendarForm';
-import { deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
+import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchShifts } from 'src/stores/actions/shift';
-import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
@@ -50,111 +51,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DayScaleCell = (props) => {
-  const classes = useStyles();
-  const { startDate, today } = props;
-
-  if (today) {
-    return <WeekView.DayScaleCell {...props} className={classes.today} />;
-  }
-  if (startDate.getDay() === 0 || startDate.getDay() === 6) {
-    return <WeekView.DayScaleCell {...props} className={classes.weekend} />;
-  }
-  return <WeekView.DayScaleCell {...props} />;
-};
-
 const SchedulerPage = ({ t, history, match }) => {
   const shifts = useSelector((state) => state.shift.shifts);
   const assignments = useSelector((state) => state.assignment.assignments);
   const userId = +match?.params?.id;
   const dispatch = useDispatch();
 
-  const [state, setState] = useState({
-    data: assignments,
-    currentDate: '2021-04-12',
-    isOpen: false,
-    selectedDate: '',
-  });
+  const DayScaleCell = (props) => {
+    const classes = useStyles();
+    const { startDate, today } = props;
 
-  useEffect(() => {
-    dispatch(
-      fetchShifts({
-        page: 0,
-        perpage: 1000,
-      }),
-    );
-    dispatch(fetchAssignments({ userId: userId }));
-
-    return () => {
-      dispatch(setEmptyAssignments());
-    };
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // useEffect(() => {
-  //   setState((preState) => ({
-  //     ...preState,
-  //     data: assignments,
-  //   }));
-  // }, [assignments]);
-  const changeCurrentDate = (currentDate) => {
-    setState({ ...state, currentDate: currentDate });
-  };
-  const handleClose = () => {
-    setState({ ...state, isOpen: false });
-  };
-  const handleConfirm = async (values) => {
-    let { data, selectedDate } = state;
-    let startDate = selectedDate.replace('00:00:00', values.start);
-    let endDate = selectedDate.replace('00:00:00', values.end);
-    let checkValidTask = data.filter((x) => isSameBeforeTypeDate(x.startDate, startDate) && isBeforeTypeDate(startDate, x.endDate));
-    if (checkValidTask.length !== 0) {
-      dispatch({
-        type: REDUX_STATE.notification.SET_NOTI,
-        payload: { open: true, type: 'error', message: 'Không thể giao việc trong khung giờ này' },
-      });
-      setState({
-        ...state,
-        isOpen: false,
-      });
-    } else {
-      let body = {
-        shiftId: +values.shiftId,
-        userId: userId,
-        date: selectedDate,
-      };
-      const payload = await api.assignment.post(body).then(({ payload }) => payload);
-      const shift = await api.shift.get(values.shiftId).then(({ payload }) => payload);
-
-      data = [
-        ...data,
-        {
-          id: payload.id,
-          startDate: startDate,
-          endDate: endDate,
-          title: shift.name,
-        },
-      ];
-      setState({
-        ...state,
-        data: data,
-        isOpen: false,
-      });
+    if (today) {
+      return <WeekView.DayScaleCell {...props} className={classes.today} />;
     }
+    if (startDate.getDay() === 0 || startDate.getDay() === 6) {
+      return <WeekView.DayScaleCell {...props} className={classes.weekend} />;
+    }
+    return <WeekView.DayScaleCell {...props} />;
   };
-  const commitChanges = ({ deleted }) => {
-    // setState(async (state) => {
-    //   let { data } = state;
-    //   const handleAfterDeleted = () => {
-    //     data = data.filter((appointment) => appointment.id !== deleted);
-    //   };
-    //   if (deleted !== undefined) {
-    //     dispatch(deleteAssignment(deleted), t('message.successful_delete'), handleAfterDeleted);
-    //   }
-    //   return { ...state, data: data };
-    // });
-    console.log('commitChanges');
-    //dispatch(deleteAssignment(deleted), t('message.successful_delete'));
-  };
+
   const TimeTableCell = (props) => {
     const classes = useStyles();
     const { startDate } = props;
@@ -176,32 +91,111 @@ const SchedulerPage = ({ t, history, match }) => {
     }
     return <WeekView.TimeTableCell {...props} onClick={onClickEvent} />;
   };
-  console.log('SchedulerPage');
+
+  const [state, setState] = useState({
+    // data: [{ id: 1, title: 'gaf', startDate: '2021-04-14T10:00:00', endDate: '2021-04-14T12:00:00' }],
+    currentDate: '2021-04-12',
+    isOpen: false,
+    selectedDate: '',
+    visible: false,
+  });
+
+  useEffect(() => {
+    dispatch(
+      fetchShifts({
+        page: 0,
+        perpage: 1000,
+      }),
+    );
+    dispatch(fetchAssignments({ userId: userId }));
+
+    return () => {
+      dispatch(setEmptyAssignments());
+    };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const changeCurrentDate = (currentDate) => {
+    setState({ ...state, currentDate: currentDate });
+  };
+  const handleClose = () => {
+    setState({ ...state, isOpen: false });
+  };
+  const toggleVisibility = () => {
+    setState({ ...state, visible: !state.visible });
+  };
+  const handleConfirm = async (values) => {
+    let { selectedDate } = state;
+    let startDate = selectedDate.replace('00:00:00', values.start);
+    let checkValidTask = assignments.filter((x) => isSameBeforeTypeDate(x.startDate, startDate) && isBeforeTypeDate(startDate, x.endDate));
+    if (checkValidTask.length !== 0) {
+      dispatch({
+        type: REDUX_STATE.notification.SET_NOTI,
+        payload: { open: true, type: 'error', message: 'Không thể giao việc trong khung giờ này' },
+      });
+      setState({
+        ...state,
+        isOpen: false,
+      });
+    } else {
+      let body = {
+        shiftId: +values.shiftId,
+        userId: userId,
+        date: selectedDate,
+      };
+      dispatch(createAssignment(body, t('message.successful_create')));
+      handleClose();
+    }
+  };
+  const style = ({ palette }) => ({
+    icon: {
+      color: palette.action.active,
+    },
+    textCenter: {
+      textAlign: 'center',
+    },
+    header: {
+      backgroundSize: 'cover',
+    },
+    commandButton: {
+      backgroundColor: 'rgba(255,255,255,0.65)',
+    },
+  });
+  const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
+    return (
+      <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
+        <IconButton
+          onClick={() => {
+            setState(async (state) => {
+              dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
+              restProps.onHide();
+            });
+          }}
+          className={classes.commandButton}
+        >
+          <Delete />
+        </IconButton>
+      </AppointmentTooltip.Header>
+    );
+  });
+
+  console.log('SchedulerPage', assignments);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <React.Fragment>
-        <CalendarForm t={t} shifts={shifts} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
-        <Paper>
-          <Scheduler data={state.data} height={660}>
-            <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
-            <EditingState onCommitChanges={commitChanges} />
-            <IntegratedEditing />
-            <WeekView
-              startDayHour={7}
-              endDayHour={22}
-              cellDuration={60}
-              timeTableCellComponent={TimeTableCell}
-              dayScaleCellComponent={DayScaleCell}
-            />
-            <Toolbar />
-            <DateNavigator />
-            <TodayButton />
-            <EditRecurrenceMenu />
-            <Appointments />
-            <AppointmentTooltip showDeleteButton />
-          </Scheduler>
-        </Paper>
-      </React.Fragment>
+      <CalendarForm t={t} shifts={shifts} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+      <Paper>
+        <Scheduler data={assignments} height={660}>
+          <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
+          <EditingState />
+          <IntegratedEditing />
+          <WeekView startDayHour={7} endDayHour={22} cellDuration={60} timeTableCellComponent={TimeTableCell} dayScaleCellComponent={DayScaleCell} />
+          <Toolbar />
+          <DateNavigator />
+          <TodayButton />
+          <EditRecurrenceMenu />
+          <Appointments />
+          <AppointmentTooltip headerComponent={Header} showCloseButton onVisibilityChange={toggleVisibility} />
+        </Scheduler>
+      </Paper>
     </CContainer>
   );
 };
