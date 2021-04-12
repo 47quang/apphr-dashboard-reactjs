@@ -52,12 +52,12 @@ export const createAssignment = (params, success_msg) => {
   };
 };
 
-export const deleteAssignment = (id, success_msg, handleAfterDeleted) => {
+export const deleteAssignment = (id, success_msg) => {
   return (dispatch, getState) => {
     api.assignment
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGMENT, payload });
+        dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGNMENT, payload });
         // handleAfterDeleted();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

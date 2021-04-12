@@ -15,16 +15,16 @@ const assignmentReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.assignment.SET_ASSIGNMENTS:
       return { ...state, assignments: payload };
     case REDUX_STATE.assignment.SET_ASSIGNMENT:
-      return { ...state, assignment: Object.assign({}, state.assignment, payload) };
-    case REDUX_STATE.assignment.DELETE_ASSIGMENT:
+      return { ...state, assignments: [...state.assignments, payload] };
+    case REDUX_STATE.assignment.DELETE_ASSIGNMENT:
       return {
         ...state,
-        assignments: state.assignment.filter((b) => b.id !== payload.id),
+        assignments: state.assignments.filter((b) => b.id !== payload.id),
       };
     case REDUX_STATE.assignment.EMPTY_VALUE:
       return {
         ...state,
-        assignments: initialState.assignments,
+        assignments: [],
       };
     default:
       return state;
