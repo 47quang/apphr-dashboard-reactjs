@@ -113,7 +113,10 @@ const SchedulerPage = ({ t, history, match }) => {
     var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
     var last = first + 6; // last day is the first day + 6
     var firstDay = new Date(state.currentDate.setDate(first));
+    firstDay.setHours(0, 0, 0, 0);
     var lastDay = new Date(state.currentDate.setDate(last));
+    lastDay.setHours(23, 59, 59, 0);
+
     dispatch(fetchAssignments({ userId: userId, from: firstDay, to: lastDay }));
     // return () => {
     //   dispatch(setEmptyAssignments());
