@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { getRegexExpression, VALIDATION_TYPE } from 'src/utils/validationUtils';
-import moment from 'moment';
+import { isBeforeTypeHour, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const VALIDATION_STRING = {
   NOT_EMPTY: 'Not empty',
@@ -21,12 +21,7 @@ export const SettingGeneralInfoSchema = Yup.object().shape({
 });
 
 //Shift
-const isBeforeTypeHour = (startTime, endTime) => {
-  return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
-};
-const isBeforeTypeDate = (startTime, endTime) => {
-  return moment(startTime).isSameOrBefore(moment(endTime));
-};
+
 export const SettingShiftInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_shift_name'),
   startCC: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_checkin_time', function (value) {
@@ -159,7 +154,7 @@ export const BasicInfoCreateSchema = Yup.object().shape({
   passportIssuedDate: Yup.string(),
   passportExpiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_great_issued_start_date', function (value) {
     const { passportIssuedDate } = this.parent;
-    if (passportIssuedDate) return isBeforeTypeDate(passportIssuedDate, value);
+    if (passportIssuedDate) return isSameBeforeTypeDate(passportIssuedDate, value);
     else return true;
   }),
 });
@@ -202,15 +197,15 @@ export const NewContractSchema = Yup.object().shape({
     })
     .test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
       const { handleDate } = this.parent;
-      return isBeforeTypeDate(handleDate, value);
+      return isSameBeforeTypeDate(handleDate, value);
     })
     .test('end_time_test', 'validation.expired_date_must_be_greater_than_valid_date', function (value) {
       const { validDate } = this.parent;
-      return isBeforeTypeDate(validDate, value);
+      return isSameBeforeTypeDate(validDate, value);
     })
     .test('end_time_test', 'validation.expired_date_must_be_greater_than_start_work', function (value) {
       const { startWork } = this.parent;
-      return isBeforeTypeDate(startWork, value);
+      return isSameBeforeTypeDate(startWork, value);
     }),
   paymentType: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
@@ -342,7 +337,7 @@ export const NewCertificateSchema = Yup.object().shape({
   issuedDate: Yup.string().required('validation.required_select_academic_issuedDate'),
   expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_great_issued_start_date', function (value) {
     const { issuedDate } = this.parent;
-    return isBeforeTypeDate(issuedDate, value);
+    return isSameBeforeTypeDate(issuedDate, value);
   }),
 });
 export const CertificatesSchema = Yup.object().shape({
@@ -377,7 +372,7 @@ export const NewHistoryWorkingSchema = Yup.object().shape({
   to: Yup.string()
     .test('end_time_test', 'validation.expired_date_must_be_great_than_start_date', function (value) {
       const { from } = this.parent;
-      return isBeforeTypeDate(from, value);
+      return isSameBeforeTypeDate(from, value);
     })
     .required('validation.required_select_end_date'),
 });
@@ -472,8 +467,17 @@ export const BenefitsSchema = Yup.object().shape({
       startDate: Yup.string().required('validation.required_select_contract_handle_date'),
       expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
         const { startDate } = this.parent;
-        return isBeforeTypeDate(startDate, value);
+        return isSameBeforeTypeDate(startDate, value);
       }),
     }),
   ),
+});
+export const NewTaskSchedule = Yup.object().shape({
+  shiftId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_shift', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_shift'),
+  start: Yup.string().required('validation.required_select_start_time'),
+  end: Yup.string().required('validation.required_select_end_time'),
 });
