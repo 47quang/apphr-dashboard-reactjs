@@ -94,12 +94,11 @@ const SchedulerPage = ({ t, history, match }) => {
 
   const [state, setState] = useState({
     // data: [{ id: 1, title: 'gaf', startDate: '2021-04-14T10:00:00', endDate: '2021-04-14T12:00:00' }],
-    currentDate: '2021-04-12',
+    currentDate: new Date(),
     isOpen: false,
     selectedDate: '',
     visible: false,
   });
-
   useEffect(() => {
     dispatch(
       fetchShifts({
@@ -107,15 +106,25 @@ const SchedulerPage = ({ t, history, match }) => {
         perpage: 1000,
       }),
     );
-    dispatch(fetchAssignments({ userId: userId }));
-
-    return () => {
-      dispatch(setEmptyAssignments());
-    };
-    //eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+    var firstDay = new Date(state.currentDate.setDate(first));
+    var lastDay = new Date(state.currentDate.setDate(last));
+    dispatch(fetchAssignments({ userId: userId, from: firstDay, to: lastDay }));
+    // return () => {
+    //   dispatch(setEmptyAssignments());
+    // };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.currentDate]);
   const changeCurrentDate = (currentDate) => {
-    setState({ ...state, currentDate: currentDate });
+    setState({
+      ...state,
+      currentDate: currentDate,
+    });
   };
   const handleClose = () => {
     setState({ ...state, isOpen: false });
@@ -165,10 +174,8 @@ const SchedulerPage = ({ t, history, match }) => {
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
         <IconButton
           onClick={() => {
-            setState(async (state) => {
-              dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
-              restProps.onHide();
-            });
+            dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
+            restProps.onHide();
           }}
           className={classes.commandButton}
         >

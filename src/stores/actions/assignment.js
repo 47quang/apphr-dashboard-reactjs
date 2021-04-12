@@ -42,6 +42,10 @@ export const createAssignment = (params, success_msg) => {
     api.assignment
       .post(params)
       .then(({ payload }) => {
+        payload.startDate = payload.date.replace('00:00:00.000Z', payload.shift.startCC);
+        payload.endDate = payload.date.replace('00:00:00.000Z', payload.shift.endCC);
+        payload.title = payload.shift.code + ' - ' + payload.shift.name;
+        payload.location = payload.shift.branch.code + ' - ' + payload.shift.branch.name;
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
