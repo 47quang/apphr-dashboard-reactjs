@@ -25,6 +25,10 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "minutes": "Phút",
+    "hours": "Giờ",
+    "flexible_time": "Mức dao động thời gian điểm danh",
+    "min_work_time": "Thời gian làm việc tối thiểu",
     "start_time": "Giờ bắt đầu",
     "end_time": "Giờ kết thúc",
     "new_task": "Phân công",
@@ -239,6 +243,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+
     "enter_field_name": "Nhập tên trường",
     "enter_article_type_name": "Nhập tên loại thông báo",
     "enter_article_type_code": "Nhập mã loại thông báo",
@@ -271,6 +276,7 @@
     "enter_tax_code": "Nhập mã số thuế",
     "enter_description": "Nhập mô tả",
     "enter_contact_link": "Nhập link",
+    "select_periodic_payment_method": "Chọn hình thức chi trả định kỳ",
     "select_field_type": "Chọn loại trường",
     "select_notification_type": "Chọn loại thông báo",
     "select_contact_channels": "Chọn kênh liên lạc",
@@ -326,6 +332,8 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_select_periodic_payment": "Bắt buộc chọn hình thức chi trả định kỳ",
+    "required_enter_flexible_time": "Bắt buộc nhập mức dao động thời gian điểm danh",
     "required_select_start_time": "Bắt buộc chọn giờ bắt đầu",
     "required_select_end_time": "Bắt buộc chọn giờ kết thúc",
     "required_select_shift": "Bắt buộc chọn ca làm việc",
@@ -359,6 +367,7 @@
     "required_select_certificate_expired_date": "Bắt buộc chọn ngày hết hạn của chứng chỉ",
     "required_select_contract_handle_date": "Bắt buộc chọn ngày ký hợp đồng",
     "required_enter_prob_time": "Bắt buộc nhập thời gian thử việc",
+    "required_enter_minimum_work_time": "Bắt buộc phải nhập thời gian làm việc tối thiểu",
     "required_select_contract_wage": "Bắt buộc phải chọn nhóm lương",
     "required_select_contract_payment": "Bắt buộc phải chọn hình thức chi trả",
     "required_select_contract_type_work": "Bắt buộc phải chọn loại công việc",
@@ -383,6 +392,8 @@
     "required_enter_position_name": "Bắt buộc nhập tên vị trí",
     "required_enter_experience_year": "Bắt buộc nhập năm kinh nghiệm",
     "experience_year_must_not_be_negative": "Năm kinh nghiệm là một số không âm",
+    "minimum_work_time_must_not_be_negative": "Thời gian làm việc tối thiểu là một số không âm",
+    "flexible_time_must_not_be_negative": "Mức dao động thời gian điểm danh là một số không âm",
     "required_enter_shift_name": "Bắt buộc nhập tên ca làm",
     "required_select_checkin_time": "Bắt buộc chọn giờ check-in",
     "required_select_checkout_time": "Bắt buộc chọn giờ check-out",
@@ -397,6 +408,7 @@
     "required_enter_total_proposal_day": "Bắt buộc nhập số ngày đề xuất tối đa",
     "required_enter_salary_level": "Bắt buộc nhập mức lương",
     "total_proposal_day_must_be_integer": "Số ngày đề xuất tối đa phải là một số nguyên",
+    "flexible_time_must_be_integer": "Mức dao động thời gian điểm danh phải là một số nguyên",
     "salary_level_must_be_integer": "Mức lương phải là một số nguyên",
     "dayOff_must_be_integer": "Số ngày nghỉ cho phép phải là một số nguyên",
     "total_proposal_day_must_not_be_negative": "Số ngày đề xuất tối đa là một số không âm",

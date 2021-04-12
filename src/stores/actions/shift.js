@@ -19,7 +19,6 @@ const formatDownloadedData = (payload) => {
   payload.operateLoop = deCodeChecked(payload.operateLoop);
   payload.startCC = convertTimeWithoutSecond(payload.startCC);
   payload.endCC = convertTimeWithoutSecond(payload.endCC);
-  payload.branchIds = convertBranchesId(payload.branchIds);
   return payload;
 };
 export const fetchShift = (id) => {

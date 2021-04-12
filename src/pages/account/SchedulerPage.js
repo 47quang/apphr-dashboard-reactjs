@@ -116,7 +116,6 @@ const SchedulerPage = ({ t, history, match }) => {
     firstDay.setHours(0, 0, 0, 0);
     var lastDay = new Date(state.currentDate.setDate(last));
     lastDay.setHours(23, 59, 59, 0);
-
     dispatch(fetchAssignments({ userId: userId, from: firstDay, to: lastDay }));
     // return () => {
     //   dispatch(setEmptyAssignments());
