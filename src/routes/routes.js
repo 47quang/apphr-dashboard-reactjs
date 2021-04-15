@@ -5,8 +5,8 @@ const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
 
 const Account = React.lazy(() => import('src/pages/account/Account'));
-const NewAccount = React.lazy(() => import('src/pages/account/NewAccount'));
-const EditAccount = React.lazy(() => import('src/pages/account/UpdateAccount'));
+const NewAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
+const EditAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
 
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
 const NewProfile = React.lazy(() => import('src/pages/profile/NewProfile'));
@@ -15,6 +15,10 @@ const NewContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
+const LeaveForm = React.lazy(() => import('src/pages/proposal/LeaveForm'));
+const Remote = React.lazy(() => import('src/pages/proposal/Proposal'));
+const Overtime = React.lazy(() => import('src/pages/proposal/Proposal'));
+
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
 const NewNotification = React.lazy(() => import('src/pages/notification/NewNotification'));
@@ -76,7 +80,16 @@ const routes = [
   { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
   { path: ROUTE_PATH.PROFILE_UPDATE, name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
-  { path: ROUTE_PATH.PROPOSAL, name: ROUTE_NAME.PROPOSAL, component: Proposal },
+
+  { path: ROUTE_PATH.LEAVE_REQUEST, name: ROUTE_NAME.LEAVE_REQUEST, component: LeaveForm },
+  { path: ROUTE_PATH.LEAVE, name: ROUTE_NAME.PROPOSAL, component: Proposal },
+
+  { path: ROUTE_PATH.REMOTE_REQUEST, name: ROUTE_NAME.REMOTE_REQUEST, component: LeaveForm },
+  { path: ROUTE_PATH.REMOTE, name: ROUTE_NAME.PROPOSAL, component: Remote },
+
+  { path: ROUTE_PATH.OVERTIME_REQUEST, name: ROUTE_NAME.OVERTIME_REQUEST, component: LeaveForm },
+  { path: ROUTE_PATH.OVERTIME, name: ROUTE_NAME.PROPOSAL, component: Overtime },
+
   { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },
   {
     path: ROUTE_PATH.NOTIFICATION_CREATE,

@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import AccountItemBody from './AccountItemBody';
-import SchedulerPage from './SchedulerPage';
+import SchedulerPage from '../profile/SchedulerPage';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;

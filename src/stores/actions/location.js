@@ -8,7 +8,13 @@ export const fetchProvinces = (params) => {
       .then(({ payload }) => {
         dispatch({ type: 'SET_PROVINCES', payload });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
   };
 };
 
@@ -21,6 +27,11 @@ export const fetchDistricts = (params) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -34,6 +45,11 @@ export const fetchWards = (params) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

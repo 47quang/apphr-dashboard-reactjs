@@ -20,6 +20,11 @@ export const fetchAssignments = (params) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -33,6 +38,11 @@ export const fetchAssignment = (id) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -51,7 +61,11 @@ export const createAssignment = (params, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -67,7 +81,11 @@ export const deleteAssignment = (id, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

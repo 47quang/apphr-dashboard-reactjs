@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { convertBranchesId, convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
+import { convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
 
@@ -12,6 +12,11 @@ export const fetchShifts = (params) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -19,7 +24,6 @@ const formatDownloadedData = (payload) => {
   payload.operateLoop = deCodeChecked(payload.operateLoop);
   payload.startCC = convertTimeWithoutSecond(payload.startCC);
   payload.endCC = convertTimeWithoutSecond(payload.endCC);
-  payload.branchIds = convertBranchesId(payload.branchIds);
   return payload;
 };
 export const fetchShift = (id) => {
@@ -32,6 +36,11 @@ export const fetchShift = (id) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -48,7 +57,11 @@ export const createNewShift = (data, history, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -67,7 +80,11 @@ export const updateShift = (data, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -82,7 +99,11 @@ export const deleteShift = (params, success_msg) => {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err } });
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

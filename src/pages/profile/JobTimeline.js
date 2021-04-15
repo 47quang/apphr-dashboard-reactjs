@@ -65,6 +65,10 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: 'Chi trả theo giờ' },
+    { id: 'by_month', name: 'Chi trả theo tháng' },
+  ];
+  const periodicPayment = [
+    { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_date', name: 'Chi trả theo ngày' },
     { id: 'by_week', name: 'Chi trả theo tuần' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
@@ -221,7 +225,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 rows={5}
                 name={`probPayRates`}
                 onChange={(e) => handleChange(`probPayRates`)(e)}
-                value={values.probTime}
+                value={values.probPayRates}
               />
               <span className="input-group-text" id="basic-addon2">
                 {t('label.percentage')}
@@ -466,6 +470,39 @@ const JobTimelineInfo = ({ t, history, match }) => {
               isTouched={touched?.amount}
               isError={errors?.amount && touched?.amount}
               errorMessage={t(errors?.amount)}
+            />
+
+            <CommonTextInput
+              containerClassName={'form-group col-xl-4'}
+              value={values.dayOff}
+              onBlur={handleBlur('dayOff')}
+              onChange={handleChange('dayOff')}
+              inputID={'dayOff'}
+              labelText={t('label.wage_dayOff')}
+              inputType={'number'}
+              placeholder={t('placeholder.enter_dayOff')}
+              inputClassName={'form-control'}
+              isRequiredField
+              isTouched={touched.dayOff}
+              isError={errors.dayOff && touched.dayOff}
+              errorMessage={t(errors.dayOff)}
+            />
+            <CommonSelectInput
+              containerClassName={'form-group col-xl-4'}
+              value={values?.periodicPayment ?? ''}
+              onBlur={handleBlur(`periodicPayment`)}
+              onChange={async (e) => {
+                handleChange(`periodicPayment`)(e);
+              }}
+              inputID={`periodicPayment`}
+              labelText={t('label.payment_method')}
+              selectClassName={'form-control'}
+              placeholder={t('placeholder.select_periodic_payment_method')}
+              isRequiredField
+              isTouched={touched?.periodicPayment}
+              isError={errors?.periodicPayment && touched?.periodicPayment}
+              errorMessage={t(errors?.periodicPayment)}
+              lstSelectOptions={periodicPayment}
             />
           </div>
         ) : (

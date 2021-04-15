@@ -13,6 +13,7 @@ import CertificateInfo from './CertificateInfo';
 import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
+import SchedulerPage from './SchedulerPage';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -100,13 +101,14 @@ const ProfileTabs = ({ t, history, match }) => {
                 scrollButtons="auto"
               >
                 <Tab className="noselect" label={t('label.profile_basic_info')} {...a11yProps(0)} />
-                <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(7)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contract')} {...a11yProps(1)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(2)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(3)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(4)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(5)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(6)} />
+                <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_history_working')} {...a11yProps(1)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contract')} {...a11yProps(2)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(3)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(4)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(5)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(6)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(7)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(8)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
@@ -119,18 +121,21 @@ const ProfileTabs = ({ t, history, match }) => {
               <JobTimelineInfo t={t} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <AcademicLevel t={t} match={match} />
-            </TabPanel>
-            <TabPanel value={subTabName} index={4} dir={theme.direction}>
-              <CertificateInfo t={t} match={match} />
-            </TabPanel>
-            <TabPanel value={subTabName} index={5} dir={theme.direction}>
-              <AddressInfo t={t} history={history} match={match} />
-            </TabPanel>
-            <TabPanel value={subTabName} index={6} dir={theme.direction}>
               <Benefit t={t} history={history} match={match} />
             </TabPanel>
+            <TabPanel value={subTabName} index={4} dir={theme.direction}>
+              <SchedulerPage t={t} history={history} match={match} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={5} dir={theme.direction}>
+              <AcademicLevel t={t} match={match} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={6} dir={theme.direction}>
+              <CertificateInfo t={t} match={match} />
+            </TabPanel>
             <TabPanel value={subTabName} index={7} dir={theme.direction}>
+              <AddressInfo t={t} history={history} match={match} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={8} dir={theme.direction}>
               <OtherInfo t={t} history={history} match={match} />
             </TabPanel>
           </div>

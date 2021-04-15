@@ -38,6 +38,11 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   coefficient: Yup.number()
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_coefficient'),
+  minWorkTime: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
+  flexibleTime: Yup.number()
+    .integer('validation.flexible_time_must_be_integer')
+    .min(0, 'validation.flexible_time_must_not_be_negative')
+    .required('validation.required_enter_flexible_time'),
   branchIds: Yup.array()
     .of(Yup.number())
     .required('validation.required_select_branch_id')
@@ -227,6 +232,25 @@ export const NewContractSchema = Yup.object().shape({
       },
       then: Yup.string().required('validation.required_select_contract_wage'),
     }),
+  dayOff: Yup.number()
+    .integer('validation.dayOff_must_be_integer"')
+    .min(0, 'validation.dayOff_must_not_be_negative')
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_enter_dayOff'),
+    }),
+  periodicPayment: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
+      return value !== '0';
+    })
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_periodic_payment'),
+    }),
   probPay: Yup.number()
     .positive('validation.required_positive_prob_pay')
     .integer('validation.required_integer_prob_pay')
@@ -410,10 +434,6 @@ export const WageSchema = Yup.object().shape({
     .integer('validation.salary_level_must_be_integer"')
     .min(0, 'validation.salary_level_must_not_be_negative')
     .required('validation.required_enter_salary_level'),
-  dayOff: Yup.number()
-    .integer('validation.dayOff_must_be_integer"')
-    .min(0, 'validation.dayOff_must_not_be_negative')
-    .required('validation.required_enter_dayOff'),
 });
 export const AllowanceSchema = Yup.object().shape({
   name: Yup.string().min(1, 'validation.required_enter_allowance_name').required('validation.required_enter_allowance_name'),
