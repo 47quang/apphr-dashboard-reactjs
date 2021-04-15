@@ -28,19 +28,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-
+import { Cancel, CheckCircle, Lens } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import classNames from 'classnames';
 import saveAs from 'file-saver';
 import { Formik } from 'formik';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
-import RollUpInfo from '../dialog/RollUpInfo';
+import { COLORS } from 'src/constants/theme';
 
 /*
   Params:
@@ -220,6 +220,8 @@ const QTable = (props) => {
     disableDelete,
     disableEdit,
     disableEditColum,
+    customTableCell,
+    statusCols,
   } = props;
   const exporterRef = useRef(null);
 
@@ -227,8 +229,8 @@ const QTable = (props) => {
     exporterRef.current.exportGrid();
   }, [exporterRef]);
 
-  const [defaultHiddenColumnNames] = useState([]);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
+  let statusColumns = Array.isArray(statusCols) ? statusCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
 
@@ -239,11 +241,25 @@ const QTable = (props) => {
     pageSize: 5,
     pageSizes: [5, 10, 15],
     editingRowIds: [],
+    hiddenColumnNames: [],
   });
+
+  const setHiddenColumnNames = (hiddenColumns) => {
+    setState((preState) => ({
+      ...preState,
+      hiddenColumnNames: hiddenColumns,
+    }));
+  };
   const [rowChanges, setRowChanges] = useState({});
 
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
 
+  useEffect(() => {
+    setState((preState) => ({
+      ...preState,
+      columns: columnDef,
+    }));
+  }, [columnDef]);
   // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
   const tableColumnExtensions = columnDef.map((col, idx) => {
     return {
@@ -279,55 +295,119 @@ const QTable = (props) => {
   const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 
   const MultiValuesFormatter = ({ value }) => {
-    return value.map((val, idx) => <Chip label={val} key={idx} className="mx-1 my-1 px-0 py-0" color="primary" variant="outlined" />);
+    console.log('value', value);
+    return value.map((val, idx) => (
+      <Chip
+        component="div"
+        label={
+          <section>
+            <div className=""> {val.shift}</div>
+          </section>
+        }
+        key={idx}
+        className="mx-1 my-1 px-0 py-0"
+        color="primary"
+        variant="outlined"
+      />
+    ));
   };
   const MultiValuesTypeProvider = (p) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...p} />;
+
+  const StatusFormatter = ({ value }) => {
+    return (
+      <Chip
+        label={value === 'accept' ? 'Đã phê duyệt' : value === 'deny' ? 'Đã từ chối' : 'Đang xữ lý'}
+        className="mx-1 my-1 px-0 py-0"
+        style={{ backgroundColor: value === 'accept' ? COLORS.FULLY_ROLL_CALL : value === 'deny' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE }}
+      />
+    );
+  };
+  const StatusProvider = (p) => <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
 
   const LinkFormatter = ({ value, column }) =>
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
-  const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
-    // console.log('value', value);
-    // console.log('row', row);
-    //console.log('column', column);
-    // console.log('children', children);
-    const [cell, setCell] = useState({
-      rowId: '',
-      columnName: '',
-      isOpen: false,
-    });
+  // const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+  //   // console.log('value', value);
+  //   // console.log('row', row);
+  //   // console.log('column', column);
+  //   // console.log('children', children);
+  //   const [cell, setCell] = useState({
+  //     rowId: '',
+  //     columnName: '',
+  //     isOpen: false,
+  //   });
 
-    const handleClose = () => {
-      setCell({ ...cell, isOpen: false });
-    };
-    const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-    return (
-      <>
-        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} />
-        <Table.Cell
-          className={classNames(className)}
-          {...restProps}
-          onClick={(e) => {
-            if (dateCol.includes(column.name))
-              setCell((prevState) => ({
-                ...prevState,
-                rowId: row.id,
-                columnName: column.name,
-                isOpen: true,
-              }));
-          }}
-          value={value}
-          row={row}
-          column={column}
-          children={children}
-          role={dateCol.includes(column.name) ? 'button' : 'layout'}
-        />
-      </>
-    );
-  };
+  //   const handleClose = () => {
+  //     setCell({ ...cell, isOpen: false });
+  //   };
+  //   const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  //   return (
+  //     <>
+  //       <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} />
+  //       <Table.Cell
+  //         className={classNames(className, Array.isArray(value) ? 'p-1 border border-secondary' : 'ps-3')}
+  //         {...restProps}
+  //         row={row}
+  //         column={column}
+  //         children={children}
+  //         style={{
+  //           backgroundColor: Array.isArray(value)
+  //             ? value.length > 0
+  //               ? value.every((v) => v.status === false)
+  //                 ? COLORS.FULLY_ABSENT_ROLL_CALL
+  //                 : COLORS.FULLY_ROLL_CALL
+  //               : COLORS.FREE_DATE
+  //             : '',
+  //         }}
+  //       >
+  //         {Array.isArray(value) ? (
+  //           <div className={classNames(className, 'rounded  p-0')}>
+  //             {value.length > 0 ? (
+  //               value.map((val, idx) => {
+  //                 return (
+  //                   <div
+  //                     className={classNames('row p-1 m-1', idx === value.length - 1 ? '' : 'border-bottom')}
+  //                     role="button"
+  //                     onClick={(e) => {
+  //                       if (dateCol.includes(column.name))
+  //                         setCell((prevState) => ({
+  //                           ...prevState,
+  //                           rowId: row.id,
+  //                           columnName: column.name,
+  //                           isOpen: true,
+  //                         }));
+  //                     }}
+  //                   >
+  //                     <div className="col-2 border-right p-0 m-0">
+  //                       <p style={{ color: val.status > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.value}</p>
+  //                     </div>
+  //                     <div className="col-10">
+  //                       {val.status ? (
+  //                         <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
+  //                       ) : (
+  //                         <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
+  //                       )}
+  //                       <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
+  //                     </div>
+  //                   </div>
+  //                 );
+  //               })
+  //             ) : (
+  //               <div className="d-flex justify-content-center">
+  //                 <Remove />
+  //               </div>
+  //             )}
+  //           </div>
+  //         ) : (
+  //           value
+  //         )}
+  //       </Table.Cell>
+  //     </>
+  //   );
+  // };
 
   return (
     <div>
@@ -382,6 +462,7 @@ const QTable = (props) => {
 
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
+          <StatusProvider for={statusColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
@@ -422,10 +503,14 @@ const QTable = (props) => {
           />
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <DragDropProvider />
-          <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={CustomTableCell} />
+          {customTableCell ? (
+            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={customTableCell} />
+          ) : (
+            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
+          )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           <TableHeaderRow showSortingControls titleComponent={Label} className="m-0 p-0" />
-          <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
+          <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
           <Toolbar rootComponent={ToolbarRoot} />
           <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} />
@@ -443,6 +528,32 @@ const QTable = (props) => {
           <PagingPanel pageSizes={state.pageSizes} />
         </Grid>
         <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />
+        {route === '/roll-up/' ? (
+          <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
+            <div className="pr-4">
+              <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
+              <p className="d-inline">Điểm danh đầy đủ</p>
+            </div>
+            <div className="pr-4">
+              <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+              <p className="d-inline"> Không có ca làm việc</p>
+            </div>
+            <div className="pr-4">
+              <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
+              <p className="d-inline"> Nghỉ cả ngày</p>
+            </div>
+            <div className="pr-4">
+              <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+              <p className="d-inline"> Điểm danh thành công</p>
+            </div>
+            <div className="pr-4">
+              <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+              <p className="d-inline"> Không điểm danh</p>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
       </Paper>
     </div>
   );

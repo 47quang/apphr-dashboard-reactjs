@@ -32,10 +32,27 @@ const _nav = [
     icon: 'cil-touch-app',
   },
   {
-    _tag: 'CSidebarNavItem',
+    _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.PROPOSAL,
     to: ROUTE_PATH.PROPOSAL,
     icon: 'cil-description',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.LEAVE,
+        to: ROUTE_PATH.LEAVE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.REMOTE,
+        to: ROUTE_PATH.REMOTE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.OVERTIME,
+        to: ROUTE_PATH.OVERTIME,
+      },
+    ],
   },
   {
     _tag: 'CSidebarNavItem',

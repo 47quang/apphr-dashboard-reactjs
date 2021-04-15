@@ -48,6 +48,15 @@ export const ROUTE_NAME = {
   ARTICLE_TYPE: 'Article Type',
   NEW_ARTICLE_TYPE: 'New Article Type',
   ARTICLE_TYPE_UPDATE: ' Article Type Update',
+
+  LEAVE: 'Leave',
+  LEAVE_REQUEST: 'Leave Request',
+
+  REMOTE: 'Remote',
+  REMOTE_REQUEST: 'Remote Request',
+
+  OVERTIME: 'Overtime',
+  OVERTIME_REQUEST: 'Overtime Request',
 };
 
 const ID = '/:id';
@@ -119,6 +128,15 @@ export const ROUTE_PATH = {
   ARTICLE_TYPE: '/setting/articleType',
   ARTICLE_TYPE_CREATE: '/setting/articleType' + CREATE,
   ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
+
+  LEAVE: '/proposal/leave',
+  LEAVE_REQUEST: '/proposal/leave' + ID,
+
+  REMOTE: '/proposal/remote',
+  REMOTE_REQUEST: '/proposal/remote' + ID,
+
+  OVERTIME: '/proposal/overtime',
+  OVERTIME_REQUEST: '/proposal/overtime' + ID,
 };
 
 export const CONTACT_TYPE = {

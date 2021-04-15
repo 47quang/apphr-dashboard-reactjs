@@ -19,7 +19,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarForm from 'src/components/calendar/CalendarForm';
-import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
+import { createAssignment, deleteAssignment, fetchAssignments } from 'src/stores/actions/assignment';
 import { fetchShifts } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 const SchedulerPage = ({ t, history, match }) => {
   const shifts = useSelector((state) => state.shift.shifts);
   const assignments = useSelector((state) => state.assignment.assignments);
-  const userId = +match?.params?.id;
+  const profileId = +match?.params?.id;
   const dispatch = useDispatch();
 
   const DayScaleCell = (props) => {
@@ -116,7 +116,7 @@ const SchedulerPage = ({ t, history, match }) => {
     firstDay.setHours(0, 0, 0, 0);
     var lastDay = new Date(state.currentDate.setDate(last));
     lastDay.setHours(23, 59, 59, 0);
-    dispatch(fetchAssignments({ userId: userId, from: firstDay, to: lastDay }));
+    dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }));
     // return () => {
     //   dispatch(setEmptyAssignments());
     // };
@@ -150,7 +150,7 @@ const SchedulerPage = ({ t, history, match }) => {
     } else {
       let body = {
         shiftId: +values.shiftId,
-        userId: userId,
+        profileId: profileId,
         date: selectedDate,
       };
       dispatch(createAssignment(body, t('message.successful_create')));
