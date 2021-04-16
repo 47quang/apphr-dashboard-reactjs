@@ -12,13 +12,14 @@ const handleAccounts = (payload) => {
   return payload;
 };
 
-export const fetchAccounts = () => {
+export const fetchAccounts = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.account
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         payload = handleAccounts(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         if (err.response.status >= 500)

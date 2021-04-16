@@ -2,12 +2,13 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchAllowances = () => {
+export const fetchAllowances = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.allowance
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

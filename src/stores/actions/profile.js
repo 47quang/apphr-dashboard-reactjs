@@ -3,11 +3,11 @@ import { getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchProfiles = () => {
+export const fetchProfiles = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.profile
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
             ? payload.map((profile) => {
@@ -16,6 +16,7 @@ export const fetchProfiles = () => {
               })
             : [];
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

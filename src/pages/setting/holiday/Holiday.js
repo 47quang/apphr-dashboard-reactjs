@@ -22,12 +22,41 @@ const HolidayPage = ({ t, location, history }) => {
   const holidays = useSelector((state) => state.holiday.holidays);
   const requests = useSelector((state) => state.holiday.requests);
   const [isDefaultTab, setIsDefaultTab] = useState(true);
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+  });
+  const onCurrentPageChange = (pageNumber) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
 
   useEffect(() => {
-    dispatch(fetchHolidays());
+    dispatch(
+      fetchHolidays(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+      ),
+    );
     dispatch(fetchAllRequest());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paging.currentPage, paging.pageSize]);
 
   const handleChangeTab = (e) => {
     if ((e === 'holiday') !== isDefaultTab) {
@@ -59,6 +88,9 @@ const HolidayPage = ({ t, location, history }) => {
               idxColumnsFilter={[1]}
               dateCols={[3, 2]}
               deleteRow={deleteRow}
+              paging={paging}
+              onCurrentPageChange={onCurrentPageChange}
+              onPageSizeChange={onPageSizeChange}
             />
           </CTabPane>
           <CTabPane data-tab="holidaySettings">
@@ -70,6 +102,9 @@ const HolidayPage = ({ t, location, history }) => {
               idxColumnsFilter={[0]}
               disableCreate={true}
               disableDelete={true}
+              paging={paging}
+              onCurrentPageChange={onCurrentPageChange}
+              onPageSizeChange={onPageSizeChange}
             />
           </CTabPane>
         </CTabContent>
