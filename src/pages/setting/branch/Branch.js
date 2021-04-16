@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 const Branch = ({ t }) => {
@@ -29,6 +29,7 @@ const Branch = ({ t }) => {
     setPaging((prevState) => ({
       ...prevState,
       pageSize: newPageSize,
+      currentPage: 0,
     }));
   const onTotalChange = (total) =>
     setPaging((prevState) => ({
@@ -58,7 +59,7 @@ const Branch = ({ t }) => {
     dispatch(deleteBranch(rowId, t('message.successful_delete')));
     dispatch(fetchBranches());
   };
-
+  let permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
@@ -71,6 +72,8 @@ const Branch = ({ t }) => {
         paging={paging}
         onCurrentPageChange={onCurrentPageChange}
         onPageSizeChange={onPageSizeChange}
+        disableDelete={!permissionIds.includes(PERMISSION.DELETE_BRANCH)}
+        disableCreate={!permissionIds.includes(PERMISSION.CREATE_BRANCH)}
       />
     </CContainer>
   );

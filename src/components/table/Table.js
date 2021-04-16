@@ -107,7 +107,7 @@ const AddRowPanel = ({ route, disableCreate }) => {
       <Template name="toolbarContent">
         <TemplatePlaceholder />
         {
-          <IconButton disabled={disableCreate} className="py-0 px-0">
+          <IconButton hidden={disableCreate} className="py-0 px-0">
             <Link to={`${route}create`} className="px-0 py-0">
               <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
             </Link>

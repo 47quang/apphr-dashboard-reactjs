@@ -9,13 +9,16 @@ import {
   CSidebarNavItem,
   CSidebarNavTitle,
 } from '@coreui/react';
+import { isArray } from '@material-ui/data-grid';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { REDUX_STATE } from 'src/stores/states';
 import nav from './_nav';
 const TheSidebar = () => {
-  const navigation = JSON.parse(JSON.stringify(nav));
+  let navigation = JSON.parse(JSON.stringify(nav));
+  const permissionIds = localStorage.getItem('permissionIds');
+  navigation = navigation.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
