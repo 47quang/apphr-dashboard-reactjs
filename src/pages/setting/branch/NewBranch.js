@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { createBranch, setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
@@ -42,25 +42,39 @@ const NewBranchPage = ({ t, location, history }) => {
     delete form.id;
     dispatch(createBranch(form, history, t('message.successful_create')));
   };
-  const buttons = [
-    {
-      type: 'button',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        history.push(ROUTE_PATH.BRANCH);
-      },
-      name: t('label.back'),
-      position: 'left',
-    },
-    {
-      type: 'button',
-      className: `btn btn-primary`,
-      onClick: (e) => {
-        branchInfoForm.current.handleSubmit(e);
-      },
-      name: t('label.create_new'),
-    },
-  ];
+  let permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
+
+  const buttons = permissionIds.includes(PERMISSION.CREATE_BRANCH)
+    ? [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            history.push(ROUTE_PATH.BRANCH);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+        {
+          type: 'button',
+          className: `btn btn-primary`,
+          onClick: (e) => {
+            branchInfoForm.current.handleSubmit(e);
+          },
+          name: t('label.create_new'),
+        },
+      ]
+    : [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            history.push(ROUTE_PATH.BRANCH);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+      ];
   return (
     <BranchItemBody
       branchRef={branchInfoForm}

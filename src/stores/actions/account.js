@@ -77,6 +77,7 @@ export const createAccount = (params, history, success_msg) => {
 };
 
 export const updateAccount = (data, success_msg) => {
+  console.log(data);
   return (dispatch, getState) => {
     api.account
       .put(data)

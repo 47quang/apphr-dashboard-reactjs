@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
 import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
@@ -41,34 +41,49 @@ const UpdateBranch = ({ t, location, history, match }) => {
     // Call API UPDATE
     dispatch(updateBranch(form, t('message.successful_update')));
   };
-  const buttons = [
-    {
-      type: 'button',
-      className: `btn btn-primary mr-4`,
+  let permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
-      onClick: (e) => {
-        history.push(ROUTE_PATH.BRANCH);
-      },
-      name: t('label.back'),
-      position: 'left',
-    },
-    {
-      type: 'reset',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        branchInfoForm.current.handleReset(e);
-      },
-      name: t('label.reset'),
-    },
-    {
-      type: 'button',
-      className: `btn btn-primary`,
-      onClick: (e) => {
-        branchInfoForm.current.handleSubmit(e);
-      },
-      name: t('label.update'),
-    },
-  ];
+  const buttons = permissionIds.includes(PERMISSION.UPDATE_BRANCH)
+    ? [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+
+          onClick: (e) => {
+            history.push(ROUTE_PATH.BRANCH);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+        {
+          type: 'reset',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            branchInfoForm.current.handleReset(e);
+          },
+          name: t('label.reset'),
+        },
+        {
+          type: 'button',
+          className: `btn btn-primary`,
+          onClick: (e) => {
+            branchInfoForm.current.handleSubmit(e);
+          },
+          name: t('label.update'),
+        },
+      ]
+    : [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+
+          onClick: (e) => {
+            history.push(ROUTE_PATH.BRANCH);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+      ];
   return (
     <BranchItemBody
       branchRef={branchInfoForm}

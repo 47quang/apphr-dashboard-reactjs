@@ -9,6 +9,7 @@ export const login = (params, history) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.user.SET_USER, payload });
         localStorage.setItem('token', payload.token);
+        localStorage.setItem('permissionIds', JSON.stringify(payload.user.role.permissionIds));
         history.push(ROUTE_PATH.ROOT);
       })
       .catch((err) => {

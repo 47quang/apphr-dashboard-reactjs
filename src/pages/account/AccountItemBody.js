@@ -45,14 +45,14 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     let form = values;
     delete form.rollUp;
     delete form.profile;
+    form.roleId = parseInt(form.roleId);
     if (isCreate) {
       delete form.id;
-      form.roleId = parseInt(form.roleId);
       dispatch(createAccount(form, history, t('message.successful_delete_account')));
     } else {
       if (form.profileId !== '0') form.profileId = +form.profileId;
       else delete form.profileId;
-      dispatch(updateAccount(form, history, t('message.successful_update_account')));
+      dispatch(updateAccount(form, t('message.successful_update_account')));
     }
   };
 
@@ -98,7 +98,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
           type: 'button',
           className: `btn btn-primary`,
           onClick: (e) => {
-            accountRef.current.handleSubmit(e);
+            accountRef.current.handleSubmit();
           },
           name: t('label.update'),
         },

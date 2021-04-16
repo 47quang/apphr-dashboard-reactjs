@@ -349,6 +349,7 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_enter_bssid": "Bắt buộc nhập BSSID",
     "required_select_periodic_payment": "Bắt buộc chọn hình thức chi trả định kỳ",
     "required_enter_flexible_time": "Bắt buộc nhập mức dao động thời gian điểm danh",
     "required_select_start_time": "Bắt buộc chọn giờ bắt đầu",
