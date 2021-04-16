@@ -3,12 +3,13 @@ import { convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
 
-export const fetchShifts = (params) => {
+export const fetchShifts = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.shift
       .getAll(params)
-      .then(({ payload }) => {
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

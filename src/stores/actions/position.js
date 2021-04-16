@@ -2,12 +2,13 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchPositions = (params) => {
+export const fetchPositions = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.position
       .getAll(params)
-      .then(({ payload }) => {
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

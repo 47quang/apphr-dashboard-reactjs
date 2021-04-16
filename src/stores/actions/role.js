@@ -9,13 +9,14 @@ const formatDownloadedData = (payload) => {
   });
 };
 
-export const fetchRoles = () => {
+export const fetchRoles = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.role
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.role.SET_ROLES, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

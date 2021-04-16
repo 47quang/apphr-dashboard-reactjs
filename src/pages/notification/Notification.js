@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
@@ -17,10 +17,40 @@ const Notification = ({ t }) => {
     // { name: 'positionIds', title: t('label.notification_positions') },
     { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+  });
+  const onCurrentPageChange = (pageNumber) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  };
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
   useEffect(() => {
-    dispatch(fetchArticles());
+    dispatch(
+      fetchArticles(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+      ),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = async (rowId) => {
     dispatch(deleteArticle(rowId, t('message.successful_delete')));
@@ -29,7 +59,17 @@ const Notification = ({ t }) => {
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <QTable t={t} columnDef={columnDef} data={articles} route={ROUTE_PATH.NOTIFICATION + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
+      <QTable
+        t={t}
+        columnDef={columnDef}
+        data={articles}
+        route={ROUTE_PATH.NOTIFICATION + '/'}
+        idxColumnsFilter={[0, 1]}
+        deleteRow={deleteRow}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
+        paging={paging}
+      />
     </CContainer>
   );
 };

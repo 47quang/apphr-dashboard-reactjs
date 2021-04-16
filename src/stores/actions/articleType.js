@@ -2,12 +2,13 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchTypes = () => {
+export const fetchTypes = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.articleType
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.articleType.SET_TYPES, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

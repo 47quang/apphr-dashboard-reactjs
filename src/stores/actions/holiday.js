@@ -7,12 +7,13 @@ const convertTime = (payload) => {
   payload.endDate = payload.endDate.replace('Z', '');
   return payload;
 };
-export const fetchHolidays = () => {
+export const fetchHolidays = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.holiday
-      .getAll()
-      .then(({ payload }) => {
+      .getAll(params)
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

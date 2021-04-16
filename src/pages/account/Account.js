@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
@@ -15,10 +15,40 @@ const Account = ({ t, location, history }) => {
   ];
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.account.accounts);
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+  });
+  const onCurrentPageChange = (pageNumber) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  };
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
   useEffect(() => {
-    dispatch(fetchAccounts());
+    dispatch(
+      fetchAccounts(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+      ),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = async (rowId) => {
     dispatch(deleteAccount(rowId, t('message.successful_delete')));
@@ -34,6 +64,9 @@ const Account = ({ t, location, history }) => {
         idxColumnsFilter={[0]}
         deleteRow={deleteRow}
         linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
+        paging={paging}
       />
     </CContainer>
   );

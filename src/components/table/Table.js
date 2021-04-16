@@ -3,9 +3,9 @@ import {
   DataTypeProvider,
   EditingState,
   IntegratedFiltering,
-  IntegratedPaging,
   IntegratedSelection,
   PagingState,
+  CustomPaging,
   SelectionState,
   SortingState,
 } from '@devexpress/dx-react-grid';
@@ -23,6 +23,7 @@ import {
   TableHeaderRow,
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
+// import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -222,6 +223,9 @@ const QTable = (props) => {
     disableEditColum,
     customTableCell,
     statusCols,
+    paging,
+    onCurrentPageChange,
+    onPageSizeChange,
   } = props;
   const exporterRef = useRef(null);
 
@@ -237,9 +241,6 @@ const QTable = (props) => {
   const [state, setState] = useState({
     columns: columnDef,
     selection: [],
-    currentPage: 0,
-    pageSize: 5,
-    pageSizes: [5, 10, 15],
     editingRowIds: [],
     hiddenColumnNames: [],
   });
@@ -329,86 +330,6 @@ const QTable = (props) => {
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
-  // const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
-  //   // console.log('value', value);
-  //   // console.log('row', row);
-  //   // console.log('column', column);
-  //   // console.log('children', children);
-  //   const [cell, setCell] = useState({
-  //     rowId: '',
-  //     columnName: '',
-  //     isOpen: false,
-  //   });
-
-  //   const handleClose = () => {
-  //     setCell({ ...cell, isOpen: false });
-  //   };
-  //   const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  //   return (
-  //     <>
-  //       <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} />
-  //       <Table.Cell
-  //         className={classNames(className, Array.isArray(value) ? 'p-1 border border-secondary' : 'ps-3')}
-  //         {...restProps}
-  //         row={row}
-  //         column={column}
-  //         children={children}
-  //         style={{
-  //           backgroundColor: Array.isArray(value)
-  //             ? value.length > 0
-  //               ? value.every((v) => v.status === false)
-  //                 ? COLORS.FULLY_ABSENT_ROLL_CALL
-  //                 : COLORS.FULLY_ROLL_CALL
-  //               : COLORS.FREE_DATE
-  //             : '',
-  //         }}
-  //       >
-  //         {Array.isArray(value) ? (
-  //           <div className={classNames(className, 'rounded  p-0')}>
-  //             {value.length > 0 ? (
-  //               value.map((val, idx) => {
-  //                 return (
-  //                   <div
-  //                     className={classNames('row p-1 m-1', idx === value.length - 1 ? '' : 'border-bottom')}
-  //                     role="button"
-  //                     onClick={(e) => {
-  //                       if (dateCol.includes(column.name))
-  //                         setCell((prevState) => ({
-  //                           ...prevState,
-  //                           rowId: row.id,
-  //                           columnName: column.name,
-  //                           isOpen: true,
-  //                         }));
-  //                     }}
-  //                   >
-  //                     <div className="col-2 border-right p-0 m-0">
-  //                       <p style={{ color: val.status > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.value}</p>
-  //                     </div>
-  //                     <div className="col-10">
-  //                       {val.status ? (
-  //                         <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
-  //                       ) : (
-  //                         <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
-  //                       )}
-  //                       <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
-  //                     </div>
-  //                   </div>
-  //                 );
-  //               })
-  //             ) : (
-  //               <div className="d-flex justify-content-center">
-  //                 <Remove />
-  //               </div>
-  //             )}
-  //           </div>
-  //         ) : (
-  //           value
-  //         )}
-  //       </Table.Cell>
-  //     </>
-  //   );
-  // };
-
   return (
     <div>
       <Paper>
@@ -460,7 +381,7 @@ const QTable = (props) => {
           </div>
         </div>
 
-        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
+        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id} style={{ position: 'relative' }}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
@@ -468,20 +389,11 @@ const QTable = (props) => {
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
           <PagingState
             currentPage={state.currentPage}
-            onCurrentPageChange={(PageNumber) =>
-              setState((prevState) => ({
-                ...prevState,
-                currentPage: PageNumber,
-              }))
-            }
-            pageSize={state.pageSize}
-            onPageSizeChange={(newPageSize) =>
-              setState((prevState) => ({
-                ...prevState,
-                pageSize: newPageSize,
-              }))
-            }
+            onCurrentPageChange={(newPage) => onCurrentPageChange(newPage)}
+            pageSize={paging.pageSize}
+            onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
           />
+          <CustomPaging totalCount={paging.total} />
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>
@@ -491,7 +403,6 @@ const QTable = (props) => {
               }))
             }
           />
-          <IntegratedPaging />
           <IntegratedSelection />
           <SortingState
             defaultSorting={[
@@ -525,8 +436,13 @@ const QTable = (props) => {
             disableEditColum={disableEditColum}
           />
           {/* <TableSelection showSelectAll /> */}
-          <PagingPanel pageSizes={state.pageSizes} />
+          <PagingPanel pageSizes={paging.pageSizes} />
         </Grid>
+        {/* {paging.loading && (
+          <div className="loading-shading-mui">
+            <CircularProgress className="loading-icon-mui" />
+          </div>
+        )} */}
         <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />
         {route === '/roll-up/' ? (
           <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
