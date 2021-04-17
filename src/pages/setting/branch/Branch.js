@@ -6,7 +6,7 @@ import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
-const Branch = ({ t }) => {
+const Branch = ({ t, history }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));

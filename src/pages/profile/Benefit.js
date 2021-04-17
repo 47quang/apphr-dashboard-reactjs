@@ -10,6 +10,7 @@ import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { PERMISSION } from 'src/constants/key';
 import { BenefitsSchema } from 'src/schema/formSchema';
 import { deleteWageHistory, fetchAllowances, fetchContracts, setEmptyContracts } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
@@ -17,6 +18,7 @@ import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
 const Benefit = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
 
@@ -32,9 +34,11 @@ const Benefit = ({ t, history, match }) => {
     { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
   useEffect(() => {
-    dispatch(setEmptyContracts());
-    dispatch(fetchAllowances());
-    dispatch(fetchContracts({ profileId: +profileId }));
+    if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
+      dispatch(setEmptyContracts());
+      dispatch(fetchAllowances());
+      dispatch(fetchContracts({ profileId: +profileId }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { PERMISSION } from 'src/constants/key';
 import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import { fetchGeneral, updateGeneral } from 'src/stores/actions/setting';
@@ -14,6 +15,7 @@ import { renderButtons } from 'src/utils/formUtils';
 
 //TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const settingRef = useRef();
   const dispatch = useDispatch();
   const general = useSelector((state) => state.setting);
@@ -41,14 +43,16 @@ const SettingGeneralPage = ({ t, location }) => {
     form.wardId = parseInt(form.wardId);
     dispatch(updateGeneral(form, t('message.successful_update')));
   };
-  const buttons = [
-    {
-      type: 'button',
-      className: `btn btn-primary`,
-      onClick: updateSetting,
-      name: t('label.update'),
-    },
-  ];
+  const buttons = permissionIds.includes(PERMISSION.UPDATE_GENERAL)
+    ? [
+        {
+          type: 'button',
+          className: `btn btn-primary`,
+          onClick: updateSetting,
+          name: t('label.update'),
+        },
+      ]
+    : [];
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">

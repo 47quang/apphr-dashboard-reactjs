@@ -66,6 +66,7 @@ export const ROUTE_PATH = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   COURSE: '/course',
+  PAGE_404: '/404',
 
   ACCOUNT: '/account',
   ACCOUNT_CREATE: '/account' + CREATE,

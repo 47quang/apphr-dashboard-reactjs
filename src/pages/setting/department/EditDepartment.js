@@ -8,7 +8,6 @@ import DepartmentItemBody from './DepartmentItemBody';
 
 const EditDepartment = ({ t, location, match, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-
   const departmentRef = useRef();
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);

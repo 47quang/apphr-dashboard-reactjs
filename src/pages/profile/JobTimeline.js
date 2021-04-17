@@ -14,6 +14,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
+import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import {
   createContract,
@@ -31,6 +32,7 @@ import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const JobTimelineInfo = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
@@ -610,6 +612,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       <div className="d-flex justify-content-center mb-4">
         <button
           type="button"
+          hidden={!permissionIds.includes(PERMISSION.CREATE_CONTACT)}
           className="btn btn-success"
           id="addBtn"
           onClick={() => {

@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { changeActions } from 'src/stores/actions/header';
 import { createHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
 

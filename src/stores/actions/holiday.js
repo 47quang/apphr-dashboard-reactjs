@@ -107,12 +107,13 @@ export const setEmptyHoliday = () => {
   };
 };
 
-export const fetchAllRequest = () => {
+export const fetchAllRequest = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.holiday
-      .getAllRequest()
-      .then(({ payload }) => {
+      .getAllRequest(params)
+      .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.holiday.GET_REQUESTS, payload });
+        onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);
