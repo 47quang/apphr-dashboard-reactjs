@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { changeActions } from 'src/stores/actions/header';
 import { createHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
@@ -8,16 +9,13 @@ import HolidayItemBody from './HolidayItemBody';
 //TODO: translate
 
 const NewHolidayPage = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const holidayInfoForm = useRef();
   const dispatch = useDispatch();
   const holiday = useSelector((state) => state.holiday.holiday);
 
   useEffect(() => {
-    dispatch(setEmptyHoliday());
-
-    return () => {
-      dispatch(changeActions([]));
-    };
+    if (permissionIds.includes(PERMISSION.CREATE_HOLIDAY)) dispatch(setEmptyHoliday());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -47,8 +45,9 @@ const NewHolidayPage = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-
-  return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+  if (permissionIds.includes(PERMISSION.CREATE_HOLIDAY))
+    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+  else return <Page404 />;
 };
 
 export default NewHolidayPage;
