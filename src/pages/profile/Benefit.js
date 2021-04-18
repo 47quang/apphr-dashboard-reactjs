@@ -26,7 +26,7 @@ const Benefit = ({ t, history, match }) => {
     contracts: useSelector((state) => state.contract.contracts),
   };
 
-  const allowances = useSelector((state) => state.contract.allowances);
+  let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'one_time', name: 'Chi trả một lần', value: 'one_time' },
     { id: 'by_hour', name: 'Chi trả theo giờ' },
@@ -35,9 +35,11 @@ const Benefit = ({ t, history, match }) => {
   ];
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
-      dispatch(setEmptyContracts());
       dispatch(fetchAllowances());
       dispatch(fetchContracts({ profileId: +profileId }));
+      return () => {
+        dispatch(setEmptyContracts());
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,6 +117,7 @@ const Benefit = ({ t, history, match }) => {
               <div>
                 <div className="d-flex justify-content-center mb-4">
                   <button
+                    hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}
                     type="button"
                     className="btn btn-success"
                     id={`addBtn${index}`}
@@ -134,7 +137,7 @@ const Benefit = ({ t, history, match }) => {
                   </button>
                 </div>
 
-                {values.wageHistories && values.wageHistories.length > 0 ? (
+                {permissionIds.includes(PERMISSION.LIST_WAGE_HISTORY) && values.wageHistories && values.wageHistories.length > 0 ? (
                   values.wageHistories.map((benefit, benefitIndex) => {
                     return (
                       <div
@@ -291,24 +294,46 @@ const Benefit = ({ t, history, match }) => {
                                             placeholder={t('placeholder.pension')}
                                             isDisable
                                           />
-                                          <div className="form-group pt-4 mt-1">
-                                            <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                                          </div>
+                                          {benefit.id ? (
+                                            <div className="pl-2" hidden={!permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)}>
+                                              <DeleteIconButton onClick={() => remove(allowanceIdx)} />
+                                            </div>
+                                          ) : (
+                                            <div className="pl-2" hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}>
+                                              <DeleteIconButton onClick={() => remove(allowanceIdx)} />
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
                                     );
                                   })}
-                                <div className="d-flex justify-content-start mb-4">
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary"
-                                    onClick={() => {
-                                      push({ name: '', amount: 0 });
-                                    }}
-                                  >
-                                    <AddCircle /> {t('label.add_allowance')}
-                                  </button>
-                                </div>
+                                {benefit.id ? (
+                                  <div className="d-flex justify-content-start mb-4">
+                                    <button
+                                      hidden={!permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)}
+                                      type="button"
+                                      className="btn btn-primary"
+                                      onClick={() => {
+                                        push({ name: '', amount: 0 });
+                                      }}
+                                    >
+                                      <AddCircle /> {t('label.add_allowance')}
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="d-flex justify-content-start mb-4">
+                                    <button
+                                      hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}
+                                      type="button"
+                                      className="btn btn-primary"
+                                      onClick={() => {
+                                        push({ name: '', amount: 0 });
+                                      }}
+                                    >
+                                      <AddCircle /> {t('label.add_allowance')}
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             )}
                           />
@@ -323,58 +348,59 @@ const Benefit = ({ t, history, match }) => {
                               handleCloseDeleteAlert();
                             }}
                             handleConfirm={async (e) => {
-                              console.log(deleteWageHistoryId);
                               removeWageHistory(deleteWageHistoryId, handleRemove);
                             }}
                           />
                           {renderButtons(
                             benefit.id // Update
-                              ? [
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 mx-4`,
-                                    onClick: async (e) => {
-                                      setIsVisibleDeleteAlert(true);
-                                      setDeleteWageHistoryId(benefit.id);
-                                      setDeleteWageHistoryIndex(benefitIndex);
+                              ? permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)
+                                ? [
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-4`,
+                                      onClick: async (e) => {
+                                        setIsVisibleDeleteAlert(true);
+                                        setDeleteWageHistoryId(benefit.id);
+                                        setDeleteWageHistoryIndex(benefitIndex);
+                                      },
+                                      name: t('label.delete'),
+                                      position: 'right',
                                     },
-                                    name: t('label.delete'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 mx-4`,
-                                    onClick: () => {
-                                      setFieldValue(`wageHistories.${benefitIndex}`, benefitTab.contracts[index]?.wageHistories[benefitIndex]);
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-4`,
+                                      onClick: () => {
+                                        setFieldValue(`wageHistories.${benefitIndex}`, benefitTab.contracts[index]?.wageHistories[benefitIndex]);
+                                      },
+                                      name: t('label.reset'),
+                                      position: 'right',
                                     },
-                                    name: t('label.reset'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 ml-4`,
-                                    onClick: async () => {
-                                      let err = await validateForm();
-                                      err.wageHistories = err.wageHistories.map((wage, idx) => {
-                                        return idx === benefitIndex ? wage : undefined;
-                                      });
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 ml-4`,
+                                      onClick: async () => {
+                                        let err = await validateForm();
+                                        err.wageHistories = err.wageHistories.map((wage, idx) => {
+                                          return idx === benefitIndex ? wage : undefined;
+                                        });
 
-                                      if (
-                                        err &&
-                                        err.wageHistories && // 👈 null and undefined check
-                                        Object.keys(err.wageHistories).length !== 0 &&
-                                        err.wageHistories.constructor === Array
-                                      )
-                                        setTouched(err);
-                                      else {
-                                        await create(benefit, values.id);
-                                        benefit.expiredDate = benefit.expiredDate ?? '';
-                                        benefitTab.contracts[index].wageHistories[benefitIndex] = benefit;
-                                      }
+                                        if (
+                                          err &&
+                                          err.wageHistories && // 👈 null and undefined check
+                                          Object.keys(err.wageHistories).length !== 0 &&
+                                          err.wageHistories.constructor === Array
+                                        )
+                                          setTouched(err);
+                                        else {
+                                          await create(benefit, values.id);
+                                          benefit.expiredDate = benefit.expiredDate ?? '';
+                                          benefitTab.contracts[index].wageHistories[benefitIndex] = benefit;
+                                        }
+                                      },
+                                      name: benefit.id ? t('label.save') : t('label.create_new'),
                                     },
-                                    name: benefit.id ? t('label.save') : t('label.create_new'),
-                                  },
-                                ]
+                                  ]
+                                : []
                               : [
                                   //Create
                                   {
@@ -431,7 +457,7 @@ const Benefit = ({ t, history, match }) => {
     <CContainer fluid className="c-main">
       <div className="m-auto">
         <div>
-          {benefitTab.contracts && benefitTab.contracts.length > 0 ? (
+          {permissionIds.includes(PERMISSION.LIST_CONTRACT) && benefitTab.contracts && benefitTab.contracts.length > 0 ? (
             benefitTab.contracts.map((contract, index) => {
               contract.isMinimize = false;
               return (

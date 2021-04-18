@@ -88,10 +88,14 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   useEffect(() => {
-    dispatch(setEmptyContracts());
-    dispatch(fetchContracts({ profileId: +profileId }));
-    dispatch(fetchBranches());
-    dispatch(fetchAllowances());
+    if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
+      dispatch(fetchContracts({ profileId: +profileId }));
+      dispatch(fetchBranches());
+      dispatch(fetchAllowances());
+      return () => {
+        dispatch(setEmptyContracts());
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // useEffect(() => {
@@ -118,7 +122,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
-  const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
+  const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
     const [isOpenDynamicFieldForm, setIsOpenDynamicFieldForm] = useState(false);
     const handleConfirm = (val) => {
       values.attributes.push(val);
@@ -409,7 +413,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               value={values?.paymentType ?? ''}
               onBlur={handleBlur(`paymentType`)}
               onChange={async (e) => {
-                if (isNew) {
+                if (isCreate) {
                   if (e.target.value !== '0') {
                     dispatch(fetchWagesByType({ type: e.target.value }));
                     setFieldValue(`amount`, 0);
@@ -442,7 +446,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               onBlur={handleBlur(`wageId`)}
               onChange={(e) => {
                 let thisWage;
-                if (isNew) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
                 else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
                 if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
                 else setFieldValue(`amount`, 0);
@@ -456,7 +460,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               isTouched={touched?.wageId}
               isError={errors?.wageId}
               errorMessage={t(errors?.wageId)}
-              lstSelectOptions={isNew ? wages : values.wages}
+              lstSelectOptions={isCreate ? wages : values.wages}
             />
             <CommonTextInput
               containerClassName={'form-group col-xl-4'}
@@ -588,8 +592,23 @@ const JobTimelineInfo = ({ t, history, match }) => {
           )}
         />
         <hr className="mt-1" />
-
-        <CommonUploadFileButton name={`attaches`} containerClassName="mt-3 " buttonClassName="btn btn-primary" value={values.attaches} />
+        {isCreate ? (
+          <CommonUploadFileButton
+            isHide={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+            name={`attaches`}
+            containerClassName="mt-3 "
+            buttonClassName="btn btn-primary"
+            value={values.attaches}
+          />
+        ) : (
+          <CommonUploadFileButton
+            isHide={!permissionIds.includes(PERMISSION.UPDATE_CONTRACT)}
+            name={`attaches`}
+            containerClassName="mt-3 "
+            buttonClassName="btn btn-primary"
+            value={values.attaches}
+          />
+        )}
       </>
     );
   };
@@ -612,7 +631,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       <div className="d-flex justify-content-center mb-4">
         <button
           type="button"
-          hidden={!permissionIds.includes(PERMISSION.CREATE_CONTACT)}
+          hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
           className="btn btn-success"
           id="addBtn"
           onClick={() => {
@@ -641,6 +660,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
           }}
         >
           {(props) => {
+            props.isCreate = true;
             return (
               <form id="newContract" hidden={true} className="p-0 m-0">
                 <div className="shadow bg-white rounded mx-4 p-4">
@@ -674,7 +694,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             );
           }}
         </Formik>
-        {jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
+        {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
           jobTimelineInfo.contractInfo.map((contract, index) => {
             contract.isMinimize = false;
             return (
@@ -739,34 +759,38 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
                               }}
                             />
-                            {renderButtons([
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 mx-2`,
-                                onClick: (e) => {
-                                  setIsVisibleDeleteAlert(true);
-                                },
-                                name: t('label.delete'),
-                                position: 'right',
-                              },
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 mx-2`,
-                                onClick: (e) => {
-                                  props.handleReset(e);
-                                },
-                                name: t('label.reset'),
-                                position: 'right',
-                              },
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 ml-2`,
-                                onClick: (e) => {
-                                  props.handleSubmit(e);
-                                },
-                                name: t('label.save'),
-                              },
-                            ])}
+                            {renderButtons(
+                              permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                                ? [
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-2`,
+                                      onClick: (e) => {
+                                        setIsVisibleDeleteAlert(true);
+                                      },
+                                      name: t('label.delete'),
+                                      position: 'right',
+                                    },
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-2`,
+                                      onClick: (e) => {
+                                        props.handleReset(e);
+                                      },
+                                      name: t('label.reset'),
+                                      position: 'right',
+                                    },
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 ml-2`,
+                                      onClick: (e) => {
+                                        props.handleSubmit(e);
+                                      },
+                                      name: t('label.save'),
+                                    },
+                                  ]
+                                : [],
+                            )}
                           </div>
                         )}
                       </div>

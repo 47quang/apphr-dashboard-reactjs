@@ -8,11 +8,13 @@ import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInpu
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
+import { PERMISSION } from 'src/constants/key';
 import { NewDegreeSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyAcademic, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 
 const AcademicLevel = ({ t, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
 
@@ -33,8 +35,12 @@ const AcademicLevel = ({ t, match }) => {
     { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
   ];
   useEffect(() => {
-    dispatch(setEmptyAcademic());
-    dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+    if (permissionIds.includes(PERMISSION.LIST_DIPLOMA)) {
+      dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'degree' }));
+      return () => {
+        dispatch(setEmptyAcademic());
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,7 +54,7 @@ const AcademicLevel = ({ t, match }) => {
       dispatch(createDiploma(form, t('message.successful_create'), handleResetNewDegree));
     }
   };
-  const getFormBody = (title, values, handleChange, handleBlur, touched, errors) => {
+  const getFormBody = (title, values, handleChange, handleBlur, touched, errors, isCreate) => {
     return (
       <>
         <h5>{title}.</h5>
@@ -123,12 +129,23 @@ const AcademicLevel = ({ t, match }) => {
           />
         </div>
         <div className="row">
-          <CommonUploadFileButton
-            name={`attaches`}
-            containerClassName="form-group col-lg-12"
-            buttonClassName="btn btn-primary"
-            value={values.attaches}
-          />
+          {isCreate ? (
+            <CommonUploadFileButton
+              isHide={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
+              name={`attaches`}
+              containerClassName="form-group col-lg-12"
+              buttonClassName="btn btn-primary"
+              value={values.attaches}
+            />
+          ) : (
+            <CommonUploadFileButton
+              isHide={!permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)}
+              name={`attaches`}
+              containerClassName="form-group col-lg-12"
+              buttonClassName="btn btn-primary"
+              value={values.attaches}
+            />
+          )}
         </div>
         <hr className="mt-1" />
       </>
@@ -150,6 +167,7 @@ const AcademicLevel = ({ t, match }) => {
         <div>
           <div className="d-flex justify-content-center mb-4">
             <button
+              hidden={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
               type="button"
               className="btn btn-success"
               id="addBtn"
@@ -171,10 +189,11 @@ const AcademicLevel = ({ t, match }) => {
             }}
           >
             {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange }) => {
+              let isCreate = true;
               return (
                 <form id="newDegree" hidden={true} className="p-0 m-0">
                   <div className="shadow bg-white rounded mx-4 p-4">
-                    {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors)}
+                    {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate)}
                     {renderButtons([
                       {
                         type: 'button',
@@ -202,7 +221,7 @@ const AcademicLevel = ({ t, match }) => {
               );
             }}
           </Formik>
-          {initialValues.degrees && initialValues.degrees.length > 0 ? (
+          {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.degrees && initialValues.degrees.length > 0 ? (
             initialValues.degrees.map((degree, index) => (
               <Formik
                 initialValues={degree}
@@ -229,32 +248,36 @@ const AcademicLevel = ({ t, match }) => {
                       }}
                     />
 
-                    {renderButtons([
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 mx-2`,
-                        onClick: (e) => {
-                          setIsVisibleDeleteAlert(true);
-                        },
-                        name: t('label.delete'),
-                      },
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 mx-2`,
-                        onClick: (e) => {
-                          handleReset(e);
-                        },
-                        name: t('label.reset'),
-                      },
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 ml-2`,
-                        onClick: (e) => {
-                          handleSubmit(e);
-                        },
-                        name: t('label.save'),
-                      },
-                    ])}
+                    {renderButtons(
+                      permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
+                        ? [
+                            {
+                              type: 'button',
+                              className: `btn btn-primary px-4 mx-2`,
+                              onClick: (e) => {
+                                setIsVisibleDeleteAlert(true);
+                              },
+                              name: t('label.delete'),
+                            },
+                            {
+                              type: 'button',
+                              className: `btn btn-primary px-4 mx-2`,
+                              onClick: (e) => {
+                                handleReset(e);
+                              },
+                              name: t('label.reset'),
+                            },
+                            {
+                              type: 'button',
+                              className: `btn btn-primary px-4 ml-2`,
+                              onClick: (e) => {
+                                handleSubmit(e);
+                              },
+                              name: t('label.save'),
+                            },
+                          ]
+                        : [],
+                    )}
                   </div>
                 )}
               </Formik>

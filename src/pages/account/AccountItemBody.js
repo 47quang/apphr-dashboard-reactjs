@@ -36,9 +36,9 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    if (accountId)
+    if (!isCreate) {
       if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(+match?.params?.id));
-      else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());
+    } else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
     dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));

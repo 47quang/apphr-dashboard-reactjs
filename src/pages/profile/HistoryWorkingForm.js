@@ -33,7 +33,7 @@ const HistoryWorkingForm = ({ t, match }) => {
     to: '',
   };
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_PROFILE)) {
+    if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
       dispatch(fetchBranches());
       dispatch(
         fetchHistoriesWork({
@@ -165,7 +165,7 @@ const HistoryWorkingForm = ({ t, match }) => {
         <div className="">
           <div className="d-flex justify-content-center mb-4">
             <button
-              hidden={!permissionIds.includes(PERMISSION.CREATE_PROFILE)}
+              hidden={!permissionIds.includes(PERMISSION.CREATE_WORK_HISTORY)}
               type="button"
               className="btn btn-success"
               id="addBtn"
@@ -220,7 +220,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               );
             }}
           </Formik>
-          {historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
+          {permissionIds.includes(PERMISSION.LIST_WORK_HISTORY) && historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
             historyWorkingForm.histories.map((history, index) => {
               return (
                 <Formik
@@ -254,7 +254,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                             }}
                           />
                           {renderButtons(
-                            permissionIds.includes(PERMISSION.UPDATE_PROFILE)
+                            permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
                               ? [
                                   {
                                     type: 'button',

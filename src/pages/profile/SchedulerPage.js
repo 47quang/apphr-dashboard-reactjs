@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SchedulerPage = ({ t, history, match }) => {
+  //const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const shifts = useSelector((state) => state.shift.shifts);
   const assignments = useSelector((state) => state.assignment.assignments);
   const profileId = +match?.params?.id;

@@ -4,7 +4,9 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { PERMISSION } from 'src/constants/key';
 import { joinClassName } from 'src/utils/stringUtils';
+import Page404 from '../page404/Page404';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileTabs = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
@@ -69,8 +72,7 @@ const ProfileTabs = ({ t, history, match }) => {
   const handleChangeSubTab = (event, newValue) => {
     setSubTabName(newValue);
   };
-
-  return (
+  const returnComponent = (
     <>
       <div className={classes.root} id="profile-tabs">
         <AppBar position="static" color="default">
@@ -145,12 +147,19 @@ const ProfileTabs = ({ t, history, match }) => {
         </TabPanel>
       </div>
       {/* <div
-        className={joinClassName(['bg-white d-flex flex-column justify-content-center', 'px-4'])}
-        style={{ position: 'fixed', right: 0, bottom: 0, width: `${snackBarWidth}px`, height: 50, borderTop: '0.5px solid #d8dbe0' }}
-      >
-        {renderButtons(buttons)}
-      </div> */}
+      className={joinClassName(['bg-white d-flex flex-column justify-content-center', 'px-4'])}
+      style={{ position: 'fixed', right: 0, bottom: 0, width: `${snackBarWidth}px`, height: 50, borderTop: '0.5px solid #d8dbe0' }}
+    >
+      {renderButtons(buttons)}
+    </div> */}
     </>
   );
+  if (isCreate) {
+    if (permissionIds.includes(PERMISSION.CREATE_PROFILE)) return returnComponent;
+    else return <Page404 />;
+  } else {
+    if (permissionIds.includes(PERMISSION.GET_PROFILE)) return returnComponent;
+    else return <Page404 />;
+  }
 };
 export default ProfileTabs;
