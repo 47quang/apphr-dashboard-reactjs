@@ -1,17 +1,19 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { createArticle, setEmptyArticle } from 'src/stores/actions/article';
+import Page404 from '../page404/Page404';
 import NotificationForm from './NotificationForm';
 
 const NewNotification = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const articleInfoForm = useRef();
   const dispatch = useDispatch();
   const article = useSelector((state) => state.article.article);
 
   useEffect(() => {
-    dispatch(setEmptyArticle());
+    if (permissionIds.includes(PERMISSION.CREATE_ARTICLE)) dispatch(setEmptyArticle());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,13 +43,15 @@ const NewNotification = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <div className="m-auto col-lg-12">
-        <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} />
-      </div>
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.CREATE_ARTICLE))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <div className="m-auto col-lg-12">
+          <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} />
+        </div>
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 
 export default NewNotification;

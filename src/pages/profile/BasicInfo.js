@@ -7,7 +7,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { BasicInfoCreateSchema } from 'src/schema/formSchema';
 import { fetchProvinces } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states/index';
@@ -15,8 +15,10 @@ import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
 import { createProfile, fetchProfile, setEmptyProfile, updateProfile } from 'src/stores/actions/profile';
 import UploadImageSingle from 'src/components/button/UploadImageSingle';
+import Page404 from '../page404/Page404';
 
 const BasicInfo = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const provinces = useSelector((state) => state.location.provinces);
   const profile = useSelector((state) => state.profile.profile);
   const profileId = +match?.params?.id;
@@ -24,9 +26,15 @@ const BasicInfo = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const refInfo = useRef();
   useEffect(() => {
-    if (provinces.length === 0) dispatch(fetchProvinces());
-    if (profileId) dispatch(fetchProfile(profileId));
-    else dispatch(setEmptyProfile());
+    if (profileId) {
+      if (permissionIds.includes(PERMISSION.GET_PROFILE)) {
+        if (provinces.length === 0) dispatch(fetchProvinces());
+        dispatch(fetchProfile(profileId));
+      }
+    } else if (permissionIds.includes(PERMISSION.CREATE_PROFILE)) {
+      if (provinces.length === 0) dispatch(fetchProvinces());
+      dispatch(setEmptyProfile());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -69,40 +77,51 @@ const BasicInfo = ({ t, history, match }) => {
     },
   ];
 
-  const buttonsUpdate = [
-    {
-      type: 'button',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        history.push(ROUTE_PATH.PROFILE);
-      },
-      name: t('label.back'),
-      position: 'left',
-    },
-    {
-      type: 'reset',
-      className: `btn btn-primary mr-4`,
-      onClick: (e) => {
-        refInfo.current.handleReset(e);
-      },
-      name: t('label.reset'),
-    },
-    {
-      type: 'button',
-      className: `btn btn-primary`,
-      onClick: (e) => {
-        refInfo.current.handleSubmit(e);
-      },
-      name: t('label.update'),
-      position: 'right',
-    },
-  ];
+  const buttonsUpdate = permissionIds.includes(PERMISSION.UPDATE_PROFILE)
+    ? [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            history.push(ROUTE_PATH.PROFILE);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+        {
+          type: 'reset',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            refInfo.current.handleReset(e);
+          },
+          name: t('label.reset'),
+        },
+        {
+          type: 'button',
+          className: `btn btn-primary`,
+          onClick: (e) => {
+            refInfo.current.handleSubmit(e);
+          },
+          name: t('label.update'),
+          position: 'right',
+        },
+      ]
+    : [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            history.push(ROUTE_PATH.PROFILE);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
+      ];
 
   function handleChangeUpload(fileUrl) {
     dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { avatar: fileUrl } });
   }
-
-  return (
+  const returnComponent = (
     <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
       <div className="row">
         <div className="col-xl-3 mb-4">
@@ -365,5 +384,12 @@ const BasicInfo = ({ t, history, match }) => {
       </div>
     </CContainer>
   );
+  if (!isCreate) {
+    if (permissionIds.includes(PERMISSION.CREATE_PROFILE)) return returnComponent;
+    else return <Page404 />;
+  } else {
+    if (permissionIds.includes(PERMISSION.GET_PROFILE)) return returnComponent;
+    else return <Page404 />;
+  }
 };
 export default BasicInfo;

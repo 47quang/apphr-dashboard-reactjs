@@ -93,7 +93,14 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
   name: Yup.string().required('validation.required_enter_branch_name'),
-  bssid: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address'),
+  bssid: Yup.string()
+    .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')
+    .when('typeCC', {
+      is: (value) => {
+        return ['WIFI'].includes(value);
+      },
+      then: Yup.string().required('validation.required_enter_bssid'),
+    }),
   address: Yup.string(),
   typeCC: Yup.string()
     .required('Bắt buộc chọn hình thức điểm danh')

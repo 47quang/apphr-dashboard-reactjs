@@ -1,4 +1,4 @@
-import { PERMISSION, Permission, ROUTE_NAME, ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_NAME, ROUTE_PATH } from 'src/constants/key';
 
 const _nav = [
   {

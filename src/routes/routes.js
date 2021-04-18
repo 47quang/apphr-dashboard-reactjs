@@ -38,10 +38,10 @@ const Department = React.lazy(() => import('src/pages/setting/department/Departm
 const NewDepartment = React.lazy(() => import('src/pages/setting/department/NewDepartment'));
 const EditDepartment = React.lazy(() => import('src/pages/setting/department/EditDepartment'));
 
-const Holiday = React.lazy(() => import('src/pages/setting/holiday/Holiday'));
+const Holiday = React.lazy(() => import('src/pages/setting/holiday/HolidayTabs'));
 const NewHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
 const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/UpdateHoliday'));
-const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettings'));
+const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettingForm'));
 
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const NewBranch = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
@@ -220,9 +220,8 @@ const routes = [
   },
   {
     path: ROUTE_PATH.WAGE_CREATE,
+    name: ROUTE_NAME.NEW_WAGE,
     exact: true,
-
-    name: ROUTE_NAME.WAGE_CREATE,
     component: NewWage,
   },
   {
@@ -235,7 +234,7 @@ const routes = [
     path: ROUTE_PATH.ALLOWANCE_CREATE,
     exact: true,
 
-    name: ROUTE_NAME.ALLOWANCE_CREATE,
+    name: ROUTE_NAME.NEW_ALLOWANCE,
     component: NewAllowance,
   },
   {

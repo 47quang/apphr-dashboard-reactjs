@@ -4,38 +4,42 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { PERMISSION } from 'src/constants/key';
 import { fetchProfile, updateOtherInfo } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
 
 const OtherInfo = ({ t, match, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const otherInfoRef = useRef();
   const profile = useSelector((state) => state.profile.profile);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchProfile(+match.params.id));
+    if (permissionIds.includes(PERMISSION.GET_PROFILE)) dispatch(fetchProfile(+match.params.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getButtonsUpdate = (action) => {
-    return [
-      {
-        type: 'reset',
-        className: `btn btn-primary mr-4`,
-        onClick: (e) => {
-          otherInfoRef.current.handleReset(e);
-        },
-        name: t('label.reset'),
-      },
-      {
-        type: 'button',
-        className: `btn btn-primary`,
-        onClick: (e) => {
-          otherInfoRef.current.handleSubmit(e);
-        },
-        name: t('label.update'),
-        position: 'right',
-      },
-    ];
+    return permissionIds.includes(PERMISSION.UPDATE_PROFILE)
+      ? [
+          {
+            type: 'reset',
+            className: `btn btn-primary mr-4`,
+            onClick: (e) => {
+              otherInfoRef.current.handleReset(e);
+            },
+            name: t('label.reset'),
+          },
+          {
+            type: 'button',
+            className: `btn btn-primary`,
+            onClick: (e) => {
+              otherInfoRef.current.handleSubmit(e);
+            },
+            name: t('label.update'),
+            position: 'right',
+          },
+        ]
+      : [];
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">

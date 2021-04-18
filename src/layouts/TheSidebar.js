@@ -9,7 +9,6 @@ import {
   CSidebarNavItem,
   CSidebarNavTitle,
 } from '@coreui/react';
-import { isArray } from '@material-ui/data-grid';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';

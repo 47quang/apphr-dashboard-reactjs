@@ -2,10 +2,12 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteWage, fetchWages } from 'src/stores/actions/wage';
 import PropTypes from 'prop-types';
+import Page404 from 'src/pages/page404/Page404';
 const Wage = ({ t }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const wages = useSelector((state) => state.wage.wages);
   const columnDef = [
@@ -37,15 +39,16 @@ const Wage = ({ t }) => {
       total: total,
     }));
   useEffect(() => {
-    dispatch(
-      fetchWages(
-        {
-          page: paging.currentPage,
-          perpage: paging.pageSize,
-        },
-        onTotalChange,
-      ),
-    );
+    if (permissionIds.includes(PERMISSION.LIST_WAGE))
+      dispatch(
+        fetchWages(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
@@ -53,22 +56,26 @@ const Wage = ({ t }) => {
     dispatch(deleteWage(rowId, t('message.successful_delete')));
     dispatch(fetchWages());
   };
-
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <QTable
-        t={t}
-        columnDef={columnDef}
-        data={wages}
-        route={ROUTE_PATH.WAGE + '/'}
-        idxColumnsFilter={[0, 1]}
-        deleteRow={deleteRow}
-        onCurrentPageChange={onCurrentPageChange}
-        onPageSizeChange={onPageSizeChange}
-        paging={paging}
-      />
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.LIST_WAGE))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable
+          t={t}
+          columnDef={columnDef}
+          data={wages}
+          route={ROUTE_PATH.WAGE + '/'}
+          idxColumnsFilter={[0, 1]}
+          deleteRow={deleteRow}
+          onCurrentPageChange={onCurrentPageChange}
+          onPageSizeChange={onPageSizeChange}
+          paging={paging}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_WAGE)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_WAGE)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
+        />
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 Wage.propTypes = {
   t: PropTypes.func,

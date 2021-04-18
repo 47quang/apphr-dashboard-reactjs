@@ -2,10 +2,12 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
+import Page404 from '../page404/Page404';
 
 const Profile = ({ t, location }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfProfiles = [
     { name: 'code', title: t('label.employee_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'lastname', title: t('label.employee_last_name'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -44,36 +46,42 @@ const Profile = ({ t, location }) => {
       total: total,
     }));
   useEffect(() => {
-    dispatch(
-      fetchProfiles(
-        {
-          page: paging.currentPage,
-          perpage: paging.pageSize,
-        },
-        onTotalChange,
-      ),
-    );
+    if (permissionIds.includes(PERMISSION.LIST_PROFILE))
+      dispatch(
+        fetchProfiles(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId, t('message.successful_delete')));
     dispatch(fetchProfiles());
   };
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <QTable
-        t={t}
-        columnDef={columnDefOfProfiles}
-        data={profiles}
-        route={ROUTE_PATH.PROFILE + '/'}
-        idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
-        deleteRow={deleteRow}
-        onCurrentPageChange={onCurrentPageChange}
-        onPageSizeChange={onPageSizeChange}
-        paging={paging}
-      />
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.LIST_PROFILE))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable
+          t={t}
+          columnDef={columnDefOfProfiles}
+          data={profiles}
+          route={ROUTE_PATH.PROFILE + '/'}
+          idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
+          deleteRow={deleteRow}
+          onCurrentPageChange={onCurrentPageChange}
+          onPageSizeChange={onPageSizeChange}
+          paging={paging}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_PROFILE)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_PROFILE)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_PROFILE)}
+        />
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 
 export default Profile;

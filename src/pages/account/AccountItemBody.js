@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountCreateInfoSchema, AccountUpdateInfoSchema } from 'src/schema/formSchema';
 import {
   fetchAccount,
@@ -18,6 +18,7 @@ import {
   updateAccount,
 } from 'src/stores/actions/account';
 import { renderButtons } from 'src/utils/formUtils';
+import Page404 from '../page404/Page404';
 
 const AccountItemBody = ({ t, branches, departments, positions, history, match }) => {
   const accountId = match?.params?.id;
@@ -29,12 +30,15 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
   const profiles = useSelector((state) => state.account.profiles);
   const isCreate = accountId ? false : true;
   const schema = accountId ? AccountUpdateInfoSchema : AccountCreateInfoSchema;
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
   const initCheck = (groupPermission, checks) => {
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    accountId ? dispatch(fetchAccount(+match?.params?.id)) : dispatch(setEmptyAccount());
+    if (!isCreate) {
+      if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(+match?.params?.id));
+    } else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
     dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
@@ -76,7 +80,8 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
           name: t('label.create_new'),
         },
       ]
-    : [
+    : permissionIds.includes(PERMISSION.UPDATE_USER)
+    ? [
         {
           type: 'button',
           className: `btn btn-primary mr-4`,
@@ -102,11 +107,22 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
           },
           name: t('label.update'),
         },
+      ]
+    : [
+        {
+          type: 'button',
+          className: `btn btn-primary mr-4`,
+          onClick: (e) => {
+            history.push(ROUTE_PATH.ACCOUNT);
+          },
+          name: t('label.back'),
+          position: 'left',
+        },
       ];
-  return (
+  const returnComponent = (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="row px-4">
-        <div className="shadow bg-white rounded p-4 col-md-9 m-auto">
+        <div className="shadow bg-white rounded p-4 col-md-10 m-auto">
           <Formik
             innerRef={accountRef}
             enableReinitialize
@@ -306,6 +322,13 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
       </div>
     </CContainer>
   );
+  if (isCreate) {
+    if (permissionIds.includes(PERMISSION.CREATE_USER)) return returnComponent;
+    else return <Page404 />;
+  } else {
+    if (permissionIds.includes(PERMISSION.GET_USER)) return returnComponent;
+    else return <Page404 />;
+  }
 };
 
 export default AccountItemBody;

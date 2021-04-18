@@ -9,12 +9,14 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Editor from 'src/components/input/Editor';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
+import { PERMISSION } from 'src/constants/key';
 import { fetchTypes } from 'src/stores/actions/articleType';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
 import { renderButtons } from 'src/utils/formUtils';
 
 const NotificationForm = ({ t, articleRef, article, buttons, submitForm }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const departments = useSelector((state) => state.department.departments);
@@ -137,6 +139,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm }) => {
                 containerClassName="form-group col-xl-12"
                 buttonClassName="btn btn-primary"
                 value={values.uploads}
+                isHide={!permissionIds.includes(PERMISSION.UPDATE_ARTICLE)}
               />
             </div>
             {renderButtons(buttons)}

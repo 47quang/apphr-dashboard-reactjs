@@ -32,7 +32,7 @@ import TableCell from '@material-ui/core/TableCell';
 import { Cancel, CheckCircle, Lens } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
 import saveAs from 'file-saver';
 import { Formik } from 'formik';
@@ -182,7 +182,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
                 <TableCell className="px-0 py-0">
                   <Link to={`${route}${params.tableRow.rowId}`}>
                     <IconButton hidden={disableEdit} title={t('message.edit_row')}>
-                      <EditIcon />
+                      <InfoIcon />
                     </IconButton>
                   </Link>
 

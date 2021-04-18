@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from 'src/stores/apis';
 
-const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassName }) => {
+const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassName, isHide }) => {
   const { t } = useTranslation();
   const uploadFileRef = useRef();
 
@@ -25,6 +25,7 @@ const CommonUploadFileButton = ({ value, name, containerClassName, buttonClassNa
       render={({ push, remove }) => (
         <div className={containerClassName}>
           <button
+            hidden={isHide}
             className={buttonClassName}
             onClick={(e) => {
               e.preventDefault();

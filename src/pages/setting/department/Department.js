@@ -2,10 +2,13 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
 
 const Department = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
+
   const columnDef = [
     { name: 'code', title: t('label.department_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'name', title: t('label.department_name'), align: 'left', width: '25%', wordWrapEnabled: true },
@@ -37,40 +40,46 @@ const Department = ({ t, location, history }) => {
     }));
 
   useEffect(() => {
-    dispatch(
-      fetchDepartments(
-        {
-          page: paging.currentPage,
-          perpage: paging.pageSize,
-        },
-        onTotalChange,
-      ),
-    );
+    if (permissionIds.includes(PERMISSION.LIST_DEPARTMENT)) {
+      dispatch(
+        fetchDepartments(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = (rowId) => {
     dispatch(deleteDepartment({ id: rowId }, t('message.successful_delete')));
   };
-
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <QTable
-        t={t}
-        columnDef={columnDef}
-        data={departments.map((d) => {
-          d.branchname = d.branch?.name;
-          d.note = d.note.substr(0, 30) + '...';
-          return d;
-        })}
-        route={ROUTE_PATH.DEPARTMENT + '/'}
-        idxColumnsFilter={[0, 2]}
-        deleteRow={deleteRow}
-        paging={paging}
-        onCurrentPageChange={onCurrentPageChange}
-        onPageSizeChange={onPageSizeChange}
-      />
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.LIST_DEPARTMENT))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable
+          t={t}
+          columnDef={columnDef}
+          data={departments.map((d) => {
+            d.branchname = d.branch?.name;
+            d.note = d.note.substr(0, 30) + '...';
+            return d;
+          })}
+          route={ROUTE_PATH.DEPARTMENT + '/'}
+          idxColumnsFilter={[0, 2]}
+          deleteRow={deleteRow}
+          paging={paging}
+          onCurrentPageChange={onCurrentPageChange}
+          onPageSizeChange={onPageSizeChange}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_DEPARTMENT)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_DEPARTMENT)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_DEPARTMENT)}
+        />
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 export default Department;

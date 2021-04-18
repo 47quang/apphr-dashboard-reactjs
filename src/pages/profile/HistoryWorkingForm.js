@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import { PERMISSION } from 'src/constants/key';
 import { NewHistoryWorkingSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
@@ -14,6 +15,7 @@ import { fetchPositions } from 'src/stores/actions/position';
 import { renderButtons } from 'src/utils/formUtils';
 
 const HistoryWorkingForm = ({ t, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   const positions = useSelector((state) => state.position.positions);
@@ -31,12 +33,14 @@ const HistoryWorkingForm = ({ t, match }) => {
     to: '',
   };
   useEffect(() => {
-    dispatch(fetchBranches());
-    dispatch(
-      fetchHistoriesWork({
-        profileId: profileId,
-      }),
-    );
+    if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
+      dispatch(fetchBranches());
+      dispatch(
+        fetchHistoriesWork({
+          profileId: profileId,
+        }),
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   async function create(form) {
@@ -160,6 +164,7 @@ const HistoryWorkingForm = ({ t, match }) => {
       <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
         <button
           type="button"
+          hidden={!permissionIds.includes(PERMISSION.CREATE_WORK_HISTORY)}
           className="btn btn-success rounded-circle p-3"
           id="addBtn"
           onClick={() => {
@@ -215,7 +220,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               );
             }}
           </Formik>
-          {historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
+          {permissionIds.includes(PERMISSION.LIST_WORK_HISTORY) && historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
             historyWorkingForm.histories.map((history, index) => {
               return (
                 <Formik
@@ -248,34 +253,38 @@ const HistoryWorkingForm = ({ t, match }) => {
                               dispatch(deleteHistoryWork(history.id, t('message.successful_delete'), handleCloseDeleteAlert));
                             }}
                           />
-                          {renderButtons([
-                            {
-                              type: 'button',
-                              className: `btn btn-primary  mx-2`,
-                              onClick: (e) => {
-                                setIsVisibleDeleteAlert(true);
-                              },
-                              name: t('label.delete'),
-                              position: 'right',
-                            },
-                            {
-                              type: 'button',
-                              className: `btn btn-primary  mx-2`,
-                              onClick: (e) => {
-                                props.handleReset(e);
-                              },
-                              name: t('label.reset'),
-                              position: 'right',
-                            },
-                            {
-                              type: 'button',
-                              className: `btn btn-primary px-4 ml-4`,
-                              onClick: async (e) => {
-                                props.handleSubmit(e);
-                              },
-                              name: t('label.save'),
-                            },
-                          ])}
+                          {renderButtons(
+                            permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
+                              ? [
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary  mx-2`,
+                                    onClick: (e) => {
+                                      setIsVisibleDeleteAlert(true);
+                                    },
+                                    name: t('label.delete'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary  mx-2`,
+                                    onClick: (e) => {
+                                      props.handleReset(e);
+                                    },
+                                    name: t('label.reset'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-4`,
+                                    onClick: async (e) => {
+                                      props.handleSubmit(e);
+                                    },
+                                    name: t('label.save'),
+                                  },
+                                ]
+                              : [],
+                          )}
                         </div>
                         <br />
                       </Form>

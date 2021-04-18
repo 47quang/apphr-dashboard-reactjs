@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
-import { CONTACT_TYPE } from 'src/constants/key';
+import { CONTACT_TYPE, PERMISSION } from 'src/constants/key';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import {
   createNewContact,
@@ -23,6 +23,7 @@ import { joinClassName } from 'src/utils/stringUtils';
 import { ContactSchema } from '../../schema/formSchema';
 
 const AddressInfo = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const ADDRESS_INFO = {
     PERMANENT_INFO: 'Permanent Info',
     RELATION_INFO: 'Relation Info',
@@ -39,8 +40,10 @@ const AddressInfo = ({ t, history, match }) => {
   const contacts = useSelector((state) => state.profile.contacts);
   const profileId = match?.params?.id;
   useEffect(() => {
-    if (provinces.length === 0) dispatch(fetchProvinces());
-    dispatch(fetchContacts(profileId));
+    if (permissionIds.includes(PERMISSION.LIST_CONTACT)) {
+      if (provinces.length === 0) dispatch(fetchProvinces());
+      dispatch(fetchContacts(profileId));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -73,27 +76,29 @@ const AddressInfo = ({ t, history, match }) => {
     url: '',
   };
   const getButtonsUpdate = (action) => {
-    return [
-      {
-        type: 'reset',
-        className: `btn btn-primary mr-4`,
-        onClick: (e) => {
-          if (action === ADDRESS_INFO.PERMANENT_INFO) permanentAddressRef.current.handleReset(e);
-          else relationInfoRef.current.handleReset(e);
-        },
-        name: t('label.reset'),
-      },
-      {
-        type: 'button',
-        className: `btn btn-primary`,
-        onClick: (e) => {
-          if (action === ADDRESS_INFO.PERMANENT_INFO) permanentAddressRef.current.handleSubmit(e);
-          else relationInfoRef.current.handleSubmit(e);
-        },
-        name: t('label.update'),
-        position: 'right',
-      },
-    ];
+    return permissionIds.includes(PERMISSION.UPDATE_CONTACT)
+      ? [
+          {
+            type: 'reset',
+            className: `btn btn-primary mr-4`,
+            onClick: (e) => {
+              if (action === ADDRESS_INFO.PERMANENT_INFO) permanentAddressRef.current.handleReset(e);
+              else relationInfoRef.current.handleReset(e);
+            },
+            name: t('label.reset'),
+          },
+          {
+            type: 'button',
+            className: `btn btn-primary`,
+            onClick: (e) => {
+              if (action === ADDRESS_INFO.PERMANENT_INFO) permanentAddressRef.current.handleSubmit(e);
+              else relationInfoRef.current.handleSubmit(e);
+            },
+            name: t('label.update'),
+            position: 'right',
+          },
+        ]
+      : [];
   };
   const [showCreateContact, setShowCreateContact] = useState(true);
   const getContactFormBody = (values, handleBlur, handleChange, errors, touched, isUpdated) => {
@@ -195,10 +200,15 @@ const AddressInfo = ({ t, history, match }) => {
               <div className="row">
                 {getContactFormBody(values, handleBlur, handleChange, errors, touched, true)}
                 <div className={'col-sm-2 d-flex flex-row justify-content-around pt-1'}>
-                  <div role="button" onClick={handleSubmit}>
+                  <div role="button" onClick={handleSubmit} hidden={!permissionIds.includes(PERMISSION.UPDATE_CONTACT)}>
                     <Save style={{ color: 'blue' }} />
                   </div>
-                  <div role="button" onClick={handleDelete} aria-describedby={'deleteContact'}>
+                  <div
+                    role="button"
+                    onClick={handleDelete}
+                    aria-describedby={'deleteContact'}
+                    hidden={!permissionIds.includes(PERMISSION.DELETE_CONTACT)}
+                  >
                     <Delete style={{ color: 'red' }} />
                   </div>
                   <Popover
@@ -419,7 +429,7 @@ const AddressInfo = ({ t, history, match }) => {
             <FormHeader text={t('title.contact_channel')} />
             {contacts && contacts.length > 0 && contacts.map((contact, index) => <div key={index}>{getContactFormUpdate(contact)}</div>)}
 
-            {showCreateContact && (
+            {showCreateContact && permissionIds.includes(PERMISSION.CREATE_CONTACT) && (
               <div className="row col-12">
                 <button
                   type="button"

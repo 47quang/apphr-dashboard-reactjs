@@ -1,17 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { AllowanceSchema } from 'src/schema/formSchema';
 import { createAllowance, setEmptyAllowance } from 'src/stores/actions/allowance';
 import AllowanceItemBody from './AllowanceItemBody';
 
 const NewAllowance = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const allowanceInfoForm = useRef();
   const dispatch = useDispatch();
   const allowance = useSelector((state) => state.allowance.allowance);
 
   useEffect(() => {
-    dispatch(setEmptyAllowance());
+    if (permissionIds.includes(PERMISSION.CREATE_ALLOWANCE)) dispatch(setEmptyAllowance());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,16 +42,18 @@ const NewAllowance = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return (
-    <AllowanceItemBody
-      allowanceRef={allowanceInfoForm}
-      allowance={allowance}
-      t={t}
-      validationSchema={AllowanceSchema}
-      buttons={buttons}
-      submitForm={submitForm}
-    />
-  );
+  if (permissionIds.includes(PERMISSION.CREATE_ALLOWANCE))
+    return (
+      <AllowanceItemBody
+        allowanceRef={allowanceInfoForm}
+        allowance={allowance}
+        t={t}
+        validationSchema={AllowanceSchema}
+        buttons={buttons}
+        submitForm={submitForm}
+      />
+    );
+  else return <Page404 />;
 };
 
 export default NewAllowance;
