@@ -1,11 +1,22 @@
+import { formatTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchAssignments = (params) => {
+const dayIndex = {
+  0: 'sunday',
+  1: 'monday',
+  2: 'tuesday',
+  3: 'wednesday',
+  4: 'thursday',
+  5: 'friday',
+  6: 'saturday',
+};
+
+export const fetchAssignments = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.assignment
       .getAll(params)
-      .then(({ payload }) => {
+      .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
             ? payload.map((a) => {
@@ -17,6 +28,58 @@ export const fetchAssignments = (params) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
+        if (onTotalChange) onTotalChange(total);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
+
+export const fetchRollUpTable = (params, onTotalChange) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .getAll(params)
+      .then(({ payload, total }) => {
+        let data = [];
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                let x = {
+                  id: a.id,
+                  fullname: a.fullname,
+                  code: a.code,
+                  sunday: [],
+                  monday: [],
+                  tuesday: [],
+                  wednesday: [],
+                  thursday: [],
+                  friday: [],
+                  saturday: [],
+                };
+                a.assignments.forEach((element) => {
+                  let dayTh = new Date(element.date).getDay();
+
+                  x[dayIndex[dayTh]].push({
+                    id: element.id,
+                    shiftCode: element.shift.code,
+                    point: element.point,
+                    startCC: formatTime(element.shift.startCC),
+                    endCC: formatTime(element.shift.endCC),
+                  });
+                });
+                data.push(x);
+                return a;
+              })
+            : [];
+        console.log(data);
+        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         console.log(err);

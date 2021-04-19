@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import { COLORS } from 'src/constants/theme';
 import { Cancel, CheckCircle, Remove } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAssignments } from 'src/stores/actions/assignment';
+import { fetchRollUpTable } from 'src/stores/actions/assignment';
 
 const RollUp = ({ t, location }) => {
   const [state, setState] = useState({
@@ -23,6 +23,7 @@ const RollUp = ({ t, location }) => {
   });
   const dispatch = useDispatch();
   const data = useSelector((state) => state.assignment.assignments);
+  console.log('data', data);
 
   // let data = [
   //   {
@@ -282,6 +283,29 @@ const RollUp = ({ t, location }) => {
   //     ],
   //   },
   // ];
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+    loading: false,
+  });
+  const onCurrentPageChange = (pageNumber) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+      currentPage: 0,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
 
   const changeColDef = (fromDate) => [
     { name: 'code', title: t('label.employee_code'), align: 'left', width: '10%', wordWrapEnabled: true },
@@ -358,14 +382,19 @@ const RollUp = ({ t, location }) => {
 
   useEffect(() => {
     dispatch(
-      fetchAssignments({
-        groupByProfile: true,
-      }),
+      fetchRollUpTable(
+        {
+          groupByProfile: true,
+          from: state.fromDate,
+          to: state.toDate,
+        },
+        onTotalChange,
+      ),
     );
     console.log(state.fromDate.format('DD/MM'));
     columnDefOfRollUp.current = changeColDef(state.fromDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.fromDate]);
+  }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
     // console.log('value', value);
@@ -407,6 +436,7 @@ const RollUp = ({ t, location }) => {
                 value.map((val, idx) => {
                   return (
                     <div
+                      key={idx + val.shiftCode}
                       className={classNames('row p-1 m-1', idx === value.length - 1 ? '' : 'border-bottom')}
                       role="button"
                       onClick={(e) => {
@@ -420,7 +450,7 @@ const RollUp = ({ t, location }) => {
                       }}
                     >
                       <div className="col-2 border-right p-0 m-0">
-                        <p style={{ color: val.status > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.value}</p>
+                        <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.point}</p>
                       </div>
                       <div className="col-10">
                         {val.status ? (
@@ -472,6 +502,9 @@ const RollUp = ({ t, location }) => {
         disableEditColum={true}
         headerDateCols={[2, 3, 4, 5, 6, 7, 8]}
         customTableCell={CustomTableCell}
+        paging={paging}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </CContainer>
   );

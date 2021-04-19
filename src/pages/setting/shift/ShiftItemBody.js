@@ -105,16 +105,18 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           name={`flexibleTime`}
                           onChange={(e) => handleChange(`flexibleTime`)(e)}
                           value={values.flexibleTime}
-                          placeholder={0}
+                          placeholder={'Nhập mức giao động thời gian điểm danh'}
                         />
                         <span className="input-group-text" id="basic-addon2">
                           {t('label.minutes')}
                         </span>
                       </div>
-                      {errors && errors.flexibleTime && t(errors && errors.flexibleTime) && (
+                      {errors && errors.flexibleTime && t(errors && errors.flexibleTime) ? (
                         <div>
                           <small className={'text-danger'}>{t(errors.flexibleTime)}</small>
                         </div>
+                      ) : (
+                        <div />
                       )}
                     </div>
                   </div>
@@ -129,7 +131,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           name={`minWorkTime`}
                           onChange={(e) => handleChange(`minWorkTime`)(e)}
                           value={values.minWorkTime}
-                          placeholder={0}
+                          placeholder={'Nhập thời gian làm việc tối thiếu'}
                         />
                         <span className="input-group-text" id="basic-addon2">
                           {t('label.hours')}

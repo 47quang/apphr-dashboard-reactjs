@@ -19,10 +19,12 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarForm from 'src/components/calendar/CalendarForm';
-import { createAssignment, deleteAssignment, fetchAssignments } from 'src/stores/actions/assignment';
+import { PERMISSION } from 'src/constants/key';
+import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchShifts } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
+import Page404 from '../page404/Page404';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -52,11 +54,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SchedulerPage = ({ t, history, match }) => {
-  //const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const shifts = useSelector((state) => state.shift.shifts);
   const assignments = useSelector((state) => state.assignment.assignments);
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
+  const [state, setState] = useState({
+    // data: [{ id: 1, title: 'gaf', startDate: '2021-04-14T10:00:00', endDate: '2021-04-14T12:00:00' }],
+    currentDate: new Date(),
+    isOpen: false,
+    selectedDate: '',
+    visible: false,
+  });
 
   const DayScaleCell = (props) => {
     const classes = useStyles();
@@ -77,14 +86,15 @@ const SchedulerPage = ({ t, history, match }) => {
     const date = moment(startDate);
 
     const onClickEvent = () => {
-      setState({
-        ...state,
-        selectedDate: moment.utc(props.startDate).startOf('day').format().replace('Z', ''),
-        isOpen: true,
-      });
+      if (permissionIds.includes(PERMISSION.CREATE_ASSIGNMENT))
+        setState({
+          ...state,
+          selectedDate: moment.utc(props.startDate).startOf('day').format().replace('Z', ''),
+          isOpen: true,
+        });
     };
 
-    if (date.day() === moment().day()) {
+    if (date.isSame(moment(), 'day')) {
       return <WeekView.TimeTableCell {...props} className={classes.todayCell} onClick={onClickEvent} />;
     }
     if (date.day() === 0 || date.day() === 6) {
@@ -93,13 +103,6 @@ const SchedulerPage = ({ t, history, match }) => {
     return <WeekView.TimeTableCell {...props} onClick={onClickEvent} />;
   };
 
-  const [state, setState] = useState({
-    // data: [{ id: 1, title: 'gaf', startDate: '2021-04-14T10:00:00', endDate: '2021-04-14T12:00:00' }],
-    currentDate: new Date(),
-    isOpen: false,
-    selectedDate: '',
-    visible: false,
-  });
   useEffect(() => {
     dispatch(
       fetchShifts({
@@ -111,16 +114,17 @@ const SchedulerPage = ({ t, history, match }) => {
   }, []);
 
   useEffect(() => {
-    var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
-    var firstDay = new Date(state.currentDate.setDate(first));
-    firstDay.setHours(0, 0, 0, 0);
-    var lastDay = new Date(state.currentDate.setDate(last));
-    lastDay.setHours(23, 59, 59, 0);
-    dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }));
-    // return () => {
-    //   dispatch(setEmptyAssignments());
-    // };
+    if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
+      var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
+      var last = first + 6; // last day is the first day + 6
+      var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
+      var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
+      lastDay.setHours(23, 59, 59, 0);
+      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }));
+      return () => {
+        dispatch(setEmptyAssignments());
+      };
+    }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.currentDate]);
   const changeCurrentDate = (currentDate) => {
@@ -133,7 +137,7 @@ const SchedulerPage = ({ t, history, match }) => {
     setState({ ...state, isOpen: false });
   };
   const toggleVisibility = () => {
-    setState({ ...state, visible: !state.visible });
+    if (permissionIds.includes(PERMISSION.GET_ASSIGNMENT)) setState({ ...state, visible: !state.visible });
   };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
@@ -175,38 +179,48 @@ const SchedulerPage = ({ t, history, match }) => {
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
     return (
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
-        <IconButton
-          onClick={() => {
-            dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
-            restProps.onHide();
-          }}
-          className={classes.commandButton}
-        >
-          <Delete />
-        </IconButton>
+        {permissionIds.includes(PERMISSION.DELETE_ASSIGNMENT) ? (
+          <IconButton
+            onClick={() => {
+              dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
+              restProps.onHide();
+            }}
+            className={classes.commandButton}
+          >
+            <Delete />
+          </IconButton>
+        ) : (
+          <div />
+        )}
       </AppointmentTooltip.Header>
     );
   });
-
-  console.log('SchedulerPage', assignments);
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <CalendarForm t={t} shifts={shifts} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
-      <Paper>
-        <Scheduler data={assignments} height={660}>
-          <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
-          <EditingState />
-          <IntegratedEditing />
-          <WeekView startDayHour={7} endDayHour={22} cellDuration={60} timeTableCellComponent={TimeTableCell} dayScaleCellComponent={DayScaleCell} />
-          <Toolbar />
-          <DateNavigator />
-          <TodayButton />
-          <EditRecurrenceMenu />
-          <Appointments />
-          <AppointmentTooltip headerComponent={Header} showCloseButton onVisibilityChange={toggleVisibility} />
-        </Scheduler>
-      </Paper>
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <CalendarForm t={t} shifts={shifts} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+        <Paper>
+          <Scheduler data={assignments} height={660}>
+            <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
+            <EditingState />
+            <IntegratedEditing />
+            <WeekView
+              startDayHour={7}
+              endDayHour={22}
+              cellDuration={60}
+              timeTableCellComponent={TimeTableCell}
+              dayScaleCellComponent={DayScaleCell}
+            />
+            <Toolbar />
+            <DateNavigator />
+            <TodayButton />
+            <EditRecurrenceMenu />
+            <Appointments />
+            <AppointmentTooltip headerComponent={Header} showCloseButton onVisibilityChange={toggleVisibility} />
+          </Scheduler>
+        </Paper>
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 export default SchedulerPage;
