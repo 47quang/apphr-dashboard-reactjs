@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { createPosition, setEmptyPosition } from 'src/stores/actions/position';
 import PositionItemBody from './PositionItemBody';
 
 const NewPositionPage = ({ t, location, match, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const positionRef = useRef();
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
@@ -14,10 +16,12 @@ const NewPositionPage = ({ t, location, match, history }) => {
   const position = useSelector((state) => state.position.position);
 
   useEffect(() => {
-    dispatch(fetchBranches());
-    return () => {
-      dispatch(setEmptyPosition());
-    };
+    if (permissionIds.includes(PERMISSION.CREATE_POSITION)) {
+      dispatch(fetchBranches());
+      return () => {
+        dispatch(setEmptyPosition());
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -47,18 +51,20 @@ const NewPositionPage = ({ t, location, match, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return (
-    <PositionItemBody
-      t={t}
-      positionRef={positionRef}
-      position={position}
-      departments={departments}
-      branches={branches}
-      shifts={shifts}
-      submitForm={submitForm}
-      buttons={buttons}
-    />
-  );
+  if (permissionIds.includes(PERMISSION.CREATE_POSITION))
+    return (
+      <PositionItemBody
+        t={t}
+        positionRef={positionRef}
+        position={position}
+        departments={departments}
+        branches={branches}
+        shifts={shifts}
+        submitForm={submitForm}
+        buttons={buttons}
+      />
+    );
+  else return <Page404 />;
 };
 
 export default NewPositionPage;

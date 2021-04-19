@@ -15,6 +15,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
     { id: 'WIFI', name: t('label.wi_fi') },
     { id: 'QR_CODE', name: t('label.qr_code') },
   ];
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -28,7 +29,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
               submitForm(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+            {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
@@ -64,7 +65,12 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     containerClassName={'form-group col-xl-6'}
                     value={values.typeCC}
                     onBlur={handleBlur('typeCC')}
-                    onChange={handleChange('typeCC')}
+                    onChange={(e) => {
+                      if (e.target.value !== 'WIFI') {
+                        setFieldValue('bssid', '');
+                      }
+                      handleChange('typeCC')(e);
+                    }}
                     inputID={'typeCC'}
                     labelText={t('label.roll_call_type')}
                     selectClassName={'form-control'}
@@ -83,6 +89,8 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                     inputID={'bssid'}
                     labelText={t('label.branch_ip_router')}
                     inputType={'text'}
+                    isRequiredField={values.typeCC === 'WIFI'}
+                    isDisable={values.typeCC !== 'WIFI'}
                     placeholder={t('placeholder.enter_branch_ip_router')}
                     inputClassName={'form-control'}
                     isTouched={touched.bssid}

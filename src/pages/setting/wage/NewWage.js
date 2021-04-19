@@ -1,17 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { WageSchema } from 'src/schema/formSchema';
 import { createWage, setEmptyWage } from 'src/stores/actions/wage';
 import WageItemBody from './WageItemBody';
 
 const NewWage = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const wageInfoForm = useRef();
   const dispatch = useDispatch();
   const wage = useSelector((state) => state.wage.wage);
 
   useEffect(() => {
-    dispatch(setEmptyWage());
+    if (permissionIds.includes(PERMISSION.CREATE_WAGE)) dispatch(setEmptyWage());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,7 +42,9 @@ const NewWage = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  return <WageItemBody wageRef={wageInfoForm} wage={wage} t={t} validationSchema={WageSchema} buttons={buttons} submitForm={submitForm} />;
+  if (permissionIds.includes(PERMISSION.CREATE_WAGE))
+    return <WageItemBody wageRef={wageInfoForm} wage={wage} t={t} validationSchema={WageSchema} buttons={buttons} submitForm={submitForm} />;
+  else return <Page404 />;
 };
 
 export default NewWage;

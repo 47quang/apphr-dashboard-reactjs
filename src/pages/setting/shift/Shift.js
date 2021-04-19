@@ -1,11 +1,13 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import Page404 from 'src/pages/page404/Page404';
 import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
 const Shifts = ({ t, location, history }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDef = [
     { name: 'code', title: t('label.shift_code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.shift_name'), align: 'left', width: '25%', wordWrapEnabled: true },
@@ -15,25 +17,54 @@ const Shifts = ({ t, location, history }) => {
   ];
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
-
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+  });
+  const onCurrentPageChange = (pageNumber) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
   useEffect(() => {
-    dispatch(
-      fetchShifts({
-        page: 0,
-        perpage: 1000,
-      }),
-    );
+    if (permissionIds.includes(PERMISSION.LIST_SHIFT)) dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));
   };
-
-  return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <QTable t={t} columnDef={columnDef} data={shifts} route={ROUTE_PATH.SHIFT + '/'} idxColumnsFilter={[0, 1]} deleteRow={deleteRow} />
-    </CContainer>
-  );
+  if (permissionIds.includes(PERMISSION.LIST_SHIFT))
+    return (
+      <CContainer fluid className="c-main mb-3 px-4">
+        <QTable
+          t={t}
+          columnDef={columnDef}
+          data={shifts}
+          route={ROUTE_PATH.SHIFT + '/'}
+          idxColumnsFilter={[0, 1]}
+          deleteRow={deleteRow}
+          paging={paging}
+          onCurrentPageChange={onCurrentPageChange}
+          onPageSizeChange={onPageSizeChange}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_SHIFT)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_SHIFT)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_SHIFT)}
+        />
+      </CContainer>
+    );
+  else return <Page404 />;
 };
 export default Shifts;

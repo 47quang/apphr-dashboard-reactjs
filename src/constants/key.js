@@ -48,6 +48,15 @@ export const ROUTE_NAME = {
   ARTICLE_TYPE: 'Article Type',
   NEW_ARTICLE_TYPE: 'New Article Type',
   ARTICLE_TYPE_UPDATE: ' Article Type Update',
+
+  LEAVE: 'Leave',
+  LEAVE_REQUEST: 'Leave Request',
+
+  REMOTE: 'Remote',
+  REMOTE_REQUEST: 'Remote Request',
+
+  OVERTIME: 'Overtime',
+  OVERTIME_REQUEST: 'Overtime Request',
 };
 
 const ID = '/:id';
@@ -57,6 +66,7 @@ export const ROUTE_PATH = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   COURSE: '/course',
+  PAGE_404: '/404',
 
   ACCOUNT: '/account',
   ACCOUNT_CREATE: '/account' + CREATE,
@@ -119,6 +129,15 @@ export const ROUTE_PATH = {
   ARTICLE_TYPE: '/setting/articleType',
   ARTICLE_TYPE_CREATE: '/setting/articleType' + CREATE,
   ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
+
+  LEAVE: '/proposal/leave',
+  LEAVE_REQUEST: '/proposal/leave' + ID,
+
+  REMOTE: '/proposal/remote',
+  REMOTE_REQUEST: '/proposal/remote' + ID,
+
+  OVERTIME: '/proposal/overtime',
+  OVERTIME_REQUEST: '/proposal/overtime' + ID,
 };
 
 export const CONTACT_TYPE = {
@@ -187,4 +206,160 @@ export const RESPONSE_CODE = {
   ///The server successfully processed the request and is not
   ///returning any content
   SUCCESS_NO_CONTENT: 204,
+};
+export const PERMISSION = {
+  // branch
+  CREATE_BRANCH: 11,
+  LIST_BRANCH: 12,
+  GET_BRANCH: 13,
+  UPDATE_BRANCH: 14,
+  DELETE_BRANCH: 15,
+
+  // department
+  CREATE_DEPARTMENT: 16,
+  LIST_DEPARTMENT: 17,
+  GET_DEPARTMENT: 18,
+  UPDATE_DEPARTMENT: 20,
+  DELETE_DEPARTMENT: 19,
+
+  // position
+  CREATE_POSITION: 21,
+  LIST_POSITION: 22,
+  GET_POSITION: 23,
+  UPDATE_POSITION: 24,
+  DELETE_POSITION: 25,
+
+  // shift
+  CREATE_SHIFT: 26,
+  LIST_SHIFT: 30,
+  GET_SHIFT: 29,
+  UPDATE_SHIFT: 27,
+  DELETE_SHIFT: 28,
+
+  // holiday
+  CREATE_HOLIDAY: 35,
+  LIST_HOLIDAY: 34,
+  GET_HOLIDAY: 33,
+  UPDATE_HOLIDAY: 31,
+  DELETE_HOLIDAY: 32,
+
+  // profile
+  CREATE_PROFILE: 36,
+  LIST_PROFILE: 37,
+  GET_PROFILE: 38,
+  UPDATE_PROFILE: 39,
+  DELETE_PROFILE: 40,
+
+  // user
+  CREATE_USER: 42,
+  LIST_USER: 41,
+  GET_USER: 44,
+  UPDATE_USER: 43,
+  DELETE_USER: 45,
+
+  // general
+  UPDATE_GENERAL: 46,
+
+  // role
+  CREATE_ROLE: 47,
+  LIST_ROLE: 48,
+  GET_ROLE: 49,
+  // UPDATE_ROLE : 43,
+  DELETE_ROLE: 50,
+
+  // article
+  CREATE_ARTICLE: 62,
+  LIST_ARTICLE: 63,
+  GET_ARTICLE: 64,
+  UPDATE_ARTICLE: 65,
+  DELETE_ARTICLE: 61,
+
+  // type article
+  CREATE_TYPE_ARTICLE: 72,
+  LIST_TYPE_ARTICLE: 74,
+  GET_TYPE_ARTICLE: 73,
+  UPDATE_TYPE_ARTICLE: 76,
+  DELETE_TYPE_ARTICLE: 75,
+
+  // wage
+  CREATE_WAGE: 78,
+  LIST_WAGE: 81,
+  GET_WAGE: 80,
+  UPDATE_WAGE: 77,
+  DELETE_WAGE: 79,
+
+  // allowance
+  CREATE_ALLOWANCE: 82,
+  LIST_ALLOWANCE: 84,
+  GET_ALLOWANCE: 83,
+  UPDATE_ALLOWANCE: 86,
+  DELETE_ALLOWANCE: 85,
+
+  // wage history
+  CREATE_WAGE_HISTORY: 90,
+  LIST_WAGE_HISTORY: 87,
+  GET_WAGE_HISTORY: 89,
+  UPDATE_WAGE_HISTORY: 88,
+  DELETE_WAGE_HISTORY: 91,
+
+  // contact
+  CREATE_CONTACT: 92,
+  LIST_CONTACT: 95,
+  UPDATE_CONTACT: 93,
+  DELETE_CONTACT: 94,
+
+  // diploma
+  CREATE_DIPLOMA: 96,
+  LIST_DIPLOMA: 98,
+  GET_DIPLOMA: 97,
+  UPDATE_DIPLOMA: 99,
+  DELETE_DIPLOMA: 100,
+
+  // roll up
+  LIST_ROLL_UP: 102,
+  GET_ROLL_UP: 101,
+  DELETE_ROLL_UP: 103,
+
+  // leave-form
+  CREATE_LEAVE_FORM: 111,
+  LIST_LEAVE_FORM: 112,
+  GET_LEAVE_FORM: 113,
+  UPDATE_LEAVE_FORM: 114,
+  DELETE_LEAVE_FORM: 115,
+  APPROVE_LEAVE_FORM: 116,
+  REJECT_LEAVE_FORM: 116,
+
+  // overtime-form
+  CREATE_OVERTIME_FORM: 118,
+  LIST_OVERTIME_FORM: 122,
+  GET_OVERTIME_FORM: 121,
+  UPDATE_OVERTIME_FORM: 120,
+  DELETE_OVERTIME_FORM: 119,
+  APPROVE_OVERTIME_FORM: 123,
+  REJECT_OVERTIME_FORM: 124,
+
+  // remote-form
+  CREATE_REMOTE_FORM: 131,
+  LIST_REMOTE_FORM: 126,
+  GET_REMOTE_FORM: 127,
+  UPDATE_REMOTE_FORM: 129,
+  DELETE_REMOTE_FORM: 125,
+  APPROVE_REMOTE_FORM: 128,
+  REJECT_REMOTE_FORM: 130,
+
+  //contract
+  CREATE_CONTRACT: 137,
+  LIST_CONTRACT: 138,
+  UPDATE_CONTRACT: 139,
+  DELETE_CONTRACT: 140,
+  GET_CONTRACT: 141,
+  ACTIVE_CONTRACT: 143,
+  INACTIVE_CONTRACT: 142,
+
+  //history working
+  CREATE_WORK_HISTORY: 132,
+  GET_WORK_HISTORY: 133,
+  LIST_WORK_HISTORY: 134,
+  UPDATE_WORK_HISTORY: 135,
+  DELETE_WORK_HISTORY: 136,
 };

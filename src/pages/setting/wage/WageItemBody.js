@@ -91,24 +91,6 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons 
                   />
                 </div>
 
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-xl-12'}
-                    value={values.dayOff}
-                    onBlur={handleBlur('dayOff')}
-                    onChange={handleChange('dayOff')}
-                    inputID={'dayOff'}
-                    labelText={t('label.wage_dayOff')}
-                    inputType={'number'}
-                    placeholder={t('placeholder.enter_dayOff')}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.dayOff}
-                    isError={errors.dayOff && touched.dayOff}
-                    errorMessage={t(errors.dayOff)}
-                  />
-                </div>
-
                 {renderButtons(buttons)}
               </form>
             )}

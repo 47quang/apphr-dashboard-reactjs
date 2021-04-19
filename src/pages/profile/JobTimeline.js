@@ -14,6 +14,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
+import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import {
   createContract,
@@ -31,6 +32,7 @@ import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const JobTimelineInfo = ({ t, history, match }) => {
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
@@ -65,6 +67,10 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: 'Chi trả theo giờ' },
+    { id: 'by_month', name: 'Chi trả theo tháng' },
+  ];
+  const periodicPayment = [
+    { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_date', name: 'Chi trả theo ngày' },
     { id: 'by_week', name: 'Chi trả theo tuần' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
@@ -82,10 +88,14 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   useEffect(() => {
-    dispatch(setEmptyContracts());
-    dispatch(fetchContracts({ profileId: +profileId }));
-    dispatch(fetchBranches());
-    dispatch(fetchAllowances());
+    if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
+      dispatch(fetchContracts({ profileId: +profileId }));
+      dispatch(fetchBranches());
+      dispatch(fetchAllowances());
+      return () => {
+        dispatch(setEmptyContracts());
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // useEffect(() => {
@@ -112,7 +122,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
-  const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isNew }) => {
+  const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
     const [isOpenDynamicFieldForm, setIsOpenDynamicFieldForm] = useState(false);
     const handleConfirm = (val) => {
       values.attributes.push(val);
@@ -221,7 +231,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 rows={5}
                 name={`probPayRates`}
                 onChange={(e) => handleChange(`probPayRates`)(e)}
-                value={values.probTime}
+                value={values.probPayRates}
               />
               <span className="input-group-text" id="basic-addon2">
                 {t('label.percentage')}
@@ -403,7 +413,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               value={values?.paymentType ?? ''}
               onBlur={handleBlur(`paymentType`)}
               onChange={async (e) => {
-                if (isNew) {
+                if (isCreate) {
                   if (e.target.value !== '0') {
                     dispatch(fetchWagesByType({ type: e.target.value }));
                     setFieldValue(`amount`, 0);
@@ -436,7 +446,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               onBlur={handleBlur(`wageId`)}
               onChange={(e) => {
                 let thisWage;
-                if (isNew) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
                 else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
                 if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
                 else setFieldValue(`amount`, 0);
@@ -450,7 +460,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               isTouched={touched?.wageId}
               isError={errors?.wageId}
               errorMessage={t(errors?.wageId)}
-              lstSelectOptions={isNew ? wages : values.wages}
+              lstSelectOptions={isCreate ? wages : values.wages}
             />
             <CommonTextInput
               containerClassName={'form-group col-xl-4'}
@@ -466,6 +476,39 @@ const JobTimelineInfo = ({ t, history, match }) => {
               isTouched={touched?.amount}
               isError={errors?.amount && touched?.amount}
               errorMessage={t(errors?.amount)}
+            />
+
+            <CommonTextInput
+              containerClassName={'form-group col-xl-4'}
+              value={values.dayOff}
+              onBlur={handleBlur('dayOff')}
+              onChange={handleChange('dayOff')}
+              inputID={'dayOff'}
+              labelText={t('label.wage_dayOff')}
+              inputType={'number'}
+              placeholder={t('placeholder.enter_dayOff')}
+              inputClassName={'form-control'}
+              isRequiredField
+              isTouched={touched.dayOff}
+              isError={errors.dayOff && touched.dayOff}
+              errorMessage={t(errors.dayOff)}
+            />
+            <CommonSelectInput
+              containerClassName={'form-group col-xl-4'}
+              value={values?.periodicPayment ?? ''}
+              onBlur={handleBlur(`periodicPayment`)}
+              onChange={async (e) => {
+                handleChange(`periodicPayment`)(e);
+              }}
+              inputID={`periodicPayment`}
+              labelText={t('label.payment_method')}
+              selectClassName={'form-control'}
+              placeholder={t('placeholder.select_periodic_payment_method')}
+              isRequiredField
+              isTouched={touched?.periodicPayment}
+              isError={errors?.periodicPayment && touched?.periodicPayment}
+              errorMessage={t(errors?.periodicPayment)}
+              lstSelectOptions={periodicPayment}
             />
           </div>
         ) : (
@@ -549,8 +592,23 @@ const JobTimelineInfo = ({ t, history, match }) => {
           )}
         />
         <hr className="mt-1" />
-
-        <CommonUploadFileButton name={`attaches`} containerClassName="mt-3 " buttonClassName="btn btn-primary" value={values.attaches} />
+        {isCreate ? (
+          <CommonUploadFileButton
+            isHide={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+            name={`attaches`}
+            containerClassName="mt-3 "
+            buttonClassName="btn btn-primary"
+            value={values.attaches}
+          />
+        ) : (
+          <CommonUploadFileButton
+            isHide={!permissionIds.includes(PERMISSION.UPDATE_CONTRACT)}
+            name={`attaches`}
+            containerClassName="mt-3 "
+            buttonClassName="btn btn-primary"
+            value={values.attaches}
+          />
+        )}
       </>
     );
   };
@@ -574,6 +632,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
         <button
           type="button"
           className="btn btn-success rounded-circle p-3"
+          hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
           id="addBtn"
           onClick={() => {
             document.getElementById('newContract').hidden = false;
@@ -601,6 +660,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
           }}
         >
           {(props) => {
+            props.isCreate = true;
             return (
               <form id="newContract" hidden={true} className="p-0 m-0">
                 <div className="shadow bg-white rounded mx-4 p-4">
@@ -634,7 +694,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             );
           }}
         </Formik>
-        {jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
+        {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
           jobTimelineInfo.contractInfo.map((contract, index) => {
             contract.isMinimize = false;
             return (
@@ -699,34 +759,38 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
                               }}
                             />
-                            {renderButtons([
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 mx-2`,
-                                onClick: (e) => {
-                                  setIsVisibleDeleteAlert(true);
-                                },
-                                name: t('label.delete'),
-                                position: 'right',
-                              },
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 mx-2`,
-                                onClick: (e) => {
-                                  props.handleReset(e);
-                                },
-                                name: t('label.reset'),
-                                position: 'right',
-                              },
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 ml-2`,
-                                onClick: (e) => {
-                                  props.handleSubmit(e);
-                                },
-                                name: t('label.save'),
-                              },
-                            ])}
+                            {renderButtons(
+                              permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                                ? [
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-2`,
+                                      onClick: (e) => {
+                                        setIsVisibleDeleteAlert(true);
+                                      },
+                                      name: t('label.delete'),
+                                      position: 'right',
+                                    },
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-2`,
+                                      onClick: (e) => {
+                                        props.handleReset(e);
+                                      },
+                                      name: t('label.reset'),
+                                      position: 'right',
+                                    },
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 ml-2`,
+                                      onClick: (e) => {
+                                        props.handleSubmit(e);
+                                      },
+                                      name: t('label.save'),
+                                    },
+                                  ]
+                                : [],
+                            )}
                           </div>
                         )}
                       </div>

@@ -1,18 +1,9 @@
-import React from 'react'
-import {
-  CButton,
-  CCol,
-  CContainer,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupAppend,
-  CInputGroupText,
-  CRow
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import React from 'react';
+import { CButton, CCol, CContainer, CInput, CInputGroup, CInputGroupPrepend, CInputGroupAppend, CInputGroupText, CRow } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
 
-const Page404 = ({ t, location }) => {
+const Page404 = ({ t, history, location }) => {
+  console.log(history);
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -20,7 +11,7 @@ const Page404 = ({ t, location }) => {
           <CCol md="6">
             <div className="clearfix">
               <h1 className="float-left display-3 mr-4">404</h1>
-              <h4 className="pt-3">Oops! You{'\''}re lost.</h4>
+              <h4 className="pt-3">Oops! You{"'"}re lost.</h4>
               <p className="text-muted float-left">The page you are looking for was not found.</p>
             </div>
             <CInputGroup className="input-prepend">
@@ -38,7 +29,7 @@ const Page404 = ({ t, location }) => {
         </CRow>
       </CContainer>
     </div>
-  )
-}
+  );
+};
 
-export default Page404
+export default Page404;

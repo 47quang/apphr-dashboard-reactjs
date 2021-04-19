@@ -4,8 +4,8 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import AccountItemBody from './AccountItemBody';
-import SchedulerPage from '../profile/SchedulerPage';
+import HolidayPage from './Holiday';
+import HolidaySetting from './HolidaySetting';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -45,12 +45,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AccountTabs = ({ t, history, match }) => {
+const HolidayTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
   const [tabName, setTabName] = useState(0);
-  const isCreate = match.params.id ? false : true;
 
   const handleChange = (event, newValue) => {
     setTabName(newValue);
@@ -69,15 +68,15 @@ const AccountTabs = ({ t, history, match }) => {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab className="noselect" label={t('label.account_info')} {...a11yProps(0)} />
-            <Tab hidden={isCreate} className="noselect" label={t('label.scheduler')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.holiday')} {...a11yProps(0)} />
+            <Tab className="noselect" label={t('label.holiday_setting')} {...a11yProps(1)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
-          <AccountItemBody match={match} history={history} t={t} />
+          <HolidayPage match={match} history={history} t={t} />
         </TabPanel>
-        <TabPanel hidden={isCreate} value={tabName} index={1}>
-          <SchedulerPage match={match} history={history} t={t} />
+        <TabPanel value={tabName} index={1}>
+          <HolidaySetting match={match} t={t} />
         </TabPanel>
       </div>
       {/* <div
@@ -89,4 +88,4 @@ const AccountTabs = ({ t, history, match }) => {
     </>
   );
 };
-export default AccountTabs;
+export default HolidayTabs;

@@ -26,7 +26,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.code}
+                    value={values.code ?? ''}
                     onBlur={handleBlur('code')}
                     onChange={handleChange('code')}
                     inputID={'code'}
@@ -38,7 +38,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.title}
+                    value={values.title ?? ''}
                     onBlur={handleBlur('title')}
                     onChange={handleChange('title')}
                     inputID={'title'}
@@ -53,7 +53,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.startDate}
+                    value={values.startDate ?? ''}
                     onBlur={handleBlur('startDate')}
                     onChange={handleChange('startDate')}
                     inputID={'startDate'}
@@ -67,7 +67,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.endDate}
+                    value={values.endDate ?? ''}
                     onBlur={handleBlur('endDate')}
                     onChange={handleChange('endDate')}
                     inputID={'endDate'}
@@ -81,7 +81,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.coefficient}
+                    value={values.coefficient ?? '0'}
                     onBlur={handleBlur('coefficient')}
                     onChange={handleChange('coefficient')}
                     inputID={'coefficient'}
