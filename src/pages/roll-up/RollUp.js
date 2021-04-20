@@ -384,7 +384,6 @@ const RollUp = ({ t, location }) => {
     dispatch(
       fetchRollUpTable(
         {
-          groupByProfile: true,
           from: state.fromDate,
           to: state.toDate,
         },
@@ -413,7 +412,7 @@ const RollUp = ({ t, location }) => {
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return (
       <>
-        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} />
+        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} id={value.id} />
         <Table.Cell
           className={classNames(className, Array.isArray(value) ? 'p-1 border border-secondary' : 'ps-3')}
           {...restProps}

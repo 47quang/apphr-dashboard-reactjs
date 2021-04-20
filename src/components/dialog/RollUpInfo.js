@@ -1,32 +1,46 @@
 import { Avatar, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { Cancel, Lens } from '@material-ui/icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { COLORS } from 'src/constants/theme';
-const RollUpInfo = ({ t, isOpen, handleClose }) => {
+import { fetchAssignment } from 'src/stores/actions/assignment';
+import { renderButtons } from 'src/utils/formUtils';
+const RollUpInfo = ({ t, isOpen, handleClose, id }) => {
   const [dropdownSuccess, setDropdownSuccess] = useState(false);
   const [dropdownDanger, setDropdownDanger] = useState(false);
 
   const toggleSuccess = () => setDropdownSuccess((prevState) => !prevState);
   const toggleDanger = () => setDropdownDanger((prevState) => !prevState);
+  const dispatch = useDispatch();
 
-  const createData = (rollupType, shift, time, type) => {
-    return { rollupType, shift, type, time };
-  };
-  const rows = [
-    createData('Mạng nội bộ', 'Ca sáng 1', '08:30', 'Check-in'),
-    createData('Mạng nội bộ', 'Ca sáng 1', '11:30', 'Check-out'),
-    createData('Mạng nội bộ', 'Ca chiều 1', '13:30', 'Check-in'),
-    createData('Mạng nội bộ', 'Ca chiều 1', '15:30', 'Check-out'),
-    createData('Mạng nội bộ', 'Ca chiều 1', '15:45', 'Check-in'),
-    createData('Mạng nội bộ', 'Ca chiều 1', '18:00', 'Check-out'),
+  const rows = useSelector((state) => state.assignment.assignment);
+
+  const buttons = [
+    {
+      type: 'button',
+      className: `btn btn-primary  mx-2`,
+      onClick: (e) => {},
+      name: t('label.check_in'),
+    },
+
+    {
+      type: 'button',
+      className: `btn btn-primary px-4 ml-4`,
+      onClick: (e) => {},
+      name: t('label.check_out'),
+    },
   ];
+
+  useEffect(() => {
+    if (id) dispatch(fetchAssignment(id));
+  }, []);
 
   return (
     <Dialog open={isOpen} maxWidth="sm" fullWidth>
       <DialogTitle className={'dialog-title-background'}>
         <div className="d-flex flex-row justify-content-between align-items-center">
-          <div style={{ fontSize: 24, color: 'black', fontWeight: 'bold' }}>Lịch sử điểm danh</div>
+          <div style={{ fontSize: 24, color: 'black', fontWeight: 'bold' }}>{t('label.history_roll_call')}</div>
           <Cancel fontSize="large" onClick={handleClose} role="button" />
         </div>
       </DialogTitle>
@@ -45,20 +59,24 @@ const RollUpInfo = ({ t, isOpen, handleClose }) => {
         <Table className="my-3">
           <TableHead>
             <TableRow>
-              <TableCell style={{ fontWeight: 'bold' }}>Hình thức điểm danh</TableCell>
+              <TableCell style={{ fontWeight: 'bold' }}>{t('label.type_roll_call')}</TableCell>
               <TableCell style={{ fontWeight: 'bold' }}>Loại</TableCell>
               <TableCell style={{ fontWeight: 'bold' }}>Thời gian</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={`row ${index}`} className={`${index % 2 === 0 ? 'table-row-background' : ''}`}>
-                <TableCell>{row.rollupType}</TableCell>
-                <TableCell>{row.shift}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.time}</TableCell>
-              </TableRow>
-            ))}
+            {rows.rollUps && rows.rollUps.length > 0 ? (
+              rows.rollUps.map((row, index) => (
+                <TableRow key={`row ${index}`} className={`${index % 2 === 0 ? 'table-row-background' : ''}`}>
+                  <TableCell>{row.code}</TableCell>
+                  <TableCell>{row.type}</TableCell>
+                  <TableCell>{row.startTime}</TableCell>
+                  <TableCell>{row.endTime}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <div />
+            )}
           </TableBody>
         </Table>
         <div className="d-flex flex-row justify-content-end mb-3 align-items-center text-danger">
@@ -67,26 +85,7 @@ const RollUpInfo = ({ t, isOpen, handleClose }) => {
         </div>
       </DialogContent>
       <DialogActions style={{ backgroundColor: COLORS.SIDE_BAR_COLOR }} className="px-3">
-        <Dropdown isOpen={dropdownSuccess} toggle={toggleSuccess}>
-          <DropdownToggle caret color="danger">
-            {t('label.reset_roll_up')}
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem>Ca sáng</DropdownItem>
-            <DropdownItem>Ca chiều</DropdownItem>
-            <DropdownItem>Cả ngày</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <Dropdown isOpen={dropdownDanger} toggle={toggleDanger}>
-          <DropdownToggle caret color="success">
-            {t('label.roll_up')}
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem>Ca sáng</DropdownItem>
-            <DropdownItem>Ca chiều</DropdownItem>
-            <DropdownItem>Cả ngày</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        {renderButtons(buttons)}
       </DialogActions>
     </Dialog>
   );

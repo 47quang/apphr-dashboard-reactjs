@@ -28,6 +28,10 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "check_out": "Check out",
+    "history_roll_call": "Lịch sử điểm danh",
+    "check_in": "Check in",
+    "type_roll_call": "Hình thức điểm danh",
     "leave_info": "Yêu cầu xin nghỉ",
     "remote_info": "Yêu cầu làm từ xa",
     "overtime_info": "Yêu cầu làm thêm giờ",

@@ -43,8 +43,8 @@ export const fetchAssignments = (params, onTotalChange) => {
 
 export const fetchRollUpTable = (params, onTotalChange) => {
   return (dispatch, getState) => {
-    api.assignment
-      .getAll(params)
+    api.profile
+      .getRollUpTable(params)
       .then(({ payload, total }) => {
         let data = [];
         payload =
@@ -157,5 +157,25 @@ export const setEmptyAssignments = () => {
   return {
     type: REDUX_STATE.assignment.EMPTY_VALUE,
     payload: [],
+  };
+};
+
+export const checkin = (id, success_msg) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .delete(id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGNMENT, payload });
+        // handleAfterDeleted();
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
   };
 };
