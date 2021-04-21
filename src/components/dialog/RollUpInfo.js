@@ -1,17 +1,11 @@
 import { Avatar, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { Cancel, Lens } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { COLORS } from 'src/constants/theme';
 import { fetchAssignment } from 'src/stores/actions/assignment';
 import { renderButtons } from 'src/utils/formUtils';
-const RollUpInfo = ({ t, isOpen, handleClose, id }) => {
-  const [dropdownSuccess, setDropdownSuccess] = useState(false);
-  const [dropdownDanger, setDropdownDanger] = useState(false);
-
-  const toggleSuccess = () => setDropdownSuccess((prevState) => !prevState);
-  const toggleDanger = () => setDropdownDanger((prevState) => !prevState);
+const RollUpInfo = ({ t, isOpen, handleClose, id, profileCode, fullName }) => {
   const dispatch = useDispatch();
 
   const rows = useSelector((state) => state.assignment.assignment);
@@ -34,6 +28,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, id }) => {
 
   useEffect(() => {
     if (id) dispatch(fetchAssignment(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -49,10 +44,14 @@ const RollUpInfo = ({ t, isOpen, handleClose, id }) => {
           <Avatar alt="avatar" src="" className="mr-3" />
           <div>
             <div>
-              <div style={{ fontWeight: 'bold' }}>{t('label.employee_full_name')}:</div>
+              <div style={{ fontWeight: 'bold' }}>
+                {t('label.employee_full_name')} : {fullName}
+              </div>
             </div>
             <div>
-              <div style={{ fontWeight: 'bold' }}>{t('label.employee_code')}:</div>
+              <div style={{ fontWeight: 'bold' }}>
+                {t('label.employee_code')} : {profileCode}
+              </div>
             </div>
           </div>
         </div>
@@ -60,8 +59,8 @@ const RollUpInfo = ({ t, isOpen, handleClose, id }) => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: 'bold' }}>{t('label.type_roll_call')}</TableCell>
-              <TableCell style={{ fontWeight: 'bold' }}>Loại</TableCell>
-              <TableCell style={{ fontWeight: 'bold' }}>Thời gian</TableCell>
+              <TableCell style={{ fontWeight: 'bold' }}>{t('label.start_time')}</TableCell>
+              <TableCell style={{ fontWeight: 'bold' }}>{t('label.end_time')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

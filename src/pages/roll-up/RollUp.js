@@ -23,266 +23,7 @@ const RollUp = ({ t, location }) => {
   });
   const dispatch = useDispatch();
   const data = useSelector((state) => state.assignment.assignments);
-  console.log('data', data);
 
-  // let data = [
-  //   {
-  //     id: 1,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 0.8 },
-  //       { startCC: '19:30', endCC: '21:00', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 0.8 },
-  //     ],
-  //     friday: [],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [],
-  //   },
-  //   {
-  //     id: 3,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: false, value: 0 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 5,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 7,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 6,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 9,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  //   {
-  //     id: 8,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     monday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     tuesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     wednesday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     thursday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     friday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     saturday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //     sunday: [
-  //       { startCC: '08:30', endCC: '13:30', status: false, value: 0 },
-  //       { startCC: '13:30', endCC: '17:30', status: true, value: 1 },
-  //     ],
-  //   },
-  // ];
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: 5,
@@ -314,45 +55,45 @@ const RollUp = ({ t, location }) => {
       name: 'sunday',
       title: ['Chủ nhật', fromDate.clone().startOf('week').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
     {
       name: 'monday',
       title: ['Thứ hai', fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
     {
       name: 'tuesday',
       title: ['Thứ ba', fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
     {
       name: 'wednesday',
       title: ['Thứ tư', fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
     {
       name: 'thursday',
       title: ['Thứ năm', fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
     {
       name: 'friday',
       title: ['Thứ sáu', fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
       align: 'left',
-      width: '15%',
+      width: '11%',
       wordWrapEnabled: true,
     },
-    { name: 'saturday', title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')], align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'saturday', title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')], align: 'left', width: '11%', wordWrapEnabled: true },
   ];
 
   let columnDefOfRollUp = useRef();
@@ -390,7 +131,6 @@ const RollUp = ({ t, location }) => {
         onTotalChange,
       ),
     );
-    console.log(state.fromDate.format('DD/MM'));
     columnDefOfRollUp.current = changeColDef(state.fromDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
@@ -405,38 +145,38 @@ const RollUp = ({ t, location }) => {
       columnName: '',
       isOpen: false,
     });
-
+    const isDay = Array.isArray(value);
     const handleClose = () => {
       setCell({ ...cell, isOpen: false });
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return (
       <>
-        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} id={value.id} />
+        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} id={value.id} profileCode={row.code} fullName={row.fullname} />
         <Table.Cell
-          className={classNames(className, Array.isArray(value) ? 'p-1 border border-secondary' : 'ps-3')}
+          className={classNames(className, isDay ? 'p-1 border border-secondary' : 'ps-3')}
           {...restProps}
           row={row}
           column={column}
           children={children}
           style={{
-            backgroundColor: Array.isArray(value)
+            backgroundColor: isDay
               ? value.length > 0
-                ? value.every((v) => v.status === false)
+                ? value.every((v) => v.point === 0)
                   ? COLORS.FULLY_ABSENT_ROLL_CALL
                   : COLORS.FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
           }}
         >
-          {Array.isArray(value) ? (
+          {isDay ? (
             <div className={classNames(className, 'rounded  p-0')}>
               {value.length > 0 ? (
                 value.map((val, idx) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames('row p-1 m-1', idx === value.length - 1 ? '' : 'border-bottom')}
+                      className={classNames('row p-0 m-0', idx === value.length - 1 ? '' : 'border-bottom')}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
@@ -451,7 +191,7 @@ const RollUp = ({ t, location }) => {
                       <div className="col-2 border-right p-0 m-0">
                         <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.point}</p>
                       </div>
-                      <div className="col-10">
+                      <div className="col-10  p-0 m-0">
                         {val.status ? (
                           <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
                         ) : (

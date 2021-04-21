@@ -29,7 +29,6 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
             }}
           >
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => {
-              console.log('errors', errors);
               return (
                 <form autoComplete="off">
                   <div className="row">

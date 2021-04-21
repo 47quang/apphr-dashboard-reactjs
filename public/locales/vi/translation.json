@@ -28,6 +28,14 @@
   "Allowance": "Trợ cấp",
   "Article Type": "Loại thông báo",
   "label": {
+    "assignment_requests": "Các buổi xin nghỉ",
+    "handleDate": "Ngày xữ lý",
+    "statistics": "Thống kê",
+    "num_of_work_day": "Số ngày đi làm trong tháng",
+    "number_of_day_off": "Số ngày nghỉ trong năm",
+    "average_work_time": "Thời gian làm việc trung bình một ngày trong tháng",
+    "total_delay_time": "Thời gian đi muộn trong tháng này",
+    "number_of_remote": "Số ngày làm việc từ xa trong tháng",
     "check_out": "Check out",
     "history_roll_call": "Lịch sử điểm danh",
     "check_in": "Check in",
@@ -265,6 +273,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_note": "Nhập ghi chú",
     "enter_field_name": "Nhập tên trường",
     "enter_article_type_name": "Nhập tên loại thông báo",
     "enter_article_type_code": "Nhập mã loại thông báo",

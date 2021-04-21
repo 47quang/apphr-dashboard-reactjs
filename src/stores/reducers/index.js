@@ -21,6 +21,7 @@ import articleTypeReducer from './articleType';
 import historyWorkReducer from './historyWork';
 import rollUpReducer from './rollUp';
 import assignmentReducer from './assignment';
+import requestReducer from './request';
 
 export default combineReducers({
   style: styleReducer,
@@ -45,4 +46,5 @@ export default combineReducers({
   historyWork: historyWorkReducer,
   rollUp: rollUpReducer,
   assignment: assignmentReducer,
+  request: requestReducer,
 });

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
-import { Table } from '@devexpress/dx-react-grid-material-ui';
+import { fetchLeaveRequests, fetchRemoteRequests, fetchOvertimeRequests } from 'src/stores/actions/request';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -14,11 +14,12 @@ const Proposal = ({ t, location, match }) => {
     // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'shifts', title: t('label.shifts'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'sentDate', title: t('label.sent_date'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'status', title: t('label.status'), align: 'left', width: '10%', wordWrapEnabled: true },
     { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
-  // const dispatch = useDispatch();
-  // const proposals = useSelector((state) => state.proposal.proposals);
+  const type = match.path.split('/')[2];
+  const dispatch = useDispatch();
+  // const proposals = useSelector((state) => state.request[type + 'Requests']);
   const proposals = [
     {
       id: 1,
@@ -77,8 +78,37 @@ const Proposal = ({ t, location, match }) => {
     }));
 
   useEffect(() => {
-    //dispatch(fetchProfiles());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (type === 'leave')
+      dispatch(
+        fetchLeaveRequests(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
+    else if (type === 'remote')
+      dispatch(
+        fetchRemoteRequests(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
+    else
+      dispatch(
+        fetchOvertimeRequests(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+          },
+          onTotalChange,
+        ),
+      );
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // const deleteRow = async (rowId) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
@@ -91,9 +121,10 @@ const Proposal = ({ t, location, match }) => {
         t={t}
         columnDef={columnDefOfProfiles}
         data={proposals}
-        route={ROUTE_PATH.PROPOSAL + '/'}
+        route={match.path + '/'}
         idxColumnsFilter={[0, 1, 3, 4]}
-        disableEditColum={true}
+        disableDelete={true}
+        disableCreate={true}
         dateCols={[3]}
         multiValuesCols={[2]}
         statusCols={[4]}

@@ -61,7 +61,7 @@ const LeaveForm = ({ t, history, match }) => {
                 <FormHeader text={t('label.leave_info')} />
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.type}
                     onBlur={handleBlur('type')}
                     onChange={handleChange('type')}
@@ -73,7 +73,7 @@ const LeaveForm = ({ t, history, match }) => {
                     lstSelectOptions={type}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.createdAt}
                     onBlur={handleBlur('createdAt')}
                     onChange={handleChange('createdAt')}
@@ -87,7 +87,7 @@ const LeaveForm = ({ t, history, match }) => {
                 </div>
                 <div className="row">
                   <div className="form-group col-xl-12">
-                    <Label text="Các ca xin nghỉ" required={true} />
+                    <Label text={t('label.assignment_requests')} required={true} />
                     <CommonMultiSelectInput
                       values={values.assigmentIds}
                       listValues={assigments}
@@ -100,22 +100,20 @@ const LeaveForm = ({ t, history, match }) => {
 
                 <div className="row" hidden={values.status}>
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.status}
                     onBlur={handleBlur('status')}
                     onChange={handleChange('status')}
                     inputID={'status'}
                     labelText={t('label.status')}
                     inputType={'text'}
-                    placeholder={t('placeholder.status')}
                     inputClassName={'form-control'}
                     isDisable
                     isRequiredField
                   />
-                </div>
-                <div className="row">
+
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.handler}
                     onBlur={handleBlur('handler')}
                     onChange={handleChange('handler')}
@@ -127,7 +125,7 @@ const LeaveForm = ({ t, history, match }) => {
                     isRequiredField
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-6'}
+                    containerClassName={'form-group col-xl-4'}
                     value={values.handleDate}
                     onBlur={handleBlur('handleDate')}
                     onChange={handleChange('handleDate')}
@@ -148,6 +146,7 @@ const LeaveForm = ({ t, history, match }) => {
                     onChange={handleChange(`note`)}
                     labelText={t('label.note')}
                     inputClassName={'form-control'}
+                    placeholder={t('placeholder.enter_note')}
                   />
                 </div>
                 {renderButtons(buttons)}
@@ -156,111 +155,193 @@ const LeaveForm = ({ t, history, match }) => {
           </Formik>
         </div>
         <br />
-        <div className="shadow bg-white rounded p-4 container col-xl-10">
-          <Formik
-            //            innerRef={branchRef}
-            enableReinitialize
-            initialValues={basicInfo}
-            // validationSchema={LeaveFormSchema}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
-          >
-            {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
-              <form autoComplete="off">
-                <FormHeader text={t('label.basic_info')} />
+        <div className="row">
+          <div className="shadow bg-white rounded p-4 container col-xl-5">
+            <Formik
+              //            innerRef={branchRef}
+              enableReinitialize
+              initialValues={basicInfo}
+              // validationSchema={LeaveFormSchema}
+              onSubmit={(values) => {
+                console.log(values);
+              }}
+            >
+              {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+                <form autoComplete="off">
+                  <FormHeader text={t('label.basic_info')} />
 
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.code ?? ''}
-                    onBlur={handleBlur('code')}
-                    onChange={handleChange('code')}
-                    inputID={'code'}
-                    labelText={t('label.employee_code')}
-                    inputType={'text'}
-                    placeholder={t('placeholder.enter_employee_code')}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.fullname ?? ''}
-                    onBlur={handleBlur('fullname')}
-                    onChange={handleChange('fullname')}
-                    inputID={'fullname'}
-                    labelText={t('label.employee_first_name')}
-                    inputType={'text'}
-                    placeholder={t('placeholder.enter_employee_fullname')}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                </div>
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.phone ?? ''}
-                    onBlur={handleBlur('phone')}
-                    onChange={handleChange('phone')}
-                    inputID={'phone'}
-                    labelText={t('label.phone_number')}
-                    inputType={'text'}
-                    placeholder={t('placeholder.enter_phone_number')}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.email ?? ''}
-                    onBlur={handleBlur('email')}
-                    onChange={handleChange('email')}
-                    inputID={'email'}
-                    labelText={t('label.email')}
-                    inputType={'email'}
-                    placeholder={t('placeholder.enter_email')}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.branch ?? ''}
-                    onBlur={handleBlur('branch')}
-                    onChange={handleChange('branch')}
-                    inputID={'branch'}
-                    labelText={t('label.branch')}
-                    inputType={'text'}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                </div>
+                  <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.code ?? ''}
+                      onBlur={handleBlur('code')}
+                      onChange={handleChange('code')}
+                      inputID={'code'}
+                      labelText={t('label.employee_code')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.fullname ?? ''}
+                      onBlur={handleBlur('fullname')}
+                      onChange={handleChange('fullname')}
+                      inputID={'fullname'}
+                      labelText={t('label.employee_first_name')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                  </div>
+                  <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.phone ?? ''}
+                      onBlur={handleBlur('phone')}
+                      onChange={handleChange('phone')}
+                      inputID={'phone'}
+                      labelText={t('label.phone_number')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.email ?? ''}
+                      onBlur={handleBlur('email')}
+                      onChange={handleChange('email')}
+                      inputID={'email'}
+                      labelText={t('label.email')}
+                      inputType={'email'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.branch ?? ''}
+                      onBlur={handleBlur('branch')}
+                      onChange={handleChange('branch')}
+                      inputID={'branch'}
+                      labelText={t('label.branch')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                  </div>
 
-                <div className="row" hidden={values.status}>
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.department ?? ''}
-                    onBlur={handleBlur('department')}
-                    onChange={handleChange('department')}
-                    inputID={'department'}
-                    labelText={t('label.department')}
-                    inputType={'text'}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-lg-6'}
-                    value={values.position ?? ''}
-                    onBlur={handleBlur('position')}
-                    onChange={handleChange('position')}
-                    inputID={'position'}
-                    labelText={t('label.position')}
-                    inputType={'text'}
-                    inputClassName={'form-control'}
-                    isDisable
-                  />
-                </div>
-              </form>
-            )}
-          </Formik>
+                  <div className="row" hidden={values.status}>
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.department ?? ''}
+                      onBlur={handleBlur('department')}
+                      onChange={handleChange('department')}
+                      inputID={'department'}
+                      labelText={t('label.department')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.position ?? ''}
+                      onBlur={handleBlur('position')}
+                      onChange={handleChange('position')}
+                      inputID={'position'}
+                      labelText={t('label.position')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
+
+          <div className="shadow bg-white rounded p-4 container col-xl-5">
+            <Formik
+              //            innerRef={branchRef}
+              enableReinitialize
+              initialValues={basicInfo}
+              // validationSchema={LeaveFormSchema}
+              onSubmit={(values) => {
+                console.log(values);
+              }}
+            >
+              {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+                <form autoComplete="off">
+                  <FormHeader text={t('label.statistics')} />
+
+                  <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.numOfWorkDay ?? ''}
+                      onBlur={handleBlur('numOfWorkDay')}
+                      onChange={handleChange('numOfWorkDay')}
+                      inputID={'numOfWorkDay'}
+                      labelText={t('label.num_of_work_day')}
+                      inputType={'number'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.numOfDayOff ?? ''}
+                      onBlur={handleBlur('numOfDayOff')}
+                      onChange={handleChange('numOfDayOff')}
+                      inputID={'numOfDayOff'}
+                      labelText={t('label.number_of_day_off')}
+                      inputType={'number'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                  </div>
+                  <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.numOfRemote ?? ''}
+                      onBlur={handleBlur('numOfRemote')}
+                      onChange={handleChange('numOfRemote')}
+                      inputID={'numOfRemote'}
+                      labelText={t('label.number_of_remote')}
+                      inputType={'number'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.averageWorkTime ?? ''}
+                      onBlur={handleBlur('averageWorkTime')}
+                      onChange={handleChange('averageWorkTime')}
+                      inputID={'averageWorkTime'}
+                      labelText={t('label.average_work_time')}
+                      inputType={'number'}
+                      inputClassName={'form-control'}
+                      isDisable
+                    />
+                    <div className="form-group col-xl-6">
+                      <Label text={t('label.total_delay_time')} />
+                      <div className="input-group">
+                        <input
+                          disabled
+                          type="number"
+                          className={'form-control'}
+                          rows={10}
+                          name={`totalDelayTime`}
+                          onChange={(e) => handleChange(`totalDelayTime`)(e)}
+                          value={values.totalDelayTime}
+                        />
+                        <span className="input-group-text" id="basic-addon2">
+                          {t('label.minutes')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
     </CContainer>

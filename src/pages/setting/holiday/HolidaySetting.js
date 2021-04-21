@@ -1,10 +1,9 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+//import { useDispatch } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { fetchAllRequest } from 'src/stores/actions/holiday';
 
 const HolidaySetting = ({ t, location, history }) => {
   const columnDef = [
@@ -14,7 +13,7 @@ const HolidaySetting = ({ t, location, history }) => {
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   // const requests = useSelector((state) => state.holiday.requests);
   const requests = [
     {
@@ -49,11 +48,11 @@ const HolidaySetting = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+  // const onTotalChange = (total) =>
+  //   setPaging((prevState) => ({
+  //     ...prevState,
+  //     total: total,
+  //   }));
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_HOLIDAY)) {

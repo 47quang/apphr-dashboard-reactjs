@@ -43,12 +43,9 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     .integer('validation.flexible_time_must_be_integer')
     .min(0, 'validation.flexible_time_must_not_be_negative')
     .required('validation.required_enter_flexible_time'),
-  branchIds: Yup.array()
-    .of(Yup.number())
-    .required('validation.required_select_branch_id')
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
-      return value ? value.length > 0 : false;
-    }),
+  branchId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
+    return value !== '0';
+  }),
 
   operateLoop: Yup.array()
     .of(Yup.number())
