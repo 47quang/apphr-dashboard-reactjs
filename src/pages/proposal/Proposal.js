@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { ROUTE_PATH } from 'src/constants/key';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
-import classNames from 'classnames';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -53,6 +52,30 @@ const Proposal = ({ t, location, match }) => {
       handler: 'Nguyễn Văn Minh',
     },
   ];
+  const [paging, setPaging] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    total: 0,
+    pageSizes: [5, 10, 15],
+    loading: false,
+  });
+  const onCurrentPageChange = (pageNumber) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      currentPage: pageNumber,
+    }));
+  const onPageSizeChange = (newPageSize) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      pageSize: newPageSize,
+      currentPage: 0,
+    }));
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
+
   useEffect(() => {
     //dispatch(fetchProfiles());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,6 +97,9 @@ const Proposal = ({ t, location, match }) => {
         dateCols={[3]}
         multiValuesCols={[2]}
         statusCols={[4]}
+        paging={paging}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </CContainer>
   );

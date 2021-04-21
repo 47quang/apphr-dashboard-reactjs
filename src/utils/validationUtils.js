@@ -10,7 +10,7 @@ export const getRegexExpression = (validationType) => {
     case VALIDATION_TYPE.POSITIVE_NUMBER:
       return /^\d+$/;
     case VALIDATION_TYPE.BSS_ID:
-      return /([0-9A-F]{2}([:-]|$)){6}/;
+      return /([0-9a-fA-F]{2}([:]|$)){6}/;
     default:
       return '';
   }

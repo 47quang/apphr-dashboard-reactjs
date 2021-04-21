@@ -2,12 +2,7 @@ import { REDUX_STATE } from '../states';
 
 const initialState = {
   assignments: [],
-  assignment: {
-    id: '',
-    shiftId: '',
-    userId: '',
-    date: '',
-  },
+  assignment: {},
 };
 
 const assignmentReducer = (state = initialState, { type, payload }) => {

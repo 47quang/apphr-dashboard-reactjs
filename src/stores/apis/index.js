@@ -268,6 +268,11 @@ export const api = {
     getProfiles: (params) => {
       return client.get(API_PREFIX.API_PROFILE + '?fields=' + params.fields.join());
     },
+    getRollUpTable: (params) => {
+      return client.get(API_PREFIX.API_PROFILE + '/assignment', {
+        params: params,
+      });
+    },
   },
   contract: {
     getAll: (params) => {

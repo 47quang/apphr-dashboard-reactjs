@@ -20,3 +20,10 @@ export const isSameBeforeTypeDate = (startTime, endTime) => {
 export const isBeforeTypeDate = (startTime, endTime) => {
   return moment(startTime).isBefore(moment(endTime));
 };
+
+export const formatTime = (time) => {
+  // 10:00:00
+  let temp = time.split(':');
+  temp.pop();
+  return temp.join(':');
+};
