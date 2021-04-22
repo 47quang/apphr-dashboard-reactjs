@@ -1,13 +1,15 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NewTaskSchedule } from 'src/schema/formSchema';
+import { fetchShifts } from 'src/stores/actions/shift';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 
-const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
+const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
   // const handleChange = (event) => {
   //   setType(event.target.value);
   // };
@@ -16,6 +18,16 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
     start: '',
     end: '',
   };
+  const shifts = useSelector((state) => state.shift.shifts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchShifts({
+        day: day,
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day]);
   return (
     <div>
       <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>

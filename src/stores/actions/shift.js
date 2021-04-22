@@ -115,3 +115,10 @@ export const resetShift = () => {
     payload: {},
   };
 };
+
+export const resetShifts = () => {
+  return {
+    type: REDUX_STATE.shift.RESET_SHIFTS,
+    payload: [],
+  };
+};

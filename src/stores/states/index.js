@@ -19,6 +19,7 @@ export const REDUX_STATE = {
     SET_SHIFT: 'SET_SHIFT',
     GET_SHIFTS: 'GET_SHIFTS',
     DELETE_SHIFT: 'DELETE_SHIFT',
+    RESET_SHIFTS: 'RESET_SHIFTS',
   },
 
   branch: {

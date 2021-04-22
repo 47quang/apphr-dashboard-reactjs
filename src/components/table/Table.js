@@ -164,7 +164,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
             {
               key: 'behavior' + route,
               type: 'behavior',
-              width: !disableEditColum ? (!disableDelete || !disableEdit ? '5%' : '10%') : '0%',
+              width: !disableEditColum ? (!disableDelete ? (!disableEdit ? '10%' : '5%') : '5%') : '0%',
               align: 'center',
             },
           ]);
