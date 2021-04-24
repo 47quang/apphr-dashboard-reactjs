@@ -154,7 +154,7 @@ const RollUp = ({ t, location }) => {
       <>
         <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} id={value.id} profileCode={row.code} fullName={row.fullname} />
         <Table.Cell
-          className={classNames(className, isDay ? 'p-1 border border-secondary' : 'ps-3')}
+          className={classNames(className, isDay ? 'm-auto border border-secondary' : 'ps-3')}
           {...restProps}
           row={row}
           column={column}
@@ -167,16 +167,18 @@ const RollUp = ({ t, location }) => {
                   : COLORS.FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
+            verticalAlign: 'text-top',
+            padding: '8px',
           }}
         >
           {isDay ? (
-            <div className={classNames(className, 'rounded  p-0')}>
+            <div className={classNames(className, 'rounded')}>
               {value.length > 0 ? (
                 value.map((val, idx) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames('row p-0 m-0', idx === value.length - 1 ? '' : 'border-bottom')}
+                      className={classNames('row p-1 m-auto')}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
@@ -188,10 +190,10 @@ const RollUp = ({ t, location }) => {
                           }));
                       }}
                     >
-                      <div className="col-2 border-right p-0 m-0">
-                        <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR }}>{val.point}</p>
+                      <div className="col-2 p-0 m-auto">
+                        <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
                       </div>
-                      <div className="col-10  p-0 m-0">
+                      <div className="col-10  p-0 m-auto">
                         {val.status ? (
                           <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
                         ) : (
@@ -203,9 +205,7 @@ const RollUp = ({ t, location }) => {
                   );
                 })
               ) : (
-                <div className="d-flex justify-content-center">
-                  <Remove />
-                </div>
+                <div className="d-flex justify-content-center"></div>
               )}
             </div>
           ) : (
@@ -244,6 +244,7 @@ const RollUp = ({ t, location }) => {
         paging={paging}
         onCurrentPageChange={onCurrentPageChange}
         onPageSizeChange={onPageSizeChange}
+        disableToolBar={true}
       />
     </CContainer>
   );

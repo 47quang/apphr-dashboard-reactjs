@@ -13,14 +13,14 @@ const RollUpInfo = ({ t, isOpen, handleClose, id, profileCode, fullName }) => {
   const buttons = [
     {
       type: 'button',
-      className: `btn btn-primary  mx-2`,
+      className: `btn btn-success mx-2`,
       onClick: (e) => {},
       name: t('label.check_in'),
     },
 
     {
       type: 'button',
-      className: `btn btn-primary px-4 ml-4`,
+      className: `btn btn-success px-4 ml-4`,
       onClick: (e) => {},
       name: t('label.check_out'),
     },
@@ -80,7 +80,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, id, profileCode, fullName }) => {
         </Table>
         <div className="d-flex flex-row justify-content-end mb-3 align-items-center text-danger">
           <Lens className="mr-2" />
-          Check in trễ/ check out sớm
+          {t('label.lately_roll_call')}
         </div>
       </DialogContent>
       <DialogActions style={{ backgroundColor: COLORS.SIDE_BAR_COLOR }} className="px-3">

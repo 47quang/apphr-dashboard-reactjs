@@ -183,6 +183,16 @@ export const api = {
         params: params,
       });
     },
+    getPolicy: (params) => {
+      return client.get(API_PREFIX.API_META, {
+        params: params,
+      });
+    },
+    setPolicy: (params) => {
+      return client.put(API_PREFIX.API_META, {
+        params: params,
+      });
+    },
   },
   user: {
     login: (params) => {

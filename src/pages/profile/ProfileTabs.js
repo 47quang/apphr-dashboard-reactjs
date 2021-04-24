@@ -3,10 +3,13 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION } from 'src/constants/key';
+import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { joinClassName } from 'src/utils/stringUtils';
 import Page404 from '../page404/Page404';
+import Proposal from '../proposal/Proposal';
 import AcademicLevel from './AcademicLevel';
 import AddressInfo from './AddressInfo';
 import BasicInfo from './BasicInfo';
@@ -15,6 +18,7 @@ import CertificateInfo from './CertificateInfo';
 import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
+import RequestStatistic from './RequestStatistic';
 import SchedulerPage from './SchedulerPage';
 
 const TabPanel = (props) => {
@@ -60,18 +64,26 @@ const ProfileTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
-  const [tabName, setTabName] = useState(0);
-  const [subTabName, setSubTabName] = useState(0);
+  const tabName = useSelector((state) => state.profile.tabName);
+  const subTabName = useSelector((state) => state.profile.subTabName);
+  const dispatch = useDispatch();
   const isCreate = match.params.id ? false : true;
 
   const handleChange = (event, newValue) => {
-    setTabName(newValue);
-    setSubTabName(0);
+    dispatch(setTabName(newValue));
+    dispatch(setSubTabName(0));
   };
 
   const handleChangeSubTab = (event, newValue) => {
-    setSubTabName(newValue);
+    dispatch(setSubTabName(newValue));
   };
+  useEffect(() => {
+    return () => {
+      dispatch(setTabName(0));
+      dispatch(setSubTabName(0));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const returnComponent = (
     <>
       <div className={classes.root} id="profile-tabs">
@@ -143,7 +155,37 @@ const ProfileTabs = ({ t, history, match }) => {
           </div>
         </TabPanel>
         <TabPanel value={tabName} index={1}>
-          (TODO)
+          <div className={joinClassName([classes.root, 'pb-5'])}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={subTabName}
+                onChange={handleChangeSubTab}
+                indicatorColor="primary"
+                className="noselect"
+                textColor="primary"
+                aria-label="full width tabs example"
+                variant="fullWidth"
+                scrollButtons="auto"
+              >
+                <Tab hidden={isCreate} className="noselect" label={t('label.request_statistic')} {...a11yProps(0)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.leave_request')} {...a11yProps(1)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.remote_request')} {...a11yProps(2)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.overtime_request')} {...a11yProps(3)} />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={subTabName} index={0} dir={theme.direction}>
+              <RequestStatistic t={t} history={history} match={match} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={1} dir={theme.direction}>
+              <Proposal t={t} history={history} match={match} type={'leave'} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={2} dir={theme.direction}>
+              <Proposal t={t} history={history} match={match} type={'remote'} />
+            </TabPanel>
+            <TabPanel value={subTabName} index={3} dir={theme.direction}>
+              <Proposal t={t} history={history} match={match} type={'overtime'} />
+            </TabPanel>
+          </div>
         </TabPanel>
       </div>
       {/* <div

@@ -11,6 +11,7 @@ import {
 } from '@devexpress/dx-react-grid';
 import { GridExporter } from '@devexpress/dx-react-grid-export';
 import {
+  Toolbar,
   ColumnChooser,
   DragDropProvider,
   ExportPanel,
@@ -21,7 +22,6 @@ import {
   TableColumnVisibility,
   TableFixedColumns,
   TableHeaderRow,
-  Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 // import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
@@ -82,9 +82,10 @@ export const TableComponent = withStyles(styles, {
   name: 'TableComponent',
 })(TableComponentBase);
 
-const ToolbarRootBase = ({ classes, className, ...restProps }) => (
-  <Toolbar.Root className={classNames(className, classes.customToolbar)} {...restProps} />
-);
+const ToolbarRootBase = ({ classes, className, ...restProps }) => {
+  return <Toolbar.Root className={classNames(className, classes.customToolbar)} {...restProps} />;
+};
+
 const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 
 const filteringColumnExtensions = [
@@ -221,6 +222,7 @@ const QTable = (props) => {
     disableDelete,
     disableEdit,
     disableEditColum,
+    disableToolBar,
     customTableCell,
     statusCols,
     paging,
@@ -296,7 +298,6 @@ const QTable = (props) => {
   const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 
   const MultiValuesFormatter = ({ value }) => {
-    console.log('value', value);
     return value.map((val, idx) => (
       <Chip
         component="div"
@@ -329,7 +330,7 @@ const QTable = (props) => {
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
-
+  console.log(disableToolBar);
   return (
     <div>
       <Paper>
@@ -339,39 +340,41 @@ const QTable = (props) => {
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                 <form autoComplete="off">
                   <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-3'}
-                      value={values.columnsFilter}
-                      onBlur={handleBlur('columnsFilter')}
-                      onChange={handleChange('columnsFilter')}
-                      labelText={t('label.column_filter')}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={columnsFilter}
-                      placeholder={t('placeholder.select_column_filter')}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-3'}
-                      value={values.filterTypes}
-                      onBlur={handleBlur('filterTypes')}
-                      onChange={handleChange('filterTypes')}
-                      labelText={t('label.filter_option')}
-                      placeholder={t('placeholder.select_filter_option')}
-                      selectClassName={'form-control'}
-                      lstSelectOptions={filterTypes}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-3'}
-                      value={values.textFilter}
-                      onBlur={handleBlur('textFilter')}
-                      onChange={handleChange('textFilter')}
-                      labelText={t('label.keyword')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_keyword')}
-                      inputClassName={'form-control'}
-                    />
-                    <div className="d-flex align-items-end form-group col-lg-3">
-                      <button type="button" className="align-bottom btn btn-primary">
-                        Primary
+                    <div className="row col-lg-11">
+                      <CommonSelectInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values.columnsFilter}
+                        onBlur={handleBlur('columnsFilter')}
+                        onChange={handleChange('columnsFilter')}
+                        labelText={t('label.column_filter')}
+                        selectClassName={'form-control'}
+                        lstSelectOptions={columnsFilter}
+                        placeholder={t('placeholder.select_column_filter')}
+                      />
+                      <CommonSelectInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values.filterTypes}
+                        onBlur={handleBlur('filterTypes')}
+                        onChange={handleChange('filterTypes')}
+                        labelText={t('label.filter_option')}
+                        placeholder={t('placeholder.select_filter_option')}
+                        selectClassName={'form-control'}
+                        lstSelectOptions={filterTypes}
+                      />
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values.textFilter}
+                        onBlur={handleBlur('textFilter')}
+                        onChange={handleChange('textFilter')}
+                        labelText={t('label.keyword')}
+                        inputType={'text'}
+                        placeholder={t('placeholder.enter_keyword')}
+                        inputClassName={'form-control'}
+                      />
+                    </div>
+                    <div className="col-lg-1 d-flex align-items-end pb-3">
+                      <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
+                        {t('label.search')}
                       </button>
                     </div>
                   </div>
@@ -423,6 +426,15 @@ const QTable = (props) => {
           <TableHeaderRow showSortingControls titleComponent={Label} className="m-0 p-0" />
           <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
           <Toolbar rootComponent={ToolbarRoot} />
+          {/* {disableToolBar ? (
+            <div />
+          ) : (
+            <>
+              <ExportPanel startExport={startExport} color={'primary'} />
+              <AddRowPanel route={route} disableCreate={disableCreate} />
+              <ColumnChooser />
+            </>
+          )} */}
           <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} />
           <ColumnChooser />
@@ -443,28 +455,28 @@ const QTable = (props) => {
             <CircularProgress className="loading-icon-mui" />
           </div>
         )} */}
-        <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />
+        {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' ? (
           <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
             <div className="pr-4">
               <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
-              <p className="d-inline">Điểm danh đầy đủ</p>
+              <p className="d-inline">{t('label.fully_roll_call')}</p>
             </div>
             <div className="pr-4">
               <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-              <p className="d-inline"> Không có ca làm việc</p>
+              <p className="d-inline">{t('label.free_date')}</p>
             </div>
             <div className="pr-4">
               <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
-              <p className="d-inline"> Nghỉ cả ngày</p>
+              <p className="d-inline">{t('label.fully_absent_roll_call')}</p>
             </div>
             <div className="pr-4">
               <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
-              <p className="d-inline"> Điểm danh thành công</p>
+              <p className="d-inline">{t('label.roll_up_success')}</p>
             </div>
             <div className="pr-4">
               <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
-              <p className="d-inline"> Không điểm danh</p>
+              <p className="d-inline">{t('label.absent_roll_Call')}</p>
             </div>
           </div>
         ) : (

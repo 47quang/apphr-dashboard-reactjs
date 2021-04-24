@@ -7,6 +7,7 @@ export const ROUTE_NAME = {
   PROFILE: 'Profile',
   NEW_PROFILE: 'New Profile',
   NEW_CONTRACT: 'New Contract',
+  PROFILE_REQUEST: 'Proposal',
   CONTRACT_UPDATE: 'Contract Update',
   PROFILE_UPDATE: 'Profile Update',
   PROPOSAL: 'Proposal',
@@ -78,6 +79,9 @@ export const ROUTE_PATH = {
   CONTRACT: '/profile/contract',
   CONTRACT_CREATE: '/profile/contract/' + CREATE,
   CONTRACT_UPDATE: '/profile/contract/' + ID,
+  PROFILE_LEAVE_REQUEST: '/profile' + ID + '/leave.id=:id',
+  PROFILE_REMOTE_REQUEST: '/profile' + ID + '/remote.id=:id',
+  PROFILE_OVERTIME_REQUEST: '/profile' + ID + '/overtime.id=:id',
 
   PROPOSAL: '/proposal',
 
@@ -131,13 +135,13 @@ export const ROUTE_PATH = {
   ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
 
   LEAVE: '/proposal/leave',
-  LEAVE_REQUEST: '/proposal/leave' + ID,
+  LEAVE_REQUEST: '/proposal/leave/leave.id=:id',
 
   REMOTE: '/proposal/remote',
-  REMOTE_REQUEST: '/proposal/remote' + ID,
+  REMOTE_REQUEST: '/proposal/remote/remote.id=:id',
 
   OVERTIME: '/proposal/overtime',
-  OVERTIME_REQUEST: '/proposal/overtime' + ID,
+  OVERTIME_REQUEST: '/proposal/overtime/overtime.id=:id',
 };
 
 export const CONTACT_TYPE = {

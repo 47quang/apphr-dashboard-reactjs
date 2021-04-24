@@ -62,6 +62,7 @@ export const REDUX_STATE = {
     EMPTY_VALUE: 'EMPTY_VALUE',
     GET_REQUESTS: 'GET_REQUESTS',
     GET_REQUEST: 'GET_REQUEST',
+    SET_POLICY: 'SET_POLICY',
   },
   user: {
     SET_USER: 'SET_USER',

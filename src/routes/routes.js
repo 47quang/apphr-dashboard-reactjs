@@ -78,6 +78,8 @@ const routes = [
   { path: ROUTE_PATH.CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
 
   { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
+  { path: ROUTE_PATH.PROFILE_LEAVE_REQUEST, name: ROUTE_NAME.PROFILE_REQUEST, component: LeaveForm },
+
   { path: ROUTE_PATH.PROFILE_UPDATE, name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
 

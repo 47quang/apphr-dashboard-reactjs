@@ -7,7 +7,7 @@ import { fetchLeaveRequests, fetchRemoteRequests, fetchOvertimeRequests } from '
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
-const Proposal = ({ t, location, match }) => {
+const Proposal = ({ t, location, match, type }) => {
   const columnDefOfProfiles = [
     { name: 'code', title: t('label.proposal_code'), align: 'left', width: '10%', wordWrapEnabled: true },
     { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -17,7 +17,8 @@ const Proposal = ({ t, location, match }) => {
     { name: 'status', title: t('label.status'), align: 'left', width: '10%', wordWrapEnabled: true },
     { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
-  const type = match.path.split('/')[2];
+  if (!type) type = match.path.split('/')[2];
+  console.log(type);
   const dispatch = useDispatch();
   // const proposals = useSelector((state) => state.request[type + 'Requests']);
   const proposals = [
@@ -114,14 +115,13 @@ const Proposal = ({ t, location, match }) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
   //   dispatch(fetchProfiles());
   // };
-
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable
         t={t}
         columnDef={columnDefOfProfiles}
         data={proposals}
-        route={match.path + '/'}
+        route={match.url + '/' + type + '.id='}
         idxColumnsFilter={[0, 1, 3, 4]}
         disableDelete={true}
         disableCreate={true}

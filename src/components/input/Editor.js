@@ -11,7 +11,6 @@ function Editor({ placeholder, onChange, value }) {
       value={value}
       modules={Editor.modules}
       formats={Editor.formats}
-      // bounds={'.app'}
       placeholder={placeholder}
     />
   );

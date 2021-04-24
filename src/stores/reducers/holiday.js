@@ -15,6 +15,9 @@ const initialState = {
     type: '',
     amount: 0,
   },
+  policy: {
+    content: '',
+  },
 };
 
 const holidayReducer = (state = initialState, { type, payload }) => {
@@ -42,6 +45,11 @@ const holidayReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         request: payload,
+      };
+    case REDUX_STATE.holiday.SET_POLICY:
+      return {
+        ...state,
+        policy: payload,
       };
     default:
       return state;

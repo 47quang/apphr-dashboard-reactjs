@@ -4,6 +4,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import DayOffPolicy from './DayOffPolicy';
 import HolidayPage from './Holiday';
 import HolidaySetting from './HolidaySetting';
 
@@ -70,6 +71,7 @@ const HolidayTabs = ({ t, history, match }) => {
           >
             <Tab className="noselect" label={t('label.holiday')} {...a11yProps(0)} />
             <Tab className="noselect" label={t('label.holiday_setting')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.day_off_policy')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
@@ -77,6 +79,9 @@ const HolidayTabs = ({ t, history, match }) => {
         </TabPanel>
         <TabPanel value={tabName} index={1}>
           <HolidaySetting match={match} t={t} />
+        </TabPanel>
+        <TabPanel value={tabName} index={2}>
+          <DayOffPolicy match={match} t={t} />
         </TabPanel>
       </div>
       {/* <div
