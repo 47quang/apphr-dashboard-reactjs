@@ -42,6 +42,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
             }}
           >
             {(props) => {
+              console.log(props.errors);
               return (
                 <form className="p-0 m-0">
                   <h5>{t('label.new_task')}.</h5>
@@ -98,6 +99,20 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       inputClassName={'form-control'}
                       isRequiredField
                       isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={props.values.endTime ?? ''}
+                      onBlur={props.handleBlur('endTime')}
+                      onChange={props.handleChange('endTime')}
+                      inputID={'endTime'}
+                      labelText={t('label.end_time_repeat')}
+                      inputType={'date'}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      isTouched={props.touched?.endTime}
+                      isError={props.errors?.endTime && props.touched?.endTime}
+                      errorMessage={t(props.errors?.endTime)}
                     />
                   </div>
                   <hr className="mt-1" />

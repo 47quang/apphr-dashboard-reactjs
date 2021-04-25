@@ -205,7 +205,7 @@ const SchedulerPage = ({ t, history, match }) => {
       <CContainer fluid className="c-main mb-3 px-4">
         <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
         <Paper>
-          <Scheduler data={assignments} height={660}>
+          <Scheduler data={assignments} height="auto">
             <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
             <EditingState />
             <IntegratedEditing />

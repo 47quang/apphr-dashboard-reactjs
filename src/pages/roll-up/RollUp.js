@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { Button } from '@material-ui/core';
+import { Avatar, Button } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import {} from 'src/stores/actions/rollUp';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import classNames from 'classnames';
 import { COLORS } from 'src/constants/theme';
-import { Cancel, CheckCircle, Remove } from '@material-ui/icons';
+import { Cancel, CheckCircle } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRollUpTable } from 'src/stores/actions/assignment';
 
@@ -49,51 +49,50 @@ const RollUp = ({ t, location }) => {
     }));
 
   const changeColDef = (fromDate) => [
-    { name: 'code', title: t('label.employee_code'), align: 'left', width: '10%', wordWrapEnabled: true },
-    { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '13%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
     {
       name: 'sunday',
       title: ['Chủ nhật', fromDate.clone().startOf('week').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
     {
       name: 'monday',
       title: ['Thứ hai', fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
     {
       name: 'tuesday',
       title: ['Thứ ba', fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
     {
       name: 'wednesday',
       title: ['Thứ tư', fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
     {
       name: 'thursday',
       title: ['Thứ năm', fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
     {
       name: 'friday',
       title: ['Thứ sáu', fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
       align: 'left',
-      width: '11%',
+      width: '12%',
       wordWrapEnabled: true,
     },
-    { name: 'saturday', title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')], align: 'left', width: '11%', wordWrapEnabled: true },
+    { name: 'saturday', title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')], align: 'left', width: '12%', wordWrapEnabled: true },
   ];
 
   let columnDefOfRollUp = useRef();
@@ -144,63 +143,85 @@ const RollUp = ({ t, location }) => {
       rowId: '',
       columnName: '',
       isOpen: false,
+      assignment: {},
     });
-    const isDay = Array.isArray(value);
+    const isDay = value?.assignment;
     const handleClose = () => {
-      setCell({ ...cell, isOpen: false });
+      setCell({ ...cell, isOpen: !cell.isOpen });
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return (
       <>
-        <RollUpInfo t={t} isOpen={cell.isOpen} handleClose={handleClose} id={value.id} profileCode={row.code} fullName={row.fullname} />
+        <RollUpInfo
+          t={t}
+          isOpen={cell.isOpen}
+          handleClose={handleClose}
+          assignment={cell.assignment}
+          profileCode={row.code}
+          fullName={row.fullname}
+          profileId={row.id}
+          avatar={row.avatar}
+        />
         <Table.Cell
-          className={classNames(className, isDay ? 'm-auto border border-secondary' : 'ps-3')}
-          {...restProps}
+          className={classNames(className, isDay ? 'm-auto' : '')}
           row={row}
           column={column}
           children={children}
+          tableColumn={restProps.tableColumn}
+          tableRow={restProps.tableRow}
           style={{
             backgroundColor: isDay
-              ? value.length > 0
-                ? value.every((v) => v.point === 0)
+              ? value.future
+                ? COLORS.FREE_DATE
+                : value.assignment.length > 0
+                ? value.assignment.every((v) => v.point === 0)
                   ? COLORS.FULLY_ABSENT_ROLL_CALL
                   : COLORS.FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
             verticalAlign: 'text-top',
             padding: '8px',
+            borderColor: 'white',
+            borderStyle: 'solid',
+            // borderLeftColor: '#D8DBE0',
+            // borderTopColor: '#D8DBE0',
+            borderWidth: 'thin',
+            ...restProps.style,
           }}
         >
           {isDay ? (
             <div className={classNames(className, 'rounded')}>
-              {value.length > 0 ? (
-                value.map((val, idx) => {
+              {value.assignment.length > 0 ? (
+                value.assignment.map((val, idx) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames('row p-1 m-auto')}
+                      className={classNames('row p-1 m-auto assignment')}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
-                          setCell((prevState) => ({
-                            ...prevState,
-                            rowId: row.id,
-                            columnName: column.name,
-                            isOpen: true,
-                          }));
+                          setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
                       }}
                     >
-                      <div className="col-2 p-0 m-auto">
-                        <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                      </div>
-                      <div className="col-10  p-0 m-auto">
-                        {val.status ? (
-                          <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
-                        ) : (
-                          <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
-                        )}
-                        <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
-                      </div>
+                      {value.future ? (
+                        <div>
+                          <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="col-2 p-0 m-auto">
+                            <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
+                          </div>
+                          <div className="col-10  p-0 m-auto">
+                            {val.status ? (
+                              <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
+                            ) : (
+                              <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
+                            )}
+                            <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   );
                 })
@@ -209,18 +230,29 @@ const RollUp = ({ t, location }) => {
               )}
             </div>
           ) : (
-            value
+            <div className="d-flex m-auto align-items-center">
+              <div />
+              <Avatar alt="avatar" src={row.avatar} className="mr-3" />
+              <div>
+                <div>
+                  <div>{row.fullname}</div>
+                </div>
+                <div>
+                  <div>{row.code}</div>
+                </div>
+              </div>
+            </div>
           )}
         </Table.Cell>
       </>
     );
   };
-
+  console.log(data);
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
-      <div className="pb-2 d-flex justify-content-center">
+    <CContainer fluid className="c-main px-4 py-2">
+      <div className="p-0 d-flex justify-content-center">
         <Button onClick={handlePrev}>
-          <NavigateBeforeIcon className="m-3" fontSize="large" />
+          <NavigateBeforeIcon className="m-1" fontSize="large" />
         </Button>
         <div className="d-inline">
           <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>

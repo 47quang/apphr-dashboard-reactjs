@@ -7,7 +7,7 @@ import { FieldArray, Formik, getIn } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
-import DynamicField from 'src/components/dialog/DynamicField';
+import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
@@ -123,19 +123,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
-    const [isOpenDynamicFieldForm, setIsOpenDynamicFieldForm] = useState(false);
-    const handleConfirm = (val) => {
-      values.attributes.push(val);
-      setFieldValue('attributes', values.attributes);
-      // dispatch(addField(values));
-      setIsOpenDynamicFieldForm(false);
-    };
-    const handleCancel = () => {
-      setIsOpenDynamicFieldForm(false);
-    };
     return (
       <>
-        <DynamicField isOpen={isOpenDynamicFieldForm} handleCancel={handleCancel} handleConfirm={handleConfirm} t={t} />
         <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
@@ -380,136 +369,153 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       inputClassName={'form-control'}
                     />
                   )}
-                  <DeleteIconButton
-                    className="pl-2"
-                    onClick={() => {
-                      values.attributes.splice(attributeIdx, 1);
-                      setFieldValue('attributes', values.attributes);
-                    }}
-                  />
                 </div>
               );
             })}
-          <div className="form-group col-xl-4">
-            <Label text={t('label.add_new_field')} />
-            <button
-              type="button"
-              className="btn btn-light form-control"
-              onClick={() => {
-                setIsOpenDynamicFieldForm(true);
-              }}
-            >
-              <Add color="primary" />
-            </button>
-          </div>
         </div>
         <div className="row"></div>
         <h5 className="px-3">{t('label.gross_salary')}</h5>
         <hr className="mt-1" />
         {values.type !== 'season' ? (
-          <div className="row">
-            <CommonSelectInput
-              containerClassName={'form-group col-xl-4'}
-              value={values?.paymentType ?? ''}
-              onBlur={handleBlur(`paymentType`)}
-              onChange={async (e) => {
-                if (isCreate) {
-                  if (e.target.value !== '0') {
-                    dispatch(fetchWagesByType({ type: e.target.value }));
+          <div>
+            <div className="row">
+              <CommonSelectInput
+                containerClassName={'form-group col-xl-4'}
+                value={values?.paymentType ?? ''}
+                onBlur={handleBlur(`paymentType`)}
+                onChange={async (e) => {
+                  if (isCreate) {
+                    if (e.target.value !== '0') {
+                      dispatch(fetchWagesByType({ type: e.target.value }));
+                      setFieldValue(`amount`, 0);
+                      handleChange(`paymentType`)(e);
+                    } else setFieldValue(`wageId`, 0);
+                  } else {
+                    if (e.target.value !== '0') {
+                      handleChange(`paymentType`)(e);
+                      let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+
+                      setFieldValue(`wages`, wage);
+                    } else setFieldValue(`wages`, []);
+                    setFieldValue(`wageId`, 0);
                     setFieldValue(`amount`, 0);
-                    handleChange(`paymentType`)(e);
-                  } else setFieldValue(`wageId`, 0);
-                } else {
-                  if (e.target.value !== '0') {
-                    handleChange(`paymentType`)(e);
-                    let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                  }
+                }}
+                inputID={`paymentType`}
+                labelText={t('label.payment_method')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={touched?.paymentType}
+                isError={errors?.paymentType && touched?.paymentType}
+                errorMessage={t(errors?.paymentType)}
+                lstSelectOptions={paymentType}
+              />
+              <CommonSelectInput
+                containerClassName={'form-group col-xl-4'}
+                value={values?.wageId ?? ''}
+                onBlur={handleBlur(`wageId`)}
+                onChange={(e) => {
+                  let thisWage;
+                  if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                  else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
+                  if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
+                  else setFieldValue(`amount`, 0);
+                  handleChange(`wageId`)(e);
+                }}
+                inputID={`wageId`}
+                labelText={t('label.salary_group')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={touched?.wageId}
+                isError={errors?.wageId}
+                errorMessage={t(errors?.wageId)}
+                lstSelectOptions={isCreate ? wages : values.wages}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-xl-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`amount`)}
+                onChange={handleChange(`amount`)}
+                inputID={`amount`}
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+                isDisable
+                isTouched={touched?.amount}
+                isError={errors?.amount && touched?.amount}
+                errorMessage={t(errors?.amount)}
+              />
+            </div>
+            <div className="row">
+              <CommonTextInput
+                containerClassName={'form-group col-xl-4'}
+                value={values.dayOff}
+                onBlur={handleBlur('dayOff')}
+                onChange={handleChange('dayOff')}
+                inputID={'dayOff'}
+                labelText={t('label.wage_dayOff')}
+                inputType={'number'}
+                placeholder={t('placeholder.enter_dayOff')}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={touched.dayOff}
+                isError={errors.dayOff && touched.dayOff}
+                errorMessage={t(errors.dayOff)}
+              />
+              <CommonSelectInput
+                containerClassName={'form-group col-xl-4'}
+                value={values?.periodicPayment ?? ''}
+                onBlur={handleBlur(`periodicPayment`)}
+                onChange={async (e) => {
+                  handleChange(`periodicPayment`)(e);
+                }}
+                inputID={`periodicPayment`}
+                labelText={t('label.periodic_payment')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_periodic_payment_method')}
+                isRequiredField
+                isTouched={touched?.periodicPayment}
+                isError={errors?.periodicPayment && touched?.periodicPayment}
+                errorMessage={t(errors?.periodicPayment)}
+                lstSelectOptions={periodicPayment}
+              />
+            </div>
 
-                    setFieldValue(`wages`, wage);
-                  } else setFieldValue(`wages`, []);
-                  setFieldValue(`wageId`, 0);
-                  setFieldValue(`amount`, 0);
-                }
-              }}
-              inputID={`paymentType`}
-              labelText={t('label.payment_method')}
-              selectClassName={'form-control'}
-              placeholder={t('placeholder.select_contract_payment_method')}
-              isRequiredField
-              isTouched={touched?.paymentType}
-              isError={errors?.paymentType && touched?.paymentType}
-              errorMessage={t(errors?.paymentType)}
-              lstSelectOptions={paymentType}
+            <CommonCheckbox
+              label={t('label.insurance')}
+              value={values.have_insurance ?? false}
+              onBlur={handleBlur('have_insurance')}
+              onChange={handleChange('have_insurance')}
             />
-            <CommonSelectInput
-              containerClassName={'form-group col-xl-4'}
-              value={values?.wageId ?? ''}
-              onBlur={handleBlur(`wageId`)}
-              onChange={(e) => {
-                let thisWage;
-                if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
-                else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-                if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
-                else setFieldValue(`amount`, 0);
-                handleChange(`wageId`)(e);
-              }}
-              inputID={`wageId`}
-              labelText={t('label.salary_group')}
-              selectClassName={'form-control'}
-              placeholder={t('placeholder.select_contract_payment_method')}
-              isRequiredField
-              isTouched={touched?.wageId}
-              isError={errors?.wageId}
-              errorMessage={t(errors?.wageId)}
-              lstSelectOptions={isCreate ? wages : values.wages}
-            />
-            <CommonTextInput
-              containerClassName={'form-group col-xl-4'}
-              value={values?.amount ?? ''}
-              onBlur={handleBlur(`amount`)}
-              onChange={handleChange(`amount`)}
-              inputID={`amount`}
-              labelText={t('label.salary_level')}
-              inputType={'number'}
-              inputClassName={'form-control'}
-              placeholder={t('placeholder.enter_salary_level')}
-              isDisable
-              isTouched={touched?.amount}
-              isError={errors?.amount && touched?.amount}
-              errorMessage={t(errors?.amount)}
-            />
-
-            <CommonTextInput
-              containerClassName={'form-group col-xl-4'}
-              value={values.dayOff}
-              onBlur={handleBlur('dayOff')}
-              onChange={handleChange('dayOff')}
-              inputID={'dayOff'}
-              labelText={t('label.wage_dayOff')}
-              inputType={'number'}
-              placeholder={t('placeholder.enter_dayOff')}
-              inputClassName={'form-control'}
-              isRequiredField
-              isTouched={touched.dayOff}
-              isError={errors.dayOff && touched.dayOff}
-              errorMessage={t(errors.dayOff)}
-            />
-            <CommonSelectInput
-              containerClassName={'form-group col-xl-4'}
-              value={values?.periodicPayment ?? ''}
-              onBlur={handleBlur(`periodicPayment`)}
-              onChange={async (e) => {
-                handleChange(`periodicPayment`)(e);
-              }}
-              inputID={`periodicPayment`}
-              labelText={t('label.payment_method')}
-              selectClassName={'form-control'}
-              placeholder={t('placeholder.select_periodic_payment_method')}
-              isRequiredField
-              isTouched={touched?.periodicPayment}
-              isError={errors?.periodicPayment && touched?.periodicPayment}
-              errorMessage={t(errors?.periodicPayment)}
-              lstSelectOptions={periodicPayment}
-            />
+            {values.have_insurance && (
+              <div className="row">
+                {/* <CommonTextInput
+                  containerClassName={'form-group col-xl-4'}
+                  value={values.gross_salary ?? ''}
+                  onBlur={handleBlur('gross_salary')}
+                  onChange={handleChange('gross_salary')}
+                  inputID={'gross_salary'}
+                  labelText={t('label.gross_salary')}
+                  inputType={'number'}
+                  placeholder={t('placeholder.enter_gross_salary')}
+                  inputClassName={'form-control'}
+                /> */}
+                <CommonTextInput
+                  containerClassName={'form-group col-xl-4'}
+                  value={values.insurance_salary ?? ''}
+                  onBlur={handleBlur('insurance_salary')}
+                  onChange={handleChange('insurance_salary')}
+                  inputID={'insurance_salary'}
+                  labelText={t('label.insurance_salary')}
+                  inputType={'number'}
+                  placeholder={t('placeholder.enter_insurance_salary')}
+                  inputClassName={'form-control'}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="row">

@@ -98,7 +98,8 @@ const ProfileTabs = ({ t, history, match }) => {
             aria-label="full width tabs example"
           >
             <Tab className="noselect" label={t('label.profile_personal')} {...a11yProps(0)} />
-            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_proposal')} {...a11yProps(1)} />
+            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(1)} />
+            <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_proposal')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
@@ -118,11 +119,10 @@ const ProfileTabs = ({ t, history, match }) => {
                 <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_history_working')} {...a11yProps(1)} />
                 <Tab disabled={isCreate} className="noselect" label={t('label.profile_contract')} {...a11yProps(2)} />
                 <Tab disabled={isCreate} className="noselect" label={t('label.profile_salary_allowance')} {...a11yProps(3)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(4)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(5)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(6)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(7)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(8)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_academic_level')} {...a11yProps(4)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_certificate')} {...a11yProps(5)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_contact_address')} {...a11yProps(6)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.profile_other_info')} {...a11yProps(7)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
@@ -138,23 +138,23 @@ const ProfileTabs = ({ t, history, match }) => {
               <Benefit t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={4} dir={theme.direction}>
-              <SchedulerPage t={t} history={history} match={match} />
-            </TabPanel>
-            <TabPanel value={subTabName} index={5} dir={theme.direction}>
               <AcademicLevel t={t} match={match} />
             </TabPanel>
-            <TabPanel value={subTabName} index={6} dir={theme.direction}>
+            <TabPanel value={subTabName} index={5} dir={theme.direction}>
               <CertificateInfo t={t} match={match} />
             </TabPanel>
-            <TabPanel value={subTabName} index={7} dir={theme.direction}>
+            <TabPanel value={subTabName} index={6} dir={theme.direction}>
               <AddressInfo t={t} history={history} match={match} />
             </TabPanel>
-            <TabPanel value={subTabName} index={8} dir={theme.direction}>
+            <TabPanel value={subTabName} index={7} dir={theme.direction}>
               <OtherInfo t={t} history={history} match={match} />
             </TabPanel>
           </div>
         </TabPanel>
         <TabPanel value={tabName} index={1}>
+          <SchedulerPage t={t} history={history} match={match} />
+        </TabPanel>
+        <TabPanel value={tabName} index={2}>
           <div className={joinClassName([classes.root, 'pb-5'])}>
             <AppBar position="static" color="default">
               <Tabs
@@ -177,13 +177,13 @@ const ProfileTabs = ({ t, history, match }) => {
               <RequestStatistic t={t} history={history} match={match} />
             </TabPanel>
             <TabPanel value={subTabName} index={1} dir={theme.direction}>
-              <Proposal t={t} history={history} match={match} type={'leave'} />
+              <Proposal t={t} history={history} match={match} type={'leave'} profileId={match?.params?.id} />
             </TabPanel>
             <TabPanel value={subTabName} index={2} dir={theme.direction}>
-              <Proposal t={t} history={history} match={match} type={'remote'} />
+              <Proposal t={t} history={history} match={match} type={'remote'} profileId={match?.params?.id} />
             </TabPanel>
             <TabPanel value={subTabName} index={3} dir={theme.direction}>
-              <Proposal t={t} history={history} match={match} type={'overtime'} />
+              <Proposal t={t} history={history} match={match} type={'overtime'} profileId={match?.params?.id} />
             </TabPanel>
           </div>
         </TabPanel>

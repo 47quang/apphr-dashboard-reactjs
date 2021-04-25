@@ -3,29 +3,27 @@ import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { approveLeaveRequest, fetchLeaveRequest, rejectLeaveRequest } from 'src/stores/actions/request';
+import { approveOvertimeRequest, fetchOvertimeRequest, rejectOvertimeRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
-const LeaveForm = ({ t, history, match }) => {
+const OvertimeForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const type = [
-    { id: 'no_pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
+    { id: 'normal_day', name: t('label.normal_day') },
+    { id: 'holiday', name: t('label.holiday') },
   ];
   const status = [
     { id: 'new', name: 'Đang xữ lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];
-  const leaveRequest = useSelector((state) => state.request.leaveForm);
+  const overtimeRequest = useSelector((state) => state.request.overtimeForm);
   const basicInfo = {};
   const requestId = match?.params?.id;
   const fullyButtons = [
@@ -34,7 +32,7 @@ const LeaveForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        history.push(ROUTE_PATH.OVERTIME);
       },
       name: t('label.back'),
       position: 'left',
@@ -43,7 +41,7 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-danger mr-4`,
       onClick: (e) => {
-        dispatch(rejectLeaveRequest(requestId, t('label.deny_success')));
+        dispatch(rejectOvertimeRequest(requestId, t('label.deny_success')));
       },
       name: t('label.deny'),
     },
@@ -51,7 +49,7 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-success`,
       onClick: (e) => {
-        dispatch(approveLeaveRequest(requestId, t('label.accept_success')));
+        dispatch(approveOvertimeRequest(requestId, t('label.accept_success')));
       },
       name: t('label.accept'),
     },
@@ -62,18 +60,18 @@ const LeaveForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        history.push(ROUTE_PATH.OVERTIME);
       },
       name: t('label.back'),
       position: 'left',
     },
   ];
   useEffect(() => {
-    if (match.path.includes('profile') && match.path.includes('leave.id=')) {
+    if (match.path.includes('profile') && match.path.includes('overtime.id=')) {
       dispatch(setTabName(PROFILE_TABS.REQUEST));
-      dispatch(setSubTabName(REQUEST_TABS.LEAVE_REQUEST));
+      dispatch(setSubTabName(REQUEST_TABS.OVERTIME_REQUEST));
     }
-    if (requestId) dispatch(fetchLeaveRequest(requestId));
+    if (requestId) dispatch(fetchOvertimeRequest(requestId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -84,13 +82,13 @@ const LeaveForm = ({ t, history, match }) => {
             <Formik
               //            innerRef={branchRef}
               enableReinitialize
-              initialValues={leaveRequest}
+              initialValues={overtimeRequest}
               // validationSchema={LeaveFormSchema}
               onSubmit={(values) => {}}
             >
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                 <form autoComplete="off">
-                  <FormHeader text={t('label.leave_info')} />
+                  <FormHeader text={t('label.overtime_info')} />
                   <div className="row">
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-12'}
@@ -98,7 +96,7 @@ const LeaveForm = ({ t, history, match }) => {
                       onBlur={handleBlur('type')}
                       onChange={handleChange('type')}
                       inputID={'type'}
-                      labelText={t('label.leave_type')}
+                      labelText={t('label.overtime_type')}
                       selectClassName={'form-control'}
                       isRequiredField
                       isDisable
@@ -119,14 +117,27 @@ const LeaveForm = ({ t, history, match }) => {
                   </div>
                   <div className="row">
                     <div className="form-group col-xl-12">
-                      <Label text={t('label.assignment_requests')} required={true} />
-                      <CommonMultiSelectInput
-                        values={values.assignmentIds ?? []}
-                        listValues={values.assignments}
-                        onChangeValues={(e) => {
-                          handleChange('assignmentIds')(e);
-                        }}
-                      />
+                      <Label text={t('label.min_work_time')} required />
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className={'form-control col-11'}
+                          rows={5}
+                          disabled
+                          name={`hours`}
+                          onChange={(e) => handleChange(`hours`)(e)}
+                          value={values.hours ?? ''}
+                          placeholder={t('placeholder.enter_hours')}
+                        />
+                        <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
+                          {t('label.hours')}
+                        </span>
+                      </div>
+                      {errors && errors?.hours && t(errors && errors?.hours) && (
+                        <div>
+                          <small className={'text-danger'}>{t(errors?.hours)}</small>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="row">
@@ -386,4 +397,4 @@ const LeaveForm = ({ t, history, match }) => {
   );
 };
 
-export default LeaveForm;
+export default OvertimeForm;

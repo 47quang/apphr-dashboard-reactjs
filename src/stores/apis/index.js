@@ -31,6 +31,7 @@ const API_PREFIX = {
   API_LEAVE_REQUEST: '/api.leave-form',
   API_REMOTE_REQUEST: '/api.remote-form',
   API_OVERTIME_REQUEST: '/api.overtime-form',
+  API_ATTRIBUTE: '/api.attribute',
 };
 
 export const api = {
@@ -502,11 +503,11 @@ export const api = {
     put: (data) => {
       return client.put(API_PREFIX.API_LEAVE_REQUEST + `/${data.id}`, data);
     },
-    approve: (data) => {
-      return client.put(API_PREFIX.API_LEAVE_REQUEST + `/${data.id}/approve`, data);
+    approve: (id) => {
+      return client.put(API_PREFIX.API_LEAVE_REQUEST + `/${id}/approve`);
     },
-    reject: (data) => {
-      return client.put(API_PREFIX.API_LEAVE_REQUEST + `/${data.id}/reject`, data);
+    reject: (id) => {
+      return client.put(API_PREFIX.API_LEAVE_REQUEST + `/${id}/reject`);
     },
     get: (id) => {
       return client.get(API_PREFIX.API_LEAVE_REQUEST + `/${id}`);
@@ -527,11 +528,11 @@ export const api = {
     put: (data) => {
       return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${data.id}`, data);
     },
-    approve: (data) => {
-      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${data.id}/approve`, data);
+    approve: (id) => {
+      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${id.id}/approve`);
     },
-    reject: (data) => {
-      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${data.id}/reject`, data);
+    reject: (id) => {
+      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${id}/reject`);
     },
     get: (id) => {
       return client.get(API_PREFIX.API_REMOTE_REQUEST + `/${id}`);
@@ -552,17 +553,36 @@ export const api = {
     put: (data) => {
       return client.put(API_PREFIX.API_OVERTIME_REQUEST + `/${data.id}`, data);
     },
-    approve: (data) => {
-      return client.put(API_PREFIX.API_OVERTIME_REQUEST + `/${data.id}/approve`, data);
+    approve: (id) => {
+      return client.put(API_PREFIX.API_OVERTIME_REQUEST + `/${id}/approve`);
     },
-    reject: (data) => {
-      return client.put(API_PREFIX.API_OVERTIME_REQUEST + `/${data.id}/reject`, data);
+    reject: (id) => {
+      return client.put(API_PREFIX.API_OVERTIME_REQUEST + `/${id}/reject`);
     },
     get: (id) => {
       return client.get(API_PREFIX.API_OVERTIME_REQUEST + `/${id}`);
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_OVERTIME_REQUEST + `/${id}`);
+    },
+  },
+  attribute: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ATTRIBUTE, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_ATTRIBUTE, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_ATTRIBUTE + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_ATTRIBUTE + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_ATTRIBUTE + `/${id}`);
     },
   },
 };

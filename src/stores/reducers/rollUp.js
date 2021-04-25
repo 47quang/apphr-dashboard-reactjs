@@ -2,17 +2,7 @@ import { REDUX_STATE } from '../states';
 
 const initialState = {
   data: [],
-  row: {
-    code: 'NV001',
-    fullname: 'Nguyễn Văn An',
-    monday: '08:30 17:30',
-    tuesday: '08:30 17:30',
-    wednesday: '08:30 17:30',
-    thursday: '08:30 17:30',
-    friday: '08:30 17:30',
-    saturday: '08:30 17:30',
-    sunday: '08:30 17:30',
-  },
+  row: {},
   histories: [],
   history: {
     type: 'Mạng nội bộ',

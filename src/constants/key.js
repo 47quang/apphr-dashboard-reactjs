@@ -58,6 +58,11 @@ export const ROUTE_NAME = {
 
   OVERTIME: 'Overtime',
   OVERTIME_REQUEST: 'Overtime Request',
+
+  CONTRACT_ATTRIBUTE: 'Contract Attribute',
+  NEW_CONTRACT_ATTRIBUTE: 'New Contract Attribute',
+  CONTRACT_ATTRIBUTE_UPDATE: 'Contract Attribute Update',
+  SALARY_POLICY: 'Salary Policy',
 };
 
 const ID = '/:id';
@@ -142,6 +147,12 @@ export const ROUTE_PATH = {
 
   OVERTIME: '/proposal/overtime',
   OVERTIME_REQUEST: '/proposal/overtime/overtime.id=:id',
+
+  CONTRACT_ATTRIBUTE: '/setting/attribute',
+  CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,
+  CONTRACT_ATTRIBUTE_UPDATE: '/setting/attribute' + ID,
+
+  SALARY_POLICY: '/setting/salaryPolicy',
 };
 
 export const CONTACT_TYPE = {
@@ -374,4 +385,27 @@ export const PERMISSION = {
   DELETE_ASSIGNMENT: 147,
   CHECK_IN: 149,
   CHECK_OUT: 150,
+};
+
+export const PROFILE_TABS = {
+  PROFILE: 0,
+  SCHEDULER: 1,
+  REQUEST: 2,
+};
+export const PROFILE_SUB_TABS = {
+  BASIC_INFO: 0,
+  HISTORY_WORKING: 1,
+  CONTRACT: 2,
+  BENEFIT: 3,
+  ACADEMIC_LEVEL: 4,
+  CERTIFICATE: 5,
+  ADDRESS_INFO: 6,
+  OTHER_INFO: 7,
+};
+
+export const REQUEST_TABS = {
+  REQUEST_STATISTIC: 0,
+  LEAVE_REQUEST: 1,
+  REMOTE_REQUEST: 2,
+  OVERTIME_REQUEST: 3,
 };

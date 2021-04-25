@@ -69,3 +69,9 @@ button:focus {
   margin-top: 0.5em;
   font-size: small;
 }
+.assignment:hover {
+  border-color: green;
+  border-style: solid;
+  border-radius: 25rem;
+  border-width: thin;
+}

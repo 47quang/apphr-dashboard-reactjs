@@ -168,6 +168,7 @@ const AcademicLevel = ({ t, match }) => {
           type="button"
           className="btn btn-success rounded-circle p-3"
           id="addBtn"
+          hidden={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
           onClick={(e) => {
             document.getElementById('newDegree').hidden = false;
             document.getElementById('addBtn').disabled = true;
@@ -178,20 +179,6 @@ const AcademicLevel = ({ t, match }) => {
       </div>
       <div className="m-auto">
         <div>
-          <div className="d-flex justify-content-center mb-4">
-            <button
-              hidden={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
-              type="button"
-              className="btn btn-success"
-              id="addBtn"
-              onClick={(e) => {
-                document.getElementById('newDegree').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add /> {t('label.add')}
-            </button>
-          </div>
           <Formik
             initialValues={newDegree}
             innerRef={newDegreeRef}

@@ -2,18 +2,18 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { AllowanceSchema } from 'src/schema/formSchema';
-import { fetchAllowance, updateAllowance } from 'src/stores/actions/allowance';
-import AllowanceItemBody from './AllowanceItemBody';
+import { NewFieldContract } from 'src/schema/formSchema';
+import { fetchAttribute, updateAttribute } from 'src/stores/actions/attribute';
+import ContractAttributeItemBody from './ContractAttributeItemBody';
 
-const UpdateAllowance = ({ t, location, history, match }) => {
+const UpdateContractAttribute = ({ t, location, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const allowanceInfoForm = useRef();
+  const attributeInfoForm = useRef();
   const dispatch = useDispatch();
-  const allowance = useSelector((state) => state.allowance.allowance);
+  const attribute = useSelector((state) => state.attribute.attribute);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAllowance(match.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAttribute(match.params?.id));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -21,7 +21,7 @@ const UpdateAllowance = ({ t, location, history, match }) => {
   const submitForm = (values) => {
     let form = values;
     // Call API UPDATE
-    dispatch(updateAllowance(form, t('message.successful_update')));
+    dispatch(updateAttribute(form, t('message.successful_update')));
   };
   const buttons = permissionIds.includes(PERMISSION.UPDATE_ALLOWANCE)
     ? [
@@ -30,7 +30,7 @@ const UpdateAllowance = ({ t, location, history, match }) => {
           className: `btn btn-primary mr-4`,
 
           onClick: (e) => {
-            history.push(ROUTE_PATH.ALLOWANCE);
+            history.push(ROUTE_PATH.CONTRACT_ATTRIBUTE);
           },
           name: t('label.back'),
           position: 'left',
@@ -39,7 +39,7 @@ const UpdateAllowance = ({ t, location, history, match }) => {
           type: 'reset',
           className: `btn btn-primary mr-4`,
           onClick: (e) => {
-            allowanceInfoForm.current.handleReset(e);
+            attributeInfoForm.current.handleReset(e);
           },
           name: t('label.reset'),
         },
@@ -47,7 +47,8 @@ const UpdateAllowance = ({ t, location, history, match }) => {
           type: 'button',
           className: `btn btn-primary`,
           onClick: (e) => {
-            allowanceInfoForm.current.handleSubmit(e);
+            attributeInfoForm.current.handleSubmit(e);
+            console.log(attributeInfoForm.current.errors);
           },
           name: t('label.update'),
         },
@@ -58,7 +59,7 @@ const UpdateAllowance = ({ t, location, history, match }) => {
           className: `btn btn-primary mr-4`,
 
           onClick: (e) => {
-            history.push(ROUTE_PATH.ALLOWANCE);
+            history.push(ROUTE_PATH.CONTRACT_ATTRIBUTE);
           },
           name: t('label.back'),
           position: 'left',
@@ -66,11 +67,11 @@ const UpdateAllowance = ({ t, location, history, match }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_ALLOWANCE))
     return (
-      <AllowanceItemBody
-        allowanceRef={allowanceInfoForm}
-        allowance={allowance}
+      <ContractAttributeItemBody
+        attributeRef={attributeInfoForm}
+        attribute={attribute}
         t={t}
-        validationSchema={AllowanceSchema}
+        validationSchema={NewFieldContract}
         buttons={buttons}
         submitForm={submitForm}
       />
@@ -78,4 +79,4 @@ const UpdateAllowance = ({ t, location, history, match }) => {
   else return <Page404 />;
 };
 
-export default UpdateAllowance;
+export default UpdateContractAttribute;

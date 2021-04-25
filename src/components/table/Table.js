@@ -37,11 +37,14 @@ import classNames from 'classnames';
 import saveAs from 'file-saver';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { COLORS } from 'src/constants/theme';
+import { createRollUp } from 'src/stores/actions/rollUp';
+import NewRollUp from '../dialog/NewRollUp';
 
 /*
   Params:
@@ -76,9 +79,37 @@ const styles = (theme) => ({
   },
 });
 
+const _styles = (theme) => ({
+  dialog: {
+    width: 'calc(100% - 16px)',
+  },
+  inputRoot: {
+    width: '100%',
+  },
+  selectMenu: {
+    position: 'absolute !important',
+  },
+  tableStriped: {
+    '& tbody tr:nth-of-type(odd)': {
+      backgroundColor: '#ffffff',
+    },
+  },
+  customToolbar: {
+    float: 'left',
+    display: 'inline-flex',
+  },
+  MuiTableCell: {
+    padding: 'none',
+  },
+});
+
 const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
 
 export const TableComponent = withStyles(styles, {
+  name: 'TableComponent',
+})(TableComponentBase);
+
+export const _TableComponent = withStyles(_styles, {
   name: 'TableComponent',
 })(TableComponentBase);
 
@@ -102,60 +133,89 @@ const filteringColumnExtensions = [
   },
 ];
 
-const AddRowPanel = ({ route, disableCreate }) => {
+const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
+  const dispatch = useDispatch();
+
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
         <TemplatePlaceholder />
         {
-          <IconButton hidden={disableCreate} className="py-0 px-0">
-            <Link to={`${route}create`} className="px-0 py-0">
+          <IconButton
+            hidden={disableCreate}
+            className="py-0 px-0"
+            onClick={() => {
+              if (isPopUp) {
+                dispatch(
+                  createRollUp({
+                    ...rollUpData,
+                    time: new Date().getTimezoneOffset(),
+                  }),
+                );
+              }
+            }}
+          >
+            {isPopUp ? (
               <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
-            </Link>
+            ) : (
+              <Link to={`${route}create`} className="px-0 py-0">
+                <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
+              </Link>
+            )}
           </IconButton>
         }
       </Template>
     </Plugin>
   );
 };
-const Label = (props) => {
+const Label = ({ column, className, ...props }) => {
+  props.draggingEnabled = false;
   return (
-    <TableHeaderRow.Title className="p-0 m-0">
-      {Array.isArray(props.children) ? (
+    <TableHeaderRow.Cell className={classNames(className, 'p-2 border border-white')} {...props}>
+      {Array.isArray(column.title) ? (
         <div>
-          <p className="p-0 m-0">{props.children[0]}</p>
-          <p className="p-0 m-0  d-flex justify-content-center">{props.children[1]}</p>
+          <p className="pl-2 m-0">{column.title[0]}</p>
+          <p className="pl-2 m-0  d-flex justify-content-center">{column.title[1]}</p>
         </div>
       ) : (
-        <div className="p-0 m-0">
-          <p className="p-0 m-0">{props.children}</p>
+        <div>
+          <p className="pl-2 ml-5">{column.title}</p>
         </div>
       )}
-    </TableHeaderRow.Title>
+    </TableHeaderRow.Cell>
   );
 };
 
-const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum }) => {
+const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum, isPopUp }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
-  const handleConfirm = (e) => {
+  const [openEditing, setOpenEditing] = useState(false);
+
+  const handleConfirmWarning = (e) => {
     if (Number.isInteger(deletingRowID)) {
       deleteRow(deletingRowID);
     }
     setOpenWarning(!openWarning);
   };
-  const handleCancel = () => {
+  const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
+  };
+  const handleConfirmEditing = (e) => {
+    setOpenEditing(!openEditing);
+  };
+  const handleCancelEditing = () => {
+    setOpenEditing(!openEditing);
   };
   return (
     <Plugin>
+      <NewRollUp isOpen={openEditing} handleConfirm={handleConfirmEditing} handleCancel={handleCancelEditing} t={t} />
       <WarningAlertDialog
         isVisible={openWarning}
         title={t('title.delete_row')}
         titleConfirm={t('label.agree')}
-        handleConfirm={handleConfirm}
+        handleConfirm={handleConfirmWarning}
         titleCancel={t('label.decline')}
-        handleCancel={handleCancel}
+        handleCancel={handleCancelWarning}
         warningMessage={t('message.delete_warning_message')}
       />
       <Getter
@@ -182,12 +242,13 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
               {(getters, { deleteRows, commitDeletedRows }) => (
                 <TableCell className="px-0 py-0">
                   <Link to={`${route}${params.tableRow.rowId}`}>
-                    <IconButton hidden={disableEdit} title={t('message.edit_row')}>
+                    <IconButton className="mx-2" hidden={disableEdit} title={t('message.edit_row')}>
                       <InfoIcon />
                     </IconButton>
                   </Link>
 
                   <IconButton
+                    className="mx-2"
                     hidden={disableDelete}
                     onClick={() => {
                       setDeletingRowID(params.tableRow.rowId);
@@ -223,11 +284,14 @@ const QTable = (props) => {
     disableEdit,
     disableEditColum,
     disableToolBar,
+    disableFilter,
     customTableCell,
     statusCols,
     paging,
     onCurrentPageChange,
     onPageSizeChange,
+    isPopUp,
+    rollUpData,
   } = props;
   const exporterRef = useRef(null);
 
@@ -264,19 +328,23 @@ const QTable = (props) => {
     }));
   }, [columnDef]);
   // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
-  const tableColumnExtensions = columnDef.map((col, idx) => {
-    return {
-      columnName: col.name,
-      align: col.align,
-      width: col.width,
-      wordWrapEnabled: col.wordWrapEnabled,
-    };
-  });
+  const tableColumnExtensions = columnDef
+    ? columnDef.map((col, idx) => {
+        return {
+          columnName: col.name,
+          align: col.align,
+          width: col.width,
+          wordWrapEnabled: col.wordWrapEnabled,
+        };
+      })
+    : [];
 
-  const columnsFilter = idxColumnsFilter.map((idx) => ({
-    id: idx,
-    name: columnDef[idx]?.title,
-  }));
+  const columnsFilter = idxColumnsFilter
+    ? idxColumnsFilter.map((idx) => ({
+        id: idx,
+        name: columnDef[idx]?.title,
+      }))
+    : [];
   const filterTypes = [
     { id: 1, name: t('label.include') },
     { id: 2, name: t('label.not_include') },
@@ -318,9 +386,11 @@ const QTable = (props) => {
   const StatusFormatter = ({ value }) => {
     return (
       <Chip
-        label={value === 'accept' ? 'Đã phê duyệt' : value === 'deny' ? 'Đã từ chối' : 'Đang xữ lý'}
+        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xữ lý'}
         className="mx-1 my-1 px-0 py-0"
-        style={{ backgroundColor: value === 'accept' ? COLORS.FULLY_ROLL_CALL : value === 'deny' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE }}
+        style={{
+          backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
+        }}
       />
     );
   };
@@ -330,60 +400,88 @@ const QTable = (props) => {
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
-  console.log(disableToolBar);
   return (
     <div>
       <Paper>
-        <div className="m-auto">
-          <div className="rounded container col-md-12 pt-4 m-2">
-            <Formik enableReinitialize initialValues={filterValues}>
-              {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
-                <form autoComplete="off">
-                  <div className="row">
-                    <div className="row col-lg-11">
-                      <CommonSelectInput
-                        containerClassName={'form-group col-lg-4'}
-                        value={values.columnsFilter}
-                        onBlur={handleBlur('columnsFilter')}
-                        onChange={handleChange('columnsFilter')}
-                        labelText={t('label.column_filter')}
-                        selectClassName={'form-control'}
-                        lstSelectOptions={columnsFilter}
-                        placeholder={t('placeholder.select_column_filter')}
-                      />
-                      <CommonSelectInput
-                        containerClassName={'form-group col-lg-4'}
-                        value={values.filterTypes}
-                        onBlur={handleBlur('filterTypes')}
-                        onChange={handleChange('filterTypes')}
-                        labelText={t('label.filter_option')}
-                        placeholder={t('placeholder.select_filter_option')}
-                        selectClassName={'form-control'}
-                        lstSelectOptions={filterTypes}
-                      />
-                      <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
-                        value={values.textFilter}
-                        onBlur={handleBlur('textFilter')}
-                        onChange={handleChange('textFilter')}
-                        labelText={t('label.keyword')}
-                        inputType={'text'}
-                        placeholder={t('placeholder.enter_keyword')}
-                        inputClassName={'form-control'}
-                      />
+        {disableFilter ? (
+          <div />
+        ) : (
+          <div className="m-auto">
+            <div className="rounded container col-md-12 pt-4 m-2">
+              <Formik enableReinitialize initialValues={filterValues}>
+                {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+                  <form autoComplete="off">
+                    <div className="row">
+                      <div className="row col-lg-11">
+                        <CommonSelectInput
+                          containerClassName={'form-group col-lg-4'}
+                          value={values.columnsFilter}
+                          onBlur={handleBlur('columnsFilter')}
+                          onChange={handleChange('columnsFilter')}
+                          labelText={t('label.column_filter')}
+                          selectClassName={'form-control'}
+                          lstSelectOptions={columnsFilter}
+                          placeholder={t('placeholder.select_column_filter')}
+                        />
+                        <CommonSelectInput
+                          containerClassName={'form-group col-lg-4'}
+                          value={values.filterTypes}
+                          onBlur={handleBlur('filterTypes')}
+                          onChange={handleChange('filterTypes')}
+                          labelText={t('label.filter_option')}
+                          placeholder={t('placeholder.select_filter_option')}
+                          selectClassName={'form-control'}
+                          lstSelectOptions={filterTypes}
+                        />
+                        <CommonTextInput
+                          containerClassName={'form-group col-lg-4'}
+                          value={values.textFilter}
+                          onBlur={handleBlur('textFilter')}
+                          onChange={handleChange('textFilter')}
+                          labelText={t('label.keyword')}
+                          inputType={'text'}
+                          placeholder={t('placeholder.enter_keyword')}
+                          inputClassName={'form-control'}
+                        />
+                      </div>
+                      <div className="col-lg-1 d-flex align-items-end pb-3">
+                        <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
+                          {t('label.search')}
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-lg-1 d-flex align-items-end pb-3">
-                      <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
-                        {t('label.search')}
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              )}
-            </Formik>
+                  </form>
+                )}
+              </Formik>
+            </div>
           </div>
-        </div>
-
+        )}
+        {route === '/roll-up/' ? (
+          <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
+            <div className="pr-4 mr-4 ml-4">
+              <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
+              <p className="d-inline">{t('label.fully_roll_call')}</p>
+            </div>
+            <div className="pr-4 mr-4 ml-4">
+              <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+              <p className="d-inline">{t('label.free_date')}</p>
+            </div>
+            <div className="pr-4 mr-4 ml-4">
+              <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
+              <p className="d-inline">{t('label.fully_absent_roll_call')}</p>
+            </div>
+            <div className="pr-4 mr-4 ml-4">
+              <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+              <p className="d-inline">{t('label.roll_up_success')}</p>
+            </div>
+            <div className="pr-0 ml-4">
+              <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+              <p className="d-inline">{t('label.absent_roll_Call')}</p>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id} style={{ position: 'relative' }}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusColumns} />
@@ -418,27 +516,51 @@ const QTable = (props) => {
           <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <DragDropProvider />
           {customTableCell ? (
-            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={customTableCell} />
+            <Table
+              key={route}
+              columnExtensions={tableColumnExtensions}
+              tableComponent={disableToolBar ? _TableComponent : TableComponent}
+              cellComponent={customTableCell}
+            />
           ) : (
             <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          <TableHeaderRow showSortingControls titleComponent={Label} className="m-0 p-0" />
+          {disableToolBar ? <TableHeaderRow showSortingControls cellComponent={Label} /> : <TableHeaderRow showSortingControls />}
           <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
-          <Toolbar rootComponent={ToolbarRoot} />
-          {/* {disableToolBar ? (
+          {/* <Toolbar rootComponent={ToolbarRoot} /> */}
+          {disableToolBar ? (
             <div />
           ) : (
-            <>
+            <div>
+              <Toolbar rootComponent={ToolbarRoot} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
               <ExportPanel startExport={startExport} color={'primary'} />
-              <AddRowPanel route={route} disableCreate={disableCreate} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
+              <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
               <ColumnChooser />
-            </>
-          )} */}
-          <ExportPanel startExport={startExport} color={'primary'} />
-          <AddRowPanel route={route} disableCreate={disableCreate} />
-          <ColumnChooser />
-          <TableFixedColumns />
+            </div>
+          )}
+          {/* <ExportPanel startExport={startExport} color={'primary'} />
+          <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
+          <ColumnChooser /> */}
+          <TableFixedColumns leftColumns={['code']} />
           <CustomTableEditColumn
             t={t}
             route={route}
@@ -446,6 +568,7 @@ const QTable = (props) => {
             disableDelete={disableDelete}
             disableEdit={disableEdit}
             disableEditColum={disableEditColum}
+            isPopUp={isPopUp}
           />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={paging.pageSizes} />
@@ -456,32 +579,6 @@ const QTable = (props) => {
           </div>
         )} */}
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
-        {route === '/roll-up/' ? (
-          <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
-            <div className="pr-4">
-              <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
-              <p className="d-inline">{t('label.fully_roll_call')}</p>
-            </div>
-            <div className="pr-4">
-              <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-              <p className="d-inline">{t('label.free_date')}</p>
-            </div>
-            <div className="pr-4">
-              <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
-              <p className="d-inline">{t('label.fully_absent_roll_call')}</p>
-            </div>
-            <div className="pr-4">
-              <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
-              <p className="d-inline">{t('label.roll_up_success')}</p>
-            </div>
-            <div className="pr-4">
-              <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
-              <p className="d-inline">{t('label.absent_roll_Call')}</p>
-            </div>
-          </div>
-        ) : (
-          <div />
-        )}
       </Paper>
     </div>
   );
