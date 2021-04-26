@@ -11,7 +11,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   const columnDefOfProfiles =
     type === 'leave'
       ? [
-          { name: 'id', title: t('label.proposal_id'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'id', title: t('label.id'), align: 'left', width: '15%', wordWrapEnabled: true },
           { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '15%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },

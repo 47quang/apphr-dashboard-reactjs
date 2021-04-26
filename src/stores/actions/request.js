@@ -10,6 +10,7 @@ export const fetchLeaveRequests = (params, onTotalChange) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
                 if (req.type === 'pay') req.type = 'Nghỉ có trả lương';
                 else if (req.type === 'no-pay') req.type = 'Nghỉ không trả lương';
                 else req.type = 'Nghỉ theo chế độ';
@@ -32,6 +33,7 @@ export const fetchLeaveRequest = (id) => {
       .then(({ payload }) => {
         payload.createdAt = deleteTheLastZ(payload.createdAt);
         payload.handleAt = payload.handleAt ? deleteTheLastZ(payload.handleAt) : '';
+        payload.fullname = payload.profile.fullname;
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -52,6 +54,7 @@ export const approveLeaveRequest = (id, success_msg) => {
     api.leaveRequest
       .approve(id)
       .then(({ payload }) => {
+        payload.fullname = payload.profile.fullname;
         dispatch(fetchLeaveRequest(id));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
