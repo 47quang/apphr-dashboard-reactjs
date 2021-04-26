@@ -1,4 +1,4 @@
-import { formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
+import { deleteTheLastZ, formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -119,6 +119,14 @@ export const fetchAssignment = (id) => {
     api.assignment
       .get(id)
       .then(({ payload }) => {
+        payload.rollUps =
+          payload.rollUps && payload.rollUps.length > 0
+            ? payload.rollUps.map((rollUp) => {
+                rollUp.startTime = deleteTheLastZ(rollUp.startTime);
+                rollUp.endTime = deleteTheLastZ(rollUp.endTime);
+                return rollUp;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
       })
       .catch((err) => {
@@ -179,6 +187,12 @@ export const setEmptyAssignments = () => {
   return {
     type: REDUX_STATE.assignment.EMPTY_VALUE,
     payload: [],
+  };
+};
+export const setEmptyAssignment = () => {
+  return {
+    type: REDUX_STATE.assignment.EMPTY_ASSIGNMENT,
+    payload: {},
   };
 };
 

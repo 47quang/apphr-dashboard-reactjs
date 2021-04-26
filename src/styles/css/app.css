@@ -69,9 +69,15 @@ button:focus {
   margin-top: 0.5em;
   font-size: small;
 }
-.assignment:hover {
-  border-color: green;
-  border-style: solid;
-  border-radius: 25rem;
-  border-width: thin;
+.assignment-absent:hover {
+  background-color: #f9cece;
+  border-radius: 9px;
+}
+.assignment-free:hover {
+  background-color: #d6d6d6;
+  border-radius: 9px;
+}
+.assignment-fully:hover {
+  background-color: #abf2d3;
+  border-radius: 9px;
 }
