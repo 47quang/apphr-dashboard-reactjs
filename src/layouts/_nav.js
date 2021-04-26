@@ -152,6 +152,18 @@ const _nav = [
         to: ROUTE_PATH.ARTICLE_TYPE,
         permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
+        to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
+        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.SALARY_POLICY,
+        to: ROUTE_PATH.SALARY_POLICY,
+        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+      },
       // {
       //   _tag: "CSidebarNavDropdown",
       //   name: ROUTE_NAME.AUTHORIZATION,

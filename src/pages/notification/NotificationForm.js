@@ -130,7 +130,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm }) => {
                 errorMessage={errors.description}
                 rows={3}
               />
-              <div className="form-group col-xl-12">
+              <div className="form-group col-xl-12 wrapper">
                 <Label text={t('label.notification_content')} required />
                 <Editor placeholder={t('placeholder.enter_notification_content')} value={values.content} onChange={handleChange('content')} />
               </div>

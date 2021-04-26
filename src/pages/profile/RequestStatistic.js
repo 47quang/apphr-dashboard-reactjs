@@ -5,11 +5,12 @@ import QTable from 'src/components/table/Table';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 
-const HolidaySetting = ({ t, location, history }) => {
+const RequestStatistic = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'id', title: t('label.id'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'label', title: t('label.proposal_type'), align: 'left', width: '45%', wordWrapEnabled: true },
-    { name: 'amount', title: t('label.maximum_day_amount'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.request_type'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'total', title: t('label.total_request'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'used', title: t('label.number_of_used_request'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'remain', title: t('label.number_of_remain_request'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
@@ -18,18 +19,24 @@ const HolidaySetting = ({ t, location, history }) => {
   const requests = [
     {
       id: 1,
-      label: 'Số ngày nghỉ phép trong năm',
-      amount: 12,
+      type: 'Số ngày nghỉ phép trong năm',
+      total: 12,
+      used: 6,
+      remain: 6,
     },
     {
       id: 2,
-      label: 'Số giờ tăng ca tối đa trong tháng',
-      amount: 12,
+      type: 'Số giờ tăng ca tối đa trong tháng',
+      total: 12,
+      used: 6,
+      remain: 6,
     },
     {
       id: 3,
-      label: 'Số ngày làm việc từ xa trong tháng',
-      amount: 12,
+      type: 'Số ngày làm việc từ xa trong tháng',
+      total: 12,
+      used: 6,
+      remain: 6,
     },
   ];
   const [paging, setPaging] = useState({
@@ -78,7 +85,7 @@ const HolidaySetting = ({ t, location, history }) => {
           route={ROUTE_PATH.HOLIDAY + '/tab2.id='}
           idxColumnsFilter={[0]}
           disableCreate={true}
-          disableDelete={true}
+          disableEditColum={true}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
@@ -87,4 +94,4 @@ const HolidaySetting = ({ t, location, history }) => {
     );
   else return <Page404 />;
 };
-export default HolidaySetting;
+export default RequestStatistic;

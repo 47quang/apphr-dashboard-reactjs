@@ -33,7 +33,6 @@ const TheSidebar = () => {
       }
     }
   };
-
   return (
     <CSidebar
       show={show}

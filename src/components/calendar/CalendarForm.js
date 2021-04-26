@@ -1,13 +1,15 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NewTaskSchedule } from 'src/schema/formSchema';
+import { fetchShifts } from 'src/stores/actions/shift';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 
-const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
+const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
   // const handleChange = (event) => {
   //   setType(event.target.value);
   // };
@@ -16,6 +18,16 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
     start: '',
     end: '',
   };
+  const shifts = useSelector((state) => state.shift.shifts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchShifts({
+        day: day,
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day]);
   return (
     <div>
       <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
@@ -30,6 +42,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
             }}
           >
             {(props) => {
+              console.log(props.errors);
               return (
                 <form className="p-0 m-0">
                   <h5>{t('label.new_task')}.</h5>
@@ -86,6 +99,20 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, shifts }) => {
                       inputClassName={'form-control'}
                       isRequiredField
                       isDisable
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={props.values.endTime ?? ''}
+                      onBlur={props.handleBlur('endTime')}
+                      onChange={props.handleChange('endTime')}
+                      inputID={'endTime'}
+                      labelText={t('label.end_time_repeat')}
+                      inputType={'date'}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      isTouched={props.touched?.endTime}
+                      isError={props.errors?.endTime && props.touched?.endTime}
+                      errorMessage={t(props.errors?.endTime)}
                     />
                   </div>
                   <hr className="mt-1" />

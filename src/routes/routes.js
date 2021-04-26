@@ -16,8 +16,12 @@ const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const LeaveForm = React.lazy(() => import('src/pages/proposal/LeaveForm'));
+
 const Remote = React.lazy(() => import('src/pages/proposal/Proposal'));
+const RemoteForm = React.lazy(() => import('src/pages/proposal/RemoteForm'));
+
 const Overtime = React.lazy(() => import('src/pages/proposal/Proposal'));
+const OvertimeForm = React.lazy(() => import('src/pages/proposal/OvertimeForm'));
 
 const RollUp = React.lazy(() => import('src/pages/roll-up/RollUp'));
 const Notification = React.lazy(() => import('src/pages/notification/Notification'));
@@ -65,6 +69,10 @@ const ArticleType = React.lazy(() => import('src/pages/setting/articleType/Artic
 const NewArticleType = React.lazy(() => import('src/pages/setting/articleType/NewType'));
 const EditArticleType = React.lazy(() => import('src/pages/setting/articleType/UpdateType'));
 
+const Attribute = React.lazy(() => import('src/pages/setting/attribute/ContractAttribute'));
+const NewAttribute = React.lazy(() => import('src/pages/setting/attribute/NewContractAttribute'));
+const EditAttribute = React.lazy(() => import('src/pages/setting/attribute/UpdateContractAttribute'));
+
 const routes = [
   { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -78,16 +86,18 @@ const routes = [
   { path: ROUTE_PATH.CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
 
   { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
+  { path: ROUTE_PATH.PROFILE_LEAVE_REQUEST, name: ROUTE_NAME.PROFILE_REQUEST, component: LeaveForm },
+
   { path: ROUTE_PATH.PROFILE_UPDATE, name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
 
   { path: ROUTE_PATH.LEAVE_REQUEST, name: ROUTE_NAME.LEAVE_REQUEST, component: LeaveForm },
   { path: ROUTE_PATH.LEAVE, name: ROUTE_NAME.PROPOSAL, component: Proposal },
 
-  { path: ROUTE_PATH.REMOTE_REQUEST, name: ROUTE_NAME.REMOTE_REQUEST, component: LeaveForm },
+  { path: ROUTE_PATH.REMOTE_REQUEST, name: ROUTE_NAME.REMOTE_REQUEST, component: RemoteForm },
   { path: ROUTE_PATH.REMOTE, name: ROUTE_NAME.PROPOSAL, component: Remote },
 
-  { path: ROUTE_PATH.OVERTIME_REQUEST, name: ROUTE_NAME.OVERTIME_REQUEST, component: LeaveForm },
+  { path: ROUTE_PATH.OVERTIME_REQUEST, name: ROUTE_NAME.OVERTIME_REQUEST, component: OvertimeForm },
   { path: ROUTE_PATH.OVERTIME, name: ROUTE_NAME.PROPOSAL, component: Overtime },
 
   { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },
@@ -256,6 +266,19 @@ const routes = [
     component: EditArticleType,
   },
   { path: ROUTE_PATH.ARTICLE_TYPE, name: ROUTE_NAME.ARTICLE_TYPE, component: ArticleType },
+  {
+    path: ROUTE_PATH.CONTRACT_ATTRIBUTE_CREATE,
+    exact: true,
+
+    name: ROUTE_NAME.NEW_CONTRACT_ATTRIBUTE,
+    component: NewAttribute,
+  },
+  {
+    path: ROUTE_PATH.CONTRACT_ATTRIBUTE_UPDATE,
+    name: ROUTE_NAME.CONTRACT_ATTRIBUTE_UPDATE,
+    component: EditAttribute,
+  },
+  { path: ROUTE_PATH.CONTRACT_ATTRIBUTE, name: ROUTE_NAME.CONTRACT_ATTRIBUTE, component: Attribute },
 ];
 
 export default routes;

@@ -65,6 +65,7 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
       </InputLabel> */}
       <Select
         labelId="demo-mutiple-chip-label"
+        className="border-bottom"
         multiple
         key={key}
         displayEmpty={true}

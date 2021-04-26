@@ -1,4 +1,4 @@
-import { formatTime } from 'src/utils/datetimeUtils';
+import { formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -53,19 +53,42 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                 let x = {
                   id: a.id,
                   fullname: a.fullname,
+                  avatar: a.avatar,
                   code: a.code,
-                  sunday: [],
-                  monday: [],
-                  tuesday: [],
-                  wednesday: [],
-                  thursday: [],
-                  friday: [],
-                  saturday: [],
+                  sunday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  monday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  tuesday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  wednesday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  thursday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  friday: {
+                    assignment: [],
+                    future: false,
+                  },
+                  saturday: {
+                    assignment: [],
+                    future: false,
+                  },
                 };
                 a.assignments.forEach((element) => {
                   let dayTh = new Date(element.date).getDay();
-
-                  x[dayIndex[dayTh]].push({
+                  let future = isBeforeTypeDate(new Date(), element.date);
+                  x[dayIndex[dayTh]].future = future;
+                  x[dayIndex[dayTh]].assignment.push({
                     id: element.id,
                     shiftCode: element.shift.code,
                     point: element.point,
@@ -77,7 +100,6 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                 return a;
               })
             : [];
-        console.log(data);
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
         if (onTotalChange) onTotalChange(total);
       })

@@ -10,22 +10,17 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { approveLeaveRequest, fetchLeaveRequest, rejectLeaveRequest } from 'src/stores/actions/request';
+import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
-const LeaveForm = ({ t, history, match }) => {
+const RemoteForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
-  const type = [
-    { id: 'no_pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
-  ];
   const status = [
     { id: 'new', name: 'Đang xữ lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];
-  const leaveRequest = useSelector((state) => state.request.leaveForm);
+  const remoteRequest = useSelector((state) => state.request.remoteForm);
   const basicInfo = {};
   const requestId = match?.params?.id;
   const fullyButtons = [
@@ -34,7 +29,7 @@ const LeaveForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        history.push(ROUTE_PATH.remote);
       },
       name: t('label.back'),
       position: 'left',
@@ -43,7 +38,7 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-danger mr-4`,
       onClick: (e) => {
-        dispatch(rejectLeaveRequest(requestId, t('label.deny_success')));
+        dispatch(rejectRemoteRequest(requestId, t('label.deny_success')));
       },
       name: t('label.deny'),
     },
@@ -51,7 +46,7 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-success`,
       onClick: (e) => {
-        dispatch(approveLeaveRequest(requestId, t('label.accept_success')));
+        dispatch(approveRemoteRequest(requestId, t('label.accept_success')));
       },
       name: t('label.accept'),
     },
@@ -62,18 +57,18 @@ const LeaveForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        history.push(ROUTE_PATH.REMOTE);
       },
       name: t('label.back'),
       position: 'left',
     },
   ];
   useEffect(() => {
-    if (match.path.includes('profile') && match.path.includes('leave.id=')) {
+    if (match.path.includes('profile') && match.path.includes('remote.id=')) {
       dispatch(setTabName(PROFILE_TABS.REQUEST));
-      dispatch(setSubTabName(REQUEST_TABS.LEAVE_REQUEST));
+      dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
     }
-    if (requestId) dispatch(fetchLeaveRequest(requestId));
+    if (requestId) dispatch(fetchRemoteRequest(requestId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -84,26 +79,14 @@ const LeaveForm = ({ t, history, match }) => {
             <Formik
               //            innerRef={branchRef}
               enableReinitialize
-              initialValues={leaveRequest}
+              initialValues={remoteRequest}
               // validationSchema={LeaveFormSchema}
               onSubmit={(values) => {}}
             >
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                 <form autoComplete="off">
-                  <FormHeader text={t('label.leave_info')} />
+                  <FormHeader text={t('label.remote_info')} />
                   <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.type ?? ''}
-                      onBlur={handleBlur('type')}
-                      onChange={handleChange('type')}
-                      inputID={'type'}
-                      labelText={t('label.leave_type')}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      isDisable
-                      lstSelectOptions={type}
-                    />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.createdAt ?? ''}
@@ -192,9 +175,7 @@ const LeaveForm = ({ t, history, match }) => {
                 enableReinitialize
                 initialValues={basicInfo}
                 // validationSchema={LeaveFormSchema}
-                onSubmit={(values) => {
-                  console.log(values);
-                }}
+                onSubmit={(values) => {}}
               >
                 {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
                   <form autoComplete="off">
@@ -386,4 +367,4 @@ const LeaveForm = ({ t, history, match }) => {
   );
 };
 
-export default LeaveForm;
+export default RemoteForm;

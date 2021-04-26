@@ -14,17 +14,17 @@ import { IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import { Delete } from '@material-ui/icons';
+import { Delete, Room } from '@material-ui/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarForm from 'src/components/calendar/CalendarForm';
 import { PERMISSION } from 'src/constants/key';
 import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
-import { fetchShifts } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SchedulerPage = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const shifts = useSelector((state) => state.shift.shifts);
   const assignments = useSelector((state) => state.assignment.assignments);
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
@@ -65,6 +64,7 @@ const SchedulerPage = ({ t, history, match }) => {
     isOpen: false,
     selectedDate: '',
     visible: false,
+    day: 0,
   });
 
   const DayScaleCell = (props) => {
@@ -91,6 +91,7 @@ const SchedulerPage = ({ t, history, match }) => {
           ...state,
           selectedDate: moment.utc(props.startDate).startOf('day').format().replace('Z', ''),
           isOpen: true,
+          day: date.day() + 1,
         });
     };
 
@@ -102,17 +103,6 @@ const SchedulerPage = ({ t, history, match }) => {
     }
     return <WeekView.TimeTableCell {...props} onClick={onClickEvent} />;
   };
-
-  useEffect(() => {
-    dispatch(
-      fetchShifts({
-        page: 0,
-        perpage: 1000,
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
       var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
@@ -195,12 +185,27 @@ const SchedulerPage = ({ t, history, match }) => {
       </AppointmentTooltip.Header>
     );
   });
+  const Content = withStyles(style, { name: 'Content' })(({ children, appointmentData, classes, ...restProps }) => {
+    return (
+      <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
+        <Grid container alignItems="center">
+          <Grid item xs={2} className={classes.textCenter}>
+            <Room className={classes.icon} />
+          </Grid>
+          <Grid item xs={10}>
+            <span>{appointmentData.shift.branch.name + ' - ' + appointmentData.shift.branch.address}</span>
+          </Grid>
+        </Grid>
+      </AppointmentTooltip.Content>
+    );
+  });
+
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <CalendarForm t={t} shifts={shifts} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+        <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
         <Paper>
-          <Scheduler data={assignments} height={660}>
+          <Scheduler data={assignments} height="auto">
             <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
             <EditingState />
             <IntegratedEditing />
@@ -216,7 +221,7 @@ const SchedulerPage = ({ t, history, match }) => {
             <TodayButton />
             <EditRecurrenceMenu />
             <Appointments />
-            <AppointmentTooltip headerComponent={Header} showCloseButton onVisibilityChange={toggleVisibility} />
+            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton onVisibilityChange={toggleVisibility} />
           </Scheduler>
         </Paper>
       </CContainer>

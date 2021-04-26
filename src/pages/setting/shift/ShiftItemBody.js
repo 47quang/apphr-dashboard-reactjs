@@ -29,7 +29,6 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
             }}
           >
             {({ values, errors, touched, handleChange, setValues, handleBlur }) => {
-              console.log('errors', errors);
               return (
                 <form autoComplete="off">
                   <div className="row">
@@ -100,14 +99,14 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                       <div className="input-group">
                         <input
                           type="number"
-                          className={'form-control'}
+                          className={'form-control col-11'}
                           rows={5}
                           name={`flexibleTime`}
                           onChange={(e) => handleChange(`flexibleTime`)(e)}
                           value={values.flexibleTime}
                           placeholder={'Nhập mức giao động thời gian điểm danh'}
                         />
-                        <span className="input-group-text" id="basic-addon2">
+                        <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
                           {t('label.minutes')}
                         </span>
                       </div>
@@ -126,20 +125,44 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                       <div className="input-group">
                         <input
                           type="number"
-                          className={'form-control'}
+                          className={'form-control col-11'}
                           rows={5}
-                          name={`minWorkTime`}
-                          onChange={(e) => handleChange(`minWorkTime`)(e)}
-                          value={values.minWorkTime}
-                          placeholder={'Nhập thời gian làm việc tối thiếu'}
+                          name={`expected`}
+                          onChange={(e) => handleChange(`expected`)(e)}
+                          value={values.expected}
+                          placeholder={t('placeholder.enter_expected')}
                         />
-                        <span className="input-group-text" id="basic-addon2">
+                        <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
                           {t('label.hours')}
                         </span>
                       </div>
-                      {errors && errors?.minWorkTime && t(errors && errors?.minWorkTime) && (
+                      {errors && errors?.expected && t(errors && errors?.expected) && (
                         <div>
-                          <small className={'text-danger'}>{t(errors?.minWorkTime)}</small>
+                          <small className={'text-danger'}>{t(errors?.expected)}</small>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="form-group col-xl-12">
+                      <Label text={t('label.min_point')} required />
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className={'form-control col-11'}
+                          rows={4}
+                          name={`minPoint`}
+                          onChange={(e) => handleChange(`minPoint`)(e)}
+                          value={values.minPoint}
+                          placeholder={t('placeholder.enter_min_point')}
+                        />
+                        <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
+                          {t('label.percentage')}
+                        </span>
+                      </div>
+                      {errors && errors?.minPoint && t(errors && errors?.minPoint) && (
+                        <div>
+                          <small className={'text-danger'}>{t(errors?.minPoint)}</small>
                         </div>
                       )}
                     </div>

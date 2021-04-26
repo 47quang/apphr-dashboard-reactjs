@@ -125,3 +125,39 @@ export const fetchAllRequest = (params, onTotalChange) => {
       });
   };
 };
+
+export const fetchPolicy = () => {
+  return (dispatch, getState) => {
+    api.holiday
+      .getPolicy()
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.holiday.SET_POLICY, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
+
+export const updatePolicy = (data) => {
+  return (dispatch, getState) => {
+    api.holiday
+      .setPolicy(data)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.holiday.SET_POLICY, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
