@@ -43,7 +43,7 @@ import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { COLORS } from 'src/constants/theme';
-import { createRollUp } from 'src/stores/actions/rollUp';
+import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
 import NewRollUp from '../dialog/NewRollUp';
 
 /*
@@ -186,11 +186,12 @@ const Label = ({ column, className, ...props }) => {
   );
 };
 
-const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum, isPopUp }) => {
+const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum, isPopUp, editColumnWidth, rollUpData }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const [openEditing, setOpenEditing] = useState(false);
-
+  const [rollUpId, setRollUpId] = useState(-1);
+  const dispatch = useDispatch();
   const handleConfirmWarning = (e) => {
     if (Number.isInteger(deletingRowID)) {
       deleteRow(deletingRowID);
@@ -200,7 +201,13 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
   };
-  const handleConfirmEditing = (e) => {
+  const handleConfirmEditing = (values) => {
+    dispatch(
+      updateRollUp({
+        ...values,
+        id: rollUpId,
+      }),
+    );
     setOpenEditing(!openEditing);
   };
   const handleCancelEditing = () => {
@@ -208,16 +215,25 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   };
   return (
     <Plugin>
-      <NewRollUp isOpen={openEditing} handleConfirm={handleConfirmEditing} handleCancel={handleCancelEditing} t={t} />
-      <WarningAlertDialog
-        isVisible={openWarning}
-        title={t('title.delete_row')}
-        titleConfirm={t('label.agree')}
-        handleConfirm={handleConfirmWarning}
-        titleCancel={t('label.decline')}
-        handleCancel={handleCancelWarning}
-        warningMessage={t('message.delete_warning_message')}
-      />
+      {openEditing ? (
+        <NewRollUp isOpen={openEditing} handleConfirm={handleConfirmEditing} handleCancel={handleCancelEditing} t={t} startCC={rollUpData.startCC} />
+      ) : (
+        <></>
+      )}
+      {openWarning ? (
+        <WarningAlertDialog
+          isVisible={openWarning}
+          title={t('title.delete_row')}
+          titleConfirm={t('label.agree')}
+          handleConfirm={handleConfirmWarning}
+          titleCancel={t('label.decline')}
+          handleCancel={handleCancelWarning}
+          warningMessage={t('message.delete_warning_message')}
+        />
+      ) : (
+        <></>
+      )}
+
       <Getter
         name="tableColumns"
         computed={({ tableColumns }) => {
@@ -225,7 +241,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
             {
               key: 'behavior' + route,
               type: 'behavior',
-              width: !disableEditColum ? (!disableDelete ? (!disableEdit ? '10%' : '5%') : '5%') : '0%',
+              width: editColumnWidth ? editColumnWidth : !disableEditColum ? (!disableDelete ? (!disableEdit ? '10%' : '5%') : '5%') : '0%',
               align: 'center',
             },
           ]);
@@ -241,11 +257,25 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
             <TemplateConnector>
               {(getters, { deleteRows, commitDeletedRows }) => (
                 <TableCell className="px-0 py-0">
-                  <Link to={`${route}${params.tableRow.rowId}`}>
-                    <IconButton className="mx-2" hidden={disableEdit} title={t('message.edit_row')}>
+                  <IconButton
+                    className="mx-2"
+                    hidden={disableEdit}
+                    title={t('message.edit_row')}
+                    onClick={() => {
+                      if (isPopUp) {
+                        setOpenEditing(!openEditing);
+                        setRollUpId(params.tableRow.rowId);
+                      }
+                    }}
+                  >
+                    {isPopUp ? (
                       <InfoIcon />
-                    </IconButton>
-                  </Link>
+                    ) : (
+                      <Link to={`${route}${params.tableRow.rowId}`}>
+                        <InfoIcon />
+                      </Link>
+                    )}
+                  </IconButton>
 
                   <IconButton
                     className="mx-2"
@@ -292,6 +322,7 @@ const QTable = (props) => {
     onPageSizeChange,
     isPopUp,
     rollUpData,
+    editColumnWidth,
   } = props;
   const exporterRef = useRef(null);
 
@@ -569,6 +600,8 @@ const QTable = (props) => {
             disableEdit={disableEdit}
             disableEditColum={disableEditColum}
             isPopUp={isPopUp}
+            editColumnWidth={editColumnWidth}
+            rollUpData={rollUpData}
           />
           {/* <TableSelection showSelectAll /> */}
           <PagingPanel pageSizes={paging.pageSizes} />

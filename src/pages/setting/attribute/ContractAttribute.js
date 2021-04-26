@@ -13,7 +13,7 @@ const ContractAttribute = ({ t }) => {
   const dispatch = useDispatch();
   const attributes = useSelector((state) => state.attribute.attributes);
   const columnDef = [
-    { name: 'id', title: t('label.attribute_code'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'id', title: t('label.id'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'name', title: t('label.attribute_name'), align: 'left', width: '40%', wordWrapEnabled: true },
     { name: 'type', title: t('label.attribute_type'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];

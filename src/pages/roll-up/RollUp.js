@@ -152,16 +152,20 @@ const RollUp = ({ t, location }) => {
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return (
       <>
-        <RollUpInfo
-          t={t}
-          isOpen={cell.isOpen}
-          handleClose={handleClose}
-          assignment={cell.assignment}
-          profileCode={row.code}
-          fullName={row.fullname}
-          profileId={row.id}
-          avatar={row.avatar}
-        />
+        {cell.isOpen ? (
+          <RollUpInfo
+            t={t}
+            isOpen={cell.isOpen}
+            handleClose={handleClose}
+            assignment={cell.assignment}
+            profileCode={row.code}
+            fullName={row.fullname}
+            profileId={row.id}
+            avatar={row.avatar}
+          />
+        ) : (
+          <></>
+        )}
         <Table.Cell
           className={classNames(className, isDay ? 'm-auto' : '')}
           row={row}
@@ -196,7 +200,18 @@ const RollUp = ({ t, location }) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames('row p-1 m-auto assignment')}
+                      className={classNames(
+                        'row p-1 m-auto',
+                        isDay
+                          ? value.future
+                            ? 'assignment-free'
+                            : value.assignment.length > 0
+                            ? value.assignment.every((v) => v.point === 0)
+                              ? 'assignment-absent'
+                              : 'assignment-fully'
+                            : 'assignment-free'
+                          : '',
+                      )}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))

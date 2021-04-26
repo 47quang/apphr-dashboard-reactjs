@@ -10,7 +10,7 @@ const assignmentReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.assignment.SET_ASSIGNMENTS:
       return { ...state, assignments: payload };
     case REDUX_STATE.assignment.SET_ASSIGNMENT:
-      return { ...state, assignments: [...state.assignments, payload] };
+      return { ...state, assignment: payload };
     case REDUX_STATE.assignment.DELETE_ASSIGNMENT:
       return {
         ...state,
@@ -21,6 +21,8 @@ const assignmentReducer = (state = initialState, { type, payload }) => {
         ...state,
         assignments: [],
       };
+    case REDUX_STATE.assignment.EMPTY_ASSIGNMENT:
+      return { ...state, assignment: payload };
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import { Avatar, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Cancel, Lens } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAssignment } from 'src/stores/actions/assignment';
+import { fetchAssignment, setEmptyAssignment } from 'src/stores/actions/assignment';
 import QTable from '../table/Table';
 const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, assignment, profileId }) => {
   const dispatch = useDispatch();
@@ -10,9 +10,9 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
   const rows = useSelector((state) => state.assignment.assignment);
 
   const columnDef = [
-    { name: 'type', title: t('label.type_roll_call'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.type_roll_call'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startTime', title: t('label.start_time'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'endTime', title: t('label.end_time'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'endTime', title: t('label.end_time'), align: 'left', width: '30%', wordWrapEnabled: true },
     //{ name: 'coefficient', title: 'Hệ số giờ làm' },
   ];
   const [paging, setPaging] = useState({
@@ -40,8 +40,13 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
         total: rows?.rollUps?.length ?? 0,
       }));
     }
+    return () => {
+      dispatch(setEmptyAssignment());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+  console.log(assignment, isOpen);
+
   return (
     <Dialog open={isOpen} maxWidth="md" fullWidth>
       <DialogTitle className={'dialog-title-background'}>
@@ -75,7 +80,8 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           onPageSizeChange={onPageSizeChange}
           disableFilter={true}
           isPopUp={true}
-          rollUpData={{ profileId: profileId, assignmentId: assignment?.id }}
+          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC }}
+          editColumnWidth={'15%'}
           // disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
           // disableCreate={false}
           // disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}

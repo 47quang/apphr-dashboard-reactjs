@@ -30,6 +30,8 @@
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Salary Policy": "Các khoản phải đóng",
   "label": {
+    "id": "ID",
+    "new_roll_up": "Check-out",
     "attribute_code": "Mã thuộc tính",
     "attribute_name": "Tên thuộc tính",
     "attribute_type": "Loại thuộc tính",

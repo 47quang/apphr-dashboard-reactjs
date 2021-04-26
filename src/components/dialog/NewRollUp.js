@@ -6,12 +6,12 @@ import { NewRollUpSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonTextInput from '../input/CommonTextInput';
 
-const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t }) => {
+const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
   // const handleChange = (event) => {
   //   setType(event.target.value);
   // };
   const newRollUp = {
-    startTime: '',
+    startTime: startCC,
     endTime: '',
   };
   return (
@@ -30,7 +30,7 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t }) => {
             {(props) => {
               return (
                 <form className="p-0 m-0">
-                  <h5>{t('label.new_field')}.</h5>
+                  <h5>{t('label.new_roll_up')}.</h5>
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonTextInput
@@ -43,9 +43,7 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t }) => {
                       inputType={'Time'}
                       inputClassName={'form-control'}
                       isRequiredField
-                      isTouched={props.touched.startTime}
-                      isError={props.errors.startTime && props.touched.startTime}
-                      errorMessage={t(props.errors.startTime)}
+                      isDisable
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-6'}
