@@ -21,7 +21,7 @@ export const isBeforeTypeDate = (startTime, endTime) => {
   return moment(startTime).isBefore(moment(endTime));
 };
 export const formatDate = (value) => {
-  return value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '';
+  return value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1') : '';
 };
 
 export const formatTime = (time) => {
@@ -29,4 +29,12 @@ export const formatTime = (time) => {
   let temp = time.split(':');
   temp.pop();
   return temp.join(':');
+};
+
+export const formatDateTime = (dateTime) => {
+  // 	2021-04-25T08:30:00.000Z
+  dateTime.replace('Z', '');
+  let temp = moment(dateTime).utc().format('LT');
+  // console.log(temp);
+  return temp;
 };

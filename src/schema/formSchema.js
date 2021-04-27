@@ -39,10 +39,7 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_coefficient'),
   expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
-  flexibleTime: Yup.number()
-    .integer('validation.flexible_time_must_be_integer')
-    .min(0, 'validation.flexible_time_must_not_be_negative')
-    .required('validation.required_enter_flexible_time'),
+  flexibleTime: Yup.number().min(0, 'validation.flexible_time_must_not_be_negative').required('validation.required_enter_flexible_time'),
   minPoint: Yup.number()
     .integer('validation.min_point_must_be_integer')
     .min(0, 'validation.min_point_must_not_be_negative')
@@ -50,7 +47,6 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   branchId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
     return value !== '0';
   }),
-
   operateLoop: Yup.array()
     .of(Yup.number())
     .required('validation.required_select_operator_loop')
@@ -523,4 +519,26 @@ export const NewRollUpSchema = Yup.object().shape({
       const { startTime } = this.parent;
       return isBeforeTypeHour(startTime, value);
     }),
+});
+export const NewLeaveFormSchema = Yup.object().shape({
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_type'),
+  assignments: Yup.array().of(
+    Yup.object().shape({
+      date: Yup.date().required('validation.required_select_leave_date'),
+      id: Yup.string()
+        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_assignment', function (value) {
+          return value !== '0';
+        })
+        .required('validation.required_select_leave_assignment'),
+    }),
+  ),
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_status'),
 });

@@ -45,7 +45,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-  console.log(assignment, isOpen);
 
   return (
     <Dialog open={isOpen} maxWidth="md" fullWidth>
@@ -80,7 +79,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           onPageSizeChange={onPageSizeChange}
           disableFilter={true}
           isPopUp={true}
-          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC }}
+          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC, date: rows.date }}
           editColumnWidth={'15%'}
           // disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
           // disableCreate={false}

@@ -147,10 +147,12 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
             onClick={() => {
               if (isPopUp) {
                 dispatch(
-                  createRollUp({
-                    ...rollUpData,
-                    time: new Date().getTimezoneOffset(),
-                  }),
+                  createRollUp(
+                    {
+                      ...rollUpData,
+                    },
+                    t('label.roll_up_success'),
+                  ),
                 );
               }
             }}
@@ -179,7 +181,7 @@ const Label = ({ column, className, ...props }) => {
         </div>
       ) : (
         <div>
-          <p className="pl-2 ml-5">{column.title}</p>
+          <p className="pl-2 ml-3">{column.title}</p>
         </div>
       )}
     </TableHeaderRow.Cell>
@@ -202,9 +204,12 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
     setOpenWarning(!openWarning);
   };
   const handleConfirmEditing = (values) => {
+    let endTime = values.endTime;
+    endTime = rollUpData.date.replace('00:00:00.000', endTime);
+    console.log(endTime);
     dispatch(
       updateRollUp({
-        ...values,
+        endTime: new Date(endTime),
         id: rollUpId,
       }),
     );
@@ -392,7 +397,7 @@ const QTable = (props) => {
     });
   };
 
-  const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
+  const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1') : '');
 
   const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 

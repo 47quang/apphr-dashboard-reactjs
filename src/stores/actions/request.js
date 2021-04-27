@@ -83,6 +83,14 @@ export const fetchRemoteRequests = (params, onTotalChange) => {
     api.remoteRequest
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload?.length > 0
+            ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
+
+                return req;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -147,6 +155,13 @@ export const fetchOvertimeRequests = (params, onTotalChange) => {
     api.overtimeRequest
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload?.length > 0
+            ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
+                return req;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -163,13 +178,8 @@ export const fetchOvertimeRequest = (id) => {
       .then(({ payload }) => {
         payload.createdAt = deleteTheLastZ(payload.createdAt);
         payload.handleAt = payload.handleAt ? deleteTheLastZ(payload.handleAt) : '';
-        payload.assignments =
-          payload.assignments && payload.assignments.length > 0
-            ? payload.assignments.map((ass) => {
-                ass.name = formatTime(ass.shift.startCC) + ' - ' + formatTime(ass.shift.endCC) + ' - ' + formatDate(getDateInput(ass.date));
-                return ass;
-              })
-            : [];
+        payload.assignment =
+          formatTime(payload.shift.startCC) + ' - ' + formatTime(payload.shift.endCC) + ' - ' + formatDate(getDateInput(payload.date));
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })
       .catch((err) => {

@@ -30,6 +30,9 @@
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Salary Policy": "Các khoản phải đóng",
   "label": {
+    "leave_date": "Ngày nghỉ",
+    "leave_assignment": "Buổi nghỉ",
+    "add_assignment": "Thêm buổi nghỉ",
     "id": "ID",
     "new_roll_up": "Check-out",
     "attribute_code": "Mã thuộc tính",
@@ -58,6 +61,7 @@
     "free_date" : "Không có ca làm việc / Ca làm việc chưa xảy ra",
     "fully_absent_roll_call": "Nghỉ cả ngày",
     "roll_up_success":"Điểm danh thành công",
+    "assignment_overtime": "Thời gian tăng ca",
     "absent_roll_Call": "Không điểm danh",
     "assignment_requests": "Các buổi xin nghỉ",
     "handleDate": "Ngày xữ lý",
@@ -307,6 +311,9 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "select_leave_assignment": "Chọn các buổi nghỉ phép",
+    "select_leave_status": "Chọn trạng thái của đề xuất",
+    "select_leave_type": "Chọn loại nghỉ phép",
     "enter_gross_salary": "Nhập mức tổng thu nhập",
     "enter_insurance_salary": "Nhập mức lương bảo hiểm",
     "enter_hours": "Nhập số giờ làm thêm",
@@ -402,6 +409,10 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_select_leave_type": "Bắt buộc chọn loại nghỉ phép",
+    "required_select_leave_date": "Bắt buộc chọn ngày nghỉ phép",
+    "required_select_leave_assignment": "Bắt buộc chọn buổi nghỉ phép",
+    "required_select_leave_status": "Bắt buộc chọn trạng thái của đề xuất",
     "required_select_end_time_repeat": "Bắt buộc chọn thời gian kết thúc lặp",
     "required_enter_bssid": "Bắt buộc nhập BSSID",
     "required_select_periodic_payment": "Bắt buộc chọn hình thức chi trả định kỳ",

@@ -16,6 +16,7 @@ const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const LeaveForm = React.lazy(() => import('src/pages/proposal/LeaveForm'));
+const NewLeaveForm = React.lazy(() => import('src/pages/proposal/NewLeaveForm'));
 
 const Remote = React.lazy(() => import('src/pages/proposal/Proposal'));
 const RemoteForm = React.lazy(() => import('src/pages/proposal/RemoteForm'));
@@ -91,12 +92,15 @@ const routes = [
   { path: ROUTE_PATH.PROFILE_UPDATE, name: ROUTE_NAME.PROFILE_UPDATE, component: EditProfile },
   { path: ROUTE_PATH.PROFILE, name: ROUTE_NAME.PROFILE, component: Profile },
 
+  { path: ROUTE_PATH.NEW_LEAVE_REQUEST, name: ROUTE_NAME.NEW_LEAVE_REQUEST, component: NewLeaveForm },
   { path: ROUTE_PATH.LEAVE_REQUEST, name: ROUTE_NAME.LEAVE_REQUEST, component: LeaveForm },
   { path: ROUTE_PATH.LEAVE, name: ROUTE_NAME.PROPOSAL, component: Proposal },
 
+  { path: ROUTE_PATH.NEW_REMOTE_REQUEST, name: ROUTE_NAME.NEW_REMOTE_REQUEST, component: NewLeaveForm },
   { path: ROUTE_PATH.REMOTE_REQUEST, name: ROUTE_NAME.REMOTE_REQUEST, component: RemoteForm },
   { path: ROUTE_PATH.REMOTE, name: ROUTE_NAME.PROPOSAL, component: Remote },
 
+  { path: ROUTE_PATH.NEW_OVERTIME_REQUEST, name: ROUTE_NAME.NEW_OVERTIME_REQUEST, component: NewLeaveForm },
   { path: ROUTE_PATH.OVERTIME_REQUEST, name: ROUTE_NAME.OVERTIME_REQUEST, component: OvertimeForm },
   { path: ROUTE_PATH.OVERTIME, name: ROUTE_NAME.PROPOSAL, component: Overtime },
 

@@ -76,6 +76,7 @@ const LeaveForm = ({ t, history, match }) => {
     if (requestId) dispatch(fetchLeaveRequest(requestId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log(leaveRequest);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">

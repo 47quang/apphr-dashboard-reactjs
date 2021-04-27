@@ -6,14 +6,16 @@ import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
+import { PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import {} from 'src/stores/actions/rollUp';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import classNames from 'classnames';
 import { COLORS } from 'src/constants/theme';
 import { Cancel, CheckCircle } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRollUpTable } from 'src/stores/actions/assignment';
+import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
+import { Link } from 'react-router-dom';
+import { setTabName } from 'src/stores/actions/profile';
 
 const RollUp = ({ t, location }) => {
   const [state, setState] = useState({
@@ -124,6 +126,8 @@ const RollUp = ({ t, location }) => {
     dispatch(
       fetchRollUpTable(
         {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
           from: state.fromDate,
           to: state.toDate,
         },
@@ -131,6 +135,9 @@ const RollUp = ({ t, location }) => {
       ),
     );
     columnDefOfRollUp.current = changeColDef(state.fromDate);
+    return () => {
+      dispatch(setEmptyAssignments());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
@@ -245,17 +252,22 @@ const RollUp = ({ t, location }) => {
               )}
             </div>
           ) : (
-            <div className="d-flex m-auto align-items-center">
+            <div className="d-flex ml-4 align-items-center">
               <div />
               <Avatar alt="avatar" src={row.avatar} className="mr-3" />
-              <div>
-                <div>
-                  <div>{row.fullname}</div>
-                </div>
+              <Link
+                to={`${ROUTE_PATH.PROFILE}/${row.id}`}
+                onClick={() => {
+                  dispatch(setTabName(PROFILE_TABS.SCHEDULER));
+                }}
+              >
                 <div>
                   <div>{row.code}</div>
                 </div>
-              </div>
+                <div>
+                  <div>{row.fullname}</div>
+                </div>
+              </Link>
             </div>
           )}
         </Table.Cell>

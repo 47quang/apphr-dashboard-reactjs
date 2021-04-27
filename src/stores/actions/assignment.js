@@ -1,4 +1,4 @@
-import { deleteTheLastZ, formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
+import { formatDateTime, formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -122,8 +122,8 @@ export const fetchAssignment = (id) => {
         payload.rollUps =
           payload.rollUps && payload.rollUps.length > 0
             ? payload.rollUps.map((rollUp) => {
-                rollUp.startTime = deleteTheLastZ(rollUp.startTime);
-                rollUp.endTime = deleteTheLastZ(rollUp.endTime);
+                rollUp.startTime = formatDateTime(rollUp.startTime);
+                rollUp.endTime = formatDateTime(rollUp.endTime);
                 return rollUp;
               })
             : [];

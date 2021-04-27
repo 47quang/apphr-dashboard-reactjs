@@ -12,20 +12,20 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     type === 'leave'
       ? [
           { name: 'id', title: t('label.id'), align: 'left', width: '15%', wordWrapEnabled: true },
-          { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },
-          { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '15%', wordWrapEnabled: true },
-          { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
-          { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '20%', wordWrapEnabled: true },
+          { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
+          // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
         ]
       : [
           { name: 'id', title: t('label.proposal_id'), align: 'left', width: '15%', wordWrapEnabled: true },
-          { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+          { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
-          { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-          { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
-          { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
+          { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
+          { name: 'status', title: t('label.status'), align: 'left', width: '25%', wordWrapEnabled: true },
+          // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
         ];
   const dispatch = useDispatch();
   const proposals = useSelector((state) => state.request[type + 'Requests']);
@@ -164,9 +164,9 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           columnDef={columnDefOfProfiles}
           data={proposals}
           route={match.url + '/' + type + '.id='}
-          idxColumnsFilter={[0, 1, 3, 4]}
+          idxColumnsFilter={[0, 1, 4]}
           disableDelete={true}
-          disableCreate={true}
+          // disableCreate={true}
           dateCols={[3]}
           statusCols={[4]}
           paging={paging}
@@ -179,9 +179,9 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           columnDef={columnDefOfProfiles}
           data={proposals}
           route={match.url + '/' + type + '.id='}
-          idxColumnsFilter={[0, 1, 2, 3]}
+          idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
-          disableCreate={true}
+          // disableCreate={true}
           dateCols={[2]}
           statusCols={[3]}
           paging={paging}

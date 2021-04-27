@@ -23,6 +23,7 @@ const RemoteForm = ({ t, history, match }) => {
   const remoteRequest = useSelector((state) => state.request.remoteForm);
   const basicInfo = {};
   const requestId = match?.params?.id;
+  console.log(requestId);
   const fullyButtons = [
     {
       type: 'button',
@@ -161,6 +162,7 @@ const RemoteForm = ({ t, history, match }) => {
                       labelText={t('label.note')}
                       inputClassName={'form-control'}
                       placeholder={t('placeholder.enter_note')}
+                      rows={10}
                     />
                   </div>
                   {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}

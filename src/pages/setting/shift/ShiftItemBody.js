@@ -157,7 +157,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           placeholder={t('placeholder.enter_min_point')}
                         />
                         <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
-                          {t('label.percentage')}
+                          {t('label.hours')}
                         </span>
                       </div>
                       {errors && errors?.minPoint && t(errors && errors?.minPoint) && (
