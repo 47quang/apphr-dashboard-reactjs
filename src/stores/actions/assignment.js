@@ -86,12 +86,13 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                 };
                 a.assignments.forEach((element) => {
                   let dayTh = new Date(element.date).getDay();
-                  let future = isBeforeTypeDate(new Date(), element.date);
+                  let future = isBeforeTypeDate(new Date(), new Date(element.date.replace('Z', '')));
                   x[dayIndex[dayTh]].future = future;
                   x[dayIndex[dayTh]].assignment.push({
                     id: element.id,
                     shiftCode: element.shift.code,
-                    point: element.point,
+                    point: element.point < 1 && element.point !== 0 ? element.point.toFixed(1) : element.point,
+                    status: element.status,
                     startCC: formatTime(element.shift.startCC),
                     endCC: formatTime(element.shift.endCC),
                   });

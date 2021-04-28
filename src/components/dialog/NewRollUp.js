@@ -78,7 +78,7 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
                       onClick: (e) => {
                         props.handleSubmit();
                       },
-                      name: t('label.create_new'),
+                      name: t('label.update'),
                     },
                   ])}
                   <br />

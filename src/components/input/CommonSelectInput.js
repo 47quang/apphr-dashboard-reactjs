@@ -22,6 +22,10 @@ const CommonSelectInput = ({
     acc[val.id] = val;
     return acc;
   }, {});
+  // if (inputID === `assignments.${1}.id`) {
+  //   console.log('isError', isError);
+  //   console.log('errorMessage', errorMessage);
+  // }
   return (
     <div className={containerClassName}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}

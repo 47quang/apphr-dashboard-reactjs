@@ -10,28 +10,22 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import { ROUTE_PATH } from 'src/constants/key';
 import { renderButtons } from 'src/utils/formUtils';
-import { NewLeaveFormSchema } from 'src/schema/formSchema';
+import { NewRemoteFormSchema } from 'src/schema/formSchema';
 import { api } from 'src/stores/apis';
 import { fetchProfiles } from 'src/stores/actions/account';
 import { formatTime } from 'src/utils/datetimeUtils';
-import { createLeaveRequest } from 'src/stores/actions/request';
+import { createRemoteRequest } from 'src/stores/actions/request';
 
-const NewLeaveForm = ({ t, history, match }) => {
+const NewRemoteForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.account.profiles);
 
-  const type = [
-    { id: 'no-pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
-  ];
   const status = [
     { id: 'new', name: 'Đang xữ lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];
-  const leaveRequest = {
-    type: '',
+  const remoteRequest = {
     assignments: [],
     status: '',
     profileId: '',
@@ -39,7 +33,6 @@ const NewLeaveForm = ({ t, history, match }) => {
 
   useEffect(() => {
     dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -49,15 +42,15 @@ const NewLeaveForm = ({ t, history, match }) => {
         <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik
             enableReinitialize
-            initialValues={leaveRequest}
-            validationSchema={NewLeaveFormSchema}
+            initialValues={remoteRequest}
+            validationSchema={NewRemoteFormSchema}
             onSubmit={(values) => {
               let data = { ...values };
               data.assignmentIds = values.assignments && values.assignments.length > 0 ? values.assignments.map((ass) => +ass.id) : [];
               delete data.assignments;
               data.profileId = parseInt(data.profileId);
               //console.log(data);
-              dispatch(createLeaveRequest(data, history, t('message.successful_create')));
+              dispatch(createRemoteRequest(data, history, t('message.successful_create')));
             }}
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
@@ -65,21 +58,6 @@ const NewLeaveForm = ({ t, history, match }) => {
                 <FormHeader text={t('label.leave_info')} />
                 <div className="row">
                   <div className="row col-11 ml-2">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.type ?? ''}
-                      onBlur={handleBlur('type')}
-                      onChange={handleChange('type')}
-                      inputID={'type'}
-                      labelText={t('label.leave_type')}
-                      selectClassName={'form-control'}
-                      placeholder={t('placeholder.select_leave_type')}
-                      isRequiredField
-                      lstSelectOptions={type}
-                      isTouched={touched.type}
-                      isError={touched.type && errors.type}
-                      errorMessage={t(errors.type)}
-                    />
                     <CommonSelectInput
                       containerClassName={'form-group col-lg-12'}
                       value={values.profileId ?? ''}
@@ -237,7 +215,7 @@ const NewLeaveForm = ({ t, history, match }) => {
                     className: `btn btn-primary mr-4`,
 
                     onClick: (e) => {
-                      history.push(ROUTE_PATH.LEAVE);
+                      history.push(ROUTE_PATH.REMOTE);
                     },
                     name: t('label.back'),
                     position: 'left',
@@ -262,4 +240,4 @@ const NewLeaveForm = ({ t, history, match }) => {
   );
 };
 
-export default NewLeaveForm;
+export default NewRemoteForm;

@@ -151,7 +151,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
             ),
           );
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paging.currentPage, paging.pageSize]);
   // const deleteRow = async (rowId) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
   //   dispatch(fetchProfiles());
@@ -167,7 +167,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           idxColumnsFilter={[0, 1, 4]}
           disableDelete={true}
           // disableCreate={true}
-          dateCols={[3]}
           statusCols={[4]}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
@@ -182,7 +181,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
           // disableCreate={true}
-          dateCols={[2]}
           statusCols={[3]}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}

@@ -28,7 +28,6 @@ const CommonTextInput = ({
       return joinClassName([inputClassName, 'is-valid']);
     } else return inputClassName;
   };
-  console.log(errorMessage, isError, isTouched);
   return (
     <div className={containerClassName}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}

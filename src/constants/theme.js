@@ -10,4 +10,5 @@ export const COLORS = {
   SUCCESS: 'green',
   ERROR: 'red',
   WAITING: 'yellow',
+  WHITE: 'white',
 };

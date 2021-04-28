@@ -203,7 +203,7 @@ const SchedulerPage = ({ t, history, match }) => {
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+        {state.isOpen ? <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} /> : <></>}
         <Paper>
           <Scheduler data={assignments} height="auto">
             <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />

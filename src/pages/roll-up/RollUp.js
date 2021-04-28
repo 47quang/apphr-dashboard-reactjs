@@ -1,21 +1,21 @@
 import { CContainer } from '@coreui/react';
+import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
+import { Cancel, CheckCircle } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
 import { PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
-import {} from 'src/stores/actions/rollUp';
-import { Table } from '@devexpress/dx-react-grid-material-ui';
-import classNames from 'classnames';
 import { COLORS } from 'src/constants/theme';
-import { Cancel, CheckCircle } from '@material-ui/icons';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
-import { Link } from 'react-router-dom';
 import { setTabName } from 'src/stores/actions/profile';
+import {} from 'src/stores/actions/rollUp';
 
 const RollUp = ({ t, location }) => {
   const [state, setState] = useState({
@@ -155,8 +155,28 @@ const RollUp = ({ t, location }) => {
     const isDay = value?.assignment;
     const handleClose = () => {
       setCell({ ...cell, isOpen: !cell.isOpen });
+      dispatch(
+        fetchRollUpTable(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+            from: state.fromDate,
+            to: state.toDate,
+          },
+          onTotalChange,
+        ),
+      );
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const statusIcon = (status, point, idx) => {
+      if (status === 'normal') {
+        if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+        else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+      } else if (status === 'leave') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'remote') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'overtime') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+    };
     return (
       <>
         {cell.isOpen ? (
@@ -186,16 +206,16 @@ const RollUp = ({ t, location }) => {
                 ? COLORS.FREE_DATE
                 : value.assignment.length > 0
                 ? value.assignment.every((v) => v.point === 0)
-                  ? COLORS.FULLY_ABSENT_ROLL_CALL
-                  : COLORS.FULLY_ROLL_CALL
+                  ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
+                  : COLORS.WHITE //FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
             verticalAlign: 'text-top',
             padding: '8px',
             borderColor: 'white',
             borderStyle: 'solid',
-            // borderLeftColor: '#D8DBE0',
-            // borderTopColor: '#D8DBE0',
+            borderLeftColor: '#D8DBE0',
+            borderTopColor: '#D8DBE0',
             borderWidth: 'thin',
             ...restProps.style,
           }}
@@ -226,21 +246,21 @@ const RollUp = ({ t, location }) => {
                       }}
                     >
                       {value.future ? (
-                        <div>
-                          <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                        </div>
+                        <>
+                          <div className="col-2 p-0 m-auto"></div>
+                          <div className="col-2  p-0 m-auto"></div>
+                          <div className="col-8  p-0 m-auto">
+                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+                          </div>
+                        </>
                       ) : (
                         <>
                           <div className="col-2 p-0 m-auto">
                             <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
                           </div>
-                          <div className="col-10  p-0 m-auto">
-                            {val.status ? (
-                              <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
-                            ) : (
-                              <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
-                            )}
-                            <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
+                          <div className="col-2  p-0 m-auto">{statusIcon(val.status, val.point, idx)}</div>
+                          <div className="col-8  p-0 m-auto">
+                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
                           </div>
                         </>
                       )}
@@ -274,7 +294,6 @@ const RollUp = ({ t, location }) => {
       </>
     );
   };
-  console.log(data);
   return (
     <CContainer fluid className="c-main px-4 py-2">
       <div className="p-0 d-flex justify-content-center">

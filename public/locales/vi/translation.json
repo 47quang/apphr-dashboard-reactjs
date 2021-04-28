@@ -30,6 +30,11 @@
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Salary Policy": "Các khoản phải đóng",
   "label": {
+    "overtime_date": "Ngày làm thêm giờ",
+    "leave_pay_req": "Nghỉ có lương",
+    "leave_no_pay_req": "Nghỉ không lương",
+    "remote_req": "Đề xuất làm từ xa",
+    "overtime_req": "Đề xuất làm thêm giờ",
     "leave_date": "Ngày nghỉ",
     "leave_assignment": "Buổi nghỉ",
     "add_assignment": "Thêm buổi nghỉ",
@@ -62,7 +67,7 @@
     "fully_absent_roll_call": "Nghỉ cả ngày",
     "roll_up_success":"Điểm danh thành công",
     "assignment_overtime": "Thời gian tăng ca",
-    "absent_roll_Call": "Không điểm danh",
+    "absent_roll_Call": "Vắng",
     "assignment_requests": "Các buổi xin nghỉ",
     "handleDate": "Ngày xữ lý",
     "statistics": "Thống kê",
@@ -311,6 +316,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "select_shift": "Chọn ca làm việc",
     "select_leave_assignment": "Chọn các buổi nghỉ phép",
     "select_leave_status": "Chọn trạng thái của đề xuất",
     "select_leave_type": "Chọn loại nghỉ phép",
@@ -409,6 +415,10 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_select_overtime_date": "Bắt buộc chọn ngày làm thêm giờ",
+    "required_select_assignments": "Bắt buộc chọn buổi nghỉ",
+    "required_select_profile_id": "Bắt buộc chọn nhân sự",
+    "duplicate_assignment": "Buỗi làm việc đã được chọn",
     "required_select_leave_type": "Bắt buộc chọn loại nghỉ phép",
     "required_select_leave_date": "Bắt buộc chọn ngày nghỉ phép",
     "required_select_leave_assignment": "Bắt buộc chọn buổi nghỉ phép",
