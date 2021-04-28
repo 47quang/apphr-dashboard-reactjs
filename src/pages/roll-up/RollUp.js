@@ -177,6 +177,13 @@ const RollUp = ({ t, location }) => {
       else if (status === 'overtime') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
       else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
     };
+    const backgroundColor = (status) => {
+      console.log(status);
+      if (status === 'normal') return '';
+      else if (status === 'overtime') return COLORS.OVERTIME;
+      else if (status === 'remote') return COLORS.REMOTE;
+      else if (status === 'OVERTIME_REMOTE') return COLORS.OVERTIME_REMOTE;
+    };
     return (
       <>
         {cell.isOpen ? (
@@ -227,23 +234,13 @@ const RollUp = ({ t, location }) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames(
-                        'row p-1 m-auto',
-                        isDay
-                          ? value.future
-                            ? 'assignment-free'
-                            : value.assignment.length > 0
-                            ? value.assignment.every((v) => v.point === 0)
-                              ? 'assignment-absent'
-                              : 'assignment-fully'
-                            : 'assignment-free'
-                          : '',
-                      )}
+                      className={classNames('row p-1 m-1')}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
                           setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
                       }}
+                      style={{ backgroundColor: backgroundColor(val.status) }}
                     >
                       {value.future ? (
                         <>

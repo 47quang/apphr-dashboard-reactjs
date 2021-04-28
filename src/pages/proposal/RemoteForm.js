@@ -30,7 +30,7 @@ const RemoteForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.remote);
+        history.push(ROUTE_PATH.REMOTE);
       },
       name: t('label.back'),
       position: 'left',

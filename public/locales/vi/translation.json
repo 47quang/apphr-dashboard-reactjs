@@ -30,6 +30,7 @@
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Salary Policy": "Các khoản phải đóng",
   "label": {
+    "overtime_remote_req": "Làm thêm giờ từ xa",
     "overtime_date": "Ngày làm thêm giờ",
     "leave_pay_req": "Nghỉ có lương",
     "leave_no_pay_req": "Nghỉ không lương",

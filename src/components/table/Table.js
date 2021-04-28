@@ -29,7 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import { AddAlarm, Bluetooth, Cancel, CheckCircle, ExitToApp, Lens } from '@material-ui/icons';
+import { AddAlarm, AttachMoney, Bluetooth, Cancel, CheckCircle, ExitToApp, Lens, MoneyOff } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
@@ -600,12 +600,16 @@ const QTable = (props) => {
           <div>
             <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
               <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
+                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
                 <p className="d-inline">{t('label.remote_req')}</p>
               </div>
               <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
                 <p className="d-inline">{t('label.overtime_req')}</p>
+              </div>
+              <div className="pr-4 mr-4 ml-4">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <p className="d-inline">{t('label.overtime_remote_req')}</p>
               </div>
               <div className="pr-4 mr-4 ml-4">
                 <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
@@ -614,11 +618,11 @@ const QTable = (props) => {
             </div>
             <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
               <div className="px-4 mx-4">
-                <ExitToApp className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
               </div>
               <div className="px-4 mx-4">
-                <ExitToApp className="mr-2" style={{ color: COLORS.ERROR }} />
+                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.leave_no_pay_req')}</p>
               </div>
               <div className="px-4 mx-4">
