@@ -11,6 +11,7 @@ import {
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { IconButton } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -22,9 +23,8 @@ import CalendarForm from 'src/components/calendar/CalendarForm';
 import { PERMISSION } from 'src/constants/key';
 import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { REDUX_STATE } from 'src/stores/states';
-import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
+import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
-import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -131,11 +131,10 @@ const SchedulerPage = ({ t, history, match }) => {
   };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
-    console.log(selectedDate);
-    console.log(values);
     let startDate = selectedDate + 'T' + values.start;
-    let checkValidTask = assignments.filter((x) => isSameBeforeTypeDate(x.startDate, startDate) && isBeforeTypeDate(startDate, x.endDate));
-    if (checkValidTask.length !== 0) {
+    let endDate = selectedDate + 'T' + values.end;
+    let checkValidTask = assignments.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate)); //bug
+    if (!checkValidTask) {
       dispatch({
         type: REDUX_STATE.notification.SET_NOTI,
         payload: { open: true, type: 'error', message: 'Không thể giao việc trong khung giờ này' },
@@ -148,9 +147,9 @@ const SchedulerPage = ({ t, history, match }) => {
       let body = {
         shiftId: +values.shiftId,
         profileId: profileId,
-        date: selectedDate,
+        date: new Date(selectedDate),
+        endTime: new Date(values.endTime),
       };
-      console.log(body);
       dispatch(createAssignment(body, t('message.successful_create')));
       handleClose();
     }
@@ -214,8 +213,8 @@ const SchedulerPage = ({ t, history, match }) => {
             <EditingState />
             <IntegratedEditing />
             <WeekView
-              startDayHour={0}
-              endDayHour={24}
+              startDayHour={6}
+              endDayHour={22}
               cellDuration={60}
               timeTableCellComponent={TimeTableCell}
               dayScaleCellComponent={DayScaleCell}

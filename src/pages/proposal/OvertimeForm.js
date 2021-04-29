@@ -14,10 +14,10 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const OvertimeForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
-  const type = [
-    { id: 'normal_day', name: t('label.normal_day') },
-    { id: 'holiday', name: t('label.holiday') },
-  ];
+  // const type = [
+  //   { id: 'normal_day', name: t('label.normal_day') },
+  //   { id: 'holiday', name: t('label.holiday') },
+  // ];
   const status = [
     { id: 'new', name: 'Đang xữ lý' },
     { id: 'approve', name: 'Đã phê duyệt' },

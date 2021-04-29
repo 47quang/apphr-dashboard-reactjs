@@ -1,17 +1,16 @@
 import { Getter, Plugin, Template, TemplateConnector, TemplatePlaceholder } from '@devexpress/dx-react-core';
 import {
+  CustomPaging,
   DataTypeProvider,
   EditingState,
   IntegratedFiltering,
   IntegratedSelection,
   PagingState,
-  CustomPaging,
   SelectionState,
   SortingState,
 } from '@devexpress/dx-react-grid';
 import { GridExporter } from '@devexpress/dx-react-grid-export';
 import {
-  Toolbar,
   ColumnChooser,
   DragDropProvider,
   ExportPanel,
@@ -22,6 +21,7 @@ import {
   TableColumnVisibility,
   TableFixedColumns,
   TableHeaderRow,
+  Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 // import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
@@ -29,7 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import { AddAlarm, AttachMoney, Bluetooth, Cancel, CheckCircle, ExitToApp, Lens, MoneyOff } from '@material-ui/icons';
+import { AttachMoney, Cancel, CheckCircle, Lens, MoneyOff } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';

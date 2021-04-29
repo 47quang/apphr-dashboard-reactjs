@@ -1,7 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
-import { Cancel, CheckCircle } from '@material-ui/icons';
+import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import classNames from 'classnames';
@@ -172,7 +172,9 @@ const RollUp = ({ t, location }) => {
       if (status === 'normal') {
         if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
         else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
-      } else if (status === 'leave') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      } else if (status === 'leave_pay')
+        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'leave_no-pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
       else if (status === 'remote') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
       else if (status === 'overtime') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
       else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
@@ -183,6 +185,13 @@ const RollUp = ({ t, location }) => {
       else if (status === 'overtime') return COLORS.OVERTIME;
       else if (status === 'remote') return COLORS.REMOTE;
       else if (status === 'OVERTIME_REMOTE') return COLORS.OVERTIME_REMOTE;
+    };
+    const backgroundColorHover = (status) => {
+      console.log(status);
+      if (status === 'normal') return '';
+      else if (status === 'overtime') return 'assignment-overtime';
+      else if (status === 'remote') return 'assignment-remote';
+      else if (status === 'remote_overtime') return 'assignment-overtime';
     };
     return (
       <>
@@ -234,13 +243,13 @@ const RollUp = ({ t, location }) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames('row p-1 m-1')}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
                           setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
                       }}
                       style={{ backgroundColor: backgroundColor(val.status) }}
+                      className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
                     >
                       {value.future ? (
                         <>

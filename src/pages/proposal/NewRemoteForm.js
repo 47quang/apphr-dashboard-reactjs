@@ -93,12 +93,17 @@ const NewRemoteForm = ({ t, history, match }) => {
                                     onBlur={handleBlur(`assignments.${assignmentIdx}.date`)}
                                     onChange={async (e) => {
                                       handleChange(`assignments.${assignmentIdx}.date`)(e);
+                                      let from = new Date(e.target.value);
+                                      from.setHours(0);
+                                      let to = new Date(e.target.value);
+                                      to.setHours(23);
+                                      to.setMinutes(59);
                                       if (values.profileId && e.target.value) {
                                         let assignments = await api.assignment
                                           .getAll({
                                             profileId: values.profileId,
-                                            from: e.target.value,
-                                            to: e.target.value,
+                                            from: from,
+                                            to: to,
                                           })
                                           .then(({ payload }) => {
                                             payload =

@@ -7,7 +7,7 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
 import { parseUTCTime } from 'src/utils/datetimeUtils';
-import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
+import { enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 //TODO: translate
 

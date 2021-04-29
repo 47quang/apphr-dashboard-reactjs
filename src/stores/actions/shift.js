@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
+import { deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';

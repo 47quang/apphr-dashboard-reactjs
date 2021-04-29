@@ -11,7 +11,7 @@ export const COLORS = {
   ERROR: 'red',
   WAITING: 'yellow',
   WHITE: 'white',
-  REMOTE: '#f7f7e8',
+  REMOTE: '#fdffbc',
   OVERTIME: '#edffec',
   OVERTIME_REMOTE: '#d9e4dd',
 };

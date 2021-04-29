@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -9,7 +8,7 @@ import { changeActions } from 'src/stores/actions/header';
 import { createNewShift, resetShift } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
 import { parseUTCTime } from 'src/utils/datetimeUtils';
-import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
+import { enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 
 const NewShift = ({ t, location, history }) => {

@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { deleteTheLastZ, formatDate, formatDateTimeToString, formatTime, getDateInput } from 'src/utils/datetimeUtils';
+import { deleteTheLastZ, formatDate, formatDateTimeToString, parseLocalTime, getDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -45,7 +45,7 @@ export const fetchLeaveRequest = (id) => {
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
-                ass.name = formatTime(ass.shift.startCC) + ' - ' + formatTime(ass.shift.endCC) + ' - ' + formatDate(getDateInput(ass.date));
+                ass.name = parseLocalTime(ass.shift.startCC) + ' - ' + parseLocalTime(ass.shift.endCC) + ' - ' + formatDate(ass.startTime);
                 return ass;
               })
             : [];
@@ -157,7 +157,7 @@ export const fetchRemoteRequest = (id) => {
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
-                ass.name = formatTime(ass.shift.startCC) + ' - ' + formatTime(ass.shift.endCC) + ' - ' + formatDate(getDateInput(ass.date));
+                ass.name = parseLocalTime(ass.shift.startCC) + ' - ' + parseLocalTime(ass.shift.endCC) + ' - ' + formatDate(ass.startTime);
                 return ass;
               })
             : [];
@@ -265,7 +265,7 @@ export const fetchOvertimeRequest = (id) => {
         payload.createdAt = deleteTheLastZ(payload.createdAt);
         payload.handleAt = payload.handleAt ? deleteTheLastZ(payload.handleAt) : '';
         payload.assignment =
-          formatTime(payload.shift.startCC) + ' - ' + formatTime(payload.shift.endCC) + ' - ' + formatDate(getDateInput(payload.date));
+          parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(getDateInput(payload.date));
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })
       .catch((err) => {
