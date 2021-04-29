@@ -317,6 +317,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_working_time_coefficient": "Nhập hệ số giờ làm",
     "select_shift": "Chọn ca làm việc",
     "select_leave_assignment": "Chọn các buổi nghỉ phép",
     "select_leave_status": "Chọn trạng thái của đề xuất",

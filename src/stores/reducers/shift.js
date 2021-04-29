@@ -3,13 +3,15 @@ import { REDUX_STATE } from '../states';
 const initialState = {
   shifts: [],
   shift: {
-    id: 0,
     name: '',
     code: '',
-    coefficient: 0,
+    coefficient: '',
     startCC: '',
     endCC: '',
     branchId: '',
+    flexibleTime: '',
+    expected: '',
+    minPoint: '',
     operateLoop: [],
     isOvertime: true,
   },

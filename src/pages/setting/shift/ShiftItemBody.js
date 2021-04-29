@@ -70,7 +70,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                       onChange={handleChange('startCC')}
                       inputID={'startCC'}
                       labelText={t('label.check_in_time')}
-                      inputType={'Time'}
+                      inputType={'time'}
                       inputClassName={'form-control'}
                       isRequiredField
                       isTouched={touched.startCC}
@@ -101,6 +101,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           type="number"
                           className={'form-control col-11'}
                           rows={5}
+                          onBlur={handleBlur('flexibleTime')}
                           name={`flexibleTime`}
                           onChange={(e) => handleChange(`flexibleTime`)(e)}
                           value={values.flexibleTime}
@@ -110,12 +111,12 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           {t('label.minutes')}
                         </span>
                       </div>
-                      {errors && errors.flexibleTime && t(errors && errors.flexibleTime) ? (
+                      {errors.flexibleTime && touched.flexibleTime && t(errors.flexibleTime) ? (
                         <div>
                           <small className={'text-danger'}>{t(errors.flexibleTime)}</small>
                         </div>
                       ) : (
-                        <div />
+                        <></>
                       )}
                     </div>
                   </div>
@@ -127,6 +128,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           type="number"
                           className={'form-control col-11'}
                           rows={5}
+                          onBlur={handleBlur('expected')}
                           name={`expected`}
                           onChange={(e) => handleChange(`expected`)(e)}
                           value={values.expected}
@@ -136,10 +138,12 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           {t('label.hours')}
                         </span>
                       </div>
-                      {errors && errors?.expected && t(errors && errors?.expected) && (
+                      {errors.expected && touched.expected && t(errors.expected) ? (
                         <div>
-                          <small className={'text-danger'}>{t(errors?.expected)}</small>
+                          <small className={'text-danger'}>{t(errors.expected)}</small>
                         </div>
+                      ) : (
+                        <></>
                       )}
                     </div>
                   </div>
@@ -150,7 +154,8 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                         <input
                           type="number"
                           className={'form-control col-11'}
-                          rows={4}
+                          rows={5}
+                          onBlur={handleBlur('minPoint')}
                           name={`minPoint`}
                           onChange={(e) => handleChange(`minPoint`)(e)}
                           value={values.minPoint}
@@ -160,9 +165,9 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           {t('label.hours')}
                         </span>
                       </div>
-                      {errors && errors?.minPoint && t(errors && errors?.minPoint) && (
+                      {errors.minPoint && touched.minPoint && t(errors.minPoint) && (
                         <div>
-                          <small className={'text-danger'}>{t(errors?.minPoint)}</small>
+                          <small className={'text-danger'}>{t(errors.minPoint)}</small>
                         </div>
                       )}
                     </div>
@@ -179,6 +184,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                       inputType={'number'}
                       inputClassName={'form-control'}
                       isRequiredField
+                      placeholder={t('placeholder.enter_working_time_coefficient')}
                       isTouched={touched.coefficient}
                       isError={errors.coefficient && touched.coefficient}
                       errorMessage={t(errors.coefficient)}

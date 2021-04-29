@@ -84,12 +84,11 @@ const SchedulerPage = ({ t, history, match }) => {
     const classes = useStyles();
     const { startDate } = props;
     const date = moment(startDate);
-
     const onClickEvent = () => {
       if (permissionIds.includes(PERMISSION.CREATE_ASSIGNMENT))
         setState({
           ...state,
-          selectedDate: moment.utc(props.startDate).startOf('day').format().replace('Z', ''),
+          selectedDate: moment(props.startDate).startOf('day').format('YYYY-MM-DD'),
           isOpen: true,
           day: date.day() + 1,
         });
@@ -115,6 +114,7 @@ const SchedulerPage = ({ t, history, match }) => {
         dispatch(setEmptyAssignments());
       };
     }
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.currentDate]);
   const changeCurrentDate = (currentDate) => {
@@ -131,7 +131,9 @@ const SchedulerPage = ({ t, history, match }) => {
   };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
-    let startDate = selectedDate.replace('00:00:00', values.start);
+    console.log(selectedDate);
+    console.log(values);
+    let startDate = selectedDate + 'T' + values.start;
     let checkValidTask = assignments.filter((x) => isSameBeforeTypeDate(x.startDate, startDate) && isBeforeTypeDate(startDate, x.endDate));
     if (checkValidTask.length !== 0) {
       dispatch({
@@ -148,6 +150,7 @@ const SchedulerPage = ({ t, history, match }) => {
         profileId: profileId,
         date: selectedDate,
       };
+      console.log(body);
       dispatch(createAssignment(body, t('message.successful_create')));
       handleClose();
     }
@@ -166,6 +169,7 @@ const SchedulerPage = ({ t, history, match }) => {
       backgroundColor: 'rgba(255,255,255,0.65)',
     },
   });
+
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
     return (
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
@@ -210,8 +214,8 @@ const SchedulerPage = ({ t, history, match }) => {
             <EditingState />
             <IntegratedEditing />
             <WeekView
-              startDayHour={7}
-              endDayHour={22}
+              startDayHour={0}
+              endDayHour={24}
               cellDuration={60}
               timeTableCellComponent={TimeTableCell}
               dayScaleCellComponent={DayScaleCell}

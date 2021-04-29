@@ -1,4 +1,11 @@
-import { formatDateTime, formatTime, isBeforeTypeDate } from 'src/utils/datetimeUtils';
+import {
+  formatDateTime,
+  formatTime,
+  formatDateTimeToString,
+  isBeforeTypeDate,
+  formatDateTimeScheduleToString,
+  parseLocalTime,
+} from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -20,8 +27,8 @@ export const fetchAssignments = (params, onTotalChange) => {
         payload =
           payload && payload.length > 0
             ? payload.map((a) => {
-                a.startDate = a.date.replace('00:00:00.000Z', a.shift.startCC);
-                a.endDate = a.date.replace('00:00:00.000Z', a.shift.endCC);
+                a.startDate = a.startTime;
+                a.endDate = a.endTime;
                 a.title = a.shift.code + ' - ' + a.shift.name;
                 a.location = a.shift.branch.code + ' - ' + a.shift.branch.name;
                 return a;
@@ -85,16 +92,20 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                   },
                 };
                 a.assignments.forEach((element) => {
-                  let dayTh = new Date(element.date).getDay();
-                  let future = isBeforeTypeDate(new Date(), new Date(element.date.replace('Z', '')));
+                  let dayTh = new Date(element.startTime).getDay();
+                  let thisDate = new Date();
+                  thisDate.setHours(23);
+                  thisDate.setMinutes(59);
+                  thisDate.setSeconds(59);
+                  let future = isBeforeTypeDate(thisDate, element.startTime); ///bug
                   x[dayIndex[dayTh]].future = future;
                   x[dayIndex[dayTh]].assignment.push({
                     id: element.id,
                     shiftCode: element.shift.code,
                     point: element.point < 1 && element.point !== 0 ? element.point.toFixed(1) : element.point,
                     status: element.status,
-                    startCC: formatTime(element.shift.startCC),
-                    endCC: formatTime(element.shift.endCC),
+                    startCC: parseLocalTime(element.shift.startCC),
+                    endCC: parseLocalTime(element.shift.endCC),
                   });
                 });
                 data.push(x);
@@ -146,11 +157,11 @@ export const createAssignment = (params, success_msg) => {
     api.assignment
       .post(params)
       .then(({ payload }) => {
-        payload.startDate = payload.date.replace('00:00:00.000Z', payload.shift.startCC);
-        payload.endDate = payload.date.replace('00:00:00.000Z', payload.shift.endCC);
+        payload.startDate = formatDateTimeScheduleToString(payload.startTime);
+        payload.endDate = formatDateTimeScheduleToString(payload.endTime);
         payload.title = payload.shift.code + ' - ' + payload.shift.name;
         payload.location = payload.shift.branch.code + ' - ' + payload.shift.branch.name;
-        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
+        dispatch({ type: REDUX_STATE.assignment.CREATE_ASSIGNMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
