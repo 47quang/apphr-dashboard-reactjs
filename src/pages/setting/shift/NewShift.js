@@ -7,7 +7,8 @@ import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
 import { createNewShift, resetShift } from 'src/stores/actions/shift';
 import { REDUX_STATE } from 'src/stores/states';
-import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
+import { parseUTCTime } from 'src/utils/datetimeUtils';
+import { enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 
 const NewShift = ({ t, location, history }) => {
@@ -38,9 +39,10 @@ const NewShift = ({ t, location, history }) => {
   const submitForm = (values) => {
     let form = values;
     form.operateLoop = enCodeChecked(form.operateLoop);
-    form.startCC = convertTimeWithSecond(form.startCC);
-    form.endCC = convertTimeWithSecond(form.endCC);
+    form.startCC = parseUTCTime(form.startCC);
+    form.endCC = parseUTCTime(form.endCC);
     form.branchId = parseInt(form.branchId);
+    console.log(form);
     dispatch(createNewShift(form, history, t('message.successful_create')));
   };
 
@@ -58,7 +60,6 @@ const NewShift = ({ t, location, history }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
-        console.log(shiftRef.current);
         shiftRef.current.handleSubmit(e);
       },
       name: t('label.create_new'),

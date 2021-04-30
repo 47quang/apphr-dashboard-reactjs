@@ -10,4 +10,8 @@ export const COLORS = {
   SUCCESS: 'green',
   ERROR: 'red',
   WAITING: 'yellow',
+  WHITE: 'white',
+  REMOTE: '#fdffbc',
+  OVERTIME: '#edffec',
+  OVERTIME_REMOTE: '#d9e4dd',
 };

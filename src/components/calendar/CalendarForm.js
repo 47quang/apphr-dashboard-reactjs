@@ -17,6 +17,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
     shiftId: '',
     start: '',
     end: '',
+    endTime: '',
   };
   const shifts = useSelector((state) => state.shift.shifts);
   const dispatch = useDispatch();
@@ -42,7 +43,6 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
             }}
           >
             {(props) => {
-              console.log(props.errors);
               return (
                 <form className="p-0 m-0">
                   <h5>{t('label.new_task')}.</h5>
@@ -54,7 +54,6 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       onBlur={props.handleBlur(`shiftId`)}
                       onChange={(e) => {
                         let selected = +e.target.value;
-                        console.log(selected);
                         if (selected !== 0) {
                           let shift = shifts.filter((x) => x.id === selected)[0];
                           props.setFieldValue('start', shift.startCC);
@@ -110,9 +109,9 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       inputType={'date'}
                       inputClassName={'form-control'}
                       isRequiredField
-                      isTouched={props.touched?.endTime}
-                      isError={props.errors?.endTime && props.touched?.endTime}
-                      errorMessage={t(props.errors?.endTime)}
+                      isTouched={props.touched.endTime}
+                      isError={props.errors.endTime && props.touched.endTime}
+                      errorMessage={t(props.errors.endTime)}
                     />
                   </div>
                   <hr className="mt-1" />

@@ -52,12 +52,15 @@ export const ROUTE_NAME = {
 
   LEAVE: 'Leave',
   LEAVE_REQUEST: 'Leave Request',
+  NEW_LEAVE_REQUEST: 'New Leave Request',
 
   REMOTE: 'Remote',
   REMOTE_REQUEST: 'Remote Request',
+  NEW_REMOTE_REQUEST: 'New Remote Request',
 
   OVERTIME: 'Overtime',
   OVERTIME_REQUEST: 'Overtime Request',
+  NEW_OVERTIME_REQUEST: 'New Overtime Request',
 
   CONTRACT_ATTRIBUTE: 'Contract Attribute',
   NEW_CONTRACT_ATTRIBUTE: 'New Contract Attribute',
@@ -141,12 +144,15 @@ export const ROUTE_PATH = {
 
   LEAVE: '/proposal/leave',
   LEAVE_REQUEST: '/proposal/leave/leave.id=:id',
+  NEW_LEAVE_REQUEST: '/proposal/leave/leave.id=create',
 
   REMOTE: '/proposal/remote',
   REMOTE_REQUEST: '/proposal/remote/remote.id=:id',
+  NEW_REMOTE_REQUEST: '/proposal/remote/remote.id=create',
 
   OVERTIME: '/proposal/overtime',
   OVERTIME_REQUEST: '/proposal/overtime/overtime.id=:id',
+  NEW_OVERTIME_REQUEST: '/proposal/overtime/overtime.id=create',
 
   CONTRACT_ATTRIBUTE: '/setting/attribute',
   CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,

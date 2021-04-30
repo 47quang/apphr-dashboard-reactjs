@@ -1,10 +1,9 @@
 import { CContainer } from '@coreui/react';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteAllowance, fetchAllowances } from 'src/stores/actions/allowance';
-import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 import { deleteAttribute, fetchAttributes } from 'src/stores/actions/attribute';
 

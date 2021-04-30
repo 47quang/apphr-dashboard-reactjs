@@ -69,15 +69,16 @@ button:focus {
   margin-top: 0.5em;
   font-size: small;
 }
-.assignment-absent:hover {
-  background-color: #f9cece;
+
+.assignment-remote:hover {
+  background-color: #e9ef40;
   border-radius: 9px;
 }
-.assignment-free:hover {
+.assignment-overtime:hover {
   background-color: #d6d6d6;
   border-radius: 9px;
 }
-.assignment-fully:hover {
+/* .assignment-remote-overtime:hover {
   background-color: #abf2d3;
   border-radius: 9px;
-}
+} */

@@ -7,6 +7,12 @@ const VALIDATION_STRING = {
 };
 //SETTING
 //General Information
+Yup.addMethod(Yup.array, 'unique', function (message, mapper = (a) => a) {
+  return this.test('unique', message, function (list) {
+    return list.length === new Set(list.map(mapper)).size;
+  });
+});
+
 export const SettingGeneralInfoSchema = Yup.object().shape({
   name: Yup.string().trim().required('validation.required_enter_company_name'),
   phone: Yup.string()
@@ -39,10 +45,7 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_coefficient'),
   expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
-  flexibleTime: Yup.number()
-    .integer('validation.flexible_time_must_be_integer')
-    .min(0, 'validation.flexible_time_must_not_be_negative')
-    .required('validation.required_enter_flexible_time'),
+  flexibleTime: Yup.number().min(0, 'validation.flexible_time_must_not_be_negative').required('validation.required_enter_flexible_time'),
   minPoint: Yup.number()
     .integer('validation.min_point_must_be_integer')
     .min(0, 'validation.min_point_must_not_be_negative')
@@ -50,7 +53,6 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   branchId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
     return value !== '0';
   }),
-
   operateLoop: Yup.array()
     .of(Yup.number())
     .required('validation.required_select_operator_loop')
@@ -523,4 +525,95 @@ export const NewRollUpSchema = Yup.object().shape({
       const { startTime } = this.parent;
       return isBeforeTypeHour(startTime, value);
     }),
+});
+export const NewOvertimeFormSchema = Yup.object().shape({
+  profileId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_profile_id'),
+  date: Yup.date().required('validation.required_select_overtime_date'),
+  shiftId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_shift', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_shift'),
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_status'),
+});
+
+export const NewRemoteFormSchema = Yup.object().shape({
+  profileId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_profile_id'),
+  assignments: Yup.array()
+    .of(
+      Yup.object()
+        .shape({
+          date: Yup.date().required('validation.required_select_leave_date'),
+          id: Yup.string()
+            .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_assignment', function (value) {
+              return value !== '0';
+            })
+            .required('validation.required_select_leave_assignment'),
+        })
+        .test('unique', 'validation.duplicate_assignment', function validateUnique(currentAssignment) {
+          const otherAssignment = this.parent.filter((assignment) => assignment !== currentAssignment);
+
+          const isDuplicate = otherAssignment.some((otherAssignment) => otherAssignment.id === currentAssignment.id);
+
+          return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
+        }),
+    )
+    .min(1, 'validation.required_select_assignments'),
+  // .unique('validation.duplicate_assignment', (a) => a.id),
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_status'),
+});
+
+export const NewLeaveFormSchema = Yup.object().shape({
+  profileId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_profile_id'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_type'),
+  assignments: Yup.array()
+    .of(
+      Yup.object()
+        .shape({
+          date: Yup.date().required('validation.required_select_leave_date'),
+          id: Yup.string()
+            .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_assignment', function (value) {
+              return value !== '0';
+            })
+            .required('validation.required_select_leave_assignment'),
+        })
+        .test('unique', 'validation.duplicate_assignment', function validateUnique(currentAssignment) {
+          const otherAssignment = this.parent.filter((assignment) => assignment !== currentAssignment);
+
+          const isDuplicate = otherAssignment.some((otherAssignment) => otherAssignment.id === currentAssignment.id);
+
+          return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
+        }),
+    )
+    .min(1, 'validation.required_select_assignments'),
+  // .unique('validation.duplicate_assignment', (a) => a.id),
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_leave_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_leave_status'),
 });

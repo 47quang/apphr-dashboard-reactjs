@@ -14,10 +14,10 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const OvertimeForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
-  const type = [
-    { id: 'normal_day', name: t('label.normal_day') },
-    { id: 'holiday', name: t('label.holiday') },
-  ];
+  // const type = [
+  //   { id: 'normal_day', name: t('label.normal_day') },
+  //   { id: 'holiday', name: t('label.holiday') },
+  // ];
   const status = [
     { id: 'new', name: 'Đang xữ lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
@@ -90,18 +90,6 @@ const OvertimeForm = ({ t, history, match }) => {
                 <form autoComplete="off">
                   <FormHeader text={t('label.overtime_info')} />
                   <div className="row">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.type ?? ''}
-                      onBlur={handleBlur('type')}
-                      onChange={handleChange('type')}
-                      inputID={'type'}
-                      labelText={t('label.overtime_type')}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      isDisable
-                      lstSelectOptions={type}
-                    />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.createdAt ?? ''}
@@ -114,32 +102,20 @@ const OvertimeForm = ({ t, history, match }) => {
                       isDisable
                       isRequiredField
                     />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={values.assignment ?? ''}
+                      onBlur={handleBlur('assignment')}
+                      onChange={handleChange('assignment')}
+                      inputID={'assignment'}
+                      labelText={t('label.assignment_overtime')}
+                      inputType={'text'}
+                      inputClassName={'form-control'}
+                      isDisable
+                      isRequiredField
+                    />
                   </div>
-                  <div className="row">
-                    <div className="form-group col-xl-12">
-                      <Label text={t('label.min_work_time')} required />
-                      <div className="input-group">
-                        <input
-                          type="number"
-                          className={'form-control col-11'}
-                          rows={5}
-                          disabled
-                          name={`hours`}
-                          onChange={(e) => handleChange(`hours`)(e)}
-                          value={values.hours ?? ''}
-                          placeholder={t('placeholder.enter_hours')}
-                        />
-                        <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
-                          {t('label.hours')}
-                        </span>
-                      </div>
-                      {errors && errors?.hours && t(errors && errors?.hours) && (
-                        <div>
-                          <small className={'text-danger'}>{t(errors?.hours)}</small>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+
                   <div className="row">
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-12'}
@@ -189,9 +165,10 @@ const OvertimeForm = ({ t, history, match }) => {
                       labelText={t('label.note')}
                       inputClassName={'form-control'}
                       placeholder={t('placeholder.enter_note')}
+                      rows={10}
                     />
                   </div>
-                  {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  <footer>{values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}</footer>
                 </form>
               )}
             </Formik>

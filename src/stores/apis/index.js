@@ -529,7 +529,7 @@ export const api = {
       return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${data.id}`, data);
     },
     approve: (id) => {
-      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${id.id}/approve`);
+      return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${id}/approve`);
     },
     reject: (id) => {
       return client.put(API_PREFIX.API_REMOTE_REQUEST + `/${id}/reject`);

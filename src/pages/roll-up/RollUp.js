@@ -1,19 +1,21 @@
 import { CContainer } from '@coreui/react';
+import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
+import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
-import { ROUTE_PATH } from 'src/constants/key';
-import {} from 'src/stores/actions/rollUp';
-import { Table } from '@devexpress/dx-react-grid-material-ui';
-import classNames from 'classnames';
+import { PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
-import { Cancel, CheckCircle } from '@material-ui/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchRollUpTable } from 'src/stores/actions/assignment';
+import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
+import { setTabName } from 'src/stores/actions/profile';
+import {} from 'src/stores/actions/rollUp';
 
 const RollUp = ({ t, location }) => {
   const [state, setState] = useState({
@@ -124,6 +126,8 @@ const RollUp = ({ t, location }) => {
     dispatch(
       fetchRollUpTable(
         {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
           from: state.fromDate,
           to: state.toDate,
         },
@@ -131,6 +135,9 @@ const RollUp = ({ t, location }) => {
       ),
     );
     columnDefOfRollUp.current = changeColDef(state.fromDate);
+    return () => {
+      dispatch(setEmptyAssignments());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
@@ -148,8 +155,44 @@ const RollUp = ({ t, location }) => {
     const isDay = value?.assignment;
     const handleClose = () => {
       setCell({ ...cell, isOpen: !cell.isOpen });
+      dispatch(
+        fetchRollUpTable(
+          {
+            page: paging.currentPage,
+            perpage: paging.pageSize,
+            from: state.fromDate,
+            to: state.toDate,
+          },
+          onTotalChange,
+        ),
+      );
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const statusIcon = (status, point, idx) => {
+      if (status === 'normal') {
+        if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+        else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+      } else if (status === 'leave_pay')
+        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'leave_no-pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'remote') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'overtime') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+    };
+    const backgroundColor = (status) => {
+      console.log(status);
+      if (status === 'normal') return '';
+      else if (status === 'overtime') return COLORS.OVERTIME;
+      else if (status === 'remote') return COLORS.REMOTE;
+      else if (status === 'OVERTIME_REMOTE') return COLORS.OVERTIME_REMOTE;
+    };
+    const backgroundColorHover = (status) => {
+      console.log(status);
+      if (status === 'normal') return '';
+      else if (status === 'overtime') return 'assignment-overtime';
+      else if (status === 'remote') return 'assignment-remote';
+      else if (status === 'remote_overtime') return 'assignment-overtime';
+    };
     return (
       <>
         {cell.isOpen ? (
@@ -179,16 +222,16 @@ const RollUp = ({ t, location }) => {
                 ? COLORS.FREE_DATE
                 : value.assignment.length > 0
                 ? value.assignment.every((v) => v.point === 0)
-                  ? COLORS.FULLY_ABSENT_ROLL_CALL
-                  : COLORS.FULLY_ROLL_CALL
+                  ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
+                  : COLORS.WHITE //FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
             verticalAlign: 'text-top',
             padding: '8px',
             borderColor: 'white',
             borderStyle: 'solid',
-            // borderLeftColor: '#D8DBE0',
-            // borderTopColor: '#D8DBE0',
+            borderLeftColor: '#D8DBE0',
+            borderTopColor: '#D8DBE0',
             borderWidth: 'thin',
             ...restProps.style,
           }}
@@ -200,40 +243,30 @@ const RollUp = ({ t, location }) => {
                   return (
                     <div
                       key={idx + val.shiftCode}
-                      className={classNames(
-                        'row p-1 m-auto',
-                        isDay
-                          ? value.future
-                            ? 'assignment-free'
-                            : value.assignment.length > 0
-                            ? value.assignment.every((v) => v.point === 0)
-                              ? 'assignment-absent'
-                              : 'assignment-fully'
-                            : 'assignment-free'
-                          : '',
-                      )}
                       role="button"
                       onClick={(e) => {
                         if (dateCol.includes(column.name))
                           setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
                       }}
+                      style={{ backgroundColor: backgroundColor(val.status) }}
+                      className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
                     >
                       {value.future ? (
-                        <div>
-                          <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                        </div>
+                        <>
+                          <div className="col-2 p-0 m-auto"></div>
+                          <div className="col-2  p-0 m-auto"></div>
+                          <div className="col-8  p-0 m-auto">
+                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+                          </div>
+                        </>
                       ) : (
                         <>
                           <div className="col-2 p-0 m-auto">
                             <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
                           </div>
-                          <div className="col-10  p-0 m-auto">
-                            {val.status ? (
-                              <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />
-                            ) : (
-                              <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />
-                            )}
-                            <p className="d-inline"> {val.startCC + ' - ' + val.endCC}</p>
+                          <div className="col-2  p-0 m-auto">{statusIcon(val.status, val.point, idx)}</div>
+                          <div className="col-8  p-0 m-auto">
+                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
                           </div>
                         </>
                       )}
@@ -245,24 +278,28 @@ const RollUp = ({ t, location }) => {
               )}
             </div>
           ) : (
-            <div className="d-flex m-auto align-items-center">
+            <div className="d-flex ml-4 align-items-center">
               <div />
               <Avatar alt="avatar" src={row.avatar} className="mr-3" />
-              <div>
-                <div>
-                  <div>{row.fullname}</div>
-                </div>
+              <Link
+                to={`${ROUTE_PATH.PROFILE}/${row.id}`}
+                onClick={() => {
+                  dispatch(setTabName(PROFILE_TABS.SCHEDULER));
+                }}
+              >
                 <div>
                   <div>{row.code}</div>
                 </div>
-              </div>
+                <div>
+                  <div>{row.fullname}</div>
+                </div>
+              </Link>
             </div>
           )}
         </Table.Cell>
       </>
     );
   };
-  console.log(data);
   return (
     <CContainer fluid className="c-main px-4 py-2">
       <div className="p-0 d-flex justify-content-center">

@@ -11,6 +11,7 @@ import {
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { IconButton } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -22,9 +23,8 @@ import CalendarForm from 'src/components/calendar/CalendarForm';
 import { PERMISSION } from 'src/constants/key';
 import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { REDUX_STATE } from 'src/stores/states';
-import { isBeforeTypeDate, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
+import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
-import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -84,12 +84,11 @@ const SchedulerPage = ({ t, history, match }) => {
     const classes = useStyles();
     const { startDate } = props;
     const date = moment(startDate);
-
     const onClickEvent = () => {
       if (permissionIds.includes(PERMISSION.CREATE_ASSIGNMENT))
         setState({
           ...state,
-          selectedDate: moment.utc(props.startDate).startOf('day').format().replace('Z', ''),
+          selectedDate: moment(props.startDate).startOf('day').format('YYYY-MM-DD'),
           isOpen: true,
           day: date.day() + 1,
         });
@@ -115,6 +114,7 @@ const SchedulerPage = ({ t, history, match }) => {
         dispatch(setEmptyAssignments());
       };
     }
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.currentDate]);
   const changeCurrentDate = (currentDate) => {
@@ -131,9 +131,10 @@ const SchedulerPage = ({ t, history, match }) => {
   };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
-    let startDate = selectedDate.replace('00:00:00', values.start);
-    let checkValidTask = assignments.filter((x) => isSameBeforeTypeDate(x.startDate, startDate) && isBeforeTypeDate(startDate, x.endDate));
-    if (checkValidTask.length !== 0) {
+    let startDate = selectedDate + 'T' + values.start;
+    let endDate = selectedDate + 'T' + values.end;
+    let checkValidTask = assignments.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate)); //bug
+    if (!checkValidTask) {
       dispatch({
         type: REDUX_STATE.notification.SET_NOTI,
         payload: { open: true, type: 'error', message: 'Không thể giao việc trong khung giờ này' },
@@ -146,7 +147,8 @@ const SchedulerPage = ({ t, history, match }) => {
       let body = {
         shiftId: +values.shiftId,
         profileId: profileId,
-        date: selectedDate,
+        date: new Date(selectedDate),
+        endTime: new Date(values.endTime),
       };
       dispatch(createAssignment(body, t('message.successful_create')));
       handleClose();
@@ -166,6 +168,7 @@ const SchedulerPage = ({ t, history, match }) => {
       backgroundColor: 'rgba(255,255,255,0.65)',
     },
   });
+
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
     return (
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
@@ -203,14 +206,14 @@ const SchedulerPage = ({ t, history, match }) => {
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+        {state.isOpen ? <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} /> : <></>}
         <Paper>
           <Scheduler data={assignments} height="auto">
             <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
             <EditingState />
             <IntegratedEditing />
             <WeekView
-              startDayHour={7}
+              startDayHour={6}
               endDayHour={22}
               cellDuration={60}
               timeTableCellComponent={TimeTableCell}

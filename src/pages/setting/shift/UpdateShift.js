@@ -6,7 +6,8 @@ import { SettingShiftInfoSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { changeActions } from 'src/stores/actions/header';
 import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
-import { convertTimeWithSecond, enCodeChecked } from './shiftFunctionUtil';
+import { parseUTCTime } from 'src/utils/datetimeUtils';
+import { enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
 //TODO: translate
 
@@ -36,8 +37,8 @@ const UpdateShift = ({ t, location, match, history }) => {
     let form = values;
 
     form.operateLoop = enCodeChecked(form.operateLoop);
-    form.startCC = convertTimeWithSecond(form.startCC);
-    form.endCC = convertTimeWithSecond(form.endCC);
+    form.startCC = parseUTCTime(form.startCC);
+    form.endCC = parseUTCTime(form.endCC);
     dispatch(updateShift(form, t('message.successful_update')));
   };
 

@@ -1,5 +1,6 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { convertTimeWithoutSecond, deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
+import { deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
+import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
 
@@ -8,6 +9,13 @@ export const fetchShifts = (params, onTotalChange) => {
     api.shift
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((p) => {
+                p = formatDownloadedData(p);
+                return p;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -23,8 +31,8 @@ export const fetchShifts = (params, onTotalChange) => {
 };
 const formatDownloadedData = (payload) => {
   payload.operateLoop = deCodeChecked(payload.operateLoop);
-  payload.startCC = convertTimeWithoutSecond(payload.startCC);
-  payload.endCC = convertTimeWithoutSecond(payload.endCC);
+  payload.startCC = parseLocalTime(payload.startCC);
+  payload.endCC = parseLocalTime(payload.endCC);
   return payload;
 };
 export const fetchShift = (id) => {
@@ -72,7 +80,7 @@ export const updateShift = (data, success_msg) => {
     api.shift
       .put(data)
       .then(({ payload }) => {
-        payload.operateLoop = deCodeChecked(payload.operateLoop);
+        payload = formatDownloadedData(payload);
         dispatch({
           type: REDUX_STATE.shift.SET_SHIFT,
           payload: payload,

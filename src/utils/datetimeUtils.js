@@ -21,7 +21,8 @@ export const isBeforeTypeDate = (startTime, endTime) => {
   return moment(startTime).isBefore(moment(endTime));
 };
 export const formatDate = (value) => {
-  return value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '';
+  let temp = moment(value);
+  return temp.format('DD/MM/YYYY');
 };
 
 export const formatTime = (time) => {
@@ -29,4 +30,38 @@ export const formatTime = (time) => {
   let temp = time.split(':');
   temp.pop();
   return temp.join(':');
+};
+
+export const formatDateTime = (dateTime) => {
+  // 	2021-04-25T08:30:00.000Z
+  dateTime.replace('Z', '');
+  let temp = moment(dateTime).utc().format('HH:mm');
+  return temp;
+};
+
+export const formatDateTimeToString = (dateTime) => {
+  // 	2021-04-25T08:30:00.000Z
+  let temp = moment(dateTime);
+  return temp.format('HH:mm:ss DD/MM/YYYY');
+};
+
+export const formatDateTimeScheduleToString = (dateTime) => {
+  // 	2021-04-25T08:30:00.000Z
+  let temp = moment(dateTime);
+  return temp.format('YYYY-MM-DDTHH:ss:ss');
+};
+
+export const parseUTCTime = (time) => {
+  // 	08:30:00
+  let temp = time.split(':');
+  let date = new Date();
+  date.setHours(+temp[0]);
+  date.setMinutes(+temp[1]);
+  return moment(date).utc().format('HH:mm:00');
+};
+export const parseLocalTime = (time) => {
+  // 	08:30:00
+  let temp = time.split(':');
+  let date = `2021-01-01T${temp[0]}:${temp[1]}:00.000Z`;
+  return moment(date).format('HH:mm');
 };

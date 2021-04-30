@@ -1,17 +1,16 @@
 import { Getter, Plugin, Template, TemplateConnector, TemplatePlaceholder } from '@devexpress/dx-react-core';
 import {
+  CustomPaging,
   DataTypeProvider,
   EditingState,
   IntegratedFiltering,
   IntegratedSelection,
   PagingState,
-  CustomPaging,
   SelectionState,
   SortingState,
 } from '@devexpress/dx-react-grid';
 import { GridExporter } from '@devexpress/dx-react-grid-export';
 import {
-  Toolbar,
   ColumnChooser,
   DragDropProvider,
   ExportPanel,
@@ -22,6 +21,7 @@ import {
   TableColumnVisibility,
   TableFixedColumns,
   TableHeaderRow,
+  Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 // import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
@@ -29,7 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import { Cancel, CheckCircle, Lens } from '@material-ui/icons';
+import { AttachMoney, Cancel, CheckCircle, Lens, MoneyOff } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
@@ -147,10 +147,12 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
             onClick={() => {
               if (isPopUp) {
                 dispatch(
-                  createRollUp({
-                    ...rollUpData,
-                    time: new Date().getTimezoneOffset(),
-                  }),
+                  createRollUp(
+                    {
+                      ...rollUpData,
+                    },
+                    t('label.roll_up_success'),
+                  ),
                 );
               }
             }}
@@ -179,7 +181,7 @@ const Label = ({ column, className, ...props }) => {
         </div>
       ) : (
         <div>
-          <p className="pl-2 ml-5">{column.title}</p>
+          <p className="pl-2 ml-3">{column.title}</p>
         </div>
       )}
     </TableHeaderRow.Cell>
@@ -202,11 +204,18 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
     setOpenWarning(!openWarning);
   };
   const handleConfirmEditing = (values) => {
+    let endTime = values.endTime;
+    endTime = rollUpData.date.replace('00:00:00.000', endTime);
+    console.log(endTime);
     dispatch(
-      updateRollUp({
-        ...values,
-        id: rollUpId,
-      }),
+      updateRollUp(
+        {
+          endTime: new Date(endTime),
+          id: rollUpId,
+        },
+        rollUpData.assignmentId,
+        t('message.successful_update'),
+      ),
     );
     setOpenEditing(!openEditing);
   };
@@ -392,7 +401,7 @@ const QTable = (props) => {
     });
   };
 
-  const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : '');
+  const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1') : '');
 
   const DateTypeProvider = (p) => <DataTypeProvider formatterComponent={DateFormatter} {...p} />;
 
@@ -487,32 +496,7 @@ const QTable = (props) => {
             </div>
           </div>
         )}
-        {route === '/roll-up/' ? (
-          <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
-            <div className="pr-4 mr-4 ml-4">
-              <Lens className="mr-2" style={{ color: COLORS.FULLY_ROLL_CALL }} />
-              <p className="d-inline">{t('label.fully_roll_call')}</p>
-            </div>
-            <div className="pr-4 mr-4 ml-4">
-              <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-              <p className="d-inline">{t('label.free_date')}</p>
-            </div>
-            <div className="pr-4 mr-4 ml-4">
-              <Lens className="mr-2" style={{ color: COLORS.FULLY_ABSENT_ROLL_CALL }} />
-              <p className="d-inline">{t('label.fully_absent_roll_call')}</p>
-            </div>
-            <div className="pr-4 mr-4 ml-4">
-              <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
-              <p className="d-inline">{t('label.roll_up_success')}</p>
-            </div>
-            <div className="pr-0 ml-4">
-              <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
-              <p className="d-inline">{t('label.absent_roll_Call')}</p>
-            </div>
-          </div>
-        ) : (
-          <div />
-        )}
+
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id} style={{ position: 'relative' }}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusColumns} />
@@ -612,6 +596,48 @@ const QTable = (props) => {
           </div>
         )} */}
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
+        {route === '/roll-up/' ? (
+          <div>
+            <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
+              <div className="pr-4 mr-4 ml-4">
+                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
+                <p className="d-inline">{t('label.remote_req')}</p>
+              </div>
+              <div className="pr-4 mr-4 ml-4">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
+                <p className="d-inline">{t('label.overtime_req')}</p>
+              </div>
+              <div className="pr-4 mr-4 ml-4">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <p className="d-inline">{t('label.overtime_remote_req')}</p>
+              </div>
+              <div className="pr-4 mr-4 ml-4">
+                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+                <p className="d-inline">{t('label.free_date')}</p>
+              </div>
+            </div>
+            <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
+              <div className="px-4 mx-4">
+                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.leave_pay_req')}</p>
+              </div>
+              <div className="px-4 mx-4">
+                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="px-4 mx-4">
+                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.roll_up_success')}</p>
+              </div>
+              <div className="pr-2 pl-4 ml-4">
+                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.absent_roll_Call')}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
       </Paper>
     </div>
   );

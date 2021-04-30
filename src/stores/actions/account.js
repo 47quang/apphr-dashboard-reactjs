@@ -190,6 +190,7 @@ export const fetchProfiles = (params) => {
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
+        console.log(err);
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
         else if (err.response?.status >= 400)
