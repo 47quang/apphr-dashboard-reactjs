@@ -15,6 +15,7 @@ const CommonSelectInput = ({
   isTouched,
   placeholder,
   isDisable,
+  isHidden,
   name,
   lstSelectOptions = [],
 }) => {
@@ -27,7 +28,7 @@ const CommonSelectInput = ({
   //   console.log('errorMessage', errorMessage);
   // }
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} hidden={isHidden}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
       <select
         className={selectClassName}

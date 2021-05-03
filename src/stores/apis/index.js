@@ -32,6 +32,7 @@ const API_PREFIX = {
   API_REMOTE_REQUEST: '/api.remote-form',
   API_OVERTIME_REQUEST: '/api.overtime-form',
   API_ATTRIBUTE: '/api.attribute',
+  API_PAYMENT: '/api.payment',
 };
 
 export const api = {
@@ -583,6 +584,25 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_ATTRIBUTE + `/${id}`);
+    },
+  },
+  payment: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_PAYMENT, {
+        params: params,
+      });
+    },
+    post: (data) => {
+      return client.post(API_PREFIX.API_PAYMENT, data);
+    },
+    put: (data) => {
+      return client.put(API_PREFIX.API_PAYMENT + `/${data.id}`, data);
+    },
+    get: (id) => {
+      return client.get(API_PREFIX.API_PAYMENT + `/${id}`);
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_PAYMENT + `/${id}`);
     },
   },
 };

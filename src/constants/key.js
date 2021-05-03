@@ -65,7 +65,10 @@ export const ROUTE_NAME = {
   CONTRACT_ATTRIBUTE: 'Contract Attribute',
   NEW_CONTRACT_ATTRIBUTE: 'New Contract Attribute',
   CONTRACT_ATTRIBUTE_UPDATE: 'Contract Attribute Update',
-  SALARY_POLICY: 'Salary Policy',
+
+  TAX_DETAIL: 'Tax Define',
+  NEW_TAX_DETAIL: 'New Tax Detail',
+  TAX_DETAIL_UPDATE: 'Tax Detail Update',
 };
 
 const ID = '/:id';
@@ -158,7 +161,9 @@ export const ROUTE_PATH = {
   CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,
   CONTRACT_ATTRIBUTE_UPDATE: '/setting/attribute' + ID,
 
-  SALARY_POLICY: '/setting/salaryPolicy',
+  TAX_DETAIL: '/setting/taxDefine',
+  TAX_DETAIL_CREATE: '/setting/taxDefine' + CREATE,
+  TAX_DETAIL_UPDATE: '/setting/taxDefine' + ID,
 };
 
 export const CONTACT_TYPE = {

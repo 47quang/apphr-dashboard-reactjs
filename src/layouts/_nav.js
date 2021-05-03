@@ -160,8 +160,8 @@ const _nav = [
       },
       {
         _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.SALARY_POLICY,
-        to: ROUTE_PATH.SALARY_POLICY,
+        name: ROUTE_NAME.TAX_DETAIL,
+        to: ROUTE_PATH.TAX_DETAIL,
         // permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
       // {

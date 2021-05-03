@@ -44,6 +44,9 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   coefficient: Yup.number()
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_coefficient'),
+  overtimeCoefficient: Yup.number()
+    .min(0, 'validation.working_time_overtime_coefficient_must_not_be_negative')
+    .required('validation.required_enter_working_time_overtime_coefficient'),
   expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
   flexibleTime: Yup.number().min(0, 'validation.flexible_time_must_not_be_negative').required('validation.required_enter_flexible_time'),
   minPoint: Yup.number()
@@ -510,7 +513,7 @@ export const NewTaskSchedule = Yup.object().shape({
     .required('validation.required_select_shift'),
   start: Yup.string(),
   end: Yup.string(),
-  endTime: Yup.string().required('validation.required_select_end_time_repeat'),
+  endTime: Yup.string(),
 });
 
 export const NewRollUpSchema = Yup.object().shape({
@@ -616,4 +619,33 @@ export const NewLeaveFormSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_leave_status'),
+});
+
+export const OtherFeeSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_payment_name').required('validation.required_enter_payment_name'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_payment_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_payment_type'),
+  by: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return ['percent'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_payment_by'),
+    })
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_payment_by', function (value) {
+      return value !== '0';
+    }),
+  value: Yup.number()
+    .min(0, 'validation.payment_value_must_not_be_negative')
+    .when('type', {
+      is: (value) => {
+        return ['percent'].includes(value);
+      },
+      then: Yup.number().max(100, 'validation.payment_value_must_less_than_100'),
+      otherwise: Yup.number().integer('validation.payment_value_must_be_integer'),
+    })
+    .required('validation.required_enter_payment_value'),
 });

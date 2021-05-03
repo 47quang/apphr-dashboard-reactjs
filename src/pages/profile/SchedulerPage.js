@@ -126,9 +126,9 @@ const SchedulerPage = ({ t, history, match }) => {
   const handleClose = () => {
     setState({ ...state, isOpen: false });
   };
-  const toggleVisibility = () => {
-    if (permissionIds.includes(PERMISSION.GET_ASSIGNMENT)) setState({ ...state, visible: !state.visible });
-  };
+  // const toggleVisibility = () => {
+  //   if (permissionIds.includes(PERMISSION.GET_ASSIGNMENT)) setState({ ...state, visible: !state.visible });
+  // };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
     let startDate = selectedDate + 'T' + values.start;
@@ -148,7 +148,7 @@ const SchedulerPage = ({ t, history, match }) => {
         shiftId: +values.shiftId,
         profileId: profileId,
         date: new Date(selectedDate),
-        endTime: new Date(values.endTime),
+        endTime: values.endTime ? new Date(values.endTime) : undefined,
       };
       dispatch(createAssignment(body, t('message.successful_create')));
       handleClose();
@@ -169,7 +169,21 @@ const SchedulerPage = ({ t, history, match }) => {
     },
   });
 
+  const Layout = withStyles(style)(({ children, appointmentData, classes, ...restProps }) => {
+    console.log('Layout', restProps);
+    return (
+      <AppointmentTooltip.Layout
+        {...restProps}
+        className={classes}
+        headerComponent={Header}
+        contentComponent={Content}
+        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+        anchorEl={restProps?.appointmentMeta?.target}
+      />
+    );
+  });
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
+    // console.log('Header', restProps);
     return (
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
         {permissionIds.includes(PERMISSION.DELETE_ASSIGNMENT) ? (
@@ -188,7 +202,9 @@ const SchedulerPage = ({ t, history, match }) => {
       </AppointmentTooltip.Header>
     );
   });
+
   const Content = withStyles(style, { name: 'Content' })(({ children, appointmentData, classes, ...restProps }) => {
+    // console.log('Content', restProps);
     return (
       <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
         <Grid container alignItems="center">
@@ -202,6 +218,23 @@ const SchedulerPage = ({ t, history, match }) => {
       </AppointmentTooltip.Content>
     );
   });
+  const Appointment = ({ children, style, ...restProps }) => {
+    // console.log(restProps);
+    if (restProps?.data?.status?.includes('overtime'))
+      return (
+        <Appointments.Appointment
+          {...restProps}
+          style={{
+            ...style,
+            backgroundColor: '#FFC107',
+            borderRadius: '8px',
+          }}
+        >
+          {children}
+        </Appointments.Appointment>
+      );
+    else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
+  };
 
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
@@ -223,8 +256,8 @@ const SchedulerPage = ({ t, history, match }) => {
             <DateNavigator />
             <TodayButton />
             <EditRecurrenceMenu />
-            <Appointments />
-            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton onVisibilityChange={toggleVisibility} />
+            <Appointments appointmentComponent={Appointment} />
+            <AppointmentTooltip layoutComponent={Layout} showCloseButton />
           </Scheduler>
         </Paper>
       </CContainer>

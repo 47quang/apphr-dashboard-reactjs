@@ -319,7 +319,7 @@ export const approveOvertimeRequest = (id, success_msg) => {
 
 export const rejectOvertimeRequest = (id, success_msg) => {
   return (dispatch, getState) => {
-    api.remoteRequest
+    api.overtimeRequest
       .reject(id)
       .then(({ payload }) => {
         dispatch(fetchOvertimeRequest(id));

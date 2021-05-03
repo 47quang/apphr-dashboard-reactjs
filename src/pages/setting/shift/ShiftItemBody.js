@@ -191,6 +191,23 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                     />
                   </div>
                   <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={values.overtimeCoefficient}
+                      onBlur={handleBlur('overtimeCoefficient')}
+                      onChange={handleChange('overtimeCoefficient')}
+                      inputID={'coefficient'}
+                      labelText={t('label.working_time_overtime_coefficient')}
+                      inputType={'number'}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      placeholder={t('placeholder.enter_working_time_overtime_coefficient')}
+                      isTouched={touched.overtimeCoefficient}
+                      isError={errors.overtimeCoefficient && touched.overtimeCoefficient}
+                      errorMessage={t(errors.overtimeCoefficient)}
+                    />
+                  </div>
+                  <div className="row">
                     <div className="form-group col-xl-12">
                       <Label text={t('label.shift_time')} required={true} />
                       <div role="group" className="d-flex flex-row flex-wrap justify-content-around">

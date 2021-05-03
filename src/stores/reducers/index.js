@@ -23,6 +23,7 @@ import rollUpReducer from './rollUp';
 import assignmentReducer from './assignment';
 import requestReducer from './request';
 import attributeReducer from './attribute';
+import paymentReducer from './payment';
 
 export default combineReducers({
   style: styleReducer,
@@ -49,4 +50,5 @@ export default combineReducers({
   assignment: assignmentReducer,
   request: requestReducer,
   attribute: attributeReducer,
+  payment: paymentReducer,
 });

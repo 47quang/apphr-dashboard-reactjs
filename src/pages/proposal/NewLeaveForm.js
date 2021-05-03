@@ -13,7 +13,7 @@ import { renderButtons } from 'src/utils/formUtils';
 import { NewLeaveFormSchema } from 'src/schema/formSchema';
 import { api } from 'src/stores/apis';
 import { fetchProfiles } from 'src/stores/actions/account';
-import { formatTime } from 'src/utils/datetimeUtils';
+import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { createLeaveRequest } from 'src/stores/actions/request';
 
 const NewLeaveForm = ({ t, history, match }) => {
@@ -135,9 +135,9 @@ const NewLeaveForm = ({ t, history, match }) => {
                                               payload && payload.length > 0
                                                 ? payload.map((ass) => {
                                                     ass.name =
-                                                      formatTime(ass.shift.startCC) +
+                                                      parseLocalTime(ass.shift.startCC) +
                                                       ' - ' +
-                                                      formatTime(ass.shift.endCC) +
+                                                      parseLocalTime(ass.shift.endCC) +
                                                       ' ' +
                                                       ass.shift.branch.name;
                                                     return ass;
