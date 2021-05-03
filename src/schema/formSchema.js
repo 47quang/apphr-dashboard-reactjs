@@ -203,6 +203,10 @@ export const NewContractSchema = Yup.object().shape({
     .positive('validation.required_positive_prob_pay_rates')
     .integer('validation.required_integer_prob_pay_rates')
     .required('validation.required_enter_prob_pay_rates'),
+  standardHours: Yup.number()
+    .positive('validation.required_positive_standard_hours')
+    .integer('validation.required_integer_standard_hours')
+    .required('validation.required_enter_standard_hours'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
@@ -252,7 +256,7 @@ export const NewContractSchema = Yup.object().shape({
       is: (value) => {
         return ['limitation', 'un_limitation'].includes(value);
       },
-      then: Yup.string().required('validation.required_enter_dayOff'),
+      then: Yup.number().required('validation.required_enter_dayOff'),
     }),
   periodicPayment: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {

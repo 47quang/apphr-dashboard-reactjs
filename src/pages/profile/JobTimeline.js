@@ -51,6 +51,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
     signee: '',
     probTime: 0,
     probPayRates: 0,
+    standardHours: 0,
     handleDate: '',
     validDate: '',
     expiredDate: '',
@@ -234,6 +235,31 @@ const JobTimelineInfo = ({ t, history, match }) => {
           </div>
         </div>
         <div className="row">
+          <div className="form-group col-xl-4">
+            <Label text={t('label.standard_hours')} required />
+            <div className="input-group">
+              <input
+                type="number"
+                className={'form-control col-10'}
+                rows={5}
+                onBlur={handleBlur('standardHours')}
+                name={`standardHours`}
+                onChange={(e) => handleChange(`standardHours`)(e)}
+                value={values.standardHours}
+                placeholder={t('placeholder.enter_standard_hours')}
+              />
+              <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
+                {t('label.hours')}
+              </span>
+            </div>
+            {errors.standardHours && touched.standardHours && t(errors.standardHours) ? (
+              <div>
+                <small className={'text-danger'}>{t(errors.standardHours)}</small>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.handleDate ?? ''}
@@ -263,6 +289,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
             isError={errors && errors?.validDate && touched && touched?.validDate}
             errorMessage={t(errors?.validDate)}
           />
+        </div>
+        <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.expiredDate ?? ''}
@@ -278,8 +306,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             isError={errors?.expiredDate}
             errorMessage={t(errors?.expiredDate)}
           />
-        </div>
-        <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.startWork ?? ''}

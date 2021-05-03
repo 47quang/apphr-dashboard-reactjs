@@ -30,6 +30,7 @@
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Tax Define": "Các loại thuế / phí",
   "label": {
+    "standard_hours": "Tổng thời gian tiêu chuẩn",
     "vnd": "VNĐ",
     "payment_by": "Tính trên loại lương",
     "payment_value": "Mức chi trả",
@@ -329,6 +330,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_standard_hours": "Nhập tổng thời gian tiêu chuẩn",
     "enter_payment_value": "Nhập mức chi trả",
     "select_payment_by": "Chọn loại lương",
     "select_payment_type": "Chọn hình thức tính phí",
@@ -434,6 +436,9 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_positive_standard_hours":"Tổng thời gian tiêu chuẩn là một số dương",
+    "required_integer_standard_hours": "Tổng thời gian tiêu chuẩn là một số nguyên",
+    "required_enter_standard_hours": "Bắt buộc nhập tổng thời gian tiêu chuẩn",
     "payment_value_must_be_integer": "Mức chi trả là một số nguyên",
     "payment_value_must_not_be_negative": "Mức chi trả là một số không âm",
     "required_select_payment_by": "Bắt buộc chọn loại lương",
