@@ -16,6 +16,7 @@ import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton'
 import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
+import { fetchAttributes } from 'src/stores/actions/attribute';
 import {
   createContract,
   deleteContract,
@@ -26,9 +27,8 @@ import {
   setEmptyContracts,
   updateContract,
 } from 'src/stores/actions/contract';
-import { fetchDepartments } from 'src/stores/actions/department';
 import { api } from 'src/stores/apis';
-import { getCurrentDate } from 'src/utils/datetimeUtils';
+import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const JobTimelineInfo = ({ t, history, match }) => {
@@ -39,6 +39,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
   // const positions = useSelector((state) => state.position.positions);
   // const departments = useSelector((state) => state.department.departments);
   let wages = useSelector((state) => state.contract.wages);
+  let attributes = useSelector((state) => state.attribute.attributes);
+
   const jobTimelineInfo = {
     contractInfo: useSelector((state) => state.contract.contracts),
   };
@@ -93,6 +95,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
       dispatch(fetchContracts({ profileId: +profileId }));
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
+      dispatch(fetchAttributes());
       return () => {
         dispatch(setEmptyContracts());
       };
@@ -245,7 +248,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 onBlur={handleBlur('standardHours')}
                 name={`standardHours`}
                 onChange={(e) => handleChange(`standardHours`)(e)}
-                value={values.standardHours}
+                value={values.standardHours ?? ''}
                 placeholder={t('placeholder.enter_standard_hours')}
               />
               <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
@@ -325,7 +328,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             value={values?.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
             onChange={(e) => {
-              dispatch(fetchDepartments({ branchId: e.target.value }));
+              // dispatch(fetchDepartments({ branchId: e.target.value }));
               handleChange('branchId')(e);
             }}
             inputID={`branchId`}
@@ -364,9 +367,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
             placeholder={t('placeholder.select_position')}
             lstSelectOptions={positions}
           /> */}
-          {values.attributes &&
-            values.attributes.length > 0 &&
-            values.attributes.map((attribute, attributeIdx) => {
+          {attributes &&
+            attributes.length > 0 &&
+            attributes.map((attribute, attributeIdx) => {
               return (
                 <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
                   {attribute.type !== 'textArea' ? (
@@ -379,7 +382,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       labelText={attribute.name}
                       inputType={attribute.type}
                       inputClassName={'form-control'}
-                      isRequiredField
                       isTouched={getIn(touched, `attributes.${attributeIdx}.value`)}
                       isError={getIn(errors, `attributes.${attributeIdx}.value`) && getIn(touched, `attributes.${attributeIdx}.value`)}
                       errorMessage={t(getIn(errors, `attributes.${attributeIdx}.value`))}
@@ -771,7 +773,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
                         </div>
 
                         <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                          {t('label.from') + props.values.handleDate + t('label.to') + props.values.expiredDate}
+                          {props.values.expiredDate
+                            ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                            : t('label.from') + formatDate(props.values.expiredDate)}
                         </div>
                         <hr className="mt-1" />
                         {props.values.isMinimize && (

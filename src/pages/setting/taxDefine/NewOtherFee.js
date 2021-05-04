@@ -21,8 +21,8 @@ const NewOtherFee = ({ t, location, history }) => {
     let form = values;
     // Call API CREATE
     delete form.id;
-    console.log(form);
-    // dispatch(createPayment(form, history, t('message.successful_create')));
+    if (form.type === 'value') delete form.by;
+    dispatch(createPayment(form, history, t('message.successful_create')));
   };
   const buttons = [
     {

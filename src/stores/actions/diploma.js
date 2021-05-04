@@ -1,4 +1,4 @@
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -51,7 +51,7 @@ export const fetchDiplomaByType = (params) => {
           payload =
             payload &&
             payload.map((dip) => {
-              dip.issuedDate = getDateInput(dip.issuedDate);
+              dip.issuedDate = formatDateInput(dip.issuedDate);
               return dip;
             });
           dispatch({ type: REDUX_STATE.diploma.SET_DEGREES, payload });
@@ -59,8 +59,8 @@ export const fetchDiplomaByType = (params) => {
           payload =
             payload &&
             payload.map((dip) => {
-              dip.issuedDate = getDateInput(dip.issuedDate);
-              dip.expiredDate = getDateInput(dip.expiredDate);
+              dip.issuedDate = formatDateInput(dip.issuedDate);
+              dip.expiredDate = formatDateInput(dip.expiredDate);
               return dip;
             });
           dispatch({ type: REDUX_STATE.diploma.SET_CERTIFICATES, payload });

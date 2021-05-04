@@ -1,4 +1,4 @@
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -9,11 +9,44 @@ export const fetchContracts = (params) => {
       .then(async ({ payload }) => {
         payload =
           payload && payload.length > 0
+            ? payload.map((contract) => {
+                contract.handleDate = formatDateInput(contract.handleDate);
+                contract.expiredDate = formatDateInput(contract.expiredDate);
+                contract.validDate = formatDateInput(contract.validDate);
+                contract.startWork = formatDateInput(contract.startWork);
+                contract['paymentType'] = contract?.wage?.type;
+                contract['wageId'] = contract?.wage?.id;
+                contract['amount'] = contract?.wage?.amount;
+                return contract;
+              })
+            : [];
+
+        dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        console.log('fetchContracts', payload);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
+
+export const fetchWageHistories = (params) => {
+  return (dispatch, getState) => {
+    api.contract
+      .getAll(params)
+      .then(async ({ payload }) => {
+        payload =
+          payload && payload.length > 0
             ? payload.map(async (contract) => {
-                contract.handleDate = getDateInput(contract.handleDate);
-                contract.expiredDate = getDateInput(contract.expiredDate);
-                contract.validDate = getDateInput(contract.validDate);
-                contract.startWork = getDateInput(contract.startWork);
+                contract.handleDate = formatDateInput(contract.handleDate);
+                contract.expiredDate = formatDateInput(contract.expiredDate);
+                contract.validDate = formatDateInput(contract.validDate);
+                contract.startWork = formatDateInput(contract.startWork);
                 contract['paymentType'] = contract?.wage?.type;
                 contract['wageId'] = contract?.wage?.id;
                 contract['amount'] = contract?.wage?.amount;
@@ -22,8 +55,8 @@ export const fetchContracts = (params) => {
                     ? contract.wageHistories.map(async (wage) => {
                         wage.type = wage.wage.type;
                         wage.amount = wage.wage.amount;
-                        wage.startDate = getDateInput(wage.startDate);
-                        wage.expiredDate = getDateInput(wage.expiredDate);
+                        wage.startDate = formatDateInput(wage.startDate);
+                        wage.expiredDate = formatDateInput(wage.expiredDate);
                         wage.wages = await api.wage.getAll({ type: wage?.wage?.type }).then(({ payload }) => payload);
                         return wage;
                       })
@@ -35,7 +68,7 @@ export const fetchContracts = (params) => {
         payload = await Promise.all(payload);
 
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        console.log('fetchContracts', payload);
+        console.log('fetchWageHistories', payload);
       })
       .catch((err) => {
         console.log(err);

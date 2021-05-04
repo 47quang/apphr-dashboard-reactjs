@@ -1,4 +1,4 @@
-import { formatDateTime, formatDateTimeScheduleToString, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
+import { formatDateTimeScheduleToString, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -127,8 +127,8 @@ export const fetchAssignment = (id) => {
         payload.rollUps =
           payload.rollUps && payload.rollUps.length > 0
             ? payload.rollUps.map((rollUp) => {
-                rollUp.startTime = formatDateTime(rollUp.startTime);
-                rollUp.endTime = formatDateTime(rollUp.endTime);
+                rollUp.startTime = parseLocalTime(rollUp.startTime);
+                rollUp.endTime = parseLocalTime(rollUp.endTime);
                 return rollUp;
               })
             : [];

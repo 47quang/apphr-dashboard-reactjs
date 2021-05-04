@@ -1,4 +1,4 @@
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -49,8 +49,8 @@ export const fetchHistoriesWork = (params) => {
         payload =
           payload &&
           payload.map(async (h) => {
-            h.from = getDateInput(h.from);
-            h.to = getDateInput(h.to);
+            h.from = formatDateInput(h.from);
+            h.to = formatDateInput(h.to);
             h['departments'] = await api.department.getAll({ branchId: h.branchId }).then(({ payload }) => payload);
             h['positions'] = await api.position.getAll({ departmentId: h.departmentId }).then(({ payload }) => payload);
             h['branches'] = await api.branch.getAll().then(({ payload }) => payload);
