@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import DayOffPolicy from './DayOffPolicy';
 import HolidayPage from './Holiday';
-import HolidaySetting from './HolidaySetting';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;

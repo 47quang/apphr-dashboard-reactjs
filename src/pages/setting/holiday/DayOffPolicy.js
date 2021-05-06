@@ -12,6 +12,7 @@ const DayOffPolicy = ({ t, location, history }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchPolicy());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

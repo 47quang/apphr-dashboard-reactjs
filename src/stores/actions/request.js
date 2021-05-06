@@ -153,7 +153,8 @@ export const fetchRemoteRequest = (id) => {
       .get(id)
       .then(({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
-        payload.handleAt = payload.handleAt ? formatDateTimeScheduleToString(payload.handleAt) : '';
+        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {

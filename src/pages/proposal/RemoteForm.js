@@ -129,10 +129,10 @@ const RemoteForm = ({ t, history, match }) => {
 
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
-                      value={values.approverId ?? ''}
-                      onBlur={handleBlur('approverId')}
-                      onChange={handleChange('approverId')}
-                      inputID={'approverId'}
+                      value={values.handler ?? ''}
+                      onBlur={handleBlur('handler')}
+                      onChange={handleChange('handler')}
+                      inputID={'handler'}
                       labelText={t('label.handler')}
                       inputType={'text'}
                       inputClassName={'form-control'}
