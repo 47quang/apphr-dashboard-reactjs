@@ -20,6 +20,7 @@ import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
 import RequestStatistic from './RequestStatistic';
 import SchedulerPage from './SchedulerPage';
+import Statistic from './Statistic';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -100,6 +101,7 @@ const ProfileTabs = ({ t, history, match }) => {
             <Tab className="noselect" label={t('label.profile_personal')} {...a11yProps(0)} />
             <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_schedule')} {...a11yProps(1)} />
             <Tab hidden={isCreate} className="noselect" label={t('label.profile_personal_proposal')} {...a11yProps(2)} />
+            <Tab hidden={isCreate} className="noselect" label={t('label.profile_statistic')} {...a11yProps(3)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
@@ -167,25 +169,24 @@ const ProfileTabs = ({ t, history, match }) => {
                 variant="fullWidth"
                 scrollButtons="auto"
               >
-                <Tab hidden={isCreate} className="noselect" label={t('label.request_statistic')} {...a11yProps(0)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.leave_request')} {...a11yProps(1)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.remote_request')} {...a11yProps(2)} />
-                <Tab disabled={isCreate} className="noselect" label={t('label.overtime_request')} {...a11yProps(3)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.leave_request')} {...a11yProps(0)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.remote_request')} {...a11yProps(1)} />
+                <Tab disabled={isCreate} className="noselect" label={t('label.overtime_request')} {...a11yProps(2)} />
               </Tabs>
             </AppBar>
             <TabPanel value={subTabName} index={0} dir={theme.direction}>
-              <RequestStatistic t={t} history={history} match={match} />
-            </TabPanel>
-            <TabPanel value={subTabName} index={1} dir={theme.direction}>
               <Proposal t={t} history={history} match={match} type={'leave'} profileId={match?.params?.id} />
             </TabPanel>
-            <TabPanel value={subTabName} index={2} dir={theme.direction}>
+            <TabPanel value={subTabName} index={1} dir={theme.direction}>
               <Proposal t={t} history={history} match={match} type={'remote'} profileId={match?.params?.id} />
             </TabPanel>
-            <TabPanel value={subTabName} index={3} dir={theme.direction}>
+            <TabPanel value={subTabName} index={2} dir={theme.direction}>
               <Proposal t={t} history={history} match={match} type={'overtime'} profileId={match?.params?.id} />
             </TabPanel>
           </div>
+        </TabPanel>
+        <TabPanel value={tabName} index={3}>
+          <Statistic t={t} />
         </TabPanel>
       </div>
       {/* <div

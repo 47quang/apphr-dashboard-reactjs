@@ -69,7 +69,7 @@ const TaxDefineTabs = ({ t, history, match }) => {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab className="noselect" label={t('label.social_insurance')} {...a11yProps(0)} />
+            <Tab className="noselect" label={t('label.required_insurance')} {...a11yProps(0)} />
             <Tab className="noselect" label={t('label.personal_tax')} {...a11yProps(1)} />
             <Tab className="noselect" label={t('label.other_fee')} {...a11yProps(2)} />
           </Tabs>

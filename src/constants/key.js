@@ -405,6 +405,7 @@ export const PROFILE_TABS = {
   PROFILE: 0,
   SCHEDULER: 1,
   REQUEST: 2,
+  STATISTIC: 3,
 };
 export const PROFILE_SUB_TABS = {
   BASIC_INFO: 0,
@@ -418,10 +419,9 @@ export const PROFILE_SUB_TABS = {
 };
 
 export const REQUEST_TABS = {
-  REQUEST_STATISTIC: 0,
-  LEAVE_REQUEST: 1,
-  REMOTE_REQUEST: 2,
-  OVERTIME_REQUEST: 3,
+  LEAVE_REQUEST: 0,
+  REMOTE_REQUEST: 1,
+  OVERTIME_REQUEST: 2,
 };
 
 export const PAGE_SIZES = {

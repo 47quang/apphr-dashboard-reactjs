@@ -32,6 +32,7 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "profile_statistic": "Thống kê",
     "standard_hours": "Tổng thời gian tiêu chuẩn",
     "vnd": "VNĐ",
     "payment_by": "Tính trên loại lương",
