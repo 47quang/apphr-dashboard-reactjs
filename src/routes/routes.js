@@ -76,6 +76,10 @@ const Attribute = React.lazy(() => import('src/pages/setting/attribute/ContractA
 const NewAttribute = React.lazy(() => import('src/pages/setting/attribute/NewContractAttribute'));
 const EditAttribute = React.lazy(() => import('src/pages/setting/attribute/UpdateContractAttribute'));
 
+const SocialInsurance = React.lazy(() => import('src/pages/setting/taxDefine/TaxDefineTabs'));
+const NewOtherFee = React.lazy(() => import('src/pages/setting/taxDefine/NewOtherFee'));
+const UpdateOtherFee = React.lazy(() => import('src/pages/setting/taxDefine/UpdateOtherFee'));
+
 const routes = [
   { path: ROUTE_PATH.ROOT, exact: true, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
   { path: ROUTE_PATH.DASHBOARD, name: ROUTE_NAME.DASHBOARD, component: Dashboard },
@@ -285,6 +289,15 @@ const routes = [
     component: EditAttribute,
   },
   { path: ROUTE_PATH.CONTRACT_ATTRIBUTE, name: ROUTE_NAME.CONTRACT_ATTRIBUTE, component: Attribute },
+
+  {
+    path: ROUTE_PATH.TAX_DETAIL_CREATE,
+    name: ROUTE_NAME.NEW_TAX_DETAIL,
+    component: NewOtherFee,
+  },
+  { path: ROUTE_PATH.TAX_DETAIL_UPDATE, name: ROUTE_NAME.TAX_DETAIL_UPDATE, component: UpdateOtherFee },
+
+  { path: ROUTE_PATH.TAX_DETAIL, name: ROUTE_NAME.TAX_DETAIL, component: SocialInsurance },
 ];
 
 export default routes;

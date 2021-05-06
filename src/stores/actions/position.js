@@ -46,7 +46,6 @@ export const createPosition = (params, history, success_msg) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-
         history.push(ROUTE_PATH.POSITION + `/${payload.id}`);
       })
       .catch((err) => {

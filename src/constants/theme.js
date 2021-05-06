@@ -12,6 +12,6 @@ export const COLORS = {
   WAITING: 'yellow',
   WHITE: 'white',
   REMOTE: '#fdffbc',
-  OVERTIME: '#edffec',
-  OVERTIME_REMOTE: '#d9e4dd',
+  OVERTIME: '#b1ffad',
+  OVERTIME_REMOTE: '#ffd5cd',
 };

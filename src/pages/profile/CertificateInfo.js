@@ -156,6 +156,8 @@ const CertificateInfo = ({ t, match }) => {
     document.getElementById('addBtn').disabled = false;
   };
   const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
@@ -232,19 +234,6 @@ const CertificateInfo = ({ t, match }) => {
                 {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit }) => (
                   <div key={index} className="shadow bg-white rounded m-4 p-4">
                     {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
-                    <WarningAlertDialog
-                      isVisible={isVisibleDeleteAlert}
-                      title={t('title.confirm')}
-                      warningMessage={t('message.confirm_delete_academic')}
-                      titleConfirm={t('label.agree')}
-                      titleCancel={t('label.cancel')}
-                      handleCancel={(e) => {
-                        handleCloseDeleteAlert();
-                      }}
-                      handleConfirm={(e) => {
-                        dispatch(deleteDiploma(certificate.id, t('message.successful_delete'), handleCloseDeleteAlert));
-                      }}
-                    />
                     {renderButtons(
                       permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
                         ? [
@@ -253,6 +242,7 @@ const CertificateInfo = ({ t, match }) => {
                               className: `btn btn-primary px-4 mx-2`,
                               onClick: (e) => {
                                 setIsVisibleDeleteAlert(true);
+                                setDeleteId(certificate.id);
                               },
                               name: t('label.delete'),
                               position: 'right',
@@ -283,6 +273,23 @@ const CertificateInfo = ({ t, match }) => {
             ))
           ) : (
             <div />
+          )}
+          {isVisibleDeleteAlert ? (
+            <WarningAlertDialog
+              isVisible={isVisibleDeleteAlert}
+              title={t('title.confirm')}
+              warningMessage={t('message.confirm_delete_academic')}
+              titleConfirm={t('label.agree')}
+              titleCancel={t('label.cancel')}
+              handleCancel={(e) => {
+                handleCloseDeleteAlert();
+              }}
+              handleConfirm={(e) => {
+                dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
+              }}
+            />
+          ) : (
+            <></>
           )}
         </div>
       </div>

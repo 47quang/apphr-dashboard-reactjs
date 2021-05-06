@@ -1,4 +1,4 @@
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
@@ -76,10 +76,10 @@ const profileReducer = (state = initialState, { type, payload }) => {
       payload =
         payload && payload.length > 0
           ? payload.map((contract) => {
-              contract.handleDate = getDateInput(contract.handleDate);
-              contract.validDate = getDateInput(contract.validDate);
-              contract.expiredDate = getDateInput(contract.expiredDate);
-              contract.startWork = getDateInput(contract.startWork);
+              contract.handleDate = formatDateInput(contract.handleDate);
+              contract.validDate = formatDateInput(contract.validDate);
+              contract.expiredDate = formatDateInput(contract.expiredDate);
+              contract.startWork = formatDateInput(contract.startWork);
               return contract;
             })
           : [];

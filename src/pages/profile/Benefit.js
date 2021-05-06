@@ -12,9 +12,10 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { PERMISSION } from 'src/constants/key';
 import { BenefitsSchema } from 'src/schema/formSchema';
-import { deleteWageHistory, fetchAllowances, fetchContracts, setEmptyContracts } from 'src/stores/actions/contract';
+import { deleteWageHistory, fetchAllowances, fetchWageHistories, setEmptyContracts } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
+import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const Benefit = ({ t, history, match }) => {
@@ -36,7 +37,7 @@ const Benefit = ({ t, history, match }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
-      dispatch(fetchContracts({ profileId: +profileId }));
+      dispatch(fetchWageHistories({ profileId: +profileId }));
       return () => {
         dispatch(setEmptyContracts());
       };
@@ -147,7 +148,11 @@ const Benefit = ({ t, history, match }) => {
                       >
                         <>
                           <h5>{t('label.payroll')}</h5>
-                          <div style={{ fontSize: 14 }}>{'Từ ' + benefit.startDate + ' đến ' + benefit.expiredDate}</div>
+                          <div style={{ fontSize: 14 }}>
+                            {benefit?.expiredDate
+                              ? t('label.from') + formatDate(benefit.startDate) + t('label.to') + formatDate(benefit.expiredDate)
+                              : t('label.from') + formatDate(benefit.startDate)}
+                          </div>
                           <hr className="mt-1" />
                           <div className="row">
                             <CommonSelectInput
@@ -503,7 +508,9 @@ const Benefit = ({ t, history, match }) => {
                           </div>
 
                           <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                            {t('label.from') + props.values.handleDate + t('label.to') + props.values.expiredDate}
+                            {props.values.expiredDate
+                              ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                              : t('label.from') + formatDate(props.values.handleDate)}
                           </div>
                           <hr className="mt-1" />
                           {props.values.isMinimize && (

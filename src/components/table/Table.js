@@ -149,7 +149,7 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
                 dispatch(
                   createRollUp(
                     {
-                      ...rollUpData,
+                      assignmentId: rollUpData.assignmentId,
                     },
                     t('label.roll_up_success'),
                   ),
@@ -205,7 +205,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   };
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
-    endTime = rollUpData.date.replace('00:00:00.000', endTime);
+    endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
     console.log(endTime);
     dispatch(
       updateRollUp(
@@ -332,6 +332,8 @@ const QTable = (props) => {
     isPopUp,
     rollUpData,
     editColumnWidth,
+    paddingColumnHeader,
+    notPaging,
   } = props;
   const exporterRef = useRef(null);
 
@@ -503,13 +505,17 @@ const QTable = (props) => {
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
-          <PagingState
-            currentPage={state.currentPage}
-            onCurrentPageChange={(newPage) => onCurrentPageChange(newPage)}
-            pageSize={paging.pageSize}
-            onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
-          />
-          <CustomPaging totalCount={paging.total} />
+          {!notPaging ? (
+            <PagingState
+              currentPage={state.currentPage}
+              onCurrentPageChange={(newPage) => onCurrentPageChange(newPage)}
+              pageSize={paging.pageSize}
+              onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
+            />
+          ) : (
+            <></>
+          )}
+          {!notPaging ? <CustomPaging totalCount={paging.total} /> : <></>}
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>
@@ -541,7 +547,7 @@ const QTable = (props) => {
             <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          {disableToolBar ? <TableHeaderRow showSortingControls cellComponent={Label} /> : <TableHeaderRow showSortingControls />}
+          {paddingColumnHeader ? <TableHeaderRow showSortingControls cellComponent={Label} /> : <TableHeaderRow showSortingControls />}
           <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (
@@ -588,7 +594,7 @@ const QTable = (props) => {
             rollUpData={rollUpData}
           />
           {/* <TableSelection showSelectAll /> */}
-          <PagingPanel pageSizes={paging.pageSizes} />
+          {!notPaging ? <PagingPanel pageSizes={paging.pageSizes} /> : <></>}
         </Grid>
         {/* {paging.loading && (
           <div className="loading-shading-mui">

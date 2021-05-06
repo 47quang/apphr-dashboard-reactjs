@@ -3,36 +3,32 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { deleteWage, fetchWages } from 'src/stores/actions/wage';
+import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
+import { fetchPayments } from 'src/stores/actions/payment';
 
-const HolidayPage = ({ t, location, history }) => {
-  // const columnDefOfRequestSetting = [
-  //   { name: 'type', title: t('label.proposal_type') },
-  //   { name: 'amount', title: t('label.maximum_day_amount') },
-  // ];
+const OtherFee = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-
-  const columnDef = [
-    { name: 'code', title: t('label.holiday_code'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'endDate', title: t('label.end_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-    //{ name: 'coefficient', title: 'Hệ số giờ làm' },
-  ];
   const dispatch = useDispatch();
-  const holidays = useSelector((state) => state.holiday.holidays);
+  const payments = useSelector((state) => state.payment.payments);
+  const columnDef = [
+    { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'by', title: t('label.wage_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'value', title: t('label.payment_value'), align: 'left', width: '20%', wordWrapEnabled: true },
+  ];
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
-  const onCurrentPageChange = (pageNumber) =>
+  const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
       ...prevState,
       currentPage: pageNumber,
     }));
+  };
   const onPageSizeChange = (newPageSize) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -43,11 +39,10 @@ const HolidayPage = ({ t, location, history }) => {
       ...prevState,
       total: total,
     }));
-
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_HOLIDAY)) {
+    if (permissionIds.includes(PERMISSION.LIST_WAGE))
       dispatch(
-        fetchHolidays(
+        fetchPayments(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -55,35 +50,35 @@ const HolidayPage = ({ t, location, history }) => {
           onTotalChange,
         ),
       );
-    }
-    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = async (rowId) => {
-    dispatch(deleteHoliday(rowId, t('message.successful_delete')));
-    dispatch(fetchHolidays());
+    dispatch(deleteWage(rowId, t('message.successful_delete')));
+    dispatch(fetchWages());
   };
-  if (permissionIds.includes(PERMISSION.LIST_HOLIDAY))
+  if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <QTable
           t={t}
           columnDef={columnDef}
-          data={holidays}
-          route={ROUTE_PATH.HOLIDAY + '/tab1.id='}
-          idxColumnsFilter={[1]}
-          dateCols={[3, 2]}
+          data={payments}
+          route={ROUTE_PATH.TAX_DETAIL + '/'}
+          idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
-          paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_HOLIDAY)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
+          paging={paging}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_WAGE)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_WAGE)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
         />
       </CContainer>
     );
   else return <Page404 />;
 };
-export default HolidayPage;
+OtherFee.propTypes = {
+  t: PropTypes.func,
+};
+export default OtherFee;

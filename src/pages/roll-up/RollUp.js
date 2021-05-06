@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
-import { PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { setTabName } from 'src/stores/actions/profile';
@@ -28,9 +28,9 @@ const RollUp = ({ t, location }) => {
 
   const [paging, setPaging] = useState({
     currentPage: 0,
-    pageSize: 5,
+    pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
-    pageSizes: [5, 10, 15],
+    pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -169,29 +169,25 @@ const RollUp = ({ t, location }) => {
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const statusIcon = (status, point, idx) => {
-      if (status === 'normal') {
+      if (status === 'leave_pay' || status === 'leave_policy')
+        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+      else if (status === 'leave_no_pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} />;
+      else {
         if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
         else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
-      } else if (status === 'leave_pay')
-        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else if (status === 'leave_no-pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else if (status === 'remote') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else if (status === 'overtime') return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+      }
     };
     const backgroundColor = (status) => {
-      console.log(status);
       if (status === 'normal') return '';
       else if (status === 'overtime') return COLORS.OVERTIME;
       else if (status === 'remote') return COLORS.REMOTE;
-      else if (status === 'OVERTIME_REMOTE') return COLORS.OVERTIME_REMOTE;
+      else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
     };
     const backgroundColorHover = (status) => {
-      console.log(status);
-      if (status === 'normal') return '';
-      else if (status === 'overtime') return 'assignment-overtime';
+      if (status === 'overtime') return 'assignment-overtime';
       else if (status === 'remote') return 'assignment-remote';
-      else if (status === 'remote_overtime') return 'assignment-overtime';
+      else if (status === 'remote_overtime') return 'assignment-remote-overtime';
+      else return 'assignment-normal';
     };
     return (
       <>
@@ -248,17 +244,33 @@ const RollUp = ({ t, location }) => {
                         if (dateCol.includes(column.name))
                           setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
                       }}
-                      style={{ backgroundColor: backgroundColor(val.status) }}
+                      style={{ backgroundColor: backgroundColor(val.status), borderRadius: '9px' }}
                       className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
                     >
                       {value.future ? (
-                        <>
-                          <div className="col-2 p-0 m-auto"></div>
-                          <div className="col-2  p-0 m-auto"></div>
-                          <div className="col-8  p-0 m-auto">
-                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                          </div>
-                        </>
+                        val.status !== 'normal' ? (
+                          <>
+                            <div className="col-2 p-0 m-auto">
+                              {val.status.includes('leave') ? (
+                                <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                            <div className="col-2  p-0 m-auto">{val.status.includes('leave') ? statusIcon(val.status, val.point, idx) : ''}</div>
+                            <div className="col-8  p-0 m-auto">
+                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="col-2 p-0 m-auto"></div>
+                            <div className="col-2  p-0 m-auto"></div>
+                            <div className="col-8  p-0 m-auto">
+                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+                            </div>
+                          </>
+                        )
                       ) : (
                         <>
                           <div className="col-2 p-0 m-auto">
@@ -329,6 +341,7 @@ const RollUp = ({ t, location }) => {
         onCurrentPageChange={onCurrentPageChange}
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
+        paddingColumnHeader={true}
       />
     </CContainer>
   );

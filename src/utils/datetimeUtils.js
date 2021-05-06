@@ -1,9 +1,5 @@
 import moment from 'moment';
 
-export const getDateInput = (dateTime) => (dateTime ? dateTime.split('T')[0] : '');
-export const deleteTheLastZ = (time) => {
-  return time.replace('Z', '');
-};
 export const getCurrentDate = () => {
   let thisDate = new Date();
   let date = thisDate.getDate();
@@ -21,8 +17,15 @@ export const isBeforeTypeDate = (startTime, endTime) => {
   return moment(startTime).isBefore(moment(endTime));
 };
 export const formatDate = (value) => {
+  if (!value) return '';
   let temp = moment(value);
   return temp.format('DD/MM/YYYY');
+};
+
+export const formatDateInput = (value) => {
+  if (!value) return '';
+  let temp = moment(value);
+  return temp.format('YYYY-MM-DD');
 };
 
 export const formatTime = (time) => {
@@ -32,11 +35,9 @@ export const formatTime = (time) => {
   return temp.join(':');
 };
 
-export const formatDateTime = (dateTime) => {
-  // 	2021-04-25T08:30:00.000Z
-  dateTime.replace('Z', '');
-  let temp = moment(dateTime).utc().format('HH:mm');
-  return temp;
+export const getTimeFromDate = (date) => {
+  // 10:00:00
+  return moment(date).format('HH:mm');
 };
 
 export const formatDateTimeToString = (dateTime) => {

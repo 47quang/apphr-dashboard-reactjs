@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { getDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -29,10 +29,10 @@ export const fetchProfile = (id) => {
     api.profile
       .get(id)
       .then(({ payload }) => {
-        payload.dateOfBirth = getDateInput(payload.dateOfBirth);
-        payload.cmndIssuedDate = getDateInput(payload.cmndIssuedDate);
-        payload.passportIssuedDate = getDateInput(payload.passportIssuedDate);
-        payload.passportExpiredDate = getDateInput(payload.passportExpiredDate);
+        payload.dateOfBirth = formatDateInput(payload.dateOfBirth);
+        payload.cmndIssuedDate = formatDateInput(payload.cmndIssuedDate);
+        payload.passportIssuedDate = formatDateInput(payload.passportIssuedDate);
+        payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
 
@@ -111,9 +111,9 @@ export const updateProfile = (data, history, success_msg) => {
     api.profile
       .put(data)
       .then(({ payload }) => {
-        payload.dateOfBirth = getDateInput(payload.dateOfBirth);
-        payload.cmndIssuedDate = getDateInput(payload.cmndIssuedDate);
-        payload.passportIssuedDate = getDateInput(payload.passportIssuedDate);
+        payload.dateOfBirth = formatDateInput(payload.dateOfBirth);
+        payload.cmndIssuedDate = formatDateInput(payload.cmndIssuedDate);
+        payload.passportIssuedDate = formatDateInput(payload.passportIssuedDate);
 
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });

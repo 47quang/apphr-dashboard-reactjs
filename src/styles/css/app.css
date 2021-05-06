@@ -71,14 +71,18 @@ button:focus {
 }
 
 .assignment-remote:hover {
-  background-color: #e9ef40;
-  border-radius: 9px;
+  border-radius: 50px;
+  background-color: #f9ff3e !important;
 }
 .assignment-overtime:hover {
-  background-color: #d6d6d6;
+  background-color: #56f94d !important;
   border-radius: 9px;
 }
-/* .assignment-remote-overtime:hover {
-  background-color: #abf2d3;
+.assignment-remote-overtime:hover {
+  background-color: #f99f8e !important;
   border-radius: 9px;
-} */
+}
+.assignment-normal:hover {
+  background-color: #c1e6e1 !important;
+  border-radius: 9px;
+}

@@ -6,6 +6,7 @@ import {
   DateNavigator,
   EditRecurrenceMenu,
   Scheduler,
+  Resources,
   TodayButton,
   Toolbar,
   WeekView,
@@ -67,6 +68,22 @@ const SchedulerPage = ({ t, history, match }) => {
     day: 0,
   });
 
+  const resources = [
+    {
+      fieldName: 'status',
+      title: 'Status',
+      instances: [
+        // { id: 'normal', text: 'Thường', color: '#64B5F6' },
+        // { id: 'leave_pay', text: 'Nghỉ có trả lương', color: '#64B5F6' },
+        // { id: 'leave_policy', text: 'Nghỉ theo chế độ', color: '#64B5F6' },
+        // { id: 'leave_no_pay', text: 'Nghỉ không trả lương', color: '#64B5F6' },
+        // { id: 'remote', text: 'Làm từ xa', color: '#64B5F6' },
+        { id: 'overtime', text: 'Làm thêm giờ', color: '#FFC107' },
+        { id: 'remote_overtime', text: 'Làm thêm giờ', color: '#FFC107' },
+      ],
+    },
+  ];
+
   const DayScaleCell = (props) => {
     const classes = useStyles();
     const { startDate, today } = props;
@@ -126,9 +143,9 @@ const SchedulerPage = ({ t, history, match }) => {
   const handleClose = () => {
     setState({ ...state, isOpen: false });
   };
-  const toggleVisibility = () => {
-    if (permissionIds.includes(PERMISSION.GET_ASSIGNMENT)) setState({ ...state, visible: !state.visible });
-  };
+  // const toggleVisibility = () => {
+  //   if (permissionIds.includes(PERMISSION.GET_ASSIGNMENT)) setState({ ...state, visible: !state.visible });
+  // };
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
     let startDate = selectedDate + 'T' + values.start;
@@ -148,7 +165,7 @@ const SchedulerPage = ({ t, history, match }) => {
         shiftId: +values.shiftId,
         profileId: profileId,
         date: new Date(selectedDate),
-        endTime: new Date(values.endTime),
+        endTime: values.endTime ? new Date(values.endTime) : undefined,
       };
       dispatch(createAssignment(body, t('message.successful_create')));
       handleClose();
@@ -170,6 +187,7 @@ const SchedulerPage = ({ t, history, match }) => {
   });
 
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
+    // console.log('Header', restProps);
     return (
       <AppointmentTooltip.Header {...restProps} className={classes.header} appointmentData={appointmentData}>
         {permissionIds.includes(PERMISSION.DELETE_ASSIGNMENT) ? (
@@ -188,7 +206,9 @@ const SchedulerPage = ({ t, history, match }) => {
       </AppointmentTooltip.Header>
     );
   });
+
   const Content = withStyles(style, { name: 'Content' })(({ children, appointmentData, classes, ...restProps }) => {
+    // console.log('Content', restProps);
     return (
       <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
         <Grid container alignItems="center">
@@ -202,6 +222,38 @@ const SchedulerPage = ({ t, history, match }) => {
       </AppointmentTooltip.Content>
     );
   });
+  const Appointment = ({ children, style, ...restProps }) => {
+    if (restProps?.data?.status?.includes('overtime'))
+      return (
+        <Appointments.Appointment
+          {...restProps}
+          style={{
+            ...style,
+            backgroundColor: '#FFC107',
+            borderRadius: '8px',
+          }}
+        >
+          {children}
+        </Appointments.Appointment>
+      );
+    else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
+  };
+
+  // const AppointmentContent = ({ ...restProps }) => {
+  //   console.log(restProps);
+  //   return (
+  //     <Appointments.AppointmentContent {...restProps}>
+  //       {
+  //         <div>
+  //           <p>
+  //             <b>{restProps.data.title}</b>
+  //           </p>
+  //           <p>{restProps.data.startDate}</p>
+  //         </div>
+  //       }
+  //     </Appointments.AppointmentContent>
+  //   );
+  // };
 
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
@@ -223,8 +275,9 @@ const SchedulerPage = ({ t, history, match }) => {
             <DateNavigator />
             <TodayButton />
             <EditRecurrenceMenu />
-            <Appointments />
-            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton onVisibilityChange={toggleVisibility} />
+            <Appointments appointmentComponent={Appointment} />
+            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton />
+            <Resources data={resources} />
           </Scheduler>
         </Paper>
       </CContainer>

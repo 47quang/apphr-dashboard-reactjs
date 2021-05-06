@@ -4,8 +4,9 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import DayOffPolicy from './DayOffPolicy';
-import HolidayPage from './Holiday';
+import ObligatoryTax from './ObligatoryTax';
+import OtherFee from './OhterFee';
+import PersonalTax from './PersonalTax';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HolidayTabs = ({ t, history, match }) => {
+const TaxDefineTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
   // const basicInfoRef = createRef();
@@ -68,15 +69,19 @@ const HolidayTabs = ({ t, history, match }) => {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab className="noselect" label={t('label.holiday')} {...a11yProps(0)} />
-            <Tab className="noselect" label={t('label.day_off_policy')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.social_insurance')} {...a11yProps(0)} />
+            <Tab className="noselect" label={t('label.personal_tax')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.other_fee')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
-          <HolidayPage match={match} history={history} t={t} />
+          <ObligatoryTax t={t} />
         </TabPanel>
         <TabPanel value={tabName} index={1}>
-          <DayOffPolicy match={match} t={t} />
+          <PersonalTax t={t} />
+        </TabPanel>
+        <TabPanel value={tabName} index={2}>
+          <OtherFee t={t} match={match} />
         </TabPanel>
       </div>
       {/* <div
@@ -88,4 +93,4 @@ const HolidayTabs = ({ t, history, match }) => {
     </>
   );
 };
-export default HolidayTabs;
+export default TaxDefineTabs;

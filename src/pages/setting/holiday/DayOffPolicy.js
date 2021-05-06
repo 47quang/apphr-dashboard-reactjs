@@ -12,7 +12,8 @@ const DayOffPolicy = ({ t, location, history }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchPolicy());
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -22,7 +23,15 @@ const DayOffPolicy = ({ t, location, history }) => {
             enableReinitialize
             initialValues={policy}
             onSubmit={(values) => {
-              dispatch(updatePolicy(values));
+              dispatch(
+                updatePolicy(
+                  {
+                    key: '__policy',
+                    data: values.content,
+                  },
+                  t('message.successful_update'),
+                ),
+              );
             }}
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (

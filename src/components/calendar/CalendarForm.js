@@ -108,7 +108,6 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       labelText={t('label.end_time_repeat')}
                       inputType={'date'}
                       inputClassName={'form-control'}
-                      isRequiredField
                       isTouched={props.touched.endTime}
                       isError={props.errors.endTime && props.touched.endTime}
                       errorMessage={t(props.errors.endTime)}

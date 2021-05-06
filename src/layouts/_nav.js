@@ -1,16 +1,6 @@
 import { PERMISSION, ROUTE_NAME, ROUTE_PATH } from 'src/constants/key';
 
 const _nav = [
-  {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Education'],
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: ROUTE_NAME.COURSE,
-    to: ROUTE_PATH.COURSE,
-    icon: 'cil-newspaper',
-  },
   // {
   //   _tag: 'CSidebarNavItem',
   //   name: 'Dashboard',
@@ -92,29 +82,37 @@ const _nav = [
     icon: 'cil-puzzle',
     _children: [
       {
-        _tag: 'CSidebarNavItem',
+        _tag: 'CSidebarNavDropdown',
         name: ROUTE_NAME.GENERAL,
-        to: ROUTE_PATH.GENERAL,
-        //permission: Permission.LIST_SHIFT,
+        // route: ROUTE_PATH.GENERAL,
+        _children: [
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.COMPANY_INFO,
+            to: ROUTE_PATH.GENERAL,
+            //permission: Permission.LIST_SHIFT,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.BRANCH,
+            to: ROUTE_PATH.BRANCH,
+            permission: PERMISSION.LIST_BRANCH,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.DEPARTMENT,
+            to: ROUTE_PATH.DEPARTMENT,
+            permission: PERMISSION.LIST_DEPARTMENT,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.POSITION,
+            to: ROUTE_PATH.POSITION,
+            permission: PERMISSION.LIST_POSITION,
+          },
+        ],
       },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.BRANCH,
-        to: ROUTE_PATH.BRANCH,
-        permission: PERMISSION.LIST_BRANCH,
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.DEPARTMENT,
-        to: ROUTE_PATH.DEPARTMENT,
-        permission: PERMISSION.LIST_DEPARTMENT,
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.POSITION,
-        to: ROUTE_PATH.POSITION,
-        permission: PERMISSION.LIST_POSITION,
-      },
+
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.SHIFT,
@@ -134,35 +132,43 @@ const _nav = [
         to: ROUTE_PATH.ROLE,
         permission: PERMISSION.LIST_ROLE,
       },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.WAGE,
-        to: ROUTE_PATH.WAGE,
-        permission: PERMISSION.LIST_SHIFT,
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ALLOWANCE,
-        to: ROUTE_PATH.ALLOWANCE,
-        permission: PERMISSION.LIST_ALLOWANCE,
-      },
+
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.ARTICLE_TYPE,
         to: ROUTE_PATH.ARTICLE_TYPE,
         permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
+
       {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
-        to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.SALARY_POLICY,
-        to: ROUTE_PATH.SALARY_POLICY,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+        _tag: 'CSidebarNavDropdown',
+        name: ROUTE_NAME.CONTRACT,
+        _children: [
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
+            to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
+            // permission: PERMISSION.LIST_TYPE_ARTICLE,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.WAGE,
+            to: ROUTE_PATH.WAGE,
+            permission: PERMISSION.LIST_SHIFT,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.ALLOWANCE,
+            to: ROUTE_PATH.ALLOWANCE,
+            permission: PERMISSION.LIST_ALLOWANCE,
+          },
+          {
+            _tag: 'CSidebarNavItem',
+            name: ROUTE_NAME.TAX_DETAIL,
+            to: ROUTE_PATH.TAX_DETAIL,
+            // permission: PERMISSION.LIST_TYPE_ARTICLE,
+          },
+        ],
       },
       // {
       //   _tag: "CSidebarNavDropdown",

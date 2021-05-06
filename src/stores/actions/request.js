@@ -1,5 +1,5 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { deleteTheLastZ, formatDate, formatDateTimeToString, parseLocalTime, getDateInput } from 'src/utils/datetimeUtils';
+import { formatDate, formatDateTimeScheduleToString, formatDateTimeToString, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -38,8 +38,8 @@ export const fetchLeaveRequest = (id) => {
     api.leaveRequest
       .get(id)
       .then(({ payload }) => {
-        payload.createdAt = deleteTheLastZ(payload.createdAt);
-        payload.handleDate = payload.approverId ? deleteTheLastZ(payload.approver.createdAt) : '';
+        payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
+        payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.fullname = payload.profile.fullname;
         payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
         payload.assignments =
@@ -129,7 +129,7 @@ export const fetchRemoteRequests = (params, onTotalChange) => {
           payload && payload?.length > 0
             ? payload.map((req) => {
                 req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeToString(req.createdAt);
+                req.createdAt = formatDateTimeScheduleToString(req.createdAt);
                 return req;
               })
             : [];
@@ -152,8 +152,9 @@ export const fetchRemoteRequest = (id) => {
     api.remoteRequest
       .get(id)
       .then(({ payload }) => {
-        payload.createdAt = deleteTheLastZ(payload.createdAt);
-        payload.handleAt = payload.handleAt ? deleteTheLastZ(payload.handleAt) : '';
+        payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
+        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -239,7 +240,7 @@ export const fetchOvertimeRequests = (params, onTotalChange) => {
           payload && payload?.length > 0
             ? payload.map((req) => {
                 req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeToString(req.createdAt);
+                req.createdAt = formatDateTimeScheduleToString(req.createdAt);
                 return req;
               })
             : [];
@@ -262,10 +263,11 @@ export const fetchOvertimeRequest = (id) => {
     api.overtimeRequest
       .get(id)
       .then(({ payload }) => {
-        payload.createdAt = deleteTheLastZ(payload.createdAt);
-        payload.handleAt = payload.handleAt ? deleteTheLastZ(payload.handleAt) : '';
+        payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
+        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignment =
-          parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(getDateInput(payload.date));
+          parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(formatDate(payload.date));
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })
       .catch((err) => {
@@ -319,7 +321,7 @@ export const approveOvertimeRequest = (id, success_msg) => {
 
 export const rejectOvertimeRequest = (id, success_msg) => {
   return (dispatch, getState) => {
-    api.remoteRequest
+    api.overtimeRequest
       .reject(id)
       .then(({ payload }) => {
         dispatch(fetchOvertimeRequest(id));

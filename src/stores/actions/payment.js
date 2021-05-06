@@ -1,13 +1,31 @@
+import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-import { fetchAssignment } from './assignment';
 
-export const fetchRollUps = (params) => {
+export const fetchPayments = (params, onTotalChange) => {
+  // const paymentType = {
+  //  gross: 'Lương Gross',
+  //  insurance: 'Lương bảo hiểm',
+  // };
   return (dispatch, getState) => {
-    api.rollUp
+    api.payment
       .getAll(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.payment.SET_PAYMENTS, payload });
+        if (onTotalChange) onTotalChange(total);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const fetchPayment = (id) => {
+  return (dispatch, getState) => {
+    api.payment
+      .get(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.rollUp.GET_ROLLUP, payload });
+        dispatch({ type: REDUX_STATE.payment.SET_PAYMENT, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -20,13 +38,14 @@ export const fetchRollUps = (params) => {
   };
 };
 
-export const createRollUp = (params, success_msg) => {
+export const createPayment = (params, history, success_msg) => {
   return (dispatch, getState) => {
-    api.rollUp
+    api.payment
       .post(params)
       .then(({ payload }) => {
-        dispatch(fetchAssignment(params.assignmentId));
+        dispatch({ type: REDUX_STATE.payment.SET_PAYMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        history.push(ROUTE_PATH.TAX_DETAIL + `/${payload.id}`);
       })
       .catch((err) => {
         console.log(err);
@@ -39,12 +58,12 @@ export const createRollUp = (params, success_msg) => {
   };
 };
 
-export const updateRollUp = (data, assignmentId, success_msg) => {
+export const updatePayment = (data, success_msg) => {
   return (dispatch, getState) => {
-    api.rollUp
+    api.payment
       .put(data)
       .then(({ payload }) => {
-        dispatch(fetchAssignment(assignmentId));
+        dispatch({ type: REDUX_STATE.payment.SET_PAYMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -58,13 +77,12 @@ export const updateRollUp = (data, assignmentId, success_msg) => {
   };
 };
 
-export const deleteRollUp = (id, assignmentId, success_msg) => {
+export const deletePayment = (id, success_msg) => {
   return (dispatch, getState) => {
-    api.rollUp
+    api.payment
       .delete(id)
       .then(({ payload }) => {
-        console.log('assignmentId', assignmentId);
-        dispatch(fetchAssignment(assignmentId));
+        dispatch({ type: REDUX_STATE.payment.DELETE_PAYMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -78,9 +96,9 @@ export const deleteRollUp = (id, assignmentId, success_msg) => {
   };
 };
 
-export const setEmptyArticle = () => {
+export const setEmptyPayment = () => {
   return {
-    type: REDUX_STATE.article.EMPTY_VALUE,
+    type: REDUX_STATE.payment.EMPTY_VALUE,
     payload: [],
   };
 };

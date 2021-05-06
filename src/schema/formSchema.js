@@ -44,6 +44,9 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   coefficient: Yup.number()
     .min(0, 'validation.working_time_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_coefficient'),
+  overtimeCoefficient: Yup.number()
+    .min(0, 'validation.working_time_overtime_coefficient_must_not_be_negative')
+    .required('validation.required_enter_working_time_overtime_coefficient'),
   expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
   flexibleTime: Yup.number().min(0, 'validation.flexible_time_must_not_be_negative').required('validation.required_enter_flexible_time'),
   minPoint: Yup.number()
@@ -200,9 +203,13 @@ export const NewContractSchema = Yup.object().shape({
     .positive('validation.required_positive_prob_pay_rates')
     .integer('validation.required_integer_prob_pay_rates')
     .required('validation.required_enter_prob_pay_rates'),
+  standardHours: Yup.number()
+    .positive('validation.required_positive_standard_hours')
+    .integer('validation.required_integer_standard_hours')
+    .required('validation.required_enter_standard_hours'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
-  startWork: Yup.string().required('Bắt buộc chọn ngày bắt đầu làm việc'),
+  startWork: Yup.string().required('validation.required_select_start_work'),
   expiredDate: Yup.string()
     .when('type', {
       is: (value) => {
@@ -223,9 +230,9 @@ export const NewContractSchema = Yup.object().shape({
       return isSameBeforeTypeDate(startWork, value);
     }),
   paymentType: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
-      return value !== '0';
-    })
+    // .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+    //   return value !== '0';
+    // })
     .when('type', {
       is: (value) => {
         return ['limitation', 'un_limitation'].includes(value);
@@ -249,7 +256,7 @@ export const NewContractSchema = Yup.object().shape({
       is: (value) => {
         return ['limitation', 'un_limitation'].includes(value);
       },
-      then: Yup.string().required('validation.required_enter_dayOff'),
+      then: Yup.number().required('validation.required_enter_dayOff'),
     }),
   periodicPayment: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
@@ -261,7 +268,7 @@ export const NewContractSchema = Yup.object().shape({
       },
       then: Yup.string().required('validation.required_select_periodic_payment'),
     }),
-  probPay: Yup.number()
+  seasonWage: Yup.number()
     .positive('validation.required_positive_prob_pay')
     .integer('validation.required_integer_prob_pay')
     .when('type', {
@@ -271,13 +278,21 @@ export const NewContractSchema = Yup.object().shape({
       then: Yup.number().required('validation.required_enter_prob_pay'),
     }),
   allowances: Yup.array().of(
-    Yup.object().shape({
-      id: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_allowance'),
-    }),
+    Yup.object()
+      .shape({
+        id: Yup.string()
+          .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+            return value !== '0';
+          })
+          .required('validation.required_select_allowance'),
+      })
+      .test('unique', 'validation.duplicate_allowance', function validateUnique(currentAllowance) {
+        const otherAllowance = this.parent.filter((allowance) => allowance !== currentAllowance);
+
+        const isDuplicate = otherAllowance.some((otherAllowance) => otherAllowance.id === currentAllowance.id);
+
+        return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
+      }),
   ),
 });
 
@@ -486,13 +501,21 @@ export const BenefitsSchema = Yup.object().shape({
         .required('validation.required_select_contract_wage'),
 
       allowances: Yup.array().of(
-        Yup.object().shape({
-          id: Yup.string()
-            .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
-              return value !== '0';
-            })
-            .required('validation.required_select_allowance'),
-        }),
+        Yup.object()
+          .shape({
+            id: Yup.string()
+              .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+                return value !== '0';
+              })
+              .required('validation.required_select_allowance'),
+          })
+          .test('unique', 'validation.duplicate_allowance', function validateUnique(currentAllowance) {
+            const otherAllowance = this.parent.filter((allowance) => allowance !== currentAllowance);
+
+            const isDuplicate = otherAllowance.some((otherAllowance) => otherAllowance.id === currentAllowance.id);
+
+            return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
+          }),
       ),
       startDate: Yup.string().required('validation.required_select_contract_handle_date'),
       expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
@@ -510,7 +533,7 @@ export const NewTaskSchedule = Yup.object().shape({
     .required('validation.required_select_shift'),
   start: Yup.string(),
   end: Yup.string(),
-  endTime: Yup.string().required('validation.required_select_end_time_repeat'),
+  endTime: Yup.string(),
 });
 
 export const NewRollUpSchema = Yup.object().shape({
@@ -616,4 +639,33 @@ export const NewLeaveFormSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_leave_status'),
+});
+
+export const OtherFeeSchema = Yup.object().shape({
+  name: Yup.string().min(1, 'validation.required_enter_payment_name').required('validation.required_enter_payment_name'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_payment_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_payment_type'),
+  by: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return ['percent'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_payment_by'),
+    })
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_payment_by', function (value) {
+      return value !== '0';
+    }),
+  value: Yup.number()
+    .min(0, 'validation.payment_value_must_not_be_negative')
+    .when('type', {
+      is: (value) => {
+        return ['percent'].includes(value);
+      },
+      then: Yup.number().max(100, 'validation.payment_value_must_less_than_100'),
+      otherwise: Yup.number().integer('validation.payment_value_must_be_integer'),
+    })
+    .required('validation.required_enter_payment_value'),
 });

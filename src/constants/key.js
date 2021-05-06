@@ -18,6 +18,7 @@ export const ROUTE_NAME = {
   REPORT: 'Report',
   SETTING: 'Setting',
   GENERAL: 'General',
+  COMPANY_INFO: 'Company Info',
   POSITION: 'Position',
   NEW_POSITION: 'New Position',
   POSITION_UPDATE: 'Position Update',
@@ -65,7 +66,12 @@ export const ROUTE_NAME = {
   CONTRACT_ATTRIBUTE: 'Contract Attribute',
   NEW_CONTRACT_ATTRIBUTE: 'New Contract Attribute',
   CONTRACT_ATTRIBUTE_UPDATE: 'Contract Attribute Update',
-  SALARY_POLICY: 'Salary Policy',
+
+  TAX_DETAIL: 'Tax Define',
+  NEW_TAX_DETAIL: 'New Tax Detail',
+  TAX_DETAIL_UPDATE: 'Tax Detail Update',
+
+  CONTRACT: 'Contract Settings',
 };
 
 const ID = '/:id';
@@ -158,7 +164,9 @@ export const ROUTE_PATH = {
   CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,
   CONTRACT_ATTRIBUTE_UPDATE: '/setting/attribute' + ID,
 
-  SALARY_POLICY: '/setting/salaryPolicy',
+  TAX_DETAIL: '/setting/taxDefine',
+  TAX_DETAIL_CREATE: '/setting/taxDefine' + CREATE,
+  TAX_DETAIL_UPDATE: '/setting/taxDefine' + ID,
 };
 
 export const CONTACT_TYPE = {
@@ -414,4 +422,10 @@ export const REQUEST_TABS = {
   LEAVE_REQUEST: 1,
   REMOTE_REQUEST: 2,
   OVERTIME_REQUEST: 3,
+};
+
+export const PAGE_SIZES = {
+  LEVEL_1: 10,
+  LEVEL_2: 20,
+  LEVEL_3: 50,
 };
