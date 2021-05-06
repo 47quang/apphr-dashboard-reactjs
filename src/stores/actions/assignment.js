@@ -1,4 +1,4 @@
-import { formatDateTimeScheduleToString, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
+import { formatDateTimeScheduleToString, getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -95,7 +95,7 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                   x[dayIndex[dayTh]].assignment.push({
                     id: element.id,
                     shiftCode: element.shift.code,
-                    point: element.point < 1 && element.point !== 0 ? element.point.toFixed(1) : element.point,
+                    point: element.point < 0.95 && element.point !== 0 ? element.point.toFixed(1) : element.point === 0 ? 0 : 1,
                     status: element.status,
                     startCC: parseLocalTime(element.shift.startCC),
                     endCC: parseLocalTime(element.shift.endCC),
@@ -127,8 +127,8 @@ export const fetchAssignment = (id) => {
         payload.rollUps =
           payload.rollUps && payload.rollUps.length > 0
             ? payload.rollUps.map((rollUp) => {
-                rollUp.startTime = parseLocalTime(rollUp.startTime);
-                rollUp.endTime = parseLocalTime(rollUp.endTime);
+                rollUp.startTime = getTimeFromDate(rollUp.startTime);
+                rollUp.endTime = getTimeFromDate(rollUp.endTime);
                 return rollUp;
               })
             : [];

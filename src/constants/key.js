@@ -18,6 +18,7 @@ export const ROUTE_NAME = {
   REPORT: 'Report',
   SETTING: 'Setting',
   GENERAL: 'General',
+  COMPANY_INFO: 'Company Info',
   POSITION: 'Position',
   NEW_POSITION: 'New Position',
   POSITION_UPDATE: 'Position Update',
@@ -69,6 +70,8 @@ export const ROUTE_NAME = {
   TAX_DETAIL: 'Tax Define',
   NEW_TAX_DETAIL: 'New Tax Detail',
   TAX_DETAIL_UPDATE: 'Tax Detail Update',
+
+  CONTRACT: 'Contract Settings',
 };
 
 const ID = '/:id';
@@ -419,4 +422,10 @@ export const REQUEST_TABS = {
   LEAVE_REQUEST: 1,
   REMOTE_REQUEST: 2,
   OVERTIME_REQUEST: 3,
+};
+
+export const PAGE_SIZES = {
+  LEVEL_1: 10,
+  LEVEL_2: 20,
+  LEVEL_3: 50,
 };

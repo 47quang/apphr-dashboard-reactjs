@@ -29,6 +29,8 @@
   "Article Type": "Loại thông báo",
   "Contract Attribute": "Thuộc tính hợp đồng",
   "Tax Define": "Các loại thuế / phí",
+  "Contract Settings": "Cấu hình hợp đồng",
+  "Company Info": "Thông tin doanh nghiệp",
   "label": {
     "standard_hours": "Tổng thời gian tiêu chuẩn",
     "vnd": "VNĐ",
@@ -330,6 +332,8 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_prob_time": "Nhập thời gian thử việc",
+    "enter_prob_payrate": "Nhập mức chi trả thử việc",
     "enter_standard_hours": "Nhập tổng thời gian tiêu chuẩn",
     "enter_payment_value": "Nhập mức chi trả",
     "select_payment_by": "Chọn loại lương",
@@ -436,6 +440,7 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_select_start_work": "Bắt buộc chọn ngày bắt đầu làm việc",
     "required_positive_standard_hours":"Tổng thời gian tiêu chuẩn là một số dương",
     "required_integer_standard_hours": "Tổng thời gian tiêu chuẩn là một số nguyên",
     "required_enter_standard_hours": "Bắt buộc nhập tổng thời gian tiêu chuẩn",
@@ -450,6 +455,7 @@
     "required_select_assignments": "Bắt buộc chọn buổi nghỉ",
     "required_select_profile_id": "Bắt buộc chọn nhân sự",
     "duplicate_assignment": "Buỗi làm việc đã được chọn",
+    "duplicate_allowance": "Trợ cấp đã được chọn",
     "required_select_leave_type": "Bắt buộc chọn loại nghỉ phép",
     "required_select_leave_date": "Bắt buộc chọn ngày nghỉ phép",
     "required_select_leave_assignment": "Bắt buộc chọn buổi nghỉ phép",
@@ -463,10 +469,10 @@
     "required_select_shift": "Bắt buộc chọn ca làm việc",
     "min_length_phone_number": "Số điện thoại tối thiểu 8 chữ số",
     "max_length_phone_number": "Số điện thoại tối đa 13 chữ số",
-    "expired_date_must_be_greater_than_handle_date": "Ngày hết hạn phải lớn hơn ngày ký",
-    "expired_date_must_be_greater_than_valid_date": "Ngày hết hạn phải lớn hơn ngày có hiệu lực",
-    "expired_date_must_be_greater_than_start_work": "Ngày hết hạn phải lớn hơn ngày bắt đầu làm việc",
-    "expired_date_must_be_great_issued_start_date": "Ngày hết hạn phải lớn hơn ngày cấp",
+    "expired_date_must_be_greater_than_handle_date": "Ngày kết thúc phải lớn hơn ngày ký",
+    "expired_date_must_be_greater_than_valid_date": "Ngày kết thúc phải lớn hơn ngày có hiệu lực",
+    "expired_date_must_be_greater_than_start_work": "Ngày kết thúc phải lớn hơn ngày bắt đầu làm việc",
+    "expired_date_must_be_great_issued_start_date": "Ngày kết thúc phải lớn hơn ngày cấp",
     "expired_date_must_be_great_than_start_date": "Ngày bắt đầu phải lớn hơn ngày kết thúc",
     "required_enter_field_name": "Bắt buộc nhập tên trường",
     "required_select_field_type": "Bắt buộc chọn kiểu của trường",

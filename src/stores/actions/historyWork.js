@@ -7,7 +7,9 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
     api.historyWork
       .post(data)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.historyWork.SET_HISTORY, payload });
+        payload.from = formatDateInput(payload.from);
+        payload.to = formatDateInput(payload.to);
+        dispatch({ type: REDUX_STATE.historyWork.CREATE_HISTORY, payload });
         handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -27,7 +29,9 @@ export const updateHistoryWork = (data, success_msg) => {
     api.historyWork
       .put(data)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.historyWork.SET_HISTORY, payload });
+        payload.from = formatDateInput(payload.from);
+        payload.to = formatDateInput(payload.to);
+        dispatch({ type: REDUX_STATE.historyWork.UPDATE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((error) => {
@@ -56,8 +60,7 @@ export const fetchHistoriesWork = (params) => {
             h['branches'] = await api.branch.getAll().then(({ payload }) => payload);
             return h;
           });
-        payload = await Promise.all(payload).then((values) => values);
-
+        payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
       })
       .catch((error) => {
@@ -127,5 +130,12 @@ export const onChangePosition = (params, index) => {
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
+  };
+};
+
+export const setEmptyHistories = () => {
+  return {
+    type: REDUX_STATE.historyWork.EMPTY_VALUE,
+    payload: [],
   };
 };

@@ -510,7 +510,7 @@ const Benefit = ({ t, history, match }) => {
                           <div style={{ fontSize: 14, paddingLeft: 82 }}>
                             {props.values.expiredDate
                               ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                              : t('label.from') + formatDate(props.values.expiredDate)}
+                              : t('label.from') + formatDate(props.values.handleDate)}
                           </div>
                           <hr className="mt-1" />
                           {props.values.isMinimize && (

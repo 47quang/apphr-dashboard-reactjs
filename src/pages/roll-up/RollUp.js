@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
-import { PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { setTabName } from 'src/stores/actions/profile';
@@ -28,9 +28,9 @@ const RollUp = ({ t, location }) => {
 
   const [paging, setPaging] = useState({
     currentPage: 0,
-    pageSize: 5,
+    pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
-    pageSizes: [5, 10, 15],
+    pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>

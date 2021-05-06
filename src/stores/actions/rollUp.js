@@ -58,12 +58,13 @@ export const updateRollUp = (data, assignmentId, success_msg) => {
   };
 };
 
-export const deleteArticle = (id, success_msg) => {
+export const deleteRollUp = (id, assignmentId, success_msg) => {
   return (dispatch, getState) => {
-    api.article
+    api.rollUp
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.article.DELETE_ARTICLE, payload });
+        console.log('assignmentId', assignmentId);
+        dispatch(fetchAssignment(assignmentId));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

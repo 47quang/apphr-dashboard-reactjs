@@ -10,8 +10,10 @@ const historyWorkReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case REDUX_STATE.historyWork.SET_HISTORIES:
       return { ...state, histories: payload };
-    case REDUX_STATE.historyWork.SET_HISTORY:
-      return { ...state, history: Object.assign({}, state.history, payload) };
+    case REDUX_STATE.historyWork.CREATE_HISTORY:
+      return { ...state, histories: [payload, ...state.histories] };
+    case REDUX_STATE.historyWork.UPDATE_HISTORY:
+      return { ...state, histories: state.histories.map((b) => (b.id === payload.id ? payload : b)) };
     case REDUX_STATE.historyWork.DELETE_HISTORY:
       return {
         ...state,
@@ -20,7 +22,7 @@ const historyWorkReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.historyWork.EMPTY_VALUE:
       return {
         ...state,
-        history: initialState.history,
+        histories: [],
       };
     case REDUX_STATE.historyWork.GET_DEPARTMENTS:
       delete payload.index;

@@ -9,7 +9,7 @@ export const fetchContracts = (params) => {
       .then(async ({ payload }) => {
         payload =
           payload && payload.length > 0
-            ? payload.map((contract) => {
+            ? payload.map(async (contract) => {
                 contract.handleDate = formatDateInput(contract.handleDate);
                 contract.expiredDate = formatDateInput(contract.expiredDate);
                 contract.validDate = formatDateInput(contract.validDate);
@@ -17,10 +17,22 @@ export const fetchContracts = (params) => {
                 contract['paymentType'] = contract?.wage?.type;
                 contract['wageId'] = contract?.wage?.id;
                 contract['amount'] = contract?.wage?.amount;
+                contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
+                contract['attributes'] =
+                  contract.contractAttributes && contract.contractAttributes.length > 0
+                    ? contract.contractAttributes.map((attr) => {
+                        let rv = {};
+                        rv.value = attr.value;
+                        rv.name = attr.attribute.name;
+                        rv.type = attr.attribute.type;
+                        rv.id = attr.attribute.id;
+                        return rv;
+                      })
+                    : [];
                 return contract;
               })
             : [];
-
+        payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
         console.log('fetchContracts', payload);
       })

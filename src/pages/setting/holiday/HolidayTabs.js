@@ -70,17 +70,13 @@ const HolidayTabs = ({ t, history, match }) => {
             aria-label="full width tabs example"
           >
             <Tab className="noselect" label={t('label.holiday')} {...a11yProps(0)} />
-            <Tab className="noselect" label={t('label.holiday_setting')} {...a11yProps(1)} />
-            <Tab className="noselect" label={t('label.day_off_policy')} {...a11yProps(2)} />
+            <Tab className="noselect" label={t('label.day_off_policy')} {...a11yProps(1)} />
           </Tabs>
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
           <HolidayPage match={match} history={history} t={t} />
         </TabPanel>
         <TabPanel value={tabName} index={1}>
-          <HolidaySetting match={match} t={t} />
-        </TabPanel>
-        <TabPanel value={tabName} index={2}>
           <DayOffPolicy match={match} t={t} />
         </TabPanel>
       </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { deleteAttribute, fetchAttributes } from 'src/stores/actions/attribute';
 
@@ -18,9 +18,9 @@ const ContractAttribute = ({ t }) => {
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
-    pageSize: 5,
+    pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
-    pageSizes: [5, 10, 15],
+    pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({

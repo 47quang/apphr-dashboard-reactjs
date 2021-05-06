@@ -35,6 +35,11 @@ export const formatTime = (time) => {
   return temp.join(':');
 };
 
+export const getTimeFromDate = (date) => {
+  // 10:00:00
+  return moment(date).format('HH:mm');
+};
+
 export const formatDateTimeToString = (dateTime) => {
   // 	2021-04-25T08:30:00.000Z
   let temp = moment(dateTime);

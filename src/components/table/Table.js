@@ -149,7 +149,7 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
                 dispatch(
                   createRollUp(
                     {
-                      ...rollUpData,
+                      assignmentId: rollUpData.assignmentId,
                     },
                     t('label.roll_up_success'),
                   ),
@@ -205,7 +205,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   };
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
-    endTime = rollUpData.date.replace('00:00:00.000', endTime);
+    endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
     console.log(endTime);
     dispatch(
       updateRollUp(

@@ -10,7 +10,7 @@ import { PERMISSION } from 'src/constants/key';
 import { NewHistoryWorkingSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import { fetchDepartments } from 'src/stores/actions/department';
-import { createHistoryWork, deleteHistoryWork, fetchHistoriesWork, updateHistoryWork } from 'src/stores/actions/historyWork';
+import { createHistoryWork, deleteHistoryWork, fetchHistoriesWork, setEmptyHistories, updateHistoryWork } from 'src/stores/actions/historyWork';
 import { fetchPositions } from 'src/stores/actions/position';
 import { renderButtons } from 'src/utils/formUtils';
 
@@ -19,9 +19,9 @@ const HistoryWorkingForm = ({ t, match }) => {
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   const positions = useSelector((state) => state.position.positions);
-  const historyWorkingForm = {
-    histories: useSelector((state) => state.historyWork.histories),
-  };
+  const histories = useSelector((state) => state.historyWork.histories);
+  const historyWorkingForm = {};
+  historyWorkingForm.histories = histories;
   const departments = useSelector((state) => state.department.departments);
   const profileId = +match?.params?.id;
   const newHistory = {
@@ -41,9 +41,13 @@ const HistoryWorkingForm = ({ t, match }) => {
         }),
       );
     }
+    return () => {
+      dispatch(setEmptyHistories());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  async function create(form) {
+
+  function create(form) {
     // form.provinceId = form.provinceId || null;
     form.profileId = profileId;
     form.branchId = parseInt(form.branchId);
@@ -53,7 +57,7 @@ const HistoryWorkingForm = ({ t, match }) => {
     if (form.id) {
       dispatch(updateHistoryWork(form, t('message.successful_update')));
     } else {
-      await dispatch(createHistoryWork(form, t('message.successful_create'), handleResetNewHistory));
+      dispatch(createHistoryWork(form, t('message.successful_create'), handleResetNewHistory));
     }
   }
 
@@ -156,6 +160,8 @@ const HistoryWorkingForm = ({ t, match }) => {
     document.getElementById('addBtn').disabled = false;
   };
   const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
@@ -182,8 +188,8 @@ const HistoryWorkingForm = ({ t, match }) => {
             initialValues={newHistory}
             validationSchema={NewHistoryWorkingSchema}
             enableReinitialize
-            onSubmit={async (values) => {
-              await create(values).then(() => dispatch(fetchHistoriesWork({ profileId: profileId })));
+            onSubmit={(values) => {
+              create(values);
             }}
           >
             {(props) => {
@@ -240,19 +246,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                           <hr className="mt-1" />
                           <BodyItem {...props} />
                           <hr className="mt-1" />
-                          <WarningAlertDialog
-                            isVisible={isVisibleDeleteAlert}
-                            title={t('title.confirm')}
-                            warningMessage={t('message.confirm_delete_academic')}
-                            titleConfirm={t('label.agree')}
-                            titleCancel={t('label.cancel')}
-                            handleCancel={(e) => {
-                              handleCloseDeleteAlert();
-                            }}
-                            handleConfirm={(e) => {
-                              dispatch(deleteHistoryWork(history.id, t('message.successful_delete'), handleCloseDeleteAlert));
-                            }}
-                          />
+
                           {renderButtons(
                             permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
                               ? [
@@ -261,6 +255,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                     className: `btn btn-primary  mx-2`,
                                     onClick: (e) => {
                                       setIsVisibleDeleteAlert(true);
+                                      setDeleteId(history.id);
                                     },
                                     name: t('label.delete'),
                                     position: 'right',
@@ -295,6 +290,23 @@ const HistoryWorkingForm = ({ t, match }) => {
             })
           ) : (
             <div />
+          )}
+          {isVisibleDeleteAlert ? (
+            <WarningAlertDialog
+              isVisible={isVisibleDeleteAlert}
+              title={t('title.confirm')}
+              warningMessage={t('message.confirm_delete_academic')}
+              titleConfirm={t('label.agree')}
+              titleCancel={t('label.cancel')}
+              handleCancel={(e) => {
+                handleCloseDeleteAlert();
+              }}
+              handleConfirm={(e) => {
+                dispatch(deleteHistoryWork(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
+              }}
+            />
+          ) : (
+            <></>
           )}
         </div>
       </div>

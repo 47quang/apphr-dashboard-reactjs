@@ -49,7 +49,7 @@ const holidayReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.holiday.SET_POLICY:
       return {
         ...state,
-        policy: payload,
+        policy: { content: payload },
       };
     default:
       return state;

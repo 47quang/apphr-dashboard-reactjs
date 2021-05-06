@@ -2,7 +2,10 @@ import { Avatar, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Cancel, Lens } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { PAGE_SIZES } from 'src/constants/key';
 import { fetchAssignment, setEmptyAssignment } from 'src/stores/actions/assignment';
+import { deleteRollUp } from 'src/stores/actions/rollUp';
+
 import QTable from '../table/Table';
 const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, assignment, profileId }) => {
   const dispatch = useDispatch();
@@ -17,9 +20,10 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
-    pageSize: 5,
+    pageSize: PAGE_SIZES.LEVEL_1,
+
     total: 0,
-    pageSizes: [5, 10, 15],
+    pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
@@ -45,7 +49,9 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  const deleteRow = async (rowId) => {
+    dispatch(deleteRollUp(rowId, assignment.id, t('message.successful_delete')));
+  };
   return (
     <Dialog open={isOpen} maxWidth="md" fullWidth>
       <DialogTitle className={'dialog-title-background'}>
@@ -79,7 +85,8 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           onPageSizeChange={onPageSizeChange}
           disableFilter={true}
           isPopUp={true}
-          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC, date: rows.date }}
+          deleteRow={deleteRow}
+          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC, date: rows.startTime }}
           editColumnWidth={'15%'}
           // disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
           // disableCreate={false}

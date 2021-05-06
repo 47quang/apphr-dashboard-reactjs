@@ -193,7 +193,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
-                      value={values.overtimeCoefficient}
+                      value={values.overtimeCoefficient ?? ''}
                       onBlur={handleBlur('overtimeCoefficient')}
                       onChange={handleChange('overtimeCoefficient')}
                       inputID={'coefficient'}

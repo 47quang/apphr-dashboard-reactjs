@@ -144,12 +144,13 @@ export const fetchPolicy = () => {
   };
 };
 
-export const updatePolicy = (data) => {
+export const updatePolicy = (params, success_msg) => {
   return (dispatch, getState) => {
     api.holiday
-      .setPolicy(data)
+      .setPolicy(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.SET_POLICY, payload });
+        dispatch({ type: REDUX_STATE.holiday.SET_POLICY, payload: payload.value });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
         console.log(err);
