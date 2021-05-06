@@ -6,6 +6,7 @@ import {
   DateNavigator,
   EditRecurrenceMenu,
   Scheduler,
+  Resources,
   TodayButton,
   Toolbar,
   WeekView,
@@ -66,6 +67,22 @@ const SchedulerPage = ({ t, history, match }) => {
     visible: false,
     day: 0,
   });
+
+  const resources = [
+    {
+      fieldName: 'status',
+      title: 'Status',
+      instances: [
+        // { id: 'normal', text: 'Thường', color: '#64B5F6' },
+        // { id: 'leave_pay', text: 'Nghỉ có trả lương', color: '#64B5F6' },
+        // { id: 'leave_policy', text: 'Nghỉ theo chế độ', color: '#64B5F6' },
+        // { id: 'leave_no_pay', text: 'Nghỉ không trả lương', color: '#64B5F6' },
+        // { id: 'remote', text: 'Làm từ xa', color: '#64B5F6' },
+        { id: 'overtime', text: 'Làm thêm giờ', color: '#FFC107' },
+        { id: 'remote_overtime', text: 'Làm thêm giờ', color: '#FFC107' },
+      ],
+    },
+  ];
 
   const DayScaleCell = (props) => {
     const classes = useStyles();
@@ -169,19 +186,6 @@ const SchedulerPage = ({ t, history, match }) => {
     },
   });
 
-  const Layout = withStyles(style)(({ children, appointmentData, classes, ...restProps }) => {
-    console.log('Layout', restProps);
-    return (
-      <AppointmentTooltip.Layout
-        {...restProps}
-        className={classes}
-        headerComponent={Header}
-        contentComponent={Content}
-        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-        anchorEl={restProps?.appointmentMeta?.target}
-      />
-    );
-  });
   const Header = withStyles(style, { name: 'Header' })(({ children, appointmentData, classes, ...restProps }) => {
     // console.log('Header', restProps);
     return (
@@ -219,7 +223,6 @@ const SchedulerPage = ({ t, history, match }) => {
     );
   });
   const Appointment = ({ children, style, ...restProps }) => {
-    // console.log(restProps);
     if (restProps?.data?.status?.includes('overtime'))
       return (
         <Appointments.Appointment
@@ -235,6 +238,22 @@ const SchedulerPage = ({ t, history, match }) => {
       );
     else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
   };
+
+  // const AppointmentContent = ({ ...restProps }) => {
+  //   console.log(restProps);
+  //   return (
+  //     <Appointments.AppointmentContent {...restProps}>
+  //       {
+  //         <div>
+  //           <p>
+  //             <b>{restProps.data.title}</b>
+  //           </p>
+  //           <p>{restProps.data.startDate}</p>
+  //         </div>
+  //       }
+  //     </Appointments.AppointmentContent>
+  //   );
+  // };
 
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
@@ -257,7 +276,8 @@ const SchedulerPage = ({ t, history, match }) => {
             <TodayButton />
             <EditRecurrenceMenu />
             <Appointments appointmentComponent={Appointment} />
-            <AppointmentTooltip layoutComponent={Layout} showCloseButton />
+            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton />
+            <Resources data={resources} />
           </Scheduler>
         </Paper>
       </CContainer>

@@ -263,7 +263,8 @@ export const fetchOvertimeRequest = (id) => {
       .get(id)
       .then(({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
-        payload.handleAt = payload.handleAt ? formatDateTimeScheduleToString(payload.handleAt) : '';
+        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignment =
           parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(formatDate(payload.date));
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
