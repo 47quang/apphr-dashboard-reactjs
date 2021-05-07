@@ -1,8 +1,8 @@
-import CIcon from '@coreui/icons-react';
-import { CCardGroup, CWidgetDropdown } from '@coreui/react';
+import { CCardGroup } from '@coreui/react';
 import React from 'react';
 import BarChart from 'src/components/charts/BarChart';
 import PieChart from 'src/components/charts/PieChart';
+import StackedBarChart from 'src/components/charts/StackedBarChart';
 
 const Statistic = ({ t, location }) => {
   const labelsRequest = ['Nghỉ có lương', 'Nghỉ chế độ', 'Nghỉ không lương', 'Tăng ca', 'Làm thêm giờ'];
@@ -14,12 +14,35 @@ const Statistic = ({ t, location }) => {
   const backgroundColorHours = ['#8bcdcd', '#a7c5eb', '#efbbcf'];
   const titleHours = 'Biểu đồ thống kê giờ làm trong tháng';
   const dataHours = [160, 150, 25];
+
+  const titleWorkHours = 'Biểu đồ thống kê giờ làm trong năm';
+  const labelsWorkHours = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5'];
+  const datasets = [
+    {
+      label: 'Thời gian làm việc tiêu chuẩn',
+      data: [160, 160, 160, 160, 170],
+      borderColor: '#ff7171',
+      type: 'line',
+      fill: false,
+    },
+    {
+      label: 'Thời gian đã làm',
+      data: [160, 150, 150, 160, 30],
+      backgroundColor: '#a6dcef',
+    },
+    {
+      label: 'Thời gian làm thêm giờ',
+      data: [15, 15, 15, 20, 2],
+      backgroundColor: '#fdffbc',
+    },
+  ];
   return (
     <>
       <CCardGroup columns className="cols-2 m-4 p-4">
         <PieChart />
         <BarChart labels={labelsHours} title={titleHours} backgroundColor={backgroundColorHours} data={dataHours} />
         <BarChart labels={labelsRequest} title={titleRequest} backgroundColor={backgroundColorRequest} data={dataRequest} />
+        <StackedBarChart labels={labelsWorkHours} title={titleWorkHours} datasets={datasets} />
       </CCardGroup>
     </>
   );

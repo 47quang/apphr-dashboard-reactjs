@@ -18,7 +18,6 @@ import CertificateInfo from './CertificateInfo';
 import HistoryWorkingForm from './HistoryWorkingForm';
 import JobTimelineInfo from './JobTimeline';
 import OtherInfo from './OtherInfo';
-import RequestStatistic from './RequestStatistic';
 import SchedulerPage from './SchedulerPage';
 import Statistic from './Statistic';
 
