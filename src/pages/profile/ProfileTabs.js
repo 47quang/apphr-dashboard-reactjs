@@ -185,7 +185,7 @@ const ProfileTabs = ({ t, history, match }) => {
           </div>
         </TabPanel>
         <TabPanel value={tabName} index={3}>
-          <Statistic t={t} />
+          <Statistic t={t} profileId={match?.params?.id} />
         </TabPanel>
       </div>
       {/* <div

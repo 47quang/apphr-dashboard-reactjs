@@ -58,7 +58,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                     onChange={handleChange('startDate')}
                     inputID={'startDate'}
                     labelText={t('label.start_date')}
-                    inputType={'datetime-local'}
+                    inputType={'date'}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.startDate}
@@ -72,7 +72,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm }) => {
                     onChange={handleChange('endDate')}
                     inputID={'endDate'}
                     labelText={t('label.end_date')}
-                    inputType={'datetime-local'}
+                    inputType={'date'}
                     inputClassName={'form-control'}
                     isRequiredField
                     isTouched={touched.endDate}

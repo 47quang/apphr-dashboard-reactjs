@@ -425,7 +425,7 @@ export const REQUEST_TABS = {
 };
 
 export const PAGE_SIZES = {
-  LEVEL_1: 10,
+  LEVEL_1: 5,
   LEVEL_2: 20,
   LEVEL_3: 50,
 };

@@ -172,20 +172,45 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
 };
 const Label = ({ column, className, ...props }) => {
   props.draggingEnabled = false;
-  return (
-    <TableHeaderRow.Cell className={classNames(className, 'p-2 border border-white')} {...props}>
-      {Array.isArray(column.title) ? (
-        <div>
-          <p className="pl-2 m-0">{column.title[0]}</p>
-          <p className="pl-2 m-0  d-flex justify-content-center">{column.title[1]}</p>
-        </div>
-      ) : (
-        <div>
-          <p className="pl-2 ml-3">{column.title}</p>
-        </div>
-      )}
+  // console.log(column);
+  const rvComponent = Array.isArray(column.title) ? (
+    <TableHeaderRow.Cell
+      className={classNames(className)}
+      {...props}
+      style={{
+        backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : '',
+        borderStyle: 'solid',
+        borderLeftColor: '#D8DBE0',
+        borderTopColor: '#D8DBE0',
+        borderRight: 'white',
+        borderBottomColor: 'white',
+        borderWidth: 'thin',
+      }}
+    >
+      <div>
+        <p className="pl-2 m-0">{column.title[0]}</p>
+        <p className="pl-2 m-0  d-flex justify-content-center">{column.title[1]}</p>
+      </div>
+    </TableHeaderRow.Cell>
+  ) : (
+    <TableHeaderRow.Cell
+      className={classNames(className)}
+      {...props}
+      style={{
+        borderStyle: 'solid',
+        borderLeftColor: '#D8DBE0',
+        borderTopColor: '#D8DBE0',
+        borderRight: 'white',
+        borderBottomColor: 'white',
+        borderWidth: 'thin',
+      }}
+    >
+      <div>
+        <p className="pl-2 ml-3">{column.title}</p>
+      </div>
     </TableHeaderRow.Cell>
   );
+  return rvComponent;
 };
 
 const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum, isPopUp, editColumnWidth, rollUpData }) => {
@@ -498,7 +523,55 @@ const QTable = (props) => {
             </div>
           </div>
         )}
+        {route === '/roll-up/' ? (
+          <div>
+            <div className="row m-2">
+              <div className="col-4">
+                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+                <p className="d-inline">{t('label.free_date')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY }} />
+                <p className="d-inline">{t('label.holiday')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
+                <p className="d-inline">{t('label.remote_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
+                <p className="d-inline">{t('label.overtime_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <p className="d-inline">{t('label.overtime_remote_req')}</p>
+              </div>
+            </div>
+            <div className="row m-2">
+              <div className="col-2"></div>
+              <div className="col-2"></div>
 
+              <div className="col-2">
+                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.leave_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.roll_up_success')}</p>
+              </div>
+              <div className="col-2">
+                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.absent_roll_Call')}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id} style={{ position: 'relative' }}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusColumns} />
@@ -602,48 +675,6 @@ const QTable = (props) => {
           </div>
         )} */}
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
-        {route === '/roll-up/' ? (
-          <div>
-            <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
-              <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
-                <p className="d-inline">{t('label.remote_req')}</p>
-              </div>
-              <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
-                <p className="d-inline">{t('label.overtime_req')}</p>
-              </div>
-              <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
-                <p className="d-inline">{t('label.overtime_remote_req')}</p>
-              </div>
-              <div className="pr-4 mr-4 ml-4">
-                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-                <p className="d-inline">{t('label.free_date')}</p>
-              </div>
-            </div>
-            <div className="d-flex flex-row justify-content-end pb-1 pr-4 align-items-center">
-              <div className="px-4 mx-4">
-                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.leave_pay_req')}</p>
-              </div>
-              <div className="px-4 mx-4">
-                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
-              </div>
-              <div className="px-4 mx-4">
-                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.roll_up_success')}</p>
-              </div>
-              <div className="pr-2 pl-4 ml-4">
-                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.absent_roll_Call')}</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div />
-        )}
       </Paper>
     </div>
   );

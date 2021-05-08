@@ -283,6 +283,9 @@ export const api = {
         params: params,
       });
     },
+    exportSalary: (data) => {
+      return client.put(API_PREFIX.API_PROFILE + `/${data.id}/export-salary`, data);
+    },
   },
   contract: {
     getAll: (params) => {

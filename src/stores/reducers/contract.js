@@ -60,6 +60,8 @@ const contractReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case REDUX_STATE.contract.SET_CONTRACTS:
       return { ...state, contracts: payload };
+    case REDUX_STATE.contract.CREATE_CONTRACT:
+      return { ...state, contracts: [payload, ...state.contracts] };
     case REDUX_STATE.contract.SET_CONTRACT:
       return { ...state, contract: Object.assign({}, state.contract, payload) };
     case REDUX_STATE.contract.DELETE_CONTRACT:

@@ -110,28 +110,32 @@ const JobTimelineInfo = ({ t, history, match }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
 
-  async function create(values) {
+  function create(values) {
     let form = values;
     form.profileId = +match.params.id;
 
-    if (form.branchId === '0') delete form.branchId;
+    if (!form.branchId) delete form.branchId;
     else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
     // if (form.departmentId === '0') delete form.departmentId;
     // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
     // if (form.positionId === '0') delete form.positionId;
     // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
-
+    if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
-      console.log('create', form);
       if (form.type === 'season') {
         delete form.wageId;
         delete form.paymentType;
         delete form.amount;
         delete form.dayOff;
+        delete form.periodicPayment;
+        delete form.pTaxType;
+        delete form.salaryGroup;
+        delete form.wageId;
+        delete form.salary;
       }
-      if (!form.expiredDate) delete form.expiredDate;
+      console.log('create', form);
       dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
@@ -404,15 +408,15 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       dispatch(fetchWagesByType({ type: e.target.value }));
                       setFieldValue(`amount`, 0);
                       handleChange(`paymentType`)(e);
-                    } else setFieldValue(`wageId`, 0);
+                    } else setFieldValue(`wageId`, '');
                   } else {
                     if (e.target.value !== '0') {
                       handleChange(`paymentType`)(e);
                       let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
                       setFieldValue(`wages`, wage);
                     } else setFieldValue(`wages`, []);
-                    setFieldValue(`wageId`, 0);
-                    setFieldValue(`amount`, 0);
+                    setFieldValue(`wageId`, '');
+                    setFieldValue(`amount`, '');
                   }
                 }}
                 inputID={`paymentType`}
@@ -668,14 +672,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
           initialValues={newContract}
           validationSchema={NewContractSchema}
           enableReinitialize
-          onSubmit={async (values) => {
-            await create(values).then(() =>
-              dispatch(
-                fetchContracts({
-                  profileId: profileId,
-                }),
-              ),
-            );
+          onSubmit={(values) => {
+            create(values);
             // console.log(values);
           }}
         >

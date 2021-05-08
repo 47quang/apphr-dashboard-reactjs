@@ -35,6 +35,7 @@ const holidayReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         holiday: initialState.holiday,
+        holidays: [],
       };
     case REDUX_STATE.holiday.GET_REQUESTS:
       return {

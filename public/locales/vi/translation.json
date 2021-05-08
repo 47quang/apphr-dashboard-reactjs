@@ -1,6 +1,6 @@
 {
   "Welcome to React": "Welcome to React and react-i18next",
-  "Dashboard": "Trang chủ",
+  "Dashboard": "Bảng điều khiển",
   "Roll up": "Điểm danh",
   "Proposal": "Đề xuất",
   "Profile": "Nhân sự",
@@ -32,6 +32,9 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "social_insurance": "Lương bảo hiểm",
+    "export": "Xuất",
+    "export_wage": "Xuất phiếu lương",
     "profile_statistic": "Thống kê",
     "standard_hours": "Tổng thời gian tiêu chuẩn",
     "vnd": "VNĐ",
@@ -211,6 +214,7 @@
     "job_start_date": "Ngày bắt đầu làm việc",
     "start_date2": "Ngày cấp",
     "end_date": "Ngày kết thúc",
+    "time_range": "Khoảng thời gian",
     "expiration_date": "Ngày hết hạn",
     "signature_date": "Ngày ký",
     "effective_date": "Ngày có hiệu lực",
@@ -317,6 +321,7 @@
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
+    "successful_export": "Xuất dữ liệu thành công",
     "successful_create_contact": "Tạo kênh liên lạc thành công",
     "successful_update_contact": "Cập nhật kênh liên lạc thành công",
     "successful_delete_contact": "Xóa kênh liên lạc thành công",
@@ -441,6 +446,7 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "end_date_must_be_greater_than_start_date": "Ngày kết thúc phải lớn hơn ngày ngày bắt đầu",
     "required_select_start_work": "Bắt buộc chọn ngày bắt đầu làm việc",
     "required_positive_standard_hours":"Tổng thời gian tiêu chuẩn là một số dương",
     "required_integer_standard_hours": "Tổng thời gian tiêu chuẩn là một số nguyên",

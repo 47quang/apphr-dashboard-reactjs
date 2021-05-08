@@ -14,4 +14,8 @@ export const COLORS = {
   REMOTE: '#fdffbc',
   OVERTIME: '#b1ffad',
   OVERTIME_REMOTE: '#ffd5cd',
+  HOLIDAY_HEADER: '#a6dcef',
+  HOLIDAY_CELL: '#bfe4f1',
+  OVERTIME_ASSIGNMENT: '#FFC107',
+  NORMAL_ASSIGNMENT: '#64B5F6',
 };

@@ -1,10 +1,15 @@
 import { CCardGroup } from '@coreui/react';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import BarChart from 'src/components/charts/BarChart';
 import PieChart from 'src/components/charts/PieChart';
 import StackedBarChart from 'src/components/charts/StackedBarChart';
+import ExportWage from 'src/components/dialog/ExportWage';
+import { exportWage } from 'src/stores/actions/profile';
+import { renderButtons } from 'src/utils/formUtils';
 
-const Statistic = ({ t, location }) => {
+const Statistic = ({ t, location, profileId }) => {
+  const dispatch = useDispatch();
   const labelsRequest = ['Nghỉ có lương', 'Nghỉ chế độ', 'Nghỉ không lương', 'Tăng ca', 'Làm thêm giờ'];
   const backgroundColorRequest = ['#8bcdcd', '#a7c5eb', '#efbbcf', '#d9e4dd', '#d8345f'];
   const titleRequest = 'Biểu đồ  thống kê số đề xuất trong tháng';
@@ -36,9 +41,30 @@ const Statistic = ({ t, location }) => {
       backgroundColor: '#fdffbc',
     },
   ];
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const button = [
+    {
+      type: 'button',
+      className: `btn btn-primary`,
+      onClick: (e) => {
+        setIsOpenDialog(true);
+      },
+      name: t('label.export_wage'),
+      position: 'right',
+    },
+  ];
+  const handleConfirm = (values) => {
+    setIsOpenDialog(false);
+    dispatch(exportWage({ ...values, id: +profileId }, t('message.successful_export')));
+  };
+  const handleCancel = () => {
+    setIsOpenDialog(false);
+  };
   return (
     <>
-      <CCardGroup columns className="cols-2 m-4 p-4">
+      {isOpenDialog ? <ExportWage isOpen={isOpenDialog} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} /> : <></>}
+      <div className="cols-1 m-2 p-2">{renderButtons(button)}</div>
+      <CCardGroup columns className="cols-2 m-2 p-2">
         <PieChart />
         <BarChart labels={labelsHours} title={titleHours} backgroundColor={backgroundColorHours} data={dataHours} />
         <BarChart labels={labelsRequest} title={titleRequest} backgroundColor={backgroundColorRequest} data={dataRequest} />

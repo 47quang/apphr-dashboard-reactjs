@@ -1,6 +1,6 @@
-import * as Yup from 'yup';
+import { isBeforeTypeDate, isBeforeTypeHour, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import { getRegexExpression, VALIDATION_TYPE } from 'src/utils/validationUtils';
-import { isBeforeTypeHour, isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
+import * as Yup from 'yup';
 
 const VALIDATION_STRING = {
   NOT_EMPTY: 'Not empty',
@@ -668,4 +668,17 @@ export const OtherFeeSchema = Yup.object().shape({
       otherwise: Yup.number().integer('validation.payment_value_must_be_integer'),
     })
     .required('validation.required_enter_payment_value'),
+});
+export const ExportWageSchema = Yup.object().shape({
+  from: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_start_date', function (value) {
+    return !!value;
+  }),
+  to: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_end_date', function (value) {
+      return !!value;
+    })
+    .test('end_time_test', 'validation.end_date_must_be_greater_than_start_date', function (value) {
+      const { from } = this.parent;
+      return isBeforeTypeDate(from, value);
+    }),
 });
