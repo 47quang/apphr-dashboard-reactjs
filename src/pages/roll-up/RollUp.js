@@ -14,8 +14,10 @@ import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
+import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
 import {} from 'src/stores/actions/rollUp';
+import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const RollUp = ({ t, location }) => {
   const [state, setState] = useState({
@@ -25,7 +27,7 @@ const RollUp = ({ t, location }) => {
   });
   const dispatch = useDispatch();
   const data = useSelector((state) => state.assignment.assignments);
-
+  const holidays = useSelector((state) => state.holiday.holidays);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
@@ -58,6 +60,13 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
     {
       name: 'monday',
@@ -65,6 +74,13 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(1, 'd'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
     {
       name: 'tuesday',
@@ -72,6 +88,13 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(2, 'd'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
     {
       name: 'wednesday',
@@ -79,6 +102,13 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(3, 'd'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
     {
       name: 'thursday',
@@ -86,6 +116,13 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(4, 'd'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
     {
       name: 'friday',
@@ -93,8 +130,28 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
+          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(5, 'd'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
     },
-    { name: 'saturday', title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')], align: 'left', width: '12%', wordWrapEnabled: true },
+    {
+      name: 'saturday',
+      title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')],
+      align: 'left',
+      width: '12%',
+      wordWrapEnabled: true,
+      holiday: holidays.find(
+        (e) =>
+          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
+          isSameBeforeTypeDate(fromDate.clone().endOf('week').format('YYYY-MM-DD'), e.endDate.replace('Z', '')),
+      )
+        ? true
+        : false,
+    },
   ];
 
   let columnDefOfRollUp = useRef();
@@ -121,8 +178,28 @@ const RollUp = ({ t, location }) => {
       toDate: to,
     }));
   };
+  // useEffect(() => {
+  //   dispatch(
+  //     fetchHolidays({
+  //       page: 0,
+  //       perpage: 999,
+  //     }),
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
+  // console.log(
+  //   holidays.find(
+  //     (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), '2021-05-01') && isSameBeforeTypeDate('2021-05-01', e.endDate.replace('Z', '')),
+  //   ),
+  // );
   useEffect(() => {
+    dispatch(
+      fetchHolidays({
+        page: 0,
+        perpage: 999,
+      }),
+    );
     dispatch(
       fetchRollUpTable(
         {
@@ -140,6 +217,7 @@ const RollUp = ({ t, location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
+  // console.log('RollUps', holidays);
 
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
     // console.log('value', value);
@@ -213,7 +291,9 @@ const RollUp = ({ t, location }) => {
           tableColumn={restProps.tableColumn}
           tableRow={restProps.tableRow}
           style={{
-            backgroundColor: isDay
+            backgroundColor: column.holiday
+              ? COLORS.HOLIDAY_CELL
+              : isDay
               ? value.future
                 ? COLORS.FREE_DATE
                 : value.assignment.length > 0

@@ -12,8 +12,10 @@ const _nav = [
   //   },
   // },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Timekeeping'],
+    _tag: 'CSidebarNavItem',
+    name: ROUTE_NAME.DASHBOARD,
+    to: ROUTE_PATH.DASHBOARD,
+    icon: 'cil-speedometer',
   },
   {
     _tag: 'CSidebarNavItem',

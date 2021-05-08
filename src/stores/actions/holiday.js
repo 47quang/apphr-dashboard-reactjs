@@ -1,17 +1,14 @@
 import { ROUTE_PATH } from 'src/constants/key';
+import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const convertTime = (payload) => {
-  payload.startDate = payload.startDate.replace('Z', '');
-  payload.endDate = payload.endDate.replace('Z', '');
-  return payload;
-};
 export const fetchHolidays = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.holiday
       .getAll(params)
       .then(({ payload, total }) => {
+        // console.log('fetchHolidays', payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -31,7 +28,8 @@ export const fetchHoliday = (id) => {
     api.holiday
       .get(id)
       .then(({ payload }) => {
-        payload = convertTime(payload);
+        payload.startDate = formatDateInput(payload.startDate);
+        payload.endDate = formatDateInput(payload.endDate);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
       })
       .catch((err) => {
@@ -47,7 +45,6 @@ export const createHoliday = (params, history, success_msg) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-
         history.push(ROUTE_PATH.HOLIDAY + `/tab1.id=${payload.id}`);
       })
       .catch((err) => {
@@ -66,7 +63,6 @@ export const updateHoliday = (data, success_msg) => {
     api.holiday
       .put(data)
       .then(({ payload }) => {
-        payload = convertTime(payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
