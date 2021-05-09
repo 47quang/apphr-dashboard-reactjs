@@ -61,7 +61,7 @@ const HistoryWorkingForm = ({ t, match }) => {
     }
   }
 
-  const BodyItem = ({ values, handleBlur, handleChange, touched, errors }) => {
+  const BodyItem = ({ values, handleBlur, handleChange, touched, errors, isCreate }) => {
     return (
       <>
         <div className="row">
@@ -99,7 +99,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.departmentId}
             isError={errors.departmentId && touched.departmentId}
             errorMessage={t(errors.departmentId)}
-            lstSelectOptions={departments}
+            lstSelectOptions={isCreate ? departments : values.departments}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -116,7 +116,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.positionId}
             isError={errors.positionId && touched.positionId}
             errorMessage={t(errors.positionId)}
-            lstSelectOptions={positions}
+            lstSelectOptions={isCreate ? positions : values.positions}
           />
         </div>
         <div className="row">
@@ -193,6 +193,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             }}
           >
             {(props) => {
+              props.isCreate = true;
               return (
                 <Form id="newHistory" hidden={true} className="p-0 m-0">
                   <div className="shadow bg-white rounded mx-4 p-4">
@@ -210,7 +211,6 @@ const HistoryWorkingForm = ({ t, match }) => {
                         name: t('label.cancel'),
                         position: 'right',
                       },
-
                       {
                         type: 'button',
                         className: `btn btn-primary px-4 ml-4`,

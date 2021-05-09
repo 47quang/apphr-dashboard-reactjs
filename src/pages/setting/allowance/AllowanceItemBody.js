@@ -1,10 +1,16 @@
 import { CContainer } from '@coreui/react';
 import { Formik } from 'formik';
 import React from 'react';
+import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { renderButtons } from 'src/utils/formUtils';
 
 const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submitForm, buttons }) => {
+  const type = [
+    { id: 'tax', name: 'Tính thuế' },
+    { id: 'no_tax', name: 'Không tính thuế' },
+    { id: 'partial_tax', name: 'Có hạn mức' },
+  ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -18,12 +24,12 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
               submitForm(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+            {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
               <form autoComplete="off">
                 <div className="row">
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.code}
+                    value={values.code ?? ''}
                     onBlur={handleBlur('code')}
                     onChange={handleChange('code')}
                     inputID={'code'}
@@ -35,7 +41,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
                   />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.name}
+                    value={values.name ?? ''}
                     onBlur={handleBlur('name')}
                     onChange={handleChange('name')}
                     inputID={'name'}
@@ -50,9 +56,43 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
                   />
                 </div>
                 <div className="row">
+                  <CommonSelectInput
+                    containerClassName={'form-group col-xl-12'}
+                    value={values.type ?? ''}
+                    labelText={t('label.allowance_type')}
+                    selectClassName={'form-control'}
+                    isRequiredField
+                    onBlur={handleBlur('type')}
+                    onChange={(e) => {
+                      if (e.target.value !== 'partial_tax') setFieldValue('bound', 0);
+                      handleChange('type')(e);
+                    }}
+                    inputID={'type'}
+                    lstSelectOptions={type}
+                    placeholder={t('placeholder.select_allowance_type')}
+                    isTouched={touched.type}
+                    isError={errors.type && touched.type}
+                    errorMessage={t(errors.type)}
+                  />
                   <CommonTextInput
                     containerClassName={'form-group col-xl-12'}
-                    value={values.amount}
+                    value={values.bound ?? 0}
+                    onBlur={handleBlur('bound')}
+                    onChange={handleChange('bound')}
+                    inputID={'bound'}
+                    labelText={t('label.allowance_bound')}
+                    inputType={'number'}
+                    placeholder={t('placeholder.enter_allowance_bound')}
+                    inputClassName={'form-control'}
+                    isRequiredField={values.type === 'partial_tax'}
+                    isDisable={values.type !== 'partial_tax'}
+                    isTouched={touched.bound}
+                    isError={errors.bound && touched.bound}
+                    errorMessage={t(errors.bound)}
+                  />
+                  <CommonTextInput
+                    containerClassName={'form-group col-xl-12'}
+                    value={values.amount ?? ''}
                     onBlur={handleBlur('amount')}
                     onChange={handleChange('amount')}
                     inputID={'amount'}

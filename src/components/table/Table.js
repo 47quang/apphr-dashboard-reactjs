@@ -182,8 +182,8 @@ const Label = ({ column, className, ...props }) => {
         borderStyle: 'solid',
         borderLeftColor: '#D8DBE0',
         borderTopColor: '#D8DBE0',
-        borderRight: 'white',
-        borderBottomColor: 'white',
+        borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
+        borderBottomColor: '#D8DBE0',
         borderWidth: 'thin',
       }}
     >
@@ -201,7 +201,7 @@ const Label = ({ column, className, ...props }) => {
         borderLeftColor: '#D8DBE0',
         borderTopColor: '#D8DBE0',
         borderRight: 'white',
-        borderBottomColor: 'white',
+        borderBottomColor: '#D8DBE0',
         borderWidth: 'thin',
       }}
     >
@@ -217,7 +217,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const [openWarning, setOpenWarning] = useState(false);
   const [deletingRowID, setDeletingRowID] = useState(-1);
   const [openEditing, setOpenEditing] = useState(false);
-  const [rollUpId, setRollUpId] = useState(-1);
+  const [rollUp, setRollUp] = useState(-1);
   const dispatch = useDispatch();
   const handleConfirmWarning = (e) => {
     if (Number.isInteger(deletingRowID)) {
@@ -231,12 +231,12 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
     endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
-    console.log(endTime);
+    console.log('rollUp', rollUp);
     dispatch(
       updateRollUp(
         {
           endTime: new Date(endTime),
-          id: rollUpId,
+          id: rollUp.rowId,
         },
         rollUpData.assignmentId,
         t('message.successful_update'),
@@ -250,7 +250,13 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   return (
     <Plugin>
       {openEditing ? (
-        <NewRollUp isOpen={openEditing} handleConfirm={handleConfirmEditing} handleCancel={handleCancelEditing} t={t} startCC={rollUpData.startCC} />
+        <NewRollUp
+          isOpen={openEditing}
+          handleConfirm={handleConfirmEditing}
+          handleCancel={handleCancelEditing}
+          t={t}
+          startCC={rollUp?.row?.startTime}
+        />
       ) : (
         <></>
       )}
@@ -298,7 +304,8 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
                     onClick={() => {
                       if (isPopUp) {
                         setOpenEditing(!openEditing);
-                        setRollUpId(params.tableRow.rowId);
+                        setRollUp(params.tableRow);
+                        console.log(params.tableRow);
                       }
                     }}
                   >
@@ -523,56 +530,8 @@ const QTable = (props) => {
             </div>
           </div>
         )}
-        {route === '/roll-up/' ? (
-          <div>
-            <div className="row m-2">
-              <div className="col-4">
-                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-                <p className="d-inline">{t('label.free_date')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY }} />
-                <p className="d-inline">{t('label.holiday')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
-                <p className="d-inline">{t('label.remote_req')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
-                <p className="d-inline">{t('label.overtime_req')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
-                <p className="d-inline">{t('label.overtime_remote_req')}</p>
-              </div>
-            </div>
-            <div className="row m-2">
-              <div className="col-2"></div>
-              <div className="col-2"></div>
 
-              <div className="col-2">
-                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.leave_pay_req')}</p>
-              </div>
-              <div className="col-2">
-                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
-              </div>
-              <div className="col-2">
-                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.roll_up_success')}</p>
-              </div>
-              <div className="col-2">
-                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.absent_roll_Call')}</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id} style={{ position: 'relative' }}>
+        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusColumns} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
@@ -654,7 +613,7 @@ const QTable = (props) => {
           {/* <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
           <ColumnChooser /> */}
-          <TableFixedColumns leftColumns={['code']} />
+          <TableFixedColumns />
           <CustomTableEditColumn
             t={t}
             route={route}
@@ -675,6 +634,55 @@ const QTable = (props) => {
           </div>
         )} */}
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
+        {route === '/roll-up/' ? (
+          <div>
+            <div className="row m-2">
+              <div className="col-4">
+                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+                <p className="d-inline">{t('label.free_date')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
+                <p className="d-inline">{t('label.holiday')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
+                <p className="d-inline">{t('label.remote_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
+                <p className="d-inline">{t('label.overtime_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <p className="d-inline">{t('label.overtime_remote_req')}</p>
+              </div>
+            </div>
+            <div className="row m-2">
+              <div className="col-2"></div>
+              <div className="col-2"></div>
+
+              <div className="col-2">
+                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.leave_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <p className="d-inline">{t('label.roll_up_success')}</p>
+              </div>
+              <div className="col-2">
+                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.absent_roll_Call')}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </Paper>
     </div>
   );

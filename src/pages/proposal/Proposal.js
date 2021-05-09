@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES } from 'src/constants/key';
-import { fetchLeaveRequests, fetchRemoteRequests, fetchOvertimeRequests } from 'src/stores/actions/request';
+import {
+  fetchLeaveRequests,
+  fetchRemoteRequests,
+  fetchOvertimeRequests,
+  setEmptyLeaveRequests,
+  setEmptyRemoteRequests,
+  setEmptyOverTimeRequests,
+} from 'src/stores/actions/request';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -21,7 +28,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
         ]
       : [
-          { name: 'id', title: t('label.proposal_id'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'id', title: t('label.id'), align: 'left', width: '15%', wordWrapEnabled: true },
           { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
@@ -153,6 +160,11 @@ const Proposal = ({ t, location, match, type, profileId }) => {
               onTotalChange,
             ),
           );
+    return () => {
+      if (type === 'leave') dispatch(setEmptyLeaveRequests());
+      else if (type === 'remote') dispatch(setEmptyRemoteRequests());
+      else dispatch(setEmptyOverTimeRequests());
+    };
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
   // const deleteRow = async (rowId) => {

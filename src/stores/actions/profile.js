@@ -214,6 +214,12 @@ export const setEmptyProfile = () => {
     payload: [],
   };
 };
+export const setEmptyProfiles = () => {
+  return {
+    type: REDUX_STATE.profile.EMPTY_LIST,
+    payload: [],
+  };
+};
 
 export const fetchRoles = (params) => {
   return (dispatch, getState) => {
@@ -364,6 +370,7 @@ export const exportWage = (params, success_msg) => {
     api.profile
       .exportSalary(params)
       .then(({ payload }) => {
+        window.location.href = payload.publicPath;
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

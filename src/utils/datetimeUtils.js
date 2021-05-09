@@ -50,7 +50,7 @@ export const formatDateTimeToString = (dateTime) => {
 export const formatDateTimeScheduleToString = (dateTime) => {
   // 	2021-04-25T08:30:00.000Z
   let temp = moment(dateTime);
-  return temp.format('YYYY-MM-DDTHH:ss:ss');
+  return temp.format('YYYY-MM-DDTHH:mm:ss');
 };
 
 export const parseUTCTime = (time) => {

@@ -308,6 +308,12 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_CONTRACT + `/${id}`);
     },
+    active: (id) => {
+      return client.put(API_PREFIX.API_CONTRACT + `/${id}/active`);
+    },
+    inactive: (id) => {
+      return client.put(API_PREFIX.API_CONTRACT + `/${id}/deactive`);
+    },
   },
   wage: {
     getAll: (params) => {

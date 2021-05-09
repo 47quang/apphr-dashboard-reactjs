@@ -14,9 +14,10 @@ export const fetchContracts = (params) => {
                 contract.expiredDate = formatDateInput(contract.expiredDate);
                 contract.validDate = formatDateInput(contract.validDate);
                 contract.startWork = formatDateInput(contract.startWork);
-                contract['paymentType'] = contract?.wage?.type;
+                contract['formOfPayment'] = contract?.wage?.type;
                 contract['wageId'] = contract?.wage?.id;
                 contract['amount'] = contract?.wage?.amount;
+                contract['standardHours'] = contract.standardHours ?? undefined;
                 contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
                 contract['attributes'] =
                   contract.contractAttributes && contract.contractAttributes.length > 0
@@ -191,7 +192,27 @@ export const updateContract = (params, success_msg) => {
     api.contract
       .put(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        payload.isMinimize = true;
+        payload.handleDate = formatDateInput(payload.handleDate);
+        payload.expiredDate = formatDateInput(payload.expiredDate);
+        payload.validDate = formatDateInput(payload.validDate);
+        payload.startWork = formatDateInput(payload.startWork);
+        payload['paymentType'] = payload?.wage?.type;
+        payload['wageId'] = payload?.wage?.id;
+        payload['amount'] = payload?.wage?.amount;
+        payload['wages'] = params?.wages;
+        payload['attributes'] =
+          payload.contractAttributes && payload.contractAttributes.length > 0
+            ? payload.contractAttributes.map((attr) => {
+                let rv = {};
+                rv.value = attr.value;
+                rv.name = attr.attribute.name;
+                rv.type = attr.attribute.type;
+                rv.id = attr.attribute.id;
+                return rv;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.contract.UPDATE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -340,6 +361,44 @@ export const deleteWageHistory = (id, handleAfterSuccess, success_msg) => {
       .delete(id)
       .then(({ payload }) => {
         handleAfterSuccess();
+        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
+export const activeContract = (id, setFieldValue, success_msg) => {
+  return (dispatch, getState) => {
+    api.contract
+      .active(id)
+      .then(({ payload }) => {
+        if (setFieldValue) setFieldValue('status', 'active');
+        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
+export const inactiveContract = (id, setFieldValue, success_msg) => {
+  return (dispatch, getState) => {
+    api.contract
+      .inactive(id)
+      .then(({ payload }) => {
+        if (setFieldValue) setFieldValue('status', 'inactive');
         // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

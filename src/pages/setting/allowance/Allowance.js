@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteAllowance, fetchAllowances } from 'src/stores/actions/allowance';
+import { deleteAllowance, fetchAllowances, setEmptyAllowances } from 'src/stores/actions/allowance';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 
@@ -12,8 +12,9 @@ const Allowance = ({ t }) => {
   const dispatch = useDispatch();
   const allowances = useSelector((state) => state.allowance.allowances);
   const columnDef = [
-    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.allowance_name'), align: 'left', width: '40%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({
@@ -38,6 +39,11 @@ const Allowance = ({ t }) => {
       ...prevState,
       total: total,
     }));
+  const decreaseTotal = (decrease) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: prevState.total - decrease,
+    }));
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
@@ -49,12 +55,23 @@ const Allowance = ({ t }) => {
           onTotalChange,
         ),
       );
+    return () => {
+      dispatch(setEmptyAllowances());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = async (rowId) => {
-    dispatch(deleteAllowance(rowId, t('message.successful_delete')));
-    dispatch(fetchAllowances());
+    dispatch(deleteAllowance(rowId, decreaseTotal, t('message.successful_delete')));
+    dispatch(
+      fetchAllowances(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
