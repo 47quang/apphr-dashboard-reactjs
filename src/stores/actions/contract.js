@@ -66,7 +66,8 @@ export const fetchWageHistories = (params) => {
                 contract['wageHistories'] =
                   contract.wageHistories && contract.wageHistories.length > 0
                     ? contract.wageHistories.map(async (wage) => {
-                        wage.type = wage.wage.type;
+                        console.log('Bug', wage);
+                        wage.type = wage?.wage?.type;
                         wage.amount = wage.wage.amount;
                         wage.startDate = formatDateInput(wage.startDate);
                         wage.expiredDate = formatDateInput(wage.expiredDate);

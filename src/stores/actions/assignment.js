@@ -41,6 +41,10 @@ export const fetchAssignments = (params, onTotalChange) => {
   };
 };
 
+const compareHours = (a1, a2) => {
+  return +a1.startCC.split(':')[0] - a2.startCC.split(':')[0];
+};
+
 export const fetchRollUpTable = (params, onTotalChange) => {
   return (dispatch, getState) => {
     api.profile
@@ -105,6 +109,21 @@ export const fetchRollUpTable = (params, onTotalChange) => {
                 return a;
               })
             : [];
+        data =
+          data && data.length > 0
+            ? data.map((a) => {
+                a.sunday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.monday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.tuesday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.wednesday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.thursday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.friday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                a.saturday.assignment.sort((a1, a2) => compareHours(a1, a2));
+                return a;
+              })
+            : [];
+
+        console.log(data);
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
         if (onTotalChange) onTotalChange(total);
       })
