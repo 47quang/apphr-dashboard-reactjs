@@ -31,6 +31,9 @@ export const updateHistoryWork = (data, success_msg) => {
       .then(({ payload }) => {
         payload.from = formatDateInput(payload.from);
         payload.to = formatDateInput(payload.to);
+        payload.branches = data.branches;
+        payload.departments = data.departments;
+        payload.positions = data.positions;
         dispatch({ type: REDUX_STATE.historyWork.UPDATE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

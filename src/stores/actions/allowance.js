@@ -7,6 +7,15 @@ export const fetchAllowances = (params, onTotalChange) => {
     api.allowance
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((allowance) => {
+                if (allowance.type === 'no_tax') allowance.type = 'Không tính thuế';
+                else if (allowance.type === 'tax') allowance.type = 'Tính thuế';
+                else allowance.type = 'Có hạn mức';
+                return allowance;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -78,11 +87,12 @@ export const updateAllowance = (data, success_msg) => {
   };
 };
 
-export const deleteAllowance = (id, success_msg) => {
+export const deleteAllowance = (id, decreaseTotal, success_msg) => {
   return (dispatch, getState) => {
     api.allowance
       .delete(id)
       .then(({ payload }) => {
+        if (decreaseTotal) decreaseTotal(-1);
         dispatch({ type: REDUX_STATE.allowance.DELETE_ALLOWANCE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -100,6 +110,12 @@ export const deleteAllowance = (id, success_msg) => {
 export const setEmptyAllowance = () => {
   return {
     type: REDUX_STATE.allowance.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyAllowances = () => {
+  return {
+    type: REDUX_STATE.allowance.EMPTY_LIST,
     payload: [],
   };
 };

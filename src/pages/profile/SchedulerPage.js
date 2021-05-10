@@ -15,7 +15,6 @@ import { IconButton } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { Delete, Lens, Room } from '@material-ui/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -31,21 +30,21 @@ import Page404 from '../page404/Page404';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
-    backgroundColor: fade(theme.palette.primary.main, 0.1),
+    backgroundColor: COLORS.TODAY_BODY_CELL,
     '&:hover': {
-      backgroundColor: fade(theme.palette.primary.main, 0.14),
+      backgroundColor: COLORS.TODAY_BODY_CELL,
     },
     '&:focus': {
-      backgroundColor: fade(theme.palette.primary.main, 0.16),
+      backgroundColor: COLORS.TODAY_BODY_CELL,
     },
   },
   weekendCell: {
-    backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+    backgroundColor: COLORS.WEEKEND_BODY_CELL,
     '&:hover': {
-      backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+      backgroundColor: COLORS.WEEKEND_BODY_CELL,
     },
     '&:focus': {
-      backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+      backgroundColor: COLORS.WEEKEND_BODY_CELL,
     },
   },
   holidayCell: {
@@ -58,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   today: {
-    backgroundColor: fade(theme.palette.primary.main, 0.16),
+    backgroundColor: COLORS.TODAY_HEADER_CELL,
   },
   weekend: {
-    backgroundColor: fade(theme.palette.action.disabledBackground, 0.06),
+    backgroundColor: COLORS.WEEKEND_HEADER_CELL,
   },
   holiday: {
     backgroundColor: COLORS.HOLIDAY_HEADER,
@@ -298,11 +297,17 @@ const SchedulerPage = ({ t, history, match }) => {
         <Paper>
           <div className="row pt-2">
             <div className="col-2"></div>
-            <div className="col-2"></div>
-            <div className="col-2"></div>
+            <div className="col-2">
+              <Lens className="mr-2" style={{ color: COLORS.TODAY_HEADER_CELL }} />
+              <p className="d-inline">{t('label.today')}</p>
+            </div>
+            <div className="col-2">
+              <Lens className="mr-2" style={{ color: COLORS.WEEKEND_HEADER_CELL }} />
+              <p className="d-inline">{t('label.weekend')}</p>
+            </div>
 
             <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_CELL }} />
+              <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
               <p className="d-inline">{t('label.holiday')}</p>
             </div>
 

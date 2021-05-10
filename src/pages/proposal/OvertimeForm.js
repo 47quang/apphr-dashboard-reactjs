@@ -9,7 +9,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { approveOvertimeRequest, fetchOvertimeRequest, rejectOvertimeRequest } from 'src/stores/actions/request';
+import { approveOvertimeRequest, fetchOvertimeRequest, rejectOvertimeRequest, setEmptyOverTimeRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
 const OvertimeForm = ({ t, history, match }) => {
@@ -72,6 +72,9 @@ const OvertimeForm = ({ t, history, match }) => {
       dispatch(setSubTabName(REQUEST_TABS.OVERTIME_REQUEST));
     }
     if (requestId) dispatch(fetchOvertimeRequest(requestId));
+    return () => {
+      dispatch(setEmptyOverTimeRequest());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -140,6 +143,7 @@ const OvertimeForm = ({ t, history, match }) => {
                       inputType={'text'}
                       inputClassName={'form-control'}
                       isDisable
+                      isHide={values.handler ? false : true}
                       isRequiredField
                     />
                     <CommonTextInput
@@ -152,6 +156,7 @@ const OvertimeForm = ({ t, history, match }) => {
                       inputType={'datetime-local'}
                       placeholder={t('placeholder.handleDate')}
                       inputClassName={'form-control'}
+                      isHide={values.handler ? false : true}
                       isDisable
                       isRequiredField
                     />
@@ -168,7 +173,10 @@ const OvertimeForm = ({ t, history, match }) => {
                       rows={10}
                     />
                   </div>
-                  <footer>{values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}</footer>
+
+                  <div style={{ position: 'absolute', bottom: 20, width: '94%' }}>
+                    {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  </div>
                 </form>
               )}
             </Formik>

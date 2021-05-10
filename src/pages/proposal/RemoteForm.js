@@ -10,7 +10,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest } from 'src/stores/actions/request';
+import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest, setEmptyRemoteRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
 const RemoteForm = ({ t, history, match }) => {
@@ -70,6 +70,9 @@ const RemoteForm = ({ t, history, match }) => {
       dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
     }
     if (requestId) dispatch(fetchRemoteRequest(requestId));
+    return () => {
+      dispatch(setEmptyRemoteRequest());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -136,6 +139,7 @@ const RemoteForm = ({ t, history, match }) => {
                       labelText={t('label.handler')}
                       inputType={'text'}
                       inputClassName={'form-control'}
+                      isHide={values.handler ? false : true}
                       isDisable
                       isRequiredField
                     />
@@ -149,6 +153,7 @@ const RemoteForm = ({ t, history, match }) => {
                       inputType={'datetime-local'}
                       placeholder={t('placeholder.handleDate')}
                       inputClassName={'form-control'}
+                      isHide={values.handler ? false : true}
                       isDisable
                       isRequiredField
                     />
@@ -162,10 +167,12 @@ const RemoteForm = ({ t, history, match }) => {
                       labelText={t('label.note')}
                       inputClassName={'form-control'}
                       placeholder={t('placeholder.enter_note')}
-                      rows={10}
+                      rows={9}
                     />
                   </div>
-                  {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  <div style={{ position: 'absolute', bottom: 20, width: '94%' }}>
+                    {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  </div>
                 </form>
               )}
             </Formik>
@@ -279,7 +286,7 @@ const RemoteForm = ({ t, history, match }) => {
                 initialValues={basicInfo}
                 // validationSchema={LeaveFormSchema}
                 onSubmit={(values) => {
-                  console.log(values);
+                  // console.log(values);
                 }}
               >
                 {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (

@@ -178,21 +178,7 @@ const RollUp = ({ t, location }) => {
       toDate: to,
     }));
   };
-  // useEffect(() => {
-  //   dispatch(
-  //     fetchHolidays({
-  //       page: 0,
-  //       perpage: 999,
-  //     }),
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
-  // console.log(
-  //   holidays.find(
-  //     (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), '2021-05-01') && isSameBeforeTypeDate('2021-05-01', e.endDate.replace('Z', '')),
-  //   ),
-  // );
   useEffect(() => {
     dispatch(
       fetchHolidays({
@@ -284,7 +270,7 @@ const RollUp = ({ t, location }) => {
           <></>
         )}
         <Table.Cell
-          className={classNames(className, isDay ? 'm-auto' : '')}
+          className={classNames(className, isDay ? 'm-auto' : 'm-auto')}
           row={row}
           column={column}
           children={children}
@@ -302,12 +288,13 @@ const RollUp = ({ t, location }) => {
                   : COLORS.WHITE //FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
               : '',
-            verticalAlign: 'text-top',
+            verticalAlign: 'inherit',
             padding: '8px',
             borderColor: 'white',
             borderStyle: 'solid',
             borderLeftColor: '#D8DBE0',
-            borderTopColor: '#D8DBE0',
+            borderBottomColor: '#D8DBE0',
+            borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
             borderWidth: 'thin',
             ...restProps.style,
           }}

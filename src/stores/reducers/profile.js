@@ -57,6 +57,11 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profile: initialState.profile,
       };
+    case REDUX_STATE.profile.EMPTY_LIST:
+      return {
+        ...state,
+        profiles: [],
+      };
     case REDUX_STATE.profile.GET_ROLES:
       return {
         ...state,

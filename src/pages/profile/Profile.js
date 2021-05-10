@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
+import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actions/profile';
 import Page404 from '../page404/Page404';
 
 const Profile = ({ t, location }) => {
@@ -57,6 +57,9 @@ const Profile = ({ t, location }) => {
           onTotalChange,
         ),
       );
+    return () => {
+      dispatch(setEmptyProfiles());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
   const deleteRow = async (rowId) => {

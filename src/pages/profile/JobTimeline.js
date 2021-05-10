@@ -18,12 +18,14 @@ import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import { fetchAttributes } from 'src/stores/actions/attribute';
 import {
+  activeContract,
   createContract,
   deleteContract,
   fetchAllowances,
   fetchBranches,
   fetchContracts,
   fetchWagesByType,
+  inactiveContract,
   setEmptyContracts,
   updateContract,
 } from 'src/stores/actions/contract';
@@ -45,27 +47,26 @@ const JobTimelineInfo = ({ t, history, match }) => {
   };
   const newContract = {
     isMinimize: false,
-    isOpen: true,
+    status: 'inactive',
     code: '',
     fullname: '',
     type: '',
-    pTaxType: '',
+    typeTax: '',
     signee: '',
-    probTime: '',
-    probPayRates: '',
-    standardHours: '',
+    standardHours: 0,
     handleDate: '',
     validDate: '',
     expiredDate: '',
     branchId: '',
     startWork: '',
-    paymentType: '',
+    formOfPayment: '',
     wageId: '',
     dayOff: '',
+    dependant: '',
     periodicPayment: '',
     salaryGroup: '',
     salary: '',
-    allowance: [],
+    allowances: [],
     files: [],
   };
   newContract.attributes = useSelector((state) => state.attribute.attributes);
@@ -115,27 +116,30 @@ const JobTimelineInfo = ({ t, history, match }) => {
     form.profileId = +match.params.id;
 
     if (!form.branchId) delete form.branchId;
-    else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
+    // else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
     // if (form.departmentId === '0') delete form.departmentId;
     // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
     // if (form.positionId === '0') delete form.positionId;
     // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
+      console.log('update', form);
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
       if (form.type === 'season') {
         delete form.wageId;
-        delete form.paymentType;
+        delete form.formOfPayment;
         delete form.amount;
         delete form.dayOff;
         delete form.periodicPayment;
-        delete form.pTaxType;
+        delete form.typeTax;
         delete form.salaryGroup;
         delete form.wageId;
         delete form.salary;
+        delete form.standardHours;
+      } else {
+        form.standardHours = +form.standardHours;
       }
-      console.log('create', form);
       dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
@@ -210,77 +214,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             lstSelectOptions={personalIncomeTaxType}
           />
 
-          <div className="form-group col-xl-4">
-            <Label text={t('label.trial_period')} required />
-            <div className="input-group">
-              <input
-                type="number"
-                className={'form-control'}
-                rows={5}
-                name={`probTime`}
-                onChange={(e) => handleChange(`probTime`)(e)}
-                placeholder={t('placeholder.enter_prob_time')}
-                value={values.probTime}
-              />
-              <span className="input-group-text" id="basic-addon2">
-                {t('label.day')}
-              </span>
-            </div>
-            {errors && errors?.probTime && touched && touched?.probTime && t(errors && errors?.probTime) && (
-              <div>
-                <small className={'text-danger'}>{t(errors?.probTime)}</small>
-              </div>
-            )}
-          </div>
-          <div className="form-group col-xl-4">
-            <Label text={t('label.trial_period_pay_rates')} required />
-            <div className="input-group">
-              <input
-                type="number"
-                className={'form-control'}
-                rows={5}
-                name={`probPayRates`}
-                placeholder={t('placeholder.enter_prob_payrate')}
-                onChange={(e) => handleChange(`probPayRates`)(e)}
-                value={values.probPayRates}
-              />
-              <span className="input-group-text" id="basic-addon2">
-                {t('label.percentage')}
-              </span>
-            </div>
-            {errors && errors?.probPayRates && touched && touched?.probPayRates && t(errors && errors?.probPayRates) && (
-              <div>
-                <small className={'text-danger'}>{t(errors?.probPayRates)}</small>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="row">
-          <div className="form-group col-xl-4">
-            <Label text={t('label.standard_hours')} required />
-            <div className="input-group">
-              <input
-                type="number"
-                className={'form-control col-10'}
-                rows={5}
-                onBlur={handleBlur('standardHours')}
-                name={`standardHours`}
-                onChange={(e) => handleChange(`standardHours`)(e)}
-                value={values.standardHours ?? ''}
-                placeholder={t('placeholder.enter_standard_hours')}
-              />
-              <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
-                {t('label.hours')}
-              </span>
-            </div>
-            {errors.standardHours && touched.standardHours && t(errors.standardHours) ? (
-              <div>
-                <small className={'text-danger'}>{t(errors.standardHours)}</small>
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.handleDate ?? ''}
@@ -400,18 +333,18 @@ const JobTimelineInfo = ({ t, history, match }) => {
             <div className="row">
               <CommonSelectInput
                 containerClassName={'form-group col-xl-4'}
-                value={values.paymentType ?? ''}
-                onBlur={handleBlur(`paymentType`)}
+                value={values.formOfPayment ?? ''}
+                onBlur={handleBlur(`formOfPayment`)}
                 onChange={async (e) => {
                   if (isCreate) {
                     if (e.target.value !== '0') {
                       dispatch(fetchWagesByType({ type: e.target.value }));
                       setFieldValue(`amount`, 0);
-                      handleChange(`paymentType`)(e);
+                      handleChange(`formOfPayment`)(e);
                     } else setFieldValue(`wageId`, '');
                   } else {
                     if (e.target.value !== '0') {
-                      handleChange(`paymentType`)(e);
+                      handleChange(`formOfPayment`)(e);
                       let wage = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
                       setFieldValue(`wages`, wage);
                     } else setFieldValue(`wages`, []);
@@ -419,14 +352,14 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     setFieldValue(`amount`, '');
                   }
                 }}
-                inputID={`paymentType`}
+                inputID={`formOfPayment`}
                 labelText={t('label.payment_method')}
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_contract_payment_method')}
                 isRequiredField
-                isTouched={touched.paymentType}
-                isError={errors.paymentType && touched.paymentType}
-                errorMessage={t(errors.paymentType)}
+                isTouched={touched.formOfPayment}
+                isError={errors.formOfPayment && touched.formOfPayment}
+                errorMessage={t(errors.formOfPayment)}
                 lstSelectOptions={paymentType}
               />
               <CommonSelectInput
@@ -462,12 +395,36 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 inputClassName={'form-control'}
                 placeholder={t('placeholder.enter_salary_level')}
                 isDisable
-                isTouched={touched?.amount}
-                isError={errors?.amount && touched?.amount}
-                errorMessage={t(errors?.amount)}
+                isTouched={touched?.wageId}
+                isError={errors?.wageId && touched?.wageId}
+                errorMessage={t(errors?.wageId)}
               />
-            </div>
-            <div className="row">
+              <div className="form-group col-xl-4">
+                <Label text={t('label.standard_hours')} required={values.formOfPayment === 'by_month'} />
+                <div className="input-group">
+                  <input
+                    type="number"
+                    className={'form-control col-10'}
+                    rows={5}
+                    onBlur={handleBlur('standardHours')}
+                    name={`standardHours`}
+                    onChange={(e) => handleChange(`standardHours`)(e)}
+                    value={values.standardHours ?? 0}
+                    placeholder={t('placeholder.enter_standard_hours')}
+                    disabled={values.formOfPayment !== 'by_month'}
+                  />
+                  <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
+                    {t('label.hours')}
+                  </span>
+                </div>
+                {errors.standardHours && touched.standardHours && t(errors.standardHours) ? (
+                  <div>
+                    <small className={'text-danger'}>{t(errors.standardHours)}</small>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
               <CommonTextInput
                 containerClassName={'form-group col-xl-4'}
                 value={values.dayOff ?? ''}
@@ -499,6 +456,23 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 isError={errors?.periodicPayment && touched?.periodicPayment}
                 errorMessage={t(errors?.periodicPayment)}
                 lstSelectOptions={periodicPayment}
+              />
+            </div>
+            <div className="row">
+              <CommonTextInput
+                containerClassName={'form-group col-xl-4'}
+                value={values.dependant ?? ''}
+                onBlur={handleBlur('dependant')}
+                onChange={handleChange('dependant')}
+                inputID={'dependant'}
+                labelText={t('label.wage_dependant')}
+                inputType={'number'}
+                placeholder={t('placeholder.enter_dependant')}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={touched.dependant}
+                isError={errors.dependant && touched.dependant}
+                errorMessage={t(errors.dependant)}
               />
             </div>
 
@@ -716,21 +690,15 @@ const JobTimelineInfo = ({ t, history, match }) => {
         </Formik>
         {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
           jobTimelineInfo.contractInfo.map((contract, index) => {
-            contract.isMinimize = false;
+            if (!contract?.isMinimize) contract.isMinimize = false;
             return (
               <Formik
                 key={index}
                 initialValues={contract}
                 validationSchema={NewContractSchema}
                 enableReinitialize
-                onSubmit={async (values) => {
-                  await create(values).then(() =>
-                    dispatch(
-                      fetchContracts({
-                        profileId: profileId,
-                      }),
-                    ),
-                  );
+                onSubmit={(values) => {
+                  create(values);
                 }}
               >
                 {(props) => {
@@ -749,10 +717,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
                             )}
                           </div>
                           <Switch
-                            checked={props.values.isOpen}
-                            name={`isOpen ${index}`}
+                            checked={props.values.status === 'active'}
+                            name={`status`}
                             onChange={(e) => {
-                              props.setFieldValue(`isOpen ${index}`, e.target.checked);
+                              console.log('e.target.checked', e.target.checked);
+                              e.target.checked
+                                ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
+                                : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
                             }}
                           />
                           {props.values.code + ' - ' + props.values.fullname}
@@ -812,6 +783,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                       className: `btn btn-primary px-4 ml-2`,
                                       onClick: (e) => {
                                         props.handleSubmit(e);
+                                        // console.log('errors', props.errors);
+                                        // console.log('values', props.values);
                                       },
                                       name: t('label.save'),
                                     },

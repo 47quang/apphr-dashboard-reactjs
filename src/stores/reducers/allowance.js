@@ -7,6 +7,8 @@ const initialState = {
     name: '',
     code: '',
     amount: '',
+    type: '',
+    bound: '',
   },
 };
 
@@ -25,6 +27,11 @@ const allowanceReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allowance: initialState.allowance,
+      };
+    case REDUX_STATE.allowance.EMPTY_LIST:
+      return {
+        ...state,
+        allowances: [],
       };
     default:
       return state;

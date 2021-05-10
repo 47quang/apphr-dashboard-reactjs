@@ -14,7 +14,7 @@ const Dashboard = ({ t, location }) => {
   return (
     <>
       <div className="m-4 p-4">
-        <h2>Thực thể</h2>
+        <h2>Tổng thể</h2>
         <div className={'row mt-2'}>
           <div className={'col-3'}>
             <CWidgetDropdown

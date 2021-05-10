@@ -45,10 +45,35 @@ const requestReducer = (state = initialState, { type, payload }) => {
         ...state,
         leaveForm: state.leaveRequests.filter((b) => b.id !== payload.id),
       };
-    case REDUX_STATE.leaveReq.EMPTY_VALUE:
+    case REDUX_STATE.leaveReq.EMPTY_LIST_LEAVE_REQUEST:
+      return {
+        ...state,
+        leaveRequests: [],
+      };
+    case REDUX_STATE.leaveReq.EMPTY_FORM_LEAVE_REQUEST:
       return {
         ...state,
         leaveForm: initialState.leaveForm,
+      };
+    case REDUX_STATE.remoteReq.EMPTY_LIST_REMOTE_REQUEST:
+      return {
+        ...state,
+        remoteRequests: [],
+      };
+    case REDUX_STATE.remoteReq.EMPTY_FORM_REMOTE_REQUEST:
+      return {
+        ...state,
+        remoteForm: initialState.remoteForm,
+      };
+    case REDUX_STATE.overtimeReq.EMPTY_LIST_OVERTIME_REQUEST:
+      return {
+        ...state,
+        overtimeRequests: [],
+      };
+    case REDUX_STATE.overtimeReq.EMPTY_FORM_OVERTIME_REQUEST:
+      return {
+        ...state,
+        overtimeForm: initialState.overtimeForm,
       };
     default:
       return state;

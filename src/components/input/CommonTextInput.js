@@ -20,6 +20,7 @@ const CommonTextInput = ({
   maxTime,
   isDisable,
   maxLength,
+  isHide,
   name,
 }) => {
   const checkInputClassName = () => {
@@ -29,7 +30,7 @@ const CommonTextInput = ({
     } else return inputClassName;
   };
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} hidden={isHide}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
       <input
         type={inputType}

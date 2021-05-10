@@ -10,7 +10,7 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
-import { approveLeaveRequest, fetchLeaveRequest, rejectLeaveRequest } from 'src/stores/actions/request';
+import { approveLeaveRequest, fetchLeaveRequest, rejectLeaveRequest, setEmptyLeaveRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
 const LeaveForm = ({ t, history, match }) => {
@@ -31,7 +31,7 @@ const LeaveForm = ({ t, history, match }) => {
   const fullyButtons = [
     {
       type: 'button',
-      className: `btn btn-primary mr-4`,
+      className: `btn btn-primary`,
 
       onClick: (e) => {
         history.push(ROUTE_PATH.LEAVE);
@@ -59,8 +59,7 @@ const LeaveForm = ({ t, history, match }) => {
   const handledButtons = [
     {
       type: 'button',
-      className: `btn btn-primary mr-4`,
-
+      className: `btn btn-primary `,
       onClick: (e) => {
         history.push(ROUTE_PATH.LEAVE);
       },
@@ -74,9 +73,11 @@ const LeaveForm = ({ t, history, match }) => {
       dispatch(setSubTabName(REQUEST_TABS.LEAVE_REQUEST));
     }
     if (requestId) dispatch(fetchLeaveRequest(requestId));
+    return () => {
+      dispatch(setEmptyLeaveRequest());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(leaveRequest);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -153,6 +154,7 @@ const LeaveForm = ({ t, history, match }) => {
                       labelText={t('label.handler')}
                       inputType={'text'}
                       inputClassName={'form-control'}
+                      isHide={values.handler ? false : true}
                       isDisable
                       isRequiredField
                     />
@@ -166,6 +168,7 @@ const LeaveForm = ({ t, history, match }) => {
                       inputType={'datetime-local'}
                       placeholder={t('placeholder.handleDate')}
                       inputClassName={'form-control'}
+                      isHide={values.handler ? false : true}
                       isDisable
                       isRequiredField
                     />
@@ -181,7 +184,9 @@ const LeaveForm = ({ t, history, match }) => {
                       placeholder={t('placeholder.enter_note')}
                     />
                   </div>
-                  {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  <div style={{ position: 'absolute', bottom: 20, width: '94%' }}>
+                    {values.status === 'new' ? renderButtons(fullyButtons) : renderButtons(handledButtons)}
+                  </div>
                 </form>
               )}
             </Formik>

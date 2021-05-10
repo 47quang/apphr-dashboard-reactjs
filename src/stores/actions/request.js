@@ -41,7 +41,7 @@ export const fetchLeaveRequest = (id) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.fullname = payload.profile.fullname;
-        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -129,7 +129,7 @@ export const fetchRemoteRequests = (params, onTotalChange) => {
           payload && payload?.length > 0
             ? payload.map((req) => {
                 req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeScheduleToString(req.createdAt);
+                req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
             : [];
@@ -153,7 +153,7 @@ export const fetchRemoteRequest = (id) => {
       .get(id)
       .then(({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
-        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
@@ -240,7 +240,7 @@ export const fetchOvertimeRequests = (params, onTotalChange) => {
           payload && payload?.length > 0
             ? payload.map((req) => {
                 req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeScheduleToString(req.createdAt);
+                req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
             : [];
@@ -264,10 +264,9 @@ export const fetchOvertimeRequest = (id) => {
       .get(id)
       .then(({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
-        payload.handler = payload.approverId ? payload.approver.profile.fullname : '';
+        payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
-        payload.assignment =
-          parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(formatDate(payload.date));
+        payload.assignment = parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(payload.date);
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })
       .catch((err) => {
@@ -338,9 +337,39 @@ export const rejectOvertimeRequest = (id, success_msg) => {
   };
 };
 
-export const setEmptyWage = () => {
+export const setEmptyLeaveRequests = () => {
   return {
-    type: REDUX_STATE.wage.EMPTY_VALUE,
+    type: REDUX_STATE.leaveReq.EMPTY_LIST_LEAVE_REQUEST,
+    payload: [],
+  };
+};
+export const setEmptyLeaveRequest = () => {
+  return {
+    type: REDUX_STATE.leaveReq.EMPTY_FORM_LEAVE_REQUEST,
+    payload: [],
+  };
+};
+export const setEmptyRemoteRequests = () => {
+  return {
+    type: REDUX_STATE.remoteReq.EMPTY_LIST_REMOTE_REQUEST,
+    payload: [],
+  };
+};
+export const setEmptyRemoteRequest = () => {
+  return {
+    type: REDUX_STATE.remoteReq.EMPTY_FORM_REMOTE_REQUEST,
+    payload: [],
+  };
+};
+export const setEmptyOverTimeRequests = () => {
+  return {
+    type: REDUX_STATE.overtimeReq.EMPTY_LIST_OVERTIME_REQUEST,
+    payload: [],
+  };
+};
+export const setEmptyOverTimeRequest = () => {
+  return {
+    type: REDUX_STATE.overtimeReq.EMPTY_FORM_OVERTIME_REQUEST,
     payload: [],
   };
 };

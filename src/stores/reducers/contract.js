@@ -62,8 +62,8 @@ const contractReducer = (state = initialState, { type, payload }) => {
       return { ...state, contracts: payload };
     case REDUX_STATE.contract.CREATE_CONTRACT:
       return { ...state, contracts: [payload, ...state.contracts] };
-    case REDUX_STATE.contract.SET_CONTRACT:
-      return { ...state, contract: Object.assign({}, state.contract, payload) };
+    case REDUX_STATE.contract.UPDATE_CONTRACT:
+      return { ...state, contracts: state.contracts.map((b) => (b.id === payload.id ? payload : b)) };
     case REDUX_STATE.contract.DELETE_CONTRACT:
       return {
         ...state,

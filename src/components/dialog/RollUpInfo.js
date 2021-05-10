@@ -1,5 +1,5 @@
 import { Avatar, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
-import { Cancel, Lens } from '@material-ui/icons';
+import { Cancel } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PAGE_SIZES } from 'src/constants/key';
@@ -92,10 +92,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           // disableCreate={false}
           // disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
         />
-        <div className="d-flex flex-row justify-content-end mb-3 pt-4 align-items-center text-danger">
-          <Lens className="mr-2" />
-          {t('label.lately_roll_call')}
-        </div>
       </DialogContent>
     </Dialog>
   );
