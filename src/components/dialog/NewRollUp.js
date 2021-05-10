@@ -1,5 +1,6 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import { Cancel } from '@material-ui/icons';
 import { Formik } from 'formik';
 import React from 'react';
 import { NewRollUpSchema } from 'src/schema/formSchema';
@@ -30,7 +31,11 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
             {(props) => {
               return (
                 <form className="p-0 m-0">
-                  <h5>{t('label.new_roll_up')}.</h5>
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <h5>{t('label.new_roll_up')}</h5>
+                    <Cancel fontSize="large" onClick={handleCancel} role="button" style={{ color: '#969696' }} />
+                  </div>
+
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonTextInput
@@ -63,15 +68,6 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
                   </div>
                   <hr className="mt-1" />
                   {renderButtons([
-                    {
-                      type: 'button',
-                      className: `btn btn-primary  mx-2`,
-                      onClick: (e) => {
-                        handleCancel();
-                      },
-                      name: t('label.cancel'),
-                      position: 'right',
-                    },
                     {
                       type: 'button',
                       className: `btn btn-primary px-4 ml-2`,

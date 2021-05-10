@@ -1,5 +1,6 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import { Cancel } from '@material-ui/icons';
 import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,7 +46,10 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
             {(props) => {
               return (
                 <form className="p-0 m-0">
-                  <h5>{t('label.new_task')}.</h5>
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <h5>{t('label.new_task')}</h5>
+                    <Cancel fontSize="large" onClick={handleCancel} role="button" style={{ color: '#969696' }} />
+                  </div>
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonSelectInput
@@ -115,15 +119,6 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                   </div>
                   <hr className="mt-1" />
                   {renderButtons([
-                    {
-                      type: 'button',
-                      className: `btn btn-primary  mx-2`,
-                      onClick: (e) => {
-                        handleCancel();
-                      },
-                      name: t('label.cancel'),
-                      position: 'right',
-                    },
                     {
                       type: 'button',
                       className: `btn btn-primary px-4 ml-2`,

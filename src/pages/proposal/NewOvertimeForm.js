@@ -18,7 +18,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
   const profiles = useSelector((state) => state.account.profiles);
   const shifts = useSelector((state) => state.shift.shifts);
   const status = [
-    { id: 'new', name: 'Đang xữ lý' },
+    { id: 'new', name: 'Đang xử lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];

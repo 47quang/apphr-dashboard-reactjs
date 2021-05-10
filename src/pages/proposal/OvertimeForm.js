@@ -19,7 +19,7 @@ const OvertimeForm = ({ t, history, match }) => {
   //   { id: 'holiday', name: t('label.holiday') },
   // ];
   const status = [
-    { id: 'new', name: 'Đang xữ lý' },
+    { id: 'new', name: 'Đang xử lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];

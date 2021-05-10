@@ -460,7 +460,7 @@ const QTable = (props) => {
   const StatusFormatter = ({ value }) => {
     return (
       <Chip
-        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xữ lý'}
+        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xử lý'}
         className="mx-1 my-1 px-0 py-0"
         style={{
           backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
