@@ -76,6 +76,11 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_BRANCH + `/${id}`);
     },
+    count: (params) => {
+      return client.get(API_PREFIX.API_SETTING_BRANCH + '/count', {
+        params: params,
+      });
+    },
   },
   department: {
     getAll: (params) => {
@@ -94,6 +99,11 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_SETTING_DEPARTMENT + `/${id}`);
+    },
+    count: (params) => {
+      return client.get(API_PREFIX.API_SETTING_DEPARTMENT + '/count', {
+        params: params,
+      });
     },
   },
   position: {
@@ -520,6 +530,11 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_LEAVE_REQUEST + `/${id}`);
     },
+    count: (params) => {
+      return client.get(API_PREFIX.API_LEAVE_REQUEST + '/count', {
+        params: params,
+      });
+    },
   },
   remoteRequest: {
     getAll: (params) => {
@@ -545,6 +560,11 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_REMOTE_REQUEST + `/${id}`);
     },
+    count: (params) => {
+      return client.get(API_PREFIX.API_REMOTE_REQUEST + '/count', {
+        params: params,
+      });
+    },
   },
   overtimeRequest: {
     getAll: (params) => {
@@ -569,6 +589,11 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_OVERTIME_REQUEST + `/${id}`);
+    },
+    count: (params) => {
+      return client.get(API_PREFIX.API_OVERTIME_REQUEST + '/count', {
+        params: params,
+      });
     },
   },
   attribute: {

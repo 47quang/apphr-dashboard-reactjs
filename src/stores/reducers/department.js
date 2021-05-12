@@ -9,6 +9,7 @@ const initialState = {
     branchId: 0,
     note: '',
   },
+  total: 0,
 };
 
 const departmentReducer = (state = initialState, { type, payload }) => {
@@ -30,6 +31,8 @@ const departmentReducer = (state = initialState, { type, payload }) => {
         ...state,
         department: initialState.department,
       };
+    case REDUX_STATE.department.COUNT_DEPARTMENTS:
+      return { ...state, total: payload };
     default:
       return state;
   }

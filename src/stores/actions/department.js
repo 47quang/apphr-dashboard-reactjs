@@ -104,3 +104,21 @@ export const resetDepartment = () => {
     payload: {},
   };
 };
+
+export const countDepartments = (params) => {
+  return (dispatch, getState) => {
+    api.department
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.department.COUNT_DEPARTMENTS, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
