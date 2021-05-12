@@ -108,7 +108,7 @@ const Dashboard = ({ t, location }) => {
               style={{
                 height: '175px',
               }}
-              text="Số đề xuất xin nghỉ chưa được xữ lý"
+              text="Số đề xuất xin nghỉ chưa được xử lý"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -130,7 +130,7 @@ const Dashboard = ({ t, location }) => {
               style={{
                 height: '175px',
               }}
-              text="Số đề xuất xin làm từ xa chưa được xữ lý"
+              text="Số đề xuất xin làm từ xa chưa được xử lý"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -152,7 +152,7 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
                 height: '175px',
               }}
-              text="Số đề xuất xin làm thêm giờ chưa được xữ lý"
+              text="Số đề xuất xin làm thêm giờ chưa được xử lý"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>

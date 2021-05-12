@@ -252,7 +252,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                               ? [
                                   {
                                     type: 'button',
-                                    className: `btn btn-primary  mx-2`,
+                                    className: `btn btn-primary mx-2`,
                                     onClick: (e) => {
                                       setIsVisibleDeleteAlert(true);
                                       setDeleteId(history.id);
@@ -262,7 +262,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                   },
                                   {
                                     type: 'button',
-                                    className: `btn btn-primary  mx-2`,
+                                    className: `btn btn-primary mx-2`,
                                     onClick: (e) => {
                                       props.handleReset(e);
                                     },
@@ -271,7 +271,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                                   },
                                   {
                                     type: 'button',
-                                    className: `btn btn-primary px-4 ml-4`,
+                                    className: `btn btn-primary px-4 mx-2`,
                                     onClick: async (e) => {
                                       props.handleSubmit(e);
                                     },
