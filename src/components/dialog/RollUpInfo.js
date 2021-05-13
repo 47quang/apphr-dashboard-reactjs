@@ -9,7 +9,7 @@ import { deleteRollUp } from 'src/stores/actions/rollUp';
 import QTable from '../table/Table';
 const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, assignment, profileId }) => {
   const dispatch = useDispatch();
-
+  const [isReload, setIsReload] = useState(false);
   const rows = useSelector((state) => state.assignment.assignment);
 
   const columnDef = [
@@ -21,7 +21,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
@@ -57,7 +56,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
       <DialogTitle className={'dialog-title-background'}>
         <div className="d-flex flex-row justify-content-between align-items-center">
           <div style={{ fontSize: 24, color: 'black', fontWeight: 'bold' }}>{t('label.history_roll_call')}</div>
-          <Cancel fontSize="large" onClick={handleClose} role="button" />
+          <Cancel fontSize="large" onClick={(e) => handleClose(isReload)} role="button" />
         </div>
       </DialogTitle>
       <DialogContent>
@@ -86,10 +85,16 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           disableFilter={true}
           isPopUp={true}
           deleteRow={deleteRow}
-          rollUpData={{ profileId: profileId, assignmentId: assignment?.id, startCC: assignment.startCC, date: rows.startTime }}
+          rollUpData={{
+            profileId: profileId,
+            assignmentId: assignment?.id,
+            startCC: assignment.startCC,
+            date: rows.startTime,
+            setIsReload: setIsReload,
+          }}
           editColumnWidth={'15%'}
           // disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
-          // disableCreate={false}
+          disableCreate={rows.rollUps && rows.rollUps.length > 0}
           // disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
         />
       </DialogContent>

@@ -324,6 +324,9 @@ export const api = {
     inactive: (id) => {
       return client.put(API_PREFIX.API_CONTRACT + `/${id}/deactive`);
     },
+    count: () => {
+      return client.get(API_PREFIX.API_CONTRACT + `/count-active`);
+    },
   },
   wage: {
     getAll: (params) => {

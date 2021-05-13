@@ -70,6 +70,10 @@ button:focus {
   font-size: small;
 }
 
+.assignment-leave:hover {
+  border-radius: 50px;
+  background-color: #ffc59a !important;
+}
 .assignment-remote:hover {
   border-radius: 50px;
   background-color: #f9ff3e !important;

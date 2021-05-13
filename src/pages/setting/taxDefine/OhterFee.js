@@ -3,25 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteWage, fetchWages } from 'src/stores/actions/wage';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
-import { fetchPayments } from 'src/stores/actions/payment';
+import { deletePayment, fetchPayments } from 'src/stores/actions/payment';
 
 const OtherFee = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const payments = useSelector((state) => state.payment.payments);
   const columnDef = [
-    { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'by', title: t('label.wage_name'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'value', title: t('label.payment_value'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'id', title: t('label.id'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.payment_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.payment_type'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
+    loading: false,
   });
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
@@ -39,6 +39,12 @@ const OtherFee = ({ t }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WAGE))
       dispatch(
@@ -48,14 +54,24 @@ const OtherFee = ({ t }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = async (rowId) => {
-    dispatch(deleteWage(rowId, t('message.successful_delete')));
-    dispatch(fetchWages());
+    dispatch(deletePayment(rowId, t('message.successful_delete')));
+    dispatch(
+      fetchPayments(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (

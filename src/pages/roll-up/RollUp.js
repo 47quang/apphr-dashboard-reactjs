@@ -1,9 +1,11 @@
 import { CContainer } from '@coreui/react';
+import DateFnsUtils from '@date-io/date-fns';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
 import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
@@ -51,6 +53,12 @@ const RollUp = ({ t, location }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
 
   const changeColDef = (fromDate) => [
     { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
@@ -178,6 +186,13 @@ const RollUp = ({ t, location }) => {
       toDate: to,
     }));
   };
+  const handleNewWeek = (date) => {
+    setState((preState) => ({
+      ...preState,
+      fromDate: moment(date).clone().startOf('week'),
+      toDate: moment(date).clone().endOf('week'),
+    }));
+  };
 
   useEffect(() => {
     dispatch(
@@ -195,6 +210,7 @@ const RollUp = ({ t, location }) => {
           to: state.toDate,
         },
         onTotalChange,
+        setLoading,
       ),
     );
     columnDefOfRollUp.current = changeColDef(state.fromDate);
@@ -216,9 +232,7 @@ const RollUp = ({ t, location }) => {
       isOpen: false,
       assignment: {},
     });
-    const isDay = value?.assignment;
-    const handleClose = () => {
-      setCell({ ...cell, isOpen: !cell.isOpen });
+    const reloadTable = () => {
       dispatch(
         fetchRollUpTable(
           {
@@ -230,6 +244,11 @@ const RollUp = ({ t, location }) => {
           onTotalChange,
         ),
       );
+    };
+    const isDay = value?.assignment;
+    const handleClose = (isReload) => {
+      setCell({ ...cell, isOpen: !cell.isOpen });
+      if (isReload) reloadTable();
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const statusIcon = (status, point, idx) => {
@@ -246,11 +265,13 @@ const RollUp = ({ t, location }) => {
       else if (status === 'overtime') return COLORS.OVERTIME;
       else if (status === 'remote') return COLORS.REMOTE;
       else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+      else if (status.includes('leave')) return COLORS.LEAVE;
     };
     const backgroundColorHover = (status) => {
       if (status === 'overtime') return 'assignment-overtime';
       else if (status === 'remote') return 'assignment-remote';
       else if (status === 'remote_overtime') return 'assignment-remote-overtime';
+      else if (status.includes('leave')) return 'assignment-leave';
       else return 'assignment-normal';
     };
     return (
@@ -265,6 +286,7 @@ const RollUp = ({ t, location }) => {
             fullName={row.fullname}
             profileId={row.id}
             avatar={row.avatar}
+            reloadTable={reloadTable}
           />
         ) : (
           <></>
@@ -287,7 +309,7 @@ const RollUp = ({ t, location }) => {
                   ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
                   : COLORS.WHITE //FULLY_ROLL_CALL
                 : COLORS.FREE_DATE
-              : '',
+              : COLORS.WHITE,
             verticalAlign: 'inherit',
             padding: '8px',
             borderColor: 'white',
@@ -381,18 +403,75 @@ const RollUp = ({ t, location }) => {
   };
   return (
     <CContainer fluid className="c-main px-4 py-2">
-      <div className="p-0 d-flex justify-content-center">
-        <Button onClick={handlePrev}>
+      <div className="p-0 d-flex justify-content-center align-items-center">
+        <Button onClick={handlePrev} style={{ height: '50%' }}>
           <NavigateBeforeIcon className="m-1" fontSize="large" />
         </Button>
-        <div className="d-inline">
+        <div>
           <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
-          <h5 className="d-flex justify-content-center">
-            {t('label.from') + ': ' + state.fromDate.format('DD/MM/YYYY') + t('label.to') + ': ' + state.toDate.format('DD/MM/YYYY')}
-          </h5>
+          {/* <div className="row px-2 d-flex align-items-center">
+            <p className="m-2 p-1">{t('label.from')}</p>
+            <TextField
+              className="m-2 pt-0"
+              id="date"
+              type="date"
+              onChange={(e) => {
+                console.log(e.target.value);
+                handleNewWeek(e.target.value);
+              }}
+              value={state.fromDate.format('yyyy-MM-DD')}
+              InputProps={{
+                inputProps: { min: 0, max: state.today.clone().endOf('week').format('yyyy-MM-DD'), pattern: 'DD/MM/yyyy' },
+                pattern: 'DD/MM/yyyy',
+              }}
+            />
+            <p className="m-2 pt-0">{t('label.to')}</p>
+            <TextField
+              id="date"
+              className="m-2 pt-0"
+              type="date"
+              value={state.toDate.format('yyyy-MM-DD')}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div> */}
+          <div className="d-flex justify-content-center align-items-center">
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <p className="m-2 pt-0">{t('label.from')}</p>
+              <KeyboardDatePicker
+                className="m-0 p-0"
+                disableToolbar
+                variant="inline"
+                autoOk={true}
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                value={new Date(state.fromDate.format('yyyy-MM-DD'))}
+                maxDate={new Date(state.today.format('yyyy-MM-DD'))}
+                onChange={(e) => {
+                  handleNewWeek(e);
+                }}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+              <p className="m-2 pt-0">{t('label.to')}</p>
+              <KeyboardDatePicker
+                className="m-0 p-0"
+                margin="normal"
+                id="date-picker-dialog"
+                readOnly={true}
+                keyboardIcon={<></>}
+                format="dd/MM/yyyy"
+                value={new Date(state.toDate.format('yyyy-MM-DD'))}
+              />
+            </MuiPickersUtilsProvider>
+          </div>
         </div>
-        <Button onClick={handleNext} disabled={state.today <= state.toDate}>
-          <NavigateNextIcon className="m-3" fontSize="large" />
+
+        <Button onClick={handleNext} style={{ height: '50%' }} disabled={state.today <= state.toDate}>
+          <NavigateNextIcon className="m-1" fontSize="large" />
         </Button>
       </div>
       <QTable
