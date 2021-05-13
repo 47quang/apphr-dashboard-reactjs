@@ -413,3 +413,21 @@ export const inactiveContract = (id, setFieldValue, success_msg) => {
       });
   };
 };
+
+export const countActiveContracts = () => {
+  return (dispatch, getState) => {
+    api.contract
+      .count()
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};

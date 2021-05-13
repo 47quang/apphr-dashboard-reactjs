@@ -2,20 +2,23 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchPayments = (params, onTotalChange) => {
+export const fetchPayments = (params, onTotalChange, setLoading) => {
   // const paymentType = {
   //  gross: 'Lương Gross',
   //  insurance: 'Lương bảo hiểm',
   // };
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.payment
       .getAll(params)
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
       })
       .catch((err) => {
         console.log(err);
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
       });
   };
 };

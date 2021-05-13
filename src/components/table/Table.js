@@ -3,7 +3,6 @@ import {
   CustomPaging,
   DataTypeProvider,
   EditingState,
-  IntegratedFiltering,
   IntegratedSelection,
   PagingState,
   SelectionState,
@@ -23,6 +22,7 @@ import {
   TableHeaderRow,
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
+import { CircularProgress } from '@material-ui/core';
 // import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -103,7 +103,9 @@ const _styles = (theme) => ({
   },
 });
 
-const TableComponentBase = ({ classes, ...restProps }) => <Table.Table {...restProps} className={classes.tableStriped} />;
+const TableComponentBase = ({ classes, ...restProps }) => {
+  return <Table.Table {...restProps} className={classes.tableStriped} />;
+};
 
 export const TableComponent = withStyles(styles, {
   name: 'TableComponent',
@@ -119,19 +121,19 @@ const ToolbarRootBase = ({ classes, className, ...restProps }) => {
 
 const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 
-const filteringColumnExtensions = [
-  {
-    columnName: 'saleDate',
-    predicate: (value, filter, row) => {
-      if (!filter.value.length) return true;
-      if (filter && filter.operation === 'month') {
-        const month = parseInt(value.split('-')[1], 10);
-        return month === parseInt(filter.value, 10);
-      }
-      return IntegratedFiltering.defaultPredicate(value, filter, row);
-    },
-  },
-];
+// const filteringColumnExtensions = [
+//   {
+//     columnName: 'saleDate',
+//     predicate: (value, filter, row) => {
+//       if (!filter.value.length) return true;
+//       if (filter && filter.operation === 'month') {
+//         const month = parseInt(value.split('-')[1], 10);
+//         return month === parseInt(filter.value, 10);
+//       }
+//       return IntegratedFiltering.defaultPredicate(value, filter, row);
+//     },
+//   },
+// ];
 
 const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
   const dispatch = useDispatch();
@@ -151,6 +153,7 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
                     {
                       assignmentId: rollUpData.assignmentId,
                     },
+                    rollUpData.setIsReload,
                     t('label.roll_up_success'),
                   ),
                 );
@@ -412,7 +415,6 @@ const QTable = (props) => {
         };
       })
     : [];
-
   const columnsFilter = idxColumnsFilter
     ? idxColumnsFilter.map((idx) => ({
         id: idx,
@@ -460,7 +462,7 @@ const QTable = (props) => {
   const StatusFormatter = ({ value }) => {
     return (
       <Chip
-        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xữ lý'}
+        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xử lý'}
         className="mx-1 my-1 px-0 py-0"
         style={{
           backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
@@ -474,6 +476,16 @@ const QTable = (props) => {
     value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
+
+  const NoDataCellComponent = ({ getMessage, ...restProps }) => {
+    //<CircularProgress className="loading-icon-mui" />
+    return (
+      <td className="py-5 text-center" colSpan={restProps.colSpan}>
+        {paging.loading ? <CircularProgress className="loading-icon-mui" /> : <big className="text-muted">{getMessage('noData')}</big>}
+      </td>
+    );
+  };
+
   return (
     <div>
       <Paper>
@@ -566,7 +578,6 @@ const QTable = (props) => {
               },
             ]}
           />
-          <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
           <DragDropProvider />
           {customTableCell ? (
             <Table
@@ -574,9 +585,10 @@ const QTable = (props) => {
               columnExtensions={tableColumnExtensions}
               tableComponent={disableToolBar ? _TableComponent : TableComponent}
               cellComponent={customTableCell}
+              noDataCellComponent={NoDataCellComponent}
             />
           ) : (
-            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} />
+            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} noDataCellComponent={NoDataCellComponent} />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           {paddingColumnHeader ? <TableHeaderRow showSortingControls cellComponent={Label} /> : <TableHeaderRow showSortingControls />}
@@ -614,54 +626,30 @@ const QTable = (props) => {
           <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
           <ColumnChooser /> */}
           <TableFixedColumns />
-          <CustomTableEditColumn
-            t={t}
-            route={route}
-            deleteRow={deleteRow}
-            disableDelete={disableDelete}
-            disableEdit={disableEdit}
-            disableEditColum={disableEditColum}
-            isPopUp={isPopUp}
-            editColumnWidth={editColumnWidth}
-            rollUpData={rollUpData}
-          />
+          {disableEditColum ? (
+            <></>
+          ) : (
+            <CustomTableEditColumn
+              t={t}
+              route={route}
+              deleteRow={deleteRow}
+              disableDelete={disableDelete}
+              disableEdit={disableEdit}
+              disableEditColum={disableEditColum}
+              isPopUp={isPopUp}
+              editColumnWidth={editColumnWidth}
+              rollUpData={rollUpData}
+            />
+          )}
+
           {/* <TableSelection showSelectAll /> */}
           {!notPaging ? <PagingPanel pageSizes={paging.pageSizes} /> : <></>}
         </Grid>
-        {/* {paging.loading && (
-          <div className="loading-shading-mui">
-            <CircularProgress className="loading-icon-mui" />
-          </div>
-        )} */}
+
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' ? (
-          <div>
-            <div className="row m-2">
-              <div className="col-4">
-                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-                <p className="d-inline">{t('label.free_date')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
-                <p className="d-inline">{t('label.holiday')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
-                <p className="d-inline">{t('label.remote_req')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
-                <p className="d-inline">{t('label.overtime_req')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
-                <p className="d-inline">{t('label.overtime_remote_req')}</p>
-              </div>
-            </div>
-            <div className="row m-2">
-              <div className="col-2"></div>
-              <div className="col-2"></div>
-
+          <div className="p-0">
+            <div className="row p-0 m-1">
               <div className="col-2">
                 <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
@@ -674,9 +662,35 @@ const QTable = (props) => {
                 <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.roll_up_success')}</p>
               </div>
-              <div className="col-2">
+              <div className="col-6 d-flex align-items-start">
                 <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.absent_roll_Call')}</p>
+              </div>
+            </div>
+            <div className="row m-2">
+              <div className="col-2 d-flex align-items-start">
+                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
+                <p>{t('label.free_date')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
+                <p className="d-inline">{t('label.holiday')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.LEAVE }} />
+                <p className="d-inline">{t('label.leave')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
+                <p className="d-inline">{t('label.remote_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
+                <p className="d-inline">{t('label.overtime_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <p className="d-inline">{t('label.overtime_remote_req')}</p>
               </div>
             </div>
           </div>

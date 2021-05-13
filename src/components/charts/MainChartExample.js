@@ -54,7 +54,7 @@ const MainChartExample = (attributes) => {
     return {
       maintainAspectRatio: false,
       legend: {
-        display: false,
+        // display: false,
       },
       scales: {
         xAxes: [

@@ -21,7 +21,7 @@ const LeaveForm = ({ t, history, match }) => {
     { id: 'policy', name: t('label.leave_policy') },
   ];
   const status = [
-    { id: 'new', name: 'Đang xữ lý' },
+    { id: 'new', name: 'Đang xử lý' },
     { id: 'approve', name: 'Đã phê duyệt' },
     { id: 'reject', name: 'Đã từ chối' },
   ];

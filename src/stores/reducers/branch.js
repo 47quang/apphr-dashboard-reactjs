@@ -14,6 +14,7 @@ const initialState = {
     note: '',
     ipRouter: '',
   },
+  total: 0,
 };
 
 const branchReducer = (state = initialState, { type, payload }) => {
@@ -32,6 +33,8 @@ const branchReducer = (state = initialState, { type, payload }) => {
         ...state,
         branch: initialState.branch,
       };
+    case REDUX_STATE.branch.COUNT_BRANCHES:
+      return { ...state, total: payload };
     default:
       return state;
   }

@@ -54,6 +54,7 @@ const initialState = {
   wages: [],
   allowances: [],
   benefits: [],
+  total: 0,
 };
 
 const contractReducer = (state = initialState, { type, payload }) => {
@@ -92,7 +93,8 @@ const contractReducer = (state = initialState, { type, payload }) => {
       };
     case REDUX_STATE.contract.SET_BENEFITS:
       return { ...state, benefits: payload };
-
+    case REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT:
+      return { ...state, total: payload };
     default:
       return state;
   }

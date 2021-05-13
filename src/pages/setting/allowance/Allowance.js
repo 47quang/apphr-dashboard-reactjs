@@ -22,6 +22,7 @@ const Allowance = ({ t }) => {
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
+    loading: false,
   });
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
@@ -39,6 +40,12 @@ const Allowance = ({ t }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   const decreaseTotal = (decrease) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -53,6 +60,7 @@ const Allowance = ({ t }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     return () => {
@@ -70,6 +78,7 @@ const Allowance = ({ t }) => {
           perpage: paging.pageSize,
         },
         onTotalChange,
+        setLoading,
       ),
     );
   };

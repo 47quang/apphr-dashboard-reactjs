@@ -24,6 +24,7 @@ import assignmentReducer from './assignment';
 import requestReducer from './request';
 import attributeReducer from './attribute';
 import paymentReducer from './payment';
+import dashboardReducer from './dashboard';
 
 export default combineReducers({
   style: styleReducer,
@@ -51,4 +52,5 @@ export default combineReducers({
   request: requestReducer,
   attribute: attributeReducer,
   payment: paymentReducer,
+  dashboard: dashboardReducer,
 });

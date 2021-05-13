@@ -1,20 +1,51 @@
 import CIcon from '@coreui/icons-react';
-import { CButton, CButtonGroup, CCard, CCardBody, CCardFooter, CCol, CProgress, CRow, CWidgetDropdown } from '@coreui/react';
-import { AttachMoney, Cancel, MoneyOff, TrendingDown, TrendingFlat, TrendingUp } from '@material-ui/icons';
-import React from 'react';
+import { CCard, CCardBody, CCol, CRow, CWidgetDropdown } from '@coreui/react';
+import { TrendingDown, TrendingUp } from '@material-ui/icons';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import MainChartExample from 'src/components/charts/MainChartExample';
 import AccountIcon from 'src/components/icon/Account';
 import BranchesIcon from 'src/components/icon/Branches';
 import DepartmentIcon from 'src/components/icon/Department';
-import EmployeeWorkingIcon from 'src/components/icon/EmployeeWorkingIcon';
-import OverTimeICon from 'src/components/icon/Overtime';
-import TeleWorking from 'src/components/icon/TeleWorking';
+import { countActiveContracts } from 'src/stores/actions/contract';
+
+import { countBranches, countDepartments, countLeaveRequests, countOvertimeRequests, countRemoteRequests } from 'src/stores/actions/dashboard';
 
 const Dashboard = ({ t, location }) => {
+  const totalEmployee = useSelector((state) => state.contract.total);
+  const totalBranch = useSelector((state) => state.dashboard.totalBranch);
+  const totalDepartment = useSelector((state) => state.dashboard.totalDepartment);
+  const totalLeave = useSelector((state) => state.dashboard.totalLeave);
+  const totalRemote = useSelector((state) => state.dashboard.totalRemote);
+  const totalOvertime = useSelector((state) => state.dashboard.totalOvertime);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(countActiveContracts());
+    dispatch(countBranches());
+    dispatch(countDepartments());
+    dispatch(
+      countLeaveRequests({
+        status: 'new',
+      }),
+    );
+    dispatch(
+      countRemoteRequests({
+        status: 'new',
+      }),
+    );
+    dispatch(
+      countOvertimeRequests({
+        status: 'new',
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <div className="m-4 p-4">
-        <h2>Tổng thể</h2>
+        <h2>{t('label.overall')}</h2>
         <div className={'row mt-2'}>
           <div className={'col-3'}>
             <CWidgetDropdown
@@ -24,16 +55,18 @@ const Dashboard = ({ t, location }) => {
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>51</p>
+                    <p>{totalEmployee}</p>
                   </h1>
                   <div className="row ml-4">
                     <TrendingUp />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
+                    <h5 className="pl-2">5% + {t('label.compare_with_previous_month')}</h5>
                   </div>
                 </div>
               }
             >
-              <AccountIcon />
+              <Link to={'/profile'}>
+                <AccountIcon />
+              </Link>
             </CWidgetDropdown>
           </div>
           <div className={'col-3'}>
@@ -50,159 +83,38 @@ const Dashboard = ({ t, location }) => {
                   </h1>
                   <div className="row ml-4">
                     <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
+                    <h5 className="pl-2">5% + {t('label.compare_with_previous_month')}</h5>
                   </div>
                 </div>
               }
             >
-              <CIcon name="cilPeople" size="xl" />
+              <Link to={'/account'} style={{ color: 'white' }}>
+                <CIcon name="cilPeople" size="xl" />
+              </Link>
             </CWidgetDropdown>
           </div>
           <div className={'col-3'}>
             <CWidgetDropdown
+              color="gradient-primary"
               style={{
-                background: `linear-gradient(to right, #0000ff 19%, #9966ff 100%)`,
                 height: '175px',
               }}
               text="Tổng số chi nhánh"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>51</p>
+                    <p>{totalBranch}</p>
                   </h1>
                   <div className="row ml-4">
                     <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
+                    <h5 className="pl-2">5% + {t('label.compare_with_previous_month')}</h5>
                   </div>
                 </div>
               }
             >
-              <BranchesIcon />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              style={{
-                background: `linear-gradient(to right, #99ff99 0%, #33cc33 100%)`,
-                height: '175px',
-              }}
-              text="Tổng số phòng ban"
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>51</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <DepartmentIcon />
-            </CWidgetDropdown>
-          </div>
-        </div>
-        <h2>Điểm danh</h2>
-        <div className="row mt-2">
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              color="gradient-success"
-              text="Số nhân viên đang làm việc"
-              style={{ height: '175px' }}
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>45</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <EmployeeWorkingIcon />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              color="gradient-primary"
-              style={{ height: '175px' }}
-              text="Số nhân viên nghỉ phép có lương/nghỉ chế độ"
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>7</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <AttachMoney />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              color="gradient-dark"
-              text="Số nhân viên nghỉ phép không lương"
-              style={{ height: '175px' }}
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>6</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <MoneyOff />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              color="gradient-danger"
-              text="Số nhân viên nghỉ không phép"
-              style={{ height: '175px' }}
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>1</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingFlat />
-                    <h5 className="pl-2">Không đổi so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <Cancel />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              color="gradient-info"
-              text="Số nhân viên làm từ xa"
-              style={{ height: '175px' }}
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>2</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <TeleWorking />
+              <Link to={'/setting/branch'}>
+                <BranchesIcon />
+              </Link>
             </CWidgetDropdown>
           </div>
           <div className={'col-3'}>
@@ -211,45 +123,65 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to left, #99ccff 0%, #cc99ff 100%)`,
                 height: '175px',
               }}
-              text="Số nhân viên làm thêm giờ"
+              text="Tổng số phòng ban"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>6</p>
+                    <p>{totalDepartment}</p>
                   </h1>
                   <div className="row ml-4">
                     <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
+                    <h5 className="pl-2">5% + {t('label.compare_with_previous_month')}</h5>
                   </div>
                 </div>
               }
             >
-              <OverTimeICon />
+              <Link to={'/setting/department'}>
+                <DepartmentIcon />
+              </Link>
             </CWidgetDropdown>
           </div>
         </div>
-        <h2>Đề xuất</h2>
+        <h2>{t('label.request')}</h2>
         <div className="row mt-2">
           <div className={'col-3'}>
             <CWidgetDropdown
+              color="gradient-success"
               style={{
-                background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
                 height: '175px',
               }}
-              text="Số đề xuất xin nghỉ chưa được xữ lý"
+              text="Số đề xuất xin nghỉ chưa được xử lý"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>4</p>
+                    <p>{totalLeave}</p>
                   </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
                 </div>
               }
             >
-              <CIcon name="cilPeople" size="xl" />
+              <Link to={'/proposal/leave'} style={{ color: 'white' }}>
+                <CIcon name="cilPeople" size="xl" />
+              </Link>
+            </CWidgetDropdown>
+          </div>
+          <div className={'col-3'}>
+            <CWidgetDropdown
+              color="gradient-info"
+              style={{
+                height: '175px',
+              }}
+              text="Số đề xuất xin làm từ xa chưa được xử lý"
+              footerSlot={
+                <div className={'text-center'} style={{ height: '100px' }}>
+                  <h1>
+                    <p>{totalRemote}</p>
+                  </h1>
+                </div>
+              }
+            >
+              <Link to={'/proposal/remote'} style={{ color: 'white' }}>
+                <CIcon name="cilPeople" size="xl" />
+              </Link>
             </CWidgetDropdown>
           </div>
           <div className={'col-3'}>
@@ -258,130 +190,35 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
                 height: '175px',
               }}
-              text="Số đề xuất xin làm từ xa chưa được xữ lý"
+              text="Số đề xuất xin làm thêm giờ chưa được xử lý"
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>4</p>
+                    <p>{totalOvertime}</p>
                   </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
                 </div>
               }
             >
-              <CIcon name="cilPeople" size="xl" />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              style={{
-                background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
-                height: '175px',
-              }}
-              text="Số đề xuất xin làm thêm giờ chưa được xữ lý"
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>4</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <CIcon name="cilPeople" size="xl" />
+              <Link to={'/proposal/overtime'} style={{ color: 'white' }}>
+                <CIcon name="cilPeople" size="xl" />
+              </Link>
             </CWidgetDropdown>
           </div>
         </div>
-        <h2>Lương</h2>
-        <div className="row mt-2">
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              style={{
-                background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
-                height: '175px',
-              }}
-              text="Tổng tiền lương"
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>100,000,000 VNĐ</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <CIcon name="cilPeople" size="xl" />
-            </CWidgetDropdown>
-          </div>
-          <div className={'col-3'}>
-            <CWidgetDropdown
-              style={{
-                background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
-                height: '175px',
-              }}
-              text="Tiền lương trung bình"
-              footerSlot={
-                <div className={'text-center'} style={{ height: '100px' }}>
-                  <h1>
-                    <p>15,000,000 VNĐ</p>
-                  </h1>
-                  <div className="row ml-4">
-                    <TrendingDown />
-                    <h5 className="pl-2">5% so với tháng trước</h5>
-                  </div>
-                </div>
-              }
-            >
-              <CIcon name="cilPeople" size="xl" />
-            </CWidgetDropdown>
-          </div>
-        </div>
+        <CCard>
+          <CCardBody>
+            <CRow>
+              <CCol sm="5">
+                <h4 id="traffic" className="card-title mb-0">
+                  Biểu đồ điểm danh
+                </h4>
+                <div className="small text-muted">Tháng 5 2021</div>
+              </CCol>
+            </CRow>
+            <MainChartExample style={{ height: '300px', marginTop: '20px' }} />
+          </CCardBody>
+        </CCard>
       </div>
-      <CCard className="p-4 m-4">
-        <CCardBody>
-          <CRow>
-            <CCol sm="5">
-              <h4 id="traffic" className="card-title mb-0">
-                Biểu đồ điểm danh
-              </h4>
-              <div className="small text-muted">Tháng 5 2021</div>
-            </CCol>
-            <CCol sm="7" className="d-none d-md-block">
-              <CButton color="primary" className="float-right">
-                <CIcon name="cil-cloud-download" />
-              </CButton>
-              <CButtonGroup className="float-right mr-3">
-                {['Tháng'].map((value) => (
-                  <CButton color="outline-secondary" key={value} className="mx-0" active={value === 'Month'}>
-                    {value}
-                  </CButton>
-                ))}
-              </CButtonGroup>
-            </CCol>
-          </CRow>
-          <MainChartExample style={{ height: '300px', marginTop: '40px' }} />
-        </CCardBody>
-        <CCardFooter>
-          <CRow className="text-center">
-            <CCol md sm="12" className="mb-sm-2 mb-0">
-              <div className="text-muted">Tổng số nhân viên</div>
-              <CProgress className="progress-xs mt-2" precision={1} color="success" value={100} />
-            </CCol>
-            <CCol md sm="12" className="mb-sm-2 mb-0 d-md-down-none">
-              <div className="text-muted">Số nhân viên đi làm</div>
-              <CProgress className="progress-xs mt-2" precision={1} color="info" value={100} />
-            </CCol>
-          </CRow>
-        </CCardFooter>
-      </CCard>
     </>
   );
 };

@@ -45,7 +45,12 @@ const compareHours = (a1, a2) => {
   return +a1.startCC.split(':')[0] - a2.startCC.split(':')[0];
 };
 
-export const fetchRollUpTable = (params, onTotalChange) => {
+export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
+  if (setLoading) {
+    setInterval(10000);
+
+    setLoading(true);
+  }
   return (dispatch, getState) => {
     api.profile
       .getRollUpTable(params)
@@ -123,9 +128,9 @@ export const fetchRollUpTable = (params, onTotalChange) => {
               })
             : [];
 
-        console.log(data);
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         console.log(err);

@@ -2,13 +2,14 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchWages = (params, onTotalChange) => {
+export const fetchWages = (params, onTotalChange, setLoading) => {
   const paymentType = {
     one_time: 'Chi trả một lần',
     by_hour: 'Chi trả theo giờ',
     by_month: 'Chi trả theo tháng',
     by_date: 'Chi trả theo ngày công',
   };
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
       .getAll(params)
@@ -22,9 +23,11 @@ export const fetchWages = (params, onTotalChange) => {
           });
         dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
       })
       .catch((err) => {
         console.log(err);
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
       });
   };
 };

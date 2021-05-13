@@ -24,6 +24,9 @@ const initialState = {
     note: '',
     assignments: [],
   },
+  totalLeave: 0,
+  totalRemote: 0,
+  totalOvertime: 0,
 };
 
 const requestReducer = (state = initialState, { type, payload }) => {
@@ -75,6 +78,12 @@ const requestReducer = (state = initialState, { type, payload }) => {
         ...state,
         overtimeForm: initialState.overtimeForm,
       };
+    case REDUX_STATE.leaveReq.COUNT_LEAVE_REQUESTS:
+      return { ...state, totalLeave: payload };
+    case REDUX_STATE.remoteReq.COUNT_REMOTE_REQUESTS:
+      return { ...state, totalRemote: payload };
+    case REDUX_STATE.overtimeReq.COUNT_OVERTIME_REQUESTS:
+      return { ...state, totalOvertime: payload };
     default:
       return state;
   }

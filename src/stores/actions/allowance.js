@@ -2,7 +2,8 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchAllowances = (params, onTotalChange) => {
+export const fetchAllowances = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.allowance
       .getAll(params)
@@ -17,9 +18,11 @@ export const fetchAllowances = (params, onTotalChange) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

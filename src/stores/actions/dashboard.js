@@ -1,13 +1,12 @@
-import { api } from '../apis/index';
+import { api } from '../apis';
 import { REDUX_STATE } from '../states';
-import { fetchAssignment } from './assignment';
 
-export const fetchRollUps = (params) => {
+export const countBranches = (params) => {
   return (dispatch, getState) => {
-    api.rollUp
-      .getAll(params)
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.rollUp.GET_ROLLUP, payload });
+    api.branch
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.dashboard.COUNT_BRANCHES, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -20,33 +19,29 @@ export const fetchRollUps = (params) => {
   };
 };
 
-export const createRollUp = (params, setIsReload, success_msg) => {
+export const countDepartments = (params) => {
   return (dispatch, getState) => {
-    api.rollUp
-      .post(params)
-      .then(({ payload }) => {
-        dispatch(fetchAssignment(params.assignmentId));
-        if (setIsReload) setIsReload(true);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+    api.department
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.dashboard.COUNT_DEPARTMENTS, payload });
       })
       .catch((err) => {
-        console.log(err.response);
-        if (err?.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err.response.data.message } });
-        else if (err?.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err.response.data.message } });
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
-
-export const updateRollUp = (data, assignmentId, success_msg) => {
+export const countLeaveRequests = (params) => {
   return (dispatch, getState) => {
-    api.rollUp
-      .put(data)
-      .then(({ payload }) => {
-        dispatch(fetchAssignment(assignmentId));
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+    api.leaveRequest
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.dashboard.COUNT_LEAVE_REQUESTS, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -59,14 +54,12 @@ export const updateRollUp = (data, assignmentId, success_msg) => {
   };
 };
 
-export const deleteRollUp = (id, assignmentId, success_msg) => {
+export const countRemoteRequests = (params) => {
   return (dispatch, getState) => {
-    api.rollUp
-      .delete(id)
-      .then(({ payload }) => {
-        console.log('assignmentId', assignmentId);
-        dispatch(fetchAssignment(assignmentId));
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+    api.remoteRequest
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.dashboard.COUNT_REMOTE_REQUESTS, payload });
       })
       .catch((err) => {
         console.log(err);
@@ -79,9 +72,20 @@ export const deleteRollUp = (id, assignmentId, success_msg) => {
   };
 };
 
-export const setEmptyArticle = () => {
-  return {
-    type: REDUX_STATE.article.EMPTY_VALUE,
-    payload: [],
+export const countOvertimeRequests = (params) => {
+  return (dispatch, getState) => {
+    api.overtimeRequest
+      .count(params)
+      .then(({ payload, total }) => {
+        dispatch({ type: REDUX_STATE.dashboard.COUNT_OVERTIME_REQUESTS, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
   };
 };
