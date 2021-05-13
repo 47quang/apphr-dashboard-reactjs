@@ -2,7 +2,8 @@ import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchContracts = (params) => {
+export const fetchContracts = (params, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -35,9 +36,10 @@ export const fetchContracts = (params) => {
             : [];
         payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        console.log('fetchContracts', payload);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -48,7 +50,8 @@ export const fetchContracts = (params) => {
   };
 };
 
-export const fetchWageHistories = (params) => {
+export const fetchWageHistories = (params, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -82,9 +85,10 @@ export const fetchWageHistories = (params) => {
         payload = await Promise.all(payload);
 
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        console.log('fetchWageHistories', payload);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

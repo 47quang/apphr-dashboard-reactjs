@@ -48,7 +48,8 @@ export const updateHistoryWork = (data, success_msg) => {
   };
 };
 
-export const fetchHistoriesWork = (params) => {
+export const fetchHistoriesWork = (params, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.historyWork
       .getAll(params)
@@ -65,8 +66,10 @@ export const fetchHistoriesWork = (params) => {
           });
         payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((error) => {
+        if (setLoading) setLoading(false);
         console.log(error);
         if (error.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

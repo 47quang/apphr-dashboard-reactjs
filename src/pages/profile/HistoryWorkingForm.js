@@ -1,4 +1,5 @@
 import { CContainer } from '@coreui/react';
+import { CircularProgress } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { Form, Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
@@ -24,6 +25,8 @@ const HistoryWorkingForm = ({ t, match }) => {
   historyWorkingForm.histories = histories;
   const departments = useSelector((state) => state.department.departments);
   const profileId = +match?.params?.id;
+  const [loading, setLoading] = useState(false);
+
   const newHistory = {
     profileId: profileId,
     branchId: '',
@@ -36,9 +39,12 @@ const HistoryWorkingForm = ({ t, match }) => {
     if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
       dispatch(fetchBranches());
       dispatch(
-        fetchHistoriesWork({
-          profileId: profileId,
-        }),
+        fetchHistoriesWork(
+          {
+            profileId: profileId,
+          },
+          setLoading,
+        ),
       );
     }
     return () => {
@@ -166,151 +172,159 @@ const HistoryWorkingForm = ({ t, match }) => {
     setIsVisibleDeleteAlert(false);
   };
   return (
-    <CContainer fluid className="c-main">
-      <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-        <button
-          type="button"
-          hidden={!permissionIds.includes(PERMISSION.CREATE_WORK_HISTORY)}
-          className="btn btn-success rounded-circle p-3"
-          id="addBtn"
-          onClick={() => {
-            document.getElementById('newHistory').hidden = false;
-            document.getElementById('addBtn').disabled = true;
-          }}
-        >
-          <Add fontSize="large" />
-        </button>
-      </div>
-      <div className="m-auto">
-        <div className="">
-          <Formik
-            innerRef={newHistoryRef}
-            initialValues={newHistory}
-            validationSchema={NewHistoryWorkingSchema}
-            enableReinitialize
-            onSubmit={(values) => {
-              create(values);
-            }}
-          >
-            {(props) => {
-              props.isCreate = true;
-              return (
-                <Form id="newHistory" hidden={true} className="p-0 m-0">
-                  <div className="shadow bg-white rounded mx-4 p-4">
-                    <h5>{'Tạo mới'}.</h5>
-                    <hr className="mt-1" />
-                    <BodyItem {...props} />
-                    <hr className="mt-1" />
-                    {renderButtons([
-                      {
-                        type: 'button',
-                        className: `btn btn-primary  mx-2`,
-                        onClick: () => {
-                          handleResetNewHistory();
-                        },
-                        name: t('label.cancel'),
-                        position: 'right',
-                      },
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 ml-4`,
-                        onClick: async (e) => {
-                          props.handleSubmit(e);
-                        },
-                        name: t('label.save'),
-                      },
-                    ])}
-                  </div>
-                  <br />
-                </Form>
-              );
-            }}
-          </Formik>
-          {permissionIds.includes(PERMISSION.LIST_WORK_HISTORY) && historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
-            historyWorkingForm.histories.map((history, index) => {
-              return (
-                <Formik
-                  key={'history ' + index}
-                  initialValues={history}
-                  validationSchema={NewHistoryWorkingSchema}
-                  enableReinitialize
-                  onSubmit={async (values) => {
-                    create(values);
-                  }}
-                >
-                  {(props) => {
-                    return (
-                      <Form className="p-0 m-0">
-                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                          <h5>{index + 1}.</h5>
-                          <hr className="mt-1" />
-                          <BodyItem {...props} />
-                          <hr className="mt-1" />
-
-                          {renderButtons(
-                            permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
-                              ? [
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary mx-2`,
-                                    onClick: (e) => {
-                                      setIsVisibleDeleteAlert(true);
-                                      setDeleteId(history.id);
-                                    },
-                                    name: t('label.delete'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary mx-2`,
-                                    onClick: (e) => {
-                                      props.handleReset(e);
-                                    },
-                                    name: t('label.reset'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 mx-2`,
-                                    onClick: async (e) => {
-                                      props.handleSubmit(e);
-                                    },
-                                    name: t('label.save'),
-                                  },
-                                ]
-                              : [],
-                          )}
-                        </div>
-                        <br />
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              );
-            })
-          ) : (
-            <div />
-          )}
-          {isVisibleDeleteAlert ? (
-            <WarningAlertDialog
-              isVisible={isVisibleDeleteAlert}
-              title={t('title.confirm')}
-              warningMessage={t('message.confirm_delete_academic')}
-              titleConfirm={t('label.agree')}
-              titleCancel={t('label.cancel')}
-              handleCancel={(e) => {
-                handleCloseDeleteAlert();
-              }}
-              handleConfirm={(e) => {
-                dispatch(deleteHistoryWork(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
-              }}
-            />
-          ) : (
-            <></>
-          )}
+    <>
+      {loading ? (
+        <div className="text-center pt-4">
+          <CircularProgress />
         </div>
-      </div>
-    </CContainer>
+      ) : (
+        <CContainer fluid className="c-main">
+          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+            <button
+              type="button"
+              hidden={!permissionIds.includes(PERMISSION.CREATE_WORK_HISTORY)}
+              className="btn btn-success rounded-circle p-3"
+              id="addBtn"
+              onClick={() => {
+                document.getElementById('newHistory').hidden = false;
+                document.getElementById('addBtn').disabled = true;
+              }}
+            >
+              <Add fontSize="large" />
+            </button>
+          </div>
+          <div className="m-auto">
+            <div className="">
+              <Formik
+                innerRef={newHistoryRef}
+                initialValues={newHistory}
+                validationSchema={NewHistoryWorkingSchema}
+                enableReinitialize
+                onSubmit={(values) => {
+                  create(values);
+                }}
+              >
+                {(props) => {
+                  props.isCreate = true;
+                  return (
+                    <Form id="newHistory" hidden={true} className="p-0 m-0">
+                      <div className="shadow bg-white rounded mx-4 p-4">
+                        <h5>{'Tạo mới'}.</h5>
+                        <hr className="mt-1" />
+                        <BodyItem {...props} />
+                        <hr className="mt-1" />
+                        {renderButtons([
+                          {
+                            type: 'button',
+                            className: `btn btn-primary  mx-2`,
+                            onClick: () => {
+                              handleResetNewHistory();
+                            },
+                            name: t('label.cancel'),
+                            position: 'right',
+                          },
+                          {
+                            type: 'button',
+                            className: `btn btn-primary px-4 ml-4`,
+                            onClick: async (e) => {
+                              props.handleSubmit(e);
+                            },
+                            name: t('label.save'),
+                          },
+                        ])}
+                      </div>
+                      <br />
+                    </Form>
+                  );
+                }}
+              </Formik>
+              {permissionIds.includes(PERMISSION.LIST_WORK_HISTORY) && historyWorkingForm.histories && historyWorkingForm.histories.length > 0 ? (
+                historyWorkingForm.histories.map((history, index) => {
+                  return (
+                    <Formik
+                      key={'history ' + index}
+                      initialValues={history}
+                      validationSchema={NewHistoryWorkingSchema}
+                      enableReinitialize
+                      onSubmit={async (values) => {
+                        create(values);
+                      }}
+                    >
+                      {(props) => {
+                        return (
+                          <Form className="p-0 m-0">
+                            <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                              <h5>{index + 1}.</h5>
+                              <hr className="mt-1" />
+                              <BodyItem {...props} />
+                              <hr className="mt-1" />
+
+                              {renderButtons(
+                                permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
+                                  ? [
+                                      {
+                                        type: 'button',
+                                        className: `btn btn-primary mx-2`,
+                                        onClick: (e) => {
+                                          setIsVisibleDeleteAlert(true);
+                                          setDeleteId(history.id);
+                                        },
+                                        name: t('label.delete'),
+                                        position: 'right',
+                                      },
+                                      {
+                                        type: 'button',
+                                        className: `btn btn-primary mx-2`,
+                                        onClick: (e) => {
+                                          props.handleReset(e);
+                                        },
+                                        name: t('label.reset'),
+                                        position: 'right',
+                                      },
+                                      {
+                                        type: 'button',
+                                        className: `btn btn-primary px-4 mx-2`,
+                                        onClick: async (e) => {
+                                          props.handleSubmit(e);
+                                        },
+                                        name: t('label.save'),
+                                      },
+                                    ]
+                                  : [],
+                              )}
+                            </div>
+                            <br />
+                          </Form>
+                        );
+                      }}
+                    </Formik>
+                  );
+                })
+              ) : (
+                <div />
+              )}
+              {isVisibleDeleteAlert ? (
+                <WarningAlertDialog
+                  isVisible={isVisibleDeleteAlert}
+                  title={t('title.confirm')}
+                  warningMessage={t('message.confirm_delete_academic')}
+                  titleConfirm={t('label.agree')}
+                  titleCancel={t('label.cancel')}
+                  handleCancel={(e) => {
+                    handleCloseDeleteAlert();
+                  }}
+                  handleConfirm={(e) => {
+                    dispatch(deleteHistoryWork(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        </CContainer>
+      )}
+    </>
   );
 };
 export default HistoryWorkingForm;

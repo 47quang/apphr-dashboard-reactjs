@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -17,9 +17,11 @@ const UpdateShift = ({ t, location, match, history }) => {
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_SHIFT)) {
-      dispatch(fetchShift(match?.params?.id));
+      dispatch(fetchShift(match?.params?.id, setLoading));
       dispatch(
         fetchBranches({
           page: 0,
@@ -91,6 +93,7 @@ const UpdateShift = ({ t, location, match, history }) => {
         branches={branches}
         buttons={buttons}
         submitForm={submitForm}
+        loading={loading}
       />
     );
   else return <Page404 />;

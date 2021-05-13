@@ -11,7 +11,7 @@ import {
   Toolbar,
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { IconButton } from '@material-ui/core';
+import { CircularProgress, IconButton } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -81,6 +81,7 @@ const SchedulerPage = ({ t, history, match }) => {
     visible: false,
     day: 0,
   });
+  const [loading, setLoading] = useState(false);
 
   const resources = [
     {
@@ -101,7 +102,6 @@ const SchedulerPage = ({ t, history, match }) => {
   const DayScaleCell = (props) => {
     const classes = useStyles();
     const { startDate, today } = props;
-    console.log(props);
     const holiday = holidays.find(
       (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
     )
@@ -155,7 +155,7 @@ const SchedulerPage = ({ t, history, match }) => {
       var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
       var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
       lastDay.setHours(23, 59, 59, 0);
-      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }));
+      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, undefined, setLoading));
       dispatch(
         fetchHolidays({
           page: 0,
@@ -292,55 +292,67 @@ const SchedulerPage = ({ t, history, match }) => {
 
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
-        {state.isOpen ? <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} /> : <></>}
-        <Paper>
-          <div className="row pt-2">
-            <div className="col-2"></div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.TODAY_HEADER_CELL }} />
-              <p className="d-inline">{t('label.today')}</p>
-            </div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.WEEKEND_HEADER_CELL }} />
-              <p className="d-inline">{t('label.weekend')}</p>
-            </div>
-
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
-              <p className="d-inline">{t('label.holiday')}</p>
-            </div>
-
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.OVERTIME_ASSIGNMENT }} />
-              <p className="d-inline">{t('label.overtime_req')}</p>
-            </div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.NORMAL_ASSIGNMENT }} />
-              <p className="d-inline">{t('label.overtime_remote_req')}</p>
-            </div>
+      <>
+        {loading ? (
+          <div className="text-center pt-4">
+            <CircularProgress />
           </div>
-          <Scheduler data={assignments} height="auto">
-            <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
-            <EditingState />
-            <IntegratedEditing />
-            <WeekView
-              startDayHour={6}
-              endDayHour={22}
-              cellDuration={60}
-              timeTableCellComponent={TimeTableCell}
-              dayScaleCellComponent={DayScaleCell}
-            />
-            <Toolbar />
-            <DateNavigator />
-            <TodayButton />
-            <EditRecurrenceMenu />
-            <Appointments appointmentComponent={Appointment} />
-            <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton />
-            <Resources data={resources} />
-          </Scheduler>
-        </Paper>
-      </CContainer>
+        ) : (
+          <CContainer fluid className="c-main mb-3 px-4">
+            {state.isOpen ? (
+              <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />
+            ) : (
+              <></>
+            )}
+            <Paper>
+              <div className="row pt-2">
+                <div className="col-2"></div>
+                <div className="col-2">
+                  <Lens className="mr-2" style={{ color: COLORS.TODAY_HEADER_CELL }} />
+                  <p className="d-inline">{t('label.today')}</p>
+                </div>
+                <div className="col-2">
+                  <Lens className="mr-2" style={{ color: COLORS.WEEKEND_HEADER_CELL }} />
+                  <p className="d-inline">{t('label.weekend')}</p>
+                </div>
+
+                <div className="col-2">
+                  <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
+                  <p className="d-inline">{t('label.holiday')}</p>
+                </div>
+
+                <div className="col-2">
+                  <Lens className="mr-2" style={{ color: COLORS.OVERTIME_ASSIGNMENT }} />
+                  <p className="d-inline">{t('label.overtime_req')}</p>
+                </div>
+                <div className="col-2">
+                  <Lens className="mr-2" style={{ color: COLORS.NORMAL_ASSIGNMENT }} />
+                  <p className="d-inline">{t('label.overtime_remote_req')}</p>
+                </div>
+              </div>
+              <Scheduler data={assignments} height="auto">
+                <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
+                <EditingState />
+                <IntegratedEditing />
+                <WeekView
+                  startDayHour={6}
+                  endDayHour={22}
+                  cellDuration={60}
+                  timeTableCellComponent={TimeTableCell}
+                  dayScaleCellComponent={DayScaleCell}
+                />
+                <Toolbar />
+                <DateNavigator />
+                <TodayButton />
+                <EditRecurrenceMenu />
+                <Appointments appointmentComponent={Appointment} />
+                <AppointmentTooltip headerComponent={Header} contentComponent={Content} showCloseButton />
+                <Resources data={resources} />
+              </Scheduler>
+            </Paper>
+          </CContainer>
+        )}
+      </>
     );
   else return <Page404 />;
 };

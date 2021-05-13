@@ -20,7 +20,6 @@ const Branch = ({ t, history }) => {
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-
     loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -39,11 +38,12 @@ const Branch = ({ t, history }) => {
       ...prevState,
       total: total,
     }));
-  const onLoadingChange = (isLoading) =>
+  const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_BRANCH)) {
       dispatch(
@@ -53,7 +53,7 @@ const Branch = ({ t, history }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
-          onLoadingChange,
+          setLoading,
         ),
       );
     }
@@ -62,7 +62,16 @@ const Branch = ({ t, history }) => {
 
   const deleteRow = async (rowId) => {
     dispatch(deleteBranch(rowId, t('message.successful_delete')));
-    dispatch(fetchBranches());
+    dispatch(
+      fetchBranches(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_BRANCH))
     return (

@@ -20,6 +20,7 @@ const ArticleType = ({ t }) => {
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
+    loading: false,
   });
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
@@ -37,6 +38,12 @@ const ArticleType = ({ t }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_TYPE_ARTICLE))
       dispatch(
@@ -46,6 +53,7 @@ const ArticleType = ({ t }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,7 +61,16 @@ const ArticleType = ({ t }) => {
 
   const deleteRow = async (rowId) => {
     dispatch(deleteArticleType(rowId, t('message.successful_delete')));
-    dispatch(fetchTypes());
+    dispatch(
+      fetchTypes(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_TYPE_ARTICLE))
     return (

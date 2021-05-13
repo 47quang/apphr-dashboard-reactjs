@@ -4,10 +4,8 @@ import { REDUX_STATE } from '../states';
 
 export const fetchWages = (params, onTotalChange, setLoading) => {
   const paymentType = {
-    one_time: 'Chi trả một lần',
     by_hour: 'Chi trả theo giờ',
     by_month: 'Chi trả theo tháng',
-    by_date: 'Chi trả theo ngày công',
   };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -23,23 +21,26 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
           });
         dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
       });
   };
 };
 
-export const fetchWage = (id) => {
+export const fetchWage = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.wage.SET_WAGE, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

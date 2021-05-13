@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -18,10 +18,11 @@ const UpdatePosition = ({ t, location, match, history }) => {
   const departments = useSelector((state) => state.department.departments);
   const branches = useSelector((state) => state.branch.branches);
   const position = useSelector((state) => state.position.position);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_POSITION)) {
-      dispatch(fetchPosition(params.id));
+      dispatch(fetchPosition(params.id, setLoading));
       dispatch(fetchShifts());
       dispatch(fetchBranches());
       dispatch(fetchDepartments());
@@ -90,6 +91,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
         shifts={shifts}
         submitForm={submitForm}
         buttons={buttons}
+        loading={loading}
       />
     );
   else return <Page404 />;

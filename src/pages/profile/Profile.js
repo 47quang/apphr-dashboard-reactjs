@@ -26,7 +26,7 @@ const Profile = ({ t, location }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-
+    loading: false,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
@@ -46,6 +46,12 @@ const Profile = ({ t, location }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_PROFILE))
       dispatch(
@@ -55,6 +61,7 @@ const Profile = ({ t, location }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     return () => {
@@ -64,7 +71,16 @@ const Profile = ({ t, location }) => {
   }, [paging.currentPage, paging.pageSize]);
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId, t('message.successful_delete')));
-    dispatch(fetchProfiles());
+    dispatch(
+      fetchProfiles(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_PROFILE))
     return (

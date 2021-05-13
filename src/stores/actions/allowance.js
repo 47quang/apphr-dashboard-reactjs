@@ -17,12 +17,12 @@ export const fetchAllowances = (params, onTotalChange, setLoading) => {
                 return allowance;
               })
             : [];
-        dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
         if (onTotalChange) onTotalChange(total);
+        dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
       })
       .catch((err) => {
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -33,14 +33,17 @@ export const fetchAllowances = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchAllowance = (id) => {
+export const fetchAllowance = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.allowance
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCE, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

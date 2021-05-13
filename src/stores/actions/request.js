@@ -3,7 +3,8 @@ import { formatDate, formatDateTimeScheduleToString, formatDateTimeToString, par
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchLeaveRequests = (params, onTotalChange) => {
+export const fetchLeaveRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
       .getAll(params)
@@ -21,8 +22,10 @@ export const fetchLeaveRequests = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -33,7 +36,8 @@ export const fetchLeaveRequests = (params, onTotalChange) => {
   };
 };
 
-export const fetchLeaveRequest = (id) => {
+export const fetchLeaveRequest = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
       .get(id)
@@ -50,8 +54,10 @@ export const fetchLeaveRequest = (id) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUEST, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -120,7 +126,8 @@ export const rejectLeaveRequest = (id, success_msg) => {
   };
 };
 
-export const fetchRemoteRequests = (params, onTotalChange) => {
+export const fetchRemoteRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
       .getAll(params)
@@ -135,8 +142,10 @@ export const fetchRemoteRequests = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -147,7 +156,8 @@ export const fetchRemoteRequests = (params, onTotalChange) => {
   };
 };
 
-export const fetchRemoteRequest = (id) => {
+export const fetchRemoteRequest = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
       .get(id)
@@ -163,8 +173,10 @@ export const fetchRemoteRequest = (id) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUEST, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -231,7 +243,8 @@ export const rejectRemoteRequest = (id, success_msg) => {
   };
 };
 
-export const fetchOvertimeRequests = (params, onTotalChange) => {
+export const fetchOvertimeRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
       .getAll(params)
@@ -246,8 +259,10 @@ export const fetchOvertimeRequests = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -258,7 +273,8 @@ export const fetchOvertimeRequests = (params, onTotalChange) => {
   };
 };
 
-export const fetchOvertimeRequest = (id) => {
+export const fetchOvertimeRequest = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
       .get(id)
@@ -268,8 +284,10 @@ export const fetchOvertimeRequest = (id) => {
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
         payload.assignment = parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(payload.date);
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -12,11 +12,12 @@ const EditDepartment = ({ t, location, match, history }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const department = useSelector((state) => state.department.department);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_DEPARTMENT)) {
       dispatch(fetchBranches());
-      dispatch(fetchDepartment({ id: match.params.id }));
+      dispatch(fetchDepartment({ id: match.params.id }, setLoading));
       return () => {
         dispatch(resetDepartment());
       };
@@ -71,7 +72,15 @@ const EditDepartment = ({ t, location, match, history }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_DEPARTMENT))
     return (
-      <DepartmentItemBody t={t} departmentRef={departmentRef} department={department} branches={branches} submitForm={submitForm} buttons={buttons} />
+      <DepartmentItemBody
+        t={t}
+        departmentRef={departmentRef}
+        department={department}
+        branches={branches}
+        submitForm={submitForm}
+        buttons={buttons}
+        loading={loading}
+      />
     );
   else return <Page404 />;
 };

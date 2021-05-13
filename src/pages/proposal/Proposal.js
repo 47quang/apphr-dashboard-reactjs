@@ -37,46 +37,11 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         ];
   const dispatch = useDispatch();
   const proposals = useSelector((state) => state.request[type + 'Requests']);
-  // const proposals = [
-  //   {
-  //     id: 1,
-  //     code: 'NV001',
-  //     fullname: 'Nguyễn Văn An',
-  //     shifts: [
-  //       { id: 1, shift: 'CS1 - Ca sáng 1 - 08:30 - 11:30 - 15/11/2020' },
-  //       { id: 2, shift: 'CC1 - Ca chiều 1 - 13:30 - 17:30 - 15/11/2020' },
-  //     ],
-  //     sentDate: '2020-11-15',
-  //     status: 'accept',
-  //     handler: 'Nguyễn Văn Minh',
-  //   },
-  //   {
-  //     id: 2,
-  //     code: 'NV002',
-  //     fullname: 'Nguyễn Văn Anh',
-  //     shifts: [{ id: 1, shift: 'CS1 - Ca sáng 1 - 15/11/2020' }],
-  //     sentDate: '2020-11-15',
-  //     status: 'pending',
-  //     handler: 'Nguyễn Văn Minh',
-  //   },
-  //   {
-  //     id: 3,
-  //     code: 'NV003',
-  //     fullname: 'Nguyễn Văn Ánh',
-  //     type: 'Tăng ca',
-  //     shifts: [{ id: 3, shift: 'CT1 - Ca tối 1 - 15/11/2020' }],
-  //     sentDate: '2020-11-15',
-  //     status: 'deny',
-  //     handler: 'Nguyễn Văn Minh',
-  //   },
-  // ];
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-
     loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -95,7 +60,12 @@ const Proposal = ({ t, location, match, type, profileId }) => {
       ...prevState,
       total: total,
     }));
-
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (type === 'leave')
       profileId
@@ -107,6 +77,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 profileId: profileId,
               },
               onTotalChange,
+              setLoading,
             ),
           )
         : dispatch(
@@ -116,6 +87,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
               },
               onTotalChange,
+              setLoading,
             ),
           );
     else if (type === 'remote')
@@ -128,6 +100,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 profileId: profileId,
               },
               onTotalChange,
+              setLoading,
             ),
           )
         : dispatch(
@@ -137,6 +110,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
               },
               onTotalChange,
+              setLoading,
             ),
           );
     else
@@ -149,6 +123,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 profileId: profileId,
               },
               onTotalChange,
+              setLoading,
             ),
           )
         : dispatch(
@@ -158,6 +133,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
               },
               onTotalChange,
+              setLoading,
             ),
           );
     return () => {

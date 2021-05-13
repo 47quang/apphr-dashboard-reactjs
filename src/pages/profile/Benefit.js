@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { Switch } from '@material-ui/core';
+import { CircularProgress, Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
@@ -22,6 +22,7 @@ const Benefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const benefitTab = {
     contracts: useSelector((state) => state.contract.contracts),
@@ -37,7 +38,7 @@ const Benefit = ({ t, history, match }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
-      dispatch(fetchWageHistories({ profileId: +profileId }));
+      dispatch(fetchWageHistories({ profileId: +profileId }, setLoading));
       return () => {
         dispatch(setEmptyContracts());
       };
@@ -459,79 +460,90 @@ const Benefit = ({ t, history, match }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main">
-      <div className="m-auto">
-        <div>
-          {permissionIds.includes(PERMISSION.LIST_CONTRACT) && benefitTab.contracts && benefitTab.contracts.length > 0 ? (
-            benefitTab.contracts.map((contract, index) => {
-              contract.isMinimize = false;
-              return (
-                <Formik
-                  key={index}
-                  initialValues={contract}
-                  validationSchema={BenefitsSchema}
-                  enableReinitialize
-                  onSubmit={async (values) => {
-                    // await create(values).then(() =>
-                    //   dispatch(
-                    //     fetchContracts({
-                    //       profileId: profileId,
-                    //     }),
-                    //   ),
-                    // );
-                  }}
-                >
-                  {(props) => {
-                    props.index = index;
-                    return (
-                      <form className="p-0 m-0">
-                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                          <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                            <div className="pt-1 d-inline" role="button">
-                              {!props.values.isMinimize ? (
-                                <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)} />
-                              ) : (
-                                <IndeterminateCheckBoxOutlinedIcon
-                                  className="pb-1"
-                                  onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+    <>
+      {loading ? (
+        <div className="text-center pt-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <CContainer fluid className="c-main">
+          <div className="m-auto">
+            <div>
+              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && benefitTab.contracts && benefitTab.contracts.length > 0 ? (
+                benefitTab.contracts.map((contract, index) => {
+                  contract.isMinimize = false;
+                  return (
+                    <Formik
+                      key={index}
+                      initialValues={contract}
+                      validationSchema={BenefitsSchema}
+                      enableReinitialize
+                      onSubmit={async (values) => {
+                        // await create(values).then(() =>
+                        //   dispatch(
+                        //     fetchContracts({
+                        //       profileId: profileId,
+                        //     }),
+                        //   ),
+                        // );
+                      }}
+                    >
+                      {(props) => {
+                        props.index = index;
+                        return (
+                          <form className="p-0 m-0">
+                            <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                              <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                                <div className="pt-1 d-inline" role="button">
+                                  {!props.values.isMinimize ? (
+                                    <AddBoxOutlinedIcon
+                                      className="pb-1"
+                                      onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)}
+                                    />
+                                  ) : (
+                                    <IndeterminateCheckBoxOutlinedIcon
+                                      className="pb-1"
+                                      onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+                                    />
+                                  )}
+                                </div>
+                                <Switch
+                                  checked={props.values.isOpen}
+                                  name={`isOpen ${index}`}
+                                  onChange={(e) => {
+                                    props.setFieldValue(`isOpen ${index}`, e.target.checked);
+                                  }}
                                 />
+                                {props.values.code + ' - ' + props.values.fullname}
+                              </div>
+
+                              <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                                {props.values.expiredDate
+                                  ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                                  : t('label.from') + formatDate(props.values.handleDate)}
+                              </div>
+                              <hr className="mt-1" />
+                              {props.values.isMinimize && (
+                                <div>
+                                  <BodyItem {...props} />
+                                  <hr className="mt-1" />
+                                </div>
                               )}
                             </div>
-                            <Switch
-                              checked={props.values.isOpen}
-                              name={`isOpen ${index}`}
-                              onChange={(e) => {
-                                props.setFieldValue(`isOpen ${index}`, e.target.checked);
-                              }}
-                            />
-                            {props.values.code + ' - ' + props.values.fullname}
-                          </div>
-
-                          <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                            {props.values.expiredDate
-                              ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                              : t('label.from') + formatDate(props.values.handleDate)}
-                          </div>
-                          <hr className="mt-1" />
-                          {props.values.isMinimize && (
-                            <div>
-                              <BodyItem {...props} />
-                              <hr className="mt-1" />
-                            </div>
-                          )}
-                        </div>
-                      </form>
-                    );
-                  }}
-                </Formik>
-              );
-            })
-          ) : (
-            <div />
-          )}
-        </div>
-      </div>
-    </CContainer>
+                          </form>
+                        );
+                      }}
+                    </Formik>
+                  );
+                })
+              ) : (
+                <div />
+              )}
+            </div>
+          </div>
+        </CContainer>
+      )}
+    </>
   );
 };
 

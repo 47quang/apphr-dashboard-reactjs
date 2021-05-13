@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -11,9 +11,10 @@ const UpdateType = ({ t, location, history, match }) => {
   const typeInfoForm = useRef();
   const dispatch = useDispatch();
   const type = useSelector((state) => state.articleType.type);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_TYPE_ARTICLE)) dispatch(fetchType(match.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_TYPE_ARTICLE)) dispatch(fetchType(match.params?.id, setLoading));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -66,7 +67,15 @@ const UpdateType = ({ t, location, history, match }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_TYPE_ARTICLE))
     return (
-      <ArticleTypeItemBody typeRef={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />
+      <ArticleTypeItemBody
+        typeRef={typeInfoForm}
+        type={type}
+        t={t}
+        validationSchema={ArticleTypeSchema}
+        buttons={buttons}
+        submitForm={submitForm}
+        loading={loading}
+      />
     );
   else return <Page404 />;
 };

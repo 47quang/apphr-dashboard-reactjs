@@ -9,7 +9,8 @@ const formatDownloadedData = (payload) => {
   });
 };
 
-export const fetchRoles = (params, onTotalChange) => {
+export const fetchRoles = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .getAll(params)
@@ -17,8 +18,10 @@ export const fetchRoles = (params, onTotalChange) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.role.SET_ROLES, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -29,15 +32,18 @@ export const fetchRoles = (params, onTotalChange) => {
   };
 };
 
-export const fetchRole = (id) => {
+export const fetchRole = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .get(id)
       .then(({ payload }) => {
         payload.permissionIds = payload.permissionIds.map((val) => +val);
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

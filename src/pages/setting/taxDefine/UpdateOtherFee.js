@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -11,9 +11,10 @@ const UpdateOtherFee = ({ t, location, history, match }) => {
   const paymentInfoForm = useRef();
   const dispatch = useDispatch();
   const payment = useSelector((state) => state.payment.payment);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_WAGE)) dispatch(fetchPayment(match.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_WAGE)) dispatch(fetchPayment(match.params?.id, setLoading));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -73,6 +74,7 @@ const UpdateOtherFee = ({ t, location, history, match }) => {
         validationSchema={OtherFeeSchema}
         buttons={buttons}
         submitForm={submitForm}
+        loading={loading}
       />
     );
   else return <Page404 />;

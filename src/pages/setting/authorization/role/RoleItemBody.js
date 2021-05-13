@@ -6,132 +6,139 @@ import FormHeader from 'src/components/text/FormHeader';
 import { RoleInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
+import { CircularProgress } from '@material-ui/core';
 
-const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions }) => {
+const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, loading }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
-      <div className="row px-4">
-        <div className="shadow bg-white rounded p-4 col-md-12">
-          <Formik
-            innerRef={roleRef}
-            enableReinitialize
-            validationSchema={RoleInfoSchema}
-            initialValues={role}
-            onSubmit={(values) => {
-              submitForm(values);
-            }}
-          >
-            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
-              <form>
-                <FormHeader text={t('title.role')} />
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-xl-3'}
-                    value={values.code}
-                    onBlur={handleBlur('code')}
-                    onChange={handleChange('code')}
-                    inputID={'code'}
-                    labelText={t('label.role_code')}
-                    inputType={'text'}
-                    placeholder={t('placeholder.enter_role_code')}
-                    inputClassName={'form-control'}
-                    isDisable={true}
-                  />
-                  <CommonTextInput
-                    containerClassName={'form-group col-xl-3'}
-                    value={values.name}
-                    onBlur={handleBlur('name')}
-                    onChange={handleChange('name')}
-                    inputID={'name'}
-                    labelText={t('label.role_name')}
-                    inputType={'text'}
-                    placeholder={t('placeholder.enter_role_name')}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={touched.name}
-                    isError={errors.name && touched.name}
-                    errorMessage={t(errors.name)}
-                  />
-                </div>
-                <div className="row">
-                  {permissions &&
-                    permissions.length > 0 &&
-                    permissions.map((permission) => {
-                      return (
-                        <div className="form-group col-xl-3" key={permission.id + 'group'}>
-                          <Field
-                            component={Checkbox}
-                            color={'primary'}
-                            name={permission.group}
-                            value={permission.group}
-                            checked={
-                              permission.children &&
-                              permission.children.length > 0 &&
-                              initCheck(
-                                permission.children.map((per) => per.id),
-                                values.permissionIds,
-                              )
-                            }
-                            onChange={(event) => {
-                              const thisPermission =
-                                permission.children && permission.children.length > 0 ? permission.children.map((per) => per.id) : [];
-                              setFieldValue(permission.group, event.target.checked);
-                              if (event.target.checked) {
-                                setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
-                              } else {
-                                setFieldValue(
-                                  'permissionIds',
-                                  values.permissionIds.filter((x) => !thisPermission.includes(x)),
-                                );
+      <div className="m-auto">
+        {loading ? (
+          <div className="text-center">
+            <CircularProgress />
+          </div>
+        ) : (
+          <div className="shadow bg-white rounded p-4 col-md-12">
+            <Formik
+              innerRef={roleRef}
+              enableReinitialize
+              validationSchema={RoleInfoSchema}
+              initialValues={role}
+              onSubmit={(values) => {
+                submitForm(values);
+              }}
+            >
+              {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
+                <form>
+                  <FormHeader text={t('title.role')} />
+                  <div className="row">
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-3'}
+                      value={values.code}
+                      onBlur={handleBlur('code')}
+                      onChange={handleChange('code')}
+                      inputID={'code'}
+                      labelText={t('label.role_code')}
+                      inputType={'text'}
+                      placeholder={t('placeholder.enter_role_code')}
+                      inputClassName={'form-control'}
+                      isDisable={true}
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-3'}
+                      value={values.name}
+                      onBlur={handleBlur('name')}
+                      onChange={handleChange('name')}
+                      inputID={'name'}
+                      labelText={t('label.role_name')}
+                      inputType={'text'}
+                      placeholder={t('placeholder.enter_role_name')}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      isTouched={touched.name}
+                      isError={errors.name && touched.name}
+                      errorMessage={t(errors.name)}
+                    />
+                  </div>
+                  <div className="row">
+                    {permissions &&
+                      permissions.length > 0 &&
+                      permissions.map((permission) => {
+                        return (
+                          <div className="form-group col-xl-3" key={permission.id + 'group'}>
+                            <Field
+                              component={Checkbox}
+                              color={'primary'}
+                              name={permission.group}
+                              value={permission.group}
+                              checked={
+                                permission.children &&
+                                permission.children.length > 0 &&
+                                initCheck(
+                                  permission.children.map((per) => per.id),
+                                  values.permissionIds,
+                                )
                               }
-                            }}
-                          />
-                          {permission.name}
-                          <FieldArray
-                            name="permissionIds"
-                            render={(arrayHelpers) => {
-                              return (
-                                <div className="mx-4 px-2">
-                                  {permission.children &&
-                                    permission.children.length > 0 &&
-                                    permission.children.map((per) => (
-                                      <div key={per.id + 'child'}>
-                                        <label>
-                                          <Checkbox
-                                            color="primary"
-                                            name="permissionIds"
-                                            type="checkbox"
-                                            value={per.id}
-                                            checked={values.permissionIds.includes(per.id)}
-                                            onChange={(e) => {
-                                              if (e.target.checked) {
-                                                arrayHelpers.push(per.id);
-                                              } else {
-                                                const idx = values.permissionIds.indexOf(per.id);
-                                                arrayHelpers.remove(idx);
-                                              }
-                                            }}
-                                          />
-                                          {per.name}
-                                        </label>
-                                      </div>
-                                    ))}
-                                </div>
-                              );
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                </div>
-                {renderButtons(buttons)}
-              </form>
-            )}
-          </Formik>
-        </div>
+                              onChange={(event) => {
+                                const thisPermission =
+                                  permission.children && permission.children.length > 0 ? permission.children.map((per) => per.id) : [];
+                                setFieldValue(permission.group, event.target.checked);
+                                if (event.target.checked) {
+                                  setFieldValue('permissionIds', Array.from(new Set([...values.permissionIds, ...thisPermission])));
+                                } else {
+                                  setFieldValue(
+                                    'permissionIds',
+                                    values.permissionIds.filter((x) => !thisPermission.includes(x)),
+                                  );
+                                }
+                              }}
+                            />
+                            {permission.name}
+                            <FieldArray
+                              name="permissionIds"
+                              render={(arrayHelpers) => {
+                                return (
+                                  <div className="mx-4 px-2">
+                                    {permission.children &&
+                                      permission.children.length > 0 &&
+                                      permission.children.map((per) => (
+                                        <div key={per.id + 'child'}>
+                                          <label>
+                                            <Checkbox
+                                              color="primary"
+                                              name="permissionIds"
+                                              type="checkbox"
+                                              value={per.id}
+                                              checked={values.permissionIds.includes(per.id)}
+                                              onChange={(e) => {
+                                                if (e.target.checked) {
+                                                  arrayHelpers.push(per.id);
+                                                } else {
+                                                  const idx = values.permissionIds.indexOf(per.id);
+                                                  arrayHelpers.remove(idx);
+                                                }
+                                              }}
+                                            />
+                                            {per.name}
+                                          </label>
+                                        </div>
+                                      ))}
+                                  </div>
+                                );
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
+                  {renderButtons(buttons)}
+                </form>
+              )}
+            </Formik>
+          </div>
+        )}
       </div>
     </CContainer>
   );

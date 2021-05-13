@@ -22,6 +22,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
+    loading: false,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -34,10 +35,15 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
       ...prevState,
       pageSize: newPageSize,
     }));
-
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (assignment?.id && isOpen) {
-      dispatch(fetchAssignment(assignment.id));
+      dispatch(fetchAssignment(assignment.id, setLoading));
       setPaging((prevState) => ({
         ...prevState,
         total: rows?.rollUps?.length ?? 0,

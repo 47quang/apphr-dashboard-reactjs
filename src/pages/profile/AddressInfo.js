@@ -33,11 +33,11 @@ const AddressInfo = ({ t, history, match }) => {
   const contactFormRef = useRef();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.profile);
-
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
   const contacts = useSelector((state) => state.profile.contacts);
+
   const profileId = match?.params?.id;
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_CONTACT)) {

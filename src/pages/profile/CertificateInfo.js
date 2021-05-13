@@ -1,4 +1,5 @@
 import { CContainer } from '@coreui/react';
+import { CircularProgress } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
@@ -15,6 +16,7 @@ import { renderButtons } from 'src/utils/formUtils';
 const CertificateInfo = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const initialValues = useSelector((state) => state.profile.profile);
+  const [loading, setLoading] = useState(false);
   let newCertificate = {
     name: '',
     certificateType: '',
@@ -26,7 +28,7 @@ const CertificateInfo = ({ t, match }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_DIPLOMA)) {
-      dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'certificate' }));
+      dispatch(fetchDiplomaByType({ profileId: match.params.id, type: 'certificate' }, setLoading));
       return () => {
         dispatch(setEmptyCertificate());
       };
@@ -162,138 +164,146 @@ const CertificateInfo = ({ t, match }) => {
     setIsVisibleDeleteAlert(false);
   };
   return (
-    <CContainer fluid className="c-main">
-      <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-        <button
-          type="button"
-          hidden={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
-          className="btn btn-success rounded-circle p-3"
-          id="addBtn"
-          onClick={() => {
-            document.getElementById('newCertificate').hidden = false;
-            document.getElementById('addBtn').disabled = true;
-          }}
-        >
-          <Add fontSize="large" />
-        </button>
-      </div>
-      <div className="m-auto">
-        <div>
-          <Formik
-            innerRef={newCertificateRef}
-            initialValues={newCertificate}
-            validationSchema={NewCertificateSchema}
-            enableReinitialize
-            onSubmit={(values) => {
-              createCertificate(values);
-            }}
-          >
-            {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange }) => {
-              let isCreate = true;
-              return (
-                <form id="newCertificate" hidden={true} className="p-0 m-0">
-                  <div className="shadow bg-white rounded mx-4 p-4">
-                    {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate)}
-                    {renderButtons([
-                      {
-                        type: 'button',
-                        className: `btn btn-primary mx-2`,
-                        onClick: (e) => {
-                          handleReset(e);
-                          document.getElementById('newCertificate').hidden = true;
-                          document.getElementById('addBtn').disabled = false;
-                        },
-                        name: t('label.cancel'),
-                      },
-
-                      {
-                        type: 'button',
-                        className: `btn btn-primary px-4 ml-4`,
-                        onClick: (e) => {
-                          handleSubmit(e);
-                        },
-                        name: t('label.create_new'),
-                      },
-                    ])}
-                  </div>
-                  <br />
-                </form>
-              );
-            }}
-          </Formik>
-          {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.certificates && initialValues.certificates.length > 0 ? (
-            initialValues.certificates.map((certificate, index) => (
+    <>
+      {loading ? (
+        <div className="text-center pt-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <CContainer fluid className="c-main">
+          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+            <button
+              type="button"
+              hidden={!permissionIds.includes(PERMISSION.CREATE_DIPLOMA)}
+              className="btn btn-success rounded-circle p-3"
+              id="addBtn"
+              onClick={() => {
+                document.getElementById('newCertificate').hidden = false;
+                document.getElementById('addBtn').disabled = true;
+              }}
+            >
+              <Add fontSize="large" />
+            </button>
+          </div>
+          <div className="m-auto">
+            <div>
               <Formik
-                key={'certificate ' + index}
-                initialValues={certificate}
+                innerRef={newCertificateRef}
+                initialValues={newCertificate}
                 validationSchema={NewCertificateSchema}
+                enableReinitialize
                 onSubmit={(values) => {
                   createCertificate(values);
                 }}
               >
-                {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit }) => (
-                  <div key={index} className="shadow bg-white rounded m-4 p-4">
-                    {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
-                    {renderButtons(
-                      permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
-                        ? [
-                            {
-                              type: 'button',
-                              className: `btn btn-primary px-4 mx-2`,
-                              onClick: (e) => {
-                                setIsVisibleDeleteAlert(true);
-                                setDeleteId(certificate.id);
-                              },
-                              name: t('label.delete'),
-                              position: 'right',
+                {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange }) => {
+                  let isCreate = true;
+                  return (
+                    <form id="newCertificate" hidden={true} className="p-0 m-0">
+                      <div className="shadow bg-white rounded mx-4 p-4">
+                        {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate)}
+                        {renderButtons([
+                          {
+                            type: 'button',
+                            className: `btn btn-primary mx-2`,
+                            onClick: (e) => {
+                              handleReset(e);
+                              document.getElementById('newCertificate').hidden = true;
+                              document.getElementById('addBtn').disabled = false;
                             },
-                            {
-                              type: 'button',
-                              className: `btn btn-primary px-4 mx-2`,
-                              onClick: (e) => {
-                                handleReset(e);
-                              },
-                              name: t('label.reset'),
-                              position: 'right',
+                            name: t('label.cancel'),
+                          },
+
+                          {
+                            type: 'button',
+                            className: `btn btn-primary px-4 ml-4`,
+                            onClick: (e) => {
+                              handleSubmit(e);
                             },
-                            {
-                              type: 'button',
-                              className: `btn btn-primary px-4 ml-2`,
-                              onClick: (e) => {
-                                handleSubmit(e);
-                              },
-                              name: t('label.save'),
-                            },
-                          ]
-                        : [],
-                    )}
-                  </div>
-                )}
+                            name: t('label.create_new'),
+                          },
+                        ])}
+                      </div>
+                      <br />
+                    </form>
+                  );
+                }}
               </Formik>
-            ))
-          ) : (
-            <div />
-          )}
-          {isVisibleDeleteAlert ? (
-            <WarningAlertDialog
-              isVisible={isVisibleDeleteAlert}
-              title={t('title.confirm')}
-              warningMessage={t('message.confirm_delete_academic')}
-              titleConfirm={t('label.agree')}
-              titleCancel={t('label.cancel')}
-              handleCancel={(e) => {
-                handleCloseDeleteAlert();
-              }}
-              handleConfirm={(e) => {
-                dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
-              }}
-            />
-          ) : (
-            <></>
-          )}
-        </div>
-      </div>
-    </CContainer>
+              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.certificates && initialValues.certificates.length > 0 ? (
+                initialValues.certificates.map((certificate, index) => (
+                  <Formik
+                    key={'certificate ' + index}
+                    initialValues={certificate}
+                    validationSchema={NewCertificateSchema}
+                    onSubmit={(values) => {
+                      createCertificate(values);
+                    }}
+                  >
+                    {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit }) => (
+                      <div key={index} className="shadow bg-white rounded m-4 p-4">
+                        {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
+                        {renderButtons(
+                          permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
+                            ? [
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 mx-2`,
+                                  onClick: (e) => {
+                                    setIsVisibleDeleteAlert(true);
+                                    setDeleteId(certificate.id);
+                                  },
+                                  name: t('label.delete'),
+                                  position: 'right',
+                                },
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 mx-2`,
+                                  onClick: (e) => {
+                                    handleReset(e);
+                                  },
+                                  name: t('label.reset'),
+                                  position: 'right',
+                                },
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 ml-2`,
+                                  onClick: (e) => {
+                                    handleSubmit(e);
+                                  },
+                                  name: t('label.save'),
+                                },
+                              ]
+                            : [],
+                        )}
+                      </div>
+                    )}
+                  </Formik>
+                ))
+              ) : (
+                <div />
+              )}
+              {isVisibleDeleteAlert ? (
+                <WarningAlertDialog
+                  isVisible={isVisibleDeleteAlert}
+                  title={t('title.confirm')}
+                  warningMessage={t('message.confirm_delete_academic')}
+                  titleConfirm={t('label.agree')}
+                  titleCancel={t('label.cancel')}
+                  handleCancel={(e) => {
+                    handleCloseDeleteAlert();
+                  }}
+                  handleConfirm={(e) => {
+                    dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        </CContainer>
+      )}
+    </>
   );
 };
 export default CertificateInfo;

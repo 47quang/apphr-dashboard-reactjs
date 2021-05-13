@@ -13,7 +13,7 @@ const OtherFee = ({ t }) => {
   const payments = useSelector((state) => state.payment.payments);
   const columnDef = [
     { name: 'id', title: t('label.id'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.payment_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.payment_name'), align: 'left', width: '35%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_type'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({

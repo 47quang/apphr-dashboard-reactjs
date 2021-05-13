@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -13,11 +13,12 @@ const UpdateRole = ({ t, location, history, match }) => {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.role.role);
   const permissions = useSelector((state) => state.role.permissions);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ROLE)) {
       dispatch(fetchPermissions());
-      dispatch(fetchRole(match?.params?.id));
+      dispatch(fetchRole(match?.params?.id, setLoading));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -67,7 +68,9 @@ const UpdateRole = ({ t, location, history, match }) => {
         },
       ];
   if (permissionIds.includes(PERMISSION.GET_ROLE))
-    return <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
+    return (
+      <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} loading={loading} />
+    );
   else return <Page404 />;
 };
 

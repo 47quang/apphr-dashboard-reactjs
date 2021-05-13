@@ -12,7 +12,8 @@ const handleAccounts = (payload) => {
   return payload;
 };
 
-export const fetchAccounts = (params, onTotalChange) => {
+export const fetchAccounts = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .getAll(params)
@@ -20,8 +21,10 @@ export const fetchAccounts = (params, onTotalChange) => {
         payload = handleAccounts(payload);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
         else if (err.response?.status >= 400)
@@ -31,7 +34,8 @@ export const fetchAccounts = (params, onTotalChange) => {
   };
 };
 
-export const fetchAccount = (id) => {
+export const fetchAccount = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .get(id)
@@ -41,8 +45,10 @@ export const fetchAccount = (id) => {
         payload.profileId = payload.profileId ?? 0;
         payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
         else if (err.response?.status >= 400)
