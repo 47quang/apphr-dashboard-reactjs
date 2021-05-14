@@ -24,8 +24,7 @@ const accountReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.account.SET_ACCOUNTS:
       return { ...state, accounts: payload };
     case REDUX_STATE.account.SET_ACCOUNT:
-      payload.roleId = payload.roleId ?? 0;
-      return { ...state, account: Object.assign({}, state.account, payload) };
+      return { ...state, account: payload };
     case REDUX_STATE.account.DELETE_ACCOUNT:
       return {
         ...state,

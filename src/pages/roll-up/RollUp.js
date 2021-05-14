@@ -1,11 +1,9 @@
 import { CContainer } from '@coreui/react';
-import DateFnsUtils from '@date-io/date-fns';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
 import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
@@ -186,13 +184,13 @@ const RollUp = ({ t, location }) => {
       toDate: to,
     }));
   };
-  const handleNewWeek = (date) => {
-    setState((preState) => ({
-      ...preState,
-      fromDate: moment(date).clone().startOf('week'),
-      toDate: moment(date).clone().endOf('week'),
-    }));
-  };
+  // const handleNewWeek = (date) => {
+  //   setState((preState) => ({
+  //     ...preState,
+  //     fromDate: moment(date).clone().startOf('week'),
+  //     toDate: moment(date).clone().endOf('week'),
+  //   }));
+  // };
 
   useEffect(() => {
     dispatch(
@@ -407,35 +405,9 @@ const RollUp = ({ t, location }) => {
         <Button onClick={handlePrev} style={{ height: '50%' }}>
           <NavigateBeforeIcon className="m-1" fontSize="large" />
         </Button>
-        <div>
+        {/* <div>
           <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
-          {/* <div className="row px-2 d-flex align-items-center">
-            <p className="m-2 p-1">{t('label.from')}</p>
-            <TextField
-              className="m-2 pt-0"
-              id="date"
-              type="date"
-              onChange={(e) => {
-                console.log(e.target.value);
-                handleNewWeek(e.target.value);
-              }}
-              value={state.fromDate.format('yyyy-MM-DD')}
-              InputProps={{
-                inputProps: { min: 0, max: state.today.clone().endOf('week').format('yyyy-MM-DD'), pattern: 'DD/MM/yyyy' },
-                pattern: 'DD/MM/yyyy',
-              }}
-            />
-            <p className="m-2 pt-0">{t('label.to')}</p>
-            <TextField
-              id="date"
-              className="m-2 pt-0"
-              type="date"
-              value={state.toDate.format('yyyy-MM-DD')}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </div> */}
+         
           <div className="d-flex justify-content-center align-items-center">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <p className="m-2 pt-0">{t('label.from')}</p>
@@ -447,6 +419,7 @@ const RollUp = ({ t, location }) => {
                 format="dd/MM/yyyy"
                 margin="normal"
                 id="date-picker-inline"
+                allowKeyboardControl={false}
                 value={new Date(state.fromDate.format('yyyy-MM-DD'))}
                 maxDate={new Date(state.today.format('yyyy-MM-DD'))}
                 onChange={(e) => {
@@ -460,6 +433,8 @@ const RollUp = ({ t, location }) => {
               <KeyboardDatePicker
                 className="m-0 p-0"
                 margin="normal"
+                allowKeyboardControl={false}
+                disableToolbar={true}
                 id="date-picker-dialog"
                 readOnly={true}
                 keyboardIcon={<></>}
@@ -468,8 +443,13 @@ const RollUp = ({ t, location }) => {
               />
             </MuiPickersUtilsProvider>
           </div>
+        </div> */}
+        <div className="d-inline">
+          <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
+          <h5 className="d-flex justify-content-center">
+            {t('label.from') + ': ' + state.fromDate.format('DD/MM/YYYY') + t('label.to') + ': ' + state.toDate.format('DD/MM/YYYY')}
+          </h5>
         </div>
-
         <Button onClick={handleNext} style={{ height: '50%' }} disabled={state.today <= state.toDate}>
           <NavigateNextIcon className="m-1" fontSize="large" />
         </Button>
