@@ -22,7 +22,7 @@ const Notification = ({ t }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-
+    loading: false,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
@@ -42,6 +42,12 @@ const Notification = ({ t }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
       dispatch(
@@ -51,6 +57,7 @@ const Notification = ({ t }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,7 +65,16 @@ const Notification = ({ t }) => {
 
   const deleteRow = async (rowId) => {
     dispatch(deleteArticle(rowId, t('message.successful_delete')));
-    dispatch(fetchArticles());
+    dispatch(
+      fetchArticles(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
     return (

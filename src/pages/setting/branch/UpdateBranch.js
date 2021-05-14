@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -15,10 +15,11 @@ const UpdateBranch = ({ t, location, history, match }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_BRANCH)) {
-      dispatch(fetchBranch(match.params?.id));
+      dispatch(fetchBranch(match.params?.id, setLoading));
       if (provinces.length === 0) dispatch(fetchProvinces());
       return () => {
         dispatch(setEmptyBranch());
@@ -99,6 +100,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
         wards={wards}
         buttons={buttons}
         submitForm={submitForm}
+        loading={loading}
       />
     );
   else return <Page404 />;

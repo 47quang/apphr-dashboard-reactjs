@@ -26,15 +26,15 @@ export const login = (params, history) => {
 export const logout = (history) => {
   return (dispatch, getState) => {
     const payload = {
-      user: '',
       token: '',
+      permissionIds: '',
     };
     dispatch({
       type: REDUX_STATE.user.SET_USER,
       payload,
     });
     localStorage.setItem('token', payload.token);
-    localStorage.setItem('user', payload.user);
+    localStorage.setItem('permissionIds', payload.permissionIds);
     history.push(ROUTE_PATH.LOGIN);
   };
 };

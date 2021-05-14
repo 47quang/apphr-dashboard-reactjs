@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -11,9 +11,10 @@ const UpdateWage = ({ t, location, history, match }) => {
   const wageInfoForm = useRef();
   const dispatch = useDispatch();
   const wage = useSelector((state) => state.wage.wage);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_WAGE)) dispatch(fetchWage(match.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_WAGE)) dispatch(fetchWage(match.params?.id, setLoading));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,7 +66,17 @@ const UpdateWage = ({ t, location, history, match }) => {
         },
       ];
   if (permissionIds.includes(PERMISSION.GET_WAGE))
-    return <WageItemBody wageRef={wageInfoForm} wage={wage} t={t} validationSchema={WageSchema} buttons={buttons} submitForm={submitForm} />;
+    return (
+      <WageItemBody
+        wageRef={wageInfoForm}
+        wage={wage}
+        t={t}
+        validationSchema={WageSchema}
+        buttons={buttons}
+        submitForm={submitForm}
+        loading={loading}
+      />
+    );
   else return <Page404 />;
 };
 

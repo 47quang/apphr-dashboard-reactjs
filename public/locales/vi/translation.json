@@ -32,6 +32,9 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "log_user": "Tài khoản",
+    "log_message": "Thay đổi",
+    "createdAt": "Ngày tạo",
     "leave": "Xin nghỉ",
     "request": "Đề xuất",
     "compare_with_previous_month": "so với tháng trước",
@@ -49,7 +52,7 @@
     "vnd": "VNĐ",
     "payment_by": "Tính trên loại lương",
     "payment_value": "Mức chi trả",
-    "payment_type": "Hình thức chi trả",
+    "payment_type": "Hình thức tính phí",
     "payment_name": "Tên chi phí",
     "personal_tax_level": "Mức chịu thuế",
     "name_tax": "Diễn giải",

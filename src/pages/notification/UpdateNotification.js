@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { fetchArticle, updateArticle } from 'src/stores/actions/article';
@@ -11,9 +11,10 @@ const UpdateNotification = ({ t, location, history, match }) => {
   const articleInfoForm = useRef();
   const dispatch = useDispatch();
   const article = useSelector((state) => state.article.article);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_ARTICLE)) dispatch(fetchArticle(match?.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_ARTICLE)) dispatch(fetchArticle(match?.params?.id, setLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,7 +69,7 @@ const UpdateNotification = ({ t, location, history, match }) => {
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <div className="m-auto col-lg-12">
-          <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} />
+          <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} loading={loading} />
         </div>
       </CContainer>
     );

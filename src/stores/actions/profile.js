@@ -3,7 +3,8 @@ import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchProfiles = (params, onTotalChange) => {
+export const fetchProfiles = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getAll(params)
@@ -17,14 +18,17 @@ export const fetchProfiles = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
       });
   };
 };
 
-export const fetchProfile = (id) => {
+export const fetchProfile = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .get(id)
@@ -35,10 +39,11 @@ export const fetchProfile = (id) => {
         payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
-
+        if (setLoading) setLoading(false);
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
       });
   };

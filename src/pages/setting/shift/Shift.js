@@ -22,6 +22,7 @@ const Shifts = ({ t, location, history }) => {
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
+    loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
@@ -38,13 +39,21 @@ const Shifts = ({ t, location, history }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_SHIFT)) dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange));
+    if (permissionIds.includes(PERMISSION.LIST_SHIFT))
+      dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));
+    dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
   };
   if (permissionIds.includes(PERMISSION.LIST_SHIFT))
     return (

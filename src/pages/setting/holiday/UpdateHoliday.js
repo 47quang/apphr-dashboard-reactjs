@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -12,10 +12,11 @@ const UpdateHoliday = ({ t, location, history, match }) => {
   const dispatch = useDispatch();
   const holiday = useSelector((state) => state.holiday.holiday);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_HOLIDAY)) {
-      dispatch(fetchHoliday(match?.params?.id.split('=')[1])); //param.id = ".id=4"
+      dispatch(fetchHoliday(match?.params?.id.split('=')[1], setLoading)); //param.id = ".id=4"
       return () => {
         dispatch(setEmptyHoliday());
       };
@@ -27,7 +28,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
     // Call API UPDATE
-
+    console.log(form);
     dispatch(updateHoliday(form, t('message.successful_update')));
   };
 
@@ -71,7 +72,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
         },
       ];
   if (permissionIds.includes(PERMISSION.GET_HOLIDAY))
-    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} loading={loading} />;
   else return <Page404 />;
 };
 

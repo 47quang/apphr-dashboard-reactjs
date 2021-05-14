@@ -12,7 +12,8 @@ const dayIndex = {
   6: 'saturday',
 };
 
-export const fetchAssignments = (params, onTotalChange) => {
+export const fetchAssignments = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
       .getAll(params)
@@ -29,8 +30,10 @@ export const fetchAssignments = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -143,7 +146,8 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchAssignment = (id) => {
+export const fetchAssignment = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
       .get(id)
@@ -157,8 +161,10 @@ export const fetchAssignment = (id) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

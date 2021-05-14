@@ -4,7 +4,8 @@ import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
 
-export const fetchShifts = (params, onTotalChange) => {
+export const fetchShifts = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.shift
       .getAll(params)
@@ -18,8 +19,10 @@ export const fetchShifts = (params, onTotalChange) => {
             : [];
         dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
@@ -35,15 +38,18 @@ const formatDownloadedData = (payload) => {
   payload.endCC = parseLocalTime(payload.endCC);
   return payload;
 };
-export const fetchShift = (id) => {
+export const fetchShift = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.shift
       .get(id)
       .then(({ payload }) => {
         payload = formatDownloadedData(payload);
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

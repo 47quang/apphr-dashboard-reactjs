@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { Switch } from '@material-ui/core';
+import { CircularProgress, Switch } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
@@ -41,6 +41,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   // const positions = useSelector((state) => state.position.positions);
   // const departments = useSelector((state) => state.department.departments);
   let wages = useSelector((state) => state.contract.wages);
+  const [loading, setLoading] = useState(false);
 
   const jobTimelineInfo = {
     contractInfo: useSelector((state) => state.contract.contracts),
@@ -95,7 +96,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
-      dispatch(fetchContracts({ profileId: +profileId }));
+      dispatch(fetchContracts({ profileId: +profileId }, setLoading));
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
@@ -625,186 +626,194 @@ const JobTimelineInfo = ({ t, history, match }) => {
     document.getElementById('addBtn').disabled = false;
   };
   return (
-    <CContainer fluid className="c-main">
-      <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-        <button
-          type="button"
-          className="btn btn-success rounded-circle p-3"
-          hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
-          id="addBtn"
-          onClick={() => {
-            document.getElementById('newContract').hidden = false;
-            document.getElementById('addBtn').disabled = true;
-          }}
-        >
-          <Add fontSize="large" />
-        </button>
-      </div>
-      <div className="m-auto">
-        <Formik
-          innerRef={newContractRef}
-          initialValues={newContract}
-          validationSchema={NewContractSchema}
-          enableReinitialize
-          onSubmit={(values) => {
-            create(values);
-            // console.log(values);
-          }}
-        >
-          {(props) => {
-            props.isCreate = true;
-            return (
-              <form id="newContract" hidden={true} className="p-0 m-0">
-                <div className="shadow bg-white rounded mx-4 p-4">
-                  <h5>{t('label.create_new')}.</h5>
-                  <hr className="mt-1" />
-                  <BodyContract {...props} />
+    <>
+      {loading ? (
+        <div className="text-center pt-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <CContainer fluid className="c-main">
+          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+            <button
+              type="button"
+              className="btn btn-success rounded-circle p-3"
+              hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+              id="addBtn"
+              onClick={() => {
+                document.getElementById('newContract').hidden = false;
+                document.getElementById('addBtn').disabled = true;
+              }}
+            >
+              <Add fontSize="large" />
+            </button>
+          </div>
+          <div className="m-auto">
+            <Formik
+              innerRef={newContractRef}
+              initialValues={newContract}
+              validationSchema={NewContractSchema}
+              enableReinitialize
+              onSubmit={(values) => {
+                create(values);
+                // console.log(values);
+              }}
+            >
+              {(props) => {
+                props.isCreate = true;
+                return (
+                  <form id="newContract" hidden={true} className="p-0 m-0">
+                    <div className="shadow bg-white rounded mx-4 p-4">
+                      <h5>{t('label.create_new')}.</h5>
+                      <hr className="mt-1" />
+                      <BodyContract {...props} />
 
-                  <hr className="mt-1" />
-                  {renderButtons([
-                    {
-                      type: 'button',
-                      className: `btn btn-primary  mx-2`,
-                      onClick: (e) => {
-                        handleResetNewContract();
-                      },
-                      name: t('label.cancel'),
-                      position: 'right',
-                    },
-                    {
-                      type: 'button',
-                      className: `btn btn-primary px-4 ml-2`,
-                      onClick: (e) => {
-                        props.handleSubmit(e);
-                        // console.log('errors', props.errors);
-                        // console.log('touched', props.touched);
-                      },
-                      name: t('label.create_new'),
-                    },
-                  ])}
-                </div>
-                <br />
-              </form>
-            );
-          }}
-        </Formik>
-        {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
-          jobTimelineInfo.contractInfo.map((contract, index) => {
-            if (!contract?.isMinimize) contract.isMinimize = false;
-            return (
-              <Formik
-                key={index}
-                initialValues={contract}
-                validationSchema={NewContractSchema}
-                enableReinitialize
-                onSubmit={(values) => {
-                  create(values);
-                }}
-              >
-                {(props) => {
-                  return (
-                    <form className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                        <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                          <div className="pt-1 d-inline" role="button">
-                            {!props.values.isMinimize ? (
-                              <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)} />
-                            ) : (
-                              <IndeterminateCheckBoxOutlinedIcon
-                                className="pb-1"
-                                onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+                      <hr className="mt-1" />
+                      {renderButtons([
+                        {
+                          type: 'button',
+                          className: `btn btn-primary  mx-2`,
+                          onClick: (e) => {
+                            handleResetNewContract();
+                          },
+                          name: t('label.cancel'),
+                          position: 'right',
+                        },
+                        {
+                          type: 'button',
+                          className: `btn btn-primary px-4 ml-2`,
+                          onClick: (e) => {
+                            props.handleSubmit(e);
+                            // console.log('errors', props.errors);
+                            // console.log('touched', props.touched);
+                          },
+                          name: t('label.create_new'),
+                        },
+                      ])}
+                    </div>
+                    <br />
+                  </form>
+                );
+              }}
+            </Formik>
+            {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
+              jobTimelineInfo.contractInfo.map((contract, index) => {
+                if (!contract?.isMinimize) contract.isMinimize = false;
+                return (
+                  <Formik
+                    key={index}
+                    initialValues={contract}
+                    validationSchema={NewContractSchema}
+                    enableReinitialize
+                    onSubmit={(values) => {
+                      create(values);
+                    }}
+                  >
+                    {(props) => {
+                      return (
+                        <form className="p-0 m-0">
+                          <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                            <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                              <div className="pt-1 d-inline" role="button">
+                                {!props.values.isMinimize ? (
+                                  <AddBoxOutlinedIcon className="pb-1" onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)} />
+                                ) : (
+                                  <IndeterminateCheckBoxOutlinedIcon
+                                    className="pb-1"
+                                    onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
+                                  />
+                                )}
+                              </div>
+                              <Switch
+                                checked={props.values.status === 'active'}
+                                name={`status`}
+                                onChange={(e) => {
+                                  console.log('e.target.checked', e.target.checked);
+                                  e.target.checked
+                                    ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
+                                    : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
+                                }}
                               />
-                            )}
-                          </div>
-                          <Switch
-                            checked={props.values.status === 'active'}
-                            name={`status`}
-                            onChange={(e) => {
-                              console.log('e.target.checked', e.target.checked);
-                              e.target.checked
-                                ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
-                                : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
-                            }}
-                          />
-                          {props.values.code + ' - ' + props.values.fullname}
-                        </div>
+                              {props.values.code + ' - ' + props.values.fullname}
+                            </div>
 
-                        <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                          {props.values.expiredDate
-                            ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                            : t('label.from') + formatDate(props.values.handleDate)}
-                        </div>
-                        <hr className="mt-1" />
-                        {props.values.isMinimize && (
-                          <div>
-                            <BodyContract {...props} />
+                            <div style={{ fontSize: 14, paddingLeft: 82 }}>
+                              {props.values.expiredDate
+                                ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                                : t('label.from') + formatDate(props.values.handleDate)}
+                            </div>
                             <hr className="mt-1" />
-                            {isVisibleDeleteAlert ? (
-                              <WarningAlertDialog
-                                isVisible={isVisibleDeleteAlert}
-                                title={t('title.confirm')}
-                                warningMessage={t('message.confirm_delete_contract')}
-                                titleConfirm={t('label.agree')}
-                                titleCancel={t('label.cancel')}
-                                handleCancel={(e) => {
-                                  handleCloseDeleteAlert();
-                                }}
-                                handleConfirm={(e) => {
-                                  dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
-                                }}
-                              />
-                            ) : (
-                              <></>
-                            )}
+                            {props.values.isMinimize && (
+                              <div>
+                                <BodyContract {...props} />
+                                <hr className="mt-1" />
+                                {isVisibleDeleteAlert ? (
+                                  <WarningAlertDialog
+                                    isVisible={isVisibleDeleteAlert}
+                                    title={t('title.confirm')}
+                                    warningMessage={t('message.confirm_delete_contract')}
+                                    titleConfirm={t('label.agree')}
+                                    titleCancel={t('label.cancel')}
+                                    handleCancel={(e) => {
+                                      handleCloseDeleteAlert();
+                                    }}
+                                    handleConfirm={(e) => {
+                                      dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
+                                    }}
+                                  />
+                                ) : (
+                                  <></>
+                                )}
 
-                            {renderButtons(
-                              permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
-                                ? [
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 mx-2`,
-                                      onClick: (e) => {
-                                        setIsVisibleDeleteAlert(true);
-                                      },
-                                      name: t('label.delete'),
-                                      position: 'right',
-                                    },
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 mx-2`,
-                                      onClick: (e) => {
-                                        props.handleReset(e);
-                                      },
-                                      name: t('label.reset'),
-                                      position: 'right',
-                                    },
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 ml-2`,
-                                      onClick: (e) => {
-                                        props.handleSubmit(e);
-                                        // console.log('errors', props.errors);
-                                        // console.log('values', props.values);
-                                      },
-                                      name: t('label.save'),
-                                    },
-                                  ]
-                                : [],
+                                {renderButtons(
+                                  permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                                    ? [
+                                        {
+                                          type: 'button',
+                                          className: `btn btn-primary px-4 mx-2`,
+                                          onClick: (e) => {
+                                            setIsVisibleDeleteAlert(true);
+                                          },
+                                          name: t('label.delete'),
+                                          position: 'right',
+                                        },
+                                        {
+                                          type: 'button',
+                                          className: `btn btn-primary px-4 mx-2`,
+                                          onClick: (e) => {
+                                            props.handleReset(e);
+                                          },
+                                          name: t('label.reset'),
+                                          position: 'right',
+                                        },
+                                        {
+                                          type: 'button',
+                                          className: `btn btn-primary px-4 ml-2`,
+                                          onClick: (e) => {
+                                            props.handleSubmit(e);
+                                            // console.log('errors', props.errors);
+                                            // console.log('values', props.values);
+                                          },
+                                          name: t('label.save'),
+                                        },
+                                      ]
+                                    : [],
+                                )}
+                              </div>
                             )}
                           </div>
-                        )}
-                      </div>
-                    </form>
-                  );
-                }}
-              </Formik>
-            );
-          })
-        ) : (
-          <div />
-        )}
-      </div>
-    </CContainer>
+                        </form>
+                      );
+                    }}
+                  </Formik>
+                );
+              })
+            ) : (
+              <div />
+            )}
+          </div>
+        </CContainer>
+      )}
+    </>
   );
 };
 

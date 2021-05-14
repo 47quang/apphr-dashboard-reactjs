@@ -42,7 +42,8 @@ export const updateDiploma = (data, success_msg) => {
   };
 };
 
-export const fetchDiplomaByType = (params) => {
+export const fetchDiplomaByType = (params, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.diploma
       .getAll(params)
@@ -65,8 +66,10 @@ export const fetchDiplomaByType = (params) => {
             });
           dispatch({ type: REDUX_STATE.diploma.SET_CERTIFICATES, payload });
         }
+        if (setLoading) setLoading(false);
       })
       .catch((error) => {
+        if (setLoading) setLoading(false);
         console.log(error);
         if (error.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

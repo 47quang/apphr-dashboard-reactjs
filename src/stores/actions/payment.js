@@ -12,25 +12,35 @@ export const fetchPayments = (params, onTotalChange, setLoading) => {
     api.payment
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((f) => {
+                f.type = f.type === 'value' ? 'Khoản tiền mặt' : f.value + ' % ' + (f.by === 'gross' ? 'Tổng thu nhập' : 'Lương bảo hiểm');
+                return f;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENTS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        if (setLoading) setTimeout(() => setLoading(false), 1000);
+        if (setLoading) setLoading(false);
       });
   };
 };
 
-export const fetchPayment = (id) => {
+export const fetchPayment = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.payment
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENT, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });

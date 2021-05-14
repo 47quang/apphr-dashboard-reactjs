@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -11,9 +11,10 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
   const attributeInfoForm = useRef();
   const dispatch = useDispatch();
   const attribute = useSelector((state) => state.attribute.attribute);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAttribute(match.params?.id));
+    if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAttribute(match.params?.id, setLoading));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -74,6 +75,7 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
         validationSchema={NewFieldContract}
         buttons={buttons}
         submitForm={submitForm}
+        loading={loading}
       />
     );
   else return <Page404 />;

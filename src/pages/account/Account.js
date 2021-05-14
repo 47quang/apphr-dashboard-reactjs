@@ -20,7 +20,7 @@ const Account = ({ t, location, history }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-
+    loading: false,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
@@ -40,6 +40,12 @@ const Account = ({ t, location, history }) => {
       ...prevState,
       total: total,
     }));
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
@@ -49,6 +55,7 @@ const Account = ({ t, location, history }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +63,16 @@ const Account = ({ t, location, history }) => {
 
   const deleteRow = async (rowId) => {
     dispatch(deleteAccount(rowId, t('message.successful_delete')));
-    dispatch(fetchAccounts());
+    dispatch(
+      fetchAccounts(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (

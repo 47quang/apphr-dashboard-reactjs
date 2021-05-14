@@ -27,6 +27,7 @@ const HolidayPage = ({ t, location, history }) => {
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
+    loading: false,
   });
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
@@ -43,7 +44,12 @@ const HolidayPage = ({ t, location, history }) => {
       ...prevState,
       total: total,
     }));
-
+  const setLoading = (isLoading) => {
+    setPaging((prevState) => ({
+      ...prevState,
+      loading: isLoading,
+    }));
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_HOLIDAY)) {
       dispatch(
@@ -53,6 +59,7 @@ const HolidayPage = ({ t, location, history }) => {
             perpage: paging.pageSize,
           },
           onTotalChange,
+          setLoading,
         ),
       );
     }
@@ -62,7 +69,16 @@ const HolidayPage = ({ t, location, history }) => {
 
   const deleteRow = async (rowId) => {
     dispatch(deleteHoliday(rowId, t('message.successful_delete')));
-    dispatch(fetchHolidays());
+    dispatch(
+      fetchHolidays(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_HOLIDAY))
     return (

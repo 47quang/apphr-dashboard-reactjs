@@ -2,16 +2,20 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-export const fetchAttributes = (params, onTotalChange) => {
+export const fetchAttributes = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.attribute
       .getAll(params)
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.attribute.SET_ATTRIBUTES, payload });
         if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
+        if (setLoading) setTimeout(() => setLoading(false), 1000);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
@@ -21,14 +25,17 @@ export const fetchAttributes = (params, onTotalChange) => {
   };
 };
 
-export const fetchAttribute = (id) => {
+export const fetchAttribute = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.attribute
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.attribute.SET_ATTRIBUTE, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
