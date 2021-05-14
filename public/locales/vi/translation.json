@@ -32,6 +32,9 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "log_user": "Tài khoản",
+    "log_message": "Thay đổi",
+    "createdAt": "Ngày tạo",
     "leave": "Xin nghỉ",
     "request": "Đề xuất",
     "compare_with_previous_month": "so với tháng trước",
