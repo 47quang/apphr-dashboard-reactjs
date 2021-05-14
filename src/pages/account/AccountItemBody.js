@@ -290,29 +290,32 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                                     <div className="mx-4 px-2">
                                       {permissionGroup.children &&
                                         permissionGroup.children.length > 0 &&
-                                        permissionGroup.children.map((per) => (
-                                          <div key={per.id}>
-                                            <label>
-                                              <Checkbox
-                                                color="primary"
-                                                name="permissions_"
-                                                type="checkbox"
-                                                disabled={true}
-                                                value={per.id}
-                                                checked={values.permissionIds.includes(per.id)}
-                                                onChange={(e) => {
-                                                  if (e.target.checked) {
-                                                    arrayHelpers.push(per.id);
-                                                  } else {
-                                                    const idx = values.permissionIds.indexOf(per.id);
-                                                    arrayHelpers.remove(idx);
-                                                  }
-                                                }}
-                                              />
-                                              {per.name}
-                                            </label>
-                                          </div>
-                                        ))}
+                                        permissionGroup.children.map((per) => {
+                                          console.log('values', values);
+                                          return (
+                                            <div key={per.id}>
+                                              <label>
+                                                <Checkbox
+                                                  color="primary"
+                                                  name="permissions_"
+                                                  type="checkbox"
+                                                  disabled={true}
+                                                  value={per.id}
+                                                  checked={values.permissionIds.includes(per.id)}
+                                                  onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                      arrayHelpers.push(per.id);
+                                                    } else {
+                                                      const idx = values.permissionIds.indexOf(per.id);
+                                                      arrayHelpers.remove(idx);
+                                                    }
+                                                  }}
+                                                />
+                                                {per.name}
+                                              </label>
+                                            </div>
+                                          );
+                                        })}
                                     </div>
                                   );
                                 }}

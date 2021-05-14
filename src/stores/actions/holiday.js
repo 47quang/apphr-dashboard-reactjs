@@ -32,8 +32,8 @@ export const fetchHoliday = (id, setLoading) => {
     api.holiday
       .get(id)
       .then(({ payload }) => {
-        payload.startDate = formatDateInput(payload.startDate);
-        payload.endDate = formatDateInput(payload.endDate);
+        payload.startDate = payload.startDate.replace('T00:00:00.000Z', '');
+        payload.endDate = payload.endDate.replace('T23:59:59.000Z', '');
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         if (setLoading) setLoading(false);
       })
@@ -49,6 +49,8 @@ export const createHoliday = (params, history, success_msg) => {
     api.holiday
       .post(params)
       .then(({ payload }) => {
+        payload.startDate = payload.startDate.replace('T00:00:00.000Z', '');
+        payload.endDate = payload.endDate.replace('T23:59:59.000Z', '');
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         history.push(ROUTE_PATH.HOLIDAY + `/tab1.id=${payload.id}`);
@@ -69,6 +71,8 @@ export const updateHoliday = (data, success_msg) => {
     api.holiday
       .put(data)
       .then(({ payload }) => {
+        payload.startDate = payload.startDate.replace('T00:00:00.000Z', '');
+        payload.endDate = payload.endDate.replace('T23:59:59.000Z', '');
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

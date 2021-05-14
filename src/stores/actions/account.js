@@ -42,7 +42,7 @@ export const fetchAccount = (id, setLoading) => {
     api.account
       .get(id)
       .then(async ({ payload }) => {
-        console.log(payload);
+        // console.log(payload);
         payload.email = payload.email ?? '';
         payload.phone = payload.phone ?? '';
         payload.profileId = payload.profileId ?? 0;
