@@ -62,7 +62,7 @@ const Statistic = ({ t, location, profileId }) => {
   };
   return (
     <>
-      {isOpenDialog ? <ExportWage isOpen={isOpenDialog} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} /> : <></>}
+      {isOpenDialog && <ExportWage isOpen={isOpenDialog} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
       <div className="cols-1 m-2 p-2">{renderButtons(button)}</div>
       <CCardGroup columns className="cols-2 m-2 p-2">
         <PieChart />

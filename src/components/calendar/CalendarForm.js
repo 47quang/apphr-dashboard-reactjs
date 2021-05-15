@@ -11,9 +11,6 @@ import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 
 const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
-  // const handleChange = (event) => {
-  //   setType(event.target.value);
-  // };
   let newTask = {
     shiftId: '',
     start: '',
@@ -39,7 +36,6 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
             validationSchema={NewTaskSchedule}
             enableReinitialize
             onSubmit={(values) => {
-              // setNewField(values);
               handleConfirm(values);
             }}
           >

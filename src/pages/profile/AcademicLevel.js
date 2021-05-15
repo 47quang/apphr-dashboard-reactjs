@@ -283,7 +283,7 @@ const AcademicLevel = ({ t, match }) => {
               ) : (
                 <div />
               )}
-              {isVisibleDeleteAlert ? (
+              {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}
                   title={t('title.confirm')}
@@ -297,8 +297,6 @@ const AcademicLevel = ({ t, match }) => {
                     dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
                   }}
                 />
-              ) : (
-                <></>
               )}
             </div>
           </div>

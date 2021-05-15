@@ -54,7 +54,6 @@ const HistoryWorkingForm = ({ t, match }) => {
   }, []);
 
   function create(form) {
-    // form.provinceId = form.provinceId || null;
     form.profileId = profileId;
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
@@ -258,7 +257,6 @@ const HistoryWorkingForm = ({ t, match }) => {
                               <hr className="mt-1" />
                               <BodyItem {...props} />
                               <hr className="mt-1" />
-
                               {renderButtons(
                                 permissionIds.includes(PERMISSION.UPDATE_WORK_HISTORY)
                                   ? [
@@ -303,7 +301,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               ) : (
                 <div />
               )}
-              {isVisibleDeleteAlert ? (
+              {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}
                   title={t('title.confirm')}
@@ -317,8 +315,6 @@ const HistoryWorkingForm = ({ t, match }) => {
                     dispatch(deleteHistoryWork(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
                   }}
                 />
-              ) : (
-                <></>
               )}
             </div>
           </div>

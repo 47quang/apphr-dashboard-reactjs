@@ -262,7 +262,7 @@ const RollUp = ({ t, location }) => {
     };
     return (
       <>
-        {cell.isOpen ? (
+        {cell.isOpen && (
           <RollUpInfo
             t={t}
             isOpen={cell.isOpen}
@@ -274,11 +274,9 @@ const RollUp = ({ t, location }) => {
             avatar={row.avatar}
             reloadTable={reloadTable}
           />
-        ) : (
-          <></>
         )}
         <Table.Cell
-          className={classNames(className, isDay ? 'm-auto' : 'm-auto')}
+          className={classNames(className, 'm-auto')}
           row={row}
           column={column}
           children={children}
@@ -309,7 +307,7 @@ const RollUp = ({ t, location }) => {
         >
           {isDay ? (
             <div className={classNames(className, 'rounded')}>
-              {value.assignment.length > 0 ? (
+              {value.assignment.length > 0 &&
                 value.assignment.map((val, idx) => {
                   return (
                     <div
@@ -326,10 +324,8 @@ const RollUp = ({ t, location }) => {
                         val.status !== 'normal' ? (
                           <>
                             <div className="col-2 p-0 m-auto">
-                              {val.status.includes('leave') ? (
+                              {val.status.includes('leave') && (
                                 <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                              ) : (
-                                <></>
                               )}
                             </div>
                             <div className="col-2  p-0 m-auto">{val.status.includes('leave') ? statusIcon(val.status, val.point, idx) : ''}</div>
@@ -359,10 +355,7 @@ const RollUp = ({ t, location }) => {
                       )}
                     </div>
                   );
-                })
-              ) : (
-                <div className="d-flex justify-content-center"></div>
-              )}
+                })}
             </div>
           ) : (
             <div className="d-flex ml-4 align-items-center">
@@ -393,45 +386,6 @@ const RollUp = ({ t, location }) => {
         <Button onClick={handlePrev} style={{ height: '50%' }}>
           <NavigateBeforeIcon className="m-1" fontSize="large" />
         </Button>
-        {/* <div>
-          <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
-         
-          <div className="d-flex justify-content-center align-items-center">
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <p className="m-2 pt-0">{t('label.from')}</p>
-              <KeyboardDatePicker
-                className="m-0 p-0"
-                disableToolbar
-                variant="inline"
-                autoOk={true}
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                allowKeyboardControl={false}
-                value={new Date(state.fromDate.format('yyyy-MM-DD'))}
-                maxDate={new Date(state.today.format('yyyy-MM-DD'))}
-                onChange={(e) => {
-                  handleNewWeek(e);
-                }}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-              <p className="m-2 pt-0">{t('label.to')}</p>
-              <KeyboardDatePicker
-                className="m-0 p-0"
-                margin="normal"
-                allowKeyboardControl={false}
-                disableToolbar={true}
-                id="date-picker-dialog"
-                readOnly={true}
-                keyboardIcon={<></>}
-                format="dd/MM/yyyy"
-                value={new Date(state.toDate.format('yyyy-MM-DD'))}
-              />
-            </MuiPickersUtilsProvider>
-          </div>
-        </div> */}
         <div className="d-inline">
           <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
           <h5 className="d-flex justify-content-center">

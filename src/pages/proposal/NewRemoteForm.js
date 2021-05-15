@@ -170,12 +170,10 @@ const NewRemoteForm = ({ t, history, match }) => {
                         <button type="button" className="btn btn-primary" onClick={() => push({ date: '', id: 0, assignments: [] })}>
                           <AddCircle /> {t('label.add_assignment')}
                         </button>
-                        {errors && errors.assignments && typeof errors.assignments === 'string' ? (
+                        {errors && errors.assignments && typeof errors.assignments === 'string' && (
                           <div className="pt-2">
                             <small className={'text-danger ml-4'}> {t(errors.assignments)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>

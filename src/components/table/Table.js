@@ -250,7 +250,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   };
   return (
     <Plugin>
-      {openEditing ? (
+      {openEditing && (
         <NewRollUp
           isOpen={openEditing}
           handleConfirm={handleConfirmEditing}
@@ -258,10 +258,8 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           t={t}
           startCC={rollUp?.row?.startTime}
         />
-      ) : (
-        <></>
       )}
-      {openWarning ? (
+      {openWarning && (
         <WarningAlertDialog
           isVisible={openWarning}
           title={t('title.delete_row')}
@@ -271,8 +269,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           handleCancel={handleCancelWarning}
           warningMessage={t('message.delete_warning_message')}
         />
-      ) : (
-        <></>
       )}
 
       <Getter
@@ -401,7 +397,7 @@ const QTable = (props) => {
       columns: columnDef,
     }));
   }, [columnDef]);
-  // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
+
   const tableColumnExtensions = columnDef
     ? columnDef.map((col, idx) => {
         return {
@@ -546,17 +542,15 @@ const QTable = (props) => {
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
-          {!notPaging ? (
+          {!notPaging && (
             <PagingState
               currentPage={state.currentPage}
               onCurrentPageChange={(newPage) => onCurrentPageChange(newPage)}
               pageSize={paging.pageSize}
               onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
             />
-          ) : (
-            <></>
           )}
-          {!notPaging ? <CustomPaging totalCount={paging.total} /> : <></>}
+          {!notPaging && <CustomPaging totalCount={paging.total} />}
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>
@@ -623,9 +617,7 @@ const QTable = (props) => {
           <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
           <ColumnChooser /> */}
           <TableFixedColumns />
-          {disableEditColum ? (
-            <></>
-          ) : (
+          {!disableEditColum && (
             <CustomTableEditColumn
               t={t}
               route={route}
@@ -639,12 +631,11 @@ const QTable = (props) => {
             />
           )}
 
-          {/* <TableSelection showSelectAll /> */}
-          {!notPaging ? <PagingPanel pageSizes={paging.pageSizes} /> : <></>}
+          {!notPaging && <PagingPanel pageSizes={paging.pageSizes} />}
         </Grid>
 
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
-        {route === '/roll-up/' ? (
+        {route === '/roll-up/' && (
           <div className="p-0">
             <div className="row p-0 m-1">
               <div className="col-2">
@@ -691,8 +682,6 @@ const QTable = (props) => {
               </div>
             </div>
           </div>
-        ) : (
-          <></>
         )}
       </Paper>
     </div>

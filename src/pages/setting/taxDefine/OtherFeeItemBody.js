@@ -109,12 +109,10 @@ const OtherFeeItemBody = ({ t, paymentRef, payment, validationSchema, submitForm
                           {values.type === 'percent' ? t('label.percentage') : t('label.vnd')}
                         </span>
                       </div>
-                      {errors.value && touched.value && t(errors.value) ? (
+                      {errors.value && touched.value && t(errors.value) && (
                         <div>
                           <small className={'text-danger'}>{t(errors.value)}</small>
                         </div>
-                      ) : (
-                        <></>
                       )}
                     </div>
                   </div>
