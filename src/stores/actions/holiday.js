@@ -12,16 +12,17 @@ export const fetchHolidays = (params, onTotalChange, setLoading) => {
         // console.log('fetchHolidays', payload);
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -35,11 +36,12 @@ export const fetchHoliday = (id, setLoading) => {
         payload.startDate = payload.startDate.replace('T00:00:00.000Z', '');
         payload.endDate = payload.endDate.replace('T23:59:59.000Z', '');
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };

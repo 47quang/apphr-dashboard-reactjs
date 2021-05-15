@@ -30,16 +30,17 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -133,7 +134,6 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
 
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -142,6 +142,9 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -161,16 +164,17 @@ export const fetchAssignment = (id, setLoading) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -204,7 +208,6 @@ export const deleteAssignment = (id, success_msg) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGNMENT, payload });
-        // handleAfterDeleted();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -237,7 +240,7 @@ export const checkin = (id, success_msg) => {
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGNMENT, payload });
-        // handleAfterDeleted();
+
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

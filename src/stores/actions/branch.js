@@ -10,16 +10,17 @@ export const fetchBranches = (params, onTotalChange, setLoading) => {
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -31,16 +32,17 @@ export const fetchBranch = (id, setLoading) => {
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
         if (err.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };

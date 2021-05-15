@@ -170,6 +170,9 @@ export const ROUTE_PATH = {
 };
 export const SERVER_RESPONSE_MESSAGE = {
   VALIDATE_FAILED_EMAIL: 'Validation failed: email must be an email',
+  NO_DAYS_OFF: 'there are no days off',
+  INVALID_ASSIGNMENT_STATUS: 'have assignment status not valid, valid assignment status is normal',
+  ALREADY_EXISTED_ASSIGNMENT: 'already existed assignment in this time, cannot create overtime in this time',
 };
 
 export const CONTACT_TYPE = {

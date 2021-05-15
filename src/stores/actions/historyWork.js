@@ -66,16 +66,17 @@ export const fetchHistoriesWork = (params, setLoading) => {
           });
         payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((error) => {
-        if (setLoading) setLoading(false);
         console.log(error);
         if (error.response?.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
         else if (error.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };

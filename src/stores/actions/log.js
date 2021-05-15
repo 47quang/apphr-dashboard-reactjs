@@ -9,10 +9,11 @@ export const fetchLogs = (params, onTotalChange, setLoading) => {
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.log.SET_LOGS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
       });
   };

@@ -18,11 +18,12 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
             : [];
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -39,12 +40,14 @@ export const fetchProfile = (id, setLoading) => {
         payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
-        if (setLoading) setLoading(false);
+
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         console.log(err);
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
