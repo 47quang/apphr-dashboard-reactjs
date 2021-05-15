@@ -141,7 +141,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                 submitForm(values);
               }}
             >
-              {({ values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit }) => {
+              {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
                 values.password = values.password ?? '';
                 return (
                   <form autoComplete="off">
@@ -291,7 +291,6 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                                       {permissionGroup.children &&
                                         permissionGroup.children.length > 0 &&
                                         permissionGroup.children.map((per) => {
-                                          console.log('values', values);
                                           return (
                                             <div key={per.id}>
                                               <label>

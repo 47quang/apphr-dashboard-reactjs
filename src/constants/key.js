@@ -168,6 +168,9 @@ export const ROUTE_PATH = {
   TAX_DETAIL_CREATE: '/setting/taxDefine' + CREATE,
   TAX_DETAIL_UPDATE: '/setting/taxDefine' + ID,
 };
+export const SERVER_RESPONSE_MESSAGE = {
+  VALIDATE_FAILED_EMAIL: 'Validation failed: email must be an email',
+};
 
 export const CONTACT_TYPE = {
   SKYPE: 'skype',

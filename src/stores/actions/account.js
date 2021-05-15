@@ -1,13 +1,31 @@
-import { ROUTE_PATH } from 'src/constants/key';
+import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-// const convertTime = (payload) => {
-//   payload.startDate = payload.startDate.replace('Z', '');
-//   payload.endDate = payload.endDate.replace('Z', '');
-//   return payload;
-// };
-
+const handleAccountExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        let messageFromServer = err.response.data.message;
+        if (messageFromServer === SERVER_RESPONSE_MESSAGE.VALIDATE_FAILED_EMAIL) errorMessage = 'Không tìm thấy email này';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchAccounts = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -23,15 +41,12 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
             : [];
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleAccountExceptions(err, dispatch, 'fetch Accounts');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -42,7 +57,6 @@ export const fetchAccount = (id, setLoading) => {
     api.account
       .get(id)
       .then(async ({ payload }) => {
-        // console.log(payload);
         payload.email = payload.email ?? '';
         payload.phone = payload.phone ?? '';
         payload.profileId = payload.profileId ?? 0;
@@ -50,11 +64,7 @@ export const fetchAccount = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'fetch Account');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -76,12 +86,7 @@ export const createAccount = (params, history, success_msg) => {
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
       .catch((err) => {
-        console.log('err', err);
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'create Account');
       });
   };
 };
@@ -100,13 +105,7 @@ export const updateAccount = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log('err', err);
-
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Server Error' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'update Account');
       });
   };
 };
@@ -120,11 +119,7 @@ export const deleteAccount = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'delete Accounts');
       });
   };
 };
@@ -144,11 +139,7 @@ export const fetchRoles = (params) => {
         dispatch({ type: REDUX_STATE.account.GET_ROLES, payload });
       })
       .catch((err) => {
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'fetch roles');
       });
   };
 };
@@ -162,11 +153,7 @@ export const fetchRole = (id) => {
         dispatch({ type: REDUX_STATE.account.GET_PERMISSION_ARRAY, payload });
       })
       .catch((err) => {
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'fetch Role');
       });
   };
 };
@@ -179,11 +166,7 @@ export const fetchPermissionGroups = () => {
         dispatch({ type: REDUX_STATE.account.GET_ALL_PERMISSION, payload });
       })
       .catch((err) => {
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'fetch permissionGroups');
       });
   };
 };
@@ -200,12 +183,7 @@ export const fetchProfiles = (params) => {
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleAccountExceptions(err, dispatch, 'fetch profiles');
       });
   };
 };
