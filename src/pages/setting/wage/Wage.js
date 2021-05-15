@@ -44,7 +44,6 @@ const Wage = ({ t }) => {
       ...prevState,
       loading: isLoading,
     }));
-    console.log('setLoading');
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WAGE))

@@ -184,13 +184,6 @@ const RollUp = ({ t, location }) => {
       toDate: to,
     }));
   };
-  // const handleNewWeek = (date) => {
-  //   setState((preState) => ({
-  //     ...preState,
-  //     fromDate: moment(date).clone().startOf('week'),
-  //     toDate: moment(date).clone().endOf('week'),
-  //   }));
-  // };
 
   useEffect(() => {
     dispatch(
@@ -217,13 +210,8 @@ const RollUp = ({ t, location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
-  // console.log('RollUps', holidays);
 
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
-    // console.log('value', value);
-    // console.log('row', row);
-    // console.log('column', column);
-    // console.log('children', children);
     const [cell, setCell] = useState({
       rowId: '',
       columnName: '',

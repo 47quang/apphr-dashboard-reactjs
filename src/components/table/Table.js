@@ -174,7 +174,6 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
 };
 const Label = ({ column, className, ...props }) => {
   props.draggingEnabled = false;
-  // console.log(column);
   const rvComponent = Array.isArray(column.title) ? (
     <TableHeaderRow.Cell
       className={classNames(className)}
@@ -233,7 +232,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
     endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
-    console.log('rollUp', rollUp);
+
     dispatch(
       updateRollUp(
         {
@@ -307,7 +306,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
                       if (isPopUp) {
                         setOpenEditing(!openEditing);
                         setRollUp(params.tableRow);
-                        console.log(params.tableRow);
                       }
                     }}
                   >

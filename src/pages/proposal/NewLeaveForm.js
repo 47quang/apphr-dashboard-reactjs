@@ -56,7 +56,7 @@ const NewLeaveForm = ({ t, history, match }) => {
               data.assignmentIds = values.assignments && values.assignments.length > 0 ? values.assignments.map((ass) => +ass.id) : [];
               delete data.assignments;
               data.profileId = parseInt(data.profileId);
-              //console.log(data);
+
               dispatch(createLeaveRequest(data, history, t('message.successful_create')));
             }}
           >
@@ -255,8 +255,6 @@ const NewLeaveForm = ({ t, history, match }) => {
                     className: `btn btn-success`,
                     onClick: (e) => {
                       handleSubmit();
-                      // console.log('getIn', t(getIn(errors, `assignments.${1}.id`) || errors.assignments));
-                      // console.log('errors', errors);
                     },
                     name: t('label.create_new'),
                   },

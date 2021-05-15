@@ -124,7 +124,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
-      console.log('update', form);
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
       if (form.type === 'season') {
@@ -655,7 +654,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
               enableReinitialize
               onSubmit={(values) => {
                 create(values);
-                // console.log(values);
               }}
             >
               {(props) => {
@@ -683,8 +681,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           className: `btn btn-primary px-4 ml-2`,
                           onClick: (e) => {
                             props.handleSubmit(e);
-                            // console.log('errors', props.errors);
-                            // console.log('touched', props.touched);
                           },
                           name: t('label.create_new'),
                         },
@@ -727,7 +723,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 checked={props.values.status === 'active'}
                                 name={`status`}
                                 onChange={(e) => {
-                                  console.log('e.target.checked', e.target.checked);
                                   e.target.checked
                                     ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
                                     : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
@@ -790,8 +785,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                           className: `btn btn-primary px-4 ml-2`,
                                           onClick: (e) => {
                                             props.handleSubmit(e);
-                                            // console.log('errors', props.errors);
-                                            // console.log('values', props.values);
                                           },
                                           name: t('label.save'),
                                         },

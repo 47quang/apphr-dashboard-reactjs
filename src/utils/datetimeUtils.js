@@ -11,7 +11,6 @@ export const isBeforeTypeHour = (startTime, endTime) => {
   return moment(startTime, 'HH:mm').isBefore(moment(endTime, 'HH:mm'));
 };
 export const isSameBeforeTypeDate = (startTime, endTime) => {
-  // console.log(startTime, endTime, moment(startTime).isSameOrBefore(moment(endTime)));
   return moment(startTime).isSameOrBefore(moment(endTime));
 };
 export const isBeforeTypeDate = (startTime, endTime) => {
