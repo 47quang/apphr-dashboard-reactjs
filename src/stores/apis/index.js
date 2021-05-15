@@ -33,6 +33,7 @@ const API_PREFIX = {
   API_OVERTIME_REQUEST: '/api.overtime-form',
   API_ATTRIBUTE: '/api.attribute',
   API_PAYMENT: '/api.payment',
+  API_ACTIVITY: '/api.activity',
 };
 
 export const api = {
@@ -635,6 +636,13 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_PAYMENT + `/${id}`);
+    },
+  },
+  log: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_ACTIVITY, {
+        params: params,
+      });
     },
   },
 };
