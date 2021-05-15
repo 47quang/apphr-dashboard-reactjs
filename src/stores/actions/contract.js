@@ -1,7 +1,30 @@
+import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleContractExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchContracts = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -38,12 +61,7 @@ export const fetchContracts = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchContracts');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -88,12 +106,7 @@ export const fetchWageHistories = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchWageHistories');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -109,12 +122,7 @@ export const fetchContract = (id) => {
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchContract');
       });
   };
 };
@@ -124,9 +132,6 @@ export const createContract = (params, success_msg, handleResetNewContract) => {
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  //params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  //params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
-
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : undefined;
@@ -134,7 +139,6 @@ export const createContract = (params, success_msg, handleResetNewContract) => {
   params.allowanceIds =
     params.allowances && params.allowances.length > 0
       ? params.allowances.map((allowance) => {
-          //if (allowance.name !== 0) return +allowance.name;
           return +allowance.id;
         })
       : [];
@@ -166,12 +170,7 @@ export const createContract = (params, success_msg, handleResetNewContract) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'createContract');
       });
   };
 };
@@ -181,8 +180,6 @@ export const updateContract = (params, success_msg) => {
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
   params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  //params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  //params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
 
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
@@ -191,7 +188,6 @@ export const updateContract = (params, success_msg) => {
   params.allowanceIds =
     params.allowances && params.allowances.length > 0
       ? params.allowances.map((allowance) => {
-          //if (allowance.name !== 0) return +allowance.name;
           return +allowance.id;
         })
       : [];
@@ -223,12 +219,7 @@ export const updateContract = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'updateContract');
       });
   };
 };
@@ -243,7 +234,7 @@ export const deleteContract = (id, success_msg, handleAfterSuccess) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
+        handleContractExceptions(err, dispatch, 'deleteContract');
       });
   };
 };
@@ -256,12 +247,7 @@ export const fetchBranches = () => {
         dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchBranches');
       });
   };
 };
@@ -274,12 +260,7 @@ export const fetchWagesByType = (type) => {
         dispatch({ type: REDUX_STATE.contract.GET_WAGES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchWagesByType');
       });
   };
 };
@@ -291,12 +272,7 @@ export const fetchHistoriesWage = (params) => {
         dispatch({ type: REDUX_STATE.contract.SET_BENEFITS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchHistoriesWage');
       });
   };
 };
@@ -309,12 +285,7 @@ export const fetchAllowances = () => {
         dispatch({ type: REDUX_STATE.contract.GET_ALLOWANCES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'fetchAllowances');
       });
   };
 };
@@ -328,12 +299,7 @@ export const createWageHistory = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'createWageHistory');
       });
   };
 };
@@ -353,12 +319,7 @@ export const addField = (params, success_msg) => {
         // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'addField');
       });
   };
 };
@@ -368,16 +329,10 @@ export const deleteWageHistory = (id, handleAfterSuccess, success_msg) => {
       .delete(id)
       .then(({ payload }) => {
         handleAfterSuccess();
-        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'deleteWageHistory');
       });
   };
 };
@@ -387,16 +342,11 @@ export const activeContract = (id, setFieldValue, success_msg) => {
       .active(id)
       .then(({ payload }) => {
         if (setFieldValue) setFieldValue('status', 'active');
-        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'activeContract');
       });
   };
 };
@@ -406,16 +356,11 @@ export const inactiveContract = (id, setFieldValue, success_msg) => {
       .inactive(id)
       .then(({ payload }) => {
         if (setFieldValue) setFieldValue('status', 'inactive');
-        // dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
+
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'inactiveContract');
       });
   };
 };
@@ -428,12 +373,7 @@ export const countActiveContracts = () => {
         dispatch({ type: REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleContractExceptions(err, dispatch, 'countActiveContracts');
       });
   };
 };
