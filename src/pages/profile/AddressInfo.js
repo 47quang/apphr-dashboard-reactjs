@@ -11,11 +11,11 @@ import { CONTACT_TYPE, PERMISSION } from 'src/constants/key';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
 import {
   createNewContact,
+  deleteContact,
   fetchContacts,
+  updateContact,
   updatePermanentAddress,
   updateRelationship,
-  updateContact,
-  deleteContact,
 } from 'src/stores/actions/profile';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
@@ -262,6 +262,7 @@ const AddressInfo = ({ t, history, match }) => {
         <div className="col-xl-7">
           <div className="shadow bg-white rounded p-4 mb-4">
             <FormHeader text={t('title.permanent_address')} />
+
             <Formik
               initialValues={profile}
               enableReinitialize

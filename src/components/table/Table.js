@@ -23,7 +23,6 @@ import {
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 import { CircularProgress } from '@material-ui/core';
-// import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';

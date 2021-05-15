@@ -45,15 +45,16 @@ export const fetchAccount = (id, setLoading) => {
         payload.profileId = payload.profileId ?? 0;
         payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        if (setLoading) setLoading(false);
         if (err.response.status >= 500)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
         else if (err.response?.status >= 400)
           dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
         else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
