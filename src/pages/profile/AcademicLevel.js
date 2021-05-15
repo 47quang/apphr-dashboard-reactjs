@@ -231,7 +231,9 @@ const AcademicLevel = ({ t, match }) => {
                   );
                 }}
               </Formik>
-              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.degrees && initialValues.degrees.length > 0 ? (
+              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) &&
+                initialValues.degrees &&
+                initialValues.degrees.length > 0 &&
                 initialValues.degrees.map((degree, index) => (
                   <Formik
                     initialValues={degree}
@@ -279,10 +281,7 @@ const AcademicLevel = ({ t, match }) => {
                       </div>
                     )}
                   </Formik>
-                ))
-              ) : (
-                <div />
-              )}
+                ))}
               {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}

@@ -142,7 +142,6 @@ const AddressInfo = ({ t, history, match }) => {
         innerRef={contactFormRef}
         onSubmit={(values) => {
           dispatch(createNewContact(values, profileId, t('message.successful_create_contact'), contactFormRef));
-          // setShowCreateContact(true);
         }}
       >
         {({ values, errors, touched, handleReset, handleSubmit, handleBlur, handleChange }) => {

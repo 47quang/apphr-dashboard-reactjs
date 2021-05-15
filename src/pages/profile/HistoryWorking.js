@@ -20,8 +20,7 @@ const HistoryWorking = ({ t, isCreate }) => {
     // dispatch(deleteProfile(rowId));
     // dispatch(fetchAllProfiles());
   };
-  // if (isCreate) {
-  // } else {
+
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <QTable

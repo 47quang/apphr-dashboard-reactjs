@@ -136,7 +136,7 @@ const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 
 const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
   const dispatch = useDispatch();
-
+  const diabledClass = disableCreate ? 'disabled' : 'primary';
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
@@ -160,10 +160,10 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
             }}
           >
             {isPopUp ? (
-              <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
+              <AddCircleOutlineIcon color={diabledClass} />
             ) : (
               <Link to={`${route}create`} className="px-0 py-0">
-                <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
+                <AddCircleOutlineIcon color={diabledClass} />
               </Link>
             )}
           </IconButton>

@@ -16,7 +16,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     { name: 'type', title: t('label.type_roll_call'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startTime', title: t('label.start_time'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'endTime', title: t('label.end_time'), align: 'left', width: '30%', wordWrapEnabled: true },
-    //{ name: 'coefficient', title: 'Hệ số giờ làm' },
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
@@ -99,9 +98,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
             setIsReload: setIsReload,
           }}
           editColumnWidth={'15%'}
-          // disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
           disableCreate={rows.rollUps && rows.rollUps.length > 0}
-          // disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
         />
       </DialogContent>
     </Dialog>

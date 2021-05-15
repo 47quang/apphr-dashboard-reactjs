@@ -229,7 +229,9 @@ const CertificateInfo = ({ t, match }) => {
                   );
                 }}
               </Formik>
-              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.certificates && initialValues.certificates.length > 0 ? (
+              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) &&
+                initialValues.certificates &&
+                initialValues.certificates.length > 0 &&
                 initialValues.certificates.map((certificate, index) => (
                   <Formik
                     key={'certificate ' + index}
@@ -278,10 +280,7 @@ const CertificateInfo = ({ t, match }) => {
                       </div>
                     )}
                   </Formik>
-                ))
-              ) : (
-                <div />
-              )}
+                ))}
               {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}
