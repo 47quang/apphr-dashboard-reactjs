@@ -14,9 +14,6 @@ const Notification = ({ t }) => {
     { name: 'code', title: t('label.notification_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'typeId', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
-    // { name: 'ARTICLEIds', title: t('label.notification_ARTICLEes') },
-    // { name: 'departmentIds', title: t('label.notification_departments') },
-    // { name: 'positionIds', title: t('label.notification_positions') },
     { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({

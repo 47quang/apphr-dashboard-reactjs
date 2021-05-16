@@ -166,12 +166,10 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                             {t('label.minutes')}
                           </span>
                         </div>
-                        {errors.flexibleTime && touched.flexibleTime && t(errors.flexibleTime) ? (
+                        {errors.flexibleTime && touched.flexibleTime && t(errors.flexibleTime) && (
                           <div>
                             <small className={'text-danger'}>{t(errors.flexibleTime)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>
@@ -193,12 +191,10 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                             {t('label.hours')}
                           </span>
                         </div>
-                        {errors.expected && touched.expected && t(errors.expected) ? (
+                        {errors.expected && touched.expected && t(errors.expected) && (
                           <div>
                             <small className={'text-danger'}>{t(errors.expected)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>

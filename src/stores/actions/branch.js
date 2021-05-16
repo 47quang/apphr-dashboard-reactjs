@@ -1,7 +1,29 @@
-import { ROUTE_PATH } from 'src/constants/key';
+import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleBranchExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchBranches = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -10,16 +32,12 @@ export const fetchBranches = (params, onTotalChange, setLoading) => {
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleBranchExceptions(err, dispatch, 'fetchBranches');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -31,16 +49,12 @@ export const fetchBranch = (id, setLoading) => {
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleBranchExceptions(err, dispatch, 'fetchBranch');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -55,12 +69,7 @@ export const createBranch = (params, history, success_msg) => {
         history.push(ROUTE_PATH.BRANCH + `/${payload.id}`);
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleBranchExceptions(err, dispatch, 'createBranch');
       });
   };
 };
@@ -74,12 +83,7 @@ export const updateBranch = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleBranchExceptions(err, dispatch, 'updateBranch');
       });
   };
 };
@@ -93,12 +97,7 @@ export const deleteBranch = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleBranchExceptions(err, dispatch, 'deleteBranch');
       });
   };
 };
@@ -117,12 +116,7 @@ export const countBranches = (params) => {
         dispatch({ type: REDUX_STATE.branch.COUNT_BRANCHES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleBranchExceptions(err, dispatch, 'countBranches');
       });
   };
 };

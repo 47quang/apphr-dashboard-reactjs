@@ -7,8 +7,6 @@ import { ROUTE_PATH } from 'src/constants/key';
 import { SettingHolidayLimitSchema } from 'src/schema/formSchema';
 import { changeActions } from 'src/stores/actions/header';
 
-//TODO: translate
-
 const HolidaySettings = ({ t, location, match, history }) => {
   const params = match.params;
   const holidayInfoForm = useRef();
@@ -18,7 +16,6 @@ const HolidaySettings = ({ t, location, match, history }) => {
     type: '',
     total: '',
   });
-  //TODO:translating
   const getHolidayInfo = () => {
     setInitialValues({
       type: 'Nghỉ có phép',
@@ -38,8 +35,6 @@ const HolidaySettings = ({ t, location, match, history }) => {
     dispatch(changeActions(actions));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const getOnSubmitInForm = (event) => holidayInfoForm.current.handleSubmit(event);
 
   return (
     <CContainer fluid className="c-main mb-3 px-4">
@@ -86,7 +81,6 @@ const HolidaySettings = ({ t, location, match, history }) => {
             )}
           </Formik>
         </div>
-        ;
       </div>
     </CContainer>
   );

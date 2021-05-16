@@ -635,5 +635,8 @@
     "allowance_level_must_be_integer": "Mức phụ cấp phải là một số nguyên",
     "allowance_level_must_not_be_negative": "Mức phụ cấp phải là một số không âm",
     "required_enter_allowance_level": "Bắt buộc phải nhập mức phụ cấp"
+  },
+  "exceptions": {
+    "message_unknown_error": "Đã có lỗi bất thường xảy ra"
   }
 }

@@ -1,7 +1,30 @@
+import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleHistoryWorkExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
   return (dispatch, getState) => {
     api.historyWork
@@ -13,13 +36,8 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
         handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'createHistoryWork');
       });
   };
 };
@@ -37,13 +55,8 @@ export const updateHistoryWork = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.historyWork.UPDATE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'updateHistoryWork');
       });
   };
 };
@@ -66,16 +79,12 @@ export const fetchHistoriesWork = (params, setLoading) => {
           });
         payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
-        if (setLoading) setLoading(false);
       })
-      .catch((error) => {
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'fetchHistoriesWork');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -92,13 +101,8 @@ export const deleteHistoryWork = (id, msg, handleAfterSuccess) => {
           payload: { open: true, type: 'success', message: msg },
         });
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'deleteHistoryWork');
       });
   };
 };
@@ -110,13 +114,8 @@ export const onChangeDepartment = (params, index) => {
         payload['index'] = index;
         dispatch({ type: REDUX_STATE.historyWork.GET_DEPARTMENTS, payload });
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'onChangeDepartment');
       });
   };
 };
@@ -128,13 +127,8 @@ export const onChangePosition = (params, index) => {
         payload['index'] = index;
         dispatch({ type: REDUX_STATE.historyWork.GET_POSITIONS, payload });
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (error.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'onChangePosition');
       });
   };
 };

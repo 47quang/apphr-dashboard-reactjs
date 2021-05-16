@@ -49,7 +49,6 @@ const NewRemoteForm = ({ t, history, match }) => {
               data.assignmentIds = values.assignments && values.assignments.length > 0 ? values.assignments.map((ass) => +ass.id) : [];
               delete data.assignments;
               data.profileId = parseInt(data.profileId);
-              //console.log(data);
               dispatch(createRemoteRequest(data, history, t('message.successful_create')));
             }}
           >
@@ -171,12 +170,10 @@ const NewRemoteForm = ({ t, history, match }) => {
                         <button type="button" className="btn btn-primary" onClick={() => push({ date: '', id: 0, assignments: [] })}>
                           <AddCircle /> {t('label.add_assignment')}
                         </button>
-                        {errors && errors.assignments && typeof errors.assignments === 'string' ? (
+                        {errors && errors.assignments && typeof errors.assignments === 'string' && (
                           <div className="pt-2">
                             <small className={'text-danger ml-4'}> {t(errors.assignments)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>
@@ -230,8 +227,6 @@ const NewRemoteForm = ({ t, history, match }) => {
                     className: `btn btn-success`,
                     onClick: (e) => {
                       handleSubmit();
-                      // console.log('getIn', t(getIn(errors, `assignments.${1}.id`) || errors.assignments));
-                      // console.log('errors', errors);
                     },
                     name: t('label.create_new'),
                   },

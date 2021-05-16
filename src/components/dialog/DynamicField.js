@@ -8,9 +8,6 @@ import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 
 const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
-  // const handleChange = (event) => {
-  //   setType(event.target.value);
-  // };
   const newField = {
     name: '',
     type: '',
@@ -39,14 +36,13 @@ const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
             validationSchema={NewFieldContract}
             enableReinitialize
             onSubmit={(values) => {
-              // setNewField(values);
               handleConfirm(values);
             }}
           >
             {(props) => {
               return (
                 <form className="p-0 m-0">
-                  <h5>{t('label.new_field')}.</h5>
+                  <h5>{t('label.new_field')}</h5>
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonTextInput

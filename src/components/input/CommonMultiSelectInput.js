@@ -5,7 +5,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import React from 'react';
-// import CancelIcon from "@material-ui/icons/Cancel";
 
 // TODO TRANS
 const useStyles = makeStyles((theme) => ({
@@ -53,16 +52,8 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
     return acc;
   }, {});
 
-  // const handleDelete = (idx) => {
-  //   let pos = values.indexOf(idx);
-  //   values = values.splice(pos, 1);
-  //   return values;
-  // };
   return (
     <FormControl className={classes.formControl} style={{ width: '100%' }}>
-      {/* <InputLabel id="demo-simple-select-label" hidden={values.length > 0}>
-        {placeholder}
-      </InputLabel> */}
       <Select
         labelId="demo-mutiple-chip-label"
         className="border-bottom"

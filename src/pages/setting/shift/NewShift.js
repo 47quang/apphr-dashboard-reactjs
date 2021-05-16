@@ -42,7 +42,6 @@ const NewShift = ({ t, location, history }) => {
     form.startCC = parseUTCTime(form.startCC);
     form.endCC = parseUTCTime(form.endCC);
     form.branchId = parseInt(form.branchId);
-    console.log(form);
     dispatch(createNewShift(form, history, t('message.successful_create')));
   };
 

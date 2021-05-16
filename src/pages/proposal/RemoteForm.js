@@ -25,7 +25,7 @@ const RemoteForm = ({ t, history, match }) => {
   const [loading, setLoading] = useState(false);
   const basicInfo = {};
   const requestId = match?.params?.id;
-  console.log(requestId);
+
   const fullyButtons = [
     {
       type: 'button',

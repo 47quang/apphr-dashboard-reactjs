@@ -46,7 +46,6 @@ const NewOvertimeForm = ({ t, history, match }) => {
               let data = { ...values };
               data.profileId = parseInt(data.profileId);
               data.shiftId = parseInt(data.shiftId);
-              //console.log(data);
               dispatch(createOvertimeRequest(data, history, t('message.successful_create')));
             }}
           >
@@ -161,8 +160,6 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     className: `btn btn-success`,
                     onClick: (e) => {
                       handleSubmit();
-                      // console.log('getIn', t(getIn(errors, `assignments.${1}.id`) || errors.assignments));
-                      // console.log('errors', errors);
                     },
                     name: t('label.create_new'),
                   },

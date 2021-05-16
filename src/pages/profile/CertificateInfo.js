@@ -229,7 +229,9 @@ const CertificateInfo = ({ t, match }) => {
                   );
                 }}
               </Formik>
-              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.certificates && initialValues.certificates.length > 0 ? (
+              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) &&
+                initialValues.certificates &&
+                initialValues.certificates.length > 0 &&
                 initialValues.certificates.map((certificate, index) => (
                   <Formik
                     key={'certificate ' + index}
@@ -278,11 +280,8 @@ const CertificateInfo = ({ t, match }) => {
                       </div>
                     )}
                   </Formik>
-                ))
-              ) : (
-                <div />
-              )}
-              {isVisibleDeleteAlert ? (
+                ))}
+              {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}
                   title={t('title.confirm')}
@@ -296,8 +295,6 @@ const CertificateInfo = ({ t, match }) => {
                     dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
                   }}
                 />
-              ) : (
-                <></>
               )}
             </div>
           </div>

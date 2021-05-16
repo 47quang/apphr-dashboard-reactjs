@@ -86,18 +86,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                   <div className="row">
                     <div className="form-group col-xl-12">
                       <Label text="Chi nhánh" required={true} />
-                      {/* <Multiselect
-                  options={branches}
-                  closeIcon="close"
-                  placeholder="Chọn chi nhánh"
-                  selectedValues={values.branchIds}
-                  onSelect={handleChange('branchIds')}
-                  displayValue="name"
-                  style={{
-                    chips: { color: 'red', outline: 'solid' },
-                    searchBox: { border: 'none', borderBottom: '1px solid blue', borderRadius: '0px' },
-                  }}
-                /> */}
+
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
                           values={values.branchIds}

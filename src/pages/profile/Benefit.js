@@ -47,7 +47,6 @@ const Benefit = ({ t, history, match }) => {
   }, []);
 
   async function create(form, contractId) {
-    // form.provinceId = form.provinceId || null;
     form.profileId = +match.params.id;
     form.contractId = contractId;
     form.wageId = parseInt(form.wageId);
@@ -139,7 +138,9 @@ const Benefit = ({ t, history, match }) => {
                   </button>
                 </div>
 
-                {permissionIds.includes(PERMISSION.LIST_WAGE_HISTORY) && values.wageHistories && values.wageHistories.length > 0 ? (
+                {permissionIds.includes(PERMISSION.LIST_WAGE_HISTORY) &&
+                  values.wageHistories &&
+                  values.wageHistories.length > 0 &&
                   values.wageHistories.map((benefit, benefitIndex) => {
                     return (
                       <div
@@ -358,7 +359,7 @@ const Benefit = ({ t, history, match }) => {
                             }}
                           />
                           {renderButtons(
-                            benefit.id // Update
+                            benefit.id
                               ? permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)
                                 ? [
                                     {
@@ -448,10 +449,7 @@ const Benefit = ({ t, history, match }) => {
                         </>
                       </div>
                     );
-                  })
-                ) : (
-                  <div></div>
-                )}
+                  })}
               </div>
             );
           }}
@@ -469,7 +467,9 @@ const Benefit = ({ t, history, match }) => {
         <CContainer fluid className="c-main">
           <div className="m-auto">
             <div>
-              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && benefitTab.contracts && benefitTab.contracts.length > 0 ? (
+              {permissionIds.includes(PERMISSION.LIST_CONTRACT) &&
+                benefitTab.contracts &&
+                benefitTab.contracts.length > 0 &&
                 benefitTab.contracts.map((contract, index) => {
                   contract.isMinimize = false;
                   return (
@@ -535,10 +535,7 @@ const Benefit = ({ t, history, match }) => {
                       }}
                     </Formik>
                   );
-                })
-              ) : (
-                <div />
-              )}
+                })}
             </div>
           </div>
         </CContainer>

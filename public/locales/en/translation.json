@@ -32,5 +32,8 @@
     "decline": "Decline",
     "agree": "Agree",
     "upload_file": "Upload File"
+  },
+  "exceptions": {
+    "message_unknown_error": "An unknown error occurred"
   }
 }

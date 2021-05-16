@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import store from './stores/store';
 import { icons } from './asset/icon';
 import '@coreui/coreui/dist/css/coreui.min.css';
-// import 'react-csv-importer/dist/index.css';
 import './i18n/i18n';
 
 const loading = (

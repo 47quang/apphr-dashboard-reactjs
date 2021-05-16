@@ -8,9 +8,6 @@ import { renderButtons } from 'src/utils/formUtils';
 import CommonTextInput from '../input/CommonTextInput';
 
 const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
-  // const handleChange = (event) => {
-  //   setType(event.target.value);
-  // };
   const newRollUp = {
     startTime: startCC,
     endTime: '',
@@ -24,7 +21,6 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
             validationSchema={NewRollUpSchema}
             enableReinitialize
             onSubmit={(values) => {
-              // setNewField(values);
               handleConfirm(values);
             }}
           >
