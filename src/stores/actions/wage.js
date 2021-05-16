@@ -13,13 +13,13 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
-          payload &&
-          payload.length > 0 &&
-          payload.map((wage) => {
-            wage.type = paymentType[wage.type];
-            return wage;
-          });
-        dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload });
+          payload && payload.length > 0
+            ? payload.map((wage) => {
+                wage.type = paymentType[wage.type];
+                return wage;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload: payload });
         if (onTotalChange) onTotalChange(total);
         if (setLoading) setLoading(false);
       })

@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actions/profile';
 import Page404 from '../page404/Page404';
 
@@ -21,6 +21,78 @@ const Profile = ({ t, location }) => {
     // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
     // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
+  const filters = {
+    username: {
+      title: t('label.employee_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    lastname: {
+      title: t('label.employee_last_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    firstname: {
+      title: t('label.employee_last_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    phone: {
+      title: t('label.phone_number'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    gender: {
+      title: t('label.sex'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        {
+          id: 'male',
+          name: t('label.male'),
+        },
+        {
+          id: 'female',
+          name: t('label.female'),
+        },
+      ],
+    },
+    email: {
+      title: t('label.email'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.profile.profiles);
   const [paging, setPaging] = useState({
@@ -69,6 +141,21 @@ const Profile = ({ t, location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+
+  const filterFunction = (params) => {
+    dispatch(
+      fetchProfiles(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
+
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId, t('message.successful_delete')));
     dispatch(
@@ -90,7 +177,6 @@ const Profile = ({ t, location }) => {
           columnDef={columnDefOfProfiles}
           data={profiles}
           route={ROUTE_PATH.PROFILE + '/'}
-          idxColumnsFilter={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
           deleteRow={deleteRow}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
@@ -98,6 +184,8 @@ const Profile = ({ t, location }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_PROFILE)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_PROFILE)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_PROFILE)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

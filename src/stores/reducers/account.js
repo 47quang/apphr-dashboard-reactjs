@@ -17,6 +17,7 @@ const initialState = {
   roles: [],
   permissionGroups: [],
   profiles: [],
+  total: 0,
 };
 
 const accountReducer = (state = initialState, { type, payload }) => {
@@ -61,6 +62,8 @@ const accountReducer = (state = initialState, { type, payload }) => {
         ...state,
         profiles: payload,
       };
+    case REDUX_STATE.account.COUNT_ACCOUNT:
+      return { ...state, total: payload };
     default:
       return state;
   }

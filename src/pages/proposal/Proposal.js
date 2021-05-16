@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES } from 'src/constants/key';
 import {
   fetchLeaveRequests,
   fetchRemoteRequests,
@@ -10,6 +10,9 @@ import {
   setEmptyLeaveRequests,
   setEmptyRemoteRequests,
   setEmptyOverTimeRequests,
+  filterLeaveRequests,
+  filterOvertimeRequests,
+  filterRemoteRequests,
 } from 'src/stores/actions/request';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
@@ -19,7 +22,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   const columnDefOfProfiles =
     type === 'leave'
       ? [
-          { name: 'id', title: t('label.id'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
           { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },
@@ -28,7 +31,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
         ]
       : [
-          { name: 'id', title: t('label.id'), align: 'left', width: '15%', wordWrapEnabled: true },
+          { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
           { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '30%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
@@ -44,6 +47,90 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
+  const filters =
+    type === 'leave'
+      ? {
+          code: {
+            title: t('label.code'),
+            operates: [
+              {
+                id: FILTER_OPERATOR.LIKE,
+                name: t('filter_operator.like'),
+              },
+            ],
+            type: 'text',
+          },
+          type: {
+            title: t('label.leave_form_type'),
+            operates: [
+              {
+                id: FILTER_OPERATOR.LIKE,
+                name: t('filter_operator.like'),
+              },
+            ],
+            type: 'text',
+          },
+          status: {
+            title: t('label.status'),
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+            type: 'select',
+            values: [
+              {
+                id: 'approve',
+                name: t('label.approve'),
+              },
+              {
+                id: 'reject',
+                name: t('label.reject'),
+              },
+              {
+                id: 'new',
+                name: t('label.new'),
+              },
+            ],
+          },
+        }
+      : {
+          code: {
+            title: t('label.code'),
+            operates: [
+              {
+                id: FILTER_OPERATOR.LIKE,
+                name: t('filter_operator.like'),
+              },
+            ],
+            type: 'text',
+          },
+          status: {
+            title: t('label.status'),
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+            type: 'select',
+            values: [
+              {
+                id: 'approve',
+                name: t('label.approve'),
+              },
+              {
+                id: 'reject',
+                name: t('label.reject'),
+              },
+              {
+                id: 'new',
+                name: t('label.new'),
+              },
+            ],
+          },
+        };
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -147,6 +234,83 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
   //   dispatch(fetchProfiles());
   // };
+  const filterFunction = (params) => {
+    if (type === 'leave')
+      profileId
+        ? dispatch(
+            filterLeaveRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+                profileId: profileId,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          )
+        : dispatch(
+            filterLeaveRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          );
+    else if (type === 'remote')
+      profileId
+        ? dispatch(
+            filterRemoteRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+                profileId: profileId,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          )
+        : dispatch(
+            filterRemoteRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          );
+    else
+      profileId
+        ? dispatch(
+            filterOvertimeRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+                profileId: profileId,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          )
+        : dispatch(
+            filterOvertimeRequests(
+              {
+                ...params,
+                page: paging.currentPage,
+                perpage: paging.pageSize,
+              },
+              onTotalChange,
+              setLoading,
+            ),
+          );
+  };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       {type === 'leave' ? (
@@ -162,6 +326,8 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       ) : (
         <QTable
@@ -176,6 +342,8 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       )}
     </CContainer>

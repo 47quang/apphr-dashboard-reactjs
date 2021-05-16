@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteWage, fetchWages } from 'src/stores/actions/wage';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
@@ -16,6 +16,42 @@ const Wage = ({ t }) => {
     { name: 'name', title: t('label.wage_name'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
+  const filters = {
+    code: {
+      title: t('label.wage_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.wage_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    type: {
+      title: t('label.payment_method'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        { id: 'by_hour', name: t('label.by_hour') },
+        { id: 'by_month', name: t('label.by_month') },
+      ],
+    },
+  };
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
@@ -44,7 +80,6 @@ const Wage = ({ t }) => {
       ...prevState,
       loading: isLoading,
     }));
-    console.log('setLoading');
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WAGE))
@@ -60,6 +95,20 @@ const Wage = ({ t }) => {
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+
+  const filterFunction = (params) => {
+    dispatch(
+      fetchWages(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
 
   const deleteRow = async (rowId) => {
     dispatch(deleteWage(rowId, t('message.successful_delete')));
@@ -90,6 +139,8 @@ const Wage = ({ t }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_WAGE)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_WAGE)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

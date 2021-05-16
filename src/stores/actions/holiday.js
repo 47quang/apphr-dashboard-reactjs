@@ -1,5 +1,4 @@
 import { ROUTE_PATH } from 'src/constants/key';
-import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 

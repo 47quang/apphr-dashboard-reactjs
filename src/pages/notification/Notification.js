@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteArticle, fetchArticles } from 'src/stores/actions/article';
 import PropTypes from 'prop-types';
 import Page404 from '../page404/Page404';
@@ -26,6 +26,29 @@ const Notification = ({ t }) => {
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
+  const filters = {
+    code: {
+      title: t('label.notification_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    title: {
+      title: t('label.notification_title'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
+
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -63,6 +86,19 @@ const Notification = ({ t }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchArticles(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const deleteRow = async (rowId) => {
     dispatch(deleteArticle(rowId, t('message.successful_delete')));
     dispatch(
@@ -92,6 +128,8 @@ const Notification = ({ t }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_ARTICLE)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_ARTICLE)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_ARTICLE)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

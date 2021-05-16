@@ -650,3 +650,19 @@ export const ExportWageSchema = Yup.object().shape({
       return isBeforeTypeDate(from, value);
     }),
 });
+
+export const FilterSchema = Yup.object().shape({
+  rule: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_rule', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_rule'),
+  op: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_operator', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_operator'),
+  value: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_value', function (value) {
+    return value !== '0' && value !== '';
+  }),
+});

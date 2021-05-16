@@ -12,7 +12,11 @@ const client = axios.create({
   headers: {
     'content-type': 'application/json',
   },
-  paramsSerializer: (params) => querystring.stringify(params),
+  paramsSerializer: (params) => {
+    if (params?.filters) {
+      return 'filters=' + JSON.stringify(params.filters);
+    } else return querystring.stringify(params);
+  },
   timeout: 20000,
   withCredentials: false,
 });

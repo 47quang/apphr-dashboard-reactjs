@@ -459,7 +459,6 @@ const RollUp = ({ t, location }) => {
         columnDef={columnDefOfRollUp.current}
         data={data}
         route={ROUTE_PATH.ROLL_UP + '/'}
-        idxColumnsFilter={[0, 1]}
         disableEditColum={true}
         headerDateCols={[2, 3, 4, 5, 6, 7, 8]}
         customTableCell={CustomTableCell}
@@ -468,6 +467,7 @@ const RollUp = ({ t, location }) => {
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
         paddingColumnHeader={true}
+        disableFilter={true}
       />
     </CContainer>
   );

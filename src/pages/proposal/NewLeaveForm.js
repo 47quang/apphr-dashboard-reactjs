@@ -160,7 +160,7 @@ const NewLeaveForm = ({ t, history, match }) => {
                                     errorMessage={t(getIn(errors, `assignments.${assignmentIdx}.date`))}
                                   />
                                   <CommonSelectInput
-                                    containerClassName={'form-group col-xl-6'}
+                                    containerClassName={'form-group col-lg-6'}
                                     value={assignment.id ?? ''}
                                     onBlur={handleBlur(`assignments.${assignmentIdx}.id`)}
                                     onChange={handleChange(`assignments.${assignmentIdx}.id`)}

@@ -425,7 +425,29 @@ export const REQUEST_TABS = {
 };
 
 export const PAGE_SIZES = {
-  LEVEL_1: 5,
+  LEVEL_1: 10,
   LEVEL_2: 20,
   LEVEL_3: 50,
+};
+
+export const FILTER_OPERATOR = {
+  IN: 'in',
+  NOT_IN: 'not_in',
+  BETWEEN: 'between',
+  NOT_BETWEEN: 'not_between',
+  NULL: 'null',
+  NOT_NULL: 'not_null',
+  EMPTY: 'empty',
+  NOT_EMPTY: 'not_empty',
+  AUTOCOMPLETE: 'autocomplete',
+  GREATER_THAN: '>',
+  GREATER_THAN_OR_EQUAL: '>=',
+  LESS_THAN: '<',
+  LESS_THAN_OR_EQUAL: '<=',
+  EQUAL: '=',
+  NOT_EQUAL: '!=',
+  LIKE: 'like',
+  NOT_LIKE: 'not_like',
+  CONTAIN: 'contain',
+  CUSTOM: 'custom',
 };
