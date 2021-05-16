@@ -301,10 +301,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
                       if (isPopUp) {
                         setOpenEditing(!openEditing);
                         setRollUp(params.tableRow);
-<<<<<<< HEAD
-                        // console.log(params.tableRow);
-=======
->>>>>>> 62ba21e7e544c31361d319ecc4e7f4f4e2e48f17
                       }
                     }}
                   >

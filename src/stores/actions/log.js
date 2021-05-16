@@ -1,9 +1,7 @@
 import { RESPONSE_CODE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-<<<<<<< HEAD
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
-=======
 const handleLogExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';
@@ -27,7 +25,6 @@ const handleLogExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
->>>>>>> 62ba21e7e544c31361d319ecc4e7f4f4e2e48f17
 export const fetchLogs = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {

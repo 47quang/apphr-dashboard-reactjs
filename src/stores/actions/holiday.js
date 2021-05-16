@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { ROUTE_PATH } from 'src/constants/key';
-=======
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
->>>>>>> 62ba21e7e544c31361d319ecc4e7f4f4e2e48f17
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleHolidayExceptions = (err, dispatch, functionName) => {
