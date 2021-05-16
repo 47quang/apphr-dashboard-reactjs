@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const AccountTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
-  // const basicInfoRef = createRef();
+
   const [tabName, setTabName] = useState(0);
   const isCreate = match.params.id ? false : true;
 

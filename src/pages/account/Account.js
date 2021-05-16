@@ -2,8 +2,8 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
+import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
+import { fetchAccounts, deleteAccount, filterAccounts } from 'src/stores/actions/account';
 import Page404 from '../page404/Page404';
 
 const Account = ({ t, location, history }) => {
@@ -15,6 +15,38 @@ const Account = ({ t, location, history }) => {
     { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'profileId', title: t('label.profile'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
+  const filters = {
+    username: {
+      title: t('label.username'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    email: {
+      title: t('label.email'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    phone: {
+      title: t('label.phone_number'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.account.accounts);
   const [paging, setPaging] = useState({
@@ -60,7 +92,19 @@ const Account = ({ t, location, history }) => {
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  const filterFunction = (params) => {
+    dispatch(
+      filterAccounts(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const deleteRow = async (rowId) => {
     dispatch(deleteAccount(rowId, t('message.successful_delete')));
     dispatch(
@@ -91,6 +135,8 @@ const Account = ({ t, location, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_USER)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_USER)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

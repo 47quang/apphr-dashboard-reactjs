@@ -1,7 +1,29 @@
-import { ROUTE_PATH } from 'src/constants/key';
+import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleWageExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server Bad Gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchWages = (params, onTotalChange, setLoading) => {
   const paymentType = {
     by_hour: 'Chi trả theo giờ',
@@ -13,18 +35,19 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
-          payload &&
-          payload.length > 0 &&
-          payload.map((wage) => {
-            wage.type = paymentType[wage.type];
-            return wage;
-          });
-        dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload });
+          payload && payload.length > 0
+            ? payload.map((wage) => {
+                wage.type = paymentType[wage.type];
+                return wage;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload: payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        handleWageExceptions(err, dispatch, 'fetchWages');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
       });
   };
@@ -37,16 +60,12 @@ export const fetchWage = (id, setLoading) => {
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.wage.SET_WAGE, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleWageExceptions(err, dispatch, 'fetchWage');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -61,12 +80,7 @@ export const createWage = (params, history, success_msg) => {
         history.push(ROUTE_PATH.WAGE + `/${payload.id}`);
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleWageExceptions(err, dispatch, 'createWage');
       });
   };
 };
@@ -80,12 +94,7 @@ export const updateWage = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleWageExceptions(err, dispatch, 'updateWage');
       });
   };
 };
@@ -99,12 +108,7 @@ export const deleteWage = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleWageExceptions(err, dispatch, 'deleteWage');
       });
   };
 };

@@ -1,5 +1,4 @@
 import CIcon from '@coreui/icons-react';
-//import { Link } from 'react-router-dom';
 import {
   CButton,
   CCard,
@@ -59,11 +58,6 @@ const Login = ({ location, history }) => {
                           {t('title.login')}
                         </CButton>
                       </CCol>
-                      {/* <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol> */}
                     </CRow>
                   </CForm>
                 </CCardBody>

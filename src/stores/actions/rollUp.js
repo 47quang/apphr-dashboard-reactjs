@@ -1,7 +1,30 @@
+import { RESPONSE_CODE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 import { fetchAssignment } from './assignment';
-
+const handleRollUpExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchRollUps = (params) => {
   return (dispatch, getState) => {
     api.rollUp
@@ -10,12 +33,7 @@ export const fetchRollUps = (params) => {
         dispatch({ type: REDUX_STATE.rollUp.GET_ROLLUP, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleRollUpExceptions(err, dispatch, 'fetchRollUps');
       });
   };
 };
@@ -30,12 +48,7 @@ export const createRollUp = (params, setIsReload, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err.response);
-        if (err?.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err.response.data.message } });
-        else if (err?.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: err.response.data.message } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleRollUpExceptions(err, dispatch, 'createRollUp');
       });
   };
 };
@@ -49,12 +62,7 @@ export const updateRollUp = (data, assignmentId, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleRollUpExceptions(err, dispatch, 'updateRollUp');
       });
   };
 };
@@ -64,17 +72,11 @@ export const deleteRollUp = (id, assignmentId, success_msg) => {
     api.rollUp
       .delete(id)
       .then(({ payload }) => {
-        console.log('assignmentId', assignmentId);
         dispatch(fetchAssignment(assignmentId));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleRollUpExceptions(err, dispatch, 'deleteRollUp');
       });
   };
 };

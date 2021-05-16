@@ -49,7 +49,6 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
           className: `btn btn-primary`,
           onClick: (e) => {
             attributeInfoForm.current.handleSubmit(e);
-            console.log(attributeInfoForm.current.errors);
           },
           name: t('label.update'),
         },

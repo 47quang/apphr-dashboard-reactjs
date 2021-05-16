@@ -5,8 +5,9 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
-const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons, submitForm, loading }) => {
+const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons, submitForm, loading, isCreate }) => {
   const DAYS = [
     t('label.sunday'),
     t('label.monday'),
@@ -34,22 +35,70 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                 submitForm(values);
               }}
             >
-              {({ values, errors, touched, handleChange, setValues, handleBlur }) => {
+              {({ values, errors, touched, handleChange, setValues, handleBlur, setFieldValue }) => {
                 return (
                   <form autoComplete="off">
                     <div className="row">
-                      <CommonTextInput
-                        containerClassName={'form-group col-xl-12'}
-                        value={values.code}
-                        onBlur={handleBlur('code')}
-                        onChange={handleChange('code')}
-                        inputID={'code'}
-                        labelText={t('label.shift_code')}
-                        inputType={'text'}
-                        placeholder={t('placeholder.enter_shift_code')}
-                        isDisable={true}
-                        inputClassName={'form-control'}
-                      />
+                      {isCreate ? (
+                        <div className="form-group col-xl-12">
+                          <Label text={t('label.shift_code')} required />
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className={'form-control col-10'}
+                              rows={5}
+                              onBlur={handleBlur('code')}
+                              name={`code`}
+                              onChange={(e) => handleChange(`code`)(e)}
+                              value={values.code}
+                              disabled={!isCreate}
+                              placeholder={t('placeholder.enter_shift_code')}
+                            />
+                            <div
+                              className="input-group-text col-2 d-flex justify-content-center"
+                              id="basic-addon2"
+                              type="button"
+                              onClick={(e) => {
+                                let randomCode = generateCode();
+                                setFieldValue('code', randomCode);
+                              }}
+                            >
+                              {t('label.random')}
+                            </div>
+                          </div>
+                          {errors.code && touched.code && t(errors.code) ? (
+                            <div>
+                              <small className={'text-danger'}>{t(errors.code)}</small>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="form-group col-xl-12">
+                          <Label text={t('label.shift_code')} required />
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className={'form-control col-12'}
+                              rows={5}
+                              onBlur={handleBlur('code')}
+                              name={`code`}
+                              onChange={(e) => handleChange(`code`)(e)}
+                              value={values.code}
+                              disabled={!isCreate}
+                              placeholder={t('placeholder.enter_shift_code')}
+                            />
+                          </div>
+                          {errors.code && touched.code && t(errors.code) ? (
+                            <div>
+                              <small className={'text-danger'}>{t(errors.code)}</small>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className="row">
                       <CommonTextInput
@@ -117,12 +166,10 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                             {t('label.minutes')}
                           </span>
                         </div>
-                        {errors.flexibleTime && touched.flexibleTime && t(errors.flexibleTime) ? (
+                        {errors.flexibleTime && touched.flexibleTime && t(errors.flexibleTime) && (
                           <div>
                             <small className={'text-danger'}>{t(errors.flexibleTime)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>
@@ -144,12 +191,10 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                             {t('label.hours')}
                           </span>
                         </div>
-                        {errors.expected && touched.expected && t(errors.expected) ? (
+                        {errors.expected && touched.expected && t(errors.expected) && (
                           <div>
                             <small className={'text-danger'}>{t(errors.expected)}</small>
                           </div>
-                        ) : (
-                          <></>
                         )}
                       </div>
                     </div>

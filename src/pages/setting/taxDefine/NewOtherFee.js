@@ -52,6 +52,7 @@ const NewOtherFee = ({ t, location, history }) => {
         validationSchema={OtherFeeSchema}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

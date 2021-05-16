@@ -95,6 +95,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_branch_code').required('validation.required_enter_branch_code'),
   name: Yup.string().required('validation.required_enter_branch_name'),
   bssid: Yup.string()
     .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')
@@ -649,4 +650,20 @@ export const ExportWageSchema = Yup.object().shape({
       const { from } = this.parent;
       return isBeforeTypeDate(from, value);
     }),
+});
+
+export const FilterSchema = Yup.object().shape({
+  rule: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_rule', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_rule'),
+  op: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_operator', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_operator'),
+  value: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_value', function (value) {
+    return value !== '0' && value !== '';
+  }),
 });

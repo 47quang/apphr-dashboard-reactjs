@@ -25,14 +25,10 @@ Editor.modules = {
     ['link', 'image'],
   ],
   clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
     matchVisual: false,
   },
 };
-/*
- * Quill editor formats
- * See https://quilljs.com/docs/formats/
- */
+
 Editor.formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image'];
 
 export default Editor;

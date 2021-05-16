@@ -78,6 +78,7 @@ const NewBranchPage = ({ t, location, history }) => {
         wards={wards}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

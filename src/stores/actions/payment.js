@@ -1,12 +1,30 @@
-import { ROUTE_PATH } from 'src/constants/key';
+import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handlePaymentExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchPayments = (params, onTotalChange, setLoading) => {
-  // const paymentType = {
-  //  gross: 'Lương Gross',
-  //  insurance: 'Lương bảo hiểm',
-  // };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.payment
@@ -15,16 +33,18 @@ export const fetchPayments = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((f) => {
-                f.type = f.type === 'value' ? 'Khoản tiền mặt' : f.value + ' % ' + (f.by === 'gross' ? 'Tổng thu nhập' : 'Lương bảo hiểm');
+                let by = f.by === 'gross' ? 'Tổng thu nhập' : 'Lương bảo hiểm';
+                f.type = f.type === 'value' ? 'Khoản tiền mặt' : f.value + ' % ' + by;
                 return f;
               })
             : [];
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENTS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        handlePaymentExceptions(err, dispatch, 'fetchPayments');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
       });
   };
@@ -37,16 +57,12 @@ export const fetchPayment = (id, setLoading) => {
       .get(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENT, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handlePaymentExceptions(err, dispatch, 'fetchPayment');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -61,12 +77,7 @@ export const createPayment = (params, history, success_msg) => {
         history.push(ROUTE_PATH.TAX_DETAIL + `/${payload.id}`);
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handlePaymentExceptions(err, dispatch, 'createPayment');
       });
   };
 };
@@ -80,12 +91,7 @@ export const updatePayment = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handlePaymentExceptions(err, dispatch, 'updatePayment');
       });
   };
 };
@@ -99,12 +105,7 @@ export const deletePayment = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handlePaymentExceptions(err, dispatch, 'deletePayment');
       });
   };
 };

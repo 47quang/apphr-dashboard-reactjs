@@ -38,8 +38,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
-  // const positions = useSelector((state) => state.position.positions);
-  // const departments = useSelector((state) => state.department.departments);
   let wages = useSelector((state) => state.contract.wages);
   const [loading, setLoading] = useState(false);
 
@@ -106,11 +104,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // useEffect(() => {
-  //   if (jobTimelineInfo.contractInfo.branchId) dispatch(fetchDepartments({ branchId: jobTimelineInfo.contractInfo.branchId }));
-  //   if (jobTimelineInfo.contractInfo.departmentId) dispatch(fetchDepartments({ departmentId: jobTimelineInfo.contractInfo.departmentId }));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [jobTimelineInfo.contractInfo.branchId, jobTimelineInfo.contractInfo.departmentId]);
 
   function create(values) {
     let form = values;
@@ -124,7 +117,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
-      console.log('update', form);
       dispatch(updateContract(form, t('message.successful_update')));
     } else {
       if (form.type === 'season') {
@@ -280,7 +272,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             value={values?.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
             onChange={(e) => {
-              // dispatch(fetchDepartments({ branchId: e.target.value }));
               handleChange('branchId')(e);
             }}
             inputID={`branchId`}
@@ -418,12 +409,10 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     {t('label.hours')}
                   </span>
                 </div>
-                {errors.standardHours && touched.standardHours && t(errors.standardHours) ? (
+                {errors.standardHours && touched.standardHours && t(errors.standardHours) && (
                   <div>
                     <small className={'text-danger'}>{t(errors.standardHours)}</small>
                   </div>
-                ) : (
-                  <></>
                 )}
               </div>
               <CommonTextInput
@@ -655,7 +644,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
               enableReinitialize
               onSubmit={(values) => {
                 create(values);
-                // console.log(values);
               }}
             >
               {(props) => {
@@ -683,8 +671,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           className: `btn btn-primary px-4 ml-2`,
                           onClick: (e) => {
                             props.handleSubmit(e);
-                            // console.log('errors', props.errors);
-                            // console.log('touched', props.touched);
                           },
                           name: t('label.create_new'),
                         },
@@ -695,7 +681,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 );
               }}
             </Formik>
-            {permissionIds.includes(PERMISSION.LIST_CONTRACT) && jobTimelineInfo.contractInfo && jobTimelineInfo.contractInfo.length > 0 ? (
+            {permissionIds.includes(PERMISSION.LIST_CONTRACT) &&
+              jobTimelineInfo.contractInfo &&
+              jobTimelineInfo.contractInfo.length > 0 &&
               jobTimelineInfo.contractInfo.map((contract, index) => {
                 if (!contract?.isMinimize) contract.isMinimize = false;
                 return (
@@ -727,7 +715,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                 checked={props.values.status === 'active'}
                                 name={`status`}
                                 onChange={(e) => {
-                                  console.log('e.target.checked', e.target.checked);
                                   e.target.checked
                                     ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
                                     : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
@@ -746,7 +733,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                               <div>
                                 <BodyContract {...props} />
                                 <hr className="mt-1" />
-                                {isVisibleDeleteAlert ? (
+                                {isVisibleDeleteAlert && (
                                   <WarningAlertDialog
                                     isVisible={isVisibleDeleteAlert}
                                     title={t('title.confirm')}
@@ -760,8 +747,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                       dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
                                     }}
                                   />
-                                ) : (
-                                  <></>
                                 )}
 
                                 {renderButtons(
@@ -790,8 +775,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                           className: `btn btn-primary px-4 ml-2`,
                                           onClick: (e) => {
                                             props.handleSubmit(e);
-                                            // console.log('errors', props.errors);
-                                            // console.log('values', props.values);
                                           },
                                           name: t('label.save'),
                                         },
@@ -806,10 +789,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     }}
                   </Formik>
                 );
-              })
-            ) : (
-              <div />
-            )}
+              })}
           </div>
         </CContainer>
       )}

@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 
@@ -24,6 +24,28 @@ const Shifts = ({ t, location, history }) => {
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
+  const filters = {
+    code: {
+      title: t('label.shift_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.shift_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -51,6 +73,19 @@ const Shifts = ({ t, location, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchShifts(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));
     dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
@@ -71,6 +106,8 @@ const Shifts = ({ t, location, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_SHIFT)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_SHIFT)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_SHIFT)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

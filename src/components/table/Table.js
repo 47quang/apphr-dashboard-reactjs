@@ -23,7 +23,6 @@ import {
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 import { CircularProgress } from '@material-ui/core';
-// import { CircularProgress } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -43,6 +42,7 @@ import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { COLORS } from 'src/constants/theme';
+import { FilterSchema } from 'src/schema/formSchema';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
 import NewRollUp from '../dialog/NewRollUp';
 
@@ -51,7 +51,6 @@ import NewRollUp from '../dialog/NewRollUp';
     columnDef:  ,
     data: ,
     route: ,
-    idxColumnsFilter,
     deleteRowFunc,
 */
 
@@ -137,7 +136,7 @@ const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 
 const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
   const dispatch = useDispatch();
-
+  const diabledClass = disableCreate ? 'disabled' : 'primary';
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
@@ -161,10 +160,10 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
             }}
           >
             {isPopUp ? (
-              <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
+              <AddCircleOutlineIcon color={diabledClass} />
             ) : (
               <Link to={`${route}create`} className="px-0 py-0">
-                <AddCircleOutlineIcon color={disableCreate ? 'disabled' : 'primary'} />
+                <AddCircleOutlineIcon color={diabledClass} />
               </Link>
             )}
           </IconButton>
@@ -175,7 +174,6 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
 };
 const Label = ({ column, className, ...props }) => {
   props.draggingEnabled = false;
-  // console.log(column);
   const rvComponent = Array.isArray(column.title) ? (
     <TableHeaderRow.Cell
       className={classNames(className)}
@@ -234,7 +232,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
     endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
-    console.log('rollUp', rollUp);
     dispatch(
       updateRollUp(
         {
@@ -252,7 +249,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   };
   return (
     <Plugin>
-      {openEditing ? (
+      {openEditing && (
         <NewRollUp
           isOpen={openEditing}
           handleConfirm={handleConfirmEditing}
@@ -260,10 +257,8 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           t={t}
           startCC={rollUp?.row?.startTime}
         />
-      ) : (
-        <></>
       )}
-      {openWarning ? (
+      {openWarning && (
         <WarningAlertDialog
           isVisible={openWarning}
           title={t('title.delete_row')}
@@ -273,8 +268,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           handleCancel={handleCancelWarning}
           warningMessage={t('message.delete_warning_message')}
         />
-      ) : (
-        <></>
       )}
 
       <Getter
@@ -308,7 +301,10 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
                       if (isPopUp) {
                         setOpenEditing(!openEditing);
                         setRollUp(params.tableRow);
-                        console.log(params.tableRow);
+<<<<<<< HEAD
+                        // console.log(params.tableRow);
+=======
+>>>>>>> 62ba21e7e544c31361d319ecc4e7f4f4e2e48f17
                       }
                     }}
                   >
@@ -348,7 +344,6 @@ const QTable = (props) => {
     columnDef,
     data,
     route,
-    idxColumnsFilter,
     dateCols,
     multiValuesCols,
     linkCols,
@@ -369,6 +364,8 @@ const QTable = (props) => {
     editColumnWidth,
     paddingColumnHeader,
     notPaging,
+    filters,
+    filterFunction,
   } = props;
   const exporterRef = useRef(null);
 
@@ -404,7 +401,7 @@ const QTable = (props) => {
       columns: columnDef,
     }));
   }, [columnDef]);
-  // const colHeight = columnDef.length < 6 ? Math.floor((0.75 / (columnDef.length - 1)) * 100) : 15;
+
   const tableColumnExtensions = columnDef
     ? columnDef.map((col, idx) => {
         return {
@@ -415,21 +412,24 @@ const QTable = (props) => {
         };
       })
     : [];
-  const columnsFilter = idxColumnsFilter
-    ? idxColumnsFilter.map((idx) => ({
-        id: idx,
-        name: columnDef[idx]?.title,
-      }))
-    : [];
-  const filterTypes = [
-    { id: 1, name: t('label.include') },
-    { id: 2, name: t('label.not_include') },
-    { id: 3, name: t('label.correct') },
-  ];
+  let columnsFilter = filters ? Object.keys(filters) : [];
+  columnsFilter =
+    columnsFilter && columnsFilter.length > 0
+      ? columnsFilter.map((colName) => ({
+          id: colName,
+          name: filters[colName]?.title,
+        }))
+      : [];
+  // const filterTypes = [
+  //   { id: 1, name: t('label.include') },
+  //   { id: 2, name: t('label.not_include') },
+  //   { id: 3, name: t('label.correct') },
+  // ];
   const filterValues = {
-    columnsFilter: columnsFilter[0],
-    filterTypes: filterTypes[0],
-    textFilter: '',
+    rule: '',
+    op: '',
+    value: '',
+    operates: [],
   };
   const onSave = (workbook) => {
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -462,7 +462,7 @@ const QTable = (props) => {
   const StatusFormatter = ({ value }) => {
     return (
       <Chip
-        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xử lý'}
+        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
         className="mx-1 my-1 px-0 py-0"
         style={{
           backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
@@ -485,7 +485,31 @@ const QTable = (props) => {
       </td>
     );
   };
+  const [multiFilter, setMultiFilter] = useState([]);
 
+  const updateMultiFilter = async (newFilter) => {
+    return new Promise((resolve, reject) => {
+      let isConsist = multiFilter.some((filter) => filter.rule === newFilter.rule);
+      if (isConsist) {
+        setMultiFilter(multiFilter.map((filter) => (filter.rule === newFilter.rule ? newFilter : filter)));
+        resolve(multiFilter.map((filter) => (filter.rule === newFilter.rule ? newFilter : filter)));
+      } else {
+        setMultiFilter([...multiFilter, newFilter]);
+        resolve([...multiFilter, newFilter]);
+      }
+    });
+  };
+  const deleteMultiFilter = async (idx) => {
+    return new Promise((resolve, reject) => {
+      multiFilter.splice(idx, 1);
+      setMultiFilter([...multiFilter]);
+      resolve([...multiFilter]);
+    });
+  };
+  const handleDelete = async (idx) => {
+    let newState = await deleteMultiFilter(idx);
+    filterFunction({ filters: newState });
+  };
   return (
     <div>
       <Paper>
@@ -494,44 +518,90 @@ const QTable = (props) => {
         ) : (
           <div className="m-auto">
             <div className="rounded container col-md-12 pt-4 m-2">
-              <Formik enableReinitialize initialValues={filterValues}>
-                {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+              <Formik
+                enableReinitialize
+                initialValues={filterValues}
+                validationSchema={FilterSchema}
+                onSubmit={async ({ operates, ...values }) => {
+                  let newState = await updateMultiFilter(values);
+                  filterFunction({ filters: newState });
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue, handleReset }) => (
                   <form autoComplete="off">
                     <div className="row">
                       <div className="row col-lg-11">
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.columnsFilter}
-                          onBlur={handleBlur('columnsFilter')}
-                          onChange={handleChange('columnsFilter')}
+                          value={values.rule}
+                          onBlur={handleBlur('rule')}
+                          onChange={(e) => {
+                            handleChange('rule')(e);
+                            setFieldValue('op', '');
+                            setFieldValue('operates', filters[e.target.value]?.operates);
+                            setFieldValue('value', '');
+                          }}
                           labelText={t('label.column_filter')}
                           selectClassName={'form-control'}
                           lstSelectOptions={columnsFilter}
                           placeholder={t('placeholder.select_column_filter')}
+                          isRequiredField
+                          isTouched={touched.rule}
+                          isError={errors.rule && touched.rule}
+                          errorMessage={t(errors.rule)}
                         />
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.filterTypes}
-                          onBlur={handleBlur('filterTypes')}
-                          onChange={handleChange('filterTypes')}
+                          value={values.op}
+                          onBlur={handleBlur('op')}
+                          onChange={handleChange('op')}
                           labelText={t('label.filter_option')}
                           placeholder={t('placeholder.select_filter_option')}
                           selectClassName={'form-control'}
-                          lstSelectOptions={filterTypes}
+                          lstSelectOptions={values.operates}
+                          isRequiredField
+                          isTouched={touched.op}
+                          isError={errors.op && touched.op}
+                          errorMessage={t(errors.op)}
                         />
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
-                          value={values.textFilter}
-                          onBlur={handleBlur('textFilter')}
-                          onChange={handleChange('textFilter')}
-                          labelText={t('label.keyword')}
-                          inputType={'text'}
-                          placeholder={t('placeholder.enter_keyword')}
-                          inputClassName={'form-control'}
-                        />
+                        {filters[values.rule]?.type === 'text' ? (
+                          <CommonTextInput
+                            containerClassName={'form-group col-lg-4'}
+                            value={values.value}
+                            onBlur={handleBlur('value')}
+                            onChange={handleChange('value')}
+                            labelText={t('label.keyword')}
+                            inputType={'text'}
+                            placeholder={t('placeholder.enter_keyword')}
+                            inputClassName={'form-control'}
+                            isTouched={touched.value}
+                            isError={errors.value && touched.value}
+                            errorMessage={t(errors.value)}
+                          />
+                        ) : (
+                          <CommonSelectInput
+                            containerClassName={'form-group col-lg-4'}
+                            value={values.value}
+                            onBlur={handleBlur('value')}
+                            onChange={handleChange('value')}
+                            labelText={t('label.filter_value')}
+                            placeholder={t('placeholder.select_value')}
+                            selectClassName={'form-control'}
+                            lstSelectOptions={filters[values.rule]?.values ?? []}
+                            isTouched={touched.value}
+                            isError={errors.value && touched.value}
+                            errorMessage={t(errors.value)}
+                          />
+                        )}
                       </div>
-                      <div className="col-lg-1 d-flex align-items-end pb-3">
-                        <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
+                      <div className="col-lg-1 d-flex align-items-start pt-4 mt-1">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(e) => {
+                            handleSubmit();
+                          }}
+                        >
                           {t('label.search')}
                         </button>
                       </div>
@@ -539,6 +609,29 @@ const QTable = (props) => {
                   </form>
                 )}
               </Formik>
+              {multiFilter && multiFilter.length > 0 ? (
+                multiFilter.map((filter, idx) => {
+                  return (
+                    <Chip
+                      className="m-1 p-1"
+                      key={`filter${idx}`}
+                      label={
+                        filters[filter.rule]?.title +
+                        ': ' +
+                        t(`filter_operator.${filter.op}`) +
+                        ' "' +
+                        (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) +
+                        '"'
+                      }
+                      color="primary"
+                      onDelete={handleDelete}
+                      variant="outlined"
+                    />
+                  );
+                })
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         )}
@@ -549,17 +642,15 @@ const QTable = (props) => {
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
-          {!notPaging ? (
+          {!notPaging && (
             <PagingState
               currentPage={state.currentPage}
               onCurrentPageChange={(newPage) => onCurrentPageChange(newPage)}
               pageSize={paging.pageSize}
               onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
             />
-          ) : (
-            <></>
           )}
-          {!notPaging ? <CustomPaging totalCount={paging.total} /> : <></>}
+          {!notPaging && <CustomPaging totalCount={paging.total} />}
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>
@@ -626,9 +717,7 @@ const QTable = (props) => {
           <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
           <ColumnChooser /> */}
           <TableFixedColumns />
-          {disableEditColum ? (
-            <></>
-          ) : (
+          {!disableEditColum && (
             <CustomTableEditColumn
               t={t}
               route={route}
@@ -642,12 +731,11 @@ const QTable = (props) => {
             />
           )}
 
-          {/* <TableSelection showSelectAll /> */}
-          {!notPaging ? <PagingPanel pageSizes={paging.pageSizes} /> : <></>}
+          {!notPaging && <PagingPanel pageSizes={paging.pageSizes} />}
         </Grid>
 
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
-        {route === '/roll-up/' ? (
+        {route === '/roll-up/' && (
           <div className="p-0">
             <div className="row p-0 m-1">
               <div className="col-2">
@@ -694,8 +782,6 @@ const QTable = (props) => {
               </div>
             </div>
           </div>
-        ) : (
-          <></>
         )}
       </Paper>
     </div>

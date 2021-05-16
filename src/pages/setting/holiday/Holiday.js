@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
 
@@ -20,6 +20,28 @@ const HolidayPage = ({ t, location, history }) => {
     { name: 'endDate', title: t('label.end_date'), align: 'left', width: '20%', wordWrapEnabled: true },
     //{ name: 'coefficient', title: 'Hệ số giờ làm' },
   ];
+  const filters = {
+    code: {
+      title: t('label.holiday_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    title: {
+      title: t('label.holiday_title'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const dispatch = useDispatch();
   const holidays = useSelector((state) => state.holiday.holidays);
   const [paging, setPaging] = useState({
@@ -67,6 +89,20 @@ const HolidayPage = ({ t, location, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchHolidays(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
+
   const deleteRow = async (rowId) => {
     dispatch(deleteHoliday(rowId, t('message.successful_delete')));
     dispatch(
@@ -97,6 +133,8 @@ const HolidayPage = ({ t, location, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_HOLIDAY)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_HOLIDAY)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

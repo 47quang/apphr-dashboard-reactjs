@@ -1,6 +1,29 @@
+import { RESPONSE_CODE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleLocationExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchProvinces = (params) => {
   return (dispatch, getState) => {
     api.location
@@ -9,11 +32,7 @@ export const fetchProvinces = (params) => {
         dispatch({ type: 'SET_PROVINCES', payload });
       })
       .catch((err) => {
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleLocationExceptions(err, dispatch, 'fetchProvinces');
       });
   };
 };
@@ -26,12 +45,7 @@ export const fetchDistricts = (params) => {
         dispatch({ type: REDUX_STATE.location.SET_DISTRICTS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleLocationExceptions(err, dispatch, 'fetchDistricts');
       });
   };
 };
@@ -44,12 +58,7 @@ export const fetchWards = (params) => {
         dispatch({ type: REDUX_STATE.location.SET_WARDS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleLocationExceptions(err, dispatch, 'fetchWards');
       });
   };
 };

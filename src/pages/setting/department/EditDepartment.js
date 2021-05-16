@@ -80,6 +80,7 @@ const EditDepartment = ({ t, location, match, history }) => {
         submitForm={submitForm}
         buttons={buttons}
         loading={loading}
+        isCreate={false}
       />
     );
   else return <Page404 />;

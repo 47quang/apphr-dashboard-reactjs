@@ -216,6 +216,11 @@ export const api = {
         params: params,
       });
     },
+    filter: (params) => {
+      return client.get(API_PREFIX.API_ACCOUNT, {
+        params: params,
+      });
+    },
     post: (data) => {
       return client.post(API_PREFIX.API_ACCOUNT, data);
     },
@@ -237,6 +242,9 @@ export const api = {
       return client.get(API_PREFIX.API_ROLE, {
         params: params,
       });
+    },
+    count: () => {
+      return client.get(API_PREFIX.API_ACCOUNT + '/count');
     },
   },
   role: {
@@ -516,6 +524,11 @@ export const api = {
         params: params,
       });
     },
+    filter: (params) => {
+      return client.get(API_PREFIX.API_LEAVE_REQUEST, {
+        params: params,
+      });
+    },
     post: (data) => {
       return client.post(API_PREFIX.API_LEAVE_REQUEST, data);
     },
@@ -546,6 +559,11 @@ export const api = {
         params: params,
       });
     },
+    filter: (params) => {
+      return client.get(API_PREFIX.API_REMOTE_REQUEST, {
+        params: params,
+      });
+    },
     post: (data) => {
       return client.post(API_PREFIX.API_REMOTE_REQUEST, data);
     },
@@ -572,6 +590,11 @@ export const api = {
   },
   overtimeRequest: {
     getAll: (params) => {
+      return client.get(API_PREFIX.API_OVERTIME_REQUEST, {
+        params: params,
+      });
+    },
+    filter: (params) => {
       return client.get(API_PREFIX.API_OVERTIME_REQUEST, {
         params: params,
       });

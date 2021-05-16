@@ -168,6 +168,12 @@ export const ROUTE_PATH = {
   TAX_DETAIL_CREATE: '/setting/taxDefine' + CREATE,
   TAX_DETAIL_UPDATE: '/setting/taxDefine' + ID,
 };
+export const SERVER_RESPONSE_MESSAGE = {
+  VALIDATE_FAILED_EMAIL: 'Validation failed: email must be an email',
+  NO_DAYS_OFF: 'there are no days off',
+  INVALID_ASSIGNMENT_STATUS: 'have assignment status not valid, valid assignment status is normal',
+  ALREADY_EXISTED_ASSIGNMENT: 'already existed assignment in this time, cannot create overtime in this time',
+};
 
 export const CONTACT_TYPE = {
   SKYPE: 'skype',
@@ -425,7 +431,29 @@ export const REQUEST_TABS = {
 };
 
 export const PAGE_SIZES = {
-  LEVEL_1: 5,
+  LEVEL_1: 10,
   LEVEL_2: 20,
   LEVEL_3: 50,
+};
+
+export const FILTER_OPERATOR = {
+  IN: 'in',
+  NOT_IN: 'not_in',
+  BETWEEN: 'between',
+  NOT_BETWEEN: 'not_between',
+  NULL: 'null',
+  NOT_NULL: 'not_null',
+  EMPTY: 'empty',
+  NOT_EMPTY: 'not_empty',
+  AUTOCOMPLETE: 'autocomplete',
+  GREATER_THAN: '>',
+  GREATER_THAN_OR_EQUAL: '>=',
+  LESS_THAN: '<',
+  LESS_THAN_OR_EQUAL: '<=',
+  EQUAL: '=',
+  NOT_EQUAL: '!=',
+  LIKE: 'like',
+  NOT_LIKE: 'not_like',
+  CONTAIN: 'contain',
+  CUSTOM: 'custom',
 };

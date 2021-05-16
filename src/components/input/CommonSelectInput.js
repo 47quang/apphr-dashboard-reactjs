@@ -23,10 +23,6 @@ const CommonSelectInput = ({
     acc[val.id] = val;
     return acc;
   }, {});
-  // if (inputID === `assignments.${1}.id`) {
-  //   console.log('isError', isError);
-  //   console.log('errorMessage', errorMessage);
-  // }
   return (
     <div className={containerClassName} hidden={isHidden}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
@@ -41,17 +37,14 @@ const CommonSelectInput = ({
         disabled={isDisable}
       >
         <option value={0}>{placeholder}</option>
-        {lstSelectOptions.length > 0 ? (
+        {lstSelectOptions.length > 0 &&
           lstSelectOptions.map((val, index) => {
             return (
               <option value={hash[val.id]?.id} key={index}>
                 {val.name}
               </option>
             );
-          })
-        ) : (
-          <></>
-        )}
+          })}
       </select>
       {isError && errorMessage && (
         <div>

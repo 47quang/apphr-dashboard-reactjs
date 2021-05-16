@@ -62,6 +62,7 @@ const NewPositionPage = ({ t, location, match, history }) => {
         shifts={shifts}
         submitForm={submitForm}
         buttons={buttons}
+        isCreate={true}
       />
     );
   else return <Page404 />;

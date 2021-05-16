@@ -44,7 +44,15 @@ const NewType = ({ t, location, history }) => {
   ];
   if (permissionIds.includes(PERMISSION.CREATE_TYPE_ARTICLE))
     return (
-      <ArticleTypeItemBody typeRef={typeInfoForm} type={type} t={t} validationSchema={ArticleTypeSchema} buttons={buttons} submitForm={submitForm} />
+      <ArticleTypeItemBody
+        typeRef={typeInfoForm}
+        type={type}
+        t={t}
+        validationSchema={ArticleTypeSchema}
+        buttons={buttons}
+        submitForm={submitForm}
+        isCreate={true}
+      />
     );
   else return <Page404 />;
 };

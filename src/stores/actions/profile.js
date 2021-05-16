@@ -1,8 +1,30 @@
-import { ROUTE_PATH } from 'src/constants/key';
+import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+const handleProfileExceptions = (err, dispatch, functionName) => {
+  console.log(functionName + ' errors', err.response);
+  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  if (err?.response?.status) {
+    switch (err.response.status) {
+      case RESPONSE_CODE.SE_BAD_GATEWAY:
+        errorMessage = 'Server bad gateway';
+        break;
+      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
+        errorMessage = 'Đã xảy ra lỗi ở server';
+        break;
+      case RESPONSE_CODE.CE_FORBIDDEN:
+        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        break;
+      case RESPONSE_CODE.CE_UNAUTHORIZED:
+        errorMessage = 'Token bị quá hạn';
+        break;
+      default:
+        break;
+    }
+  }
+  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
+};
 export const fetchProfiles = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -18,11 +40,12 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
             : [];
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchProfiles');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
       });
   };
 };
@@ -39,12 +62,14 @@ export const fetchProfile = (id, setLoading) => {
         payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
-        if (setLoading) setLoading(false);
+
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchProfile');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
       });
   };
 };
@@ -82,8 +107,7 @@ export const createProfile = (params, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: err } });
+        handleProfileExceptions(err, dispatch, 'createProfile');
       });
   };
 };
@@ -98,8 +122,6 @@ export const updateProfile = (data, history, success_msg) => {
   data.passportExpiredDate = data.passportExpiredDate === '' ? null : data.passportExpiredDate;
   data.passportProvinceId = data.passportProvinceId !== null && parseInt(data.passportProvinceId) !== 0 ? parseInt(data.passportProvinceId) : null;
   data.branchId = data.branchId !== null && parseInt(data.branchId) !== 0 ? parseInt(data.branchId) : null;
-  // data.departmentId = data.departmentId !== null && parseInt(data.departmentId) !== 0 ? parseInt(data.departmentId) : null;
-  // data.positionId = data.positionId !== null && parseInt(data.positionId) !== 0 ? parseInt(data.positionId) : null;
   if (!data.have_id) {
     data.cmnd = null;
     data.cmndIssuedDate = null;
@@ -124,7 +146,7 @@ export const updateProfile = (data, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
+        handleProfileExceptions(err, dispatch, 'updateProfile');
       });
   };
 };
@@ -159,12 +181,7 @@ export const updatePermanentAddress = (data, provinces, districts, wards, succes
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'updatePermanentAddress');
       });
   };
 };
@@ -184,12 +201,7 @@ export const updateRelationship = (data, profileId, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'updateRelationship');
       });
   };
 };
@@ -203,12 +215,7 @@ export const deleteProfile = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'deleteProfile');
       });
   };
 };
@@ -234,12 +241,7 @@ export const fetchRoles = (params) => {
         dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'fetchRoles');
       });
   };
 };
@@ -269,12 +271,7 @@ export const fetchContacts = (profileId) => {
         dispatch({ type: REDUX_STATE.profile.SET_CONTACTS, payload });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'fetchContacts');
       });
   };
 };
@@ -293,12 +290,7 @@ export const createNewContact = (data, profileId, success_msg, ref) => {
         ref.current.handleReset();
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'createNewContact');
       });
   };
 };
@@ -312,12 +304,7 @@ export const updateContact = (data, profileId, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'updateContact');
       });
   };
 };
@@ -331,12 +318,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'deleteContact');
       })
       .finally(() => {
         setClosePopOver();
@@ -360,12 +342,7 @@ export const updateOtherInfo = (profile, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'updateOtherInfo');
       });
   };
 };
@@ -379,12 +356,7 @@ export const exportWage = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+        handleProfileExceptions(err, dispatch, 'exportWage');
       });
   };
 };

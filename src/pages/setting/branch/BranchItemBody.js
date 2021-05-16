@@ -9,14 +9,15 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
+import Label from 'src/components/text/Label';
+import { generateCode } from 'src/utils/randomCode';
 
-const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons, loading }) => {
+const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons, loading, isCreate }) => {
   const dispatch = useDispatch();
   const typeCC = [
     { id: 'WIFI', name: t('label.wi_fi') },
     { id: 'QR_CODE', name: t('label.qr_code') },
   ];
-
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -38,18 +39,66 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
                   <div className="row">
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-6'}
-                      value={values.code}
-                      onBlur={handleBlur('code')}
-                      onChange={handleChange('code')}
-                      inputID={'code'}
-                      labelText={t('label.branch_code')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_branch_code')}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
+                    {isCreate ? (
+                      <div className="form-group col-xl-6">
+                        <Label text={t('label.branch_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-10'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_branch_code')}
+                          />
+                          <div
+                            className="input-group-text col-2 d-flex justify-content-center"
+                            id="basic-addon2"
+                            type="button"
+                            onClick={(e) => {
+                              let randomCode = generateCode();
+                              setFieldValue('code', randomCode);
+                            }}
+                          >
+                            {t('label.random')}
+                          </div>
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="form-group col-xl-6">
+                        <Label text={t('label.branch_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_branch_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    )}
                     <CommonTextInput
                       containerClassName={'form-group col-xl-6'}
                       value={values.name}

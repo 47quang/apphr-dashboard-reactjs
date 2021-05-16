@@ -69,7 +69,16 @@ const UpdateRole = ({ t, location, history, match }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_ROLE))
     return (
-      <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} loading={loading} />
+      <RoleItemBody
+        t={t}
+        roleRef={roleInfoForm}
+        role={role}
+        buttons={buttons}
+        submitForm={submitForm}
+        permissions={permissions}
+        loading={loading}
+        isCreate={false}
+      />
     );
   else return <Page404 />;
 };

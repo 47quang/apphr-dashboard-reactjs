@@ -51,6 +51,7 @@ const NewAllowance = ({ t, location, history }) => {
         validationSchema={AllowanceSchema}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

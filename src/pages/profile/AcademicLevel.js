@@ -231,7 +231,9 @@ const AcademicLevel = ({ t, match }) => {
                   );
                 }}
               </Formik>
-              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) && initialValues.degrees && initialValues.degrees.length > 0 ? (
+              {permissionIds.includes(PERMISSION.LIST_DIPLOMA) &&
+                initialValues.degrees &&
+                initialValues.degrees.length > 0 &&
                 initialValues.degrees.map((degree, index) => (
                   <Formik
                     initialValues={degree}
@@ -279,11 +281,8 @@ const AcademicLevel = ({ t, match }) => {
                       </div>
                     )}
                   </Formik>
-                ))
-              ) : (
-                <div />
-              )}
-              {isVisibleDeleteAlert ? (
+                ))}
+              {isVisibleDeleteAlert && (
                 <WarningAlertDialog
                   isVisible={isVisibleDeleteAlert}
                   title={t('title.confirm')}
@@ -297,8 +296,6 @@ const AcademicLevel = ({ t, match }) => {
                     dispatch(deleteDiploma(deleteId, t('message.successful_delete'), handleCloseDeleteAlert));
                   }}
                 />
-              ) : (
-                <></>
               )}
             </div>
           </div>

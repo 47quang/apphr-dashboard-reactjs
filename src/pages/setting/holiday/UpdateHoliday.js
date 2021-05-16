@@ -27,8 +27,6 @@ const UpdateHoliday = ({ t, location, history, match }) => {
   const submitForm = (values) => {
     let form = values;
     form.coefficient = parseInt(form.coefficient);
-    // Call API UPDATE
-    console.log(form);
     dispatch(updateHoliday(form, t('message.successful_update')));
   };
 
@@ -72,7 +70,17 @@ const UpdateHoliday = ({ t, location, history, match }) => {
         },
       ];
   if (permissionIds.includes(PERMISSION.GET_HOLIDAY))
-    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} loading={loading} />;
+    return (
+      <HolidayItemBody
+        t={t}
+        holidayRef={holidayInfoForm}
+        holiday={holiday}
+        buttons={buttons}
+        submitForm={submitForm}
+        loading={loading}
+        isCreate={false}
+      />
+    );
   else return <Page404 />;
 };
 

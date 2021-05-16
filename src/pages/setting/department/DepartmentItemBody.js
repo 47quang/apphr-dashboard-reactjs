@@ -4,10 +4,12 @@ import { Formik } from 'formik';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import Label from 'src/components/text/Label';
 import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
-const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, submitForm, loading }) => {
+const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, submitForm, loading, isCreate }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -26,21 +28,69 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                 submitForm(values);
               }}
             >
-              {({ values, errors, touched, handleChange, handleBlur }) => (
+              {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
                   <div className="row">
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.code}
-                      onBlur={handleBlur('code')}
-                      onChange={handleChange('code')}
-                      inputID={'code'}
-                      labelText={t('label.department_code')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_department_code')}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
+                    {isCreate ? (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.department_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-10'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_department_code')}
+                          />
+                          <div
+                            className="input-group-text col-2 d-flex justify-content-center"
+                            id="basic-addon2"
+                            type="button"
+                            onClick={(e) => {
+                              let randomCode = generateCode();
+                              setFieldValue('code', randomCode);
+                            }}
+                          >
+                            {t('label.random')}
+                          </div>
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.department_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_department_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="row">
                     <CommonTextInput

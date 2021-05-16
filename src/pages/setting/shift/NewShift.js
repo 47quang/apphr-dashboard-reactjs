@@ -42,7 +42,6 @@ const NewShift = ({ t, location, history }) => {
     form.startCC = parseUTCTime(form.startCC);
     form.endCC = parseUTCTime(form.endCC);
     form.branchId = parseInt(form.branchId);
-    console.log(form);
     dispatch(createNewShift(form, history, t('message.successful_create')));
   };
 
@@ -75,6 +74,7 @@ const NewShift = ({ t, location, history }) => {
         branches={branches}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

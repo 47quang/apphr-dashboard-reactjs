@@ -7,8 +7,10 @@ import { RoleInfoSchema } from 'src/schema/formSchema';
 import Checkbox from '@material-ui/core/Checkbox';
 import { renderButtons } from 'src/utils/formUtils';
 import { CircularProgress } from '@material-ui/core';
+import Label from 'src/components/text/Label';
+import { generateCode } from 'src/utils/randomCode';
 
-const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, loading }) => {
+const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, loading, isCreate }) => {
   const initCheck = (groupPermission, checks) => {
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
@@ -34,20 +36,68 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, load
                 <form>
                   <FormHeader text={t('title.role')} />
                   <div className="row">
+                    {isCreate ? (
+                      <div className="form-group col-xl-6">
+                        <Label text={t('label.role')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-10'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_role_code')}
+                          />
+                          <div
+                            className="input-group-text col-2 d-flex justify-content-center"
+                            id="basic-addon2"
+                            type="button"
+                            onClick={(e) => {
+                              let randomCode = generateCode();
+                              setFieldValue('code', randomCode);
+                            }}
+                          >
+                            {t('label.random')}
+                          </div>
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="form-group col-xl-6">
+                        <Label text={t('label.role')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_role_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    )}
                     <CommonTextInput
-                      containerClassName={'form-group col-xl-3'}
-                      value={values.code}
-                      onBlur={handleBlur('code')}
-                      onChange={handleChange('code')}
-                      inputID={'code'}
-                      labelText={t('label.role_code')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_role_code')}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-3'}
+                      containerClassName={'form-group col-xl-6'}
                       value={values.name}
                       onBlur={handleBlur('name')}
                       onChange={handleChange('name')}

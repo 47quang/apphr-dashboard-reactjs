@@ -19,7 +19,7 @@ const NewNotification = ({ t, location, history }) => {
 
   const submitForm = (values) => {
     let form = values;
-    // Call API CREATE
+
     delete form.id;
     form.typeId = parseInt(form.typeId);
     dispatch(createArticle(form, history, t('message.successful_create')));

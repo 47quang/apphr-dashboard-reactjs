@@ -3,7 +3,6 @@ import { CButton, CCol, CContainer, CInput, CInputGroup, CInputGroupPrepend, CIn
 import CIcon from '@coreui/icons-react';
 
 const Page404 = ({ t, history, location }) => {
-  console.log(history);
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
