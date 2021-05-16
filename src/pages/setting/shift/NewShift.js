@@ -75,6 +75,7 @@ const NewShift = ({ t, location, history }) => {
         branches={branches}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

@@ -43,7 +43,17 @@ const NewWage = ({ t, location, history }) => {
     },
   ];
   if (permissionIds.includes(PERMISSION.CREATE_WAGE))
-    return <WageItemBody wageRef={wageInfoForm} wage={wage} t={t} validationSchema={WageSchema} buttons={buttons} submitForm={submitForm} />;
+    return (
+      <WageItemBody
+        wageRef={wageInfoForm}
+        wage={wage}
+        t={t}
+        validationSchema={WageSchema}
+        buttons={buttons}
+        submitForm={submitForm}
+        isCreate={true}
+      />
+    );
   else return <Page404 />;
 };
 

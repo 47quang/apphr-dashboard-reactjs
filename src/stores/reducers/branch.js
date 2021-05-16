@@ -3,7 +3,6 @@ import { REDUX_STATE } from '../states';
 const initialState = {
   branches: [],
   branch: {
-    id: 0,
     name: '',
     shortname: '',
     address: '',

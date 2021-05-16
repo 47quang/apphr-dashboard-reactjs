@@ -95,6 +95,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_branch_code').required('validation.required_enter_branch_code'),
   name: Yup.string().required('validation.required_enter_branch_name'),
   bssid: Yup.string()
     .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')

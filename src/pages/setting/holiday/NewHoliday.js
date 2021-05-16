@@ -45,7 +45,7 @@ const NewHolidayPage = ({ t, location, history }) => {
     },
   ];
   if (permissionIds.includes(PERMISSION.CREATE_HOLIDAY))
-    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} />;
+    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} isCreate={true} />;
   else return <Page404 />;
 };
 

@@ -47,7 +47,9 @@ const NewRole = ({ t, location, history }) => {
     },
   ];
   if (permissionIds.includes(PERMISSION.CREATE_ROLE))
-    return <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} />;
+    return (
+      <RoleItemBody t={t} roleRef={roleInfoForm} role={role} buttons={buttons} submitForm={submitForm} permissions={permissions} isCreate={true} />
+    );
   else return <Page404 />;
 };
 

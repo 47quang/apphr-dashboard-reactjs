@@ -50,7 +50,15 @@ const NewDepartment = ({ t, location, history }) => {
   ];
   if (permissionIds.includes(PERMISSION.CREATE_DEPARTMENT))
     return (
-      <DepartmentItemBody t={t} departmentRef={departmentRef} department={department} branches={branches} buttons={buttons} submitForm={submitForm} />
+      <DepartmentItemBody
+        t={t}
+        departmentRef={departmentRef}
+        department={department}
+        branches={branches}
+        buttons={buttons}
+        submitForm={submitForm}
+        isCreate={true}
+      />
     );
   else return <Page404 />;
 };

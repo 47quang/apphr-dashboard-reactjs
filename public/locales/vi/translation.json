@@ -32,6 +32,8 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "fee_code": "Mã chi phí",
+    "random": "Ngẫu nhiên",
     "percent": "Phần trăm",
     "value": "Mức phí",
     "no_tax": "Không tính thuế",
@@ -388,6 +390,8 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "enter_fee_code": "Nhập mã chi phí",
+    "enter_attribute_code": "Nhập mã thuộc tính",
     "select_value": "Chọn giá trị",
     "enter_dependant": "Nhập số người phụ thuốc",
     "enter_allowance_bound": "Nhập mức miễn thuế tối đa",
@@ -499,6 +503,7 @@
     "enter_allowance_amount": "Nhập mức trợ cấp"
   },
   "validation": {
+    "required_enter_branch_code": "Bắt buộc phải nhập mã chi nhánh",
     "required_select_filter_rule": "Bắt buộc phải chọn cột cần lọc",
     "required_select_filter_operator": "Bắt buộc chọn tùy chọn lọc",
     "required_select_filter_value": "Bắt buộc nhập / chọn từ khóa",

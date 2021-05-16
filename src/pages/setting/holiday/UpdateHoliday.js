@@ -72,7 +72,17 @@ const UpdateHoliday = ({ t, location, history, match }) => {
         },
       ];
   if (permissionIds.includes(PERMISSION.GET_HOLIDAY))
-    return <HolidayItemBody t={t} holidayRef={holidayInfoForm} holiday={holiday} buttons={buttons} submitForm={submitForm} loading={loading} />;
+    return (
+      <HolidayItemBody
+        t={t}
+        holidayRef={holidayInfoForm}
+        holiday={holiday}
+        buttons={buttons}
+        submitForm={submitForm}
+        loading={loading}
+        isCreate={false}
+      />
+    );
   else return <Page404 />;
 };
 
