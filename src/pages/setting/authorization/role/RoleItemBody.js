@@ -38,7 +38,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, load
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-6">
-                        <Label text={t('label.role')} required />
+                        <Label text={t('label.role_code')} required />
                         <div className="input-group">
                           <input
                             type="text"

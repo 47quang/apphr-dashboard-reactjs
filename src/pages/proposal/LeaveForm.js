@@ -97,10 +97,33 @@ const LeaveForm = ({ t, history, match }) => {
                 // validationSchema={LeaveFormSchema}
                 onSubmit={(values) => {}}
               >
-                {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+                {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                   <form autoComplete="off">
                     <FormHeader text={t('label.leave_info')} />
                     <div className="row">
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code ?? ''}
+                            disabled
+                            placeholder={t('placeholder.enter_leave_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
                       <CommonSelectInput
                         containerClassName={'form-group col-xl-12'}
                         value={values.type ?? ''}

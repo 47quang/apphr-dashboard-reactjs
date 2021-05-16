@@ -15,6 +15,8 @@ import { api } from 'src/stores/apis';
 import { fetchProfiles } from 'src/stores/actions/account';
 import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { createRemoteRequest } from 'src/stores/actions/request';
+import { generateCode } from 'src/utils/randomCode';
+import Label from 'src/components/text/Label';
 
 const NewRemoteForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
@@ -54,9 +56,42 @@ const NewRemoteForm = ({ t, history, match }) => {
           >
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
               <form autoComplete="off">
-                <FormHeader text={t('label.leave_info')} />
+                <FormHeader text={t('label.remote_info')} />
                 <div className="row">
                   <div className="row col-11 ml-2">
+                    <div className="form-group col-xl-12">
+                      <Label text={t('label.code')} required />
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          className={'form-control col-10'}
+                          rows={5}
+                          onBlur={handleBlur('code')}
+                          name={`code`}
+                          onChange={(e) => handleChange(`code`)(e)}
+                          value={values.code ?? ''}
+                          placeholder={t('placeholder.enter_remote_code')}
+                        />
+                        <div
+                          className="input-group-text col-2 d-flex justify-content-center"
+                          id="basic-addon2"
+                          type="button"
+                          onClick={(e) => {
+                            let randomCode = generateCode();
+                            setFieldValue('code', randomCode);
+                          }}
+                        >
+                          {t('label.random')}
+                        </div>
+                      </div>
+                      {errors.code && touched.code && t(errors.code) ? (
+                        <div>
+                          <small className={'text-danger'}>{t(errors.code)}</small>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                     <CommonSelectInput
                       containerClassName={'form-group col-lg-12'}
                       value={values.profileId ?? ''}

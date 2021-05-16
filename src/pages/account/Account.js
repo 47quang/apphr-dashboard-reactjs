@@ -9,11 +9,12 @@ import Page404 from '../page404/Page404';
 const Account = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
-    { name: 'username', title: t('label.username'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.account_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'username', title: t('label.username'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'profileId', title: t('label.profile'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'profileId', title: t('label.profile'), align: 'left', width: '10%', wordWrapEnabled: true },
   ];
   const filters = {
     username: {
