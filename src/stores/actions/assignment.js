@@ -125,6 +125,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                   x[dayIndex[dayTh]].future = future;
                   x[dayIndex[dayTh]].assignment.push({
                     id: element.id,
+                    shiftName: element.shift.name,
                     shiftCode: element.shift.code,
                     point: element.point < 0.95 && element.point !== 0 ? element.point.toFixed(1) : element.point === 0 ? 0 : 1,
                     status: element.status,
