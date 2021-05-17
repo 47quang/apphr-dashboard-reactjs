@@ -1,7 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
-import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
+import { Lens } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import classNames from 'classnames';
@@ -211,7 +211,177 @@ const RollUp = ({ t, location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
+  // const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+  //   const [cell, setCell] = useState({
+  //     rowId: '',
+  //     columnName: '',
+  //     isOpen: false,
+  //     assignment: {},
+  //   });
+  //   const reloadTable = () => {
+  //     dispatch(
+  //       fetchRollUpTable(
+  //         {
+  //           page: paging.currentPage,
+  //           perpage: paging.pageSize,
+  //           from: state.fromDate,
+  //           to: state.toDate,
+  //         },
+  //         onTotalChange,
+  //       ),
+  //     );
+  //   };
+  //   const isDay = value?.assignment;
+  //   const handleClose = (isReload) => {
+  //     setCell({ ...cell, isOpen: !cell.isOpen });
+  //     if (isReload) reloadTable();
+  //   };
+  //   const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  //   const statusIcon = (status, point, idx) => {
+  //     if (status === 'leave_pay' || status === 'leave_policy')
+  //       return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+  //     else if (status === 'leave_no_pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} />;
+  //     else {
+  //       if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
+  //       else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+  //     }
+  //   };
+  //   const backgroundColor = (status) => {
+  //     if (status === 'normal') return '';
+  //     else if (status === 'overtime') return COLORS.OVERTIME;
+  //     else if (status === 'remote') return COLORS.REMOTE;
+  //     else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+  //     else if (status.includes('leave')) return COLORS.LEAVE;
+  //   };
+  //   const backgroundColorHover = (status) => {
+  //     if (status === 'overtime') return 'assignment-overtime';
+  //     else if (status === 'remote') return 'assignment-remote';
+  //     else if (status === 'remote_overtime') return 'assignment-remote-overtime';
+  //     else if (status.includes('leave')) return 'assignment-leave';
+  //     else return 'assignment-normal';
+  //   };
+  //   return (
+  //     <>
+  //       {cell.isOpen && (
+  //         <RollUpInfo
+  //           t={t}
+  //           isOpen={cell.isOpen}
+  //           handleClose={handleClose}
+  //           assignment={cell.assignment}
+  //           profileCode={row.code}
+  //           fullName={row.fullname}
+  //           profileId={row.id}
+  //           avatar={row.avatar}
+  //           reloadTable={reloadTable}
+  //         />
+  //       )}
+  //       <Table.Cell
+  //         className={classNames(className, 'm-auto')}
+  //         row={row}
+  //         column={column}
+  //         children={children}
+  //         tableColumn={restProps.tableColumn}
+  //         tableRow={restProps.tableRow}
+  //         style={{
+  //           backgroundColor: column.holiday
+  //             ? COLORS.HOLIDAY_CELL
+  //             : isDay
+  //             ? value.future
+  //               ? COLORS.FREE_DATE
+  //               : value.assignment.length > 0
+  //               ? value.assignment.every((v) => v.point === 0)
+  //                 ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
+  //                 : COLORS.WHITE //FULLY_ROLL_CALL
+  //               : COLORS.FREE_DATE
+  //             : COLORS.WHITE,
+  //           verticalAlign: 'inherit',
+  //           padding: '8px',
+  //           borderColor: 'white',
+  //           borderStyle: 'solid',
+  //           borderLeftColor: '#D8DBE0',
+  //           borderBottomColor: '#D8DBE0',
+  //           borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
+  //           borderWidth: 'thin',
+  //           ...restProps.style,
+  //         }}
+  //       >
+  //         {isDay ? (
+  //           <div className={classNames(className, 'rounded')}>
+  //             {value.assignment.length > 0 &&
+  //               value.assignment.map((val, idx) => {
+  //                 return (
+  //                   <div
+  //                     key={idx + val.shiftCode}
+  //                     role="button"
+  //                     onClick={(e) => {
+  //                       if (dateCol.includes(column.name))
+  //                         setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
+  //                     }}
+  //                     style={{ backgroundColor: backgroundColor(val.status), borderRadius: '9px' }}
+  //                     className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
+  //                   >
+  //                     {value.future ? (
+  //                       val.status !== 'normal' ? (
+  //                         <>
+  //                           <div className="col-2 p-0 m-auto">
+  //                             {val.status.includes('leave') && (
+  //                               <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
+  //                             )}
+  //                           </div>
+  //                           <div className="col-2  p-0 m-auto">{val.status.includes('leave') ? statusIcon(val.status, val.point, idx) : ''}</div>
+  //                           <div className="col-8  p-0 m-auto">
+  //                             <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+  //                           </div>
+  //                         </>
+  //                       ) : (
+  //                         <>
+  //                           <div className="col-2 p-0 m-auto"></div>
+  //                           <div className="col-2  p-0 m-auto"></div>
+  //                           <div className="col-8  p-0 m-auto">
+  //                             <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+  //                           </div>
+  //                         </>
+  //                       )
+  //                     ) : (
+  //                       <>
+  //                         <div className="col-2 p-0 m-auto">
+  //                           <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
+  //                         </div>
+  //                         <div className="col-2  p-0 m-auto">{statusIcon(val.status, val.point, idx)}</div>
+  //                         <div className="col-8  p-0 m-auto">
+  //                           <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
+  //                         </div>
+  //                       </>
+  //                     )}
+  //                   </div>
+  //                 );
+  //               })}
+  //           </div>
+  //         ) : (
+  //           <div className="d-flex ml-4 align-items-center">
+  //             <div />
+  //             <Avatar alt="avatar" src={row.avatar} className="mr-3" />
+  //             <Link
+  //               to={`${ROUTE_PATH.PROFILE}/${row.id}`}
+  //               onClick={() => {
+  //                 dispatch(setTabName(PROFILE_TABS.SCHEDULER));
+  //               }}
+  //             >
+  //               <div>
+  //                 <div>{row.code}</div>
+  //               </div>
+  //               <div>
+  //                 <div>{row.fullname}</div>
+  //               </div>
+  //             </Link>
+  //           </div>
+  //         )}
+  //       </Table.Cell>
+  //     </>
+  //   );
+  // };
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+    // console.log('value', value);
     const [cell, setCell] = useState({
       rowId: '',
       columnName: '',
@@ -236,29 +406,65 @@ const RollUp = ({ t, location }) => {
       setCell({ ...cell, isOpen: !cell.isOpen });
       if (isReload) reloadTable();
     };
-    const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const statusIcon = (status, point, idx) => {
-      if (status === 'leave_pay' || status === 'leave_policy')
-        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else if (status === 'leave_no_pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} />;
+    //const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+    const backgroundColor = (value) => {
+      let numOfAssignment = value.assignment.length;
+      if (numOfAssignment === 0) return COLORS.FREE_DATE;
+      else if (numOfAssignment > 1) return COLORS.BACKGROUND_COLOR_MANY_ASSIGNMENT;
       else {
-        if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-        else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
+        let status = value.assignment[0].status;
+        if (status === 'normal') {
+          let point = value.assignment[0].point;
+          if (point === 0) return COLORS.BACKGROUND_ABSENT_ROLL_CALL;
+          else if (point === 1) return COLORS.BACKGROUND_SUCCESS_ROLL_CALL;
+          else return COLORS.BACKGROUND_LATE_ROLL_CALL;
+        } else if (status === 'overtime') return COLORS.OVERTIME;
+        else if (status === 'remote') return COLORS.REMOTE;
+        else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+        else if (status === 'leave_no_pay') return COLORS.BACKGROUND_LEAVE_NO_PAY;
+        else if (status === 'leave_pay') return COLORS.BACKGROUND_LEAVE_PAY;
+        else if (status === 'leave_policy') return COLORS.BACKGROUND_LEAVE_POLICY;
       }
     };
-    const backgroundColor = (status) => {
-      if (status === 'normal') return '';
-      else if (status === 'overtime') return COLORS.OVERTIME;
+    const dotColor = (value) => {
+      let status = value.status;
+      if (status === 'normal') {
+        let point = value.point;
+        if (point === 0) return COLORS.ERROR;
+        else if (point === 1) return COLORS.BORDER_SUCCESS_ROLL_CALL;
+        else return COLORS.BORDER_LATE_ROLL_CALL;
+      } else if (status === 'overtime') return COLORS.OVERTIME;
       else if (status === 'remote') return COLORS.REMOTE;
       else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
-      else if (status.includes('leave')) return COLORS.LEAVE;
+      else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
+      else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
+      else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;
+      else return COLORS.ERROR;
     };
-    const backgroundColorHover = (status) => {
-      if (status === 'overtime') return 'assignment-overtime';
-      else if (status === 'remote') return 'assignment-remote';
-      else if (status === 'remote_overtime') return 'assignment-remote-overtime';
-      else if (status.includes('leave')) return 'assignment-leave';
-      else return 'assignment-normal';
+    const borderColor = (value) => {
+      let numOfAssignment = value.assignment.length;
+      if (numOfAssignment === 0) return COLORS.FREE_DATE;
+      else if (numOfAssignment > 1) return COLORS.MANY_ASSIGNMENT;
+      else {
+        let status = value.assignment[0].status;
+        if (status === 'normal') {
+          let point = value.assignment[0].point;
+          if (point === 0) return COLORS.ERROR;
+          else if (point === 1) return COLORS.BORDER_SUCCESS_ROLL_CALL;
+          else return COLORS.BORDER_LATE_ROLL_CALL;
+        } else if (status === 'overtime') return COLORS.BORDER_OVERTIME;
+        else if (status === 'remote') return COLORS.REMOTE;
+        else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+        else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
+        else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
+        else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;
+      }
+    };
+    const backgroundColorHover = (value) => {
+      let numOfAssignment = value.assignment.length;
+      if (numOfAssignment === 1) return 'assignment-overtime';
+      else return '';
     };
     return (
       <>
@@ -276,86 +482,55 @@ const RollUp = ({ t, location }) => {
           />
         )}
         <Table.Cell
-          className={classNames(className, 'm-auto')}
+          className={classNames(className, 'm-0 p-0')}
           row={row}
           column={column}
           children={children}
           tableColumn={restProps.tableColumn}
           tableRow={restProps.tableRow}
           style={{
-            backgroundColor: column.holiday
-              ? COLORS.HOLIDAY_CELL
-              : isDay
-              ? value.future
-                ? COLORS.FREE_DATE
-                : value.assignment.length > 0
-                ? value.assignment.every((v) => v.point === 0)
-                  ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
-                  : COLORS.WHITE //FULLY_ROLL_CALL
-                : COLORS.FREE_DATE
-              : COLORS.WHITE,
             verticalAlign: 'inherit',
-            padding: '8px',
             borderColor: 'white',
             borderStyle: 'solid',
-            borderLeftColor: '#D8DBE0',
-            borderBottomColor: '#D8DBE0',
-            borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
             borderWidth: 'thin',
+            height: 75,
             ...restProps.style,
           }}
         >
           {isDay ? (
-            <div className={classNames(className, 'rounded')}>
-              {value.assignment.length > 0 &&
-                value.assignment.map((val, idx) => {
-                  return (
-                    <div
-                      key={idx + val.shiftCode}
-                      role="button"
-                      onClick={(e) => {
-                        if (dateCol.includes(column.name))
-                          setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
-                      }}
-                      style={{ backgroundColor: backgroundColor(val.status), borderRadius: '9px' }}
-                      className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
-                    >
-                      {value.future ? (
-                        val.status !== 'normal' ? (
-                          <>
-                            <div className="col-2 p-0 m-auto">
-                              {val.status.includes('leave') && (
-                                <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                              )}
-                            </div>
-                            <div className="col-2  p-0 m-auto">{val.status.includes('leave') ? statusIcon(val.status, val.point, idx) : ''}</div>
-                            <div className="col-8  p-0 m-auto">
-                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="col-2 p-0 m-auto"></div>
-                            <div className="col-2  p-0 m-auto"></div>
-                            <div className="col-8  p-0 m-auto">
-                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                            </div>
-                          </>
-                        )
-                      ) : (
-                        <>
-                          <div className="col-2 p-0 m-auto">
-                            <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                          </div>
-                          <div className="col-2  p-0 m-auto">{statusIcon(val.status, val.point, idx)}</div>
-                          <div className="col-8  p-0 m-auto">
-                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
+            <div
+              className={classNames(backgroundColorHover(value), 'd-flex justify-content-center', 'align-items-center')}
+              style={{
+                verticalAlign: 'inherit',
+                borderColor: borderColor(value),
+                borderStyle: 'solid',
+                height: '100%',
+                borderRadius: '5px',
+                borderWidth: '2px',
+                backgroundColor: backgroundColor(value),
+              }}
+            >
+              {value.assignment.length > 1 ? (
+                <div>
+                  <p className="mb-0">{value.assignment.length + 'Ca'}</p>
+                  <div>
+                    {value.assignment.map((assignment, idx) => (
+                      <Lens
+                        key={assignment.shiftCode}
+                        className="mr-1"
+                        style={{ color: assignment.point > 0 ? dotColor(assignment) : COLORS.ERROR, height: '10px', width: '10px' }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : value.assignment.length === 0 ? (
+                <></>
+              ) : (
+                <div>
+                  <p className="mb-0">{value.assignment[0].shiftName}</p>
+                  <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
+                </div>
+              )}
             </div>
           ) : (
             <div className="d-flex ml-4 align-items-center">

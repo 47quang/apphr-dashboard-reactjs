@@ -3,6 +3,7 @@ import { REDUX_STATE } from '../states';
 const initialState = {
   payments: [],
   payment: {
+    code: '',
     name: '',
     type: '',
     by: '',

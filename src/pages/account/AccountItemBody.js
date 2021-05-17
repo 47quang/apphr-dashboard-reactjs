@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
+import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountCreateInfoSchema, AccountUpdateInfoSchema } from 'src/schema/formSchema';
 import {
@@ -19,6 +20,7 @@ import {
   updateAccount,
 } from 'src/stores/actions/account';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 import Page404 from '../page404/Page404';
 
 const AccountItemBody = ({ t, branches, departments, positions, history, match }) => {
@@ -147,8 +149,68 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                   <form autoComplete="off">
                     <FormHeader text={t('label.account_info')} />
                     <div className="row" style={{ paddingBottom: 40 }}>
+                      {isCreate ? (
+                        <div className="form-group col-xl-6">
+                          <Label text={t('label.account_code')} required />
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className={'form-control col-10'}
+                              rows={5}
+                              onBlur={handleBlur('code')}
+                              name={`code`}
+                              onChange={(e) => handleChange(`code`)(e)}
+                              value={values.code ?? ''}
+                              disabled={!isCreate}
+                              placeholder={t('placeholder.enter_account_code')}
+                            />
+                            <div
+                              className="input-group-text col-2 d-flex justify-content-center"
+                              id="basic-addon2"
+                              type="button"
+                              onClick={(e) => {
+                                let randomCode = generateCode();
+                                setFieldValue('code', randomCode);
+                              }}
+                            >
+                              {t('label.random')}
+                            </div>
+                          </div>
+                          {errors.code && touched.code && t(errors.code) ? (
+                            <div>
+                              <small className={'text-danger'}>{t(errors.code)}</small>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="form-group col-xl-6">
+                          <Label text={t('label.account_code')} required />
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className={'form-control col-12'}
+                              rows={5}
+                              onBlur={handleBlur('code')}
+                              name={`code`}
+                              onChange={(e) => handleChange(`code`)(e)}
+                              value={values.code ?? ''}
+                              disabled={!isCreate}
+                              placeholder={t('placeholder.enter_account_code')}
+                            />
+                          </div>
+                          {errors.code && touched.code && t(errors.code) ? (
+                            <div>
+                              <small className={'text-danger'}>{t(errors.code)}</small>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      )}
                       <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
+                        containerClassName={'form-group col-lg-6'}
                         value={values.username ?? ''}
                         onBlur={handleBlur('username')}
                         onChange={handleChange('username')}
@@ -163,7 +225,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                         errorMessage={t(errors.username)}
                       />
                       <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
+                        containerClassName={'form-group col-lg-6'}
                         value={values?.password ?? ''}
                         onBlur={handleBlur('password')}
                         onChange={handleChange('password')}
@@ -178,9 +240,8 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                         errorMessage={t(errors.password)}
                         isDisable={!isCreate}
                       />
-
                       <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
+                        containerClassName={'form-group col-lg-6'}
                         value={values.email ?? ''}
                         onBlur={handleBlur('email')}
                         onChange={handleChange('email')}
@@ -194,7 +255,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                         errorMessage={t(errors.email)}
                       />
                       <CommonTextInput
-                        containerClassName={'form-group col-lg-4'}
+                        containerClassName={'form-group col-lg-6'}
                         value={values.phone ?? ''}
                         onBlur={handleBlur('phone')}
                         onChange={handleChange('phone')}
@@ -207,7 +268,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                         errorMessage={t(errors.phone)}
                       />
                       <CommonSelectInput
-                        containerClassName={'form-group col-lg-8'}
+                        containerClassName={'form-group col-lg-6'}
                         value={values.profileId ?? 0}
                         labelText={t('label.profileId')}
                         selectClassName={'form-control'}

@@ -28,7 +28,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import { AttachMoney, Cancel, CheckCircle, Lens, MoneyOff } from '@material-ui/icons';
+import { Lens } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
@@ -189,8 +189,7 @@ const Label = ({ column, className, ...props }) => {
       }}
     >
       <div>
-        <p className="pl-2 m-0">{column.title[0]}</p>
-        <p className="pl-2 m-0  d-flex justify-content-center">{column.title[1]}</p>
+        <p className="pl-2 m-0">{column.title[0] + column.title[1]}</p>
       </div>
     </TableHeaderRow.Cell>
   ) : (
@@ -733,7 +732,7 @@ const QTable = (props) => {
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' && (
           <div className="p-0">
-            <div className="row p-0 m-1">
+            {/* <div className="row p-0 m-1">
               <div className="col-2">
                 <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
@@ -750,7 +749,7 @@ const QTable = (props) => {
                 <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.absent_roll_Call')}</p>
               </div>
-            </div>
+            </div> */}
             <div className="row m-2">
               <div className="col-2 d-flex align-items-start">
                 <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
@@ -761,8 +760,16 @@ const QTable = (props) => {
                 <p className="d-inline">{t('label.holiday')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.LEAVE }} />
-                <p className="d-inline">{t('label.leave')}</p>
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_NO_PAY }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_PAY }} />
+                <p className="d-inline">{t('label.leave_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_POLICY }} />
+                <p className="d-inline">{t('label.leave_policy_req')}</p>
               </div>
               <div className="col-2">
                 <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
@@ -775,6 +782,18 @@ const QTable = (props) => {
               <div className="col-2">
                 <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
                 <p className="d-inline">{t('label.overtime_remote_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_SUCCESS_ROLL_CALL }} />
+                <p className="d-inline">{t('label.success_roll_call')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LATE_ROLL_CALL }} />
+                <p className="d-inline">{t('label.late_roll_call')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.error_roll_call')}</p>
               </div>
             </div>
           </div>
