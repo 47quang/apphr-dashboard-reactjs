@@ -11,8 +11,11 @@ const client = axios.create({
   baseURL: 'https://apphr.me',
   headers: {
     'content-type': 'application/json',
+    subdomain: 'dev',
   },
   paramsSerializer: (params) => {
+    // params.subdomain = 'dev';
+    // console.log(params, 'params');
     if (params?.filters) {
       return 'filters=' + JSON.stringify(params.filters);
     } else return querystring.stringify(params);
