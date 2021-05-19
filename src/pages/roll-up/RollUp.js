@@ -283,7 +283,7 @@ const RollUp = ({ t, location }) => {
           tableColumn={restProps.tableColumn}
           tableRow={restProps.tableRow}
           style={{
-            backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : isDay ? (value.future ? COLORS.FREE_DATE : COLORS.FREE_DATE) : COLORS.WHITE,
+            backgroundColor: column.holiday ? COLORS.HOLIDAY_CELL : isDay ? (value.future ? COLORS.FREE_DATE : COLORS.FREE_DATE) : COLORS.WHITE,
             verticalAlign: 'inherit',
             borderBottomColor: '#D8DBE0',
             borderLeftColor: '#D8DBE0',

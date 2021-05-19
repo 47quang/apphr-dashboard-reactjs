@@ -35,7 +35,7 @@
     "assignments": "Các ca làm việc",
     "success_roll_call": "Điểm danh đúng giờ",
     "late_roll_call": "Vào muộn / ra sớm",
-    "error_roll_call": "Chưa vào ca / ra ca",
+    "error_roll_call": "Làm chưa đủ giờ / Vắng",
     "account_code": "Mã",
     "fee_code": "Mã chi phí",
     "random": "Ngẫu nhiên",
