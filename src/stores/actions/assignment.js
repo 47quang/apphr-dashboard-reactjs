@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateTimeScheduleToString, getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
@@ -46,6 +47,8 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
             ? payload.map((a) => {
                 a.startDate = a.startTime;
                 a.endDate = a.endTime;
+                a.shiftName = a.shift.name;
+                a.shiftCode = a.shift.code;
                 a.title = a.shift.code + ' - ' + a.shift.name;
                 a.location = a.shift.branch.code + ' - ' + a.shift.branch.name;
                 return a;
@@ -63,14 +66,40 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
   };
 };
 
+export const fetchAssignmentsInDate = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.assignment
+      .getAll(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.shiftName = a.shift.name;
+                a.shiftCode = a.shift.code;
+                a.startCC = parseLocalTime(a.shift.startCC);
+                a.endCC = parseLocalTime(a.shift.endCC);
+                return a;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT_IN_A_DATE, payload });
+        if (onTotalChange) onTotalChange(total);
+      })
+      .catch((err) => {
+        handleAssignmentExceptions(err, dispatch, 'fetchAssignments');
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
+      });
+  };
+};
 const compareHours = (a1, a2) => {
   return +a1.startCC.split(':')[0] - a2.startCC.split(':')[0];
 };
 
 export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
+  let from = params?.from ? moment(params.from) : undefined;
   if (setLoading) {
-    setInterval(10000);
-
     setLoading(true);
   }
   return (dispatch, getState) => {
@@ -89,30 +118,37 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                   sunday: {
                     assignment: [],
                     future: false,
+                    date: from,
                   },
                   monday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(1, 'd'),
                   },
                   tuesday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(2, 'd'),
                   },
                   wednesday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(3, 'd'),
                   },
                   thursday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(4, 'd'),
                   },
                   friday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(5, 'd'),
                   },
                   saturday: {
                     assignment: [],
                     future: false,
+                    date: from.clone().add(6, 'd'),
                   },
                 };
                 a.assignments.forEach((element) => {
@@ -127,7 +163,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                     id: element.id,
                     shiftName: element.shift.name,
                     shiftCode: element.shift.code,
-                    point: element.point < 0.95 && element.point !== 0 ? element.point.toFixed(1) : element.point === 0 ? 0 : 1,
+                    point: element.point !== 1 && element.point !== 0 ? element.point.toFixed(2) : element.point === 0 ? 0 : 1,
                     status: element.status,
                     startCC: parseLocalTime(element.shift.startCC),
                     endCC: parseLocalTime(element.shift.endCC),
@@ -229,6 +265,12 @@ export const setEmptyAssignments = () => {
 export const setEmptyAssignment = () => {
   return {
     type: REDUX_STATE.assignment.EMPTY_ASSIGNMENT,
+    payload: {},
+  };
+};
+export const setEmptyAssignmentInADate = () => {
+  return {
+    type: REDUX_STATE.assignment.EMPTY_ASSIGNMENT_IN_A_DATE,
     payload: {},
   };
 };

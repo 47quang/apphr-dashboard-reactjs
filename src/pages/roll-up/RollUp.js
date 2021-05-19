@@ -214,22 +214,21 @@ const RollUp = ({ t, location }) => {
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
+    // console.log(row);
     const [cell, setCell] = useState({
       rowId: '',
       columnName: '',
       isOpen: false,
       assignment: {},
+      date: '',
     });
     const [isOpenAssignmentsDialog, setIsOpenAssignmentsDialog] = useState(false);
-    const [assignments, setAsssignments] = useState([]);
 
-    const handleCloseAssignmentsDialog = () => {
+    const handleCloseAssignmentsDialog = (isReload) => {
       setIsOpenAssignmentsDialog(false);
+      if (isReload) reloadTable();
     };
 
-    const handleConfirmAssignmentsDialog = (assignment) => {
-      setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: assignment });
-    };
     const reloadTable = () => {
       dispatch(
         fetchRollUpTable(
@@ -268,9 +267,12 @@ const RollUp = ({ t, location }) => {
           <AssignmentsDialog
             t={t}
             isOpen={isOpenAssignmentsDialog}
-            handleConfirm={handleConfirmAssignmentsDialog}
             handleCancel={handleCloseAssignmentsDialog}
-            assignments={assignments}
+            profileId={cell.rowId}
+            date={cell.date}
+            fullName={row.fullname}
+            avatar={row.avatar}
+            code={row.code}
           />
         ) : (
           <></>
@@ -306,7 +308,7 @@ const RollUp = ({ t, location }) => {
                     setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
                   else if (numOfAssignment >= 1) {
                     setIsOpenAssignmentsDialog(true);
-                    setAsssignments(value.assignment);
+                    setCell({ ...cell, rowId: row.id, date: value.date });
                   }
                 }
               }}
