@@ -4,10 +4,12 @@ import { Formik } from 'formik';
 import React from 'react';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
+import Label from 'src/components/text/Label';
 import { SettingHolidayInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
-const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading }) => {
+const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading, isCreate }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -26,22 +28,70 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading 
                 submitForm(values);
               }}
             >
-              {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+              {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                 <form>
                   <FormHeader text={t('label.holiday')} />
                   <div className="row">
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.code ?? ''}
-                      onBlur={handleBlur('code')}
-                      onChange={handleChange('code')}
-                      inputID={'code'}
-                      labelText={t('label.role_code')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_role_code')}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
+                    {isCreate ? (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.holiday')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-10'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_role_code')}
+                          />
+                          <div
+                            className="input-group-text col-2 d-flex justify-content-center"
+                            id="basic-addon2"
+                            type="button"
+                            onClick={(e) => {
+                              let randomCode = generateCode();
+                              setFieldValue('code', randomCode);
+                            }}
+                          >
+                            {t('label.random')}
+                          </div>
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.holiday')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_role_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    )}
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.title ?? ''}

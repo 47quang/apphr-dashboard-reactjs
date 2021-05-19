@@ -9,12 +9,14 @@ import BranchesIcon from 'src/components/icon/Branches';
 import DepartmentIcon from 'src/components/icon/Department';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES } from 'src/constants/key';
+import { countAccounts } from 'src/stores/actions/account';
 import { countActiveContracts } from 'src/stores/actions/contract';
 import { countBranches, countDepartments, countLeaveRequests, countOvertimeRequests, countRemoteRequests } from 'src/stores/actions/dashboard';
 import { fetchLogs } from 'src/stores/actions/log';
 
 const Dashboard = ({ t, location }) => {
   const totalEmployee = useSelector((state) => state.contract.total);
+  const totalAccount = useSelector((state) => state.account.total);
   const totalBranch = useSelector((state) => state.dashboard.totalBranch);
   const totalDepartment = useSelector((state) => state.dashboard.totalDepartment);
   const totalLeave = useSelector((state) => state.dashboard.totalLeave);
@@ -61,6 +63,7 @@ const Dashboard = ({ t, location }) => {
     dispatch(countActiveContracts());
     dispatch(countBranches());
     dispatch(countDepartments());
+    dispatch(countAccounts());
     dispatch(
       countLeaveRequests({
         status: 'new',
@@ -128,7 +131,7 @@ const Dashboard = ({ t, location }) => {
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
-                    <p>15</p>
+                    <p>{totalAccount}</p>
                   </h1>
                   {/* <div className="row ml-4">
                     <TrendingDown />

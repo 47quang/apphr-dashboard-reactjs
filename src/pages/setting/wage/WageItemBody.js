@@ -4,9 +4,11 @@ import { Formik } from 'formik';
 import React from 'react';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
-const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons, loading }) => {
+const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const paymentType = [
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
@@ -29,21 +31,69 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons,
                 submitForm(values);
               }}
             >
-              {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+              {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
                   <div className="row">
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.code}
-                      onBlur={handleBlur('code')}
-                      onChange={handleChange('code')}
-                      inputID={'code'}
-                      labelText={t('label.wage_code')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_wage_code')}
-                      inputClassName={'form-control'}
-                      isDisable={true}
-                    />
+                    {isCreate ? (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.wage_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-10'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_wage_code')}
+                          />
+                          <div
+                            className="input-group-text col-2 d-flex justify-content-center"
+                            id="basic-addon2"
+                            type="button"
+                            onClick={(e) => {
+                              let randomCode = generateCode();
+                              setFieldValue('code', randomCode);
+                            }}
+                          >
+                            {t('label.random')}
+                          </div>
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="form-group col-xl-12">
+                        <Label text={t('label.wage_code')} required />
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className={'form-control col-12'}
+                            rows={5}
+                            onBlur={handleBlur('code')}
+                            name={`code`}
+                            onChange={(e) => handleChange(`code`)(e)}
+                            value={values.code}
+                            disabled={!isCreate}
+                            placeholder={t('placeholder.enter_wage_code')}
+                          />
+                        </div>
+                        {errors.code && touched.code && t(errors.code) ? (
+                          <div>
+                            <small className={'text-danger'}>{t(errors.code)}</small>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    )}
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.type}

@@ -29,6 +29,7 @@ export const SettingGeneralInfoSchema = Yup.object().shape({
 //Shift
 
 export const SettingShiftInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_shift_code').required('validation.required_enter_shift_code'),
   name: Yup.string().required('validation.required_enter_shift_name'),
   startCC: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_checkin_time', function (value) {
     return !!value;
@@ -63,6 +64,7 @@ export const SettingShiftInfoSchema = Yup.object().shape({
 
 //Holiday
 export const SettingHolidayInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_holiday_code').required('validation.required_enter_holiday_code'),
   title: Yup.string().required('validation.required_enter_holiday_title'),
   startDate: Yup.date().required('validation.required_select_start_date'),
   endDate: Yup.date().required('validation.required_select_end_date'),
@@ -80,6 +82,7 @@ export const SettingHolidayLimitSchema = Yup.object().shape({
 
 //Position
 export const SettingPositionInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_position_code').required('validation.required_enter_position_code'),
   name: Yup.string().required('validation.required_enter_position_name'),
   branchId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
     return value !== '0';
@@ -95,6 +98,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
 
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_branch_code').required('validation.required_enter_branch_code'),
   name: Yup.string().required('validation.required_enter_branch_name'),
   bssid: Yup.string()
     .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')
@@ -114,6 +118,7 @@ export const SettingBranchInfoSchema = Yup.object().shape({
 
 //Department
 export const SettingDepartmentInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_department_code').required('validation.required_enter_department_code'),
   name: Yup.string().required('validation.required_enter_department_name'),
   branchId: Yup.string().test('empty string', 'validation.required_select_branch_id', function (value) {
     return value !== '0';
@@ -121,6 +126,7 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
 });
 //Account
 export const AccountCreateInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_account_code').required('validation.required_enter_account_code'),
   username: Yup.string().required('validation.required_enter_usename'),
   password: Yup.string().test('empty string', 'validation.password_length_must_be_greater_than_6', function (value) {
     return value ? value.length > 5 : false;
@@ -141,10 +147,12 @@ export const AccountUpdateInfoSchema = Yup.object().shape({
   }),
 });
 export const RoleInfoSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_role_code').required('validation.required_enter_role_code'),
   name: Yup.string().required('validation.required_enter_role_name'),
 });
 
 export const BasicInfoCreateSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_employee_code').required('validation.required_enter_employee_code'),
   firstname: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_enter_firstname', function (value) {
       return value && value.length;
@@ -403,6 +411,7 @@ export const HistoryWorkingsSchema = Yup.object().shape({
   ),
 });
 export const WageSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_wage_code').required('validation.required_enter_wage_code'),
   name: Yup.string().min(1, 'validation.required_enter_salary_group').required('validation.required_enter_salary_group'),
   type: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
@@ -415,6 +424,7 @@ export const WageSchema = Yup.object().shape({
     .required('validation.required_enter_salary_level'),
 });
 export const AllowanceSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_allowance_code').required('validation.required_enter_allowance_code'),
   name: Yup.string().min(1, 'validation.required_enter_allowance_name').required('validation.required_enter_allowance_name'),
   amount: Yup.number()
     .integer('validation.allowance_level_must_be_integer"')
@@ -444,10 +454,12 @@ export const NotificationSchema = Yup.object().shape({
     .required('validation.required_select_notification_type'),
 });
 export const ArticleTypeSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_article_type_code').required('validation.required_enter_article_type_code'),
   name: Yup.string().min(1, 'validation.required_enter_article_type').required('validation.required_enter_article_type'),
 });
 
 export const NewFieldContract = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_contract_field_code').required('validation.required_enter_contract_field_code'),
   name: Yup.string().min(1, 'validation.required_enter_field_name').required('validation.required_enter_field_name'),
   type: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_field_type', function (value) {
     return value !== '0';
@@ -518,6 +530,7 @@ export const NewRollUpSchema = Yup.object().shape({
     }),
 });
 export const NewOvertimeFormSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_overtime_code').required('validation.required_enter_overtime_code'),
   profileId: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
       return value !== '0';
@@ -537,6 +550,7 @@ export const NewOvertimeFormSchema = Yup.object().shape({
 });
 
 export const NewRemoteFormSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_remote_code').required('validation.required_enter_remote_code'),
   profileId: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
       return value !== '0';
@@ -571,6 +585,7 @@ export const NewRemoteFormSchema = Yup.object().shape({
 });
 
 export const NewLeaveFormSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_leave_code').required('validation.required_enter_leave_code'),
   profileId: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
       return value !== '0';
@@ -610,6 +625,7 @@ export const NewLeaveFormSchema = Yup.object().shape({
 });
 
 export const OtherFeeSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_fee_code').required('validation.required_enter_fee_code'),
   name: Yup.string().min(1, 'validation.required_enter_payment_name').required('validation.required_enter_payment_name'),
   type: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_payment_type', function (value) {
@@ -649,4 +665,20 @@ export const ExportWageSchema = Yup.object().shape({
       const { from } = this.parent;
       return isBeforeTypeDate(from, value);
     }),
+});
+
+export const FilterSchema = Yup.object().shape({
+  rule: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_rule', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_rule'),
+  op: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_operator', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_filter_operator'),
+  value: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_value', function (value) {
+    return value !== '0' && value !== '';
+  }),
 });

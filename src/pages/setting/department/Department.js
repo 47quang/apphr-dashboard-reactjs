@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
 
@@ -15,6 +15,28 @@ const Department = ({ t, location, history }) => {
     { name: 'branchname', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'note', title: t('label.description'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
+  const filters = {
+    code: {
+      title: t('label.department_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.department_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.department.departments);
   const [paging, setPaging] = useState({
@@ -61,6 +83,20 @@ const Department = ({ t, location, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchDepartments(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
+
   const deleteRow = (rowId) => {
     dispatch(deleteDepartment({ id: rowId }, t('message.successful_delete')));
     dispatch(
@@ -94,6 +130,8 @@ const Department = ({ t, location, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_DEPARTMENT)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_DEPARTMENT)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_DEPARTMENT)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

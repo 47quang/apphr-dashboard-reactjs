@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.js';
 import { Provider } from 'react-redux';
 import store from './stores/store';
@@ -18,11 +18,11 @@ React.icons = icons;
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
+    <BrowserRouter>
       <Suspense fallback={loading}>
         <App />
       </Suspense>
-    </HashRouter>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root'),
 );

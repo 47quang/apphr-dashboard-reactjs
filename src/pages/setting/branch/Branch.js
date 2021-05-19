@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
@@ -22,6 +22,28 @@ const Branch = ({ t, history }) => {
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
+  const filters = {
+    code: {
+      title: t('label.branch_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.branch_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -60,6 +82,20 @@ const Branch = ({ t, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchBranches(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
+
   const deleteRow = async (rowId) => {
     dispatch(deleteBranch(rowId, t('message.successful_delete')));
     dispatch(
@@ -89,6 +125,8 @@ const Branch = ({ t, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_BRANCH)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_BRANCH)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_BRANCH)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

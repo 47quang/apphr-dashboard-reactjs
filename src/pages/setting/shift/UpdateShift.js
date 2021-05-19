@@ -94,6 +94,7 @@ const UpdateShift = ({ t, location, match, history }) => {
         buttons={buttons}
         submitForm={submitForm}
         loading={loading}
+        isCreate={false}
       />
     );
   else return <Page404 />;

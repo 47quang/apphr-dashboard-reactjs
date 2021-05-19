@@ -1,7 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
 import { Avatar, Button } from '@material-ui/core';
-import { AttachMoney, Cancel, CheckCircle, MoneyOff } from '@material-ui/icons';
+import { Lens } from '@material-ui/icons';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import classNames from 'classnames';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import AssignmentsDialog from 'src/components/dialog/Assignments';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
@@ -17,6 +18,7 @@ import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assign
 import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
 import {} from 'src/stores/actions/rollUp';
+import { backgroundColor, backgroundColorHover, borderColor, dotColor } from 'src/utils/colorOfCell';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const RollUp = ({ t, location }) => {
@@ -218,6 +220,16 @@ const RollUp = ({ t, location }) => {
       isOpen: false,
       assignment: {},
     });
+    const [isOpenAssignmentsDialog, setIsOpenAssignmentsDialog] = useState(false);
+    const [assignments, setAsssignments] = useState([]);
+
+    const handleCloseAssignmentsDialog = () => {
+      setIsOpenAssignmentsDialog(false);
+    };
+
+    const handleConfirmAssignmentsDialog = (assignment) => {
+      setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: assignment });
+    };
     const reloadTable = () => {
       dispatch(
         fetchRollUpTable(
@@ -237,29 +249,6 @@ const RollUp = ({ t, location }) => {
       if (isReload) reloadTable();
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const statusIcon = (status, point, idx) => {
-      if (status === 'leave_pay' || status === 'leave_policy')
-        return <AttachMoney key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-      else if (status === 'leave_no_pay') return <MoneyOff key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} />;
-      else {
-        if (point !== 0) return <CheckCircle key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.SUCCESS }} />;
-        else return <Cancel key={row.id + column.name + idx} className="m-0 p-0" style={{ color: COLORS.ERROR }} role="layout" />;
-      }
-    };
-    const backgroundColor = (status) => {
-      if (status === 'normal') return '';
-      else if (status === 'overtime') return COLORS.OVERTIME;
-      else if (status === 'remote') return COLORS.REMOTE;
-      else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
-      else if (status.includes('leave')) return COLORS.LEAVE;
-    };
-    const backgroundColorHover = (status) => {
-      if (status === 'overtime') return 'assignment-overtime';
-      else if (status === 'remote') return 'assignment-remote';
-      else if (status === 'remote_overtime') return 'assignment-remote-overtime';
-      else if (status.includes('leave')) return 'assignment-leave';
-      else return 'assignment-normal';
-    };
     return (
       <>
         {cell.isOpen && (
@@ -275,87 +264,84 @@ const RollUp = ({ t, location }) => {
             reloadTable={reloadTable}
           />
         )}
+        {isOpenAssignmentsDialog ? (
+          <AssignmentsDialog
+            t={t}
+            isOpen={isOpenAssignmentsDialog}
+            handleConfirm={handleConfirmAssignmentsDialog}
+            handleCancel={handleCloseAssignmentsDialog}
+            assignments={assignments}
+          />
+        ) : (
+          <></>
+        )}
         <Table.Cell
-          className={classNames(className, 'm-auto')}
+          className={classNames(className, 'm-1 p-1')}
           row={row}
           column={column}
           children={children}
           tableColumn={restProps.tableColumn}
           tableRow={restProps.tableRow}
           style={{
-            backgroundColor: column.holiday
-              ? COLORS.HOLIDAY_CELL
-              : isDay
-              ? value.future
-                ? COLORS.FREE_DATE
-                : value.assignment.length > 0
-                ? value.assignment.every((v) => v.point === 0)
-                  ? COLORS.WHITE //FULLY_ABSENT_ROLL_CALL
-                  : COLORS.WHITE //FULLY_ROLL_CALL
-                : COLORS.FREE_DATE
-              : COLORS.WHITE,
+            backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : isDay ? (value.future ? COLORS.FREE_DATE : COLORS.FREE_DATE) : COLORS.WHITE,
             verticalAlign: 'inherit',
-            padding: '8px',
-            borderColor: 'white',
-            borderStyle: 'solid',
-            borderLeftColor: '#D8DBE0',
             borderBottomColor: '#D8DBE0',
-            borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
+            borderLeftColor: '#D8DBE0',
+            borderTopColor: 'white',
+            borderRightColor: 'white',
+            borderStyle: 'solid',
             borderWidth: 'thin',
+            height: 75,
             ...restProps.style,
           }}
         >
           {isDay ? (
-            <div className={classNames(className, 'rounded')}>
-              {value.assignment.length > 0 &&
-                value.assignment.map((val, idx) => {
-                  return (
-                    <div
-                      key={idx + val.shiftCode}
-                      role="button"
-                      onClick={(e) => {
-                        if (dateCol.includes(column.name))
-                          setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: val });
-                      }}
-                      style={{ backgroundColor: backgroundColor(val.status), borderRadius: '9px' }}
-                      className={classNames('row p-1 m-1 ' + backgroundColorHover(val.status))}
-                    >
-                      {value.future ? (
-                        val.status !== 'normal' ? (
-                          <>
-                            <div className="col-2 p-0 m-auto">
-                              {val.status.includes('leave') && (
-                                <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                              )}
-                            </div>
-                            <div className="col-2  p-0 m-auto">{val.status.includes('leave') ? statusIcon(val.status, val.point, idx) : ''}</div>
-                            <div className="col-8  p-0 m-auto">
-                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="col-2 p-0 m-auto"></div>
-                            <div className="col-2  p-0 m-auto"></div>
-                            <div className="col-8  p-0 m-auto">
-                              <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                            </div>
-                          </>
-                        )
-                      ) : (
-                        <>
-                          <div className="col-2 p-0 m-auto">
-                            <p style={{ color: val.point > 0 ? COLORS.SUCCESS : COLORS.ERROR, margin: 'auto' }}>{val.point}</p>
-                          </div>
-                          <div className="col-2  p-0 m-auto">{statusIcon(val.status, val.point, idx)}</div>
-                          <div className="col-8  p-0 m-auto">
-                            <p className="m-auto"> {val.startCC + ' - ' + val.endCC}</p>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
+            <div
+              className={classNames(backgroundColorHover(value), 'd-flex justify-content-center', 'align-items-center')}
+              role={value.assignment.length > 0 ? 'button' : 'layout'}
+              onClick={(e) => {
+                if (dateCol.includes(column.name)) {
+                  let numOfAssignment = value.assignment.length;
+                  if (numOfAssignment === 1)
+                    setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
+                  else if (numOfAssignment >= 1) {
+                    setIsOpenAssignmentsDialog(true);
+                    setAsssignments(value.assignment);
+                  }
+                }
+              }}
+              style={{
+                verticalAlign: 'inherit',
+                borderColor: borderColor(value),
+                borderStyle: 'solid',
+                //height: '100%',
+                borderRadius: '5px',
+                borderWidth: '2px',
+                backgroundColor: backgroundColor(value),
+                height: 75,
+              }}
+            >
+              {value.assignment.length > 1 ? (
+                <div>
+                  <p className="mb-0">{value.assignment.length + 'Ca'}</p>
+                  <div>
+                    {value.assignment.map((assignment, idx) => (
+                      <Lens
+                        key={assignment.shiftCode}
+                        className="mr-1"
+                        style={{ color: assignment.point > 0 ? dotColor(assignment) : COLORS.ERROR, height: '10px', width: '10px' }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : value.assignment.length === 0 ? (
+                <></>
+              ) : (
+                <div>
+                  <p className="mb-0">{value.assignment[0].shiftName}</p>
+                  <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
+                </div>
+              )}
             </div>
           ) : (
             <div className="d-flex ml-4 align-items-center">
@@ -401,7 +387,6 @@ const RollUp = ({ t, location }) => {
         columnDef={columnDefOfRollUp.current}
         data={data}
         route={ROUTE_PATH.ROLL_UP + '/'}
-        idxColumnsFilter={[0, 1]}
         disableEditColum={true}
         headerDateCols={[2, 3, 4, 5, 6, 7, 8]}
         customTableCell={CustomTableCell}
@@ -410,6 +395,7 @@ const RollUp = ({ t, location }) => {
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
         paddingColumnHeader={true}
+        disableFilter={true}
       />
     </CContainer>
   );

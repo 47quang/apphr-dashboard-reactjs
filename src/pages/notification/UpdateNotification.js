@@ -68,7 +68,15 @@ const UpdateNotification = ({ t, location, history, match }) => {
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <div className="m-auto col-lg-12">
-          <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} loading={loading} />
+          <NotificationForm
+            t={t}
+            articleRef={articleInfoForm}
+            article={article}
+            buttons={buttons}
+            submitForm={submitForm}
+            loading={loading}
+            isCreate={false}
+          />
         </div>
       </CContainer>
     );

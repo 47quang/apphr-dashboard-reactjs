@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 
@@ -45,12 +45,47 @@ const Position = ({ t, location, history }) => {
       loading: isLoading,
     }));
   };
+  const filters = {
+    code: {
+      title: t('label.position_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.position_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+  };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_POSITION))
       dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchPositions(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const deleteRow = async (rowId) => {
     dispatch(deletePosition({ id: rowId }, t('message.successful_delete')));
     dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
@@ -75,6 +110,8 @@ const Position = ({ t, location, history }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_POSITION)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_POSITION)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_POSITION)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

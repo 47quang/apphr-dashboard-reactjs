@@ -70,6 +70,38 @@ export const fetchLeaveRequests = (params, onTotalChange, setLoading) => {
       });
   };
 };
+export const filterLeaveRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.leaveRequest
+      .filter(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload?.length > 0
+            ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
+                if (req.type === 'pay') req.type = 'Nghỉ có trả lương';
+                else if (req.type === 'no-pay') req.type = 'Nghỉ không trả lương';
+                else req.type = 'Nghỉ theo chế độ';
+                req.createdAt = formatDateTimeToString(req.createdAt);
+                return req;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
+        if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
+      })
+      .catch((err) => {
+        if (setLoading) setLoading(false);
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
 
 export const fetchLeaveRequest = (id, setLoading) => {
   if (setLoading) setLoading(true);
@@ -118,7 +150,7 @@ export const approveLeaveRequest = (id, success_msg) => {
     api.leaveRequest
       .approve(id)
       .then(({ payload }) => {
-        payload.fullname = payload.profile.fullname;
+        // payload.fullname = payload.profile.fullname;
         dispatch(fetchLeaveRequest(id));
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -164,6 +196,35 @@ export const fetchRemoteRequests = (params, onTotalChange, setLoading) => {
       })
       .finally(() => {
         if (setLoading) setLoading(false);
+      });
+  };
+};
+export const filterRemoteRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.remoteRequest
+      .filter(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload?.length > 0
+            ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
+                req.createdAt = formatDateTimeToString(req.createdAt);
+                return req;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
+        if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
+      })
+      .catch((err) => {
+        if (setLoading) setLoading(false);
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -258,6 +319,35 @@ export const fetchOvertimeRequests = (params, onTotalChange, setLoading) => {
       })
       .finally(() => {
         if (setLoading) setLoading(false);
+      });
+  };
+};
+export const filterOvertimeRequests = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.overtimeRequest
+      .filter(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload?.length > 0
+            ? payload.map((req) => {
+                req.fullname = req.profile.fullname;
+                req.createdAt = formatDateTimeToString(req.createdAt);
+                return req;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
+        if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
+      })
+      .catch((err) => {
+        if (setLoading) setLoading(false);
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

@@ -51,6 +51,33 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
   };
 };
 
+export const filterAccounts = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.account
+      .filter(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.role = a.role.name;
+                return a;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
+        if (onTotalChange) onTotalChange(total);
+        if (setLoading) setLoading(false);
+      })
+      .catch((err) => {
+        if (setLoading) setLoading(false);
+        if (err.response.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
+      });
+  };
+};
 export const fetchAccount = (id, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -183,6 +210,24 @@ export const fetchProfiles = (params) => {
       })
       .catch((err) => {
         handleAccountExceptions(err, dispatch, 'fetch profiles');
+      });
+  };
+};
+
+export const countAccounts = (params) => {
+  return (dispatch, getState) => {
+    api.account
+      .count(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.account.COUNT_ACCOUNT, payload });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status >= 500)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
+        else if (err.response?.status >= 400)
+          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
+        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

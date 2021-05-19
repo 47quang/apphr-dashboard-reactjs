@@ -2,8 +2,12 @@ import axios from 'axios';
 import querystring from 'query-string';
 
 const getDefaultHeaders = () => {
+  let host = window.location.host;
+  let parts = host.split('.');
+  let subdomain = parts.length >= 3 ? parts[0] : 'dev';
   return {
     Authorization: 'Bearer ' + localStorage.getItem('token'),
+    subdomain: subdomain,
   };
 };
 
@@ -12,7 +16,12 @@ const client = axios.create({
   headers: {
     'content-type': 'application/json',
   },
-  paramsSerializer: (params) => querystring.stringify(params),
+  paramsSerializer: (params) => {
+    if (params?.filters) {
+      let { filters, ...other } = params;
+      return 'filters=' + JSON.stringify(filters) + '&' + querystring.stringify(other);
+    } else return querystring.stringify(params);
+  },
   timeout: 20000,
   withCredentials: false,
 });

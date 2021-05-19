@@ -17,6 +17,7 @@ import { createProfile, fetchProfile, setEmptyProfile, updateProfile } from 'src
 import UploadImageSingle from 'src/components/button/UploadImageSingle';
 import Page404 from '../page404/Page404';
 import { CircularProgress } from '@material-ui/core';
+import { generateCode } from 'src/utils/randomCode';
 
 const BasicInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -156,18 +157,66 @@ const BasicInfo = ({ t, history, match }) => {
                     <div className="row">
                       <div className="col-xl-12">
                         <div className="row">
-                          <CommonTextInput
-                            containerClassName={'form-group col-lg-6'}
-                            value={values.code ?? ''}
-                            onBlur={handleBlur('code')}
-                            onChange={handleChange('code')}
-                            inputID={'code'}
-                            labelText={t('label.employee_code')}
-                            inputType={'text'}
-                            placeholder={t('placeholder.enter_employee_code')}
-                            inputClassName={'form-control'}
-                            isDisable={true}
-                          />
+                          {!isCreate ? (
+                            <div className="form-group col-xl-6">
+                              <Label text={t('label.employee_code')} required />
+                              <div className="input-group">
+                                <input
+                                  type="text"
+                                  className={'form-control col-10'}
+                                  rows={5}
+                                  onBlur={handleBlur('code')}
+                                  name={`code`}
+                                  onChange={(e) => handleChange(`code`)(e)}
+                                  value={values.code ?? ''}
+                                  disabled={isCreate}
+                                  placeholder={t('placeholder.enter_employee_code')}
+                                />
+                                <div
+                                  className="input-group-text col-2 d-flex justify-content-center"
+                                  id="basic-addon2"
+                                  type="button"
+                                  onClick={(e) => {
+                                    let randomCode = generateCode();
+                                    setFieldValue('code', randomCode);
+                                  }}
+                                >
+                                  {t('label.random')}
+                                </div>
+                              </div>
+                              {errors.code && touched.code && t(errors.code) ? (
+                                <div>
+                                  <small className={'text-danger'}>{t(errors.code)}</small>
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="form-group col-xl-6">
+                              <Label text={t('label.employee_code')} required />
+                              <div className="input-group">
+                                <input
+                                  type="text"
+                                  className={'form-control col-12'}
+                                  rows={5}
+                                  onBlur={handleBlur('code')}
+                                  name={`code`}
+                                  onChange={(e) => handleChange(`code`)(e)}
+                                  value={values.code ?? ''}
+                                  disabled={isCreate}
+                                  placeholder={t('placeholder.enter_employee_code')}
+                                />
+                              </div>
+                              {errors.code && touched.code && t(errors.code) ? (
+                                <div>
+                                  <small className={'text-danger'}>{t(errors.code)}</small>
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          )}
                           <CommonTextInput
                             containerClassName={'form-group col-lg-6'}
                             value={values.firstname ?? ''}

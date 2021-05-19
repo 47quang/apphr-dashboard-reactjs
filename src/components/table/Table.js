@@ -28,7 +28,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import { AttachMoney, Cancel, CheckCircle, Lens, MoneyOff } from '@material-ui/icons';
+import { Lens } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
@@ -42,6 +42,7 @@ import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { COLORS } from 'src/constants/theme';
+import { FilterSchema } from 'src/schema/formSchema';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
 import NewRollUp from '../dialog/NewRollUp';
 
@@ -50,7 +51,6 @@ import NewRollUp from '../dialog/NewRollUp';
     columnDef:  ,
     data: ,
     route: ,
-    idxColumnsFilter,
     deleteRowFunc,
 */
 
@@ -189,8 +189,7 @@ const Label = ({ column, className, ...props }) => {
       }}
     >
       <div>
-        <p className="pl-2 m-0">{column.title[0]}</p>
-        <p className="pl-2 m-0  d-flex justify-content-center">{column.title[1]}</p>
+        <p className="pl-2 m-0">{column.title[0] + ' - ' + column.title[1]}</p>
       </div>
     </TableHeaderRow.Cell>
   ) : (
@@ -232,7 +231,6 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
   const handleConfirmEditing = (values) => {
     let endTime = values.endTime;
     endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
-
     dispatch(
       updateRollUp(
         {
@@ -341,7 +339,6 @@ const QTable = (props) => {
     columnDef,
     data,
     route,
-    idxColumnsFilter,
     dateCols,
     multiValuesCols,
     linkCols,
@@ -362,6 +359,8 @@ const QTable = (props) => {
     editColumnWidth,
     paddingColumnHeader,
     notPaging,
+    filters,
+    filterFunction,
   } = props;
   const exporterRef = useRef(null);
 
@@ -408,21 +407,24 @@ const QTable = (props) => {
         };
       })
     : [];
-  const columnsFilter = idxColumnsFilter
-    ? idxColumnsFilter.map((idx) => ({
-        id: idx,
-        name: columnDef[idx]?.title,
-      }))
-    : [];
-  const filterTypes = [
-    { id: 1, name: t('label.include') },
-    { id: 2, name: t('label.not_include') },
-    { id: 3, name: t('label.correct') },
-  ];
+  let columnsFilter = filters ? Object.keys(filters) : [];
+  columnsFilter =
+    columnsFilter && columnsFilter.length > 0
+      ? columnsFilter.map((colName) => ({
+          id: colName,
+          name: filters[colName]?.title,
+        }))
+      : [];
+  // const filterTypes = [
+  //   { id: 1, name: t('label.include') },
+  //   { id: 2, name: t('label.not_include') },
+  //   { id: 3, name: t('label.correct') },
+  // ];
   const filterValues = {
-    columnsFilter: columnsFilter[0],
-    filterTypes: filterTypes[0],
-    textFilter: '',
+    rule: '',
+    op: '',
+    value: '',
+    operates: [],
   };
   const onSave = (workbook) => {
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -455,7 +457,7 @@ const QTable = (props) => {
   const StatusFormatter = ({ value }) => {
     return (
       <Chip
-        label={value === 'approve' ? 'Đã phê duyệt' : value === 'reject' ? 'Đã từ chối' : 'Đang xử lý'}
+        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
         className="mx-1 my-1 px-0 py-0"
         style={{
           backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
@@ -478,7 +480,31 @@ const QTable = (props) => {
       </td>
     );
   };
+  const [multiFilter, setMultiFilter] = useState([]);
 
+  const updateMultiFilter = async (newFilter) => {
+    return new Promise((resolve, reject) => {
+      let isConsist = multiFilter.some((filter) => filter.rule === newFilter.rule);
+      if (isConsist) {
+        setMultiFilter(multiFilter.map((filter) => (filter.rule === newFilter.rule ? newFilter : filter)));
+        resolve(multiFilter.map((filter) => (filter.rule === newFilter.rule ? newFilter : filter)));
+      } else {
+        setMultiFilter([...multiFilter, newFilter]);
+        resolve([...multiFilter, newFilter]);
+      }
+    });
+  };
+  const deleteMultiFilter = async (idx) => {
+    return new Promise((resolve, reject) => {
+      multiFilter.splice(idx, 1);
+      setMultiFilter([...multiFilter]);
+      resolve([...multiFilter]);
+    });
+  };
+  const handleDelete = async (idx) => {
+    let newState = await deleteMultiFilter(idx);
+    filterFunction({ filters: newState });
+  };
   return (
     <div>
       <Paper>
@@ -487,44 +513,90 @@ const QTable = (props) => {
         ) : (
           <div className="m-auto">
             <div className="rounded container col-md-12 pt-4 m-2">
-              <Formik enableReinitialize initialValues={filterValues}>
-                {({ values, errors, touched, handleChange, handleSubmit, handleBlur }) => (
+              <Formik
+                enableReinitialize
+                initialValues={filterValues}
+                validationSchema={FilterSchema}
+                onSubmit={async ({ operates, ...values }) => {
+                  let newState = await updateMultiFilter(values);
+                  filterFunction({ filters: newState });
+                }}
+              >
+                {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue, handleReset }) => (
                   <form autoComplete="off">
                     <div className="row">
                       <div className="row col-lg-11">
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.columnsFilter}
-                          onBlur={handleBlur('columnsFilter')}
-                          onChange={handleChange('columnsFilter')}
+                          value={values.rule}
+                          onBlur={handleBlur('rule')}
+                          onChange={(e) => {
+                            handleChange('rule')(e);
+                            setFieldValue('op', '');
+                            setFieldValue('operates', filters[e.target.value]?.operates);
+                            setFieldValue('value', '');
+                          }}
                           labelText={t('label.column_filter')}
                           selectClassName={'form-control'}
                           lstSelectOptions={columnsFilter}
                           placeholder={t('placeholder.select_column_filter')}
+                          isRequiredField
+                          isTouched={touched.rule}
+                          isError={errors.rule && touched.rule}
+                          errorMessage={t(errors.rule)}
                         />
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.filterTypes}
-                          onBlur={handleBlur('filterTypes')}
-                          onChange={handleChange('filterTypes')}
+                          value={values.op}
+                          onBlur={handleBlur('op')}
+                          onChange={handleChange('op')}
                           labelText={t('label.filter_option')}
                           placeholder={t('placeholder.select_filter_option')}
                           selectClassName={'form-control'}
-                          lstSelectOptions={filterTypes}
+                          lstSelectOptions={values.operates}
+                          isRequiredField
+                          isTouched={touched.op}
+                          isError={errors.op && touched.op}
+                          errorMessage={t(errors.op)}
                         />
-                        <CommonTextInput
-                          containerClassName={'form-group col-lg-4'}
-                          value={values.textFilter}
-                          onBlur={handleBlur('textFilter')}
-                          onChange={handleChange('textFilter')}
-                          labelText={t('label.keyword')}
-                          inputType={'text'}
-                          placeholder={t('placeholder.enter_keyword')}
-                          inputClassName={'form-control'}
-                        />
+                        {filters[values.rule]?.type === 'text' ? (
+                          <CommonTextInput
+                            containerClassName={'form-group col-lg-4'}
+                            value={values.value}
+                            onBlur={handleBlur('value')}
+                            onChange={handleChange('value')}
+                            labelText={t('label.keyword')}
+                            inputType={'text'}
+                            placeholder={t('placeholder.enter_keyword')}
+                            inputClassName={'form-control'}
+                            isTouched={touched.value}
+                            isError={errors.value && touched.value}
+                            errorMessage={t(errors.value)}
+                          />
+                        ) : (
+                          <CommonSelectInput
+                            containerClassName={'form-group col-lg-4'}
+                            value={values.value}
+                            onBlur={handleBlur('value')}
+                            onChange={handleChange('value')}
+                            labelText={t('label.filter_value')}
+                            placeholder={t('placeholder.select_value')}
+                            selectClassName={'form-control'}
+                            lstSelectOptions={filters[values.rule]?.values ?? []}
+                            isTouched={touched.value}
+                            isError={errors.value && touched.value}
+                            errorMessage={t(errors.value)}
+                          />
+                        )}
                       </div>
-                      <div className="col-lg-1 d-flex align-items-end pb-3">
-                        <button type="button" className="btn btn-primary" style={{ width: '100%' }}>
+                      <div className="col-lg-1 d-flex align-items-start pt-4 mt-1">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(e) => {
+                            handleSubmit();
+                          }}
+                        >
                           {t('label.search')}
                         </button>
                       </div>
@@ -532,6 +604,29 @@ const QTable = (props) => {
                   </form>
                 )}
               </Formik>
+              {multiFilter && multiFilter.length > 0 ? (
+                multiFilter.map((filter, idx) => {
+                  return (
+                    <Chip
+                      className="m-1 p-1"
+                      key={`filter${idx}`}
+                      label={
+                        filters[filter.rule]?.title +
+                        ': ' +
+                        t(`filter_operator.${filter.op}`) +
+                        ' "' +
+                        (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) +
+                        '"'
+                      }
+                      color="primary"
+                      onDelete={handleDelete}
+                      variant="outlined"
+                    />
+                  );
+                })
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         )}
@@ -637,7 +732,7 @@ const QTable = (props) => {
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' && (
           <div className="p-0">
-            <div className="row p-0 m-1">
+            {/* <div className="row p-0 m-1">
               <div className="col-2">
                 <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
@@ -654,7 +749,7 @@ const QTable = (props) => {
                 <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.absent_roll_Call')}</p>
               </div>
-            </div>
+            </div> */}
             <div className="row m-2">
               <div className="col-2 d-flex align-items-start">
                 <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
@@ -665,8 +760,16 @@ const QTable = (props) => {
                 <p className="d-inline">{t('label.holiday')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.LEAVE }} />
-                <p className="d-inline">{t('label.leave')}</p>
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_NO_PAY }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_PAY }} />
+                <p className="d-inline">{t('label.leave_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_POLICY }} />
+                <p className="d-inline">{t('label.leave_policy_req')}</p>
               </div>
               <div className="col-2">
                 <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
@@ -679,6 +782,18 @@ const QTable = (props) => {
               <div className="col-2">
                 <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
                 <p className="d-inline">{t('label.overtime_remote_req')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_SUCCESS_ROLL_CALL }} />
+                <p className="d-inline">{t('label.success_roll_call')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.BORDER_LATE_ROLL_CALL }} />
+                <p className="d-inline">{t('label.late_roll_call')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.error_roll_call')}</p>
               </div>
             </div>
           </div>

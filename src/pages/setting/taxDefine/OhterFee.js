@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 import { deletePayment, fetchPayments } from 'src/stores/actions/payment';
@@ -12,10 +12,46 @@ const OtherFee = ({ t }) => {
   const dispatch = useDispatch();
   const payments = useSelector((state) => state.payment.payments);
   const columnDef = [
-    { name: 'id', title: t('label.id'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.payment_name'), align: 'left', width: '35%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_type'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
+  const filters = {
+    code: {
+      title: t('label.code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    name: {
+      title: t('label.payment_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    type: {
+      title: t('label.payment_type'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        { id: 'value', name: t('label.payment_value') },
+        { id: 'percent', name: t('label.percent') },
+      ],
+    },
+  };
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
@@ -60,6 +96,19 @@ const OtherFee = ({ t }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
+  const filterFunction = (params) => {
+    dispatch(
+      fetchPayments(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const deleteRow = async (rowId) => {
     dispatch(deletePayment(rowId, t('message.successful_delete')));
     dispatch(
@@ -89,6 +138,8 @@ const OtherFee = ({ t }) => {
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_WAGE)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_WAGE)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
+          filters={filters}
+          filterFunction={filterFunction}
         />
       </CContainer>
     );

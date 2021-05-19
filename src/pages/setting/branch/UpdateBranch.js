@@ -101,6 +101,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
         buttons={buttons}
         submitForm={submitForm}
         loading={loading}
+        isCreate={false}
       />
     );
   else return <Page404 />;
