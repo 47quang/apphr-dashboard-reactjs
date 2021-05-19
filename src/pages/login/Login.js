@@ -50,7 +50,13 @@ const Login = ({ location, history }) => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" id="password" placeholder="Password" autoComplete="current-password" />
+                      <CInput
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                      />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="12">
