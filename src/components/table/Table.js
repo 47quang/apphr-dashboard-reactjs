@@ -247,6 +247,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           id: rollUp.rowId,
         },
         rollUpData.assignmentId,
+        rollUpData.setIsReload,
         t('message.successful_update'),
       ),
     );

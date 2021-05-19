@@ -244,7 +244,8 @@ const RollUp = ({ t, location }) => {
     };
     const isDay = value?.assignment;
     const handleClose = (isReload) => {
-      setCell({ ...cell, isOpen: !cell.isOpen });
+      console.log('isReload', isReload);
+      setCell({ ...cell, isOpen: !cell.isOpen, isReload: isReload });
       if (isReload) reloadTable();
     };
     const dateCol = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
