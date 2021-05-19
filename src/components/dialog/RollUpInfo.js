@@ -11,7 +11,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
   const dispatch = useDispatch();
   const [isReload, setIsReload] = useState(false);
   const rows = useSelector((state) => state.assignment.assignment);
-
   const columnDef = [
     { name: 'type', title: t('label.type_roll_call'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startTime', title: t('label.start_time'), align: 'left', width: '30%', wordWrapEnabled: true },
@@ -79,6 +78,10 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <p className="mb-1">{'Tên ca làm : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
+          <p>{t('label.from') + assignment.startCC + t('label.to') + assignment.endCC}</p>
         </div>
         <QTable
           t={t}

@@ -32,6 +32,7 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "assignments": "Các ca làm việc",
     "success_roll_call": "Điểm danh đúng giờ",
     "late_roll_call": "Vào muộn / ra sớm",
     "error_roll_call": "Chưa vào ca / ra ca",

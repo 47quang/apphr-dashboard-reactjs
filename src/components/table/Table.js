@@ -189,7 +189,7 @@ const Label = ({ column, className, ...props }) => {
       }}
     >
       <div>
-        <p className="pl-2 m-0">{column.title[0] + column.title[1]}</p>
+        <p className="pl-2 m-0">{column.title[0] + ' - ' + column.title[1]}</p>
       </div>
     </TableHeaderRow.Cell>
   ) : (
