@@ -57,11 +57,11 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     if (isCreate) {
       delete form.id;
       if (form.profileId !== '0') form.profileId = +form.profileId;
-      dispatch(createAccount(form, history, t('message.successful_delete_account')));
+      dispatch(createAccount(form, history, t('message.successful_delete')));
     } else {
       if (form.profileId !== '0') form.profileId = +form.profileId;
       else delete form.profileId;
-      dispatch(updateAccount(form, t('message.successful_update_account')));
+      dispatch(updateAccount(form, t('message.successful_update')));
     }
   };
 
