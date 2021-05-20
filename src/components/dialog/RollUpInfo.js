@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PAGE_SIZES } from 'src/constants/key';
 import { fetchAssignment, setEmptyAssignment } from 'src/stores/actions/assignment';
 import { deleteRollUp } from 'src/stores/actions/rollUp';
-
 import QTable from '../table/Table';
+
 const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, assignment, profileId }) => {
   const dispatch = useDispatch();
   const [isReload, setIsReload] = useState(false);
@@ -56,7 +56,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     dispatch(deleteRollUp(rowId, assignment.id, t('message.successful_delete')));
   };
   return (
-    <Dialog open={isOpen} maxWidth="md" fullWidth>
+    <Dialog open={isOpen} maxWidth="md" fullWidth disableBackdropClick={false}>
       <DialogTitle className={'dialog-title-background'}>
         <div className="d-flex flex-row justify-content-between align-items-center">
           <div style={{ fontSize: 24, color: 'black', fontWeight: 'bold' }}>{t('label.history_roll_call')}</div>

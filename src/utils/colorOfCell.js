@@ -15,9 +15,9 @@ export const backgroundColorOfAssignment = (assignment) => {
     if (point === 0) return COLORS.BACKGROUND_ABSENT_ROLL_CALL;
     else if (point === 1) return COLORS.BACKGROUND_SUCCESS_ROLL_CALL;
     else return COLORS.BACKGROUND_LATE_ROLL_CALL;
-  } else if (status === 'overtime') return COLORS.OVERTIME;
-  else if (status === 'remote') return COLORS.REMOTE;
-  else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+  } else if (status === 'overtime') return COLORS.BACKGROUND_OVERTIME;
+  else if (status === 'remote') return COLORS.BACKGROUND_REMOTE;
+  else if (status === 'remote_overtime') return COLORS.BACKGROUND_REMOTE_OVERTIME;
   else if (status === 'leave_no_pay') return COLORS.BACKGROUND_LEAVE_NO_PAY;
   else if (status === 'leave_pay') return COLORS.BACKGROUND_LEAVE_PAY;
   else if (status === 'leave_policy') return COLORS.BACKGROUND_LEAVE_POLICY;
@@ -29,9 +29,9 @@ export const dotColor = (assignment) => {
     if (point === 0) return COLORS.ERROR;
     else if (point === 1) return COLORS.BORDER_SUCCESS_ROLL_CALL;
     else return COLORS.BORDER_LATE_ROLL_CALL;
-  } else if (status === 'overtime') return COLORS.OVERTIME;
-  else if (status === 'remote') return COLORS.REMOTE;
-  else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+  } else if (status === 'overtime') return COLORS.BORDER_OVERTIME;
+  else if (status === 'remote') return COLORS.BORDER_REMOTE;
+  else if (status === 'remote_overtime') return COLORS.BORDER_REMOTE_OVERTIME;
   else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
   else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
   else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;
@@ -53,8 +53,8 @@ export const borderColorOfAssignment = (assignment) => {
     else if (point === 1) return COLORS.BORDER_SUCCESS_ROLL_CALL;
     else return COLORS.BORDER_LATE_ROLL_CALL;
   } else if (status === 'overtime') return COLORS.BORDER_OVERTIME;
-  else if (status === 'remote') return COLORS.REMOTE;
-  else if (status === 'remote_overtime') return COLORS.OVERTIME_REMOTE;
+  else if (status === 'remote') return COLORS.BORDER_REMOTE;
+  else if (status === 'remote_overtime') return COLORS.BORDER_REMOTE_OVERTIME;
   else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
   else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
   else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;

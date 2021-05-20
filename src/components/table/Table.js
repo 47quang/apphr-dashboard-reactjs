@@ -172,6 +172,15 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
     </Plugin>
   );
 };
+const StubHeaderCellComponent = ({ column, className, ...props }) => {
+  return (
+    <Table.StubHeaderCell
+      style={{
+        width: 0,
+      }}
+    ></Table.StubHeaderCell>
+  );
+};
 const Label = ({ column, className, ...props }) => {
   props.draggingEnabled = false;
   const rvComponent = Array.isArray(column.title) ? (
@@ -189,7 +198,7 @@ const Label = ({ column, className, ...props }) => {
       }}
     >
       <div>
-        <p className="pl-2 m-0">{column.title[0] + ' - ' + column.title[1]}</p>
+        <p className="p-0 m-0 ml-1">{column.title[0] + ' - ' + column.title[1]}</p>
       </div>
     </TableHeaderRow.Cell>
   ) : (
@@ -206,7 +215,7 @@ const Label = ({ column, className, ...props }) => {
       }}
     >
       <div>
-        <p className="pl-2 ml-3">{column.title}</p>
+        <p className="m-0 ml-1">{column.title}</p>
       </div>
     </TableHeaderRow.Cell>
   );
@@ -238,6 +247,7 @@ const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit
           id: rollUp.rowId,
         },
         rollUpData.assignmentId,
+        rollUpData.setIsReload,
         t('message.successful_update'),
       ),
     );
@@ -505,6 +515,7 @@ const QTable = (props) => {
     let newState = await deleteMultiFilter(idx);
     filterFunction({ filters: newState });
   };
+
   return (
     <div>
       <Paper>
@@ -672,6 +683,7 @@ const QTable = (props) => {
               tableComponent={disableToolBar ? _TableComponent : TableComponent}
               cellComponent={customTableCell}
               noDataCellComponent={NoDataCellComponent}
+              stubHeaderCellComponent={StubHeaderCellComponent}
             />
           ) : (
             <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} noDataCellComponent={NoDataCellComponent} />
@@ -734,65 +746,61 @@ const QTable = (props) => {
           <div className="p-0">
             {/* <div className="row p-0 m-1">
               <div className="col-2">
-                <AttachMoney className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <AttachMoney  className="mr-2 mb-2"  style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
               </div>
               <div className="col-2">
-                <MoneyOff className="mr-2" style={{ color: COLORS.ERROR }} />
+                <MoneyOff  className="mr-2 mb-2"  style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.leave_no_pay_req')}</p>
               </div>
               <div className="col-2">
-                <CheckCircle className="mr-2" style={{ color: COLORS.SUCCESS }} />
+                <CheckCircle  className="mr-2 mb-2"  style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.roll_up_success')}</p>
               </div>
               <div className="col-6 d-flex align-items-start">
-                <Cancel className="mr-2" style={{ color: COLORS.ERROR }} />
+                <Cancel  className="mr-2 mb-2"  style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.absent_roll_Call')}</p>
               </div>
             </div> */}
             <div className="row m-2">
-              <div className="col-2 d-flex align-items-start">
-                <Lens className="mr-2" style={{ color: COLORS.FREE_DATE }} />
-                <p>{t('label.free_date')}</p>
-              </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
                 <p className="d-inline">{t('label.holiday')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_NO_PAY }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_NO_PAY }} />
                 <p className="d-inline">{t('label.leave_no_pay_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_PAY }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_PAY }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.BORDER_LEAVE_POLICY }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_POLICY }} />
                 <p className="d-inline">{t('label.leave_policy_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.REMOTE }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_REMOTE }} />
                 <p className="d-inline">{t('label.remote_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_OVERTIME }} />
                 <p className="d-inline">{t('label.overtime_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.OVERTIME_REMOTE }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_REMOTE_OVERTIME }} />
                 <p className="d-inline">{t('label.overtime_remote_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.BORDER_SUCCESS_ROLL_CALL }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_SUCCESS_ROLL_CALL }} />
                 <p className="d-inline">{t('label.success_roll_call')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.BORDER_LATE_ROLL_CALL }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LATE_ROLL_CALL }} />
                 <p className="d-inline">{t('label.late_roll_call')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2" style={{ color: COLORS.ERROR }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.error_roll_call')}</p>
               </div>
             </div>
