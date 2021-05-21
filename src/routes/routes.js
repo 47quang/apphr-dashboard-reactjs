@@ -8,11 +8,15 @@ const Account = React.lazy(() => import('src/pages/account/Account'));
 const NewAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
 const EditAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
 
+const Contract = React.lazy(() => import('src/pages/contract/Contract'));
+const NewContract = React.lazy(() => import('src/pages/contract/NewContract'));
+const EditContract = React.lazy(() => import('src/pages/contract/EditContract'));
+
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
 const NewProfile = React.lazy(() => import('src/pages/profile/NewProfile'));
 const EditProfile = React.lazy(() => import('src/pages/profile/UpdateProfile'));
-const NewContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
-const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
+//const NewContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
+//const EditContract = React.lazy(() => import('src/pages/profile/JobTimeline'));
 
 const Proposal = React.lazy(() => import('src/pages/proposal/Proposal'));
 const LeaveForm = React.lazy(() => import('src/pages/proposal/LeaveForm'));
@@ -89,8 +93,9 @@ const routes = [
   { path: ROUTE_PATH.ACCOUNT_UPDATE, name: ROUTE_NAME.ACCOUNT_UPDATE, component: EditAccount },
   { path: ROUTE_PATH.ACCOUNT, name: ROUTE_NAME.ACCOUNT, component: Account },
 
-  { path: ROUTE_PATH.CONTRACT_CREATE, name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
-  { path: ROUTE_PATH.CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
+  { path: ROUTE_PATH.NAV_CONTRACT_CREATE, name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
+  { path: ROUTE_PATH.NAV_CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
+  { path: ROUTE_PATH.NAV_CONTRACT, name: ROUTE_NAME.NAV_CONTRACT, component: Contract },
 
   { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },
   { path: ROUTE_PATH.PROFILE_LEAVE_REQUEST, name: ROUTE_NAME.PROFILE_REQUEST, component: LeaveForm },
