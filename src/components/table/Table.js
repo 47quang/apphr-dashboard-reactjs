@@ -1,4 +1,4 @@
-import { Getter, Plugin, Template, TemplateConnector, TemplatePlaceholder } from '@devexpress/dx-react-core';
+import { Getter, Plugin, Template, TemplatePlaceholder } from '@devexpress/dx-react-core';
 import {
   CustomPaging,
   DataTypeProvider,
@@ -18,6 +18,8 @@ import {
   Table,
   TableColumnReordering,
   TableColumnVisibility,
+  TableEditColumn,
+  TableEditRow,
   TableFixedColumns,
   TableHeaderRow,
   Toolbar,
@@ -27,7 +29,6 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
 import { Lens } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -222,127 +223,6 @@ const Label = ({ column, className, ...props }) => {
   return rvComponent;
 };
 
-const CustomTableEditColumn = ({ t, route, deleteRow, disableDelete, disableEdit, disableEditColum, isPopUp, editColumnWidth, rollUpData }) => {
-  const [openWarning, setOpenWarning] = useState(false);
-  const [deletingRowID, setDeletingRowID] = useState(-1);
-  const [openEditing, setOpenEditing] = useState(false);
-  const [rollUp, setRollUp] = useState(-1);
-  const dispatch = useDispatch();
-  const handleConfirmWarning = (e) => {
-    if (Number.isInteger(deletingRowID)) {
-      deleteRow(deletingRowID);
-    }
-    setOpenWarning(!openWarning);
-  };
-  const handleCancelWarning = () => {
-    setOpenWarning(!openWarning);
-  };
-  const handleConfirmEditing = (values) => {
-    let endTime = values.endTime;
-    endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
-    dispatch(
-      updateRollUp(
-        {
-          endTime: new Date(endTime),
-          id: rollUp.rowId,
-        },
-        rollUpData.assignmentId,
-        rollUpData.setIsReload,
-        t('message.successful_update'),
-      ),
-    );
-    setOpenEditing(!openEditing);
-  };
-  const handleCancelEditing = () => {
-    setOpenEditing(!openEditing);
-  };
-  return (
-    <Plugin>
-      {openEditing && (
-        <NewRollUp
-          isOpen={openEditing}
-          handleConfirm={handleConfirmEditing}
-          handleCancel={handleCancelEditing}
-          t={t}
-          startCC={rollUp?.row?.startTime}
-        />
-      )}
-      {openWarning && (
-        <WarningAlertDialog
-          isVisible={openWarning}
-          title={t('title.delete_row')}
-          titleConfirm={t('label.agree')}
-          handleConfirm={handleConfirmWarning}
-          titleCancel={t('label.decline')}
-          handleCancel={handleCancelWarning}
-          warningMessage={t('message.delete_warning_message')}
-        />
-      )}
-
-      <Getter
-        name="tableColumns"
-        computed={({ tableColumns }) => {
-          tableColumns = tableColumns.concat([
-            {
-              key: 'behavior' + route,
-              type: 'behavior',
-              width: editColumnWidth ? editColumnWidth : !disableEditColum ? (!disableDelete ? (!disableEdit ? '10%' : '5%') : '5%') : '0%',
-              align: 'center',
-            },
-          ]);
-          return tableColumns;
-        }}
-      />
-      <Template
-        name="tableCell"
-        predicate={({ tableColumn, tableRow }) => tableColumn.type === 'behavior' && tableRow.type === Table.ROW_TYPE && !disableEditColum}
-      >
-        {(params) => {
-          return (
-            <TemplateConnector>
-              {(getters, { deleteRows, commitDeletedRows }) => (
-                <TableCell className="px-0 py-0">
-                  <IconButton
-                    className="mx-2"
-                    hidden={disableEdit}
-                    title={t('message.edit_row')}
-                    onClick={() => {
-                      if (isPopUp) {
-                        setOpenEditing(!openEditing);
-                        setRollUp(params.tableRow);
-                      }
-                    }}
-                  >
-                    {isPopUp ? (
-                      <InfoIcon />
-                    ) : (
-                      <Link to={`${route}${params.tableRow.rowId}`}>
-                        <InfoIcon />
-                      </Link>
-                    )}
-                  </IconButton>
-
-                  <IconButton
-                    className="mx-2"
-                    hidden={disableDelete}
-                    onClick={() => {
-                      setDeletingRowID(params.tableRow.rowId);
-                      setOpenWarning(!openWarning);
-                    }}
-                    title={t('message.delete_row')}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              )}
-            </TemplateConnector>
-          );
-        }}
-      </Template>
-    </Plugin>
-  );
-};
-
 const QTable = (props) => {
   const {
     t,
@@ -371,6 +251,7 @@ const QTable = (props) => {
     notPaging,
     filters,
     filterFunction,
+    fixed,
   } = props;
   const exporterRef = useRef(null);
 
@@ -514,6 +395,99 @@ const QTable = (props) => {
   const handleDelete = async (idx) => {
     let newState = await deleteMultiFilter(idx);
     filterFunction({ filters: newState });
+  };
+  const TestComponent = ({ row, ...props }) => {
+    // console.log('TestComponent', props);
+    const [openWarning, setOpenWarning] = useState(false);
+    const [deletingRowID, setDeletingRowID] = useState(-1);
+    const [openEditing, setOpenEditing] = useState(false);
+    const [rollUp, setRollUp] = useState(-1);
+    const dispatch = useDispatch();
+    const handleConfirmWarning = (e) => {
+      if (Number.isInteger(deletingRowID)) {
+        deleteRow(deletingRowID);
+      }
+      setOpenWarning(!openWarning);
+    };
+    const handleCancelWarning = () => {
+      setOpenWarning(!openWarning);
+    };
+    const handleConfirmEditing = (values) => {
+      let endTime = values.endTime;
+      endTime = rollUpData.date.split('T')[0] + 'T' + endTime;
+      dispatch(
+        updateRollUp(
+          {
+            endTime: new Date(endTime),
+            id: rollUp.rowId,
+          },
+          rollUpData.assignmentId,
+          rollUpData.setIsReload,
+          t('message.successful_update'),
+        ),
+      );
+      setOpenEditing(!openEditing);
+    };
+    const handleCancelEditing = () => {
+      setOpenEditing(!openEditing);
+    };
+    return (
+      <TableEditColumn.Cell {...props}>
+        {openEditing && (
+          <NewRollUp
+            isOpen={openEditing}
+            handleConfirm={handleConfirmEditing}
+            handleCancel={handleCancelEditing}
+            t={t}
+            startCC={rollUp?.row?.startTime}
+          />
+        )}
+        {openWarning && (
+          <WarningAlertDialog
+            isVisible={openWarning}
+            title={t('title.delete_row')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelWarning}
+            warningMessage={t('message.delete_warning_message')}
+          />
+        )}
+        <IconButton
+          className="mx-2 my-0 p-0"
+          hidden={disableEdit}
+          title={t('message.edit_row')}
+          onClick={() => {
+            if (isPopUp) {
+              setOpenEditing(!openEditing);
+              setRollUp(row.id);
+            }
+          }}
+          style={{ width: 35, height: 35 }}
+        >
+          {isPopUp ? (
+            <InfoIcon />
+          ) : (
+            <Link to={`${route}${row.id}`}>
+              <InfoIcon />
+            </Link>
+          )}
+        </IconButton>
+
+        <IconButton
+          className="mx-2 my-0 p-0"
+          hidden={disableDelete}
+          onClick={() => {
+            setDeletingRowID(row.id);
+            setOpenWarning(!openWarning);
+          }}
+          title={t('message.delete_row')}
+          style={{ width: 35, height: 35 }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </TableEditColumn.Cell>
+    );
   };
 
   return (
@@ -723,20 +697,56 @@ const QTable = (props) => {
           {/* <ExportPanel startExport={startExport} color={'primary'} />
           <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
           <ColumnChooser /> */}
-          <TableFixedColumns />
-          {!disableEditColum && (
-            <CustomTableEditColumn
-              t={t}
-              route={route}
-              deleteRow={deleteRow}
-              disableDelete={disableDelete}
-              disableEdit={disableEdit}
-              disableEditColum={disableEditColum}
-              isPopUp={isPopUp}
-              editColumnWidth={editColumnWidth}
-              rollUpData={rollUpData}
-            />
-          )}
+          <TableEditRow />
+          {!disableEditColum && <TableEditColumn cellComponent={TestComponent} />}
+          <TableFixedColumns rightColumns={fixed ? [TableEditColumn.COLUMN_TYPE] : []} leftColumns={fixed ? ['code'] : []} />
+
+          <Getter
+            name="tableColumns"
+            computed={({ tableColumns }) => {
+              // console.log('tableColumns', tableColumns);
+              if (disableEditColum) return tableColumns;
+              let editColumn = tableColumns.shift();
+              //return tableColumns;
+              // console.log(editColumn);
+              return [...tableColumns, { ...editColumn, width: 150 }];
+            }}
+          />
+
+          <Getter
+            name="tableHeaderColumnChains"
+            computed={({ tableHeaderColumnChains }) => {
+              if (!fixed) return tableHeaderColumnChains;
+              // console.log('tableHeaderColumnChainstableHeaderColumnChains', tableHeaderColumnChains);
+              tableHeaderColumnChains =
+                tableHeaderColumnChains && tableHeaderColumnChains.length > 0
+                  ? tableHeaderColumnChains.map((ele) => {
+                      ele.push({
+                        columns: [
+                          {
+                            width: editColumnWidth
+                              ? editColumnWidth
+                              : !disableEditColum
+                              ? !disableDelete
+                                ? !disableEdit
+                                  ? '10%'
+                                  : '5%'
+                                : '5%'
+                              : '0%',
+                            key: 'Symbol(editCommand)',
+                            type: 'Symbol(editCommand)',
+                            fixed: 'right',
+                          },
+                        ],
+                        start: 7,
+                        fixed: 'right',
+                      });
+                      return ele;
+                    })
+                  : undefined;
+              return tableHeaderColumnChains;
+            }}
+          />
 
           {!notPaging && <PagingPanel pageSizes={paging.pageSizes} />}
         </Grid>
@@ -744,24 +754,6 @@ const QTable = (props) => {
         {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' && (
           <div className="p-0">
-            {/* <div className="row p-0 m-1">
-              <div className="col-2">
-                <AttachMoney  className="mr-2 mb-2"  style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.leave_pay_req')}</p>
-              </div>
-              <div className="col-2">
-                <MoneyOff  className="mr-2 mb-2"  style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
-              </div>
-              <div className="col-2">
-                <CheckCircle  className="mr-2 mb-2"  style={{ color: COLORS.SUCCESS }} />
-                <p className="d-inline">{t('label.roll_up_success')}</p>
-              </div>
-              <div className="col-6 d-flex align-items-start">
-                <Cancel  className="mr-2 mb-2"  style={{ color: COLORS.ERROR }} />
-                <p className="d-inline">{t('label.absent_roll_Call')}</p>
-              </div>
-            </div> */}
             <div className="row m-2">
               <div className="col-2">
                 <Lens className="mr-2 mb-2" style={{ color: COLORS.HOLIDAY_HEADER }} />

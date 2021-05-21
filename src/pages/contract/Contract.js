@@ -2,24 +2,24 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteAllowance, fetchAllowances, setEmptyAllowances } from 'src/stores/actions/allowance';
-import PropTypes from 'prop-types';
-import Page404 from 'src/pages/page404/Page404';
+import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
+import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
+import Page404 from '../page404/Page404';
 
-const Allowance = ({ t }) => {
+const Contract = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const dispatch = useDispatch();
-  const allowances = useSelector((state) => state.allowance.allowances);
-  const columnDef = [
-    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '25%', wordWrapEnabled: true },
+  const columnDefOfAccounts = [
+    { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'fullname', title: t('label.full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'employee', title: t('label.profile'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
-      title: t('label.allowance_code'),
+      title: t('label.username'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -28,8 +28,8 @@ const Allowance = ({ t }) => {
       ],
       type: 'text',
     },
-    name: {
-      title: t('label.allowance_name'),
+    fullname: {
+      title: t('label.email'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -39,27 +39,34 @@ const Allowance = ({ t }) => {
       type: 'text',
     },
     type: {
-      title: t('label.allowance_type'),
+      title: t('label.phone_number'),
       operates: [
         {
-          id: FILTER_OPERATOR.EQUAL,
-          name: t('filter_operator.='),
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
         },
       ],
-      type: 'select',
-      values: [
-        { id: 'tax', name: t('label.tax') },
-        { id: 'no_tax', name: t('label.no_tax') },
-        { id: 'partial_tax', name: t('label.partial_tax') },
+      type: 'text',
+    },
+    profileId: {
+      title: t('label.phone_number'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
       ],
+      type: 'text',
     },
   };
+  const dispatch = useDispatch();
+  const contracts = useSelector((state) => state.contract.contracts);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
+    loading: false,
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-    loading: false,
   });
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
@@ -83,15 +90,10 @@ const Allowance = ({ t }) => {
       loading: isLoading,
     }));
   };
-  const decreaseTotal = (decrease) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: prevState.total - decrease,
-    }));
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
+    if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
-        fetchAllowances(
+        fetchContractTable(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -100,15 +102,11 @@ const Allowance = ({ t }) => {
           setLoading,
         ),
       );
-    return () => {
-      dispatch(setEmptyAllowances());
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
   const filterFunction = (params) => {
     dispatch(
-      fetchAllowances(
+      fetchContractTable(
         {
           ...params,
           page: paging.currentPage,
@@ -119,11 +117,10 @@ const Allowance = ({ t }) => {
       ),
     );
   };
-
   const deleteRow = async (rowId) => {
-    dispatch(deleteAllowance(rowId, decreaseTotal, t('message.successful_delete')));
+    dispatch(deleteContract(rowId, t('message.successful_delete')));
     dispatch(
-      fetchAllowances(
+      fetchContractTable(
         {
           page: paging.currentPage,
           perpage: paging.pageSize,
@@ -133,30 +130,29 @@ const Allowance = ({ t }) => {
       ),
     );
   };
-  if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
+  if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <QTable
           t={t}
-          columnDef={columnDef}
-          data={allowances}
-          route={ROUTE_PATH.ALLOWANCE + '/'}
-          idxColumnsFilter={[0, 1]}
+          columnDef={columnDefOfAccounts}
+          data={contracts}
+          route={ROUTE_PATH.NAV_CONTRACT + '/'}
           deleteRow={deleteRow}
+          //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_ALLOWANCE)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_ALLOWANCE)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_ALLOWANCE)}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_USER)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_USER)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );
   else return <Page404 />;
 };
-Allowance.propTypes = {
-  t: PropTypes.func,
-};
-export default Allowance;
+
+export default Contract;
