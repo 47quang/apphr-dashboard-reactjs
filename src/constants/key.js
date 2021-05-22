@@ -5,6 +5,7 @@ export const ROUTE_NAME = {
   NEW_ACCOUNT: 'New Account',
   ACCOUNT_UPDATE: 'Account Update',
   PROFILE: 'Profile',
+  NAV_CONTRACT: 'Contract',
   NEW_PROFILE: 'New Profile',
   NEW_CONTRACT: 'New Contract',
   PROFILE_REQUEST: 'Proposal',
@@ -83,6 +84,10 @@ export const ROUTE_PATH = {
   COURSE: '/course',
   PAGE_404: '/404',
 
+  NAV_CONTRACT: '/contract',
+  NAV_CONTRACT_CREATE: '/contract' + CREATE,
+  NAV_CONTRACT_UPDATE: '/contract' + ID,
+
   ACCOUNT: '/account',
   ACCOUNT_CREATE: '/account' + CREATE,
   ACCOUNT_UPDATE: '/account' + ID,
@@ -90,9 +95,10 @@ export const ROUTE_PATH = {
   PROFILE: '/profile',
   PROFILE_UPDATE: '/profile' + ID,
   PROFILE_CREATE: '/profile' + CREATE,
-  CONTRACT: '/profile/contract',
-  CONTRACT_CREATE: '/profile/contract/' + CREATE,
-  CONTRACT_UPDATE: '/profile/contract/' + ID,
+
+  CONTRACT: '/contract',
+  CONTRACT_CREATE: '/contract/' + CREATE,
+  CONTRACT_UPDATE: '/contract/' + ID,
   PROFILE_LEAVE_REQUEST: '/profile' + ID + '/leave.id=:id',
   PROFILE_REMOTE_REQUEST: '/profile' + ID + '/remote.id=:id',
   PROFILE_OVERTIME_REQUEST: '/profile' + ID + '/overtime.id=:id',

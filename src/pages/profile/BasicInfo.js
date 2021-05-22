@@ -225,7 +225,7 @@ const BasicInfo = ({ t, history, match }) => {
                             inputID={'firstname'}
                             labelText={t('label.employee_first_name')}
                             inputType={'text'}
-                            placeholder={t('placeholder.enter_employee_firstname')}
+                            placeholder={t('placeholder.enter_employee_first_name')}
                             inputClassName={'form-control'}
                             isRequiredField
                             isTouched={touched.firstname}
@@ -242,7 +242,7 @@ const BasicInfo = ({ t, history, match }) => {
                             inputID={'lastname'}
                             labelText={t('label.employee_last_name')}
                             inputType={'text'}
-                            placeholder={t('placeholder.enter_employee_lastname')}
+                            placeholder={t('placeholder.enter_employee_last_name')}
                             inputClassName={'form-control'}
                             isRequiredField
                             isTouched={touched.lastname}

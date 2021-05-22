@@ -1,5 +1,5 @@
-import { RESPONSE_CODE } from 'src/constants/key';
-import { formatDateInput } from 'src/utils/datetimeUtils';
+import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateInput, formatDate } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleContractExceptions = (err, dispatch, functionName) => {
@@ -25,7 +25,18 @@ const handleContractExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchContracts = (params, setLoading) => {
+
+const type = {
+  limitation: 'Có xác định thời hạn',
+  un_limitation: 'Không xác định thời hạn',
+  season: 'Thuê khoán',
+};
+const status = {
+  inactive: 'Không có hiệu lực',
+  active: 'Không có hiệu lực',
+};
+
+export const fetchContracts = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
@@ -34,6 +45,7 @@ export const fetchContracts = (params, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map(async (contract) => {
+                contract.text_type = type[contract.type];
                 contract.handleDate = formatDateInput(contract.handleDate);
                 contract.expiredDate = formatDateInput(contract.expiredDate);
                 contract.validDate = formatDateInput(contract.validDate);
@@ -59,6 +71,37 @@ export const fetchContracts = (params, setLoading) => {
             : [];
         payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        if (onTotalChange) onTotalChange();
+      })
+      .catch((err) => {
+        handleContractExceptions(err, dispatch, 'fetchContracts');
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
+      });
+  };
+};
+
+export const fetchContractTable = (params, onTotalChange, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.contract
+      .getAll(params)
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((contract) => {
+                contract.type = type[contract.type];
+                contract.status = status[contract.status];
+                contract.text_type = type[contract.periodicPayment];
+                contract.handleDate = formatDate(contract.handleDate);
+                contract.startWork = formatDate(contract.startWork);
+                contract.employee = contract.profileId ? contract.profile?.code + ' - ' + contract.profile?.fullname : '';
+                return contract;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContracts');
@@ -117,8 +160,29 @@ export const fetchContract = (id) => {
   return (dispatch, getState) => {
     api.contract
       .get(id)
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
+      .then(async ({ payload }) => {
+        payload.text_type = type[payload.type];
+        payload.handleDate = formatDateInput(payload.handleDate);
+        payload.expiredDate = formatDateInput(payload.expiredDate);
+        payload.validDate = formatDateInput(payload.validDate);
+        payload.startWork = formatDateInput(payload.startWork);
+        payload['formOfPayment'] = payload?.wage?.type;
+        payload['wageId'] = payload?.wage?.id;
+        payload['amount'] = payload?.wage?.amount;
+        payload['standardHours'] = payload.standardHours ?? undefined;
+        payload['wages'] = await api.wage.getAll({ type: payload?.wage?.type }).then(({ payload }) => payload);
+        payload['attributes'] =
+          payload.contractAttributes && payload.contractAttributes.length > 0
+            ? payload.contractAttributes.map((attr) => {
+                let rv = {};
+                rv.value = attr.value;
+                rv.name = attr.attribute.name;
+                rv.type = attr.attribute.type;
+                rv.id = attr.attribute.id;
+                return rv;
+              })
+            : [];
+        dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContract');
@@ -126,7 +190,7 @@ export const fetchContract = (id) => {
   };
 };
 
-export const createContract = (params, success_msg, handleResetNewContract) => {
+export const createContract = (params, success_msg, handleResetNewContract, history) => {
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
@@ -164,9 +228,9 @@ export const createContract = (params, success_msg, handleResetNewContract) => {
                 return rv;
               })
             : [];
-        dispatch({ type: REDUX_STATE.contract.CREATE_CONTRACT, payload });
-        handleResetNewContract();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleResetNewContract) handleResetNewContract();
+        else history.push(ROUTE_PATH.CONTRACT + `/${payload.id}`);
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'createContract');
@@ -214,7 +278,7 @@ export const updateContract = (params, success_msg) => {
                 return rv;
               })
             : [];
-        dispatch({ type: REDUX_STATE.contract.UPDATE_CONTRACT, payload });
+        dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -228,7 +292,7 @@ export const deleteContract = (id, success_msg, handleAfterSuccess) => {
     api.contract
       .delete(id)
       .then(({ payload }) => {
-        handleAfterSuccess();
+        if (handleAfterSuccess) handleAfterSuccess();
         dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -242,7 +306,7 @@ export const fetchBranches = () => {
   return (dispatch, getState) => {
     api.branch
       .getAll()
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
       })
       .catch((err) => {
@@ -303,6 +367,12 @@ export const createWageHistory = (params, success_msg) => {
   };
 };
 export const setEmptyContracts = () => {
+  return {
+    type: REDUX_STATE.contract.EMPTY_LIST_CONTRACT,
+    payload: [],
+  };
+};
+export const setEmptyContract = () => {
   return {
     type: REDUX_STATE.contract.EMPTY_VALUE,
     payload: [],

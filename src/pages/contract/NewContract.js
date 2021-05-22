@@ -1,47 +1,31 @@
 import { CContainer } from '@coreui/react';
-import { CircularProgress, Switch } from '@material-ui/core';
-import { Add, AddCircle } from '@material-ui/icons';
+import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
-import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
-import { PERMISSION } from 'src/constants/key';
-import { NewContractSchema } from 'src/schema/formSchema';
+import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { NewContractSchemaWithProfileID } from 'src/schema/formSchema';
+import { fetchProfiles } from 'src/stores/actions/account';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import {
-  activeContract,
-  createContract,
-  deleteContract,
-  fetchAllowances,
-  fetchBranches,
-  fetchContracts,
-  fetchWagesByType,
-  inactiveContract,
-  setEmptyContracts,
-  updateContract,
-} from 'src/stores/actions/contract';
+import { createContract, fetchAllowances, fetchBranches, fetchWagesByType } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
-import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
+import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
-const JobTimelineInfo = ({ t, history, match }) => {
+const NewContract = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const profileId = +match?.params?.id;
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
-  const [loading, setLoading] = useState(false);
+  const profiles = useSelector((state) => state.account.profiles);
 
-  const jobTimelineInfo = {
-    contractInfo: useSelector((state) => state.contract.contracts),
-  };
   const newContract = {
     isMinimize: false,
     status: 'inactive',
@@ -92,12 +76,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
-      dispatch(fetchContracts({ profileId: +profileId, status: 'active' }, setLoading));
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
+      dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
+
       return () => {
-        dispatch(setEmptyContracts());
+        //dispatch(setEmptyContracts());
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,39 +90,45 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   function create(values) {
     let form = values;
-    form.profileId = +match.params.id;
 
     if (!form.branchId) delete form.branchId;
-    // else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
-    // if (form.departmentId === '0') delete form.departmentId;
-    // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
-    // if (form.positionId === '0') delete form.positionId;
-    // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
-    if (form.id) {
-      dispatch(updateContract(form, t('message.successful_update')));
+    if (form.type === 'season') {
+      delete form.wageId;
+      delete form.formOfPayment;
+      delete form.amount;
+      delete form.dayOff;
+      delete form.periodicPayment;
+      delete form.typeTax;
+      delete form.salaryGroup;
+      delete form.wageId;
+      delete form.salary;
+      delete form.standardHours;
     } else {
-      if (form.type === 'season') {
-        delete form.wageId;
-        delete form.formOfPayment;
-        delete form.amount;
-        delete form.dayOff;
-        delete form.periodicPayment;
-        delete form.typeTax;
-        delete form.salaryGroup;
-        delete form.wageId;
-        delete form.salary;
-        delete form.standardHours;
-      } else {
-        form.standardHours = +form.standardHours;
-      }
-      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
+      form.standardHours = +form.standardHours;
     }
+    // console.log('createContract', form);
+    dispatch(createContract(form, t('message.successful_create'), undefined, history));
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
     return (
       <>
         <div className="row">
+          <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values.profileId ?? 0}
+            labelText={t('label.profileId')}
+            selectClassName={'form-control'}
+            onBlur={handleBlur('profileId')}
+            onChange={handleChange('profileId')}
+            inputID={t('label.profileId')}
+            lstSelectOptions={profiles}
+            isRequiredField
+            placeholder={t('placeholder.select_profile')}
+            isTouched={touched.profileId}
+            isError={errors.profileId && touched.profileId}
+            errorMessage={t(errors.profileId)}
+          />
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.code ?? ''}
@@ -161,7 +152,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             inputID={`fullname`}
             labelText={t('label.contract_fullname')}
             inputType={'text'}
-            placeholder={t('placeholder.enter_contract_full_name')}
+            placeholder={t('placeholder.enter_contract_fullname')}
             inputClassName={'form-control'}
             isRequiredField
             isTouched={touched.fullname}
@@ -186,8 +177,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             errorMessage={t(errors.type)}
             lstSelectOptions={type}
           />
-        </div>
-        <div className="row">
           <CommonSelectInput
             containerClassName={'form-group col-xl-4'}
             value={values?.typeTax ?? ''}
@@ -234,8 +223,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             isError={errors && errors?.validDate && touched && touched?.validDate}
             errorMessage={t(errors?.validDate)}
           />
-        </div>
-        <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.startWork ?? ''}
@@ -599,178 +586,55 @@ const JobTimelineInfo = ({ t, history, match }) => {
     );
   };
 
-  const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
-
-  const handleCloseDeleteAlert = () => {
-    setIsVisibleDeleteAlert(false);
-  };
-
-  const newContractRef = useRef();
-
-  const handleResetNewContract = () => {
-    newContractRef.current.handleReset();
-    document.getElementById('newContract').hidden = true;
-    document.getElementById('addBtn').disabled = false;
-  };
   return (
-    <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
-        </div>
-      ) : (
-        <CContainer fluid className="c-main">
-          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-            <button
-              type="button"
-              className="btn btn-success rounded-circle p-3"
-              hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newContract').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add fontSize="large" />
-            </button>
-          </div>
-          <div className="m-auto">
-            <Formik
-              innerRef={newContractRef}
-              initialValues={newContract}
-              validationSchema={NewContractSchema}
-              enableReinitialize
-              onSubmit={(values) => {
-                create(values);
-              }}
-            >
-              {(props) => {
-                props.isCreate = true;
-                return (
-                  <form id="newContract" hidden={true} className="p-0 m-0">
-                    <div className="shadow bg-white rounded mx-4 p-4">
-                      <h5>{t('label.create_new')}.</h5>
-                      <hr className="mt-1" />
-                      <BodyContract {...props} />
+    <CContainer fluid className="c-main">
+      <div className="m-auto">
+        <Formik
+          initialValues={newContract}
+          validationSchema={NewContractSchemaWithProfileID}
+          enableReinitialize
+          onSubmit={(values) => {
+            create(values);
+          }}
+        >
+          {(props) => {
+            props.isCreate = true;
+            return (
+              <form id="newContract" className="p-0 m-0">
+                <div className="shadow bg-white rounded mx-4 p-4">
+                  <h5>{t('label.create_new')}.</h5>
+                  <hr className="mt-1" />
+                  <BodyContract {...props} />
 
-                      <hr className="mt-1" />
-                      {renderButtons([
-                        {
-                          type: 'button',
-                          className: `btn btn-primary  mx-2`,
-                          onClick: (e) => {
-                            handleResetNewContract();
-                          },
-                          name: t('label.cancel'),
-                          position: 'right',
-                        },
-                        {
-                          type: 'button',
-                          className: `btn btn-primary px-4 ml-2`,
-                          onClick: (e) => {
-                            props.handleSubmit(e);
-                          },
-                          name: t('label.create_new'),
-                        },
-                      ])}
-                    </div>
-                    <br />
-                  </form>
-                );
-              }}
-            </Formik>
-            {permissionIds.includes(PERMISSION.LIST_CONTRACT) &&
-              jobTimelineInfo.contractInfo &&
-              jobTimelineInfo.contractInfo.length > 0 &&
-              jobTimelineInfo.contractInfo.map((contract, index) => {
-                return (
-                  <Formik
-                    key={index}
-                    initialValues={contract}
-                    validationSchema={NewContractSchema}
-                    enableReinitialize
-                    onSubmit={(values) => {
-                      create(values);
-                    }}
-                  >
-                    {(props) => {
-                      return (
-                        <form className="p-0 m-0">
-                          <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                            <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                              <Switch
-                                checked={props.values.status === 'active'}
-                                name={`status`}
-                                onChange={(e) => {
-                                  e.target.checked
-                                    ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
-                                    : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
-                                }}
-                              />
-                              {props.values.code + ' - ' + props.values.fullname}
-                            </div>
-
-                            <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                              {props.values.expiredDate
-                                ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                                : t('label.from') + formatDate(props.values.handleDate)}
-                            </div>
-                            <hr className="mt-1" />
-                            <div>
-                              <BodyContract {...props} />
-                              <hr className="mt-1" />
-                              {isVisibleDeleteAlert && (
-                                <WarningAlertDialog
-                                  isVisible={isVisibleDeleteAlert}
-                                  title={t('title.confirm')}
-                                  warningMessage={t('message.confirm_delete_contract')}
-                                  titleConfirm={t('label.agree')}
-                                  titleCancel={t('label.cancel')}
-                                  handleCancel={(e) => {
-                                    handleCloseDeleteAlert();
-                                  }}
-                                  handleConfirm={(e) => {
-                                    dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
-                                  }}
-                                />
-                              )}
-
-                              {renderButtons(
-                                permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
-                                  ? [
-                                      {
-                                        type: 'button',
-                                        className: `btn btn-primary px-4 mx-2`,
-                                        onClick: (e) => {
-                                          props.handleReset(e);
-                                        },
-                                        name: t('label.reset'),
-                                        position: 'right',
-                                      },
-                                      {
-                                        type: 'button',
-                                        className: `btn btn-primary px-4 ml-2`,
-                                        onClick: (e) => {
-                                          props.handleSubmit(e);
-                                        },
-                                        name: t('label.save'),
-                                      },
-                                    ]
-                                  : [],
-                              )}
-                            </div>
-                          </div>
-                        </form>
-                      );
-                    }}
-                  </Formik>
-                );
-              })}
-          </div>
-        </CContainer>
-      )}
-    </>
+                  <hr className="mt-1" />
+                  {renderButtons([
+                    {
+                      type: 'button',
+                      className: `btn btn-primary mr-4`,
+                      onClick: (e) => {
+                        history.push(ROUTE_PATH.NAV_CONTRACT);
+                      },
+                      name: t('label.back'),
+                      position: 'left',
+                    },
+                    {
+                      type: 'button',
+                      className: `btn btn-primary px-4 ml-2`,
+                      onClick: (e) => {
+                        props.handleSubmit(e);
+                      },
+                      name: t('label.create_new'),
+                    },
+                  ])}
+                </div>
+                <br />
+              </form>
+            );
+          }}
+        </Formik>
+      </div>
+    </CContainer>
   );
 };
 
-export default JobTimelineInfo;
+export default NewContract;

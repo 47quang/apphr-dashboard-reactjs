@@ -53,12 +53,13 @@ export const createRollUp = (params, setIsReload, success_msg) => {
   };
 };
 
-export const updateRollUp = (data, assignmentId, success_msg) => {
+export const updateRollUp = (data, assignmentId, setIsReload, success_msg) => {
   return (dispatch, getState) => {
     api.rollUp
       .put(data)
       .then(({ payload }) => {
         dispatch(fetchAssignment(assignmentId));
+        if (setIsReload) setIsReload(true);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
