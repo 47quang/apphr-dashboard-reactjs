@@ -19,17 +19,7 @@ const Contract = ({ t, location, history }) => {
   ];
   const filters = {
     code: {
-      title: t('label.username'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
-      type: 'text',
-    },
-    fullname: {
-      title: t('label.email'),
+      title: t('label.contract_code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -39,7 +29,31 @@ const Contract = ({ t, location, history }) => {
       type: 'text',
     },
     type: {
-      title: t('label.phone_number'),
+      title: t('label.contract_type'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        {
+          id: 'limitation',
+          name: t('label.limitation'),
+        },
+        {
+          id: 'un_limitation',
+          name: t('label.un_limitation'),
+        },
+        {
+          id: 'season',
+          name: t('label.season'),
+        },
+      ],
+    },
+    firstname: {
+      title: t('label.employee_first_name'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -48,8 +62,8 @@ const Contract = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    profileId: {
-      title: t('label.phone_number'),
+    lastname: {
+      title: t('label.employee_last_name'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -57,6 +71,36 @@ const Contract = ({ t, location, history }) => {
         },
       ],
       type: 'text',
+    },
+    profile_code: {
+      title: t('label.employee_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    status: {
+      title: t('label.status'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        {
+          id: 'active',
+          name: t('label.active'),
+        },
+        {
+          id: 'inactive',
+          name: t('label.inactive'),
+        },
+      ],
     },
   };
   const dispatch = useDispatch();

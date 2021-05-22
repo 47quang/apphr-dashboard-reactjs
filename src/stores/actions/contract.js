@@ -33,7 +33,7 @@ const type = {
 };
 const status = {
   inactive: 'Không có hiệu lực',
-  active: 'Không có hiệu lực',
+  active: 'Có hiệu lực',
 };
 
 export const fetchContracts = (params, onTotalChange, setLoading) => {
@@ -45,6 +45,7 @@ export const fetchContracts = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map(async (contract) => {
+                contract.name = contract.code + ' - ' + status[contract.status] + ' - ' + contract.fullname;
                 contract.text_type = type[contract.type];
                 contract.handleDate = formatDateInput(contract.handleDate);
                 contract.expiredDate = formatDateInput(contract.expiredDate);

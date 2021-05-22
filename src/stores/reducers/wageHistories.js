@@ -2,7 +2,17 @@ import { REDUX_STATE } from '../states';
 
 const initialState = {
   wageHistories: [],
-  wageHistory: {},
+  wageHistory: {
+    profileId: '',
+    contractId: '',
+    type: '',
+    wageId: '',
+    amount: '',
+    startDate: '',
+    expiredDate: '',
+    wages: [],
+    code: '',
+  },
 };
 
 const wageHistoryReducer = (state = initialState, { type, payload }) => {

@@ -13,8 +13,8 @@ const NewContract = React.lazy(() => import('src/pages/contract/NewContract'));
 const EditContract = React.lazy(() => import('src/pages/contract/EditContract'));
 
 const Benefit = React.lazy(() => import('src/pages/benefit/Benefit'));
-//const NewContract = React.lazy(() => import('src/pages/contract/NewContract'));
-//const EditContract = React.lazy(() => import('src/pages/contract/EditContract'));
+const NewBenefit = React.lazy(() => import('src/pages/benefit/NewBenefit'));
+const EditBenefit = React.lazy(() => import('src/pages/benefit/UpdateBenefit'));
 
 const Profile = React.lazy(() => import('src/pages/profile/Profile'));
 const NewProfile = React.lazy(() => import('src/pages/profile/NewProfile'));
@@ -101,8 +101,8 @@ const routes = [
   { path: ROUTE_PATH.NAV_CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
   { path: ROUTE_PATH.NAV_CONTRACT, name: ROUTE_NAME.NAV_CONTRACT, component: Contract },
 
-  // { path: ROUTE_PATH.NAV_CONTRACT_CREATE, name: ROUTE_NAME.NEW_CONTRACT, component: NewContract },
-  //{ path: ROUTE_PATH.NAV_CONTRACT_UPDATE, name: ROUTE_NAME.CONTRACT_UPDATE, component: EditContract },
+  { path: ROUTE_PATH.NAV_BENEFIT_CREATE, name: ROUTE_NAME.NAV_BENEFIT_CREATE, component: NewBenefit },
+  { path: ROUTE_PATH.NAV_BENEFIT_UPDATE, name: ROUTE_NAME.NAV_BENEFIT_UPDATE, component: EditBenefit },
   { path: ROUTE_PATH.NAV_BENEFIT, name: ROUTE_NAME.NAV_BENEFIT, component: Benefit },
 
   { path: ROUTE_PATH.PROFILE_CREATE, name: ROUTE_NAME.NEW_PROFILE, component: NewProfile },

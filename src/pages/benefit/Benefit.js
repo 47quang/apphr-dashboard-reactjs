@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
-import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
 import { deleteWageHistory, fetchWageHistories } from 'src/stores/actions/wageHistories';
 import Page404 from '../page404/Page404';
 
 const Benefit = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
-    { name: 'code', title: t('label._code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'contractId', title: t('label.contract'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.benefit_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'contractName', title: t('label.contract'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
@@ -115,8 +115,7 @@ const Benefit = ({ t, location, history }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteWageHistory(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchWageHistories(
         {
@@ -127,6 +126,9 @@ const Benefit = ({ t, location, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = (rowId) => {
+    dispatch(deleteWageHistory(rowId, handleAfterDelete, t('message.successful_delete')));
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
@@ -146,6 +148,7 @@ const Benefit = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );

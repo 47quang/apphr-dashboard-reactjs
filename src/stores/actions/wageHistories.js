@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDate, formatDateInput } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleWageExceptions = (err, dispatch, functionName) => {
@@ -34,13 +35,16 @@ export const fetchWageHistories = (params, onTotalChange, setLoading) => {
     api.wageHistory
       .getAll(params)
       .then(({ payload, total }) => {
-        // payload =
-        //   payload && payload.length > 0
-        //     ? payload.map((wage) => {
-        //         wage.type = paymentType[wage.type];
-        //         return wage;
-        //       })
-        //     : [];
+        payload =
+          payload && payload.length > 0
+            ? payload.map((wage) => {
+                wage.contractName = wage?.contract?.code + ' - ' + wage?.contract?.fullname;
+                wage.employee = wage.profile.code + ' - ' + wage.profile.fullname;
+                wage.type = paymentType[wage.type];
+                wage.startDate = formatDate(wage.startDate);
+                return wage;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORIES, payload: payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -58,7 +62,11 @@ export const fetchWageHistory = (id, setLoading) => {
   return (dispatch, getState) => {
     api.wageHistory
       .get(id)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
+        payload.type = payload?.wage?.type;
+        payload.wages = await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload);
+        payload.startDate = formatDateInput(payload.startDate);
+        payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
       })
       .catch((err) => {
@@ -75,9 +83,8 @@ export const createWageHistory = (params, history, success_msg) => {
     api.wageHistory
       .post(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-        history.push(ROUTE_PATH.NAV_BENEFIT_CREATE + `/${payload.id}`);
+        history.push(ROUTE_PATH.NAV_BENEFIT + `/${payload.id}`);
       })
       .catch((err) => {
         handleWageExceptions(err, dispatch, 'createWageHistory');
@@ -90,6 +97,11 @@ export const updateWageHistory = (data, success_msg) => {
     api.wageHistory
       .put(data)
       .then(({ payload }) => {
+        payload.type = payload?.wage?.type;
+        payload.wages = data.wages;
+        payload.startDate = formatDateInput(payload.startDate);
+        payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -99,12 +111,12 @@ export const updateWageHistory = (data, success_msg) => {
   };
 };
 
-export const deleteWageHistory = (id, success_msg) => {
+export const deleteWageHistory = (id, handleAfterDelete, success_msg) => {
   return (dispatch, getState) => {
     api.wageHistory
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.wageHistory.DELETE_WAGE_HISTORY, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

@@ -34,6 +34,8 @@
   "Contract Settings": "Cấu hình hợp đồng",
   "Company Info": "Thông tin doanh nghiệp",
   "label": {
+    "contract": "Hợp đồng",
+    "benefit_code": "Mã đợt lương",
     "assignments": "Các ca làm việc",
     "success_roll_call": "Điểm danh đúng giờ",
     "late_roll_call": "Vào muộn / ra sớm",
@@ -183,19 +185,19 @@
     "trial_period_pay_rates": "Probationary pay rate",
     "payroll": "Pay period",
     "delete": "Delete",
-    "contract_fullname": "Contract Full Name",
-    "avatar": "Avatar",
-    "employee": "Employee",
-    "employee_last_name": "Last Name",
-    "employee_first_name": "First Name",
-    "employee_full_name": "Full Name",
-    "update": "Update",
-    "save": "Save",
-    "cancel": "Cancel",
-    "back": "Back",
-    "create_new": "New",
-    "new_field": "New Field",
-    "add": "Add",
+    "contract_fullname": "Tên hợp đồng",
+    "avatar": "Ảnh đại diện",
+    "employee": "Nhân viên",
+    "employee_last_name": "Tên",
+    "employee_first_name": "Họ",
+    "employee_full_name": "Họ và tên",
+    "update": "Cập nhật",
+    "save": "Lưu",
+    "cancel": "Hũy",
+    "back": "Quay lại",
+    "create_new": "Tạo mới",
+    "new_field": "Trường mới",
+    "add": "Thêm",
     "add_allowance": "Add new allowance",
     "reset": "Reset",
     "close_all_cap": "CLOSE",
@@ -308,8 +310,8 @@
     "certificate_type": "Loại chứng chỉ",
     "certificate_name": "Tên chứng chỉ",
     "education_place": "Nơi đào tạo",
-    "contract_code": "Số contract",
-    "contract_type": "Loại contract",
+    "contract_code": "Số hợp đồng",
+    "contract_type": "Loại hợp đồng",
     "status": "Tình trạng",
     "male": "Nam",
     "female": "Nữ",
@@ -337,7 +339,15 @@
     "salary_level": "Mức lương",
     "allowance": "Trợ cấp",
     "allowance_level": "Mức trợ cấp",
-    "add_new_field": "Add New Field"
+    "add_new_field": "Add New Field",
+    "resident": "Cá nhân có cư trứ",
+    "non_resident": "Cá nhân không cư trứ",
+    "limitation": "Có xác định thời hạn",
+    "un_limitation": "Không xác định thời hạn",
+    "season": "Thuê khoán",
+    "inactive":"Không có hiệu lực",
+    "active": "Có hiệu lực"
+
   },
   "title": {
     "confirm": "Xác nhận",
@@ -393,6 +403,7 @@
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
   },
   "placeholder": {
+    "select_contract" :"Chọn hợp đồng",
     "enter_remote_code": "Nhập mã xin làm từ xa",
     "enter_overtime_code": "Nhập mã xin làm thêm giờ",
     "enter_leave_code": "Nhập mã xin nghỉ",
@@ -507,7 +518,10 @@
     "enter_wage_name": "Nhập tên nhóm lương",
     "enter_allowance_code": "Nhập mã trợ cấp",
     "enter_allowance_name": "Nhập tên trợ cấp",
-    "enter_allowance_amount": "Nhập mức trợ cấp"
+    "enter_allowance_amount": "Nhập mức trợ cấp",
+    "enter_contract_fullname": "Nhập tên hợp đồng",
+    "select_benefit_status": "Chọn trạng thái đợt lương",
+    "enter_benefit_code": "Nhập mã đợt lương"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -656,7 +670,9 @@
     "required_enter_contact_url": "Phải nhập url",
     "allowance_level_must_be_integer": "Mức phụ cấp phải là một số nguyên",
     "allowance_level_must_not_be_negative": "Mức phụ cấp phải là một số không âm",
-    "required_enter_allowance_level": "Bắt buộc phải nhập mức phụ cấp"
+    "required_enter_allowance_level": "Bắt buộc phải nhập mức phụ cấp",
+    "required_select_contract_id": "Bắt buộc phải chọn hợp đồng",
+    "required_enter_benefit_code": "Bắt buộc phải nhập mã đợt lương"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"
