@@ -161,7 +161,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             inputID={`fullname`}
             labelText={t('label.contract_fullname')}
             inputType={'text'}
-            placeholder={t('placeholder.enter_contract_fullname')}
+            placeholder={t('placeholder.enter_contract_full_name')}
             inputClassName={'form-control'}
             isRequiredField
             isTouched={touched.fullname}

@@ -111,7 +111,7 @@ const AddressInfo = ({ t, history, match }) => {
           onBlur={handleBlur('type')}
           onChange={handleChange('type')}
           inputID={'type'}
-          placeholder={t('placeholder.select_contact_channels')}
+          placeholder={t('placeholder.select_contact_channel')}
           lstSelectOptions={channels}
           isRequiredField
           isTouched={touched.type}
@@ -141,7 +141,7 @@ const AddressInfo = ({ t, history, match }) => {
         validationSchema={ContactSchema}
         innerRef={contactFormRef}
         onSubmit={(values) => {
-          dispatch(createNewContact(values, profileId, t('message.successful_create_contact'), contactFormRef));
+          dispatch(createNewContact(values, profileId, t('message.successful_create'), contactFormRef));
         }}
       >
         {({ values, errors, touched, handleReset, handleSubmit, handleBlur, handleChange }) => {
@@ -190,7 +190,7 @@ const AddressInfo = ({ t, history, match }) => {
         enableReinitialize
         validationSchema={ContactSchema}
         onSubmit={(values) => {
-          dispatch(updateContact(values, profileId, t('message.successful_update_contact')));
+          dispatch(updateContact(values, profileId, t('message.successful_update')));
         }}
       >
         {({ values, errors, touched, handleSubmit, handleBlur, handleChange }) => {
@@ -240,7 +240,7 @@ const AddressInfo = ({ t, history, match }) => {
                         type="button"
                         className="btn btn-warning mx-auto text-white"
                         onClick={(e) => {
-                          dispatch(deleteContact(contactValues.id, profileId, setClosePopOver, t('message.successful_delete_contact')));
+                          dispatch(deleteContact(contactValues.id, profileId, setClosePopOver, t('message.successful_delete')));
                         }}
                       >
                         {t('label.agree')}
