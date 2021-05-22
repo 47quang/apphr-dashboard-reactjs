@@ -42,7 +42,7 @@ const TheSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-        <img src="images/apphr_logo.png" alt="" style={{ height: '35px' }} />
+        <img src="images/long_logo_web.svg" alt="" style={{ height: '45px' }} />
       </CSidebarBrand>
 
       <CSidebarNav>

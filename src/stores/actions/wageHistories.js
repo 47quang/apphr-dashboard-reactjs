@@ -1,13 +1,13 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-const handleRoleExceptions = (err, dispatch, functionName) => {
+const handleWageExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
+        errorMessage = 'Server Bad Gateway';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
         errorMessage = 'Đã xảy ra lỗi ở server';
@@ -24,25 +24,28 @@ const handleRoleExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-const formatDownloadedData = (payload) => {
-  return payload?.map((tup) => {
-    tup.createdAt.replace('Z', '');
-    return tup;
-  });
-};
-
-export const fetchRoles = (params, onTotalChange, setLoading) => {
+export const fetchWageHistories = (params, onTotalChange, setLoading) => {
+  const paymentType = {
+    by_hour: 'Chi trả theo giờ',
+    by_month: 'Chi trả theo tháng',
+  };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
-    api.role
+    api.wageHistory
       .getAll(params)
       .then(({ payload, total }) => {
-        payload = formatDownloadedData(payload);
-        dispatch({ type: REDUX_STATE.role.SET_ROLES, payload });
+        // payload =
+        //   payload && payload.length > 0
+        //     ? payload.map((wage) => {
+        //         wage.type = paymentType[wage.type];
+        //         return wage;
+        //       })
+        //     : [];
+        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORIES, payload: payload });
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'fetchRoles');
+        handleWageExceptions(err, dispatch, 'fetchWageHistories');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -50,16 +53,16 @@ export const fetchRoles = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchRole = (id, setLoading) => {
+export const fetchWageHistory = (id, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
-    api.role
+    api.wageHistory
       .get(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
       })
       .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'fetchRole');
+        handleWageExceptions(err, dispatch, 'fetchWageHistory');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -67,66 +70,59 @@ export const fetchRole = (id, setLoading) => {
   };
 };
 
-export const createRole = (params, history, success_msg) => {
+export const createWageHistory = (params, history, success_msg) => {
   return (dispatch, getState) => {
-    api.role
+    api.wageHistory
       .post(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-
-        history.push(ROUTE_PATH.ROLE + `/${payload.id}`);
+        history.push(ROUTE_PATH.NAV_BENEFIT_CREATE + `/${payload.id}`);
       })
       .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'createRole');
+        handleWageExceptions(err, dispatch, 'createWageHistory');
       });
   };
 };
 
-export const updateRole = (data, success_msg) => {
+export const updateWageHistory = (data, success_msg) => {
   return (dispatch, getState) => {
-    api.role
+    api.wageHistory
       .put(data)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
+        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'updateRole');
+        handleWageExceptions(err, dispatch, 'updateWageHistory');
       });
   };
 };
 
-export const deleteRole = (id, success_msg) => {
+export const deleteWageHistory = (id, success_msg) => {
   return (dispatch, getState) => {
-    api.role
+    api.wageHistory
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
+        dispatch({ type: REDUX_STATE.wageHistory.DELETE_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'deleteRole');
+        handleWageExceptions(err, dispatch, 'deleteWageHistory');
       });
   };
 };
 
-export const setEmptyRole = () => {
+export const setEmptyWageHistories = () => {
   return {
-    type: REDUX_STATE.role.EMPTY_VALUE,
+    type: REDUX_STATE.wageHistory.EMPTY_LIST,
     payload: [],
   };
 };
 
-export const fetchPermissions = () => {
-  return (dispatch, getState) => {
-    api.role
-      .getAllPermission()
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.SET_PERMISSIONS, payload });
-      })
-      .catch((err) => {
-        handleRoleExceptions(err, dispatch, 'fetchPermissions');
-      });
+export const setEmptyWageHistory = () => {
+  return {
+    type: REDUX_STATE.wageHistory.EMPTY_VALUE,
+    payload: [],
   };
 };

@@ -13,7 +13,7 @@ import { AccountCreateInfoSchema, AccountUpdateInfoSchema } from 'src/schema/for
 import {
   fetchAccount,
   fetchPermissionGroups,
-  fetchProfiles,
+  fetchProfilesWithoutAccount,
   fetchRoles,
   setEmptyAccount,
   createAccount,
@@ -45,7 +45,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     } else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());
     dispatch(fetchRoles());
     dispatch(fetchPermissionGroups());
-    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
+    dispatch(fetchProfilesWithoutAccount());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

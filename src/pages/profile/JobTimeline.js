@@ -92,7 +92,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
-      dispatch(fetchContracts({ profileId: +profileId, status: 'active' }, setLoading));
+      dispatch(fetchContracts({ profileId: +profileId, filters: [{ rule: 'status', op: '=', value: 'active' }] }, setLoading));
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
