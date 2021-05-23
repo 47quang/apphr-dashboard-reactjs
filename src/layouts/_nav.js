@@ -59,6 +59,20 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: ROUTE_NAME.NAV_CONTRACT,
+    to: ROUTE_PATH.NAV_CONTRACT,
+    icon: 'cil-user',
+    //permission: PERMISSION.LIST_PROFILE,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: ROUTE_NAME.NAV_BENEFIT,
+    to: ROUTE_PATH.NAV_BENEFIT,
+    icon: 'cil-user',
+    //permission: PERMISSION.LIST_PROFILE,
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: ROUTE_NAME.ACCOUNT,
     to: ROUTE_PATH.ACCOUNT,
     icon: 'cil-pencil',

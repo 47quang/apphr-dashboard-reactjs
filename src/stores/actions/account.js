@@ -214,6 +214,21 @@ export const fetchProfiles = (params) => {
   };
 };
 
+export const fetchProfilesWithoutAccount = (params) => {
+  return (dispatch, getState) => {
+    api.profile
+      .getProfilesWithoutAccount()
+      .then(({ payload }) => {
+        payload =
+          payload && payload.length > 0 ? payload.map((profile) => ({ id: profile.id ?? 0, name: profile?.code + ' - ' + profile.fullname })) : [];
+        dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
+      })
+      .catch((err) => {
+        handleAccountExceptions(err, dispatch, 'fetch profiles');
+      });
+  };
+};
+
 export const countAccounts = (params) => {
   return (dispatch, getState) => {
     api.account

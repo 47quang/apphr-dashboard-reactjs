@@ -2,28 +2,58 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actions/profile';
+import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
+import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
 import Page404 from '../page404/Page404';
 
-const Profile = ({ t, location }) => {
+const Contract = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDefOfProfiles = [
-    { name: 'code', title: t('label.employee_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'lastname', title: t('label.employee_last_name'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'firstname', title: t('label.employee_first_name'), align: 'left', width: '10%', wordWrapEnabled: true },
-    // { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'gender', title: t('label.sex'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
-    // { name: 'positionId', title: t('label.position'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'departmentId', title: t('label.department'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
+  const columnDefOfAccounts = [
+    { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'fullname', title: t('label.full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
-      title: t('label.employee_code'),
+      title: t('label.contract_code'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    type: {
+      title: t('label.contract_type'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.EQUAL,
+          name: t('filter_operator.='),
+        },
+      ],
+      type: 'select',
+      values: [
+        {
+          id: 'limitation',
+          name: t('label.limitation'),
+        },
+        {
+          id: 'un_limitation',
+          name: t('label.un_limitation'),
+        },
+        {
+          id: 'season',
+          name: t('label.season'),
+        },
+      ],
+    },
+    firstname: {
+      title: t('label.employee_first_name'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -42,8 +72,8 @@ const Profile = ({ t, location }) => {
       ],
       type: 'text',
     },
-    firstname: {
-      title: t('label.employee_last_name'),
+    profile_code: {
+      title: t('label.employee_code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -52,18 +82,8 @@ const Profile = ({ t, location }) => {
       ],
       type: 'text',
     },
-    phone: {
-      title: t('label.phone_number'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
-      type: 'text',
-    },
-    gender: {
-      title: t('label.sex'),
+    status: {
+      title: t('label.status'),
       operates: [
         {
           id: FILTER_OPERATOR.EQUAL,
@@ -73,28 +93,18 @@ const Profile = ({ t, location }) => {
       type: 'select',
       values: [
         {
-          id: 'male',
-          name: t('label.male'),
+          id: 'active',
+          name: t('label.active'),
         },
         {
-          id: 'female',
-          name: t('label.female'),
+          id: 'inactive',
+          name: t('label.inactive'),
         },
       ],
-    },
-    email: {
-      title: t('label.email'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
-      type: 'text',
     },
   };
   const dispatch = useDispatch();
-  const profiles = useSelector((state) => state.profile.profiles);
+  const contracts = useSelector((state) => state.contract.contracts);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
@@ -125,9 +135,9 @@ const Profile = ({ t, location }) => {
     }));
   };
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_PROFILE))
+    if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
-        fetchProfiles(
+        fetchContractTable(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -136,15 +146,11 @@ const Profile = ({ t, location }) => {
           setLoading,
         ),
       );
-    return () => {
-      dispatch(setEmptyProfiles());
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
   const filterFunction = (params) => {
     dispatch(
-      fetchProfiles(
+      fetchContractTable(
         {
           ...params,
           page: paging.currentPage,
@@ -155,11 +161,10 @@ const Profile = ({ t, location }) => {
       ),
     );
   };
-
   const deleteRow = async (rowId) => {
-    dispatch(deleteProfile(rowId, t('message.successful_delete')));
+    dispatch(deleteContract(rowId, t('message.successful_delete')));
     dispatch(
-      fetchProfiles(
+      fetchContractTable(
         {
           page: paging.currentPage,
           perpage: paging.pageSize,
@@ -169,27 +174,29 @@ const Profile = ({ t, location }) => {
       ),
     );
   };
-  if (permissionIds.includes(PERMISSION.LIST_PROFILE))
+  if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <QTable
           t={t}
-          columnDef={columnDefOfProfiles}
-          data={profiles}
-          route={ROUTE_PATH.PROFILE + '/'}
+          columnDef={columnDefOfAccounts}
+          data={contracts}
+          route={ROUTE_PATH.NAV_CONTRACT + '/'}
           deleteRow={deleteRow}
+          //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_PROFILE)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_PROFILE)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_PROFILE)}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_USER)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_USER)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );
   else return <Page404 />;
 };
 
-export default Profile;
+export default Contract;

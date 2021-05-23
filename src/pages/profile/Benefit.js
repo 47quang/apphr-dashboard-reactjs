@@ -30,10 +30,8 @@ const Benefit = ({ t, history, match }) => {
 
   let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'one_time', name: 'Chi trả một lần', value: 'one_time' },
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
-    { id: 'by_date', name: 'Chi trả theo ngày công' },
   ];
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {

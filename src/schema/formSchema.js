@@ -308,6 +308,137 @@ export const NewContractSchema = Yup.object().shape({
   ),
 });
 
+export const NewContractSchemaWithProfileID = Yup.object().shape({
+  profileId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_profile_id'),
+  code: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_contract_code'),
+  fullname: Yup.string().min(1, 'validation.required_enter_contract_full_name').required('validation.required_enter_contract_full_name'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_type'),
+  typeTax: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return ['un_limitation', 'limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_type_tax'),
+    })
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
+      return value !== '0';
+    }),
+
+  handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
+  validDate: Yup.string().required('validation.required_select_contract_valid_date'),
+  startWork: Yup.string().required('validation.required_select_start_work'),
+  expiredDate: Yup.string()
+    .when('type', {
+      is: (value) => {
+        return value === 'limitation';
+      },
+      then: Yup.string().required('validation.required_select_contract_expired_date'),
+    })
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
+      const { handleDate } = this.parent;
+      return isSameBeforeTypeDate(handleDate, value);
+    })
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_valid_date', function (value) {
+      const { validDate } = this.parent;
+      return isSameBeforeTypeDate(validDate, value);
+    })
+    .test('end_time_test', 'validation.expired_date_must_be_greater_than_start_work', function (value) {
+      const { startWork } = this.parent;
+      return isSameBeforeTypeDate(startWork, value);
+    }),
+  formOfPayment: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+      return value !== '0';
+    })
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_payment'),
+    }),
+  standardHours: Yup.number().when('formOfPayment', {
+    is: (value) => {
+      return ['by_month'].includes(value);
+    },
+    then: Yup.number()
+      .positive('validation.required_positive_standard_hours')
+      .integer('validation.required_integer_standard_hours')
+      .required('validation.required_enter_standard_hours'),
+  }),
+  wageId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
+      return value !== '0';
+    })
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_contract_wage'),
+    }),
+  dayOff: Yup.number()
+    .integer('validation.dayOff_must_be_integer')
+    .min(0, 'validation.dayOff_must_not_be_negative')
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.number().required('validation.required_enter_dayOff'),
+    }),
+  dependant: Yup.number()
+    .integer('validation.dependant_must_be_integer')
+    .min(0, 'validation.dependant_must_not_be_negative')
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.number().required('validation.required_enter_dependant'),
+    }),
+  periodicPayment: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
+      return value !== '0';
+    })
+    .when('type', {
+      is: (value) => {
+        return ['limitation', 'un_limitation'].includes(value);
+      },
+      then: Yup.string().required('validation.required_select_periodic_payment'),
+    }),
+  seasonWage: Yup.number().when('type', {
+    is: (value) => {
+      return value === 'season';
+    },
+    then: Yup.number()
+      .positive('validation.required_positive_prob_pay')
+      .integer('validation.required_integer_prob_pay')
+      .required('validation.required_enter_prob_pay'),
+  }),
+  allowances: Yup.array().of(
+    Yup.object()
+      .shape({
+        id: Yup.string()
+          .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+            return value !== '0';
+          })
+          .required('validation.required_select_allowance'),
+      })
+      .test('unique', 'validation.duplicate_allowance', function validateUnique(currentAllowance) {
+        const otherAllowance = this.parent.filter((allowance) => allowance !== currentAllowance);
+
+        const isDuplicate = otherAllowance.some((otherAllowance) => otherAllowance.id === currentAllowance.id);
+
+        return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
+      }),
+  ),
+});
+
 export const ContactSchema = Yup.object().shape({
   type: Yup.string()
     .required('validation.required_select_contact_type')
@@ -467,43 +598,50 @@ export const NewFieldContract = Yup.object().shape({
 });
 
 export const BenefitsSchema = Yup.object().shape({
-  wageHistories: Yup.array().of(
-    Yup.object().shape({
-      type: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_contract_payment'),
-      wageId: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_contract_wage'),
+  profileId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_profile_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_profile_id'),
+  contractId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_id'),
+  code: Yup.string().min(1, 'validation.required_enter_benefit_code').required('validation.required_enter_benefit_code'),
+  type: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_payment', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_payment'),
+  wageId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_wage', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_wage'),
 
-      allowances: Yup.array().of(
-        Yup.object()
-          .shape({
-            id: Yup.string()
-              .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
-                return value !== '0';
-              })
-              .required('validation.required_select_allowance'),
+  allowances: Yup.array().of(
+    Yup.object()
+      .shape({
+        id: Yup.string()
+          .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_allowance', function (value) {
+            return value !== '0';
           })
-          .test('unique', 'validation.duplicate_allowance', function validateUnique(currentAllowance) {
-            const otherAllowance = this.parent.filter((allowance) => allowance !== currentAllowance);
+          .required('validation.required_select_allowance'),
+      })
+      .test('unique', 'validation.duplicate_allowance', function validateUnique(currentAllowance) {
+        const otherAllowance = this.parent.filter((allowance) => allowance !== currentAllowance);
 
-            const isDuplicate = otherAllowance.some((otherAllowance) => otherAllowance.id === currentAllowance.id);
+        const isDuplicate = otherAllowance.some((otherAllowance) => otherAllowance.id === currentAllowance.id);
 
-            return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
-          }),
-      ),
-      startDate: Yup.string().required('validation.required_select_contract_handle_date'),
-      expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
-        const { startDate } = this.parent;
-        return isSameBeforeTypeDate(startDate, value);
+        return isDuplicate ? this.createError({ path: `${this.path}.id` }) : true;
       }),
-    }),
   ),
+  startDate: Yup.string().required('validation.required_select_contract_handle_date'),
+  expiredDate: Yup.string().test('end_time_test', 'validation.expired_date_must_be_greater_than_handle_date', function (value) {
+    const { startDate } = this.parent;
+    return isSameBeforeTypeDate(startDate, value);
+  }),
 });
 export const NewTaskSchedule = Yup.object().shape({
   shiftId: Yup.string()

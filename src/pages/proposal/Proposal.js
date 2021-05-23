@@ -27,7 +27,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-          { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
+          { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
         ]
       : [
@@ -35,7 +35,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '30%', wordWrapEnabled: true },
           // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
-          { name: 'status', title: t('label.status'), align: 'left', width: '25%', wordWrapEnabled: true },
+          { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
         ];
   const dispatch = useDispatch();

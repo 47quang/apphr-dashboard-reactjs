@@ -10,6 +10,7 @@
   "Setting": "Setting",
   "Remote": "Request for Telecommuting",
   "Leave": "Request for Leave of Absence",
+  "Contract": "Contract",
   "Overtime": "Request for Overtime",
   "General": "General",
   "Shift": "Shift",
@@ -25,6 +26,7 @@
   "Timekeeping": "Timekeeping",
   "Holiday": "Holiday",
   "Wage": "Wage",
+  "Benefit": "Benefit",
   "Allowance": "Allowance",
   "Article Type": "Notification Type",
   "Contract Attribute": "Contract Attribute",
@@ -32,6 +34,8 @@
   "Contract Settings": "Contract Settings",
   "Company Info": "Company Information",
   "label": {
+    "contract": "Contract",
+    "benefit_code": "Benefit Code",
     "assignments": "Assignments",
     "success_roll_call": "Roll-up on time",
     "late_roll_call": "Late in / early out",
@@ -335,7 +339,14 @@
     "salary_level": "Salary Level",
     "allowance": "Allowance",
     "allowance_level": "Allowance Level",
-    "add_new_field": "Add New Field"
+    "add_new_field": "Add New Field",
+    "resident": "Resident",
+    "non_resident": "Non-Resident",
+    "limitation": "Limited",
+    "un_limitation": "Unlimited",
+    "season": "Season",
+    "inactive": "Inactive",
+    "active": "Active"
   },
   "title": {
     "confirm": "Confirm",
@@ -391,6 +402,7 @@
     "confirm_delete_contract": "Are you sure to delete this contract?"
   },
   "placeholder": {
+    "select_contract": "Select contract",
     "enter_remote_code": "Enter code",
     "enter_overtime_code": "Enter code",
     "enter_leave_code": "Enter code",
@@ -505,7 +517,10 @@
     "enter_wage_name": "Enter wage name",
     "enter_allowance_code": "Enter allowance code",
     "enter_allowance_name": "Enter allowance name",
-    "enter_allowance_amount": "Enter allowance amount"
+    "enter_allowance_amount": "Enter allowance amount",
+    "enter_contract_fullname": "Enter contract fullname",
+    "select_benefit_status": "Select Benefit status",
+    "enter_benefit_code": "Enter benefit code"
   },
   "validation": {
     "required_enter_fee_code": "Required to enter Fee Code",
@@ -654,7 +669,9 @@
     "required_enter_contact_url": "Required to enter Contact URL",
     "allowance_level_must_be_integer": "Allowance level must be an integer",
     "allowance_level_must_not_be_negative": "Allowance level must be a non-negative number",
-    "required_enter_allowance_level": "Required to enter Allowance Level"
+    "required_enter_allowance_level": "Required to enter Allowance Level",
+    "required_select_contract_id": "Required to select a Contract",
+    "required_enter_benefit_code": "Required to enter benefit code"
   },
   "exceptions": {
     "message_unknown_error": "An unknown error occurred"

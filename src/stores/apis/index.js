@@ -305,6 +305,9 @@ export const api = {
     exportSalary: (data) => {
       return client.put(API_PREFIX.API_PROFILE + `/${data.id}/export-salary`, data);
     },
+    getProfilesWithoutAccount: () => {
+      return client.get(API_PREFIX.API_PROFILE + '/without-account', {});
+    },
   },
   contract: {
     getAll: (params) => {
@@ -356,6 +359,7 @@ export const api = {
       return client.delete(API_PREFIX.API_WAGE + `/${id}`);
     },
   },
+
   allowance: {
     getAll: (params) => {
       return client.get(API_PREFIX.API_ALLOWANCE, {
