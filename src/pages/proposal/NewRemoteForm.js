@@ -23,9 +23,9 @@ const NewRemoteForm = ({ t, history, match }) => {
   const profiles = useSelector((state) => state.account.profiles);
 
   const status = [
-    { id: 'new', name: 'Đang xử lý' },
-    { id: 'approve', name: 'Đã phê duyệt' },
-    { id: 'reject', name: 'Đã từ chối' },
+    { id: 'new', name: t('label.new') },
+    { id: 'approve', name: t('label.approve') },
+    { id: 'reject', name: t('label.reject') },
   ];
   const remoteRequest = {
     assignments: [],

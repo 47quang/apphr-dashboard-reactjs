@@ -1,6 +1,7 @@
 import { RESPONSE_CODE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
+//TODO
 const handleLocationExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';

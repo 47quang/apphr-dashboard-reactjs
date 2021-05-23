@@ -366,7 +366,18 @@
     "unprocessed_leave_request": "Số đề xuất xin nghỉ chưa được xử lý",
     "unprocessed_remote_request": "Số đề xuất xin làm từ xa chưa được xử lý",
     "unprocessed_policy_request": "Số đề xuất xin làm thêm giờ chưa được xử lý",
-    "roll_call_chart": "Biểu đồ điểm danh"
+    "roll_call_chart": "Biểu đồ điểm danh",
+    "day_offs_in_year": "Số ngày nghỉ phép trong năm",
+    "chart_number_requests_in_month": "Biểu đồ  thống kê số đề xuất trong tháng",
+    "chart_hours_in_month": "Biểu đồ thống kê giờ làm trong tháng",
+    "chart_hours_in_year": "Biểu đồ thống kê giờ làm trong năm",
+    "standard_working_time": "Thời gian làm việc tiêu chuẩn",
+    "time_worked": "Thời gian đã làm",
+    "overtime_worked": "Thời gian làm thêm giờ",
+    "standard_working_hours": "Tổng số giờ làm tiêu chuẩn",
+    "social_Insurance": "Bảo hiểm xã hội",
+    "heath_insurance": "Bảo hiểm y tế",
+    "unemployment_insurance": "Bảo hiểm thất nghiệp"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -419,7 +430,8 @@
     "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
-    "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?"
+    "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",
+    "not_assign_in_this_time": "Không thể giao việc trong khung giờ này"
   },
   "placeholder": {
     "select_contract": "Chọn hợp đồng",

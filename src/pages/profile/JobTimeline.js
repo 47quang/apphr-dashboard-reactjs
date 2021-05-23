@@ -65,8 +65,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   const personalIncomeTaxType = [
-    { id: 'resident', name: 'Cá nhân có cư trứ' },
-    { id: 'non_resident', name: 'Cá nhân không cư trú' },
+    { id: 'resident', name: t('label.resident') },
+    { id: 'non_resident', name: t('label.non_resident') },
   ];
 
   const type = [
@@ -125,7 +125,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
         form.standardHours = +form.standardHours;
       }
       console.log(form);
-      //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {

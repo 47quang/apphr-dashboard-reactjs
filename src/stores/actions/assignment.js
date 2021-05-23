@@ -3,7 +3,7 @@ import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateTimeScheduleToString, getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
+//TODO
 const dayIndex = {
   0: 'sunday',
   1: 'monday',

@@ -9,9 +9,9 @@ const ObligatoryTax = ({ t, location, history }) => {
     { name: 'value', title: t('label.percentage_tax'), align: 'left', width: '30%', wordWrapEnabled: true },
   ];
   const taxes = [
-    { id: 1, name: 'Bảo hiểm xã hội', value: '8%' },
-    { id: 2, name: 'Bảo hiểm y tế', value: '1.5%' },
-    { id: 3, name: 'Bảo hiểm thất nghiệp', value: '1%' },
+    { id: 1, name: t('label.social_Insurance'), value: '8%' },
+    { id: 2, name: t('label.heath_insurance'), value: '1.5%' },
+    { id: 3, name: t('label.unemployment_insurance'), value: '1%' },
   ];
 
   return (

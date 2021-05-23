@@ -27,7 +27,7 @@ import { fetchHolidays } from 'src/stores/actions/holiday';
 import { REDUX_STATE } from 'src/stores/states';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
-
+//TODO
 const useStyles = makeStyles((theme) => ({
   todayCell: {
     backgroundColor: COLORS.TODAY_BODY_CELL,
@@ -87,13 +87,8 @@ const SchedulerPage = ({ t, history, match }) => {
       fieldName: 'status',
       title: 'Status',
       instances: [
-        // { id: 'normal', text: 'Thường', color: '#64B5F6' },
-        // { id: 'leave_pay', text: 'Nghỉ có trả lương', color: '#64B5F6' },
-        // { id: 'leave_policy', text: 'Nghỉ theo chế độ', color: '#64B5F6' },
-        // { id: 'leave_no_pay', text: 'Nghỉ không trả lương', color: '#64B5F6' },
-        // { id: 'remote', text: 'Làm từ xa', color: '#64B5F6' },
-        { id: 'overtime', text: 'Làm thêm giờ', color: '#FFC107' },
-        { id: 'remote_overtime', text: 'Làm thêm giờ', color: '#FFC107' },
+        { id: 'overtime', text: t('Overtime'), color: '#FFC107' },
+        { id: 'remote_overtime', text: t('Overtime'), color: '#FFC107' },
       ],
     },
   ];
@@ -186,7 +181,7 @@ const SchedulerPage = ({ t, history, match }) => {
     if (!checkValidTask) {
       dispatch({
         type: REDUX_STATE.notification.SET_NOTI,
-        payload: { open: true, type: 'error', message: 'Không thể giao việc trong khung giờ này' },
+        payload: { open: true, type: 'error', message: t('message.not_assign_in_this_time') },
       });
       setState({
         ...state,

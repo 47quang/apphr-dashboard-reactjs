@@ -15,14 +15,11 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const OvertimeForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
-  // const type = [
-  //   { id: 'normal_day', name: t('label.normal_day') },
-  //   { id: 'holiday', name: t('label.holiday') },
-  // ];
+
   const status = [
-    { id: 'new', name: 'Đang xử lý' },
-    { id: 'approve', name: 'Đã phê duyệt' },
-    { id: 'reject', name: 'Đã từ chối' },
+    { id: 'new', name: t('label.new') },
+    { id: 'approve', name: t('label.approve') },
+    { id: 'reject', name: t('label.reject') },
   ];
   const overtimeRequest = useSelector((state) => state.request.overtimeForm);
   const [loading, setLoading] = useState(false);
