@@ -7,10 +7,10 @@ import StackedBarChart from 'src/components/charts/StackedBarChart';
 import ExportWage from 'src/components/dialog/ExportWage';
 import { exportWage } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
-
+//TODO
 const Statistic = ({ t, location, profileId }) => {
   const dispatch = useDispatch();
-  const labelsRequest = ['Nghỉ có lương', 'Nghỉ chế độ', 'Nghỉ không lương', 'Tăng ca', 'Làm thêm giờ'];
+  const labelsRequest = [t('label.leave_pay_req'), t('label.leave_policy_req'), t('label.leave_no_pay_req'), 'Tăng ca', t('Overtime')];
   const backgroundColorRequest = ['#8bcdcd', '#a7c5eb', '#efbbcf', '#d9e4dd', '#d8345f'];
   const titleRequest = 'Biểu đồ  thống kê số đề xuất trong tháng';
   const dataRequest = [2, 0, 0, 3, 5];

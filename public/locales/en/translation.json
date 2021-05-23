@@ -50,6 +50,8 @@
     "partial_tax": "Tax limit",
     "by_hour": "Hourly payment",
     "by_month": "Monthly payment",
+    "by_week": "Weekly payment",
+    "by_date": "daily payment",
     "textArea": "Text area",
     "text": "Text",
     "date": "Date",
@@ -135,6 +137,7 @@
     "average_work_time": "Average working time per day in a month",
     "total_delay_time": "Time to go late this month",
     "number_of_remote": "Number of remote working days in a month",
+    "number_of_overtime": "Number of maximum overtime days in a month",
     "check_out": "Check-out",
     "history_roll_call": "Roll call History",
     "check_in": "Check-in",
@@ -355,7 +358,15 @@
     "number_paid_shift": "Number of paid leave shifts",
     "number_unpaid_shift": "Number of unpaid leave shifts",
     "number_policy_shift": "number of policy shifts",
-    "absence": "Absence"
+    "absence": "Absence",
+    "total_number_employees": "Total number of employees",
+    "total_number_accounts": "Total number of accounts",
+    "total_number_branches": "Total number of branches",
+    "total_number_departments": "Total number of departments",
+    "unprocessed_leave_request": "Unprocessed leave requests",
+    "unprocessed_remote_request": "Unprocessed remote requests",
+    "unprocessed_overtime_request": "Unprocessed overtime requests",
+    "roll_call_chart": "Roll call Chart"
   },
   "title": {
     "confirm": "Confirm",

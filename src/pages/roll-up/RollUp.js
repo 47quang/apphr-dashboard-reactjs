@@ -64,7 +64,7 @@ const RollUp = ({ t, location }) => {
     { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
     {
       name: 'sunday',
-      title: ['Chủ nhật', fromDate.clone().startOf('week').format('DD/MM')],
+      title: [t('label.sunday'), fromDate.clone().startOf('week').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -78,7 +78,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'monday',
-      title: ['Thứ hai', fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
+      title: [t('label.monday'), fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -92,7 +92,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'tuesday',
-      title: ['Thứ ba', fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
+      title: [t('label.tuesday'), fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -106,7 +106,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'wednesday',
-      title: ['Thứ tư', fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
+      title: [t('label.wednesday'), fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -120,7 +120,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'thursday',
-      title: ['Thứ năm', fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
+      title: [t('label.thursday'), fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -134,7 +134,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'friday',
-      title: ['Thứ sáu', fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
+      title: [t('label.friday'), fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -148,7 +148,7 @@ const RollUp = ({ t, location }) => {
     },
     {
       name: 'saturday',
-      title: ['Thứ bảy', fromDate.clone().endOf('week').format('DD/MM')],
+      title: [t('label.saturday'), fromDate.clone().endOf('week').format('DD/MM')],
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
@@ -214,7 +214,6 @@ const RollUp = ({ t, location }) => {
   }, [state.fromDate, paging.currentPage, paging.pageSize]);
 
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
-    // console.log(row);
     const [cell, setCell] = useState({
       rowId: '',
       columnName: '',

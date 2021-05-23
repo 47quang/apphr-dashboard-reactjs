@@ -15,7 +15,7 @@ import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import { createContract, fetchAllowances, fetchBranches, fetchWagesByType, updateContract } from 'src/stores/actions/contract';
+import { fetchAllowances, fetchBranches, fetchWagesByType, updateContract } from 'src/stores/actions/contract';
 import { fetchActiveContract, setEmptyActiveContract } from 'src/stores/actions/profile';
 import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
@@ -60,8 +60,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
   newContract.attributes = useSelector((state) => state.attribute.attributes);
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'by_hour', name: 'Chi trả theo giờ' },
-    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_hour', name: t('label.by_hour') },
+    { id: 'by_month', name: t('label.by_month') },
   ];
 
   const personalIncomeTaxType = [
@@ -70,9 +70,18 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   const type = [
-    { id: 'limitation', name: 'Có xác định thời hạn' },
-    { id: 'un_limitation', name: 'Không xác định thời hạn' },
-    { id: 'season', name: 'Thuê khoán' },
+    {
+      id: 'limitation',
+      name: t('label.limitation'),
+    },
+    {
+      id: 'un_limitation',
+      name: t('label.un_limitation'),
+    },
+    {
+      id: 'season',
+      name: t('label.season'),
+    },
   ];
 
   useEffect(() => {
