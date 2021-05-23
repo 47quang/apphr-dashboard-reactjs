@@ -107,7 +107,6 @@ const AssignmentsDialog = ({ isOpen, handleCancel, t, profileId, date, code, ful
       </DialogContent>
     </Dialog>
   );
-  //return <></>;
 };
 
 export default AssignmentsDialog;

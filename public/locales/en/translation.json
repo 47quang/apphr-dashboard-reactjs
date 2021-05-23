@@ -75,6 +75,7 @@
     "export_wage": "Export Wage",
     "profile_statistic": "Statistic",
     "standard_hours": "Standard total time",
+    "standard_man_hours": "Standard person-hours",
     "vnd": "VND",
     "payment_by": "Calculated on salary type",
     "payment_value": "Payout",
@@ -346,7 +347,15 @@
     "un_limitation": "Unlimited",
     "season": "Season",
     "inactive": "Inactive",
-    "active": "Active"
+    "active": "Active",
+    "number_hours_worked": "Number of hours worked",
+    "overtime_hours": "Overtime hours",
+    "chart_shift_in_month": "Chart of shifts in the month",
+    "number_shift_works": "Number of shifts worked",
+    "number_paid_shift": "Number of paid leave shifts",
+    "number_unpaid_shift": "Number of unpaid leave shifts",
+    "number_policy_shift": "number of policy shifts",
+    "absence": "Absence"
   },
   "title": {
     "confirm": "Confirm",

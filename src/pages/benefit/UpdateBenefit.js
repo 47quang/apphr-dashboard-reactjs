@@ -44,12 +44,11 @@ const UpdateBenefit = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const upđate = (form) => {
+  const update = (form) => {
     form.profileId = parseInt(form.profileId);
     form.contractId = parseInt(form.contractId);
     form.wageId = parseInt(form.wageId);
-    // delete form.wage;
-    // delete form.wages;
+
     form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
     dispatch(updateWageHistory(form, t('message.successful_update')));
   };

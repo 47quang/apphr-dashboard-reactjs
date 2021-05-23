@@ -68,11 +68,7 @@ const EditContract = ({ t, history, match }) => {
     form.profileId = +match.params.id;
 
     if (!form.branchId) delete form.branchId;
-    // else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
-    // if (form.departmentId === '0') delete form.departmentId;
-    // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
-    // if (form.positionId === '0') delete form.positionId;
-    // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
+
     if (!form.expiredDate) delete form.expiredDate;
 
     dispatch(updateContract(form, t('message.successful_update')));

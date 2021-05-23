@@ -75,6 +75,7 @@
     "export_wage": "Xuất phiếu lương",
     "profile_statistic": "Thống kê",
     "standard_hours": "Tổng thời gian tiêu chuẩn",
+    "standard_man_hours": "Số giờ công tiêu chuẩn",
     "vnd": "VNĐ",
     "payment_by": "Tính trên loại lương",
     "payment_value": "Mức chi trả",
@@ -346,7 +347,15 @@
     "un_limitation": "Không xác định thời hạn",
     "season": "Thuê khoán",
     "inactive": "Không có hiệu lực",
-    "active": "Có hiệu lực"
+    "active": "Có hiệu lực",
+    "number_hours_worked": "Số giờ làm được",
+    "overtime_hours": "Số giờ làm thêm",
+    "chart_shift_in_month": "Biểu đồ thống kê ca làm việc trong tháng",
+    "number_shift_works": "Số ca đã làm",
+    "number_paid_shift": "Số ca nghỉ có lương",
+    "number_unpaid_shift": "Số ca nghỉ không lương",
+    "number_policy_shift": "Số ca nghỉ chế độ",
+    "absence": "Vắng"
   },
   "title": {
     "confirm": "Xác nhận",
