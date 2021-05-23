@@ -738,7 +738,7 @@ const QTable = (props) => {
                             fixed: 'right',
                           },
                         ],
-                        start: 7,
+                        start: columnDef.length,
                         fixed: 'right',
                       });
                       return ele;

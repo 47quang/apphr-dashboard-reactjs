@@ -3,23 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
-import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
+import { deleteWageHistory, fetchWageHistories } from 'src/stores/actions/wageHistories';
 import Page404 from '../page404/Page404';
 
-const Contract = ({ t, location, history }) => {
+const Benefit = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
-    { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'fullname', title: t('label.full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.benefit_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'contractName', title: t('label.contract'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
-      title: t('label.contract_code'),
+      title: t('label.code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -28,32 +26,8 @@ const Contract = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    type: {
-      title: t('label.contract_type'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.EQUAL,
-          name: t('filter_operator.='),
-        },
-      ],
-      type: 'select',
-      values: [
-        {
-          id: 'limitation',
-          name: t('label.limitation'),
-        },
-        {
-          id: 'un_limitation',
-          name: t('label.un_limitation'),
-        },
-        {
-          id: 'season',
-          name: t('label.season'),
-        },
-      ],
-    },
-    firstname: {
-      title: t('label.employee_first_name'),
+    contractId: {
+      title: t('label.contractId'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -62,18 +36,8 @@ const Contract = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    lastname: {
-      title: t('label.employee_last_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
-      type: 'text',
-    },
-    profile_code: {
-      title: t('label.employee_code'),
+    employee: {
+      title: t('label.employee'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -87,24 +51,14 @@ const Contract = ({ t, location, history }) => {
       operates: [
         {
           id: FILTER_OPERATOR.EQUAL,
-          name: t('filter_operator.='),
+          name: t('filter_operator.like'),
         },
       ],
-      type: 'select',
-      values: [
-        {
-          id: 'active',
-          name: t('label.active'),
-        },
-        {
-          id: 'inactive',
-          name: t('label.inactive'),
-        },
-      ],
+      type: 'text',
     },
   };
   const dispatch = useDispatch();
-  const contracts = useSelector((state) => state.contract.contracts);
+  const wageHistories = useSelector((state) => state.wageHistory.wageHistories);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
@@ -137,7 +91,7 @@ const Contract = ({ t, location, history }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
-        fetchContractTable(
+        fetchWageHistories(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -150,7 +104,7 @@ const Contract = ({ t, location, history }) => {
   }, [paging.currentPage, paging.pageSize]);
   const filterFunction = (params) => {
     dispatch(
-      fetchContractTable(
+      fetchWageHistories(
         {
           ...params,
           page: paging.currentPage,
@@ -161,10 +115,9 @@ const Contract = ({ t, location, history }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteContract(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
-      fetchContractTable(
+      fetchWageHistories(
         {
           page: paging.currentPage,
           perpage: paging.pageSize,
@@ -174,14 +127,17 @@ const Contract = ({ t, location, history }) => {
       ),
     );
   };
+  const deleteRow = (rowId) => {
+    dispatch(deleteWageHistory(rowId, handleAfterDelete, t('message.successful_delete')));
+  };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
         <QTable
           t={t}
           columnDef={columnDefOfAccounts}
-          data={contracts}
-          route={ROUTE_PATH.NAV_CONTRACT + '/'}
+          data={wageHistories}
+          route={ROUTE_PATH.NAV_BENEFIT + '/'}
           deleteRow={deleteRow}
           //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
           onCurrentPageChange={onCurrentPageChange}
@@ -199,4 +155,4 @@ const Contract = ({ t, location, history }) => {
   else return <Page404 />;
 };
 
-export default Contract;
+export default Benefit;

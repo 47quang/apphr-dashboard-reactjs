@@ -18,6 +18,7 @@ import { createContract, fetchAllowances, fetchBranches, fetchWagesByType } from
 import { api } from 'src/stores/apis';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
 const NewContract = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -53,25 +54,25 @@ const NewContract = ({ t, history, match }) => {
   newContract.attributes = useSelector((state) => state.attribute.attributes);
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'by_hour', name: 'Chi trả theo giờ' },
-    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_hour', name: t('label.by_hour') },
+    { id: 'by_month', name: t('label.by_month') },
   ];
   const periodicPayment = [
-    { id: 'hourly', name: 'Chi trả theo giờ' },
+    { id: 'hourly', name: t('label.by_hour') },
     { id: 'daily', name: 'Chi trả theo ngày' },
     { id: 'weekly', name: 'Chi trả theo tuần' },
-    { id: 'monthly', name: 'Chi trả theo tháng' },
+    { id: 'monthly', name: t('label.by_month') },
   ];
 
   const personalIncomeTaxType = [
-    { id: 'resident', name: 'Cá nhân có cư trứ' },
-    { id: 'non_resident', name: 'Cá nhân không cư trú' },
+    { id: 'resident', name: t('label.resident') },
+    { id: 'non_resident', name: t('label.non_resident') },
   ];
 
   const type = [
-    { id: 'limitation', name: 'Có xác định thời hạn' },
-    { id: 'un_limitation', name: 'Không xác định thời hạn' },
-    { id: 'season', name: 'Thuê khoán' },
+    { id: 'limitation', name: t('label.limitation') },
+    { id: 'un_limitation', name: t('label.un_limitation') },
+    { id: 'season', name: t('label.season') },
   ];
 
   useEffect(() => {
@@ -129,21 +130,40 @@ const NewContract = ({ t, history, match }) => {
             isError={errors.profileId && touched.profileId}
             errorMessage={t(errors.profileId)}
           />
-          <CommonTextInput
-            containerClassName={'form-group col-xl-4'}
-            value={values?.code ?? ''}
-            onBlur={handleBlur(`code`)}
-            onChange={handleChange(`code`)}
-            inputID={`code`}
-            labelText={t('label.contract_code')}
-            inputType={'text'}
-            isRequiredField
-            placeholder={t('placeholder.enter_contract_code')}
-            inputClassName={'form-control'}
-            isTouched={touched.code}
-            isError={errors.code && touched.code}
-            errorMessage={t(errors.code)}
-          />
+          <div className="form-group col-xl-4">
+            <Label text={t('label.contract_code')} required />
+            <div className="input-group">
+              <input
+                type="text"
+                className={'form-control col-10'}
+                rows={5}
+                onBlur={handleBlur('code')}
+                name={`code`}
+                onChange={(e) => handleChange(`code`)(e)}
+                value={values.code}
+                disabled={!isCreate}
+                placeholder={t('placeholder.enter_contract_code')}
+              />
+              <div
+                className="input-group-text col-2 d-flex justify-content-center"
+                id="basic-addon2"
+                type="button"
+                onClick={(e) => {
+                  let randomCode = generateCode();
+                  setFieldValue('code', randomCode);
+                }}
+              >
+                {t('label.random')}
+              </div>
+            </div>
+            {errors.code && touched.code && t(errors.code) ? (
+              <div>
+                <small className={'text-danger'}>{t(errors.code)}</small>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.fullname ?? ''}

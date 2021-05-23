@@ -22,7 +22,7 @@ const Profile = ({ t, location }) => {
     // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
-    username: {
+    code: {
       title: t('label.employee_code'),
       operates: [
         {

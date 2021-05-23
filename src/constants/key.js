@@ -73,6 +73,10 @@ export const ROUTE_NAME = {
   TAX_DETAIL_UPDATE: 'Tax Detail Update',
 
   CONTRACT: 'Contract Settings',
+
+  NAV_BENEFIT: 'Benefit',
+  NAV_BENEFIT_CREATE: 'New Benefit',
+  NAV_BENEFIT_UPDATE: 'Update Benefit',
 };
 
 const ID = '/:id';
@@ -87,6 +91,10 @@ export const ROUTE_PATH = {
   NAV_CONTRACT: '/contract',
   NAV_CONTRACT_CREATE: '/contract' + CREATE,
   NAV_CONTRACT_UPDATE: '/contract' + ID,
+
+  NAV_BENEFIT: '/benefit',
+  NAV_BENEFIT_CREATE: '/benefit' + CREATE,
+  NAV_BENEFIT_UPDATE: '/benefit' + ID,
 
   ACCOUNT: '/account',
   ACCOUNT_CREATE: '/account' + CREATE,

@@ -56,7 +56,6 @@ export const fetchRole = (id, setLoading) => {
     api.role
       .get(id)
       .then(({ payload }) => {
-        payload.permissionIds = payload.permissionIds.map((val) => +val);
         dispatch({ type: REDUX_STATE.role.SET_ROLE, payload });
       })
       .catch((err) => {

@@ -105,6 +105,7 @@ const EditContract = ({ t, history, match }) => {
             labelText={t('label.contract_code')}
             inputType={'text'}
             isRequiredField
+            isDisable
             placeholder={t('placeholder.enter_contract_code')}
             inputClassName={'form-control'}
             isTouched={touched.code}
