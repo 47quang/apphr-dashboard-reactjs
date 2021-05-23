@@ -360,3 +360,52 @@ export const exportWage = (params, success_msg) => {
       });
   };
 };
+const type = {
+  limitation: 'Có xác định thời hạn',
+  un_limitation: 'Không xác định thời hạn',
+  season: 'Thuê khoán',
+};
+export const fetchActiveContract = (id, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.profile
+      .getActiveContract(id)
+      .then(async ({ payload }) => {
+        if (payload) {
+          payload.text_type = type[payload.type];
+          payload.handleDate = formatDateInput(payload.handleDate);
+          payload.expiredDate = formatDateInput(payload.expiredDate);
+          payload.validDate = formatDateInput(payload.validDate);
+          payload.startWork = formatDateInput(payload.startWork);
+          payload['formOfPayment'] = payload?.wage?.type;
+          payload['wageId'] = payload?.wage?.id;
+          payload['amount'] = payload?.wage?.amount;
+          payload['standardHours'] = payload.standardHours ?? undefined;
+          payload['wages'] = await api.wage.getAll({ type: payload?.wage?.type }).then(({ payload }) => payload);
+          payload['attributes'] =
+            payload.contractAttributes && payload.contractAttributes.length > 0
+              ? payload.contractAttributes.map((attr) => {
+                  let rv = {};
+                  rv.value = attr.value;
+                  rv.name = attr.attribute.name;
+                  rv.type = attr.attribute.type;
+                  rv.id = attr.attribute.id;
+                  return rv;
+                })
+              : [];
+        }
+        if (setLoading) setLoading(false);
+        dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_CONTRACT, payload });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchActiveContract');
+      });
+  };
+};
+
+export const setEmptyActiveContract = () => {
+  return {
+    type: REDUX_STATE.profile.EMPTY_ACTIVE_CONTRACT,
+    payload: [],
+  };
+};

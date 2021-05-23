@@ -308,6 +308,9 @@ export const api = {
     getProfilesWithoutAccount: () => {
       return client.get(API_PREFIX.API_PROFILE + '/without-account', {});
     },
+    getActiveContract: (id) => {
+      return client.get(API_PREFIX.API_PROFILE + `/${id}/contract-active`);
+    },
   },
   contract: {
     getAll: (params) => {

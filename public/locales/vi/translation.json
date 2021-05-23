@@ -672,7 +672,8 @@
     "allowance_level_must_not_be_negative": "Mức phụ cấp phải là một số không âm",
     "required_enter_allowance_level": "Bắt buộc phải nhập mức phụ cấp",
     "required_select_contract_id": "Bắt buộc phải chọn hợp đồng",
-    "required_enter_benefit_code": "Bắt buộc phải nhập mã đợt lương"
+    "required_enter_benefit_code": "Bắt buộc phải nhập mã đợt lương",
+    "required_select_contract_status": "Bắt buộc phải chọn tình trạng của hợp đồng"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

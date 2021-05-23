@@ -44,7 +44,7 @@ const UpdateBenefit = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const upđate = (form) => {
+  const update = (form) => {
     form.profileId = parseInt(form.profileId);
     form.contractId = parseInt(form.contractId);
     form.wageId = parseInt(form.wageId);
@@ -335,7 +335,7 @@ const UpdateBenefit = ({ t, history, match }) => {
                   validationSchema={BenefitsSchema}
                   enableReinitialize
                   onSubmit={(values) => {
-                    upđate(values);
+                    update(values);
                   }}
                 >
                   {(props) => {
