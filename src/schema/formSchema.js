@@ -200,7 +200,11 @@ export const NewContractSchema = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
       return value !== '0';
     }),
-
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_status'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('validation.required_select_start_work'),
@@ -270,16 +274,7 @@ export const NewContractSchema = Yup.object().shape({
       },
       then: Yup.number().required('validation.required_enter_dependant'),
     }),
-  periodicPayment: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
-      return value !== '0';
-    })
-    .when('type', {
-      is: (value) => {
-        return ['limitation', 'un_limitation'].includes(value);
-      },
-      then: Yup.string().required('validation.required_select_periodic_payment'),
-    }),
+
   seasonWage: Yup.number().when('type', {
     is: (value) => {
       return value === 'season';
@@ -331,7 +326,11 @@ export const NewContractSchemaWithProfileID = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
       return value !== '0';
     }),
-
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_status'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('validation.required_select_start_work'),
@@ -401,16 +400,7 @@ export const NewContractSchemaWithProfileID = Yup.object().shape({
       },
       then: Yup.number().required('validation.required_enter_dependant'),
     }),
-  periodicPayment: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
-      return value !== '0';
-    })
-    .when('type', {
-      is: (value) => {
-        return ['limitation', 'un_limitation'].includes(value);
-      },
-      then: Yup.string().required('validation.required_select_periodic_payment'),
-    }),
+
   seasonWage: Yup.number().when('type', {
     is: (value) => {
       return value === 'season';

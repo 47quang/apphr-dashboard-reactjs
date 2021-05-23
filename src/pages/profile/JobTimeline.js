@@ -1,5 +1,5 @@
 import { CContainer } from '@coreui/react';
-import { CircularProgress, Switch } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
 import { useEffect, useRef, useState } from 'react';
@@ -15,18 +15,8 @@ import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import {
-  activeContract,
-  createContract,
-  deleteContract,
-  fetchAllowances,
-  fetchBranches,
-  fetchContracts,
-  fetchWagesByType,
-  inactiveContract,
-  setEmptyContracts,
-  updateContract,
-} from 'src/stores/actions/contract';
+import { createContract, fetchAllowances, fetchBranches, fetchWagesByType, updateContract } from 'src/stores/actions/contract';
+import { fetchActiveContract, setEmptyActiveContract } from 'src/stores/actions/profile';
 import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
@@ -39,18 +29,20 @@ const JobTimelineInfo = ({ t, history, match }) => {
   let wages = useSelector((state) => state.contract.wages);
   const [loading, setLoading] = useState(false);
 
-  const jobTimelineInfo = {
-    contractInfo: useSelector((state) => state.contract.contracts),
-  };
+  const activeContract = useSelector((state) => state.profile.activeContract);
+  const status = [
+    { id: 'active', name: t('label.active') },
+    { id: 'inactive', name: t('label.inactive') },
+  ];
   const newContract = {
     isMinimize: false,
-    status: 'inactive',
+    status: '',
     code: '',
     fullname: '',
     type: '',
     typeTax: '',
     signee: '',
-    standardHours: 0,
+    standardHours: '',
     handleDate: '',
     validDate: '',
     expiredDate: '',
@@ -60,7 +52,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     wageId: '',
     dayOff: '',
     dependant: '',
-    periodicPayment: '',
     salaryGroup: '',
     salary: '',
     allowances: [],
@@ -71,12 +62,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const paymentType = [
     { id: 'by_hour', name: 'Chi trả theo giờ' },
     { id: 'by_month', name: 'Chi trả theo tháng' },
-  ];
-  const periodicPayment = [
-    { id: 'hourly', name: 'Chi trả theo giờ' },
-    { id: 'daily', name: 'Chi trả theo ngày' },
-    { id: 'weekly', name: 'Chi trả theo tuần' },
-    { id: 'monthly', name: 'Chi trả theo tháng' },
   ];
 
   const personalIncomeTaxType = [
@@ -91,13 +76,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
   ];
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
-      dispatch(fetchContracts({ profileId: +profileId, filters: [{ rule: 'status', op: '=', value: 'active' }] }, setLoading));
+    if (permissionIds.includes(PERMISSION.GET_CONTRACT)) {
+      dispatch(fetchActiveContract(+profileId, setLoading));
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
       return () => {
-        dispatch(setEmptyContracts());
+        dispatch(setEmptyActiveContract());
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,7 +107,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
         delete form.formOfPayment;
         delete form.amount;
         delete form.dayOff;
-        delete form.periodicPayment;
         delete form.typeTax;
         delete form.salaryGroup;
         delete form.wageId;
@@ -131,7 +115,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
       } else {
         form.standardHours = +form.standardHours;
       }
-      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
+      console.log(form);
+      //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
@@ -266,6 +251,23 @@ const JobTimelineInfo = ({ t, history, match }) => {
             errorMessage={t(errors?.expiredDate)}
           />
           <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values?.status ?? ''}
+            onBlur={handleBlur(`status`)}
+            onChange={(e) => {
+              handleChange(`status`)(e);
+            }}
+            inputID={`status`}
+            labelText={t('label.status')}
+            selectClassName={'form-control'}
+            isRequiredField
+            placeholder={t('placeholder.select_benefit_status')}
+            isTouched={getIn(touched, `status`)}
+            isError={getIn(errors, `status`) && getIn(touched, `status`)}
+            errorMessage={t(getIn(errors, `status`))}
+            lstSelectOptions={status}
+          />
+          <CommonSelectInput
             containerClassName={'form-group col-xl-4'}
             value={values?.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
@@ -276,9 +278,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             labelText={t('label.job_place')}
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_branch')}
-            isTouched={touched?.branchId}
-            isError={errors?.branchId && touched?.branchId}
-            errorMessage={t(errors?.branchId)}
             lstSelectOptions={branches}
           />
           {values.attributes &&
@@ -296,9 +295,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       labelText={attribute.name}
                       inputType={attribute.type}
                       inputClassName={'form-control'}
-                      isTouched={getIn(touched, `attributes.${attributeIdx}.value`)}
-                      isError={getIn(errors, `attributes.${attributeIdx}.value`) && getIn(touched, `attributes.${attributeIdx}.value`)}
-                      errorMessage={t(getIn(errors, `attributes.${attributeIdx}.value`))}
                     />
                   ) : (
                     <CommonMultipleTextInput
@@ -428,25 +424,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 isError={errors.dayOff && touched.dayOff}
                 errorMessage={t(errors.dayOff)}
               />
-              <CommonSelectInput
-                containerClassName={'form-group col-xl-4'}
-                value={values?.periodicPayment ?? ''}
-                onBlur={handleBlur(`periodicPayment`)}
-                onChange={async (e) => {
-                  handleChange(`periodicPayment`)(e);
-                }}
-                inputID={`periodicPayment`}
-                labelText={t('label.periodic_payment')}
-                selectClassName={'form-control'}
-                placeholder={t('placeholder.select_periodic_payment_method')}
-                isRequiredField
-                isTouched={touched?.periodicPayment}
-                isError={errors?.periodicPayment && touched?.periodicPayment}
-                errorMessage={t(errors?.periodicPayment)}
-                lstSelectOptions={periodicPayment}
-              />
-            </div>
-            <div className="row">
               <CommonTextInput
                 containerClassName={'form-group col-xl-4'}
                 value={values.dependant ?? ''}
@@ -472,17 +449,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
             />
             {values.isIns && (
               <div className="row">
-                {/* <CommonTextInput
-                  containerClassName={'form-group col-xl-4'}
-                  value={values.gross_salary ?? ''}
-                  onBlur={handleBlur('gross_salary')}
-                  onChange={handleChange('gross_salary')}
-                  inputID={'gross_salary'}
-                  labelText={t('label.gross_salary')}
-                  inputType={'number'}
-                  placeholder={t('placeholder.enter_gross_salary')}
-                  inputClassName={'form-control'}
-                /> */}
                 <CommonTextInput
                   containerClassName={'form-group col-xl-4'}
                   value={values.amountIns ?? ''}
@@ -490,6 +456,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                   onChange={handleChange('amountIns')}
                   inputID={'amountIns'}
                   labelText={t('label.social_insurance')}
+                  isRequiredField={values.isIns}
                   inputType={'number'}
                   placeholder={t('placeholder.enter_insurance_salary')}
                   inputClassName={'form-control'}
@@ -599,18 +566,19 @@ const JobTimelineInfo = ({ t, history, match }) => {
     );
   };
 
-  const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
-
-  const handleCloseDeleteAlert = () => {
-    setIsVisibleDeleteAlert(false);
-  };
-
   const newContractRef = useRef();
 
   const handleResetNewContract = () => {
     newContractRef.current.handleReset();
     document.getElementById('newContract').hidden = true;
     document.getElementById('addBtn').disabled = false;
+  };
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    create(newContractRef.current.values);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
   };
   return (
     <>
@@ -634,6 +602,17 @@ const JobTimelineInfo = ({ t, history, match }) => {
               <Add fontSize="large" />
             </button>
           </div>
+          {openWarning && (
+            <WarningAlertDialog
+              isVisible={openWarning}
+              title={t('title.delete_row')}
+              titleConfirm={t('label.agree')}
+              handleConfirm={handleConfirmWarning}
+              titleCancel={t('label.decline')}
+              handleCancel={handleCancelWarning}
+              warningMessage={t('message.delete_warning_message')}
+            />
+          )}
           <div className="m-auto">
             <Formik
               innerRef={newContractRef}
@@ -641,7 +620,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
               validationSchema={NewContractSchema}
               enableReinitialize
               onSubmit={(values) => {
-                create(values);
+                console.log('values', values);
+                if (values?.status === 'active') setOpenWarning(true);
               }}
             >
               {(props) => {
@@ -679,93 +659,65 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 );
               }}
             </Formik>
-            {permissionIds.includes(PERMISSION.LIST_CONTRACT) &&
-              jobTimelineInfo.contractInfo &&
-              jobTimelineInfo.contractInfo.length > 0 &&
-              jobTimelineInfo.contractInfo.map((contract, index) => {
-                return (
-                  <Formik
-                    key={index}
-                    initialValues={contract}
-                    validationSchema={NewContractSchema}
-                    enableReinitialize
-                    onSubmit={(values) => {
-                      create(values);
-                    }}
-                  >
-                    {(props) => {
-                      return (
-                        <form className="p-0 m-0">
-                          <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                            <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                              <Switch
-                                checked={props.values.status === 'active'}
-                                name={`status`}
-                                onChange={(e) => {
-                                  e.target.checked
-                                    ? dispatch(activeContract(props.values.id, props.setFieldValue, t('message.successful_active')))
-                                    : dispatch(inactiveContract(props.values.id, props.setFieldValue, t('message.successful_inactive')));
-                                }}
-                              />
-                              {props.values.code + ' - ' + props.values.fullname}
-                            </div>
+            {activeContract ? (
+              <Formik
+                initialValues={activeContract}
+                validationSchema={NewContractSchema}
+                enableReinitialize
+                onSubmit={(values) => {
+                  create(values);
+                }}
+              >
+                {(props) => {
+                  return (
+                    <form className="p-0 m-0">
+                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                        <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                          {props.values.code + ' - ' + props.values.fullname}
+                        </div>
 
-                            <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                              {props.values.expiredDate
-                                ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                                : t('label.from') + formatDate(props.values.handleDate)}
-                            </div>
-                            <hr className="mt-1" />
-                            <div>
-                              <BodyContract {...props} />
-                              <hr className="mt-1" />
-                              {isVisibleDeleteAlert && (
-                                <WarningAlertDialog
-                                  isVisible={isVisibleDeleteAlert}
-                                  title={t('title.confirm')}
-                                  warningMessage={t('message.confirm_delete_contract')}
-                                  titleConfirm={t('label.agree')}
-                                  titleCancel={t('label.cancel')}
-                                  handleCancel={(e) => {
-                                    handleCloseDeleteAlert();
-                                  }}
-                                  handleConfirm={(e) => {
-                                    dispatch(deleteContract(contract.id, t('message.successful_delete'), handleCloseDeleteAlert));
-                                  }}
-                                />
-                              )}
+                        <div style={{ fontSize: 14 }}>
+                          {props.values.expiredDate
+                            ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                            : t('label.from') + formatDate(props.values.handleDate)}
+                        </div>
+                        <hr className="mt-1" />
+                        <div>
+                          <BodyContract {...props} />
+                          <hr className="mt-1" />
 
-                              {renderButtons(
-                                permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
-                                  ? [
-                                      {
-                                        type: 'button',
-                                        className: `btn btn-primary px-4 mx-2`,
-                                        onClick: (e) => {
-                                          props.handleReset(e);
-                                        },
-                                        name: t('label.reset'),
-                                        position: 'right',
-                                      },
-                                      {
-                                        type: 'button',
-                                        className: `btn btn-primary px-4 ml-2`,
-                                        onClick: (e) => {
-                                          props.handleSubmit(e);
-                                        },
-                                        name: t('label.save'),
-                                      },
-                                    ]
-                                  : [],
-                              )}
-                            </div>
-                          </div>
-                        </form>
-                      );
-                    }}
-                  </Formik>
-                );
-              })}
+                          {renderButtons(
+                            permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                              ? [
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-2`,
+                                    onClick: (e) => {
+                                      props.handleReset(e);
+                                    },
+                                    name: t('label.reset'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-2`,
+                                    onClick: (e) => {
+                                      props.handleSubmit(e);
+                                    },
+                                    name: t('label.save'),
+                                  },
+                                ]
+                              : [],
+                          )}
+                        </div>
+                      </div>
+                    </form>
+                  );
+                }}
+              </Formik>
+            ) : (
+              <></>
+            )}
           </div>
         </CContainer>
       )}

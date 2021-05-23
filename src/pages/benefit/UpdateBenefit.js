@@ -334,7 +334,7 @@ const UpdateBenefit = ({ t, history, match }) => {
                   validationSchema={BenefitsSchema}
                   enableReinitialize
                   onSubmit={(values) => {
-                    upđate(values);
+                    update(values);
                   }}
                 >
                   {(props) => {

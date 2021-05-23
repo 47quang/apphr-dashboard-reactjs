@@ -26,7 +26,10 @@ const NewContract = ({ t, history, match }) => {
   let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
   const profiles = useSelector((state) => state.account.profiles);
-
+  const status = [
+    { id: 'active', name: t('label.active') },
+    { id: 'inactive', name: t('label.inactive') },
+  ];
   const newContract = {
     isMinimize: false,
     status: 'inactive',
@@ -45,7 +48,6 @@ const NewContract = ({ t, history, match }) => {
     wageId: '',
     dayOff: '',
     dependant: '',
-    periodicPayment: '',
     salaryGroup: '',
     salary: '',
     allowances: [],
@@ -56,12 +58,6 @@ const NewContract = ({ t, history, match }) => {
   const paymentType = [
     { id: 'by_hour', name: t('label.by_hour') },
     { id: 'by_month', name: t('label.by_month') },
-  ];
-  const periodicPayment = [
-    { id: 'hourly', name: t('label.by_hour') },
-    { id: 'daily', name: 'Chi trả theo ngày' },
-    { id: 'weekly', name: 'Chi trả theo tuần' },
-    { id: 'monthly', name: t('label.by_month') },
   ];
 
   const personalIncomeTaxType = [
@@ -99,7 +95,6 @@ const NewContract = ({ t, history, match }) => {
       delete form.formOfPayment;
       delete form.amount;
       delete form.dayOff;
-      delete form.periodicPayment;
       delete form.typeTax;
       delete form.salaryGroup;
       delete form.wageId;
@@ -273,6 +268,22 @@ const NewContract = ({ t, history, match }) => {
             errorMessage={t(errors?.expiredDate)}
           />
           <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values?.status ?? ''}
+            onBlur={handleBlur(`status`)}
+            onChange={(e) => {
+              handleChange(`status`)(e);
+            }}
+            inputID={`status`}
+            labelText={t('label.status')}
+            selectClassName={'form-control'}
+            placeholder={t('placeholder.select_benefit_status')}
+            isTouched={getIn(touched, `status`)}
+            isError={getIn(errors, `status`) && getIn(touched, `status`)}
+            errorMessage={t(getIn(errors, `status`))}
+            lstSelectOptions={status}
+          />
+          <CommonSelectInput
             containerClassName={'form-group col-xl-4'}
             value={values?.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
@@ -434,23 +445,6 @@ const NewContract = ({ t, history, match }) => {
                 isTouched={touched.dayOff}
                 isError={errors.dayOff && touched.dayOff}
                 errorMessage={t(errors.dayOff)}
-              />
-              <CommonSelectInput
-                containerClassName={'form-group col-xl-4'}
-                value={values?.periodicPayment ?? ''}
-                onBlur={handleBlur(`periodicPayment`)}
-                onChange={async (e) => {
-                  handleChange(`periodicPayment`)(e);
-                }}
-                inputID={`periodicPayment`}
-                labelText={t('label.periodic_payment')}
-                selectClassName={'form-control'}
-                placeholder={t('placeholder.select_periodic_payment_method')}
-                isRequiredField
-                isTouched={touched?.periodicPayment}
-                isError={errors?.periodicPayment && touched?.periodicPayment}
-                errorMessage={t(errors?.periodicPayment)}
-                lstSelectOptions={periodicPayment}
               />
             </div>
             <div className="row">
