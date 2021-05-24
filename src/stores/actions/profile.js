@@ -383,17 +383,6 @@ export const fetchActiveContract = (id, setLoading) => {
           payload['amount'] = payload?.wage?.amount;
           payload['standardHours'] = payload.standardHours ?? undefined;
           payload['wages'] = await api.wage.getAll({ type: payload?.wage?.type }).then(({ payload }) => payload);
-          payload['attributes'] =
-            payload.contractAttributes && payload.contractAttributes.length > 0
-              ? payload.contractAttributes.map((attr) => {
-                  let rv = {};
-                  rv.value = attr.value;
-                  rv.name = attr.attribute.name;
-                  rv.type = attr.attribute.type;
-                  rv.id = attr.attribute.id;
-                  return rv;
-                })
-              : [];
         }
         if (setLoading) setLoading(false);
         dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_CONTRACT, payload });
@@ -407,6 +396,35 @@ export const fetchActiveContract = (id, setLoading) => {
 export const setEmptyActiveContract = () => {
   return {
     type: REDUX_STATE.profile.EMPTY_ACTIVE_CONTRACT,
+    payload: [],
+  };
+};
+
+export const fetchActiveWage = (id, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.profile
+      .getActiveWage(id)
+      .then(async ({ payload }) => {
+        if (payload) {
+          payload.wageId = payload.wageId ?? undefined;
+          payload.type = payload?.wage?.type;
+          payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
+          payload.startDate = formatDateInput(payload.startDate);
+          payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        }
+        if (setLoading) setLoading(false);
+        dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+      });
+  };
+};
+
+export const setEmptyActiveWage = () => {
+  return {
+    type: REDUX_STATE.profile.EMPTY_ACTIVE_WAGE,
     payload: [],
   };
 };

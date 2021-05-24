@@ -34,7 +34,12 @@ const HistoryWorkingForm = ({ t, match }) => {
     positionId: '',
     from: '',
     to: '',
+    status: '',
   };
+  const status = [
+    { id: 'active', name: t('label.active') },
+    { id: 'inactive', name: t('label.inactive') },
+  ];
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
       dispatch(fetchBranches());
@@ -58,7 +63,7 @@ const HistoryWorkingForm = ({ t, match }) => {
     form.branchId = parseInt(form.branchId);
     form.departmentId = parseInt(form.departmentId);
     form.positionId = parseInt(form.positionId);
-
+    if (!form.to) delete form.to;
     if (form.id) {
       dispatch(updateHistoryWork(form, t('message.successful_update')));
     } else {
@@ -123,8 +128,23 @@ const HistoryWorkingForm = ({ t, match }) => {
             errorMessage={t(errors.positionId)}
             lstSelectOptions={isCreate ? positions : values.positions}
           />
-        </div>
-        <div className="row">
+          <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values?.status ?? ''}
+            onBlur={handleBlur(`status`)}
+            onChange={(e) => {
+              handleChange(`status`)(e);
+            }}
+            inputID={`status`}
+            labelText={t('label.status')}
+            selectClassName={'form-control'}
+            placeholder={t('placeholder.select_history_working_status')}
+            isRequiredField
+            isTouched={touched.status}
+            isError={errors.status && touched.status}
+            errorMessage={t(errors.from)}
+            lstSelectOptions={status}
+          />
           <CommonTextInput
             containerClassName={'form-group col-lg-4'}
             value={values.from ?? ''}
@@ -148,7 +168,6 @@ const HistoryWorkingForm = ({ t, match }) => {
             labelText={t('label.end_date')}
             inputType={'date'}
             inputClassName={'form-control'}
-            isRequiredField
             isTouched={touched.to}
             isError={errors.to && touched.to}
             errorMessage={t(errors.to)}
@@ -228,7 +247,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                             onClick: async (e) => {
                               props.handleSubmit(e);
                             },
-                            name: t('label.save'),
+                            name: t('label.create_new'),
                           },
                         ])}
                       </div>

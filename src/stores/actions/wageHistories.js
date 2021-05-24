@@ -26,10 +26,14 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchWageHistories = (params, onTotalChange, setLoading) => {
+export const fetchWageHistories = (params, onTotalChange, setLoading, t) => {
   const paymentType = {
     by_hour: 'Chi trả theo giờ',
     by_month: 'Chi trả theo tháng',
+  };
+  const status = {
+    active: t('label.active'),
+    inactive: t('label.inactive'),
   };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -42,6 +46,7 @@ export const fetchWageHistories = (params, onTotalChange, setLoading) => {
                 wage.contractName = wage?.contract?.code + ' - ' + wage?.contract?.fullname;
                 wage.employee = wage.profile.code + ' - ' + wage.profile.fullname;
                 wage.type = paymentType[wage.type];
+                wage.status = status[wage.status];
                 wage.startDate = formatDate(wage.startDate);
                 return wage;
               })
@@ -64,8 +69,10 @@ export const fetchWageHistory = (id, setLoading) => {
     api.wageHistory
       .get(id)
       .then(async ({ payload }) => {
+        payload.wageId = payload.wageId ?? undefined;
         payload.type = payload?.wage?.type;
-        payload.wages = await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload);
+        payload.code = payload.code ?? undefined;
+        payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
         payload.startDate = formatDateInput(payload.startDate);
         payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
@@ -94,13 +101,22 @@ export const createWageHistory = (params, history, success_msg) => {
 };
 
 export const updateWageHistory = (data, success_msg) => {
+  data.profileId = data.profileId ? parseInt(data.profileId) : data.profileId;
+  data.contractId = data.contractId ? parseInt(data.contractId) : data.contractId;
+  data.wageId = data.wageId ? parseInt(data.wageId) : data.wageId;
+  if (!data.expiredDate) delete data.expiredDate;
+  // delete data.wage;
+  // delete data.wages;
+  data.allowanceIds = data.allowances && data.allowances.length > 0 ? data.allowances.map((a) => parseInt(a.id)) : [];
   return (dispatch, getState) => {
     api.wageHistory
       .put(data)
       .then(({ payload }) => {
-        payload.type = payload?.wage?.type;
+        payload.type = data?.wage?.type;
+        payload.wageId = data.wageId;
         payload.wages = data.wages;
         payload.startDate = formatDateInput(payload.startDate);
+        payload.code = payload.code ?? undefined;
         payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });

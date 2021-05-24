@@ -63,6 +63,19 @@ const initialState = {
     allowances: [],
     files: [],
   },
+  activeWage: {
+    profileId: '',
+    contractId: '',
+    type: '',
+    wageId: '',
+    amount: '',
+    startDate: '',
+    expiredDate: '',
+    wages: [],
+    code: '',
+    status: '',
+    contractType: '',
+  },
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -164,6 +177,10 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return { ...state, activeContract: payload };
     case REDUX_STATE.profile.EMPTY_ACTIVE_CONTRACT:
       return { ...state, activeContract: initialState.activeContract };
+    case REDUX_STATE.profile.GET_ACTIVE_WAGE:
+      return { ...state, activeWage: payload };
+    case REDUX_STATE.profile.EMPTY_ACTIVE_WAGE:
+      return { ...state, activeWage: initialState.activeWage };
     default:
       return state;
   }

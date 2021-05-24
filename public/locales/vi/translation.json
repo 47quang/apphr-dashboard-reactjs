@@ -6,7 +6,7 @@
   "Profile": "Nhân sự",
   "Account": "Tài khoản",
   "Notification": "Thông báo",
-  "Report": "Báo cáo",
+  "Library": "Thư viện",
   "Setting": "Cấu hình",
   "Remote": "Làm từ xa",
   "Leave": "Nghỉ làm",
@@ -393,7 +393,9 @@
     "delete_row": "Xóa hàng",
     "delete_academic": "Xóa trình độ chuyên môn",
     "delete_contract": "Xóa hợp đồng",
-    "delete_certificate": "Xóa chứng chỉ"
+    "delete_certificate": "Xóa chứng chỉ",
+    "new_contract": "Tạo mới hợp đồng", 
+    "update_contract": "Cập nhật hợp đồng"
   },
   "filter_operator": {
     "in": "trong",
@@ -431,6 +433,8 @@
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",
+    "new_contract_warning_message": "Việc tạo mới một hợp đồng có hiệu lực sẽ ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn tạo mới hợp đồng chứ?",
+    "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn cập nhật hợp đồng chứ ",
     "not_assign_in_this_time": "Không thể giao việc trong khung giờ này"
   },
   "placeholder": {
@@ -552,7 +556,8 @@
     "enter_allowance_amount": "Nhập mức trợ cấp",
     "enter_contract_fullname": "Nhập tên hợp đồng",
     "select_benefit_status": "Chọn trạng thái đợt lương",
-    "enter_benefit_code": "Nhập mã đợt lương"
+    "enter_benefit_code": "Nhập mã đợt lương",
+    "select_history_working_status": "Chọn tình trạng đợt công tác"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -704,7 +709,9 @@
     "required_enter_allowance_level": "Bắt buộc phải nhập mức phụ cấp",
     "required_select_contract_id": "Bắt buộc phải chọn hợp đồng",
     "required_enter_benefit_code": "Bắt buộc phải nhập mã đợt lương",
-    "required_select_contract_status": "Bắt buộc phải chọn tình trạng của hợp đồng"
+    "required_select_contract_status": "Bắt buộc phải chọn tình trạng của hợp đồng",
+    "required_select_benefit_status": "Bắt buộc phải chọn tình trạng của đợt lương",
+    "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

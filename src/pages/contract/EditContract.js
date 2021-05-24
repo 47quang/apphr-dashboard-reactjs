@@ -1,22 +1,20 @@
 import { CContainer } from '@coreui/react';
-import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { NewContractSchema } from 'src/schema/formSchema';
-import { fetchProfiles } from 'src/stores/actions/account';
+import { EditContractSchemaWithProfileID } from 'src/schema/formSchema';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import { fetchAllowances, fetchBranches, fetchContract, updateContract, setEmptyContract } from 'src/stores/actions/contract';
+import { fetchAllowances, fetchBranches, fetchContract, setEmptyContract, updateContract } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
-import { getCurrentDate } from 'src/utils/datetimeUtils';
+import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 
 const EditContract = ({ t, history, match }) => {
@@ -24,9 +22,12 @@ const EditContract = ({ t, history, match }) => {
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   let contract = useSelector((state) => state.contract.contract);
-  const profiles = useSelector((state) => state.account.profiles);
 
   const allowances = useSelector((state) => state.contract.allowances);
+  const status = [
+    { id: 'active', name: t('label.active') },
+    { id: 'inactive', name: t('label.inactive') },
+  ];
   const paymentType = [
     { id: 'by_hour', name: t('label.by_hour') },
     { id: 'by_month', name: t('label.by_month') },
@@ -53,7 +54,6 @@ const EditContract = ({ t, history, match }) => {
     if (permissionIds.includes(PERMISSION.GET_CONTRACT)) {
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
-      dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
       dispatch(fetchAttributes());
       dispatch(fetchContract(+match?.params?.id));
       return () => {
@@ -71,26 +71,23 @@ const EditContract = ({ t, history, match }) => {
 
     if (!form.expiredDate) delete form.expiredDate;
 
-    dispatch(updateContract(form, t('message.successful_update')));
+    dispatch(updateContract(form, false, t('message.successful_update')));
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue }) => {
     return (
       <>
         <div className="row">
-          <CommonSelectInput
-            containerClassName={'form-group col-lg-4'}
-            value={values.profileId ?? 0}
+          <CommonTextInput
+            containerClassName={'form-group col-xl-4'}
+            value={values?.employee ?? ''}
+            onBlur={handleBlur(`employee`)}
+            onChange={handleChange(`employee`)}
+            inputID={`employee`}
             labelText={t('label.profileId')}
-            selectClassName={'form-control'}
-            onBlur={handleBlur('profileId')}
-            onChange={handleChange('profileId')}
-            inputID={t('label.profileId')}
-            lstSelectOptions={profiles}
+            inputType={'text'}
             isRequiredField
-            placeholder={t('placeholder.select_profile')}
-            isTouched={touched.profileId}
-            isError={errors.profileId && touched.profileId}
-            errorMessage={t(errors.profileId)}
+            isDisable
+            inputClassName={'form-control'}
           />
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
@@ -104,9 +101,6 @@ const EditContract = ({ t, history, match }) => {
             isDisable
             placeholder={t('placeholder.enter_contract_code')}
             inputClassName={'form-control'}
-            isTouched={touched.code}
-            isError={errors.code && touched.code}
-            errorMessage={t(errors.code)}
           />
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
@@ -136,13 +130,10 @@ const EditContract = ({ t, history, match }) => {
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_contract_type')}
             isRequiredField
-            isTouched={touched?.type}
-            isError={errors?.type && touched?.type}
-            errorMessage={t(errors.type)}
+            isDisable
             lstSelectOptions={type}
           />
-        </div>
-        <div className="row">
+
           <CommonSelectInput
             containerClassName={'form-group col-xl-4'}
             value={values?.typeTax ?? ''}
@@ -189,8 +180,7 @@ const EditContract = ({ t, history, match }) => {
             isError={errors && errors?.validDate && touched && touched?.validDate}
             errorMessage={t(errors?.validDate)}
           />
-        </div>
-        <div className="row">
+
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.startWork ?? ''}
@@ -221,6 +211,23 @@ const EditContract = ({ t, history, match }) => {
             errorMessage={t(errors?.expiredDate)}
           />
           <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values?.status ?? ''}
+            onBlur={handleBlur(`status`)}
+            onChange={(e) => {
+              handleChange(`status`)(e);
+            }}
+            inputID={`status`}
+            labelText={t('label.status')}
+            selectClassName={'form-control'}
+            isRequiredField
+            placeholder={t('placeholder.select_benefit_status')}
+            isTouched={getIn(touched, `status`)}
+            isError={getIn(errors, `status`) && getIn(touched, `status`)}
+            errorMessage={t(getIn(errors, `status`))}
+            lstSelectOptions={status}
+          />
+          <CommonSelectInput
             containerClassName={'form-group col-xl-4'}
             value={values?.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
@@ -236,33 +243,32 @@ const EditContract = ({ t, history, match }) => {
             errorMessage={t(errors?.branchId)}
             lstSelectOptions={branches}
           />
-          {values.attributes &&
-            values.attributes.length > 0 &&
-            values.attributes.map((attribute, attributeIdx) => {
+          {values.contractAttributes &&
+            values.contractAttributes.length > 0 &&
+            values.contractAttributes.map((attribute, attributeIdx) => {
               return (
                 <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
                   {attribute.type !== 'textArea' ? (
                     <CommonTextInput
                       containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute?.value ?? ''}
-                      onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
-                      onChange={handleChange(`attributes.${attributeIdx}.value`)}
-                      inputID={`attributes.${attributeIdx}.value`}
-                      labelText={attribute.name}
-                      inputType={attribute.type}
+                      onBlur={handleBlur(`contractAttributes.${attributeIdx}.value`)}
+                      onChange={(e) => {
+                        handleChange(`contractAttributes.${attributeIdx}.value`)(e);
+                      }}
+                      inputID={`contractAttributes.${attributeIdx}.value`}
+                      labelText={attribute?.attribute.name}
+                      inputType={attribute?.attribute.type}
                       inputClassName={'form-control'}
-                      isTouched={getIn(touched, `attributes.${attributeIdx}.value`)}
-                      isError={getIn(errors, `attributes.${attributeIdx}.value`) && getIn(touched, `attributes.${attributeIdx}.value`)}
-                      errorMessage={t(getIn(errors, `attributes.${attributeIdx}.value`))}
                     />
                   ) : (
                     <CommonMultipleTextInput
                       containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute.value ?? ''}
-                      onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
-                      onChange={handleChange(`attributes.${attributeIdx}.value`)}
-                      inputID={attribute.type}
-                      labelText={attribute.name}
+                      onBlur={handleBlur(`contractAttributes.${attributeIdx}.value`)}
+                      onChange={handleChange(`contractAttributes.${attributeIdx}.value`)}
+                      inputID={attribute?.attribute.type}
+                      labelText={attribute?.attribute.name}
                       inputClassName={'form-control'}
                     />
                   )}
@@ -294,6 +300,7 @@ const EditContract = ({ t, history, match }) => {
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_contract_payment_method')}
                 isRequiredField
+                isDisable
                 isTouched={touched.formOfPayment}
                 isError={errors.formOfPayment && touched.formOfPayment}
                 errorMessage={t(errors.formOfPayment)}
@@ -315,6 +322,7 @@ const EditContract = ({ t, history, match }) => {
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_contract_payment_method')}
                 isRequiredField
+                isDisable
                 isTouched={touched?.wageId}
                 isError={errors?.wageId && touched.wageId}
                 errorMessage={t(errors?.wageId)}
@@ -347,7 +355,7 @@ const EditContract = ({ t, history, match }) => {
                     onChange={(e) => handleChange(`standardHours`)(e)}
                     value={values.standardHours ?? 0}
                     placeholder={t('placeholder.enter_standard_hours')}
-                    disabled={values.formOfPayment !== 'by_month'}
+                    disabled
                   />
                   <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
                     {t('label.hours')}
@@ -370,9 +378,7 @@ const EditContract = ({ t, history, match }) => {
                 placeholder={t('placeholder.enter_dayOff')}
                 inputClassName={'form-control'}
                 isRequiredField
-                isTouched={touched.dayOff}
-                isError={errors.dayOff && touched.dayOff}
-                errorMessage={t(errors.dayOff)}
+                isDisable
               />
               <CommonSelectInput
                 containerClassName={'form-group col-xl-4'}
@@ -386,9 +392,7 @@ const EditContract = ({ t, history, match }) => {
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_periodic_payment_method')}
                 isRequiredField
-                isTouched={touched?.periodicPayment}
-                isError={errors?.periodicPayment && touched?.periodicPayment}
-                errorMessage={t(errors?.periodicPayment)}
+                isDisable
                 lstSelectOptions={periodicPayment}
               />
             </div>
@@ -404,9 +408,7 @@ const EditContract = ({ t, history, match }) => {
                 placeholder={t('placeholder.enter_dependant')}
                 inputClassName={'form-control'}
                 isRequiredField
-                isTouched={touched.dependant}
-                isError={errors.dependant && touched.dependant}
-                errorMessage={t(errors.dependant)}
+                isDisable
               />
             </div>
 
@@ -414,6 +416,7 @@ const EditContract = ({ t, history, match }) => {
               label={t('label.insurance')}
               value={values.isIns ?? false}
               onBlur={handleBlur('isIns')}
+              isDisable
               onChange={handleChange('isIns')}
             />
             {values.isIns && (
@@ -439,6 +442,7 @@ const EditContract = ({ t, history, match }) => {
                   inputType={'number'}
                   placeholder={t('placeholder.enter_insurance_salary')}
                   inputClassName={'form-control'}
+                  isDisable
                 />
               </div>
             )}
@@ -456,9 +460,7 @@ const EditContract = ({ t, history, match }) => {
               inputType={'number'}
               inputClassName={'form-control'}
               placeholder={t('placeholder.enter_salary_level')}
-              isTouched={touched?.seasonWage}
-              isError={errors?.seasonWage}
-              errorMessage={t(errors?.seasonWage)}
+              isDisable
             />
           </div>
         )}
@@ -490,9 +492,7 @@ const EditContract = ({ t, history, match }) => {
                           selectClassName={'form-control'}
                           placeholder={t('placeholder.select_allowance_type')}
                           isRequiredField
-                          isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
-                          isError={getIn(errors, `allowances.${allowanceIdx}.id`) && getIn(touched, `allowances.${allowanceIdx}.id`)}
-                          errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
+                          isDisable
                           lstSelectOptions={allowances}
                         />
                         <CommonTextInput
@@ -507,19 +507,10 @@ const EditContract = ({ t, history, match }) => {
                           placeholder={t('placeholder.pension')}
                           isDisable
                         />
-
-                        <div className="form-group pb-2 col-1">
-                          <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                        </div>
                       </div>
                     </div>
                   );
                 })}
-              <div className="d-flex justify-content-start mb-4">
-                <button type="button" className="btn btn-primary" onClick={() => push({ name: 0, amount: 0 })}>
-                  <AddCircle /> {t('label.add_allowance')}
-                </button>
-              </div>
             </div>
           )}
         />
@@ -535,23 +526,55 @@ const EditContract = ({ t, history, match }) => {
       </>
     );
   };
-
+  const newContractRef = useRef();
+  const preStatus = contract.status;
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    create(newContractRef.current.values);
+    setOpenWarning(!openWarning);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
+  };
   return (
     <CContainer fluid className="c-main">
       <div className="m-auto">
+        {openWarning && (
+          <WarningAlertDialog
+            isVisible={openWarning}
+            title={t('title.update_contract')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelWarning}
+            warningMessage={t('message.update_contract_warning_message')}
+          />
+        )}
         <Formik
+          innerRef={newContractRef}
           initialValues={contract}
-          validationSchema={NewContractSchema}
+          validationSchema={EditContractSchemaWithProfileID}
           enableReinitialize
           onSubmit={(values) => {
-            create(values);
+            if (values.status !== preStatus) setOpenWarning(true);
+            else create(values);
           }}
         >
           {(props) => {
             return (
               <form id="newContract" className="p-0 m-0">
                 <div className="shadow bg-white rounded mx-4 p-4">
-                  <h5>{t('label.create_new')}.</h5>
+                  <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis', height: 27 }}>
+                    {props.values.code ? props.values.code + ' - ' + props.values.fullname : ''}
+                  </div>
+
+                  <div style={{ fontSize: 14, height: 21 }}>
+                    {props.values.expiredDate
+                      ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                      : props.values.expiredDate
+                      ? t('label.from') + formatDate(props.values.handleDate)
+                      : ''}
+                  </div>
                   <hr className="mt-1" />
                   <BodyContract {...props} />
 
@@ -565,6 +588,15 @@ const EditContract = ({ t, history, match }) => {
                       },
                       name: t('label.back'),
                       position: 'left',
+                    },
+                    {
+                      type: 'button',
+                      className: `btn btn-primary px-4 mx-2`,
+                      onClick: (e) => {
+                        props.handleReset(e);
+                      },
+                      name: t('label.reset'),
+                      position: 'right',
                     },
                     {
                       type: 'button',

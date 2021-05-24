@@ -27,6 +27,7 @@ import paymentReducer from './payment';
 import dashboardReducer from './dashboard';
 import logReducer from './log';
 import wageHistoryReducer from './wageHistories';
+import staticReducer from './static';
 
 export default combineReducers({
   style: styleReducer,
@@ -57,4 +58,5 @@ export default combineReducers({
   dashboard: dashboardReducer,
   log: logReducer,
   wageHistory: wageHistoryReducer,
+  static: staticReducer,
 });

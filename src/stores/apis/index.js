@@ -34,6 +34,7 @@ const API_PREFIX = {
   API_ATTRIBUTE: '/api.attribute',
   API_PAYMENT: '/api.payment',
   API_ACTIVITY: '/api.activity',
+  API_STATIC: '/api.static',
 };
 
 export const api = {
@@ -311,6 +312,9 @@ export const api = {
     getActiveContract: (id) => {
       return client.get(API_PREFIX.API_PROFILE + `/${id}/contract-active`);
     },
+    getActiveWage: (id) => {
+      return client.get(API_PREFIX.API_PROFILE + `/${id}/work-history-active`);
+    },
   },
   contract: {
     getAll: (params) => {
@@ -360,6 +364,16 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_WAGE + `/${id}`);
+    },
+  },
+  static: {
+    getAll: (params) => {
+      return client.get(API_PREFIX.API_STATIC, {
+        params: params,
+      });
+    },
+    delete: (id) => {
+      return client.delete(API_PREFIX.API_STATIC + `/${id}`);
     },
   },
 

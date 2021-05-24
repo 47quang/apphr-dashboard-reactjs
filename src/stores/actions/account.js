@@ -36,6 +36,7 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
           payload && payload.length > 0
             ? payload.map((a) => {
                 a.role = a.role.name;
+                a.profileCode = a.profile.code;
                 return a;
               })
             : [];
