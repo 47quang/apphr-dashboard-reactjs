@@ -208,7 +208,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                   return (
                     <Form id="newHistory" hidden={true} className="p-0 m-0">
                       <div className="shadow bg-white rounded mx-4 p-4">
-                        <h5>{'Tạo mới'}.</h5>
+                        <h5>{t('label.create_new')}.</h5>
                         <hr className="mt-1" />
                         <BodyItem {...props} />
                         <hr className="mt-1" />

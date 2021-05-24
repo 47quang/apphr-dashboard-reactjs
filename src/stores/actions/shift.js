@@ -3,6 +3,7 @@ import { deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
+//TODO
 const handleShiftExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';

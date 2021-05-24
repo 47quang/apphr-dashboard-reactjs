@@ -102,7 +102,7 @@ const Dashboard = ({ t, location }) => {
           <div className={'col-3'}>
             <CWidgetDropdown
               color="gradient-warning"
-              text="Tổng số nhân viên"
+              text={t('label.total_number_employees')}
               style={{ height: '175px' }}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
@@ -127,7 +127,7 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to left, #ff5050 19%, #ff9900 100%)`,
                 height: '175px',
               }}
-              text="Tổng số tài khoản"
+              text={t('label.total_number_accounts')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -151,7 +151,7 @@ const Dashboard = ({ t, location }) => {
               style={{
                 height: '175px',
               }}
-              text="Tổng số chi nhánh"
+              text={t('label.total_number_branches')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -175,7 +175,7 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to left, #99ccff 0%, #cc99ff 100%)`,
                 height: '175px',
               }}
-              text="Tổng số phòng ban"
+              text={t('label.total_number_departments')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -202,7 +202,7 @@ const Dashboard = ({ t, location }) => {
               style={{
                 height: '175px',
               }}
-              text="Số đề xuất xin nghỉ chưa được xử lý"
+              text={t('label.unprocessed_leave_request')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -222,7 +222,7 @@ const Dashboard = ({ t, location }) => {
               style={{
                 height: '175px',
               }}
-              text="Số đề xuất xin làm từ xa chưa được xử lý"
+              text={t('label.unprocessed_remote_request')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -242,7 +242,7 @@ const Dashboard = ({ t, location }) => {
                 background: `linear-gradient(to right, #0099cc 0%, #66ccff 100%)`,
                 height: '175px',
               }}
-              text="Số đề xuất xin làm thêm giờ chưa được xử lý"
+              text={t('label.unprocessed_overtime_request')}
               footerSlot={
                 <div className={'text-center'} style={{ height: '100px' }}>
                   <h1>
@@ -262,7 +262,7 @@ const Dashboard = ({ t, location }) => {
             <CRow>
               <CCol sm="5">
                 <h4 id="traffic" className="card-title mb-0">
-                  Biểu đồ điểm danh
+                  {t('label.roll_call_chart')}
                 </h4>
                 <div className="small text-muted">Tháng 5 2021</div>
               </CCol>

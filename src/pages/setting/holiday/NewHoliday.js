@@ -5,8 +5,6 @@ import Page404 from 'src/pages/page404/Page404';
 import { createHoliday, setEmptyHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
 
-//TODO: translate
-
 const NewHolidayPage = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const holidayInfoForm = useRef();

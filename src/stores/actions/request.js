@@ -2,6 +2,7 @@ import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constant
 import { formatDate, formatDateTimeScheduleToString, formatDateTimeToString, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
+//TODO
 const handleRequestExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';

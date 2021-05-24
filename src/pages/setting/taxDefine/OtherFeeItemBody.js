@@ -10,12 +10,12 @@ import { generateCode } from 'src/utils/randomCode';
 
 const OtherFeeItemBody = ({ t, paymentRef, payment, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const type = [
-    { id: 'percent', name: 'Phần trăm' },
-    { id: 'value', name: 'Mức phí ' },
+    { id: 'percent', name: t('label.percent') },
+    { id: 'value', name: t('label.value') },
   ];
   const by = [
-    { id: 'gross', name: 'Tổng thu nhập' },
-    { id: 'insurrance', name: 'Lương bảo hiểm ' },
+    { id: 'gross', name: t('label.gross_salary') },
+    { id: 'insurrance', name: t('label.social_insurance') },
   ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">

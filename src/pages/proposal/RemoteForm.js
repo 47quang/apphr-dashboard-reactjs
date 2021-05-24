@@ -17,9 +17,9 @@ import { renderButtons } from 'src/utils/formUtils';
 const RemoteForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const status = [
-    { id: 'new', name: 'Đang xử lý' },
-    { id: 'approve', name: 'Đã phê duyệt' },
-    { id: 'reject', name: 'Đã từ chối' },
+    { id: 'new', name: t('label.new') },
+    { id: 'approve', name: t('label.approve') },
+    { id: 'reject', name: t('label.reject') },
   ];
   const remoteRequest = useSelector((state) => state.request.remoteForm);
   const [loading, setLoading] = useState(false);

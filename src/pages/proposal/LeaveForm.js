@@ -22,9 +22,9 @@ const LeaveForm = ({ t, history, match }) => {
     { id: 'policy', name: t('label.leave_policy') },
   ];
   const status = [
-    { id: 'new', name: 'Đang xử lý' },
-    { id: 'approve', name: 'Đã phê duyệt' },
-    { id: 'reject', name: 'Đã từ chối' },
+    { id: 'new', name: t('label.new') },
+    { id: 'approve', name: t('label.approve') },
+    { id: 'reject', name: t('label.reject') },
   ];
   const leaveRequest = useSelector((state) => state.request.leaveForm);
   const [loading, setLoading] = useState(false);
@@ -91,7 +91,6 @@ const LeaveForm = ({ t, history, match }) => {
           <div className="row">
             <div className="shadow bg-white rounded p-4 container col-xl-6">
               <Formik
-                //            innerRef={branchRef}
                 enableReinitialize
                 initialValues={leaveRequest}
                 // validationSchema={LeaveFormSchema}

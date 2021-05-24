@@ -39,6 +39,30 @@ const initialState = {
   tabName: 0,
   subTabName: 0,
   contacts: [],
+  activeContract: {
+    isMinimize: false,
+    status: 'inactive',
+    code: '',
+    fullname: '',
+    type: '',
+    typeTax: '',
+    signee: '',
+    standardHours: 0,
+    handleDate: '',
+    validDate: '',
+    expiredDate: '',
+    branchId: '',
+    startWork: '',
+    formOfPayment: '',
+    wageId: '',
+    dayOff: '',
+    dependant: '',
+    periodicPayment: '',
+    salaryGroup: '',
+    salary: '',
+    allowances: [],
+    files: [],
+  },
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -136,6 +160,10 @@ const profileReducer = (state = initialState, { type, payload }) => {
       };
     case REDUX_STATE.diploma.SET_DIPLOMA:
       return { ...state, newDegree: payload };
+    case REDUX_STATE.profile.GET_ACTIVE_CONTRACT:
+      return { ...state, activeContract: payload };
+    case REDUX_STATE.profile.EMPTY_ACTIVE_CONTRACT:
+      return { ...state, activeContract: initialState.activeContract };
     default:
       return state;
   }

@@ -95,7 +95,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
   }),
   expYear: Yup.number().required('validation.required_enter_experience_year').min(0, 'validation.experience_year_must_not_be_negative'),
 });
-
+//TODO
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
   code: Yup.string().min(1, 'validation.required_enter_branch_code').required('validation.required_enter_branch_code'),
@@ -110,7 +110,7 @@ export const SettingBranchInfoSchema = Yup.object().shape({
     }),
   address: Yup.string(),
   typeCC: Yup.string()
-    .required('Bắt buộc chọn hình thức điểm danh')
+    .required('validation.required_select_roll_call')
     .test('not equal 0', 'validation.required_select_roll_call', function (value) {
       return value !== '0';
     }),
@@ -200,7 +200,11 @@ export const NewContractSchema = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
       return value !== '0';
     }),
-
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_status'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('validation.required_select_start_work'),
@@ -270,16 +274,7 @@ export const NewContractSchema = Yup.object().shape({
       },
       then: Yup.number().required('validation.required_enter_dependant'),
     }),
-  periodicPayment: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
-      return value !== '0';
-    })
-    .when('type', {
-      is: (value) => {
-        return ['limitation', 'un_limitation'].includes(value);
-      },
-      then: Yup.string().required('validation.required_select_periodic_payment'),
-    }),
+
   seasonWage: Yup.number().when('type', {
     is: (value) => {
       return value === 'season';
@@ -331,7 +326,11 @@ export const NewContractSchemaWithProfileID = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_type_tax', function (value) {
       return value !== '0';
     }),
-
+  status: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_contract_status', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_contract_status'),
   handleDate: Yup.string().required('validation.required_select_contract_handle_date'),
   validDate: Yup.string().required('validation.required_select_contract_valid_date'),
   startWork: Yup.string().required('validation.required_select_start_work'),
@@ -401,16 +400,7 @@ export const NewContractSchemaWithProfileID = Yup.object().shape({
       },
       then: Yup.number().required('validation.required_enter_dependant'),
     }),
-  periodicPayment: Yup.string()
-    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_periodic_payment', function (value) {
-      return value !== '0';
-    })
-    .when('type', {
-      is: (value) => {
-        return ['limitation', 'un_limitation'].includes(value);
-      },
-      then: Yup.string().required('validation.required_select_periodic_payment'),
-    }),
+
   seasonWage: Yup.number().when('type', {
     is: (value) => {
       return value === 'season';

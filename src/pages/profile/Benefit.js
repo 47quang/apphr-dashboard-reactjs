@@ -30,8 +30,8 @@ const Benefit = ({ t, history, match }) => {
 
   let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'by_hour', name: 'Chi trả theo giờ' },
-    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_hour', name: t('label.by_hours') },
+    { id: 'by_month', name: t('label.by_month') },
   ];
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
@@ -67,7 +67,6 @@ const Benefit = ({ t, history, match }) => {
             payload: { open: true, type: 'error', message: err },
           });
         });
-      return;
     } else {
       delete form.id;
       delete form.wage;

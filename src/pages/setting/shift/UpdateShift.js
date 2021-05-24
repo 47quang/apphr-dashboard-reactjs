@@ -9,7 +9,6 @@ import { fetchShift, resetShift, updateShift } from 'src/stores/actions/shift';
 import { parseUTCTime } from 'src/utils/datetimeUtils';
 import { enCodeChecked } from './shiftFunctionUtil';
 import ShiftItemBody from './ShiftItemBody';
-//TODO: translate
 
 const UpdateShift = ({ t, location, match, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));

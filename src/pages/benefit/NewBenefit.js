@@ -349,37 +349,35 @@ const NewBenefit = ({ t, history, match }) => {
     );
   };
   return (
-    <>
-      <CContainer fluid className="c-main">
-        <div className="m-auto">
-          <div>
-            {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
-              <Formik
-                initialValues={benefit}
-                validationSchema={BenefitsSchema}
-                enableReinitialize
-                onSubmit={(values) => {
-                  create(values);
-                }}
-              >
-                {(props) => {
-                  return (
-                    <form className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                        <div>
-                          <BodyItem {...props} />
-                          <hr className="mt-1" />
-                        </div>
+    <CContainer fluid className="c-main">
+      <div className="m-auto">
+        <div>
+          {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
+            <Formik
+              initialValues={benefit}
+              validationSchema={BenefitsSchema}
+              enableReinitialize
+              onSubmit={(values) => {
+                create(values);
+              }}
+            >
+              {(props) => {
+                return (
+                  <form className="p-0 m-0">
+                    <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                      <div>
+                        <BodyItem {...props} />
+                        <hr className="mt-1" />
                       </div>
-                    </form>
-                  );
-                }}
-              </Formik>
-            )}
-          </div>
+                    </div>
+                  </form>
+                );
+              }}
+            </Formik>
+          )}
         </div>
-      </CContainer>
-    </>
+      </div>
+    </CContainer>
   );
 };
 

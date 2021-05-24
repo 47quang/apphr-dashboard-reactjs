@@ -5,8 +5,6 @@ import Page404 from 'src/pages/page404/Page404';
 import { createRole, setEmptyRole, fetchPermissions } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
-//TODO: translate
-
 const NewRole = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const roleInfoForm = useRef();
