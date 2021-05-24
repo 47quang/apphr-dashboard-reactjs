@@ -1,11 +1,13 @@
 import { CCard, CCardBody, CCardHeader } from '@coreui/react';
 import { CChartPie } from '@coreui/react-chartjs';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const PieChart = () => {
+  const { t } = useTranslation();
   return (
     <CCard>
-      <CCardHeader>Biểu đồ thống kê ca làm việc trong tháng</CCardHeader>
+      <CCardHeader>{t('label.chart_shift_in_month')}</CCardHeader>
       <CCardBody>
         <CChartPie
           datasets={[
@@ -15,7 +17,13 @@ const PieChart = () => {
               hoverOffset: 100,
             },
           ]}
-          labels={['Số ca đã làm', 'Số ca nghỉ có lương', 'Số ca nghỉ không lương', 'Số ca nghỉ chế độ', 'Vắng']}
+          labels={[
+            t('label.number_shift_works'),
+            t('label.number_paid_shift'),
+            t('label.number_unpaid_shift'),
+            t('label.number_policy_shift'),
+            t('label.absence'),
+          ]}
           options={{
             tooltips: {
               enabled: true,

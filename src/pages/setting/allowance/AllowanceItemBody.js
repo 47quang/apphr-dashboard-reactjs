@@ -10,9 +10,9 @@ import { generateCode } from 'src/utils/randomCode';
 
 const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const type = [
-    { id: 'tax', name: 'Tính thuế' },
-    { id: 'no_tax', name: 'Không tính thuế' },
-    { id: 'partial_tax', name: 'Có hạn mức' },
+    { id: 'tax', name: t('label.tax') },
+    { id: 'no_tax', name: t('label.no_tax') },
+    { id: 'partial_tax', name: t('label.partial_tax') },
   ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">

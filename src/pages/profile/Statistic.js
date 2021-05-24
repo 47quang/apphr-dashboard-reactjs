@@ -7,36 +7,36 @@ import StackedBarChart from 'src/components/charts/StackedBarChart';
 import ExportWage from 'src/components/dialog/ExportWage';
 import { exportWage } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
-
+//TODO
 const Statistic = ({ t, location, profileId }) => {
   const dispatch = useDispatch();
-  const labelsRequest = ['Nghỉ có lương', 'Nghỉ chế độ', 'Nghỉ không lương', 'Tăng ca', 'Làm thêm giờ'];
+  const labelsRequest = [t('label.leave_pay_req'), t('label.leave_policy_req'), t('label.leave_no_pay_req'), 'Tăng ca', t('Overtime')];
   const backgroundColorRequest = ['#8bcdcd', '#a7c5eb', '#efbbcf', '#d9e4dd', '#d8345f'];
-  const titleRequest = 'Biểu đồ  thống kê số đề xuất trong tháng';
+  const titleRequest = t('label.chart_number_requests_in_month');
   const dataRequest = [2, 0, 0, 3, 5];
 
-  const labelsHours = ['Tổng số giờ làm tiêu chuẩn', 'Tổng số giờ làm được', 'Tổng số giờ làm thêm'];
+  const labelsHours = [t('label.standard_working_hours'), t('label.number_hours_worked'), t('label.overtime_hours')];
   const backgroundColorHours = ['#8bcdcd', '#a7c5eb', '#efbbcf'];
-  const titleHours = 'Biểu đồ thống kê giờ làm trong tháng';
+  const titleHours = t('label.chart_hours_in_month');
   const dataHours = [160, 150, 25];
 
-  const titleWorkHours = 'Biểu đồ thống kê giờ làm trong năm';
+  const titleWorkHours = t('label.chart_hours_in_year');
   const labelsWorkHours = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5'];
   const datasets = [
     {
-      label: 'Thời gian làm việc tiêu chuẩn',
+      label: t('label.standard_working_time'),
       data: [160, 160, 160, 160, 170],
       borderColor: '#ff7171',
       type: 'line',
       fill: false,
     },
     {
-      label: 'Thời gian đã làm',
+      label: t('label.time_worked'),
       data: [160, 150, 150, 160, 30],
       backgroundColor: '#a6dcef',
     },
     {
-      label: 'Thời gian làm thêm giờ',
+      label: t('label.overtime_worked'),
       data: [15, 15, 15, 20, 2],
       backgroundColor: '#fdffbc',
     },

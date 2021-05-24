@@ -10,8 +10,8 @@ import { generateCode } from 'src/utils/randomCode';
 
 const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const paymentType = [
-    { id: 'by_hour', name: 'Chi trả theo giờ' },
-    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_hour', name: t('label.by_hour') },
+    { id: 'by_month', name: t('label.by_month') },
   ];
   return (
     <CContainer fluid className="c-main mb-3 px-4">

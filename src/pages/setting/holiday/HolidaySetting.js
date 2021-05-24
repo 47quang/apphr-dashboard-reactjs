@@ -1,6 +1,5 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
-//import { useDispatch } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -13,22 +12,20 @@ const HolidaySetting = ({ t, location, history }) => {
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
-  //const dispatch = useDispatch();
-  // const requests = useSelector((state) => state.holiday.requests);
   const requests = [
     {
       id: 1,
-      label: 'Số ngày nghỉ phép trong năm',
+      label: t('label.day_offs_in_year'),
       amount: 12,
     },
     {
       id: 2,
-      label: 'Số giờ tăng ca tối đa trong tháng',
+      label: t('label.number_of_overtime'),
       amount: 12,
     },
     {
       id: 3,
-      label: 'Số ngày làm việc từ xa trong tháng',
+      label: t('label.number_of_remote'),
       amount: 12,
     },
   ];
@@ -49,12 +46,6 @@ const HolidaySetting = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  // const onTotalChange = (total) =>
-  //   setPaging((prevState) => ({
-  //     ...prevState,
-  //     total: total,
-  //   }));
-
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_HOLIDAY)) {
       // dispatch(

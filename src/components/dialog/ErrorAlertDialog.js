@@ -5,7 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { ErrorOutlineOutlined } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next/*';
 
-//TODO: translate
 const ErrorAlertDialog = ({ isVisible, handleClose, msg }) => {
   const { t } = useTranslation();
   return (

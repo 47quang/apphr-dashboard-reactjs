@@ -41,7 +41,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
           </div>
         ) : (
           <div className="shadow bg-white rounded p-4 container">
-            <FormHeader text="Thông báo" />
+            <FormHeader text={t('Notification')} />
             <Formik
               innerRef={articleRef}
               initialValues={article}
@@ -146,7 +146,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                   </div>
                   <div className="row">
                     <div className="form-group col-xl-12">
-                      <Label text="Chi nhánh" required={true} />
+                      <Label text={t('Branch')} required={true} />
 
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
@@ -162,7 +162,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       </div>
                     </div>
                     <div className="form-group col-xl-12">
-                      <Label text="Phòng ban" />
+                      <Label text={t('Department')} />
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
                           values={values.departmentIds}

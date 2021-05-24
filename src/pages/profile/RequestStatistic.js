@@ -1,6 +1,5 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
-//import { useDispatch } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
@@ -13,27 +12,24 @@ const RequestStatistic = ({ t, location, history }) => {
     { name: 'remain', title: t('label.number_of_remain_request'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-
-  //const dispatch = useDispatch();
-  // const requests = useSelector((state) => state.holiday.requests);
   const requests = [
     {
       id: 1,
-      type: 'Số ngày nghỉ phép trong năm',
+      type: t('label.number_of_day_off'),
       total: 12,
       used: 6,
       remain: 6,
     },
     {
       id: 2,
-      type: 'Số giờ tăng ca tối đa trong tháng',
+      type: t('label.number_of_overtime'),
       total: 12,
       used: 6,
       remain: 6,
     },
     {
       id: 3,
-      type: 'Số ngày làm việc từ xa trong tháng',
+      type: t('label.number_of_remote'),
       total: 12,
       used: 6,
       remain: 6,

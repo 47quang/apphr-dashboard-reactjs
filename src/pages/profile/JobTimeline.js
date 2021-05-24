@@ -60,19 +60,28 @@ const JobTimelineInfo = ({ t, history, match }) => {
   newContract.attributes = useSelector((state) => state.attribute.attributes);
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'by_hour', name: 'Chi trả theo giờ' },
-    { id: 'by_month', name: 'Chi trả theo tháng' },
+    { id: 'by_hour', name: t('label.by_hour') },
+    { id: 'by_month', name: t('label.by_month') },
   ];
 
   const personalIncomeTaxType = [
-    { id: 'resident', name: 'Cá nhân có cư trứ' },
-    { id: 'non_resident', name: 'Cá nhân không cư trú' },
+    { id: 'resident', name: t('label.resident') },
+    { id: 'non_resident', name: t('label.non_resident') },
   ];
 
   const type = [
-    { id: 'limitation', name: 'Có xác định thời hạn' },
-    { id: 'un_limitation', name: 'Không xác định thời hạn' },
-    { id: 'season', name: 'Thuê khoán' },
+    {
+      id: 'limitation',
+      name: t('label.limitation'),
+    },
+    {
+      id: 'un_limitation',
+      name: t('label.un_limitation'),
+    },
+    {
+      id: 'season',
+      name: t('label.season'),
+    },
   ];
 
   useEffect(() => {

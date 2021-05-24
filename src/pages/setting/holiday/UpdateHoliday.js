@@ -5,8 +5,6 @@ import Page404 from 'src/pages/page404/Page404';
 import { fetchHoliday, setEmptyHoliday, updateHoliday } from 'src/stores/actions/holiday';
 import HolidayItemBody from './HolidayItemBody';
 
-//TODO: translate
-
 const UpdateHoliday = ({ t, location, history, match }) => {
   const holidayInfoForm = useRef();
   const dispatch = useDispatch();

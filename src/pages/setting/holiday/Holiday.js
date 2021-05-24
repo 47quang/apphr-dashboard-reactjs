@@ -7,10 +7,6 @@ import Page404 from 'src/pages/page404/Page404';
 import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
 
 const HolidayPage = ({ t, location, history }) => {
-  // const columnDefOfRequestSetting = [
-  //   { name: 'type', title: t('label.proposal_type') },
-  //   { name: 'amount', title: t('label.maximum_day_amount') },
-  // ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
   const columnDef = [
@@ -18,7 +14,6 @@ const HolidayPage = ({ t, location, history }) => {
     { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'startDate', title: t('label.start_date'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'endDate', title: t('label.end_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-    //{ name: 'coefficient', title: 'Hệ số giờ làm' },
   ];
   const filters = {
     code: {

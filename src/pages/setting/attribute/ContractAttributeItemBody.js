@@ -7,12 +7,12 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
-
+//TODO
 const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const typeOptions = [
     {
       id: 'date',
-      name: 'Ngày',
+      name: t('lael.date'),
     },
     {
       id: 'text',

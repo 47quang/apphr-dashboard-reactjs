@@ -1,6 +1,7 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
+//TODO
 const handleArticleExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
   let errorMessage = 'Đã có lỗi bất thường xảy ra';

@@ -80,7 +80,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
           </div>
         </div>
         <div>
-          <p className="mb-1">{'Tên ca làm : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
+          <p className="mb-1">{t('label.shift_name') + ' : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
           <p>{t('label.from') + assignment.startCC + t('label.to') + assignment.endCC}</p>
         </div>
         <QTable

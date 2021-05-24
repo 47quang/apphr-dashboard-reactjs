@@ -14,7 +14,6 @@ import { fetchGeneral, updateGeneral } from 'src/stores/actions/setting';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 
-//TODO: translate
 const SettingGeneralPage = ({ t, location }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const settingRef = useRef();

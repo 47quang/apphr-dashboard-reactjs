@@ -6,7 +6,6 @@ import Select from '@material-ui/core/Select';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import React from 'react';
 
-// TODO TRANS
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),

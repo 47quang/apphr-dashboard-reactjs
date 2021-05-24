@@ -1,8 +1,10 @@
 import { CCard, CCardBody, CCardHeader } from '@coreui/react';
 import { CChartLine } from '@coreui/react-chartjs';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const LineChart = ({ labels, title, backgroundColor, data }) => {
+  const { t } = useTranslation();
   return (
     <CCard>
       <CCardHeader>{title}</CCardHeader>
@@ -10,19 +12,19 @@ const LineChart = ({ labels, title, backgroundColor, data }) => {
         <CChartLine
           datasets={[
             {
-              label: 'Số giờ công tiêu chuẩn',
+              label: t('label.standard_man_hours'),
               borderColor: '#0000ff',
               fill: false,
               data: [160, 160, 160, 160, 170, 170, 170],
             },
             {
-              label: 'Số giờ làm được',
+              label: t('label.number_hours_worked'),
               borderColor: '#2dd256',
               fill: false,
               data: [160, 150, 150, 160, 160, 160, 170],
             },
             {
-              label: 'Số giờ làm thêm',
+              label: t('label.overtime_hours'),
               borderColor: '#FF6384',
               fill: false,
               data: [15, 15, 15, 20, 10, 15, 10],

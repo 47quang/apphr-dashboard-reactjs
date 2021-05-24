@@ -115,7 +115,6 @@ const NewContract = ({ t, history, match }) => {
     } else {
       form.standardHours = +form.standardHours;
     }
-    // console.log('createContract', form);
     dispatch(createContract(form, t('message.successful_create'), undefined, history));
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
