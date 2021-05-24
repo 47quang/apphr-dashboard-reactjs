@@ -1,5 +1,5 @@
 export const generateCode = (n, up = true, type = 'LetterOrDigit') => {
-  n = n || 5;
+  n = n || 6;
   let text = '';
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   if (type === 'Letter') {

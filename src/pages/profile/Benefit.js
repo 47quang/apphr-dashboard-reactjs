@@ -10,19 +10,20 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
-import { BenefitsSchema } from 'src/schema/formSchema';
+import { NewActiveBenefitSchema } from 'src/schema/formSchema';
 import { fetchAllowances, setEmptyContracts } from 'src/stores/actions/contract';
-import { fetchActiveWage } from 'src/stores/actions/profile';
+import { createActiveWage, fetchActiveContract, fetchActiveWage, updateWageHistory } from 'src/stores/actions/profile';
 import { api } from 'src/stores/apis';
-import { REDUX_STATE } from 'src/stores/states';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
 const Benefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const activeContract = useSelector((state) => state.profile.activeContract);
 
   const activeWage = useSelector((state) => state.profile.activeWage);
   const status = [
@@ -31,13 +32,14 @@ const Benefit = ({ t, history, match }) => {
   ];
   let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
-    { id: 'by_hour', name: t('label.by_hours') },
+    { id: 'by_hour', name: t('label.by_hour') },
     { id: 'by_month', name: t('label.by_month') },
   ];
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
       dispatch(fetchActiveWage(+profileId, setLoading));
+      dispatch(fetchActiveContract(+profileId));
 
       return () => {
         dispatch(setEmptyContracts());
@@ -61,48 +63,13 @@ const Benefit = ({ t, history, match }) => {
 
   async function create(form, contractId) {
     form.profileId = +match.params.id;
-    form.contractId = contractId;
+    form.contractId = +activeContract.id;
     form.wageId = parseInt(form.wageId);
 
     if (form.id) {
-      form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
-      form.expiredDate = form.expiredDate === '' ? null : form.expiredDate;
-      await api.wageHistory
-        .put(form)
-        .then(({ payload }) => {
-          dispatch({
-            type: REDUX_STATE.notification.SET_NOTI,
-            payload: { open: true, type: 'success', message: t('message.successful_update') },
-          });
-          return payload;
-        })
-        .catch((err) => {
-          dispatch({
-            type: REDUX_STATE.notification.SET_NOTI,
-            payload: { open: true, type: 'error', message: err },
-          });
-        });
+      dispatch(updateWageHistory(form, t('message.successful_update')));
     } else {
-      delete form.id;
-      delete form.wage;
-      delete form.wages;
-      form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
-      let newWage = await api.wageHistory
-        .post(form)
-        .then(({ payload }) => {
-          dispatch({
-            type: REDUX_STATE.notification.SET_NOTI,
-            payload: { open: true, type: 'success', message: t('message.successful_create') },
-          });
-          return payload;
-        })
-        .catch((err) => {
-          dispatch({
-            type: REDUX_STATE.notification.SET_NOTI,
-            payload: { open: true, type: 'error', message: err },
-          });
-        });
-      return newWage.id;
+      dispatch(createActiveWage(form, t('message.successful_create'), handleResetNewWage));
     }
   }
 
@@ -119,6 +86,8 @@ const Benefit = ({ t, history, match }) => {
     handleReset,
     setTouched,
     handleSubmit,
+    isCreate,
+    contractType,
   }) => {
     return (
       <>
@@ -130,23 +99,59 @@ const Benefit = ({ t, history, match }) => {
         </div>
         <hr className="mt-1" />
         <div className="row">
-          <div className="form-group col-xl-4">
-            <Label text={t('label.benefit_code')} required />
-            <div className="input-group">
-              <input
-                type="text"
-                className={'form-control col-12'}
-                rows={5}
-                onBlur={handleBlur('code')}
-                name={`code`}
-                onChange={(e) => handleChange(`code`)(e)}
-                value={values.code}
-                disabled
-                placeholder={t('placeholder.enter_benefit_code')}
-              />
+          {isCreate ? (
+            <div className="form-group col-xl-4">
+              <Label text={t('label.benefit_code')} required />
+              <div className="input-group">
+                <input
+                  type="text"
+                  className={'form-control col-10'}
+                  rows={5}
+                  onBlur={handleBlur('code')}
+                  name={`code`}
+                  onChange={(e) => handleChange(`code`)(e)}
+                  value={values.code}
+                  placeholder={t('placeholder.enter_benefit_code')}
+                />
+                <div
+                  className="input-group-text col-2 d-flex justify-content-center"
+                  id="basic-addon2"
+                  type="button"
+                  onClick={(e) => {
+                    let randomCode = generateCode();
+                    setFieldValue('code', randomCode);
+                  }}
+                >
+                  {t('label.random')}
+                </div>
+              </div>
+              {errors.code && touched.code && t(errors.code) ? (
+                <div>
+                  <small className={'text-danger'}>{t(errors.code)}</small>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
-          </div>
-          {values?.wageId ? (
+          ) : (
+            <div className="form-group col-xl-4">
+              <Label text={t('label.benefit_code')} required />
+              <div className="input-group">
+                <input
+                  type="text"
+                  className={'form-control col-12'}
+                  rows={5}
+                  onBlur={handleBlur('code')}
+                  name={`code`}
+                  onChange={(e) => handleChange(`code`)(e)}
+                  value={values.code}
+                  disabled
+                  placeholder={t('placeholder.enter_benefit_code')}
+                />
+              </div>
+            </div>
+          )}
+          {contractType !== 'season' ? (
             <>
               <CommonSelectInput
                 containerClassName={'form-group col-lg-4'}
@@ -154,6 +159,12 @@ const Benefit = ({ t, history, match }) => {
                 onBlur={handleBlur(`type`)}
                 onChange={async (e) => {
                   handleChange(`type`)(e);
+                  if (e.target.value !== '0') {
+                    let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                    setFieldValue(`wages`, wages);
+                  } else setFieldValue(`wages`, []);
+                  setFieldValue(`wageId`, '');
+                  setFieldValue(`amount`, '');
                 }}
                 inputID={`type`}
                 labelText={t('label.payment_method')}
@@ -171,7 +182,7 @@ const Benefit = ({ t, history, match }) => {
                 onBlur={handleBlur(`wageId`)}
                 onChange={(e) => {
                   let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, '');
                   handleChange(`wageId`)(e);
                 }}
                 inputID={`wageId`}
@@ -261,6 +272,7 @@ const Benefit = ({ t, history, match }) => {
             inputID={`status`}
             labelText={t('label.status')}
             selectClassName={'form-control'}
+            isRequiredField
             placeholder={t('placeholder.select_benefit_status')}
             isTouched={getIn(touched, `status`)}
             isError={getIn(errors, `status`) && getIn(touched, `status`)}
@@ -341,7 +353,7 @@ const Benefit = ({ t, history, match }) => {
   };
   const newWageRef = useRef();
 
-  const handleResetNewContract = () => {
+  const handleResetNewWage = () => {
     newWageRef.current.handleReset();
     document.getElementById('newWage').hidden = true;
     document.getElementById('addBtn').disabled = false;
@@ -353,6 +365,21 @@ const Benefit = ({ t, history, match }) => {
   };
   const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
+  };
+
+  const updateWageRef = useRef();
+
+  const preStatus = activeWage?.status;
+
+  const [openUpdateWarning, setOpenUpdateWarning] = useState(false);
+
+  const handleConfirmUpdateWarning = (e) => {
+    create(updateWageRef.current.values);
+    setOpenUpdateWarning(!openUpdateWarning);
+  };
+
+  const handleCancelUpdateWarning = () => {
+    setOpenUpdateWarning(!openUpdateWarning);
   };
   return (
     <>
@@ -379,26 +406,42 @@ const Benefit = ({ t, history, match }) => {
           {openWarning && (
             <WarningAlertDialog
               isVisible={openWarning}
-              title={t('title.new_contract')}
+              title={t('title.new_active_wage')}
               titleConfirm={t('label.agree')}
               handleConfirm={handleConfirmWarning}
               titleCancel={t('label.decline')}
               handleCancel={handleCancelWarning}
-              warningMessage={t('message.new_contract_warning_message')}
+              warningMessage={t('message.new_active_wage_warning_message')}
             />
           )}
+          {openUpdateWarning && (
+            <WarningAlertDialog
+              isVisible={openUpdateWarning}
+              title={t('title.update_active_wage')}
+              titleConfirm={t('label.agree')}
+              handleConfirm={handleConfirmUpdateWarning}
+              titleCancel={t('label.decline')}
+              handleCancel={handleCancelUpdateWarning}
+              warningMessage={t('message.update_active_wage_warning_message')}
+            />
+          )}
+
           <div className="m-auto">
             <div>
               {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
                 <Formik
+                  innerRef={newWageRef}
                   initialValues={newBenefit}
-                  validationSchema={BenefitsSchema}
+                  validationSchema={NewActiveBenefitSchema}
                   enableReinitialize
                   onSubmit={(values) => {
-                    create(values);
+                    if (values?.status === 'active') setOpenWarning(true);
+                    else create(values);
                   }}
                 >
                   {(props) => {
+                    props.isCreate = true;
+                    props.contractType = activeContract.type;
                     return (
                       <form id="newWage" hidden={true} className="p-0 m-0">
                         <div className="shadow bg-white rounded mx-4 p-4 mb-4">
@@ -410,7 +453,7 @@ const Benefit = ({ t, history, match }) => {
                                 type: 'button',
                                 className: `btn btn-primary  mx-2`,
                                 onClick: (e) => {
-                                  handleResetNewContract();
+                                  handleResetNewWage();
                                 },
                                 name: t('label.cancel'),
                                 position: 'right',
@@ -420,6 +463,7 @@ const Benefit = ({ t, history, match }) => {
                                 className: `btn btn-primary px-4 ml-2`,
                                 onClick: (e) => {
                                   props.handleSubmit(e);
+                                  console.log(props.errors);
                                 },
                                 name: t('label.create_new'),
                               },
@@ -431,16 +475,20 @@ const Benefit = ({ t, history, match }) => {
                   }}
                 </Formik>
               )}
-              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
+              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && activeWage ? (
                 <Formik
+                  innerRef={updateWageRef}
                   initialValues={activeWage}
-                  validationSchema={BenefitsSchema}
+                  validationSchema={NewActiveBenefitSchema}
                   enableReinitialize
                   onSubmit={(values) => {
-                    create(values);
+                    if (preStatus && values.status !== preStatus) setOpenUpdateWarning(true);
+                    else create(values);
                   }}
                 >
                   {(props) => {
+                    props.isCreate = false;
+                    props.contractType = activeContract.type;
                     return (
                       <form className="p-0 m-0">
                         <div className="shadow bg-white rounded mx-4 p-4 mb-4">
@@ -477,6 +525,8 @@ const Benefit = ({ t, history, match }) => {
                     );
                   }}
                 </Formik>
+              ) : (
+                <></>
               )}
             </div>
           </div>

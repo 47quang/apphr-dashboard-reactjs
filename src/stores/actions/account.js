@@ -1,6 +1,7 @@
 import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 //TODO
 const handleAccountExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
@@ -37,6 +38,9 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
             ? payload.map((a) => {
                 a.role = a.role.name;
                 a.profileCode = a.profile.code;
+                a.profileId = a.profile.id;
+                a.employee = a.profile.code + ' - ' + a.profile.fullname;
+                a.createdAt = formatDateTimeToString(a.createdAt);
                 return a;
               })
             : [];

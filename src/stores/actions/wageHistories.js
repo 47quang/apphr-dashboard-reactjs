@@ -44,7 +44,9 @@ export const fetchWageHistories = (params, onTotalChange, setLoading, t) => {
           payload && payload.length > 0
             ? payload.map((wage) => {
                 wage.contractName = wage?.contract?.code + ' - ' + wage?.contract?.fullname;
+                wage.contractId = wage?.id;
                 wage.employee = wage.profile.code + ' - ' + wage.profile.fullname;
+                wage.profileId = wage.profile.id;
                 wage.type = paymentType[wage.type];
                 wage.status = status[wage.status];
                 wage.startDate = formatDate(wage.startDate);
@@ -115,10 +117,10 @@ export const updateWageHistory = (data, success_msg) => {
         payload.type = data?.wage?.type;
         payload.wageId = data.wageId;
         payload.wages = data.wages;
+        payload.allowances = data.allowances;
         payload.startDate = formatDateInput(payload.startDate);
         payload.code = payload.code ?? undefined;
         payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
-        dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

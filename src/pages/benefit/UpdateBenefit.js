@@ -45,6 +45,9 @@ const UpdateBenefit = ({ t, history, match }) => {
 
   const update = (form) => {
     // console.log('updateWageHistory', form);
+    let thisWage = form.wages.filter((s) => s.id === parseInt(form.wageId));
+    if (thisWage.length > 0) form.wage = thisWage[0];
+    if (form.amount === '') delete form.amount;
     dispatch(updateWageHistory(form, t('message.successful_update')));
   };
 
@@ -145,7 +148,9 @@ const UpdateBenefit = ({ t, history, match }) => {
                 onBlur={handleBlur(`wageId`)}
                 onChange={(e) => {
                   let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  if (thisWage.length > 0) {
+                    setFieldValue(`amount`, thisWage[0].amount);
+                  } else setFieldValue(`amount`, '');
                   handleChange(`wageId`)(e);
                 }}
                 inputID={`wageId`}

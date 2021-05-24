@@ -12,6 +12,7 @@ const initialState = {
     expiredDate: '',
     wages: [],
     code: '',
+    wage: {},
   },
 };
 

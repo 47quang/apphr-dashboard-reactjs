@@ -20,6 +20,7 @@ import { fetchActiveContract, setEmptyActiveContract } from 'src/stores/actions/
 import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
 const JobTimelineInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -133,21 +134,60 @@ const JobTimelineInfo = ({ t, history, match }) => {
     return (
       <>
         <div className="row">
-          <CommonTextInput
-            containerClassName={'form-group col-xl-4'}
-            value={values?.code ?? ''}
-            onBlur={handleBlur(`code`)}
-            onChange={handleChange(`code`)}
-            inputID={`code`}
-            labelText={t('label.contract_code')}
-            inputType={'text'}
-            isRequiredField
-            placeholder={t('placeholder.enter_contract_code')}
-            inputClassName={'form-control'}
-            isTouched={touched.code}
-            isError={errors.code && touched.code}
-            errorMessage={t(errors.code)}
-          />
+          {isCreate ? (
+            <div className="form-group col-xl-4">
+              <Label text={t('label.contract_code')} required />
+              <div className="input-group">
+                <input
+                  type="text"
+                  className={'form-control col-10'}
+                  rows={5}
+                  onBlur={handleBlur('code')}
+                  name={`code`}
+                  onChange={(e) => handleChange(`code`)(e)}
+                  value={values.code}
+                  disabled={!isCreate}
+                  placeholder={t('placeholder.enter_contract_code')}
+                />
+                <div
+                  className="input-group-text col-2 d-flex justify-content-center"
+                  id="basic-addon2"
+                  type="button"
+                  onClick={(e) => {
+                    let randomCode = generateCode();
+                    setFieldValue('code', randomCode);
+                  }}
+                >
+                  {t('label.random')}
+                </div>
+              </div>
+              {errors.code && touched.code && t(errors.code) ? (
+                <div>
+                  <small className={'text-danger'}>{t(errors.code)}</small>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <>
+              <CommonTextInput
+                containerClassName={'form-group col-xl-4'}
+                value={values?.code ?? ''}
+                onBlur={handleBlur(`code`)}
+                onChange={handleChange(`code`)}
+                inputID={`code`}
+                labelText={t('label.contract_code')}
+                inputType={'text'}
+                isRequiredField
+                placeholder={t('placeholder.enter_contract_code')}
+                inputClassName={'form-control'}
+                isTouched={touched.code}
+                isError={errors.code && touched.code}
+                errorMessage={t(errors.code)}
+              />
+            </>
+          )}
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values?.fullname ?? ''}
@@ -404,7 +444,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                   if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
                   else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
                   if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
-                  else setFieldValue(`amount`, 0);
+                  else setFieldValue(`amount`, '');
                   handleChange(`wageId`)(e);
                 }}
                 inputID={`wageId`}
@@ -537,8 +577,14 @@ const JobTimelineInfo = ({ t, history, match }) => {
           </div>
         )}
 
-        <h5 className="px-3">{t('label.allowance')}</h5>
-        <hr className="mt-2" />
+        {values.allowances && values.allowances.length > 0 ? (
+          <>
+            <h5 className="px-3">{t('label.allowance')}</h5>
+            <hr className="mt-2" />
+          </>
+        ) : (
+          <></>
+        )}
         <FieldArray
           name={`allowances`}
           render={({ insert, remove, push, replace }) => (
@@ -642,6 +688,21 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
   };
+
+  const updateContractRef = useRef();
+
+  const preStatus = activeContract.status;
+
+  const [openUpdateWarning, setOpenUpdateWarning] = useState(false);
+
+  const handleConfirmUpdateWarning = (e) => {
+    create(updateContractRef.current.values);
+    setOpenUpdateWarning(!openUpdateWarning);
+  };
+
+  const handleCancelUpdateWarning = () => {
+    setOpenUpdateWarning(!openUpdateWarning);
+  };
   return (
     <>
       {loading ? (
@@ -675,6 +736,18 @@ const JobTimelineInfo = ({ t, history, match }) => {
               warningMessage={t('message.new_contract_warning_message')}
             />
           )}
+          {openUpdateWarning && (
+            <WarningAlertDialog
+              isVisible={openUpdateWarning}
+              title={t('title.update_contract')}
+              titleConfirm={t('label.agree')}
+              handleConfirm={handleConfirmUpdateWarning}
+              titleCancel={t('label.decline')}
+              handleCancel={handleCancelUpdateWarning}
+              warningMessage={t('message.update_contract_warning_message')}
+            />
+          )}
+
           <div className="m-auto">
             <Formik
               innerRef={newContractRef}
@@ -723,11 +796,13 @@ const JobTimelineInfo = ({ t, history, match }) => {
             </Formik>
             {activeContract ? (
               <Formik
+                innerRef={updateContractRef}
                 initialValues={activeContract}
                 validationSchema={NewContractSchema}
                 enableReinitialize
                 onSubmit={(values) => {
-                  create(values);
+                  if (values.status !== preStatus) setOpenUpdateWarning(true);
+                  else create(values);
                 }}
               >
                 {(props) => {

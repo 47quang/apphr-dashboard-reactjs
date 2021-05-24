@@ -158,7 +158,8 @@ export const fetchWageHistories = (params, setLoading) => {
   };
 };
 
-export const fetchContract = (id) => {
+export const fetchContract = (id, setLoading) => {
+  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .get(id)
@@ -186,6 +187,7 @@ export const fetchContract = (id) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContract');

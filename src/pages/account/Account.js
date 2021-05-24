@@ -3,18 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
-import { fetchAccounts, deleteAccount, filterAccounts } from 'src/stores/actions/account';
+import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
 import Page404 from '../page404/Page404';
 
 const Account = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
     { name: 'code', title: t('label.account_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'username', title: t('label.username'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'profileId', title: t('label.employee_code'), align: 'left', width: '10%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     username: {
@@ -95,7 +96,7 @@ const Account = ({ t, location, history }) => {
   }, [paging.currentPage, paging.pageSize]);
   const filterFunction = (params) => {
     dispatch(
-      filterAccounts(
+      fetchAccounts(
         {
           ...params,
           page: paging.currentPage,
@@ -129,7 +130,7 @@ const Account = ({ t, location, history }) => {
           route={ROUTE_PATH.ACCOUNT + '/'}
           idxColumnsFilter={[0]}
           deleteRow={deleteRow}
-          linkCols={[{ name: 'profileId', value: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
+          linkCols={[{ name: 'employee', id: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
@@ -138,6 +139,7 @@ const Account = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );

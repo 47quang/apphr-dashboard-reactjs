@@ -62,6 +62,7 @@ const NewBenefit = ({ t, history, match }) => {
     delete form.wage;
     delete form.wages;
     if (!form.expiredDate) delete form.expiredDate;
+    if (form.amount === '') delete form.amount;
     form.allowanceIds = form.allowances && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
     dispatch(createWageHistory(form, history, t('message.successful_create')));
   };
@@ -177,8 +178,8 @@ const NewBenefit = ({ t, history, match }) => {
                     let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
                     setFieldValue(`wages`, wages);
                   } else setFieldValue(`wages`, []);
-                  setFieldValue(`wageId`, 0);
-                  setFieldValue(`amount`, 0);
+                  setFieldValue(`wageId`, '');
+                  setFieldValue(`amount`, '');
                 }}
                 inputID={`type`}
                 labelText={t('label.payment_method')}
@@ -196,7 +197,7 @@ const NewBenefit = ({ t, history, match }) => {
                 onBlur={handleBlur(`wageId`)}
                 onChange={(e) => {
                   let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, '');
                   handleChange(`wageId`)(e);
                 }}
                 inputID={`wageId`}
@@ -382,6 +383,7 @@ const NewBenefit = ({ t, history, match }) => {
                   className: `btn btn-primary px-4 ml-2`,
                   onClick: (e) => {
                     handleSubmit(e);
+                    console.log(errors);
                   },
                   name: t('label.create_new'),
                 },

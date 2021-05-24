@@ -1,4 +1,5 @@
 import { CContainer } from '@coreui/react';
+import { CircularProgress } from '@material-ui/core';
 import { FieldArray, Formik, getIn } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,8 +23,9 @@ const EditContract = ({ t, history, match }) => {
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   let contract = useSelector((state) => state.contract.contract);
-
   const allowances = useSelector((state) => state.contract.allowances);
+  const [loading, setLoading] = useState(false);
+
   const status = [
     { id: 'active', name: t('label.active') },
     { id: 'inactive', name: t('label.inactive') },
@@ -55,7 +57,7 @@ const EditContract = ({ t, history, match }) => {
       dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
-      dispatch(fetchContract(+match?.params?.id));
+      dispatch(fetchContract(+match?.params?.id, setLoading));
       return () => {
         dispatch(setEmptyContract());
       };
@@ -279,7 +281,23 @@ const EditContract = ({ t, history, match }) => {
         <div className="row"></div>
         <h5 className="px-3">{t('label.gross_salary')}</h5>
         <hr className="mt-1" />
-        {values.type !== 'season' ? (
+        {values.type === 'season' ? (
+          <div className="row">
+            <CommonTextInput
+              containerClassName={'form-group col-xl-4'}
+              value={values?.seasonWage ?? ''}
+              onBlur={handleBlur(`seasonWage`)}
+              onChange={handleChange(`seasonWage`)}
+              inputID={`seasonWage`}
+              isRequiredField={values.type === 'season'}
+              labelText={t('label.salary_level')}
+              inputType={'number'}
+              inputClassName={'form-control'}
+              placeholder={t('placeholder.enter_salary_level')}
+              isDisable
+            />
+          </div>
+        ) : (
           <div>
             <div className="row">
               <CommonSelectInput
@@ -447,32 +465,21 @@ const EditContract = ({ t, history, match }) => {
               </div>
             )}
           </div>
+        )}
+        {values.allowances && values.allowances.length > 0 ? (
+          <>
+            <h5 className="px-3">{t('label.allowance')}</h5>
+            <hr className="mt-2" />
+          </>
         ) : (
-          <div className="row">
-            <CommonTextInput
-              containerClassName={'form-group col-xl-4'}
-              value={values?.seasonWage ?? ''}
-              onBlur={handleBlur(`seasonWage`)}
-              onChange={handleChange(`seasonWage`)}
-              inputID={`seasonWage`}
-              isRequiredField={values.type === 'season'}
-              labelText={t('label.salary_level')}
-              inputType={'number'}
-              inputClassName={'form-control'}
-              placeholder={t('placeholder.enter_salary_level')}
-              isDisable
-            />
-          </div>
+          <></>
         )}
 
-        <h5 className="px-3">{t('label.allowance')}</h5>
-        <hr className="mt-2" />
         <FieldArray
           name={`allowances`}
           render={({ insert, remove, push, replace }) => (
             <div>
-              {values.allowances &&
-                values.allowances.length > 0 &&
+              {values.allowances && values.allowances.length > 0 ? (
                 values.allowances.map((allowance, allowanceIdx) => {
                   return (
                     <div key={`allowance${allowanceIdx}`}>
@@ -510,7 +517,10 @@ const EditContract = ({ t, history, match }) => {
                       </div>
                     </div>
                   );
-                })}
+                })
+              ) : (
+                <></>
+              )}
             </div>
           )}
         />
@@ -539,80 +549,85 @@ const EditContract = ({ t, history, match }) => {
   return (
     <CContainer fluid className="c-main">
       <div className="m-auto">
-        {openWarning && (
-          <WarningAlertDialog
-            isVisible={openWarning}
-            title={t('title.update_contract')}
-            titleConfirm={t('label.agree')}
-            handleConfirm={handleConfirmWarning}
-            titleCancel={t('label.decline')}
-            handleCancel={handleCancelWarning}
-            warningMessage={t('message.update_contract_warning_message')}
-          />
+        {loading ? (
+          <div className="text-center">
+            <CircularProgress />
+          </div>
+        ) : (
+          <Formik
+            innerRef={newContractRef}
+            initialValues={contract}
+            validationSchema={EditContractSchemaWithProfileID}
+            enableReinitialize
+            onSubmit={(values) => {
+              if (values.status !== preStatus) setOpenWarning(true);
+              else create(values);
+            }}
+          >
+            {(props) => {
+              return (
+                <form id="newContract" className="p-0 m-0">
+                  <div className="shadow bg-white rounded mx-4 p-4">
+                    <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis', height: 27 }}>
+                      {props.values.code ? props.values.code + ' - ' + props.values.fullname : ''}
+                    </div>
+
+                    <div style={{ fontSize: 14, height: 21 }}>
+                      {props.values.expiredDate
+                        ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                        : props.values.expiredDate
+                        ? t('label.from') + formatDate(props.values.handleDate)
+                        : ''}
+                    </div>
+                    <hr className="mt-1" />
+                    <BodyContract {...props} />
+                    {openWarning && (
+                      <WarningAlertDialog
+                        isVisible={openWarning}
+                        title={t('title.update_contract')}
+                        titleConfirm={t('label.agree')}
+                        handleConfirm={handleConfirmWarning}
+                        titleCancel={t('label.decline')}
+                        handleCancel={handleCancelWarning}
+                        warningMessage={t('message.update_contract_warning_message')}
+                      />
+                    )}
+                    <hr className="mt-1" />
+                    {renderButtons([
+                      {
+                        type: 'button',
+                        className: `btn btn-primary mr-4`,
+                        onClick: (e) => {
+                          history.push(ROUTE_PATH.NAV_CONTRACT);
+                        },
+                        name: t('label.back'),
+                        position: 'left',
+                      },
+                      {
+                        type: 'button',
+                        className: `btn btn-primary px-4 mx-2`,
+                        onClick: (e) => {
+                          props.handleReset(e);
+                        },
+                        name: t('label.reset'),
+                        position: 'right',
+                      },
+                      {
+                        type: 'button',
+                        className: `btn btn-primary px-4 ml-2`,
+                        onClick: (e) => {
+                          props.handleSubmit(e);
+                        },
+                        name: t('label.save'),
+                      },
+                    ])}
+                  </div>
+                  <br />
+                </form>
+              );
+            }}
+          </Formik>
         )}
-        <Formik
-          innerRef={newContractRef}
-          initialValues={contract}
-          validationSchema={EditContractSchemaWithProfileID}
-          enableReinitialize
-          onSubmit={(values) => {
-            if (values.status !== preStatus) setOpenWarning(true);
-            else create(values);
-          }}
-        >
-          {(props) => {
-            return (
-              <form id="newContract" className="p-0 m-0">
-                <div className="shadow bg-white rounded mx-4 p-4">
-                  <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis', height: 27 }}>
-                    {props.values.code ? props.values.code + ' - ' + props.values.fullname : ''}
-                  </div>
-
-                  <div style={{ fontSize: 14, height: 21 }}>
-                    {props.values.expiredDate
-                      ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                      : props.values.expiredDate
-                      ? t('label.from') + formatDate(props.values.handleDate)
-                      : ''}
-                  </div>
-                  <hr className="mt-1" />
-                  <BodyContract {...props} />
-
-                  <hr className="mt-1" />
-                  {renderButtons([
-                    {
-                      type: 'button',
-                      className: `btn btn-primary mr-4`,
-                      onClick: (e) => {
-                        history.push(ROUTE_PATH.NAV_CONTRACT);
-                      },
-                      name: t('label.back'),
-                      position: 'left',
-                    },
-                    {
-                      type: 'button',
-                      className: `btn btn-primary px-4 mx-2`,
-                      onClick: (e) => {
-                        props.handleReset(e);
-                      },
-                      name: t('label.reset'),
-                      position: 'right',
-                    },
-                    {
-                      type: 'button',
-                      className: `btn btn-primary px-4 ml-2`,
-                      onClick: (e) => {
-                        props.handleSubmit(e);
-                      },
-                      name: t('label.save'),
-                    },
-                  ])}
-                </div>
-                <br />
-              </form>
-            );
-          }}
-        </Formik>
       </div>
     </CContainer>
   );

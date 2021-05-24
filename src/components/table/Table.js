@@ -358,8 +358,10 @@ const QTable = (props) => {
   };
   const StatusProvider = (p) => <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
 
-  const LinkFormatter = ({ value, column }) =>
-    value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
+  const LinkFormatter = ({ row, value, column }) => {
+    let col = linkCols.filter((x) => x.name === column.name)[0];
+    return value ? <Link to={`${col.route}${row[col.id]}`}>{value}</Link> : t('message.empty_table');
+  };
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
@@ -549,7 +551,9 @@ const QTable = (props) => {
                             containerClassName={'form-group col-lg-4'}
                             value={values.value}
                             onBlur={handleBlur('value')}
-                            onChange={handleChange('value')}
+                            onChange={(e) => {
+                              handleChange('value')(e);
+                            }}
                             labelText={t('label.keyword')}
                             inputType={'text'}
                             placeholder={t('placeholder.enter_keyword')}
@@ -563,7 +567,9 @@ const QTable = (props) => {
                             containerClassName={'form-group col-lg-4'}
                             value={values.value}
                             onBlur={handleBlur('value')}
-                            onChange={handleChange('value')}
+                            onChange={(e) => {
+                              handleChange('value')(e);
+                            }}
                             labelText={t('label.filter_value')}
                             placeholder={t('placeholder.select_value')}
                             selectClassName={'form-control'}

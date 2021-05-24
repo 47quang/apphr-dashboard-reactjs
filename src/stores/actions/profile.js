@@ -421,6 +421,57 @@ export const fetchActiveWage = (id, setLoading) => {
       });
   };
 };
+export const createActiveWage = (params, success_msg, handleResetNewWage) => {
+  delete params.id;
+  delete params.wage;
+  delete params.wages;
+  if (params.expiredDate === '') delete params.expiredDate;
+  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.id)) : [];
+  return (dispatch, getState) => {
+    api.wageHistory
+      .post(params)
+      .then(async ({ payload }) => {
+        if (payload) {
+          payload.wageId = payload.wageId ?? undefined;
+          payload.type = payload?.wage?.type;
+          payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
+          payload.startDate = formatDateInput(payload.startDate);
+          payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        }
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleResetNewWage) handleResetNewWage();
+        dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+      });
+  };
+};
+
+export const updateWageHistory = (data, success_msg) => {
+  if (data.expiredDate === '') delete data.expiredDate;
+  data.allowanceIds = data && data.allowances.length > 0 ? data.allowances.map((a) => parseInt(a.id)) : [];
+  let thisWage = data.wages && data.wages.length > 0 ? data.wages.filter((wage) => wage.id === data.wageId) : [];
+  data.wage = thisWage && thisWage.length > 0 ? thisWage[0] : {};
+  return (dispatch, getState) => {
+    api.wageHistory
+      .put(data)
+      .then(({ payload }) => {
+        payload.type = data?.wage?.type;
+        payload.wageId = data.wageId;
+        payload.wages = data.wages;
+        payload.allowances = data.allowances;
+        payload.startDate = formatDateInput(payload.startDate);
+        payload.code = payload.code ?? undefined;
+        payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        if (payload.status === 'active') dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+      });
+  };
+};
 
 export const setEmptyActiveWage = () => {
   return {

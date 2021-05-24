@@ -152,7 +152,10 @@ const Benefit = ({ t, location, history }) => {
           data={wageHistories}
           route={ROUTE_PATH.NAV_BENEFIT + '/'}
           deleteRow={deleteRow}
-          //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
+          linkCols={[
+            { name: 'contractName', id: 'contractId', route: `${ROUTE_PATH.NAV_CONTRACT}/` },
+            { name: 'employee', id: 'profileId', route: `${ROUTE_PATH.PROFILE}/` },
+          ]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
