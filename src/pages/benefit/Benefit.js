@@ -17,7 +17,7 @@ const Benefit = ({ t, location, history }) => {
   ];
   const filters = {
     code: {
-      title: t('label.code'),
+      title: t('label.benefit_code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -26,8 +26,8 @@ const Benefit = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    contractId: {
-      title: t('label.contractId'),
+    contractCode: {
+      title: t('label.contract_code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -36,8 +36,8 @@ const Benefit = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    employee: {
-      title: t('label.employee'),
+    profileCode: {
+      title: t('label.employee_code'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,
@@ -51,10 +51,20 @@ const Benefit = ({ t, location, history }) => {
       operates: [
         {
           id: FILTER_OPERATOR.EQUAL,
-          name: t('filter_operator.like'),
+          name: t('filter_operator.='),
         },
       ],
-      type: 'text',
+      type: 'select',
+      values: [
+        {
+          id: 'active',
+          name: t('label.active'),
+        },
+        {
+          id: 'inactive',
+          name: t('label.inactive'),
+        },
+      ],
     },
   };
   const dispatch = useDispatch();
@@ -98,6 +108,7 @@ const Benefit = ({ t, location, history }) => {
           },
           onTotalChange,
           setLoading,
+          t,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,6 +123,7 @@ const Benefit = ({ t, location, history }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
   };
@@ -124,6 +136,7 @@ const Benefit = ({ t, location, history }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
   };

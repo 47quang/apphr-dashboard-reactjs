@@ -100,7 +100,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
     // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
-      dispatch(updateContract(form, t('message.successful_update')));
+      dispatch(updateContract(form, true, t('message.successful_update')));
     } else {
       if (form.type === 'season') {
         delete form.wageId;
@@ -112,11 +112,12 @@ const JobTimelineInfo = ({ t, history, match }) => {
         delete form.wageId;
         delete form.salary;
         delete form.standardHours;
+        delete form.dependant;
       } else {
         form.standardHours = +form.standardHours;
       }
-      console.log(form);
-      //dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
+      // console.log(form);
+      dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue, isCreate }) => {
@@ -281,6 +282,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             lstSelectOptions={branches}
           />
           {values.attributes &&
+            isCreate &&
             values.attributes.length > 0 &&
             values.attributes.map((attribute, attributeIdx) => {
               return (
@@ -290,7 +292,9 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       containerClassName={'form-group flex-grow-1 p-0 m-0'}
                       value={attribute?.value ?? ''}
                       onBlur={handleBlur(`attributes.${attributeIdx}.value`)}
-                      onChange={handleChange(`attributes.${attributeIdx}.value`)}
+                      onChange={(e) => {
+                        handleChange(`attributes.${attributeIdx}.value`)(e);
+                      }}
                       inputID={`attributes.${attributeIdx}.value`}
                       labelText={attribute.name}
                       inputType={attribute.type}
@@ -304,6 +308,39 @@ const JobTimelineInfo = ({ t, history, match }) => {
                       onChange={handleChange(`attributes.${attributeIdx}.value`)}
                       inputID={attribute.type}
                       labelText={attribute.name}
+                      inputClassName={'form-control'}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          {values.contractAttributes &&
+            !isCreate &&
+            values.contractAttributes.length > 0 &&
+            values.contractAttributes.map((attribute, attributeIdx) => {
+              return (
+                <div key={`attribute${attributeIdx}`} className="form-group col-xl-4 d-flex">
+                  {attribute.type !== 'textArea' ? (
+                    <CommonTextInput
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
+                      value={attribute?.value ?? ''}
+                      onBlur={handleBlur(`contractAttributes.${attributeIdx}.value`)}
+                      onChange={(e) => {
+                        handleChange(`contractAttributes.${attributeIdx}.value`)(e);
+                      }}
+                      inputID={`contractAttributes.${attributeIdx}.value`}
+                      labelText={attribute?.attribute.name}
+                      inputType={attribute?.attribute.type}
+                      inputClassName={'form-control'}
+                    />
+                  ) : (
+                    <CommonMultipleTextInput
+                      containerClassName={'form-group flex-grow-1 p-0 m-0'}
+                      value={attribute.value ?? ''}
+                      onBlur={handleBlur(`contractAttributes.${attributeIdx}.value`)}
+                      onChange={handleChange(`contractAttributes.${attributeIdx}.value`)}
+                      inputID={attribute?.attribute.type}
+                      labelText={attribute?.attribute.name}
                       inputClassName={'form-control'}
                     />
                   )}
@@ -342,6 +379,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 labelText={t('label.payment_method')}
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_contract_payment_method')}
+                isDisable={!isCreate}
                 isRequiredField
                 isTouched={touched.formOfPayment}
                 isError={errors.formOfPayment && touched.formOfPayment}
@@ -365,6 +403,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 selectClassName={'form-control'}
                 placeholder={t('placeholder.select_contract_payment_method')}
                 isRequiredField
+                isDisable={!isCreate}
                 isTouched={touched?.wageId}
                 isError={errors?.wageId && touched.wageId}
                 errorMessage={t(errors?.wageId)}
@@ -397,7 +436,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                     onChange={(e) => handleChange(`standardHours`)(e)}
                     value={values.standardHours ?? 0}
                     placeholder={t('placeholder.enter_standard_hours')}
-                    disabled={values.formOfPayment !== 'by_month'}
+                    disabled={values.formOfPayment !== 'by_month' || !isCreate}
                   />
                   <span className="input-group-text col-2 d-flex justify-content-center" id="basic-addon2">
                     {t('label.hours')}
@@ -420,6 +459,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 placeholder={t('placeholder.enter_dayOff')}
                 inputClassName={'form-control'}
                 isRequiredField
+                isDisable={!isCreate}
                 isTouched={touched.dayOff}
                 isError={errors.dayOff && touched.dayOff}
                 errorMessage={t(errors.dayOff)}
@@ -435,6 +475,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 placeholder={t('placeholder.enter_dependant')}
                 inputClassName={'form-control'}
                 isRequiredField
+                isDisable={!isCreate}
                 isTouched={touched.dependant}
                 isError={errors.dependant && touched.dependant}
                 errorMessage={t(errors.dependant)}
@@ -446,6 +487,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               value={values.isIns ?? false}
               onBlur={handleBlur('isIns')}
               onChange={handleChange('isIns')}
+              isDisable={!isCreate}
             />
             {values.isIns && (
               <div className="row">
@@ -457,6 +499,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                   inputID={'amountIns'}
                   labelText={t('label.social_insurance')}
                   isRequiredField={values.isIns}
+                  isDisable={!isCreate}
                   inputType={'number'}
                   placeholder={t('placeholder.enter_insurance_salary')}
                   inputClassName={'form-control'}
@@ -480,6 +523,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
               isTouched={touched?.seasonWage}
               isError={errors?.seasonWage}
               errorMessage={t(errors?.seasonWage)}
+              isDisable={!isCreate}
             />
           </div>
         )}
@@ -515,6 +559,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           isError={getIn(errors, `allowances.${allowanceIdx}.id`) && getIn(touched, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
                           lstSelectOptions={allowances}
+                          isDisable={!isCreate}
                         />
                         <CommonTextInput
                           containerClassName={'form-group col-xl-4'}
@@ -528,19 +573,26 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           placeholder={t('placeholder.pension')}
                           isDisable
                         />
-
-                        <div className="form-group pb-2 col-1">
-                          <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                        </div>
+                        {isCreate ? (
+                          <div className="form-group pb-2 col-1">
+                            <DeleteIconButton onClick={() => remove(allowanceIdx)} />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   );
                 })}
-              <div className="d-flex justify-content-start mb-4">
-                <button type="button" className="btn btn-primary" onClick={() => push({ name: 0, amount: 0 })}>
-                  <AddCircle /> {t('label.add_allowance')}
-                </button>
-              </div>
+              {isCreate ? (
+                <div className="d-flex justify-content-start mb-4">
+                  <button type="button" className="btn btn-primary" onClick={() => push({ name: 0, amount: 0 })}>
+                    <AddCircle /> {t('label.add_allowance')}
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           )}
         />
@@ -576,6 +628,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const handleConfirmWarning = (e) => {
     create(newContractRef.current.values);
+    setOpenWarning(!openWarning);
   };
   const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
@@ -605,12 +658,12 @@ const JobTimelineInfo = ({ t, history, match }) => {
           {openWarning && (
             <WarningAlertDialog
               isVisible={openWarning}
-              title={t('title.delete_row')}
+              title={t('title.new_contract')}
               titleConfirm={t('label.agree')}
               handleConfirm={handleConfirmWarning}
               titleCancel={t('label.decline')}
               handleCancel={handleCancelWarning}
-              warningMessage={t('message.delete_warning_message')}
+              warningMessage={t('message.new_contract_warning_message')}
             />
           )}
           <div className="m-auto">
@@ -620,8 +673,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
               validationSchema={NewContractSchema}
               enableReinitialize
               onSubmit={(values) => {
-                console.log('values', values);
                 if (values?.status === 'active') setOpenWarning(true);
+                else create(values);
               }}
             >
               {(props) => {
@@ -703,6 +756,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     className: `btn btn-primary px-4 ml-2`,
                                     onClick: (e) => {
                                       props.handleSubmit(e);
+                                      console.log(props.errors);
                                     },
                                     name: t('label.save'),
                                   },

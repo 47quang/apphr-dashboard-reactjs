@@ -1,18 +1,18 @@
 import { CContainer } from '@coreui/react';
-import { CircularProgress, Switch } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { Add, AddCircle } from '@material-ui/icons';
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { BenefitsSchema } from 'src/schema/formSchema';
-import { deleteWageHistory, fetchAllowances, fetchWageHistories, setEmptyContracts } from 'src/stores/actions/contract';
+import { fetchAllowances, setEmptyContracts } from 'src/stores/actions/contract';
+import { fetchActiveWage } from 'src/stores/actions/profile';
 import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { formatDate } from 'src/utils/datetimeUtils';
@@ -24,10 +24,11 @@ const Benefit = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const benefitTab = {
-    contracts: useSelector((state) => state.contract.contracts),
-  };
-
+  const activeWage = useSelector((state) => state.profile.activeWage);
+  const status = [
+    { id: 'active', name: t('label.active') },
+    { id: 'inactive', name: t('label.inactive') },
+  ];
   let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: 'Chi trả theo giờ' },
@@ -36,13 +37,27 @@ const Benefit = ({ t, history, match }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
-      dispatch(fetchWageHistories({ profileId: +profileId }, setLoading));
+      dispatch(fetchActiveWage(+profileId, setLoading));
+
       return () => {
         dispatch(setEmptyContracts());
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  let newBenefit = {
+    profileId: '',
+    contractId: '',
+    type: '',
+    wageId: '',
+    amount: '',
+    startDate: '',
+    expiredDate: '',
+    wages: [],
+    code: '',
+    status: '',
+    contractType: '',
+  };
 
   async function create(form, contractId) {
     form.profileId = +match.params.id;
@@ -92,368 +107,253 @@ const Benefit = ({ t, history, match }) => {
     }
   }
 
-  function removeWageHistory(wageHistoryId, handleRemove) {
-    dispatch(deleteWageHistory(wageHistoryId, handleRemove, t('message.successful_delete')));
-  }
-  const BodyItem = ({ values, handleChange, handleBlur, touched, errors, index, setFieldValue, validateForm, setFieldTouched, setTouched }) => {
-    const [isVisibleDeleteAlert, setIsVisibleDeleteAlert] = useState(false);
-    const [deleteWageHistoryId, setDeleteWageHistoryId] = useState();
-    const [deleteWageHistoryIndex, setDeleteWageHistoryIndex] = useState();
-
-    const handleCloseDeleteAlert = () => {
-      setIsVisibleDeleteAlert(false);
-    };
+  const BodyItem = ({
+    values,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+    index,
+    setFieldValue,
+    validateForm,
+    setFieldTouched,
+    handleReset,
+    setTouched,
+    handleSubmit,
+  }) => {
     return (
       <>
+        <h5>{t('label.payroll')}</h5>
+        <div style={{ fontSize: 14 }}>
+          {values?.expiredDate
+            ? t('label.from') + formatDate(values.startDate) + t('label.to') + formatDate(values.expiredDate)
+            : t('label.from') + formatDate(values.startDate)}
+        </div>
+        <hr className="mt-1" />
+        <div className="row">
+          <div className="form-group col-xl-4">
+            <Label text={t('label.benefit_code')} required />
+            <div className="input-group">
+              <input
+                type="text"
+                className={'form-control col-12'}
+                rows={5}
+                onBlur={handleBlur('code')}
+                name={`code`}
+                onChange={(e) => handleChange(`code`)(e)}
+                value={values.code}
+                disabled
+                placeholder={t('placeholder.enter_benefit_code')}
+              />
+            </div>
+          </div>
+          {values?.wageId ? (
+            <>
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.type ?? ''}
+                onBlur={handleBlur(`type`)}
+                onChange={async (e) => {
+                  handleChange(`type`)(e);
+                }}
+                inputID={`type`}
+                labelText={t('label.payment_method')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `type`)}
+                isError={getIn(errors, `type`) && getIn(touched, `type`)}
+                errorMessage={t(getIn(errors, `type`))}
+                lstSelectOptions={paymentType}
+              />
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.wageId ?? ''}
+                onBlur={handleBlur(`wageId`)}
+                onChange={(e) => {
+                  let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
+                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  handleChange(`wageId`)(e);
+                }}
+                inputID={`wageId`}
+                labelText={t('label.salary_group')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `wageId`)}
+                isError={getIn(errors, `wageId`) && getIn(touched, `wageId`)}
+                errorMessage={t(getIn(errors, `wageId`))}
+                lstSelectOptions={values.wages}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`wage.amount`)}
+                onChange={handleChange(`wage.amount`)}
+                inputID={`wage.amount`}
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+                isDisable
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.expiredDate ?? ''}
+                onBlur={handleBlur(`expiredDate`)}
+                onChange={handleChange(`expiredDate`)}
+                inputID={`expiredDate`}
+                labelText={t('label.expiration_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+              />
+            </>
+          ) : (
+            <>
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`amount`)}
+                onChange={handleChange(`amount`)}
+                inputID={`amount`}
+                isRequiredField
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+            </>
+          )}
+          <CommonSelectInput
+            containerClassName={'form-group col-lg-4'}
+            value={values?.status ?? ''}
+            onBlur={handleBlur(`status`)}
+            onChange={(e) => {
+              handleChange(`status`)(e);
+            }}
+            inputID={`status`}
+            labelText={t('label.status')}
+            selectClassName={'form-control'}
+            placeholder={t('placeholder.select_benefit_status')}
+            isTouched={getIn(touched, `status`)}
+            isError={getIn(errors, `status`) && getIn(touched, `status`)}
+            errorMessage={t(getIn(errors, `status`))}
+            lstSelectOptions={status}
+          />
+        </div>
+        <h5 className="px-3">{t('label.allowance')}</h5>
+        <hr className="mt-2" />
         <FieldArray
-          name={`wageHistories`}
-          render={({ insert, remove, push, replace, unshift }) => {
-            const handleRemove = () => {
-              handleCloseDeleteAlert();
-              remove(deleteWageHistoryIndex);
-            };
-            return (
-              <div>
-                <div className="d-flex justify-content-center mb-4">
-                  <button
-                    hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}
-                    type="button"
-                    className="btn btn-success"
-                    id={`addBtn${index}`}
-                    onClick={() => {
-                      insert(0, {
-                        id: '',
-                        wageId: '',
-                        allowanceIds: [],
-                        allowances: [],
-                        startDate: '',
-                        expiredDate: '',
-                      });
-                      document.getElementById(`addBtn${index}`).disabled = true;
-                    }}
-                  >
-                    <Add /> {t('label.add')}
-                  </button>
-                </div>
+          name={`allowances`}
+          render={({ insert, remove, push, replace }) => (
+            <div>
+              {values.allowances &&
+                values.allowances.length > 0 &&
+                values.allowances.map((allowance, allowanceIdx) => {
+                  return (
+                    <div key={`allowance${allowanceIdx}`}>
+                      <div className="row">
+                        <CommonSelectInput
+                          containerClassName={'form-group col-lg-4'}
+                          value={allowance?.id ?? ''}
+                          onBlur={handleBlur(`allowances.${allowanceIdx}.id`)}
+                          onChange={(e) => {
+                            let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
+                            if (thisSubsidizes && thisSubsidizes.length > 0)
+                              setFieldValue(`allowances.${allowanceIdx}.amount`, thisSubsidizes[0].amount);
+                            handleChange(`allowances.${allowanceIdx}.id`)(e);
+                          }}
+                          inputID={`allowances.${allowanceIdx}.id`}
+                          labelText={t('label.allowance')}
+                          selectClassName={'form-control'}
+                          placeholder={t('placeholder.select_allowance_type')}
+                          isRequiredField
+                          isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
+                          isError={getIn(touched, `allowances.${allowanceIdx}.id`) && getIn(errors, `allowances.${allowanceIdx}.id`)}
+                          errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
+                          lstSelectOptions={allowances}
+                        />
+                        <CommonTextInput
+                          containerClassName={'form-group col-lg-4'}
+                          value={allowance?.amount ?? ''}
+                          onBlur={handleBlur(`allowances.${allowanceIdx}.amount`)}
+                          onChange={handleChange(`allowances.${allowanceIdx}.amount`)}
+                          inputID={`allowances.${allowanceIdx}.amount`}
+                          labelText={t('label.allowance_level')}
+                          inputType={'number'}
+                          inputClassName={'form-control'}
+                          placeholder={t('placeholder.pension')}
+                          isDisable
+                        />
 
-                {permissionIds.includes(PERMISSION.LIST_WAGE_HISTORY) &&
-                  values.wageHistories &&
-                  values.wageHistories.length > 0 &&
-                  values.wageHistories.map((benefit, benefitIndex) => {
-                    return (
-                      <div
-                        key={'benefit:' + benefitIndex}
-                        id={values.id + benefitIndex}
-                        className="shadow bg-white border border-secondary rounded m-4 p-4"
-                      >
-                        <>
-                          <h5>{t('label.payroll')}</h5>
-                          <div style={{ fontSize: 14 }}>
-                            {benefit?.expiredDate
-                              ? t('label.from') + formatDate(benefit.startDate) + t('label.to') + formatDate(benefit.expiredDate)
-                              : t('label.from') + formatDate(benefit.startDate)}
-                          </div>
-                          <hr className="mt-1" />
-                          <div className="row">
-                            <CommonSelectInput
-                              containerClassName={'form-group col-lg-4'}
-                              value={benefit?.type ?? ''}
-                              onBlur={handleBlur(`wageHistories.${benefitIndex}.type`)}
-                              onChange={async (e) => {
-                                handleChange(`wageHistories.${benefitIndex}.type`)(e);
-                                if (e.target.value !== '0') {
-                                  let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
-                                  setFieldValue(`wageHistories.${benefitIndex}.wages`, wages);
-                                } else setFieldValue(`wageHistories.${benefitIndex}.wages`, []);
-                                setFieldValue(`wageHistories.${benefitIndex}.wageId`, 0);
-                                setFieldValue(`wageHistories.${benefitIndex}.amount`, 0);
-                              }}
-                              inputID={`wageHistories.${benefitIndex}.type`}
-                              labelText={t('label.payment_method')}
-                              selectClassName={'form-control'}
-                              placeholder={t('placeholder.select_contract_payment_method')}
-                              isRequiredField
-                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.type`)}
-                              isError={getIn(errors, `wageHistories.${benefitIndex}.type`) && getIn(touched, `wageHistories.${benefitIndex}.type`)}
-                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.type`))}
-                              lstSelectOptions={paymentType}
-                            />
-                            <CommonSelectInput
-                              containerClassName={'form-group col-lg-4'}
-                              value={benefit?.wageId ?? ''}
-                              onBlur={handleBlur(`wageHistories.${benefitIndex}.wageId`)}
-                              onChange={(e) => {
-                                let thisWage = benefit.wages.filter((s) => s.id === parseInt(e.target.value));
-                                thisWage.length > 0
-                                  ? setFieldValue(`wageHistories.${benefitIndex}.amount`, thisWage[0].amount)
-                                  : setFieldValue(`wageHistories.${benefitIndex}.amount`, 0);
-                                handleChange(`wageHistories.${benefitIndex}.wageId`)(e);
-                              }}
-                              inputID={`wageHistories.${benefitIndex}.wageId`}
-                              labelText={t('label.salary_group')}
-                              selectClassName={'form-control'}
-                              placeholder={t('placeholder.select_contract_payment_method')}
-                              isRequiredField
-                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.wageId`)}
-                              isError={
-                                getIn(errors, `wageHistories.${benefitIndex}.wageId`) && getIn(touched, `wageHistories.${benefitIndex}.wageId`)
-                              }
-                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.wageId`))}
-                              lstSelectOptions={benefit.wages}
-                            />
-                            <CommonTextInput
-                              containerClassName={'form-group col-lg-4'}
-                              value={benefit?.amount ?? ''}
-                              onBlur={handleBlur(`wageHistories.${benefitIndex}.wage.amount`)}
-                              onChange={handleChange(`wageHistories.${benefitIndex}.wage.amount`)}
-                              inputID={`wageHistories.${benefitIndex}.wage.amount`}
-                              labelText={t('label.salary_level')}
-                              inputType={'number'}
-                              inputClassName={'form-control'}
-                              placeholder={t('placeholder.enter_salary_level')}
-                              isDisable
-                            />
-                          </div>
-                          <div className="row">
-                            <CommonTextInput
-                              containerClassName={'form-group col-lg-4'}
-                              value={benefit?.startDate ?? ''}
-                              onBlur={handleBlur(`wageHistories.${benefitIndex}.startDate`)}
-                              onChange={handleChange(`wageHistories.${benefitIndex}.startDate`)}
-                              inputID={`wageHistories.${benefitIndex}.startDate`}
-                              labelText={t('label.signature_date')}
-                              inputType={'date'}
-                              inputClassName={'form-control'}
-                              isRequiredField
-                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.startDate`)}
-                              isError={
-                                getIn(errors, `wageHistories.${benefitIndex}.startDate`) && getIn(touched, `wageHistories.${benefitIndex}.startDate`)
-                              }
-                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.startDate`))}
-                            />
-                            <CommonTextInput
-                              containerClassName={'form-group col-lg-4'}
-                              value={benefit?.expiredDate ?? ''}
-                              onBlur={handleBlur(`wageHistories.${benefitIndex}.expiredDate`)}
-                              onChange={handleChange(`wageHistories.${benefitIndex}.expiredDate`)}
-                              inputID={`wageHistories.${benefitIndex}.expiredDate`}
-                              labelText={t('label.expiration_date')}
-                              inputType={'date'}
-                              inputClassName={'form-control'}
-                              isRequiredField
-                              isTouched={getIn(touched, `wageHistories.${benefitIndex}.expiredDate`)}
-                              isError={
-                                getIn(errors, `wageHistories.${benefitIndex}.expiredDate`) &&
-                                getIn(touched, `wageHistories.${benefitIndex}.expiredDate`)
-                              }
-                              errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.expiredDate`))}
-                            />
-                          </div>
-                          <h5 className="px-3">{t('label.allowance')}</h5>
-                          <hr className="mt-2" />
-                          <FieldArray
-                            name={`wageHistories.${benefitIndex}.allowances`}
-                            render={({ insert, remove, push, replace }) => (
-                              <div>
-                                {benefit.allowances &&
-                                  benefit.allowances.length > 0 &&
-                                  benefit.allowances.map((allowance, allowanceIdx) => {
-                                    return (
-                                      <div key={`allowance${allowanceIdx}`}>
-                                        <div className="row">
-                                          <CommonSelectInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={allowance?.id ?? ''}
-                                            onBlur={handleBlur(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)}
-                                            onChange={(e) => {
-                                              let thisSubsidizes = allowances.filter((s) => s.id === parseInt(e.target.value));
-                                              if (thisSubsidizes && thisSubsidizes.length > 0)
-                                                setFieldValue(
-                                                  `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`,
-                                                  thisSubsidizes[0].amount,
-                                                );
-                                              handleChange(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)(e);
-                                            }}
-                                            inputID={`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`}
-                                            labelText={t('label.allowance')}
-                                            selectClassName={'form-control'}
-                                            placeholder={t('placeholder.select_allowance_type')}
-                                            isRequiredField
-                                            isTouched={getIn(touched, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)}
-                                            isError={
-                                              getIn(touched, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`) &&
-                                              getIn(errors, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`)
-                                            }
-                                            errorMessage={t(getIn(errors, `wageHistories.${benefitIndex}.allowances.${allowanceIdx}.id`))}
-                                            lstSelectOptions={allowances}
-                                          />
-                                          <CommonTextInput
-                                            containerClassName={'form-group col-lg-4'}
-                                            value={allowance?.amount ?? ''}
-                                            onBlur={handleBlur(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`)}
-                                            onChange={handleChange(`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`)}
-                                            inputID={`wageHistories.${benefitIndex}.allowances.${allowanceIdx}.amount`}
-                                            labelText={t('label.allowance_level')}
-                                            inputType={'number'}
-                                            inputClassName={'form-control'}
-                                            placeholder={t('placeholder.pension')}
-                                            isDisable
-                                          />
-                                          {benefit.id ? (
-                                            <div className="pl-2" hidden={!permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)}>
-                                              <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                                            </div>
-                                          ) : (
-                                            <div className="pl-2" hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}>
-                                              <DeleteIconButton onClick={() => remove(allowanceIdx)} />
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                {benefit.id ? (
-                                  <div className="d-flex justify-content-start mb-4">
-                                    <button
-                                      hidden={!permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)}
-                                      type="button"
-                                      className="btn btn-primary"
-                                      onClick={() => {
-                                        push({ name: '', amount: 0 });
-                                      }}
-                                    >
-                                      <AddCircle /> {t('label.add_allowance')}
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <div className="d-flex justify-content-start mb-4">
-                                    <button
-                                      hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}
-                                      type="button"
-                                      className="btn btn-primary"
-                                      onClick={() => {
-                                        push({ name: '', amount: 0 });
-                                      }}
-                                    >
-                                      <AddCircle /> {t('label.add_allowance')}
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          />
-                          <hr className="mt-1" />
-                          <WarningAlertDialog
-                            isVisible={isVisibleDeleteAlert}
-                            title={t('title.confirm')}
-                            warningMessage={t('message.confirm_delete_academic')}
-                            titleConfirm={t('label.agree')}
-                            titleCancel={t('label.cancel')}
-                            handleCancel={(e) => {
-                              handleCloseDeleteAlert();
-                            }}
-                            handleConfirm={async (e) => {
-                              removeWageHistory(deleteWageHistoryId, handleRemove);
-                            }}
-                          />
-                          {renderButtons(
-                            benefit.id
-                              ? permissionIds.includes(PERMISSION.UPDATE_WAGE_HISTORY)
-                                ? [
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 mx-4`,
-                                      onClick: async (e) => {
-                                        setIsVisibleDeleteAlert(true);
-                                        setDeleteWageHistoryId(benefit.id);
-                                        setDeleteWageHistoryIndex(benefitIndex);
-                                      },
-                                      name: t('label.delete'),
-                                      position: 'right',
-                                    },
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 mx-4`,
-                                      onClick: () => {
-                                        setFieldValue(`wageHistories.${benefitIndex}`, benefitTab.contracts[index]?.wageHistories[benefitIndex]);
-                                      },
-                                      name: t('label.reset'),
-                                      position: 'right',
-                                    },
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 ml-4`,
-                                      onClick: async () => {
-                                        let err = await validateForm();
-                                        err.wageHistories = err.wageHistories.map((wage, idx) => {
-                                          return idx === benefitIndex ? wage : undefined;
-                                        });
-
-                                        if (
-                                          err &&
-                                          err.wageHistories && // 👈 null and undefined check
-                                          Object.keys(err.wageHistories).length !== 0 &&
-                                          err.wageHistories.constructor === Array
-                                        )
-                                          setTouched(err);
-                                        else {
-                                          await create(benefit, values.id);
-                                          benefit.expiredDate = benefit.expiredDate ?? '';
-                                          benefitTab.contracts[index].wageHistories[benefitIndex] = benefit;
-                                        }
-                                      },
-                                      name: benefit.id ? t('label.save') : t('label.create_new'),
-                                    },
-                                  ]
-                                : []
-                              : [
-                                  //Create
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 mx-4`,
-                                    onClick: async (e) => {
-                                      remove(benefitIndex);
-                                      document.getElementById(`addBtn${index}`).disabled = false;
-                                    },
-                                    name: t('label.delete'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 ml-4`,
-                                    onClick: async () => {
-                                      let err = await validateForm();
-                                      err && err.wageHistories && err.wageHistories.splice(1);
-                                      if (
-                                        err &&
-                                        err.wageHistories && // 👈 null and undefined check
-                                        Object.keys(err.wageHistories).length !== 0 &&
-                                        err.wageHistories.constructor === Array
-                                      )
-                                        setTouched(err);
-                                      else {
-                                        let wages = benefit.wages;
-                                        let newWage = await create(benefit, values.id);
-                                        benefit.id = newWage;
-                                        benefit.wages = wages;
-                                        setFieldValue(`wageHistories.${0}`, benefit);
-                                        document.getElementById(`addBtn${index}`).disabled = true;
-                                      }
-                                    },
-                                    name: t('label.create_new'),
-                                  },
-                                ],
-                          )}
-                        </>
+                        <div className="pl-2" hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}>
+                          <DeleteIconButton onClick={() => remove(allowanceIdx)} />
+                        </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
+
+              <div className="d-flex justify-content-start mb-4">
+                <button
+                  hidden={!permissionIds.includes(PERMISSION.CREATE_WAGE_HISTORY)}
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    push({ name: '', amount: 0 });
+                  }}
+                >
+                  <AddCircle /> {t('label.add_allowance')}
+                </button>
               </div>
-            );
-          }}
+            </div>
+          )}
         />
       </>
     );
+  };
+  const newWageRef = useRef();
+
+  const handleResetNewContract = () => {
+    newWageRef.current.handleReset();
+    document.getElementById('newWage').hidden = true;
+    document.getElementById('addBtn').disabled = false;
+  };
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    create(newWageRef.current.values);
+    setOpenWarning(!openWarning);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
   };
   return (
     <>
@@ -463,77 +363,122 @@ const Benefit = ({ t, history, match }) => {
         </div>
       ) : (
         <CContainer fluid className="c-main">
+          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+            <button
+              type="button"
+              className="btn btn-success rounded-circle p-3"
+              hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+              id="addBtn"
+              onClick={() => {
+                document.getElementById('newWage').hidden = false;
+                document.getElementById('addBtn').disabled = true;
+              }}
+            >
+              <Add fontSize="large" />
+            </button>
+          </div>
+          {openWarning && (
+            <WarningAlertDialog
+              isVisible={openWarning}
+              title={t('title.new_contract')}
+              titleConfirm={t('label.agree')}
+              handleConfirm={handleConfirmWarning}
+              titleCancel={t('label.decline')}
+              handleCancel={handleCancelWarning}
+              warningMessage={t('message.new_contract_warning_message')}
+            />
+          )}
           <div className="m-auto">
             <div>
-              {permissionIds.includes(PERMISSION.LIST_CONTRACT) &&
-                benefitTab.contracts &&
-                benefitTab.contracts.length > 0 &&
-                benefitTab.contracts.map((contract, index) => {
-                  contract.isMinimize = false;
-                  return (
-                    <Formik
-                      key={index}
-                      initialValues={contract}
-                      validationSchema={BenefitsSchema}
-                      enableReinitialize
-                      onSubmit={async (values) => {
-                        // await create(values).then(() =>
-                        //   dispatch(
-                        //     fetchContracts({
-                        //       profileId: profileId,
-                        //     }),
-                        //   ),
-                        // );
-                      }}
-                    >
-                      {(props) => {
-                        props.index = index;
-                        return (
-                          <form className="p-0 m-0">
-                            <div className="shadow bg-white rounded mx-4 p-4 mb-4">
-                              <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                                <div className="pt-1 d-inline" role="button">
-                                  {!props.values.isMinimize ? (
-                                    <AddBoxOutlinedIcon
-                                      className="pb-1"
-                                      onClick={(e) => props.setFieldValue(`isMinimize`, !props.values.isMinimize)}
-                                    />
-                                  ) : (
-                                    <IndeterminateCheckBoxOutlinedIcon
-                                      className="pb-1"
-                                      onClick={(e) => props.setFieldValue('isMinimize', !props.values.isMinimize)}
-                                    />
-                                  )}
-                                </div>
-                                <Switch
-                                  checked={props.values.isOpen}
-                                  name={`isOpen ${index}`}
-                                  onChange={(e) => {
-                                    props.setFieldValue(`isOpen ${index}`, e.target.checked);
-                                  }}
-                                />
-                                {props.values.code + ' - ' + props.values.fullname}
-                              </div>
-
-                              <div style={{ fontSize: 14, paddingLeft: 82 }}>
-                                {props.values.expiredDate
-                                  ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                                  : t('label.from') + formatDate(props.values.handleDate)}
-                              </div>
-                              <hr className="mt-1" />
-                              {props.values.isMinimize && (
-                                <div>
-                                  <BodyItem {...props} />
-                                  <hr className="mt-1" />
-                                </div>
-                              )}
-                            </div>
-                          </form>
-                        );
-                      }}
-                    </Formik>
-                  );
-                })}
+              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
+                <Formik
+                  initialValues={newBenefit}
+                  validationSchema={BenefitsSchema}
+                  enableReinitialize
+                  onSubmit={(values) => {
+                    create(values);
+                  }}
+                >
+                  {(props) => {
+                    return (
+                      <form id="newWage" hidden={true} className="p-0 m-0">
+                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                          <div>
+                            <BodyItem {...props} />
+                            <hr className="mt-1" />
+                            {renderButtons([
+                              {
+                                type: 'button',
+                                className: `btn btn-primary  mx-2`,
+                                onClick: (e) => {
+                                  handleResetNewContract();
+                                },
+                                name: t('label.cancel'),
+                                position: 'right',
+                              },
+                              {
+                                type: 'button',
+                                className: `btn btn-primary px-4 ml-2`,
+                                onClick: (e) => {
+                                  props.handleSubmit(e);
+                                },
+                                name: t('label.create_new'),
+                              },
+                            ])}
+                          </div>
+                        </div>
+                      </form>
+                    );
+                  }}
+                </Formik>
+              )}
+              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
+                <Formik
+                  initialValues={activeWage}
+                  validationSchema={BenefitsSchema}
+                  enableReinitialize
+                  onSubmit={(values) => {
+                    create(values);
+                  }}
+                >
+                  {(props) => {
+                    return (
+                      <form className="p-0 m-0">
+                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                          <div>
+                            <BodyItem {...props} />
+                            <hr className="mt-1" />
+                            {renderButtons(
+                              permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                                ? [
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 mx-2`,
+                                      onClick: (e) => {
+                                        props.handleReset(e);
+                                      },
+                                      name: t('label.reset'),
+                                      position: 'right',
+                                    },
+                                    {
+                                      type: 'button',
+                                      className: `btn btn-primary px-4 ml-2`,
+                                      onClick: (e) => {
+                                        props.handleSubmit(e);
+                                        console.log(props.errors);
+                                      },
+                                      name: t('label.save'),
+                                    },
+                                  ]
+                                : [],
+                            )}
+                          </div>
+                        </div>
+                      </form>
+                    );
+                  }}
+                </Formik>
+              )}
             </div>
           </div>
         </CContainer>

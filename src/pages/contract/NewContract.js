@@ -1,10 +1,11 @@
 import { CContainer } from '@coreui/react';
 import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
@@ -32,13 +33,12 @@ const NewContract = ({ t, history, match }) => {
   ];
   const newContract = {
     isMinimize: false,
-    status: 'inactive',
     code: '',
     fullname: '',
     type: '',
     typeTax: '',
     signee: '',
-    standardHours: 0,
+    standardHours: '',
     handleDate: '',
     validDate: '',
     expiredDate: '',
@@ -52,6 +52,17 @@ const NewContract = ({ t, history, match }) => {
     salary: '',
     allowances: [],
     files: [],
+    status: '',
+  };
+  const newContractRef = useRef();
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    create(newContractRef.current.values);
+    setOpenWarning(!openWarning);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
   };
   newContract.attributes = useSelector((state) => state.attribute.attributes);
   const allowances = useSelector((state) => state.contract.allowances);
@@ -99,6 +110,7 @@ const NewContract = ({ t, history, match }) => {
       delete form.salaryGroup;
       delete form.wageId;
       delete form.salary;
+      delete form.dependant;
       delete form.standardHours;
     } else {
       form.standardHours = +form.standardHours;
@@ -277,6 +289,7 @@ const NewContract = ({ t, history, match }) => {
             inputID={`status`}
             labelText={t('label.status')}
             selectClassName={'form-control'}
+            isRequiredField
             placeholder={t('placeholder.select_benefit_status')}
             isTouched={getIn(touched, `status`)}
             isError={getIn(errors, `status`) && getIn(touched, `status`)}
@@ -403,9 +416,6 @@ const NewContract = ({ t, history, match }) => {
                 inputClassName={'form-control'}
                 placeholder={t('placeholder.enter_salary_level')}
                 isDisable
-                isTouched={touched?.wageId}
-                isError={errors?.wageId && touched?.wageId}
-                errorMessage={t(errors?.wageId)}
               />
               <div className="form-group col-xl-4">
                 <Label text={t('label.standard_hours')} required={values.formOfPayment === 'by_month'} />
@@ -446,8 +456,6 @@ const NewContract = ({ t, history, match }) => {
                 isError={errors.dayOff && touched.dayOff}
                 errorMessage={t(errors.dayOff)}
               />
-            </div>
-            <div className="row">
               <CommonTextInput
                 containerClassName={'form-group col-xl-4'}
                 value={values.dependant ?? ''}
@@ -603,12 +611,25 @@ const NewContract = ({ t, history, match }) => {
   return (
     <CContainer fluid className="c-main">
       <div className="m-auto">
+        {openWarning && (
+          <WarningAlertDialog
+            isVisible={openWarning}
+            title={t('title.new_contract')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelWarning}
+            warningMessage={t('message.new_contract_warning_message')}
+          />
+        )}
         <Formik
+          innerRef={newContractRef}
           initialValues={newContract}
           validationSchema={NewContractSchemaWithProfileID}
           enableReinitialize
           onSubmit={(values) => {
-            create(values);
+            if (values?.status === 'active') setOpenWarning(true);
+            else create(values);
           }}
         >
           {(props) => {

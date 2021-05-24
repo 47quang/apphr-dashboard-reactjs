@@ -16,7 +16,7 @@ export const ROUTE_NAME = {
   NOTIFICATION: 'Notification',
   NEW_NOTIFICATION: 'New Notification',
   NOTIFICATION_UPDATE: 'Notification Update',
-  REPORT: 'Report',
+  REPORT: 'Library',
   SETTING: 'Setting',
   GENERAL: 'General',
   COMPANY_INFO: 'Company Info',

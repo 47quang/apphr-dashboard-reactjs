@@ -167,6 +167,7 @@ export const fetchContract = (id) => {
         payload.expiredDate = formatDateInput(payload.expiredDate);
         payload.validDate = formatDateInput(payload.validDate);
         payload.startWork = formatDateInput(payload.startWork);
+        payload.employee = payload.profileId ? payload.profile?.code + ' - ' + payload.profile?.fullname : '';
         payload['formOfPayment'] = payload?.wage?.type;
         payload['wageId'] = payload?.wage?.id;
         payload['amount'] = payload?.wage?.amount;
@@ -230,8 +231,10 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
               })
             : [];
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-        if (handleResetNewContract) handleResetNewContract();
-        else history.push(ROUTE_PATH.CONTRACT + `/${payload.id}`);
+        if (handleResetNewContract) {
+          handleResetNewContract();
+          if (payload.status === 'active') dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_CONTRACT, payload });
+        } else history.push(ROUTE_PATH.CONTRACT + `/${payload.id}`);
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'createContract');
@@ -239,7 +242,7 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
   };
 };
 
-export const updateContract = (params, success_msg) => {
+export const updateContract = (params, isActive, success_msg) => {
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
@@ -255,6 +258,7 @@ export const updateContract = (params, success_msg) => {
           return +allowance.id;
         })
       : [];
+
   return (dispatch, getState) => {
     api.contract
       .put(params)
@@ -264,22 +268,12 @@ export const updateContract = (params, success_msg) => {
         payload.expiredDate = formatDateInput(payload.expiredDate);
         payload.validDate = formatDateInput(payload.validDate);
         payload.startWork = formatDateInput(payload.startWork);
-        payload['paymentType'] = payload?.wage?.type;
+        payload['formOfPayment'] = payload?.wage?.type;
         payload['wageId'] = payload?.wage?.id;
         payload['amount'] = payload?.wage?.amount;
         payload['wages'] = params?.wages;
-        payload['attributes'] =
-          payload.contractAttributes && payload.contractAttributes.length > 0
-            ? payload.contractAttributes.map((attr) => {
-                let rv = {};
-                rv.value = attr.value;
-                rv.name = attr.attribute.name;
-                rv.type = attr.attribute.type;
-                rv.id = attr.attribute.id;
-                return rv;
-              })
-            : [];
-        dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
+        if (isActive) dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_CONTRACT, payload });
+        else dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

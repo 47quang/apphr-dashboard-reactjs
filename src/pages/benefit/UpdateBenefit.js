@@ -9,7 +9,7 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { BenefitsSchema } from 'src/schema/formSchema';
+import { UpdateBenefitsSchema } from 'src/schema/formSchema';
 import { fetchProfiles } from 'src/stores/actions/account';
 import { fetchAllowances, fetchContracts } from 'src/stores/actions/contract';
 import { fetchWageHistory, updateWageHistory } from 'src/stores/actions/wageHistories';
@@ -33,7 +33,6 @@ const UpdateBenefit = ({ t, history, match }) => {
     { id: 'inactive', name: t('label.inactive') },
   ];
   let benefit = useSelector((state) => state.wageHistory.wageHistory);
-
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
@@ -45,12 +44,7 @@ const UpdateBenefit = ({ t, history, match }) => {
   }, []);
 
   const update = (form) => {
-    form.profileId = parseInt(form.profileId);
-    form.contractId = parseInt(form.contractId);
-    form.wageId = parseInt(form.wageId);
-    // delete form.wage;
-    // delete form.wages;
-    form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
+    // console.log('updateWageHistory', form);
     dispatch(updateWageHistory(form, t('message.successful_update')));
   };
 
@@ -120,84 +114,117 @@ const UpdateBenefit = ({ t, history, match }) => {
                 onBlur={handleBlur('code')}
                 name={`code`}
                 onChange={(e) => handleChange(`code`)(e)}
-                value={values.code}
+                value={values.code ?? ''}
                 disabled
                 placeholder={t('placeholder.enter_benefit_code')}
               />
             </div>
           </div>
-          <CommonSelectInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.type ?? ''}
-            onBlur={handleBlur(`type`)}
-            onChange={async (e) => {
-              handleChange(`type`)(e);
-            }}
-            inputID={`type`}
-            labelText={t('label.payment_method')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_contract_payment_method')}
-            isRequiredField
-            isTouched={getIn(touched, `type`)}
-            isError={getIn(errors, `type`) && getIn(touched, `type`)}
-            errorMessage={t(getIn(errors, `type`))}
-            lstSelectOptions={paymentType}
-          />
-          <CommonSelectInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.wageId ?? ''}
-            onBlur={handleBlur(`wageId`)}
-            onChange={(e) => {
-              let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-              thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
-              handleChange(`wageId`)(e);
-            }}
-            inputID={`wageId`}
-            labelText={t('label.salary_group')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_contract_payment_method')}
-            isRequiredField
-            isTouched={getIn(touched, `wageId`)}
-            isError={getIn(errors, `wageId`) && getIn(touched, `wageId`)}
-            errorMessage={t(getIn(errors, `wageId`))}
-            lstSelectOptions={values.wages}
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.amount ?? ''}
-            onBlur={handleBlur(`wage.amount`)}
-            onChange={handleChange(`wage.amount`)}
-            inputID={`wage.amount`}
-            labelText={t('label.salary_level')}
-            inputType={'number'}
-            inputClassName={'form-control'}
-            placeholder={t('placeholder.enter_salary_level')}
-            isDisable
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.startDate ?? ''}
-            onBlur={handleBlur(`startDate`)}
-            onChange={handleChange(`startDate`)}
-            inputID={`startDate`}
-            labelText={t('label.signature_date')}
-            inputType={'date'}
-            inputClassName={'form-control'}
-            isRequiredField
-            isTouched={getIn(touched, `startDate`)}
-            isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
-            errorMessage={t(getIn(errors, `startDate`))}
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.expiredDate ?? ''}
-            onBlur={handleBlur(`expiredDate`)}
-            onChange={handleChange(`expiredDate`)}
-            inputID={`expiredDate`}
-            labelText={t('label.expiration_date')}
-            inputType={'date'}
-            inputClassName={'form-control'}
-          />
+          {values?.wageId ? (
+            <>
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.type ?? ''}
+                onBlur={handleBlur(`type`)}
+                onChange={async (e) => {
+                  handleChange(`type`)(e);
+                }}
+                inputID={`type`}
+                labelText={t('label.payment_method')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `type`)}
+                isError={getIn(errors, `type`) && getIn(touched, `type`)}
+                errorMessage={t(getIn(errors, `type`))}
+                lstSelectOptions={paymentType}
+              />
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.wageId ?? ''}
+                onBlur={handleBlur(`wageId`)}
+                onChange={(e) => {
+                  let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
+                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  handleChange(`wageId`)(e);
+                }}
+                inputID={`wageId`}
+                labelText={t('label.salary_group')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `wageId`)}
+                isError={getIn(errors, `wageId`) && getIn(touched, `wageId`)}
+                errorMessage={t(getIn(errors, `wageId`))}
+                lstSelectOptions={values.wages}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`wage.amount`)}
+                onChange={handleChange(`wage.amount`)}
+                inputID={`wage.amount`}
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+                isDisable
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.expiredDate ?? ''}
+                onBlur={handleBlur(`expiredDate`)}
+                onChange={handleChange(`expiredDate`)}
+                inputID={`expiredDate`}
+                labelText={t('label.expiration_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+              />
+            </>
+          ) : (
+            <>
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`amount`)}
+                onChange={handleChange(`amount`)}
+                inputID={`amount`}
+                isRequiredField
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+            </>
+          )}
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
             value={values?.status ?? ''}
@@ -210,6 +237,7 @@ const UpdateBenefit = ({ t, history, match }) => {
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_benefit_status')}
             isTouched={getIn(touched, `status`)}
+            isRequiredField
             isError={getIn(errors, `status`) && getIn(touched, `status`)}
             errorMessage={t(getIn(errors, `status`))}
             lstSelectOptions={status}
@@ -332,7 +360,7 @@ const UpdateBenefit = ({ t, history, match }) => {
               {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
                 <Formik
                   initialValues={benefit}
-                  validationSchema={BenefitsSchema}
+                  validationSchema={UpdateBenefitsSchema}
                   enableReinitialize
                   onSubmit={(values) => {
                     update(values);

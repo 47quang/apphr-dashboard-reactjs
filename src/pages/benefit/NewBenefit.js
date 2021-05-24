@@ -41,6 +41,8 @@ const NewBenefit = ({ t, history, match }) => {
     expiredDate: '',
     wages: [],
     code: '',
+    status: '',
+    contractType: '',
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
@@ -59,7 +61,8 @@ const NewBenefit = ({ t, history, match }) => {
     delete form.id;
     delete form.wage;
     delete form.wages;
-    form.allowanceIds = form && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
+    if (!form.expiredDate) delete form.expiredDate;
+    form.allowanceIds = form.allowances && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
     dispatch(createWageHistory(form, history, t('message.successful_create')));
   };
 
@@ -114,7 +117,12 @@ const NewBenefit = ({ t, history, match }) => {
             labelText={t('label.contract')}
             selectClassName={'form-control'}
             onBlur={handleBlur('contractId')}
-            onChange={handleChange('contractId')}
+            onChange={(e) => {
+              handleChange('contractId')(e);
+              let contract = contracts.filter((x) => x.id === +e.target.value);
+              console.log('contract', contract);
+              setFieldValue('contractType', contract.length === 1 ? contract[0].type : '');
+            }}
             inputID={t('label.contractId')}
             lstSelectOptions={contracts}
             isRequiredField
@@ -157,84 +165,118 @@ const NewBenefit = ({ t, history, match }) => {
               <></>
             )}
           </div>
-          <CommonSelectInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.type ?? ''}
-            onBlur={handleBlur(`type`)}
-            onChange={async (e) => {
-              handleChange(`type`)(e);
-              if (e.target.value !== '0') {
-                let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
-                setFieldValue(`wages`, wages);
-              } else setFieldValue(`wages`, []);
-              setFieldValue(`wageId`, 0);
-              setFieldValue(`amount`, 0);
-            }}
-            inputID={`type`}
-            labelText={t('label.payment_method')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_contract_payment_method')}
-            isRequiredField
-            isTouched={getIn(touched, `type`)}
-            isError={getIn(errors, `type`) && getIn(touched, `type`)}
-            errorMessage={t(getIn(errors, `type`))}
-            lstSelectOptions={paymentType}
-          />
-          <CommonSelectInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.wageId ?? ''}
-            onBlur={handleBlur(`wageId`)}
-            onChange={(e) => {
-              let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
-              thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
-              handleChange(`wageId`)(e);
-            }}
-            inputID={`wageId`}
-            labelText={t('label.salary_group')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_contract_payment_method')}
-            isRequiredField
-            isTouched={getIn(touched, `wageId`)}
-            isError={getIn(errors, `wageId`) && getIn(touched, `wageId`)}
-            errorMessage={t(getIn(errors, `wageId`))}
-            lstSelectOptions={values.wages}
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.amount ?? ''}
-            onBlur={handleBlur(`wage.amount`)}
-            onChange={handleChange(`wage.amount`)}
-            inputID={`wage.amount`}
-            labelText={t('label.salary_level')}
-            inputType={'number'}
-            inputClassName={'form-control'}
-            placeholder={t('placeholder.enter_salary_level')}
-            isDisable
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.startDate ?? ''}
-            onBlur={handleBlur(`startDate`)}
-            onChange={handleChange(`startDate`)}
-            inputID={`startDate`}
-            labelText={t('label.signature_date')}
-            inputType={'date'}
-            inputClassName={'form-control'}
-            isRequiredField
-            isTouched={getIn(touched, `startDate`)}
-            isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
-            errorMessage={t(getIn(errors, `startDate`))}
-          />
-          <CommonTextInput
-            containerClassName={'form-group col-lg-4'}
-            value={values?.expiredDate ?? ''}
-            onBlur={handleBlur(`expiredDate`)}
-            onChange={handleChange(`expiredDate`)}
-            inputID={`expiredDate`}
-            labelText={t('label.expiration_date')}
-            inputType={'date'}
-            inputClassName={'form-control'}
-          />
+          {values.contractType !== 'season' ? (
+            <>
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.type ?? ''}
+                onBlur={handleBlur(`type`)}
+                onChange={async (e) => {
+                  handleChange(`type`)(e);
+                  if (e.target.value !== '0') {
+                    let wages = await api.wage.getAll({ type: e.target.value }).then(({ payload }) => payload);
+                    setFieldValue(`wages`, wages);
+                  } else setFieldValue(`wages`, []);
+                  setFieldValue(`wageId`, 0);
+                  setFieldValue(`amount`, 0);
+                }}
+                inputID={`type`}
+                labelText={t('label.payment_method')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `type`)}
+                isError={getIn(errors, `type`) && getIn(touched, `type`)}
+                errorMessage={t(getIn(errors, `type`))}
+                lstSelectOptions={paymentType}
+              />
+              <CommonSelectInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.wageId ?? ''}
+                onBlur={handleBlur(`wageId`)}
+                onChange={(e) => {
+                  let thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
+                  thisWage.length > 0 ? setFieldValue(`amount`, thisWage[0].amount) : setFieldValue(`amount`, 0);
+                  handleChange(`wageId`)(e);
+                }}
+                inputID={`wageId`}
+                labelText={t('label.salary_group')}
+                selectClassName={'form-control'}
+                placeholder={t('placeholder.select_contract_payment_method')}
+                isRequiredField
+                isTouched={getIn(touched, `wageId`)}
+                isError={getIn(errors, `wageId`) && getIn(touched, `wageId`)}
+                errorMessage={t(getIn(errors, `wageId`))}
+                lstSelectOptions={values.wages}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`wage.amount`)}
+                onChange={handleChange(`wage.amount`)}
+                inputID={`wage.amount`}
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+                isDisable
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.expiredDate ?? ''}
+                onBlur={handleBlur(`expiredDate`)}
+                onChange={handleChange(`expiredDate`)}
+                inputID={`expiredDate`}
+                labelText={t('label.expiration_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+              />
+            </>
+          ) : (
+            <>
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.amount ?? ''}
+                onBlur={handleBlur(`amount`)}
+                onChange={handleChange(`amount`)}
+                inputID={`amount`}
+                isRequiredField
+                labelText={t('label.salary_level')}
+                inputType={'number'}
+                inputClassName={'form-control'}
+                placeholder={t('placeholder.enter_salary_level')}
+              />
+              <CommonTextInput
+                containerClassName={'form-group col-lg-4'}
+                value={values?.startDate ?? ''}
+                onBlur={handleBlur(`startDate`)}
+                onChange={handleChange(`startDate`)}
+                inputID={`startDate`}
+                labelText={t('label.signature_date')}
+                inputType={'date'}
+                inputClassName={'form-control'}
+                isRequiredField
+                isTouched={getIn(touched, `startDate`)}
+                isError={getIn(errors, `startDate`) && getIn(touched, `startDate`)}
+                errorMessage={t(getIn(errors, `startDate`))}
+              />
+            </>
+          )}
+
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
             value={values?.status ?? ''}
@@ -247,6 +289,7 @@ const NewBenefit = ({ t, history, match }) => {
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_benefit_status')}
             isTouched={getIn(touched, `status`)}
+            isRequiredField
             isError={getIn(errors, `status`) && getIn(touched, `status`)}
             errorMessage={t(getIn(errors, `status`))}
             lstSelectOptions={status}

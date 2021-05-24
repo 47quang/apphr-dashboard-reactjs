@@ -14,7 +14,7 @@ const Account = ({ t, location, history }) => {
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'profileId', title: t('label.profile'), align: 'left', width: '10%', wordWrapEnabled: true },
+    { name: 'profileId', title: t('label.employee_code'), align: 'left', width: '10%', wordWrapEnabled: true },
   ];
   const filters = {
     username: {
@@ -129,7 +129,7 @@ const Account = ({ t, location, history }) => {
           route={ROUTE_PATH.ACCOUNT + '/'}
           idxColumnsFilter={[0]}
           deleteRow={deleteRow}
-          linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
+          linkCols={[{ name: 'profileId', value: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
