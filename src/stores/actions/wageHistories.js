@@ -1,5 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
-import { formatDate, formatDateInput } from 'src/utils/datetimeUtils';
+import { formatDate, formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -44,12 +44,11 @@ export const fetchWageHistories = (params, onTotalChange, setLoading, t) => {
           payload && payload.length > 0
             ? payload.map((wage) => {
                 wage.contractName = wage?.contract?.code + ' - ' + wage?.contract?.fullname;
-                wage.contractId = wage?.id;
                 wage.employee = wage.profile.code + ' - ' + wage.profile.fullname;
-                wage.profileId = wage.profile.id;
                 wage.type = paymentType[wage.type];
                 wage.status = status[wage.status];
                 wage.startDate = formatDate(wage.startDate);
+                wage.createdAt = formatDateTimeToString(wage.createdAt);
                 return wage;
               })
             : [];

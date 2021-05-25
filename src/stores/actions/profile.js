@@ -1,5 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
-import { formatDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -35,6 +35,7 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((profile) => {
+                profile.createdAt = formatDateTimeToString(profile.createdAt);
                 profile.gender = profile.gender === 'male' ? 'Nam' : 'Nữ';
                 return profile;
               })
@@ -207,13 +208,14 @@ export const updateRelationship = (data, profileId, success_msg) => {
   };
 };
 
-export const deleteProfile = (id, success_msg) => {
+export const deleteProfile = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.profile
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.DELETE_PROFILE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'deleteProfile');

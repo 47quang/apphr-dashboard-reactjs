@@ -12,8 +12,9 @@ const ArticleType = ({ t }) => {
   const dispatch = useDispatch();
   const types = useSelector((state) => state.articleType.types);
   const columnDef = [
-    { name: 'code', title: t('label.article_type_code'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.article_type_name'), align: 'left', width: '60%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.article_type_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.article_type_name'), align: 'left', width: '50%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -93,8 +94,7 @@ const ArticleType = ({ t }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteArticleType(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchTypes(
         {
@@ -105,6 +105,9 @@ const ArticleType = ({ t }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteArticleType(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_TYPE_ARTICLE))
     return (

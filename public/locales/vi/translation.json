@@ -365,7 +365,7 @@
     "total_number_departments": "Tổng số phòng ban",
     "unprocessed_leave_request": "Số đề xuất xin nghỉ chưa được xử lý",
     "unprocessed_remote_request": "Số đề xuất xin làm từ xa chưa được xử lý",
-    "unprocessed_policy_request": "Số đề xuất xin làm thêm giờ chưa được xử lý",
+    "unprocessed_overtime_request": "Số đề xuất xin làm thêm giờ chưa được xử lý",
     "roll_call_chart": "Biểu đồ điểm danh",
     "day_offs_in_year": "Số ngày nghỉ phép trong năm",
     "chart_number_requests_in_month": "Biểu đồ  thống kê số đề xuất trong tháng",
@@ -377,7 +377,8 @@
     "standard_working_hours": "Tổng số giờ làm tiêu chuẩn",
     "social_Insurance": "Bảo hiểm xã hội",
     "heath_insurance": "Bảo hiểm y tế",
-    "unemployment_insurance": "Bảo hiểm thất nghiệp"
+    "unemployment_insurance": "Bảo hiểm thất nghiệp",
+    "future_roll_call": "Chưa đến ca"
   },
   "title": {
     "confirm": "Xác nhận",

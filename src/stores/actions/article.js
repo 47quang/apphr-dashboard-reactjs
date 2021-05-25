@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -31,6 +32,13 @@ export const fetchArticles = (params, onTotalChange, setLoading) => {
     api.article
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                return a;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.article.SET_ARTICLES, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -90,13 +98,13 @@ export const updateArticle = (data, success_msg) => {
   };
 };
 
-export const deleteArticle = (id, success_msg) => {
+export const deleteArticle = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.article
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.article.DELETE_ARTICLE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleArticleExceptions(err, dispatch, 'delete Article');

@@ -280,6 +280,7 @@ const Dashboard = ({ t, location }) => {
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           disableToolBar={true}
+          linkCols={[{ name: 'message', id: 'path' }]}
         />
       </div>
     </>

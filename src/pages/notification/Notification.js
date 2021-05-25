@@ -15,6 +15,7 @@ const Notification = ({ t }) => {
     { name: 'typeId', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
@@ -96,8 +97,7 @@ const Notification = ({ t }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteArticle(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchArticles(
         {
@@ -108,6 +108,9 @@ const Notification = ({ t }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteArticle(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
     return (
@@ -127,6 +130,7 @@ const Notification = ({ t }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_ARTICLE)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );

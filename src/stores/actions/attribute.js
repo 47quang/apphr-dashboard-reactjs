@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -31,6 +32,13 @@ export const fetchAttributes = (params, onTotalChange, setLoading) => {
     api.attribute
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                return a;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.attribute.SET_ATTRIBUTES, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -89,12 +97,12 @@ export const updateAttribute = (data, success_msg) => {
   };
 };
 
-export const deleteAttribute = (id, success_msg) => {
+export const deleteAttribute = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.attribute
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.attribute.DELETE_ATTRIBUTE, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

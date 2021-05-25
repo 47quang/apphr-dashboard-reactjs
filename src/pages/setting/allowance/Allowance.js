@@ -12,10 +12,11 @@ const Allowance = ({ t }) => {
   const dispatch = useDispatch();
   const allowances = useSelector((state) => state.allowance.allowances);
   const columnDef = [
-    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.allowance_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -83,11 +84,7 @@ const Allowance = ({ t }) => {
       loading: isLoading,
     }));
   };
-  const decreaseTotal = (decrease) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: prevState.total - decrease,
-    }));
+
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
@@ -98,6 +95,7 @@ const Allowance = ({ t }) => {
           },
           onTotalChange,
           setLoading,
+          t,
         ),
       );
     return () => {
@@ -116,12 +114,11 @@ const Allowance = ({ t }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteAllowance(rowId, decreaseTotal, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchAllowances(
         {
@@ -130,8 +127,12 @@ const Allowance = ({ t }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteAllowance(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (

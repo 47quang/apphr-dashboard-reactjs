@@ -9,9 +9,10 @@ import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 const Position = ({ t, location, history }) => {
   const columnDef = [
     { name: 'code', title: t('label.position_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.position_name'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'branchName', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'departmentName', title: t('label.department'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.position_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'branchName', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'departmentName', title: t('label.department'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
@@ -86,9 +87,11 @@ const Position = ({ t, location, history }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deletePosition({ id: rowId }, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deletePosition({ id: rowId }, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_POSITION))
     return (

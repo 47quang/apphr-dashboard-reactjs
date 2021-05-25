@@ -14,6 +14,7 @@ const Benefit = ({ t, location, history }) => {
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {

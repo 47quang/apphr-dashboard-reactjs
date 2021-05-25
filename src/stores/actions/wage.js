@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -39,6 +40,7 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
           payload && payload.length > 0
             ? payload.map((wage) => {
                 wage.type = paymentType[wage.type];
+                wage.createdAt = formatDateTimeToString(wage.createdAt);
                 return wage;
               })
             : [];
@@ -100,12 +102,12 @@ export const updateWage = (data, success_msg) => {
   };
 };
 
-export const deleteWage = (id, success_msg) => {
+export const deleteWage = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.wage
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.wage.DELETE_WAGE, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

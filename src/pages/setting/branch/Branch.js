@@ -11,9 +11,10 @@ const Branch = ({ t, history }) => {
   const branches = useSelector((state) => state.branch.branches);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDef = [
-    { name: 'code', title: t('label.branch_code'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.branch_name'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'address', title: t('label.address'), align: 'left', width: '35%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.branch_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.branch_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'address', title: t('label.address'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const [paging, setPaging] = useState({
     currentPage: 0,
@@ -95,9 +96,7 @@ const Branch = ({ t, history }) => {
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteBranch(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchBranches(
         {
@@ -108,6 +107,9 @@ const Branch = ({ t, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteBranch(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_BRANCH))
     return (

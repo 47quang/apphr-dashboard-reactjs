@@ -11,9 +11,10 @@ const Department = ({ t, location, history }) => {
 
   const columnDef = [
     { name: 'code', title: t('label.department_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.department_name'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'branchname', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'note', title: t('label.description'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.department_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'branchname', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'note', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -96,9 +97,7 @@ const Department = ({ t, location, history }) => {
       ),
     );
   };
-
-  const deleteRow = (rowId) => {
-    dispatch(deleteDepartment({ id: rowId }, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchDepartments(
         {
@@ -109,6 +108,9 @@ const Department = ({ t, location, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = (rowId) => {
+    dispatch(deleteDepartment({ id: rowId }, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_DEPARTMENT))
     return (

@@ -141,13 +141,14 @@ export const updateAccount = (data, success_msg) => {
   };
 };
 
-export const deleteAccount = (id, success_msg) => {
+export const deleteAccount = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.account
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.DELETE_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleAccountExceptions(err, dispatch, 'delete Accounts');

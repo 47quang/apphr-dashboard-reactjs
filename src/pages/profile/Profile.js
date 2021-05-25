@@ -16,6 +16,7 @@ const Profile = ({ t, location }) => {
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'gender', title: t('label.sex'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
     // { name: 'positionId', title: t('label.position'), align: 'left', width: '15%', wordWrapEnabled: true },
     // { name: 'departmentId', title: t('label.department'), align: 'left', width: '15%', wordWrapEnabled: true },
     // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -155,9 +156,7 @@ const Profile = ({ t, location }) => {
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteProfile(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchProfiles(
         {
@@ -168,6 +167,9 @@ const Profile = ({ t, location }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteProfile(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_PROFILE))
     return (
@@ -186,6 +188,7 @@ const Profile = ({ t, location }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_PROFILE)}
           filters={filters}
           filterFunction={filterFunction}
+          fixed={true}
         />
       </CContainer>
     );

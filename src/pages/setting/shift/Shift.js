@@ -9,11 +9,12 @@ import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
 const Shifts = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDef = [
-    { name: 'code', title: t('label.shift_code'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.shift_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.shift_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.shift_name'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'startCC', title: t('label.check_in_time'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'endCC', title: t('label.check_out_time'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'coefficient', title: t('label.working_time_coefficient'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'coefficient', title: t('label.working_time_coefficient'), align: 'left', width: '10%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
@@ -86,9 +87,11 @@ const Shifts = ({ t, location, history }) => {
       ),
     );
   };
-  const deleteRow = (rowID) => {
-    dispatch(deleteShift({ id: rowID }, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+  };
+  const deleteRow = (rowID) => {
+    dispatch(deleteShift({ id: rowID }, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_SHIFT))
     return (

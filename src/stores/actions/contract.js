@@ -1,5 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
-import { formatDateInput, formatDate } from 'src/utils/datetimeUtils';
+import { formatDateInput, formatDate, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -98,6 +98,7 @@ export const fetchContractTable = (params, onTotalChange, setLoading) => {
                 contract.text_type = type[contract.periodicPayment];
                 contract.handleDate = formatDate(contract.handleDate);
                 contract.startWork = formatDate(contract.startWork);
+                contract.createdAt = formatDateTimeToString(contract.createdAt);
                 contract.employee = contract.profileId ? contract.profile?.code + ' - ' + contract.profile?.fullname : '';
                 return contract;
               })
@@ -291,7 +292,6 @@ export const deleteContract = (id, success_msg, handleAfterSuccess) => {
       .delete(id)
       .then(({ payload }) => {
         if (handleAfterSuccess) handleAfterSuccess();
-        dispatch({ type: REDUX_STATE.contract.DELETE_CONTRACT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

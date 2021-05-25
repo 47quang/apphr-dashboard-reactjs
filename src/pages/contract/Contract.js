@@ -16,6 +16,7 @@ const Contract = ({ t, location, history }) => {
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {

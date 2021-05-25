@@ -13,8 +13,9 @@ const OtherFee = ({ t }) => {
   const payments = useSelector((state) => state.payment.payments);
   const columnDef = [
     { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.payment_name'), align: 'left', width: '35%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.payment_type'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.payment_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -91,6 +92,7 @@ const OtherFee = ({ t }) => {
           },
           onTotalChange,
           setLoading,
+          t,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,11 +108,11 @@ const OtherFee = ({ t }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deletePayment(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchPayments(
         {
@@ -119,8 +121,12 @@ const OtherFee = ({ t }) => {
         },
         onTotalChange,
         setLoading,
+        t,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deletePayment(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (

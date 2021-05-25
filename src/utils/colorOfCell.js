@@ -1,6 +1,7 @@
 const { COLORS } = require('src/constants/theme');
 
 export const backgroundColor = (value) => {
+  if (value.future) return COLORS.BACKGROUND_FUTURE;
   let numOfAssignment = value.assignment.length;
   if (numOfAssignment === 0) return 'transparent';
   else if (numOfAssignment > 1) return COLORS.BACKGROUND_COLOR_MANY_ASSIGNMENT;
@@ -38,6 +39,7 @@ export const dotColor = (assignment) => {
   else return COLORS.ERROR;
 };
 export const borderColor = (value) => {
+  if (value.future) return COLORS.BORDER_FUTURE;
   let numOfAssignment = value.assignment.length;
   if (numOfAssignment === 0) return 'transparent';
   else if (numOfAssignment > 1) return COLORS.MANY_ASSIGNMENT;
@@ -61,6 +63,7 @@ export const borderColorOfAssignment = (assignment) => {
 };
 export const backgroundColorHover = (value) => {
   let numOfAssignment = value.assignment.length;
-  if (numOfAssignment === 1) return 'assignment-overtime';
+  if (numOfAssignment > 1) return 'assignment-multi';
+  else if (numOfAssignment === 1) return 'assignment-overtime';
   else return '';
 };

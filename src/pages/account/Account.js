@@ -107,8 +107,7 @@ const Account = ({ t, location, history }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteAccount(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchAccounts(
         {
@@ -119,6 +118,9 @@ const Account = ({ t, location, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteAccount(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
