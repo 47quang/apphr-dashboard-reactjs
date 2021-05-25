@@ -90,3 +90,20 @@ button:focus {
   background-color: #f5f5f5 !important;
   border-radius: 9px;
 }
+.assignment-multi:hover {
+  background-color: #76c0fb !important;
+  border-radius: 9px;
+}
+.assignment-error:hover {
+  background-color: #ffb1a2 !important;
+  border-radius: 9px;
+}
+.assignment-success:hover {
+  background-color: #98ff8e !important;
+  border-radius: 9px;
+}
+
+.assignment-late:hover {
+  background-color: #fbff87 !important;
+  border-radius: 9px;
+}

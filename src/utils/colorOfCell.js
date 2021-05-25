@@ -67,3 +67,17 @@ export const backgroundColorHover = (value) => {
   else if (numOfAssignment === 1) return 'assignment-overtime';
   else return '';
 };
+export const borderHoverOfAssignment = (assignment) => {
+  let status = assignment.status;
+  if (status === 'normal') {
+    let point = assignment.point;
+    if (point === 0) return 'assignment-error';
+    else if (point === 1) return 'assignment-success';
+    else return 'assignment-late';
+  } else if (status === 'overtime') return COLORS.BORDER_OVERTIME;
+  else if (status === 'remote') return COLORS.BORDER_REMOTE;
+  else if (status === 'remote_overtime') return COLORS.BORDER_REMOTE_OVERTIME;
+  else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
+  else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
+  else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;
+};
