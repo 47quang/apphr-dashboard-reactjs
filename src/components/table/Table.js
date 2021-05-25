@@ -29,7 +29,7 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import { Lens } from '@material-ui/icons';
+import { AlarmAdd, AttachMoney, BluetoothAudio, Cancel, CheckCircle, Gavel, Lens, MoneyOff, Schedule } from '@material-ui/icons';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
@@ -189,11 +189,11 @@ const Label = ({ column, className, ...props }) => {
       className={classNames(className)}
       {...props}
       style={{
-        backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : '',
+        backgroundColor: column.today ? COLORS.TODAY_HEADER_CELL : column.holiday ? COLORS.HOLIDAY_HEADER : '',
         borderStyle: 'solid',
         borderLeftColor: '#D8DBE0',
         borderTopColor: '#D8DBE0',
-        borderRightColor: column.name === 'saturday' ? '#D8DBE0' : 'white',
+        borderRightColor: column.today ? COLORS.TODAY_HEADER_CELL : column.holiday ? COLORS.HOLIDAY_HEADER : 'white',
         borderBottomColor: '#D8DBE0',
         borderWidth: 'thin',
       }}
@@ -360,7 +360,7 @@ const QTable = (props) => {
 
   const LinkFormatter = ({ row, value, column }) => {
     let col = linkCols.filter((x) => x.name === column.name)[0];
-    console.log('LinkFormatter', row);
+    // console.log('LinkFormatter', row);
     if (value) {
       if (col.route) return <Link to={`${col.route}${row[col.id]}`}>{value}</Link>;
       else {
@@ -770,48 +770,60 @@ const QTable = (props) => {
           <div className="p-0">
             <div className="row m-2">
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.HOLIDAY_CELL }} />
                 <p className="d-inline">{t('label.holiday')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_NO_PAY }} />
-                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.TODAY_BODY_CELL }} />
+                <p className="d-inline">{t('label.today')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_PAY }} />
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BACKGROUND_REQUEST }} />
+                <p className="d-inline">{t('label.request')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BACKGROUND_NORMAL }} />
+                <p className="d-inline">{t('label.normal_assignment')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BACKGROUND_COLOR_MANY_ASSIGNMENT }} />
+                <p className="d-inline">{t('label.many_assignments')}</p>
+              </div>
+            </div>
+            <div className="row m-2">
+              <div className="col-2">
+                <AttachMoney className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_pay_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LEAVE_POLICY }} />
+                <MoneyOff className="mr-2 mb-2" style={{ color: COLORS.ERROR }} />
+                <p className="d-inline">{t('label.leave_no_pay_req')}</p>
+              </div>
+              <div className="col-2">
+                <Gavel className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.leave_policy_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_REMOTE }} />
+                <BluetoothAudio className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.remote_req')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_OVERTIME }} />
+                <AlarmAdd className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.overtime_req')}</p>
               </div>
+            </div>
+            <div className="row m-2">
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_REMOTE_OVERTIME }} />
-                <p className="d-inline">{t('label.overtime_remote_req')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_SUCCESS_ROLL_CALL }} />
+                <CheckCircle className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
                 <p className="d-inline">{t('label.success_roll_call')}</p>
               </div>
               <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_LATE_ROLL_CALL }} />
+                <Schedule className="mr-2 mb-2" style={{ color: COLORS.LATE }} />
                 <p className="d-inline">{t('label.late_roll_call')}</p>
               </div>
-              <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.ERROR }} />
+              <div className="col-4">
+                <Cancel className="mr-2 mb-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.error_roll_call')}</p>
-              </div>
-              <div className="col-2">
-                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_FUTURE }} />
-                <p className="d-inline">{t('label.future_roll_call')}</p>
               </div>
             </div>
           </div>
