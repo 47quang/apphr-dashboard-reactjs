@@ -1,6 +1,7 @@
 import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constants/key';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 //TODO
 const handleAccountExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
@@ -37,6 +38,9 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
             ? payload.map((a) => {
                 a.role = a.role.name;
                 a.profileCode = a.profile.code;
+                a.profileId = a.profile.id;
+                a.employee = a.profile.code + ' - ' + a.profile.fullname;
+                a.createdAt = formatDateTimeToString(a.createdAt);
                 return a;
               })
             : [];
@@ -137,13 +141,14 @@ export const updateAccount = (data, success_msg) => {
   };
 };
 
-export const deleteAccount = (id, success_msg) => {
+export const deleteAccount = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.account
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.account.DELETE_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleAccountExceptions(err, dispatch, 'delete Accounts');

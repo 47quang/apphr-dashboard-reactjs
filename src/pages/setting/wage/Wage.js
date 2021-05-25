@@ -11,10 +11,11 @@ const Wage = ({ t }) => {
   const dispatch = useDispatch();
   const wages = useSelector((state) => state.wage.wages);
   const columnDef = [
-    { name: 'code', title: t('label.wage_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.wage_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_method'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.wage_name'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.wage_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -109,9 +110,7 @@ const Wage = ({ t }) => {
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteWage(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchWages(
         {
@@ -122,6 +121,9 @@ const Wage = ({ t }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteWage(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (

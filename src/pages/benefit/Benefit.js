@@ -14,6 +14,7 @@ const Benefit = ({ t, location, history }) => {
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -152,7 +153,10 @@ const Benefit = ({ t, location, history }) => {
           data={wageHistories}
           route={ROUTE_PATH.NAV_BENEFIT + '/'}
           deleteRow={deleteRow}
-          //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
+          linkCols={[
+            { name: 'contractName', id: 'contractId', route: `${ROUTE_PATH.NAV_CONTRACT}/` },
+            { name: 'employee', id: 'profileId', route: `${ROUTE_PATH.PROFILE}/` },
+          ]}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}

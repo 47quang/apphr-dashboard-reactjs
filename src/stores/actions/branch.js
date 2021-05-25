@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -31,6 +32,13 @@ export const fetchBranches = (params, onTotalChange, setLoading) => {
     api.branch
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                return a;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -89,13 +97,13 @@ export const updateBranch = (data, success_msg) => {
   };
 };
 
-export const deleteBranch = (id, success_msg) => {
+export const deleteBranch = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.branch
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.branch.DELETE_BRANCH, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleBranchExceptions(err, dispatch, 'deleteBranch');

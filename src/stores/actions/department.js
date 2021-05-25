@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -31,6 +32,13 @@ export const fetchDepartments = (params, onTotalChange, setLoading) => {
     api.department
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                return a;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENTS, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -43,13 +51,13 @@ export const fetchDepartments = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const deleteDepartment = (params, success_msg) => {
+export const deleteDepartment = (params, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.department
       .delete(params.id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.department.DELETE_DEPARTMENT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleDepartmentExceptions(err, dispatch, 'deleteDepartment');

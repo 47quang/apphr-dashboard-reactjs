@@ -313,7 +313,7 @@ export const api = {
       return client.get(API_PREFIX.API_PROFILE + `/${id}/contract-active`);
     },
     getActiveWage: (id) => {
-      return client.get(API_PREFIX.API_PROFILE + `/${id}/work-history-active`);
+      return client.get(API_PREFIX.API_PROFILE + `/${id}/wage-history-active`);
     },
   },
   contract: {

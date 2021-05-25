@@ -298,53 +298,99 @@ const RollUp = ({ t, location }) => {
           }}
         >
           {isDay ? (
-            <div
-              className={classNames(backgroundColorHover(value), 'd-flex justify-content-center', 'align-items-center')}
-              role={value.assignment.length > 0 ? 'button' : 'layout'}
-              onClick={(e) => {
-                if (dateCol.includes(column.name)) {
-                  let numOfAssignment = value.assignment.length;
-                  if (numOfAssignment === 1)
-                    setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
-                  else if (numOfAssignment >= 1) {
-                    setIsOpenAssignmentsDialog(true);
-                    setCell({ ...cell, rowId: row.id, date: value.date });
-                  }
-                }
-              }}
-              style={{
-                verticalAlign: 'inherit',
-                borderColor: borderColor(value),
-                borderStyle: 'solid',
-                //height: '100%',
-                borderRadius: '5px',
-                borderWidth: '2px',
-                backgroundColor: backgroundColor(value),
-                height: 75,
-              }}
-            >
-              {value.assignment.length > 1 ? (
-                <div>
-                  <p className="mb-0">{value.assignment.length + 'Ca'}</p>
+            value.future ? (
+              <div
+                className={classNames('d-flex justify-content-center', 'align-items-center')}
+                //role={value.assignment.length > 0 ? 'button' : 'layout'}
+                // onClick={(e) => {
+                //   if (dateCol.includes(column.name)) {
+                //     let numOfAssignment = value.assignment.length;
+                //     if (numOfAssignment === 1)
+                //       setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
+                //     else if (numOfAssignment >= 1) {
+                //       setIsOpenAssignmentsDialog(true);
+                //       setCell({ ...cell, rowId: row.id, date: value.date });
+                //     }
+                //   }
+                // }}
+                style={{
+                  verticalAlign: 'inherit',
+                  borderColor: borderColor(value),
+                  borderStyle: 'solid',
+                  //height: '100%',
+                  borderRadius: '5px',
+                  borderWidth: '2px',
+                  backgroundColor: backgroundColor(value),
+                  height: 75,
+                }}
+              >
+                {value.assignment.length > 1 ? (
                   <div>
-                    {value.assignment.map((assignment, idx) => (
-                      <Lens
-                        key={assignment.shiftCode}
-                        className="mr-1"
-                        style={{ color: assignment.point > 0 ? dotColor(assignment) : COLORS.ERROR, height: '10px', width: '10px' }}
-                      />
-                    ))}
+                    <p className="mb-0">{value.assignment.length + 'Ca'}</p>
+                    <div>
+                      {value.assignment.map((assignment, idx) => (
+                        <Lens key={assignment.shiftCode} className="mr-1" style={{ color: COLORS.BORDER_FUTURE, height: '10px', width: '10px' }} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ) : value.assignment.length === 0 ? (
-                <></>
-              ) : (
-                <div>
-                  <p className="mb-0">{value.assignment[0].shiftName}</p>
-                  <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
-                </div>
-              )}
-            </div>
+                ) : value.assignment.length === 0 ? (
+                  <></>
+                ) : (
+                  <div>
+                    <p className="mb-0">{value.assignment[0].shiftName}</p>
+                    <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div
+                className={classNames(backgroundColorHover(value), 'd-flex justify-content-center', 'align-items-center')}
+                role={value.assignment.length > 0 ? 'button' : 'layout'}
+                onClick={(e) => {
+                  if (dateCol.includes(column.name)) {
+                    let numOfAssignment = value.assignment.length;
+                    if (numOfAssignment === 1)
+                      setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
+                    else if (numOfAssignment >= 1) {
+                      setIsOpenAssignmentsDialog(true);
+                      setCell({ ...cell, rowId: row.id, date: value.date });
+                    }
+                  }
+                }}
+                style={{
+                  verticalAlign: 'inherit',
+                  borderColor: borderColor(value),
+                  borderStyle: 'solid',
+                  //height: '100%',
+                  borderRadius: '5px',
+                  borderWidth: '2px',
+                  backgroundColor: backgroundColor(value),
+                  height: 75,
+                }}
+              >
+                {value.assignment.length > 1 ? (
+                  <div>
+                    <p className="mb-0">{value.assignment.length + 'Ca'}</p>
+                    <div>
+                      {value.assignment.map((assignment, idx) => (
+                        <Lens
+                          key={assignment.shiftCode}
+                          className="mr-1"
+                          style={{ color: assignment.point > 0 ? dotColor(assignment) : COLORS.ERROR, height: '10px', width: '10px' }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : value.assignment.length === 0 ? (
+                  <></>
+                ) : (
+                  <div>
+                    <p className="mb-0">{value.assignment[0].shiftName}</p>
+                    <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
+                  </div>
+                )}
+              </div>
+            )
           ) : (
             <div className="d-flex ml-4 align-items-center">
               <div />

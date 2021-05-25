@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -25,8 +26,16 @@ const handlePaymentExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchPayments = (params, onTotalChange, setLoading) => {
+export const fetchPayments = (params, onTotalChange, setLoading, t) => {
   if (setLoading) setLoading(true);
+  let type = {
+    value: 'label.payment_value',
+    percent: 'label.percent',
+  };
+  const _by = {
+    gross: 'label.gross_salary',
+    insurrance: 'label.social_insurance',
+  };
   return (dispatch, getState) => {
     api.payment
       .getAll(params)
@@ -34,8 +43,9 @@ export const fetchPayments = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((f) => {
-                let by = f.by === 'gross' ? 'Tổng thu nhập' : 'Lương bảo hiểm';
-                f.type = f.type === 'value' ? 'Khoản tiền mặt' : f.value + ' % ' + by;
+                let by = t(_by[f.by]);
+                f.type = f.type === 'value' ? t(type[f.type]) : f.value + ' % ' + by;
+                f.createdAt = formatDateTimeToString(f.createdAt);
                 return f;
               })
             : [];
@@ -97,12 +107,12 @@ export const updatePayment = (data, success_msg) => {
   };
 };
 
-export const deletePayment = (id, success_msg) => {
+export const deletePayment = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.payment
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.payment.DELETE_PAYMENT, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

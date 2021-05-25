@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -25,8 +26,13 @@ const handleAllowanceExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAllowances = (params, onTotalChange, setLoading) => {
+export const fetchAllowances = (params, onTotalChange, setLoading, t) => {
   if (setLoading) setLoading(true);
+  let type = {
+    tax: 'label.tax',
+    no_tax: 'label.no_tax',
+    partial_tax: 'label.partial_tax',
+  };
   return (dispatch, getState) => {
     api.allowance
       .getAll(params)
@@ -34,9 +40,10 @@ export const fetchAllowances = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((allowance) => {
-                if (allowance.type === 'no_tax') allowance.type = 'Không tính thuế';
-                else if (allowance.type === 'tax') allowance.type = 'Tính thuế';
-                else allowance.type = 'Có hạn mức';
+                if (t) {
+                  allowance.type = t(type[allowance.type]);
+                }
+                allowance.createdAt = formatDateTimeToString(allowance.createdAt);
                 return allowance;
               })
             : [];
@@ -99,13 +106,12 @@ export const updateAllowance = (data, success_msg) => {
   };
 };
 
-export const deleteAllowance = (id, decreaseTotal, success_msg) => {
+export const deleteAllowance = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.allowance
       .delete(id)
       .then(({ payload }) => {
-        if (decreaseTotal) decreaseTotal(-1);
-        dispatch({ type: REDUX_STATE.allowance.DELETE_ALLOWANCE, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

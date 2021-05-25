@@ -10,12 +10,13 @@ const Contract = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
     { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'fullname', title: t('label.full_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'fullname', title: t('label.contract_fullname'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -64,6 +65,16 @@ const Contract = ({ t, location, history }) => {
     },
     lastname: {
       title: t('label.employee_last_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.LIKE,
+          name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    fullname: {
+      title: t('label.contract_fullname'),
       operates: [
         {
           id: FILTER_OPERATOR.LIKE,

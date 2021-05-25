@@ -358,8 +358,18 @@ const QTable = (props) => {
   };
   const StatusProvider = (p) => <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
 
-  const LinkFormatter = ({ value, column }) =>
-    value ? <Link to={`${linkCols.filter((x) => x.name === column.name)[0].route}${value}`}>{value}</Link> : t('message.empty_table');
+  const LinkFormatter = ({ row, value, column }) => {
+    let col = linkCols.filter((x) => x.name === column.name)[0];
+    console.log('LinkFormatter', row);
+    if (value) {
+      if (col.route) return <Link to={`${col.route}${row[col.id]}`}>{value}</Link>;
+      else {
+        if (row[col.id]) return <Link to={`${row[col.id]}`}>{value}</Link>;
+        else return <p>{value}</p>;
+      }
+    }
+    return t('message.empty_table');
+  };
 
   const LinkTypeProvider = (p) => <DataTypeProvider formatterComponent={LinkFormatter} {...p} />;
 
@@ -549,7 +559,9 @@ const QTable = (props) => {
                             containerClassName={'form-group col-lg-4'}
                             value={values.value}
                             onBlur={handleBlur('value')}
-                            onChange={handleChange('value')}
+                            onChange={(e) => {
+                              handleChange('value')(e);
+                            }}
                             labelText={t('label.keyword')}
                             inputType={'text'}
                             placeholder={t('placeholder.enter_keyword')}
@@ -563,7 +575,9 @@ const QTable = (props) => {
                             containerClassName={'form-group col-lg-4'}
                             value={values.value}
                             onBlur={handleBlur('value')}
-                            onChange={handleChange('value')}
+                            onChange={(e) => {
+                              handleChange('value')(e);
+                            }}
                             labelText={t('label.filter_value')}
                             placeholder={t('placeholder.select_value')}
                             selectClassName={'form-control'}
@@ -794,6 +808,10 @@ const QTable = (props) => {
               <div className="col-2">
                 <Lens className="mr-2 mb-2" style={{ color: COLORS.ERROR }} />
                 <p className="d-inline">{t('label.error_roll_call')}</p>
+              </div>
+              <div className="col-2">
+                <Lens className="mr-2 mb-2" style={{ color: COLORS.BORDER_FUTURE }} />
+                <p className="d-inline">{t('label.future_roll_call')}</p>
               </div>
             </div>
           </div>

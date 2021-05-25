@@ -365,7 +365,7 @@
     "total_number_departments": "Tổng số phòng ban",
     "unprocessed_leave_request": "Số đề xuất xin nghỉ chưa được xử lý",
     "unprocessed_remote_request": "Số đề xuất xin làm từ xa chưa được xử lý",
-    "unprocessed_policy_request": "Số đề xuất xin làm thêm giờ chưa được xử lý",
+    "unprocessed_overtime_request": "Số đề xuất xin làm thêm giờ chưa được xử lý",
     "roll_call_chart": "Biểu đồ điểm danh",
     "day_offs_in_year": "Số ngày nghỉ phép trong năm",
     "chart_number_requests_in_month": "Biểu đồ  thống kê số đề xuất trong tháng",
@@ -377,7 +377,8 @@
     "standard_working_hours": "Tổng số giờ làm tiêu chuẩn",
     "social_Insurance": "Bảo hiểm xã hội",
     "heath_insurance": "Bảo hiểm y tế",
-    "unemployment_insurance": "Bảo hiểm thất nghiệp"
+    "unemployment_insurance": "Bảo hiểm thất nghiệp",
+    "future_roll_call": "Chưa đến ca"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -395,7 +396,9 @@
     "delete_contract": "Xóa hợp đồng",
     "delete_certificate": "Xóa chứng chỉ",
     "new_contract": "Tạo mới hợp đồng", 
-    "update_contract": "Cập nhật hợp đồng"
+    "update_contract": "Cập nhật hợp đồng",
+    "new_active_wage": "Tạo đợt lương mới",
+    "update_active_wage": "Cập nhật đợt lương"
   },
   "filter_operator": {
     "in": "trong",
@@ -433,9 +436,12 @@
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",
-    "new_contract_warning_message": "Việc tạo mới một hợp đồng có hiệu lực sẽ ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn tạo mới hợp đồng chứ?",
-    "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn cập nhật hợp đồng chứ ",
-    "not_assign_in_this_time": "Không thể giao việc trong khung giờ này"
+    "new_contract_warning_message": "Việc tạo mới một hợp đồng có hiệu lực sẽ ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn tạo hợp đồng này chứ?",
+    "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn cập nhật hợp đồng này chứ?",
+    "not_assign_in_this_time": "Không thể giao việc trong khung giờ này!",
+    "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn tạo đợt lương này chứ?",
+    "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?"
+
   },
   "placeholder": {
     "select_contract": "Chọn hợp đồng",

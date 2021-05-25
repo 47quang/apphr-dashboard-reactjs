@@ -10,10 +10,11 @@ const HolidayPage = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
   const columnDef = [
-    { name: 'code', title: t('label.holiday_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.holiday_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'endDate', title: t('label.end_date'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'endDate', title: t('label.end_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -97,9 +98,7 @@ const HolidayPage = ({ t, location, history }) => {
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteHoliday(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchHolidays(
         {
@@ -110,6 +109,9 @@ const HolidayPage = ({ t, location, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteHoliday(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_HOLIDAY))
     return (

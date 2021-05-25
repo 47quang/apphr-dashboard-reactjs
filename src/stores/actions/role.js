@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -27,7 +28,7 @@ const handleRoleExceptions = (err, dispatch, functionName) => {
 };
 const formatDownloadedData = (payload) => {
   return payload?.map((tup) => {
-    tup.createdAt.replace('Z', '');
+    tup.createdAt = formatDateTimeToString(tup.createdAt);
     return tup;
   });
 };
@@ -98,13 +99,14 @@ export const updateRole = (data, success_msg) => {
   };
 };
 
-export const deleteRole = (id, success_msg) => {
+export const deleteRole = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.role
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleRoleExceptions(err, dispatch, 'deleteRole');

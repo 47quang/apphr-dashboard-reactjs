@@ -8,8 +8,9 @@ import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const Role = ({ t, location, history }) => {
   const columnDef = [
-    { name: 'code', title: t('label.role_code'), align: 'left', width: '30%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.role_name'), align: 'left', width: '60%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.role_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.role_name'), align: 'left', width: '50%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
@@ -93,9 +94,7 @@ const Role = ({ t, location, history }) => {
       ),
     );
   };
-
-  const deleteRow = async (rowId) => {
-    dispatch(deleteRole(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchRoles(
         {
@@ -106,6 +105,9 @@ const Role = ({ t, location, history }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteRole(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_ROLE))
     return (

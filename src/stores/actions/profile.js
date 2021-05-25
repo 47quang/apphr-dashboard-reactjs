@@ -1,5 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
-import { formatDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -35,6 +35,7 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((profile) => {
+                profile.createdAt = formatDateTimeToString(profile.createdAt);
                 profile.gender = profile.gender === 'male' ? 'Nam' : 'Nữ';
                 return profile;
               })
@@ -207,13 +208,14 @@ export const updateRelationship = (data, profileId, success_msg) => {
   };
 };
 
-export const deleteProfile = (id, success_msg) => {
+export const deleteProfile = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.profile
       .delete(id)
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.profile.DELETE_PROFILE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'deleteProfile');
@@ -418,6 +420,57 @@ export const fetchActiveWage = (id, setLoading) => {
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+      });
+  };
+};
+export const createActiveWage = (params, success_msg, handleResetNewWage) => {
+  delete params.id;
+  delete params.wage;
+  delete params.wages;
+  if (params.expiredDate === '') delete params.expiredDate;
+  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.id)) : [];
+  return (dispatch, getState) => {
+    api.wageHistory
+      .post(params)
+      .then(async ({ payload }) => {
+        if (payload) {
+          payload.wageId = payload.wageId ?? undefined;
+          payload.type = payload?.wage?.type;
+          payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
+          payload.startDate = formatDateInput(payload.startDate);
+          payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        }
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleResetNewWage) handleResetNewWage();
+        dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+      });
+  };
+};
+
+export const updateWageHistory = (data, success_msg) => {
+  if (data.expiredDate === '') delete data.expiredDate;
+  data.allowanceIds = data && data.allowances.length > 0 ? data.allowances.map((a) => parseInt(a.id)) : [];
+  let thisWage = data.wages && data.wages.length > 0 ? data.wages.filter((wage) => wage.id === data.wageId) : [];
+  data.wage = thisWage && thisWage.length > 0 ? thisWage[0] : {};
+  return (dispatch, getState) => {
+    api.wageHistory
+      .put(data)
+      .then(({ payload }) => {
+        payload.type = data?.wage?.type;
+        payload.wageId = data.wageId;
+        payload.wages = data.wages;
+        payload.allowances = data.allowances;
+        payload.startDate = formatDateInput(payload.startDate);
+        payload.code = payload.code ?? undefined;
+        payload.expiredDate = payload.expiredDate ? formatDateInput(payload.expiredDate) : '';
+        if (payload.status === 'active') dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
       });
   };
 };

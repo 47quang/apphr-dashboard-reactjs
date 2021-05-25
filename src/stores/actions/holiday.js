@@ -1,4 +1,5 @@
 import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 //TODO
@@ -31,6 +32,13 @@ export const fetchHolidays = (params, onTotalChange, setLoading) => {
     api.holiday
       .getAll(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                return a;
+              })
+            : [];
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
         if (onTotalChange) onTotalChange(total);
       })
@@ -95,13 +103,13 @@ export const updateHoliday = (data, success_msg) => {
   };
 };
 
-export const deleteHoliday = (id, success_msg) => {
+export const deleteHoliday = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.holiday
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.holiday.DELETE_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
         handleHolidayExceptions(err, dispatch, 'deleteHoliday');

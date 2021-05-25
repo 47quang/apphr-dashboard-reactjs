@@ -12,9 +12,10 @@ const ContractAttribute = ({ t }) => {
   const dispatch = useDispatch();
   const attributes = useSelector((state) => state.attribute.attributes);
   const columnDef = [
-    { name: 'code', title: t('label.code'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.attribute_name'), align: 'left', width: '40%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.attribute_type'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.attribute_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.attribute_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
   const filters = {
     code: {
@@ -110,8 +111,7 @@ const ContractAttribute = ({ t }) => {
       ),
     );
   };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteAttribute(rowId, t('message.successful_delete')));
+  const handleAfterDelete = () => {
     dispatch(
       fetchAttributes(
         {
@@ -122,6 +122,9 @@ const ContractAttribute = ({ t }) => {
         setLoading,
       ),
     );
+  };
+  const deleteRow = async (rowId) => {
+    dispatch(deleteAttribute(rowId, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
