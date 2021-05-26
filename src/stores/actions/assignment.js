@@ -186,7 +186,6 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
-
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
         if (onTotalChange) onTotalChange(total);
       })

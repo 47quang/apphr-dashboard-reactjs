@@ -37,9 +37,9 @@
     "contract": "Hợp đồng",
     "benefit_code": "Mã đợt lương",
     "assignments": "Các ca làm việc",
-    "success_roll_call": "Điểm danh đúng giờ",
+    "success_roll_call": "Làm đủ giờ",
     "late_roll_call": "Vào muộn / ra sớm",
-    "error_roll_call": "Chưa vào ca / ra ca",
+    "error_roll_call": "Làm ít hơn quy định / Vắng / Chưa đến",
     "account_code": "Mã",
     "fee_code": "Mã chi phí",
     "random": "Ngẫu nhiên",
@@ -378,7 +378,9 @@
     "social_Insurance": "Bảo hiểm xã hội",
     "heath_insurance": "Bảo hiểm y tế",
     "unemployment_insurance": "Bảo hiểm thất nghiệp",
-    "future_roll_call": "Chưa đến ca"
+    "future_roll_call": "Chưa đến ca",
+    "normal_assignment": "Ca thông thường",
+    "many_assignments": "Nhiều ca làm việc"
   },
   "title": {
     "confirm": "Xác nhận",

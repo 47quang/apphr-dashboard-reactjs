@@ -18,7 +18,7 @@ import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assign
 import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
 import {} from 'src/stores/actions/rollUp';
-import { backgroundColor, backgroundColorHover, borderColor, dotColor } from 'src/utils/colorOfCell';
+import { backgroundColor, backgroundColorHover, borderColor, dotColor, renderIcon } from 'src/utils/colorOfCell';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const RollUp = ({ t, location }) => {
@@ -68,6 +68,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
@@ -82,6 +83,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
@@ -96,6 +98,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
@@ -110,6 +113,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
@@ -124,6 +128,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
@@ -138,6 +143,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
@@ -152,6 +158,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
+      today: state.today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
@@ -285,7 +292,7 @@ const RollUp = ({ t, location }) => {
           tableColumn={restProps.tableColumn}
           tableRow={restProps.tableRow}
           style={{
-            backgroundColor: column.holiday ? COLORS.HOLIDAY_CELL : isDay ? (value.future ? COLORS.FREE_DATE : COLORS.FREE_DATE) : COLORS.WHITE,
+            backgroundColor: column.today ? COLORS.TODAY_BODY_CELL : column.holiday ? COLORS.HOLIDAY_CELL : isDay ? COLORS.FREE_DATE : COLORS.WHITE,
             verticalAlign: 'inherit',
             borderBottomColor: '#D8DBE0',
             borderLeftColor: '#D8DBE0',
@@ -298,99 +305,67 @@ const RollUp = ({ t, location }) => {
           }}
         >
           {isDay ? (
-            value.future ? (
-              <div
-                className={classNames('d-flex justify-content-center', 'align-items-center')}
-                //role={value.assignment.length > 0 ? 'button' : 'layout'}
-                // onClick={(e) => {
-                //   if (dateCol.includes(column.name)) {
-                //     let numOfAssignment = value.assignment.length;
-                //     if (numOfAssignment === 1)
-                //       setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
-                //     else if (numOfAssignment >= 1) {
-                //       setIsOpenAssignmentsDialog(true);
-                //       setCell({ ...cell, rowId: row.id, date: value.date });
-                //     }
-                //   }
-                // }}
-                style={{
-                  verticalAlign: 'inherit',
-                  borderColor: borderColor(value),
-                  borderStyle: 'solid',
-                  //height: '100%',
-                  borderRadius: '5px',
-                  borderWidth: '2px',
-                  backgroundColor: backgroundColor(value),
-                  height: 75,
-                }}
-              >
-                {value.assignment.length > 1 ? (
-                  <div>
-                    <p className="mb-0">{value.assignment.length + 'Ca'}</p>
-                    <div>
-                      {value.assignment.map((assignment, idx) => (
-                        <Lens key={assignment.shiftCode} className="mr-1" style={{ color: COLORS.BORDER_FUTURE, height: '10px', width: '10px' }} />
-                      ))}
-                    </div>
-                  </div>
-                ) : value.assignment.length === 0 ? (
-                  <></>
-                ) : (
-                  <div>
-                    <p className="mb-0">{value.assignment[0].shiftName}</p>
-                    <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div
-                className={classNames(backgroundColorHover(value), 'd-flex justify-content-center', 'align-items-center')}
-                role={value.assignment.length > 0 ? 'button' : 'layout'}
-                onClick={(e) => {
-                  if (dateCol.includes(column.name)) {
-                    let numOfAssignment = value.assignment.length;
-                    if (numOfAssignment === 1)
-                      setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
-                    else if (numOfAssignment >= 1) {
-                      setIsOpenAssignmentsDialog(true);
-                      setCell({ ...cell, rowId: row.id, date: value.date });
-                    }
+            <div
+              className={classNames(
+                backgroundColorHover(value),
+                value.assignment.length > 1 ? 'd-flex justify-content-center align-items-center' : 'd-flex align-items-center',
+              )}
+              role={value.assignment.length > 0 ? 'button' : 'layout'}
+              onClick={(e) => {
+                if (dateCol.includes(column.name)) {
+                  let numOfAssignment = value.assignment.length;
+                  if (numOfAssignment === 1)
+                    setCell({ ...cell, rowId: row.id, columnName: column.name, isOpen: !cell.isOpen, assignment: value.assignment[0] });
+                  else if (numOfAssignment >= 1) {
+                    setIsOpenAssignmentsDialog(true);
+                    setCell({ ...cell, rowId: row.id, date: value.date });
                   }
-                }}
-                style={{
-                  verticalAlign: 'inherit',
-                  borderColor: borderColor(value),
-                  borderStyle: 'solid',
-                  //height: '100%',
-                  borderRadius: '5px',
-                  borderWidth: '2px',
-                  backgroundColor: backgroundColor(value),
-                  height: 75,
-                }}
-              >
-                {value.assignment.length > 1 ? (
+                }
+              }}
+              style={{
+                verticalAlign: 'inherit',
+                borderColor: borderColor(value),
+                borderStyle: 'solid',
+                //height: '100%',
+                borderRadius: '5px',
+                borderWidth: '2px',
+                backgroundColor: backgroundColor(value),
+                height: 75,
+              }}
+            >
+              {value.assignment.length > 1 ? (
+                <div>
+                  <p className="mb-0">{value.assignment.length + ' Ca'}</p>
                   <div>
-                    <p className="mb-0">{value.assignment.length + 'Ca'}</p>
-                    <div>
-                      {value.assignment.map((assignment, idx) => (
-                        <Lens
-                          key={assignment.shiftCode}
-                          className="mr-1"
-                          style={{ color: assignment.point > 0 ? dotColor(assignment) : COLORS.ERROR, height: '10px', width: '10px' }}
-                        />
-                      ))}
-                    </div>
+                    {value.assignment.map((assignment, idx) => (
+                      <Lens
+                        key={assignment.shiftCode}
+                        className="mr-1"
+                        style={{
+                          color: dotColor(assignment),
+                          height: '10px',
+                          width: '10px',
+                          textAlign: 'center',
+                        }}
+                      />
+                    ))}
                   </div>
-                ) : value.assignment.length === 0 ? (
-                  <></>
-                ) : (
-                  <div>
+                </div>
+              ) : value.assignment.length === 0 ? (
+                <></>
+              ) : (
+                <div className="m-2 p-0 row d-flex align-items-center" style={{ width: '90%' }}>
+                  <div className="col-2 p-0">{renderIcon(value.assignment[0])}</div>
+                  <div
+                    className="col-10 pl-1"
+                    style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '80%', textAlign: 'left' }}
+                  >
                     <p className="mb-0">{value.assignment[0].shiftName}</p>
                     <p className="m-auto"> {value.assignment[0].startCC + ' - ' + value.assignment[0].endCC}</p>
                   </div>
-                )}
-              </div>
-            )
+                </div>
+              )}
+            </div>
           ) : (
             <div className="d-flex ml-4 align-items-center">
               <div />
