@@ -339,7 +339,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           columnDef={columnDefOfProfiles}
           data={proposals}
           route={match.url + '/' + type + '.id='}
-          idxColumnsFilter={[0, 1, 4]}
           disableDelete={true}
           // disableCreate={true}
           statusCols={['status']}
@@ -349,6 +348,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filters={filters}
           filterFunction={filterFunction}
           statusComponent={statusComponent}
+          fixed={true}
         />
       ) : (
         <QTable
@@ -366,6 +366,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filters={filters}
           filterFunction={filterFunction}
           statusComponent={statusComponent}
+          fixed={true}
         />
       )}
     </CContainer>

@@ -380,7 +380,9 @@
     "unemployment_insurance": "Bảo hiểm thất nghiệp",
     "future_roll_call": "Chưa đến ca",
     "normal_assignment": "Ca thông thường",
-    "many_assignments": "Nhiều ca làm việc"
+    "many_assignments": "Nhiều ca làm việc",
+    "month_salary": "Xuất phiếu lương",
+    "month": "Tháng"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -400,7 +402,8 @@
     "new_contract": "Tạo mới hợp đồng", 
     "update_contract": "Cập nhật hợp đồng",
     "new_active_wage": "Tạo đợt lương mới",
-    "update_active_wage": "Cập nhật đợt lương"
+    "update_active_wage": "Cập nhật đợt lương",
+    "reset_password": "Đặt lại mật khẩu"
   },
   "filter_operator": {
     "in": "trong",
@@ -444,7 +447,9 @@
     "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn cập nhật hợp đồng này chứ?",
     "not_assign_in_this_time": "Không thể giao việc trong khung giờ này!",
     "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn tạo đợt lương này chứ?",
-    "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?"
+    "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?",
+    "reset_password_warning_message": "Bạn thật sự muốn đặt lại mật khẩu cho tài khoản này",
+    "reset_password_row": "Đặt lại mật khẩu cho hàng này"
 
   },
   "placeholder": {
@@ -567,7 +572,8 @@
     "enter_contract_fullname": "Nhập tên hợp đồng",
     "select_benefit_status": "Chọn trạng thái đợt lương",
     "enter_benefit_code": "Nhập mã đợt lương",
-    "select_history_working_status": "Chọn tình trạng đợt công tác"
+    "select_history_working_status": "Chọn tình trạng đợt công tác",
+    "select_month": "Chọn tháng"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -721,7 +727,8 @@
     "required_enter_benefit_code": "Bắt buộc phải nhập mã đợt lương",
     "required_select_contract_status": "Bắt buộc phải chọn tình trạng của hợp đồng",
     "required_select_benefit_status": "Bắt buộc phải chọn tình trạng của đợt lương",
-    "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác"
+    "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
+    "required_select_month": "Bắt buộc phải chọn tháng"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

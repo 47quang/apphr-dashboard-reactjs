@@ -691,7 +691,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
 
   const updateContractRef = useRef();
 
-  const preStatus = activeContract.status;
+  const preStatus = activeContract?.status;
 
   const [openUpdateWarning, setOpenUpdateWarning] = useState(false);
 

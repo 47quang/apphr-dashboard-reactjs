@@ -17,7 +17,7 @@ const OtherFee = ({ t }) => {
     { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.payment_name'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
   const operatesText = [
     {

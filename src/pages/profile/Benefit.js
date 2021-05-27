@@ -63,7 +63,7 @@ const Benefit = ({ t, history, match }) => {
 
   async function create(form, contractId) {
     form.profileId = +match.params.id;
-    form.contractId = +activeContract.id;
+    form.contractId = activeContract?.id ? +activeContract.id : '';
     form.wageId = parseInt(form.wageId);
 
     if (form.id) {
@@ -441,7 +441,7 @@ const Benefit = ({ t, history, match }) => {
                 >
                   {(props) => {
                     props.isCreate = true;
-                    props.contractType = activeContract.type;
+                    props.contractType = activeContract?.type;
                     return (
                       <form id="newWage" hidden={true} className="p-0 m-0">
                         <div className="shadow bg-white rounded mx-4 p-4 mb-4">
@@ -488,7 +488,7 @@ const Benefit = ({ t, history, match }) => {
                 >
                   {(props) => {
                     props.isCreate = false;
-                    props.contractType = activeContract.type;
+                    props.contractType = activeContract?.type;
                     return (
                       <form className="p-0 m-0">
                         <div className="shadow bg-white rounded mx-4 p-4 mb-4">

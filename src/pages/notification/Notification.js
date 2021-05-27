@@ -57,6 +57,16 @@ const Notification = ({ t }) => {
       operates: operatesText,
       type: 'text',
     },
+    type_code: {
+      title: t('label.article_type_code'),
+      operates: operatesText,
+      type: 'text',
+    },
+    type_name: {
+      title: t('label.article_type_name'),
+      operates: operatesText,
+      type: 'text',
+    },
   };
 
   const onCurrentPageChange = (pageNumber) => {

@@ -201,6 +201,8 @@ const Profile = ({ t, location }) => {
           filterFunction={filterFunction}
           fixed={true}
           statusComponent={statusComponent}
+          isExportEmployeeSalary={true}
+          disableExportAllSalary={true}
         />
       </CContainer>
     );

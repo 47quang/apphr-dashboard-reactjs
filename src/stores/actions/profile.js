@@ -362,6 +362,19 @@ export const exportWage = (params, success_msg) => {
       });
   };
 };
+export const exportAllWage = (params, success_msg) => {
+  return (dispatch, getState) => {
+    api.profile
+      .exportAllSalary(params)
+      .then(({ payload }) => {
+        window.location.href = payload.publicPath;
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'exportWage');
+      });
+  };
+};
 const type = {
   limitation: 'Có xác định thời hạn',
   un_limitation: 'Không xác định thời hạn',
@@ -443,7 +456,7 @@ export const createActiveWage = (params, success_msg, handleResetNewWage) => {
   delete params.wage;
   delete params.wages;
   if (params.expiredDate === '') delete params.expiredDate;
-  params.allowanceIds = params && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.id)) : [];
+  params.allowanceIds = params && params.allowances && params.allowances.length > 0 ? params.allowances.map((a) => parseInt(a.id)) : [];
   return (dispatch, getState) => {
     api.wageHistory
       .post(params)

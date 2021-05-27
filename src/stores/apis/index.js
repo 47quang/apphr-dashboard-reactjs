@@ -234,6 +234,9 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_ACCOUNT + `/${id}`);
     },
+    resetPassword: (id) => {
+      return client.put(API_PREFIX.API_ACCOUNT + `/${id}/reset-password`);
+    },
     getAllProfiles: (params) => {
       return client.get(API_PREFIX.API_ACCOUNT, {
         params: params,
@@ -305,6 +308,9 @@ export const api = {
     },
     exportSalary: (data) => {
       return client.put(API_PREFIX.API_PROFILE + `/${data.id}/export-salary`, data);
+    },
+    exportAllSalary: (data) => {
+      return client.put(API_PREFIX.API_PROFILE + `/statistic`, data);
     },
     getProfilesWithoutAccount: () => {
       return client.get(API_PREFIX.API_PROFILE + '/without-account', {});

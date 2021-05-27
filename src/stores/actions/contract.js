@@ -204,7 +204,7 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : undefined;
 
   params.allowanceIds =
-    params.allowances && params.allowances.length > 0
+    params && params.allowances && params.allowances.length > 0
       ? params.allowances.map((allowance) => {
           return +allowance.id;
         })
