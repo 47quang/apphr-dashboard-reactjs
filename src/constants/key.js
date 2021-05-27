@@ -470,4 +470,6 @@ export const FILTER_OPERATOR = {
   NOT_LIKE: 'not_like',
   CONTAIN: 'contain',
   CUSTOM: 'custom',
+  START: 'start',
+  END: 'end',
 };

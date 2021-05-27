@@ -109,11 +109,20 @@ export const fetchLeaveRequest = (id, setLoading) => {
   return (dispatch, getState) => {
     api.leaveRequest
       .get(id)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
-        payload.fullname = payload.profile.fullname;
         payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
+        payload.profileCode = payload.profileId ? payload.profile.code : '';
+        payload.profileFullName = payload.profileId ? payload.profile.fullname : '';
+        payload.phone = payload.profileId ? payload.profile.phone : '';
+        payload.email = payload.profileId ? payload.profile.email : '';
+        let workingAt = await api.profile.getActiveWorking(payload.profileId);
+        // console.log(workingAt);
+        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
+        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -235,10 +244,19 @@ export const fetchRemoteRequest = (id, setLoading) => {
   return (dispatch, getState) => {
     api.remoteRequest
       .get(id)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
         payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
+        payload.profileCode = payload.profileId ? payload.profile.code : '';
+        payload.profileFullName = payload.profileId ? payload.profile.fullname : '';
+        payload.phone = payload.profileId ? payload.profile.phone : '';
+        payload.email = payload.profileId ? payload.profile.email : '';
+        let workingAt = await api.profile.getActiveWorking(payload.profileId);
+        // console.log(workingAt);
+        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
+        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -358,10 +376,19 @@ export const fetchOvertimeRequest = (id, setLoading) => {
   return (dispatch, getState) => {
     api.overtimeRequest
       .get(id)
-      .then(({ payload }) => {
+      .then(async ({ payload }) => {
         payload.createdAt = formatDateTimeScheduleToString(payload.createdAt);
         payload.handler = payload.approverId ? payload.approver.profile.code + ' - ' + payload.approver.profile.fullname : '';
         payload.handleDate = payload.approverId ? formatDateTimeScheduleToString(payload.approver.createdAt) : '';
+        payload.profileCode = payload.profileId ? payload.profile.code : '';
+        payload.profileFullName = payload.profileId ? payload.profile.fullname : '';
+        payload.phone = payload.profileId ? payload.profile.phone : '';
+        payload.email = payload.profileId ? payload.profile.email : '';
+        let workingAt = await api.profile.getActiveWorking(payload.profileId);
+        // console.log(workingAt);
+        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
+        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
         payload.assignment = parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(payload.date);
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })

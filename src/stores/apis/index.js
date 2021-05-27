@@ -315,6 +315,9 @@ export const api = {
     getActiveWage: (id) => {
       return client.get(API_PREFIX.API_PROFILE + `/${id}/wage-history-active`);
     },
+    getActiveWorking: (id) => {
+      return client.get(API_PREFIX.API_PROFILE + `/${id}/work-history-active`);
+    },
   },
   contract: {
     getAll: (params) => {

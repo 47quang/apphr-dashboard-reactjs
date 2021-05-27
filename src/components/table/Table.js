@@ -252,6 +252,7 @@ const QTable = (props) => {
     filters,
     filterFunction,
     fixed,
+    statusComponent,
   } = props;
   const exporterRef = useRef(null);
 
@@ -260,7 +261,7 @@ const QTable = (props) => {
   }, [exporterRef]);
 
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
-  let statusColumns = Array.isArray(statusCols) ? statusCols.map((idx) => columnDef[idx].name) : [''];
+  // let statusColumns = Array.isArray(statusCols) ? statusCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
 
@@ -345,18 +346,12 @@ const QTable = (props) => {
   };
   const MultiValuesTypeProvider = (p) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...p} />;
 
-  const StatusFormatter = ({ value }) => {
-    return (
-      <Chip
-        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
-        className="mx-1 my-1 px-0 py-0"
-        style={{
-          backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
-        }}
-      />
-    );
+  const StatusFormatter = ({ value, column }) => {
+    return statusComponent ? statusComponent(value, column.name) : <p>{value}</p>;
   };
-  const StatusProvider = (p) => <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
+  const StatusProvider = (p) => {
+    return <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
+  };
 
   const LinkFormatter = ({ row, value, column }) => {
     let col = linkCols.filter((x) => x.name === column.name)[0];
@@ -567,6 +562,7 @@ const QTable = (props) => {
                             placeholder={t('placeholder.enter_keyword')}
                             inputClassName={'form-control'}
                             isTouched={touched.value}
+                            isDisable={['empty', 'not_empty'].includes(values.op)}
                             isError={errors.value && touched.value}
                             errorMessage={t(errors.value)}
                           />
@@ -613,9 +609,9 @@ const QTable = (props) => {
                         filters[filter.rule]?.title +
                         ': ' +
                         t(`filter_operator.${filter.op}`) +
-                        ' "' +
-                        (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) +
-                        '"'
+                        (['empty', 'not_empty'].includes(filter.op)
+                          ? ''
+                          : ' "' + (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) + '"')
                       }
                       color="primary"
                       onDelete={handleDelete}
@@ -632,7 +628,7 @@ const QTable = (props) => {
 
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
-          <StatusProvider for={statusColumns} />
+          <StatusProvider for={statusCols ?? []} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />

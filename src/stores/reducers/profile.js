@@ -76,6 +76,15 @@ const initialState = {
     status: '',
     contractType: '',
   },
+  activeWorking: {
+    profileId: '',
+    branchId: '',
+    departmentId: '',
+    positionId: '',
+    from: '',
+    to: '',
+    status: '',
+  },
 };
 
 const profileReducer = (state = initialState, { type, payload }) => {
@@ -181,6 +190,10 @@ const profileReducer = (state = initialState, { type, payload }) => {
       return { ...state, activeWage: payload };
     case REDUX_STATE.profile.EMPTY_ACTIVE_WAGE:
       return { ...state, activeWage: initialState.activeWage };
+    case REDUX_STATE.profile.GET_ACTIVE_WORKING:
+      return { ...state, activeWorking: payload };
+    case REDUX_STATE.profile.EMPTY_ACTIVE_WORKING:
+      return { ...state, activeWorking: initialState.activeWorking };
     default:
       return state;
   }

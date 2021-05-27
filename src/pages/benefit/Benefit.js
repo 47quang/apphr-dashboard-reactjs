@@ -1,8 +1,10 @@
 import { CContainer } from '@coreui/react';
+import { Chip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
+import { COLORS } from 'src/constants/theme';
 import { deleteWageHistory, fetchWageHistories } from 'src/stores/actions/wageHistories';
 import Page404 from '../page404/Page404';
 
@@ -144,6 +146,17 @@ const Benefit = ({ t, location, history }) => {
   const deleteRow = (rowId) => {
     dispatch(deleteWageHistory(rowId, handleAfterDelete, t('message.successful_delete')));
   };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'active' ? t('label.active') : t('label.inactive')}
+        className="m-0 p-0"
+        style={{
+          backgroundColor: value === 'active' ? COLORS.FULLY_ROLL_CALL : COLORS.FULLY_ABSENT_ROLL_CALL,
+        }}
+      />
+    );
+  };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
@@ -160,12 +173,14 @@ const Benefit = ({ t, location, history }) => {
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
+          statusCols={['status']}
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_USER)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_USER)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}
           filters={filters}
           filterFunction={filterFunction}
           fixed={true}
+          statusComponent={statusComponent}
         />
       </CContainer>
     );

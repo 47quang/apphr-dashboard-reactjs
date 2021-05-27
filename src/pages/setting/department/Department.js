@@ -16,25 +16,37 @@ const Department = ({ t, location, history }) => {
     { name: 'note', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters = {
     code: {
       title: t('label.department_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     name: {
       title: t('label.department_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
   };

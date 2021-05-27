@@ -1,8 +1,10 @@
 import { CContainer } from '@coreui/react';
+import { Chip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
+import { COLORS } from 'src/constants/theme';
 import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actions/profile';
 import Page404 from '../page404/Page404';
 
@@ -22,45 +24,47 @@ const Profile = ({ t, location }) => {
     // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
     // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters = {
     code: {
       title: t('label.employee_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     lastname: {
       title: t('label.employee_last_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     firstname: {
       title: t('label.employee_last_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     phone: {
       title: t('label.phone_number'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     gender: {
@@ -85,12 +89,7 @@ const Profile = ({ t, location }) => {
     },
     email: {
       title: t('label.email'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
   };
@@ -171,6 +170,17 @@ const Profile = ({ t, location }) => {
   const deleteRow = async (rowId) => {
     dispatch(deleteProfile(rowId, t('message.successful_delete'), handleAfterDelete));
   };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'male' ? t('label.male') : t('label.female')}
+        className="mx-1 my-1 px-0 py-0"
+        style={{
+          backgroundColor: value === 'male' ? COLORS.FULLY_ROLL_CALL : COLORS.FULLY_ABSENT_ROLL_CALL,
+        }}
+      />
+    );
+  };
   if (permissionIds.includes(PERMISSION.LIST_PROFILE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
@@ -183,12 +193,14 @@ const Profile = ({ t, location }) => {
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
+          statusCols={['gender']}
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_PROFILE)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_PROFILE)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_PROFILE)}
           filters={filters}
           filterFunction={filterFunction}
           fixed={true}
+          statusComponent={statusComponent}
         />
       </CContainer>
     );

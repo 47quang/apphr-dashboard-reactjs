@@ -421,7 +421,9 @@
     "like": "giống với",
     "not_like": "không giống với",
     "contain": "có chứa",
-    "custom": "tùy chỉnh"
+    "custom": "tùy chỉnh",
+    "start": "bắt đầu với",
+    "end": "kết thúc bằng"
   },
   "message": {
     "sign_in": "Đăng nhập với tài khoản của bạn",

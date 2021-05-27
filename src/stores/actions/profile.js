@@ -36,7 +36,6 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
           payload && payload.length > 0
             ? payload.map((profile) => {
                 profile.createdAt = formatDateTimeToString(profile.createdAt);
-                profile.gender = profile.gender === 'male' ? 'Nam' : 'Nữ';
                 return profile;
               })
             : [];
@@ -423,6 +422,22 @@ export const fetchActiveWage = (id, setLoading) => {
       });
   };
 };
+export const fetchActiveWorking = (id, setLoading) => {
+  if (setLoading) setLoading(true);
+  return (dispatch, getState) => {
+    api.profile
+      .getActiveWorking(id)
+      .then(({ payload }) => {
+        if (payload) {
+        }
+        if (setLoading) setLoading(false);
+        dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+      });
+  };
+};
 export const createActiveWage = (params, success_msg, handleResetNewWage) => {
   delete params.id;
   delete params.wage;
@@ -478,6 +493,13 @@ export const updateWageHistory = (data, success_msg) => {
 export const setEmptyActiveWage = () => {
   return {
     type: REDUX_STATE.profile.EMPTY_ACTIVE_WAGE,
+    payload: [],
+  };
+};
+
+export const setEmptyActiveWorking = () => {
+  return {
+    type: REDUX_STATE.profile.EMPTY_ACTIVE_WORKING,
     payload: [],
   };
 };

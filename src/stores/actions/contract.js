@@ -93,8 +93,6 @@ export const fetchContractTable = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((contract) => {
-                contract.type = type[contract.type];
-                contract.status = status[contract.status];
                 contract.text_type = type[contract.periodicPayment];
                 contract.handleDate = formatDate(contract.handleDate);
                 contract.startWork = formatDate(contract.startWork);

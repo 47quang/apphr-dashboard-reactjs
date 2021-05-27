@@ -54,8 +54,8 @@ const NewOvertimeForm = ({ t, history, match }) => {
             {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
               <form autoComplete="off">
                 <FormHeader text={t('label.overtime_info')} />
-                <div className="row m-2">
-                  <div className="form-group col-xl-12 ml-2">
+                <div className="row">
+                  <div className="form-group col-xl-12 ">
                     <Label text={t('label.code')} required />
                     <div className="input-group">
                       <input
@@ -89,9 +89,9 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     )}
                   </div>
                 </div>
-                <div className="row m-2">
+                <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-12 ml-2'}
+                    containerClassName={'form-group col-xl-12 '}
                     value={values.profileId ?? ''}
                     labelText={t('label.profileId')}
                     selectClassName={'form-control'}
@@ -106,7 +106,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     errorMessage={t(errors.profileId)}
                   />
                   <CommonTextInput
-                    containerClassName={'form-group col-xl-12 ml-2'}
+                    containerClassName={'form-group col-xl-12 '}
                     inputClassName={'form-control'}
                     value={values.date ?? ''}
                     onBlur={handleBlur(`date`)}
@@ -130,7 +130,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     errorMessage={t(errors.date)}
                   />
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-12 ml-2'}
+                    containerClassName={'form-group col-xl-12 '}
                     value={values.shiftId ?? ''}
                     labelText={t('label.shift')}
                     selectClassName={'form-control'}
@@ -147,9 +147,9 @@ const NewOvertimeForm = ({ t, history, match }) => {
                   />
                 </div>
 
-                <div className="row m-2">
+                <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-12 ml-2'}
+                    containerClassName={'form-group col-xl-12 '}
                     value={values.status ?? ''}
                     onBlur={handleBlur('status')}
                     onChange={handleChange('status')}
@@ -164,9 +164,9 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     errorMessage={t(errors.status)}
                   />
                 </div>
-                <div className="row m-2">
+                <div className="row">
                   <CommonMultipleTextInput
-                    containerClassName={'form-group col-lg-12 ml-2'}
+                    containerClassName={'form-group col-lg-12 '}
                     value={values.note ?? ''}
                     onBlur={handleBlur(`note`)}
                     onChange={handleChange(`note`)}

@@ -6,6 +6,8 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteAllowance, fetchAllowances, setEmptyAllowances } from 'src/stores/actions/allowance';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
+import { Chip } from '@material-ui/core';
+import { COLORS } from 'src/constants/theme';
 
 const Allowance = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -13,30 +15,42 @@ const Allowance = ({ t }) => {
   const allowances = useSelector((state) => state.allowance.allowances);
   const columnDef = [
     { name: 'code', title: t('label.allowance_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+  ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
   ];
   const filters = {
     code: {
       title: t('label.allowance_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     name: {
       title: t('label.allowance_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     type: {
@@ -95,7 +109,6 @@ const Allowance = ({ t }) => {
           },
           onTotalChange,
           setLoading,
-          t,
         ),
       );
     return () => {
@@ -114,7 +127,6 @@ const Allowance = ({ t }) => {
         },
         onTotalChange,
         setLoading,
-        t,
       ),
     );
   };
@@ -127,12 +139,22 @@ const Allowance = ({ t }) => {
         },
         onTotalChange,
         setLoading,
-        t,
       ),
     );
   };
   const deleteRow = async (rowId) => {
     dispatch(deleteAllowance(rowId, t('message.successful_delete'), handleAfterDelete));
+  };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'tax' ? t('label.tax') : value === 'no_tax' ? t('label.no_tax') : t('label.partial_tax')}
+        className="m-0 p-0"
+        style={{
+          backgroundColor: value === 'tax' ? COLORS.FULLY_ROLL_CALL : value === 'no_tax' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
+        }}
+      />
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
@@ -152,6 +174,8 @@ const Allowance = ({ t }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_ALLOWANCE)}
           filters={filters}
           filterFunction={filterFunction}
+          statusComponent={statusComponent}
+          statusCols={['type']}
         />
       </CContainer>
     );

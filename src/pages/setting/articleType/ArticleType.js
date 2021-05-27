@@ -16,25 +16,37 @@ const ArticleType = ({ t }) => {
     { name: 'name', title: t('label.article_type_name'), align: 'left', width: '50%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
   ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters = {
     code: {
       title: t('label.article_type_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     name: {
       title: t('label.article_type_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
   };

@@ -6,6 +6,8 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 import { deletePayment, fetchPayments } from 'src/stores/actions/payment';
+import { Chip } from '@material-ui/core';
+import { COLORS } from 'src/constants/theme';
 
 const OtherFee = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -17,25 +19,37 @@ const OtherFee = ({ t }) => {
     { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
   ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters = {
     code: {
       title: t('label.code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     name: {
       title: t('label.payment_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     type: {
@@ -92,7 +106,6 @@ const OtherFee = ({ t }) => {
           },
           onTotalChange,
           setLoading,
-          t,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,7 +121,6 @@ const OtherFee = ({ t }) => {
         },
         onTotalChange,
         setLoading,
-        t,
       ),
     );
   };
@@ -121,12 +133,22 @@ const OtherFee = ({ t }) => {
         },
         onTotalChange,
         setLoading,
-        t,
       ),
     );
   };
   const deleteRow = async (rowId) => {
     dispatch(deletePayment(rowId, t('message.successful_delete'), handleAfterDelete));
+  };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'value' ? t('label.payment_value') : t('label.percent')}
+        className="m-0 p-0"
+        style={{
+          backgroundColor: value === 'value' ? COLORS.FULLY_ROLL_CALL : COLORS.FULLY_ABSENT_ROLL_CALL,
+        }}
+      />
+    );
   };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
@@ -146,6 +168,8 @@ const OtherFee = ({ t }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
           filters={filters}
           filterFunction={filterFunction}
+          statusComponent={statusComponent}
+          statusCols={['type']}
         />
       </CContainer>
     );

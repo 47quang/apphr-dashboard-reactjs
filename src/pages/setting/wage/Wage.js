@@ -6,36 +6,50 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteWage, fetchWages } from 'src/stores/actions/wage';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
+import { Chip } from '@material-ui/core';
+import { COLORS } from 'src/constants/theme';
 const Wage = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const wages = useSelector((state) => state.wage.wages);
   const columnDef = [
     { name: 'code', title: t('label.wage_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'type', title: t('label.payment_method'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.wage_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.payment_method'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.wage_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+  ];
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
   ];
   const filters = {
     code: {
       title: t('label.wage_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     name: {
       title: t('label.wage_name'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     type: {
@@ -125,6 +139,17 @@ const Wage = ({ t }) => {
   const deleteRow = async (rowId) => {
     dispatch(deleteWage(rowId, t('message.successful_delete'), handleAfterDelete));
   };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'by_hour' ? t('label.by_hour') : t('label.by_month')}
+        className="m-0 p-0"
+        style={{
+          backgroundColor: value === 'by_hour' ? COLORS.FULLY_ROLL_CALL : COLORS.FULLY_ABSENT_ROLL_CALL,
+        }}
+      />
+    );
+  };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
@@ -143,6 +168,8 @@ const Wage = ({ t }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
           filters={filters}
           filterFunction={filterFunction}
+          statusComponent={statusComponent}
+          statusCols={['type']}
         />
       </CContainer>
     );

@@ -5,7 +5,7 @@ import { Cancel } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAssignmentsInDate, setEmptyAssignmentInADate } from 'src/stores/actions/assignment';
-import { backgroundColorOfAssignment, borderColorOfAssignment } from 'src/utils/colorOfCell';
+import { backgroundColorOfAssignment, borderColorOfAssignment, renderIcon } from 'src/utils/colorOfCell';
 import RollUpInfo from './RollUpInfo';
 
 const AssignmentsDialog = ({ isOpen, handleCancel, t, profileId, date, code, fullName, avatar }) => {
@@ -92,9 +92,15 @@ const AssignmentsDialog = ({ isOpen, handleCancel, t, profileId, date, code, ful
                       textAlign: 'center',
                     }}
                   >
-                    <div>
-                      <p className="mb-0">{assignment.shiftName}</p>
-                      <p className="m-auto"> {assignment.startCC + ' - ' + assignment.endCC}</p>
+                    <div className="m-2 p-0 row d-flex align-items-center" style={{ width: '90%' }}>
+                      <div className="col-2 p-0">{renderIcon(assignment)}</div>
+                      <div
+                        className="col-10 pl-1"
+                        style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '80%', textAlign: 'left' }}
+                      >
+                        <p className="mb-0">{assignment.shiftName}</p>
+                        <p className="m-auto"> {assignment.startCC + ' - ' + assignment.endCC}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

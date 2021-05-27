@@ -28,14 +28,7 @@ const handlePaymentExceptions = (err, dispatch, functionName) => {
 };
 export const fetchPayments = (params, onTotalChange, setLoading, t) => {
   if (setLoading) setLoading(true);
-  let type = {
-    value: 'label.payment_value',
-    percent: 'label.percent',
-  };
-  const _by = {
-    gross: 'label.gross_salary',
-    insurrance: 'label.social_insurance',
-  };
+
   return (dispatch, getState) => {
     api.payment
       .getAll(params)
@@ -43,8 +36,6 @@ export const fetchPayments = (params, onTotalChange, setLoading, t) => {
         payload =
           payload && payload.length > 0
             ? payload.map((f) => {
-                let by = t(_by[f.by]);
-                f.type = f.type === 'value' ? t(type[f.type]) : f.value + ' % ' + by;
                 f.createdAt = formatDateTimeToString(f.createdAt);
                 return f;
               })
