@@ -133,33 +133,33 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
         <TemplatePlaceholder />
-        {
+        {isPopUp ? (
           <IconButton
             hidden={disableCreate}
             className="py-0 px-0"
+            title={t('message.add')}
             onClick={() => {
-              if (isPopUp) {
-                dispatch(
-                  createRollUp(
-                    {
-                      assignmentId: rollUpData.assignmentId,
-                    },
-                    rollUpData.setIsReload,
-                    t('label.roll_up_success'),
-                  ),
-                );
-              }
+              dispatch(
+                createRollUp(
+                  {
+                    assignmentId: rollUpData.assignmentId,
+                  },
+                  rollUpData.setIsReload,
+                  t('label.roll_up_success'),
+                ),
+              );
             }}
+            style={{ width: 35, height: 35 }}
           >
-            {isPopUp ? (
-              <AddCircle color={disabledClass} />
-            ) : (
-              <Link to={`${route}create`} className="px-0 py-0">
-                <AddCircle color={disabledClass} />
-              </Link>
-            )}
+            <AddCircle color={disabledClass} />
           </IconButton>
-        }
+        ) : (
+          <Link to={`${route}create`} className="px-0 py-0">
+            <IconButton hidden={disableCreate} className="py-0 px-0" title={t('message.add')} style={{ width: 35, height: 35 }}>
+              <AddCircle color={disabledClass} />
+            </IconButton>
+          </Link>
+        )}
       </Template>
     </Plugin>
   );
@@ -169,7 +169,12 @@ const ExportAllSalaryPanel = ({ t, disableExportAllSalary }) => {
   const [openExportEmployeeSalary, setOpenExportEmployeeSalary] = useState(false);
   const handleConfirmExportSalary = (values) => {
     setOpenExportEmployeeSalary(false);
-    dispatch(exportAllWage({ from: moment(values.month), to: moment(values.month).endOf('month') }, t('message.successful_export')));
+    dispatch(
+      exportAllWage(
+        { from: moment(values.month), to: moment(values.month).endOf('month'), filename: values.filename },
+        t('message.successful_export'),
+      ),
+    );
   };
   const handleCancelExportSalary = () => {
     setOpenExportEmployeeSalary(false);
@@ -456,7 +461,12 @@ const QTable = (props) => {
     };
     const handleConfirmExportSalary = (values) => {
       setOpenExportEmployeeSalary(false);
-      dispatch(exportWage({ from: moment(values.month), to: moment(values.month).endOf('month'), id: +row.id }, t('message.successful_export')));
+      dispatch(
+        exportWage(
+          { from: moment(values.month), to: moment(values.month).endOf('month'), id: +row.id, filename: values.filename },
+          t('message.successful_export'),
+        ),
+      );
     };
     const handleCancelExportSalary = () => {
       setOpenExportEmployeeSalary(false);

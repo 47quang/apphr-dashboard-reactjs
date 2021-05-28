@@ -113,14 +113,14 @@ const routes = [
 
   { path: ROUTE_PATH.NEW_LEAVE_REQUEST, name: ROUTE_NAME.NEW_LEAVE_REQUEST, component: NewLeaveForm },
   { path: ROUTE_PATH.LEAVE_REQUEST, name: ROUTE_NAME.LEAVE_REQUEST, component: LeaveForm },
-  { path: ROUTE_PATH.LEAVE, name: ROUTE_NAME.PROPOSAL, component: Proposal },
 
   { path: ROUTE_PATH.NEW_REMOTE_REQUEST, name: ROUTE_NAME.NEW_REMOTE_REQUEST, component: NewRemoteForm },
   { path: ROUTE_PATH.REMOTE_REQUEST, name: ROUTE_NAME.REMOTE_REQUEST, component: RemoteForm },
-  { path: ROUTE_PATH.REMOTE, name: ROUTE_NAME.PROPOSAL, component: Remote },
 
   { path: ROUTE_PATH.NEW_OVERTIME_REQUEST, name: ROUTE_NAME.NEW_OVERTIME_REQUEST, component: NewOvertimeForm },
   { path: ROUTE_PATH.OVERTIME_REQUEST, name: ROUTE_NAME.OVERTIME_REQUEST, component: OvertimeForm },
+  { path: ROUTE_PATH.LEAVE, name: ROUTE_NAME.PROPOSAL, component: Proposal },
+  { path: ROUTE_PATH.REMOTE, name: ROUTE_NAME.PROPOSAL, component: Remote },
   { path: ROUTE_PATH.OVERTIME, name: ROUTE_NAME.PROPOSAL, component: Overtime },
 
   { path: ROUTE_PATH.ROLL_UP, name: ROUTE_NAME.ROLL_UP, component: RollUp },

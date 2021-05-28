@@ -30,12 +30,6 @@ const BarChart = ({ labels, title, backgroundColor, data }) => {
               ],
               yAxes: [
                 {
-                  ticks: {
-                    beginAtZero: true,
-                    maxTicksLimit: Math.max(...data),
-                    stepSize: Math.ceil(Math.max(...data) / 8),
-                    max: Math.max(...data),
-                  },
                   gridLines: {
                     display: true,
                   },

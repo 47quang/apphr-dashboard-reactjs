@@ -107,9 +107,9 @@ export const ROUTE_PATH = {
   CONTRACT: '/contract',
   CONTRACT_CREATE: '/contract/' + CREATE,
   CONTRACT_UPDATE: '/contract/' + ID,
-  PROFILE_LEAVE_REQUEST: '/profile' + ID + '/leave.id=:id',
-  PROFILE_REMOTE_REQUEST: '/profile' + ID + '/remote.id=:id',
-  PROFILE_OVERTIME_REQUEST: '/profile' + ID + '/overtime.id=:id',
+  PROFILE_LEAVE_REQUEST: '/profile' + ID + '/:id',
+  PROFILE_REMOTE_REQUEST: '/profile' + ID + '/=:id',
+  PROFILE_OVERTIME_REQUEST: '/profile' + ID + '/=:id',
 
   PROPOSAL: '/proposal',
 
@@ -163,16 +163,16 @@ export const ROUTE_PATH = {
   ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
 
   LEAVE: '/proposal/leave',
-  LEAVE_REQUEST: '/proposal/leave/leave.id=:id',
-  NEW_LEAVE_REQUEST: '/proposal/leave/leave.id=create',
+  LEAVE_REQUEST: '/proposal/leave/:id',
+  NEW_LEAVE_REQUEST: '/proposal/leave/create',
 
   REMOTE: '/proposal/remote',
-  REMOTE_REQUEST: '/proposal/remote/remote.id=:id',
-  NEW_REMOTE_REQUEST: '/proposal/remote/remote.id=create',
+  REMOTE_REQUEST: '/proposal/remote/:id',
+  NEW_REMOTE_REQUEST: '/proposal/remote/create',
 
   OVERTIME: '/proposal/overtime',
-  OVERTIME_REQUEST: '/proposal/overtime/overtime.id=:id',
-  NEW_OVERTIME_REQUEST: '/proposal/overtime/overtime.id=create',
+  OVERTIME_REQUEST: '/proposal/overtime/:id',
+  NEW_OVERTIME_REQUEST: '/proposal/overtime/create',
 
   CONTRACT_ATTRIBUTE: '/setting/attribute',
   CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,

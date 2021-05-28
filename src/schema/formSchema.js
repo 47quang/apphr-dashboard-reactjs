@@ -948,6 +948,7 @@ export const OtherFeeSchema = Yup.object().shape({
     .required('validation.required_enter_payment_value'),
 });
 export const ExportWageSchema = Yup.object().shape({
+  filename: Yup.string().min(1, 'validation.required_enter_file_name').required('validation.required_enter_file_name'),
   month: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_month', function (value) {
       return !!value;
@@ -972,4 +973,14 @@ export const FilterSchema = Yup.object().shape({
     },
     then: Yup.string().required('validation.required_select_filter_value'),
   }),
+});
+
+export const DateRange = Yup.object().shape({
+  from: Yup.string().required('validation.required_select_start_date'),
+  to: Yup.string()
+    .test('end_time_test', 'validation.expired_date_must_be_great_than_start_date', function (value) {
+      const { from } = this.parent;
+      return isSameBeforeTypeDate(from, value);
+    })
+    .required('validation.required_select_end_date'),
 });

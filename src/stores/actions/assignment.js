@@ -273,7 +273,18 @@ export const setEmptyAssignmentInADate = () => {
     payload: {},
   };
 };
-
+export const setEmptyPersonChart = () => {
+  return {
+    type: REDUX_STATE.assignment.SET_EMPTY_PERSON_CHART,
+    payload: {},
+  };
+};
+export const setEmptyStatisticChart = () => {
+  return {
+    type: REDUX_STATE.assignment.SET_EMPTY_STATISTIC_CHART,
+    payload: {},
+  };
+};
 export const checkin = (id, success_msg) => {
   return (dispatch, getState) => {
     api.assignment
@@ -285,6 +296,69 @@ export const checkin = (id, success_msg) => {
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'checkin');
+      });
+  };
+};
+
+export const fetchPersonChart = (params, t) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .getPersonChart(params)
+      .then(({ payload }) => {
+        let labels = [];
+
+        let datasets = [
+          {
+            label: t('label.work_time'),
+            backgroundColor: '#caf7e3',
+            data: [],
+          },
+          {
+            label: t('label.overtime_time'),
+            backgroundColor: '#ffdcb8',
+            data: [],
+          },
+          {
+            label: t('label.leave_time'),
+            backgroundColor: '#ddf3f5',
+            data: [],
+          },
+          {
+            label: t('label.absent_time'),
+            backgroundColor: '#ffc1b6',
+            data: [],
+          },
+        ];
+        for (const [key, value] of Object.entries(payload)) {
+          labels.push(t('label.month') + ' ' + key);
+          datasets[0].data.push(value.work.toFixed(2));
+          datasets[1].data.push(value.overtime.toFixed(2));
+          datasets[2].data.push(value.leave.toFixed(2));
+          datasets[3].data.push(value.absent.toFixed(2));
+        }
+        let rv = {
+          labels: labels,
+          datasets: datasets,
+        };
+        dispatch({ type: REDUX_STATE.assignment.SET_PERSON_CHART, payload: rv });
+      })
+      .catch((err) => {
+        console.log(err);
+        handleAssignmentExceptions(err, dispatch, 'fetchPersonChart');
+      });
+  };
+};
+
+export const fetchStatisticChart = (params, success_msg) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .getStatisticChart(params)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload });
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleAssignmentExceptions(err, dispatch, 'fetchStatisticChart');
       });
   };
 };

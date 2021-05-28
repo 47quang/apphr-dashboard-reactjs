@@ -37,6 +37,21 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
+                      value={props.values.filename}
+                      onBlur={props.handleBlur('filename')}
+                      onChange={props.handleChange('filename')}
+                      inputID={'filename'}
+                      labelText={t('label.file_name')}
+                      inputType={'filename'}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      placeholder={t('placeholder.enter_file_name')}
+                      isTouched={props.touched.filename}
+                      isError={props.errors.filename && props.touched.filename}
+                      errorMessage={t(props.errors.filename)}
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
                       value={props.values.month}
                       onBlur={props.handleBlur('month')}
                       onChange={props.handleChange('month')}

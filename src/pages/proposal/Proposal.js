@@ -338,7 +338,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           t={t}
           columnDef={columnDefOfProfiles}
           data={proposals}
-          route={match.url + '/' + type + '.id='}
+          route={match.url + '/'}
           disableDelete={true}
           // disableCreate={true}
           statusCols={['status']}
@@ -355,7 +355,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           t={t}
           columnDef={columnDefOfProfiles}
           data={proposals}
-          route={match.url + '/' + type + '.id='}
+          route={match.url + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
           // disableCreate={true}

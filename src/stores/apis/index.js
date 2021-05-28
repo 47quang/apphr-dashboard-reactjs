@@ -547,6 +547,16 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_ASSIGNMENT + `/${id}`);
     },
+    getPersonChart: (params) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT + `/chart`, {
+        params: params,
+      });
+    },
+    getStatisticChart: (params) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT + `/statistic`, {
+        params: params,
+      });
+    },
   },
   leaveRequest: {
     getAll: (params) => {
