@@ -12,7 +12,7 @@ const Notification = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDef = [
     { name: 'code', title: t('label.notification_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'typeId', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+    { name: 'type', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -24,25 +24,47 @@ const Notification = ({ t }) => {
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters = {
     code: {
       title: t('label.notification_code'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
       type: 'text',
     },
     title: {
       title: t('label.notification_title'),
-      operates: [
-        {
-          id: FILTER_OPERATOR.LIKE,
-          name: t('filter_operator.like'),
-        },
-      ],
+      operates: operatesText,
+      type: 'text',
+    },
+    type_code: {
+      title: t('label.article_type_code'),
+      operates: operatesText,
+      type: 'text',
+    },
+    type_name: {
+      title: t('label.article_type_name'),
+      operates: operatesText,
       type: 'text',
     },
   };

@@ -1,13 +1,14 @@
-import { CBreadcrumbRouter, CHeader, CHeaderNav, CToggler } from '@coreui/react';
+import { CButton, CHeader, CHeaderNav, CToggler } from '@coreui/react';
+import { ExitToApp } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import routes from 'src/routes/routes';
+import { logout } from 'src/stores/actions/user';
 import { REDUX_STATE } from 'src/stores/states';
 import '../styles/scss/header.scss';
-import TheHeaderDropdown from './TheHeaderDropdown';
 
 const TheHeader = (props) => {
+  // const { t } = useTranslation();
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'vi', name: 'Vietnam' },
@@ -41,9 +42,6 @@ const TheHeader = (props) => {
       <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
       <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
 
-      <CHeaderNav className="d-md-down-none mr-auto">
-        <CBreadcrumbRouter className="border-0 c-subheader-nav m-0 px-0 px-md-3" routes={routes} />
-      </CHeaderNav>
       <CHeaderNav className="ml-auto mr-3">
         <div className="lang">
           <div className={language}></div>
@@ -68,7 +66,16 @@ const TheHeader = (props) => {
         {/* <TheHeaderDropdownNotif /> */}
         {/* <TheHeaderDropdownMssg /> */}
         {/* <TheHeaderDropdownTasks /> */}
-        <TheHeaderDropdown {...props} />
+        <CButton
+          onClick={(e) => {
+            dispatch(logout(props.history));
+          }}
+          className="d-flex flex-row justify-content-between"
+        >
+          {/* <div>{t('title.logout')}</div> */}
+          <ExitToApp style={{ color: 'red' }} />
+        </CButton>
+        {/* <TheHeaderDropdown {...props} /> */}
       </CHeaderNav>
     </CHeader>
   );

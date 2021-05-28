@@ -11,6 +11,7 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
   const range = {
     from: '',
     to: '',
+    month: '',
   };
   return (
     <div>
@@ -21,6 +22,7 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
             validationSchema={ExportWageSchema}
             enableReinitialize
             onSubmit={(values) => {
+              // console.log(moment(values.month).endOf('month').format('YYYY-MM-DD'));
               handleConfirm(values);
             }}
           >
@@ -28,40 +30,25 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
               return (
                 <form className="p-0 m-0">
                   <div className="d-flex flex-row justify-content-between align-items-center">
-                    <h5>{t('label.time_range')}</h5>
+                    <h5>{t('label.month_salary')}</h5>
                     <Cancel fontSize="large" onClick={handleCancel} role="button" style={{ color: '#969696' }} />
                   </div>
                   <hr className="mt-1" />
                   <div className="row">
                     <CommonTextInput
-                      containerClassName={'form-group col-xl-6'}
-                      value={props.values.from}
-                      onBlur={props.handleBlur('from')}
-                      onChange={props.handleChange('from')}
-                      inputID={'from'}
-                      labelText={t('label.start_date')}
-                      inputType={'date'}
+                      containerClassName={'form-group col-xl-12'}
+                      value={props.values.month}
+                      onBlur={props.handleBlur('month')}
+                      onChange={props.handleChange('month')}
+                      inputID={'month'}
+                      labelText={t('label.month')}
+                      inputType={'month'}
                       inputClassName={'form-control'}
                       isRequiredField
-                      isTouched={props.touched.from}
-                      isError={props.errors.from && props.touched.from}
-                      errorMessage={t(props.errors.from)}
-                      minTime={props.values.from}
-                    />
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-6'}
-                      value={props.values.to}
-                      onBlur={props.handleBlur('to')}
-                      onChange={props.handleChange('to')}
-                      inputID={'to'}
-                      labelText={t('label.end_date')}
-                      inputType={'date'}
-                      inputClassName={'form-control'}
-                      isRequiredField
-                      isTouched={props.touched.to}
-                      isError={props.errors.to && props.touched.to}
-                      errorMessage={t(props.errors.to)}
-                      minTime={props.values.to}
+                      placeholder={t('placeholder.select_month')}
+                      isTouched={props.touched.month}
+                      isError={props.errors.month && props.touched.month}
+                      errorMessage={t(props.errors.month)}
                     />
                   </div>
                   <hr className="mt-1" />

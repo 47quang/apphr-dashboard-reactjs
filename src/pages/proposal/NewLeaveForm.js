@@ -66,74 +66,72 @@ const NewLeaveForm = ({ t, history, match }) => {
               <form autoComplete="off">
                 <FormHeader text={t('label.leave_info')} />
                 <div className="row">
-                  <div className="row col-11 ml-2">
-                    <div className="form-group col-xl-12">
-                      <Label text={t('label.code')} required />
-                      <div className="input-group">
-                        <input
-                          type="text"
-                          className={'form-control col-10'}
-                          rows={5}
-                          onBlur={handleBlur('code')}
-                          name={`code`}
-                          onChange={(e) => handleChange(`code`)(e)}
-                          value={values.code ?? ''}
-                          placeholder={t('placeholder.enter_leave_code')}
-                        />
-                        <div
-                          className="input-group-text col-2 d-flex justify-content-center"
-                          id="basic-addon2"
-                          type="button"
-                          onClick={(e) => {
-                            let randomCode = generateCode();
-                            setFieldValue('code', randomCode);
-                          }}
-                        >
-                          {t('label.random')}
-                        </div>
+                  <div className="form-group col-xl-12  ">
+                    <Label text={t('label.code')} required />
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className={'form-control col-10'}
+                        rows={5}
+                        onBlur={handleBlur('code')}
+                        name={`code`}
+                        onChange={(e) => handleChange(`code`)(e)}
+                        value={values.code ?? ''}
+                        placeholder={t('placeholder.enter_leave_code')}
+                      />
+                      <div
+                        className="input-group-text col-2 d-flex justify-content-center"
+                        id="basic-addon2"
+                        type="button"
+                        onClick={(e) => {
+                          let randomCode = generateCode();
+                          setFieldValue('code', randomCode);
+                        }}
+                      >
+                        {t('label.random')}
                       </div>
-                      {errors.code && touched.code && t(errors.code) ? (
-                        <div>
-                          <small className={'text-danger'}>{t(errors.code)}</small>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
                     </div>
-                    <CommonSelectInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.type ?? ''}
-                      onBlur={handleBlur('type')}
-                      onChange={handleChange('type')}
-                      inputID={'type'}
-                      labelText={t('label.leave_type')}
-                      selectClassName={'form-control'}
-                      placeholder={t('placeholder.select_leave_type')}
-                      isRequiredField
-                      lstSelectOptions={type}
-                      isTouched={touched.type}
-                      isError={touched.type && errors.type}
-                      errorMessage={t(errors.type)}
-                    />
-                    <CommonSelectInput
-                      containerClassName={'form-group col-lg-12'}
-                      value={values.profileId ?? ''}
-                      labelText={t('label.profileId')}
-                      selectClassName={'form-control'}
-                      onBlur={handleBlur('profileId')}
-                      onChange={(e) => {
-                        handleChange('profileId')(e);
-                        setFieldValue('assignments', []);
-                      }}
-                      inputID={t('label.profileId')}
-                      lstSelectOptions={profiles}
-                      isRequiredField
-                      placeholder={t('placeholder.select_profile')}
-                      isTouched={touched.profileId}
-                      isError={touched.profileId && errors.profileId}
-                      errorMessage={t(errors.profileId)}
-                    />
+                    {errors.code && touched.code && t(errors.code) ? (
+                      <div>
+                        <small className={'text-danger'}>{t(errors.code)}</small>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
+                  <CommonSelectInput
+                    containerClassName={'form-group col-xl-12  '}
+                    value={values.type ?? ''}
+                    onBlur={handleBlur('type')}
+                    onChange={handleChange('type')}
+                    inputID={'type'}
+                    labelText={t('label.leave_type')}
+                    selectClassName={'form-control'}
+                    placeholder={t('placeholder.select_leave_type')}
+                    isRequiredField
+                    lstSelectOptions={type}
+                    isTouched={touched.type}
+                    isError={touched.type && errors.type}
+                    errorMessage={t(errors.type)}
+                  />
+                  <CommonSelectInput
+                    containerClassName={'form-group col-lg-12'}
+                    value={values.profileId ?? ''}
+                    labelText={t('label.profileId')}
+                    selectClassName={'form-control'}
+                    onBlur={handleBlur('profileId')}
+                    onChange={(e) => {
+                      handleChange('profileId')(e);
+                      setFieldValue('assignments', []);
+                    }}
+                    inputID={t('label.profileId')}
+                    lstSelectOptions={profiles}
+                    isRequiredField
+                    placeholder={t('placeholder.select_profile')}
+                    isTouched={touched.profileId}
+                    isError={touched.profileId && errors.profileId}
+                    errorMessage={t(errors.profileId)}
+                  />
                 </div>
                 <FieldArray
                   name={`assignments`}
@@ -145,7 +143,7 @@ const NewLeaveForm = ({ t, history, match }) => {
                           return (
                             <div key={`assignment${assignmentIdx}`}>
                               <div className="row">
-                                <div className="row col-11 ml-2">
+                                <div className="row col-11">
                                   <CommonTextInput
                                     containerClassName={'form-group col-lg-6'}
                                     inputClassName={'form-control'}
@@ -227,7 +225,7 @@ const NewLeaveForm = ({ t, history, match }) => {
                           );
                         })}
 
-                      <div className="d-flex justify-content-start mb-4 ml-4">
+                      <div className="d-flex justify-content-start mb-3">
                         <button type="button" className="btn btn-primary" onClick={() => push({ date: '', id: 0, assignments: [] })}>
                           <AddCircle /> {t('label.add_assignment')}
                         </button>
@@ -241,36 +239,32 @@ const NewLeaveForm = ({ t, history, match }) => {
                   )}
                 />
                 <div className="row">
-                  <div className="col-11">
-                    <CommonSelectInput
-                      containerClassName={'form-group col-xl-12 ml-2'}
-                      value={values.status ?? ''}
-                      onBlur={handleBlur('status')}
-                      onChange={handleChange('status')}
-                      inputID={'status'}
-                      labelText={t('label.status')}
-                      selectClassName={'form-control'}
-                      isRequiredField
-                      placeholder={t('placeholder.select_leave_status')}
-                      lstSelectOptions={status}
-                      isTouched={touched.status}
-                      isError={touched.status && errors.status}
-                      errorMessage={t(errors.status)}
-                    />
-                  </div>
+                  <CommonSelectInput
+                    containerClassName={'form-group col-xl-12  '}
+                    value={values.status ?? ''}
+                    onBlur={handleBlur('status')}
+                    onChange={handleChange('status')}
+                    inputID={'status'}
+                    labelText={t('label.status')}
+                    selectClassName={'form-control'}
+                    isRequiredField
+                    placeholder={t('placeholder.select_leave_status')}
+                    lstSelectOptions={status}
+                    isTouched={touched.status}
+                    isError={touched.status && errors.status}
+                    errorMessage={t(errors.status)}
+                  />
                 </div>
                 <div className="row">
-                  <div className="col-11">
-                    <CommonMultipleTextInput
-                      containerClassName={'form-group col-lg-12 ml-2'}
-                      value={values.note ?? ''}
-                      onBlur={handleBlur(`note`)}
-                      onChange={handleChange(`note`)}
-                      labelText={t('label.note')}
-                      inputClassName={'form-control'}
-                      placeholder={t('placeholder.enter_note')}
-                    />
-                  </div>
+                  <CommonMultipleTextInput
+                    containerClassName={'form-group col-lg-12 '}
+                    value={values.note ?? ''}
+                    onBlur={handleBlur(`note`)}
+                    onChange={handleChange(`note`)}
+                    labelText={t('label.note')}
+                    inputClassName={'form-control'}
+                    placeholder={t('placeholder.enter_note')}
+                  />
                 </div>
                 {renderButtons([
                   {

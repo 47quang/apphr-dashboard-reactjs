@@ -26,13 +26,9 @@ const handleAllowanceExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAllowances = (params, onTotalChange, setLoading, t) => {
+export const fetchAllowances = (params, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
-  let type = {
-    tax: 'label.tax',
-    no_tax: 'label.no_tax',
-    partial_tax: 'label.partial_tax',
-  };
+
   return (dispatch, getState) => {
     api.allowance
       .getAll(params)
@@ -40,9 +36,6 @@ export const fetchAllowances = (params, onTotalChange, setLoading, t) => {
         payload =
           payload && payload.length > 0
             ? payload.map((allowance) => {
-                if (t) {
-                  allowance.type = t(type[allowance.type]);
-                }
                 allowance.createdAt = formatDateTimeToString(allowance.createdAt);
                 return allowance;
               })

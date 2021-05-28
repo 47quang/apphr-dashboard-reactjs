@@ -27,10 +27,6 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchWages = (params, onTotalChange, setLoading) => {
-  const paymentType = {
-    by_hour: 'Chi trả theo giờ',
-    by_month: 'Chi trả theo tháng',
-  };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
@@ -39,7 +35,6 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((wage) => {
-                wage.type = paymentType[wage.type];
                 wage.createdAt = formatDateTimeToString(wage.createdAt);
                 return wage;
               })

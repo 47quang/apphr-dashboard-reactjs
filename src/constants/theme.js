@@ -49,4 +49,5 @@ export const COLORS = {
   BACKGROUND_REQUEST: '#eddefb',
   BORDER_REQUEST: '#9933ff',
   LATE: '#c18b00',
+  BLUE: '#a6dcef',
 };

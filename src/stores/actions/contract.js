@@ -93,8 +93,6 @@ export const fetchContractTable = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((contract) => {
-                contract.type = type[contract.type];
-                contract.status = status[contract.status];
                 contract.text_type = type[contract.periodicPayment];
                 contract.handleDate = formatDate(contract.handleDate);
                 contract.startWork = formatDate(contract.startWork);
@@ -206,7 +204,7 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : undefined;
 
   params.allowanceIds =
-    params.allowances && params.allowances.length > 0
+    params && params.allowances && params.allowances.length > 0
       ? params.allowances.map((allowance) => {
           return +allowance.id;
         })

@@ -1,18 +1,7 @@
 import { Getter, Plugin, Template, TemplatePlaceholder } from '@devexpress/dx-react-core';
+import { CustomPaging, DataTypeProvider, EditingState, IntegratedSelection, PagingState, SelectionState } from '@devexpress/dx-react-grid';
 import {
-  CustomPaging,
-  DataTypeProvider,
-  EditingState,
-  IntegratedSelection,
-  PagingState,
-  SelectionState,
-  SortingState,
-} from '@devexpress/dx-react-grid';
-import { GridExporter } from '@devexpress/dx-react-grid-export';
-import {
-  ColumnChooser,
   DragDropProvider,
-  ExportPanel,
   Grid,
   PagingPanel,
   Table,
@@ -29,14 +18,27 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import { AlarmAdd, AttachMoney, BluetoothAudio, Cancel, CheckCircle, Gavel, Lens, MoneyOff, Schedule } from '@material-ui/icons';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import {
+  AccountBalanceWallet,
+  AddCircle,
+  AlarmAdd,
+  AttachMoney,
+  BluetoothAudio,
+  Cancel,
+  CheckCircle,
+  Gavel,
+  Lens,
+  MonetizationOn,
+  MoneyOff,
+  Replay,
+  Schedule,
+} from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
-import saveAs from 'file-saver';
 import { Formik } from 'formik';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
@@ -44,7 +46,10 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { COLORS } from 'src/constants/theme';
 import { FilterSchema } from 'src/schema/formSchema';
+import { resetPassword } from 'src/stores/actions/account';
+import { exportAllWage, exportWage } from 'src/stores/actions/profile';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
+import ExportWage from '../dialog/ExportWage';
 import NewRollUp from '../dialog/NewRollUp';
 
 /*
@@ -121,23 +126,9 @@ const ToolbarRootBase = ({ classes, className, ...restProps }) => {
 
 const ToolbarRoot = withStyles(styles)(ToolbarRootBase);
 
-// const filteringColumnExtensions = [
-//   {
-//     columnName: 'saleDate',
-//     predicate: (value, filter, row) => {
-//       if (!filter.value.length) return true;
-//       if (filter && filter.operation === 'month') {
-//         const month = parseInt(value.split('-')[1], 10);
-//         return month === parseInt(filter.value, 10);
-//       }
-//       return IntegratedFiltering.defaultPredicate(value, filter, row);
-//     },
-//   },
-// ];
-
 const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
   const dispatch = useDispatch();
-  const diabledClass = disableCreate ? 'disabled' : 'primary';
+  const disabledClass = disableCreate ? 'disabled' : 'primary';
   return (
     <Plugin name="AddRowPanel" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
@@ -161,12 +152,44 @@ const AddRowPanel = ({ t, route, disableCreate, isPopUp, rollUpData }) => {
             }}
           >
             {isPopUp ? (
-              <AddCircleOutlineIcon color={diabledClass} />
+              <AddCircle color={disabledClass} />
             ) : (
               <Link to={`${route}create`} className="px-0 py-0">
-                <AddCircleOutlineIcon color={diabledClass} />
+                <AddCircle color={disabledClass} />
               </Link>
             )}
+          </IconButton>
+        }
+      </Template>
+    </Plugin>
+  );
+};
+const ExportAllSalaryPanel = ({ t, disableExportAllSalary }) => {
+  const dispatch = useDispatch();
+  const [openExportEmployeeSalary, setOpenExportEmployeeSalary] = useState(false);
+  const handleConfirmExportSalary = (values) => {
+    setOpenExportEmployeeSalary(false);
+    dispatch(exportAllWage({ from: moment(values.month), to: moment(values.month).endOf('month') }, t('message.successful_export')));
+  };
+  const handleCancelExportSalary = () => {
+    setOpenExportEmployeeSalary(false);
+  };
+  return (
+    <Plugin name="ExportAllSalaryPanel" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {disableExportAllSalary && openExportEmployeeSalary && (
+          <ExportWage isOpen={openExportEmployeeSalary} t={t} handleCancel={handleCancelExportSalary} handleConfirm={handleConfirmExportSalary} />
+        )}
+        {
+          <IconButton
+            hidden={!disableExportAllSalary}
+            className="py-0 px-2"
+            onClick={() => {
+              setOpenExportEmployeeSalary(true);
+            }}
+          >
+            <AccountBalanceWallet color={'primary'} />
           </IconButton>
         }
       </Template>
@@ -252,15 +275,13 @@ const QTable = (props) => {
     filters,
     filterFunction,
     fixed,
+    statusComponent,
+    isExportEmployeeSalary,
+    disableExportAllSalary,
+    isResetPassWord,
   } = props;
-  const exporterRef = useRef(null);
-
-  const startExport = useCallback(() => {
-    exporterRef.current.exportGrid();
-  }, [exporterRef]);
 
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
-  let statusColumns = Array.isArray(statusCols) ? statusCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
 
@@ -306,21 +327,11 @@ const QTable = (props) => {
           name: filters[colName]?.title,
         }))
       : [];
-  // const filterTypes = [
-  //   { id: 1, name: t('label.include') },
-  //   { id: 2, name: t('label.not_include') },
-  //   { id: 3, name: t('label.correct') },
-  // ];
   const filterValues = {
     rule: '',
     op: '',
     value: '',
     operates: [],
-  };
-  const onSave = (workbook) => {
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
-    });
   };
 
   const DateFormatter = ({ value }) => (value ? value.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1') : '');
@@ -345,22 +356,15 @@ const QTable = (props) => {
   };
   const MultiValuesTypeProvider = (p) => <DataTypeProvider formatterComponent={MultiValuesFormatter} {...p} />;
 
-  const StatusFormatter = ({ value }) => {
-    return (
-      <Chip
-        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
-        className="mx-1 my-1 px-0 py-0"
-        style={{
-          backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.FREE_DATE,
-        }}
-      />
-    );
+  const StatusFormatter = ({ value, column }) => {
+    return statusComponent ? statusComponent(value, column.name) : <p>{value}</p>;
   };
-  const StatusProvider = (p) => <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
+  const StatusProvider = (p) => {
+    return <DataTypeProvider formatterComponent={StatusFormatter} {...p} />;
+  };
 
   const LinkFormatter = ({ row, value, column }) => {
     let col = linkCols.filter((x) => x.name === column.name)[0];
-    // console.log('LinkFormatter', row);
     if (value) {
       if (col.route) return <Link to={`${col.route}${row[col.id]}`}>{value}</Link>;
       else {
@@ -406,11 +410,13 @@ const QTable = (props) => {
     let newState = await deleteMultiFilter(idx);
     filterFunction({ filters: newState });
   };
-  const TestComponent = ({ row, ...props }) => {
+  const TestComponent = ({ row, className, ...props }) => {
     // console.log('TestComponent', props);
     const [openWarning, setOpenWarning] = useState(false);
+    const [openResetPassWordWarning, setOpenResetPassWordWarning] = useState(false);
     const [deletingRowID, setDeletingRowID] = useState(-1);
     const [openEditing, setOpenEditing] = useState(false);
+    const [openExportEmloyeeSalary, setOpenExportEmployeeSalary] = useState(false);
     const [rollUp, setRollUp] = useState(-1);
     const dispatch = useDispatch();
     const handleConfirmWarning = (e) => {
@@ -421,6 +427,13 @@ const QTable = (props) => {
     };
     const handleCancelWarning = () => {
       setOpenWarning(!openWarning);
+    };
+    const handleConfirmResetPassWord = (e) => {
+      dispatch(resetPassword(+row.id));
+      setOpenResetPassWordWarning(!openResetPassWordWarning);
+    };
+    const handleCancelResetPasswod = () => {
+      setOpenResetPassWordWarning(!openResetPassWordWarning);
     };
     const handleConfirmEditing = (values) => {
       let endTime = values.endTime;
@@ -441,8 +454,15 @@ const QTable = (props) => {
     const handleCancelEditing = () => {
       setOpenEditing(!openEditing);
     };
+    const handleConfirmExportSalary = (values) => {
+      setOpenExportEmployeeSalary(false);
+      dispatch(exportWage({ from: moment(values.month), to: moment(values.month).endOf('month'), id: +row.id }, t('message.successful_export')));
+    };
+    const handleCancelExportSalary = () => {
+      setOpenExportEmployeeSalary(false);
+    };
     return (
-      <TableEditColumn.Cell {...props}>
+      <TableEditColumn.Cell className={classNames(className, isExportEmployeeSalary ? 'm-0 p-0' : '')} {...props}>
         {openEditing && (
           <NewRollUp
             isOpen={openEditing}
@@ -463,26 +483,42 @@ const QTable = (props) => {
             warningMessage={t('message.delete_warning_message')}
           />
         )}
-        <IconButton
-          className="mx-2 my-0 p-0"
-          hidden={disableEdit}
-          title={t('message.edit_row')}
-          onClick={() => {
-            if (isPopUp) {
-              setOpenEditing(!openEditing);
-              setRollUp(row.id);
-            }
-          }}
-          style={{ width: 35, height: 35 }}
-        >
-          {isPopUp ? (
+        {openResetPassWordWarning && isResetPassWord && (
+          <WarningAlertDialog
+            isVisible={openResetPassWordWarning}
+            title={t('title.reset_password')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmResetPassWord}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelResetPasswod}
+            warningMessage={t('message.reset_password_warning_message')}
+          />
+        )}
+        {isExportEmployeeSalary && openExportEmloyeeSalary && (
+          <ExportWage isOpen={openExportEmloyeeSalary} t={t} handleCancel={handleCancelExportSalary} handleConfirm={handleConfirmExportSalary} />
+        )}
+        {isPopUp ? (
+          <IconButton
+            className="mx-2 my-0 p-0"
+            hidden={disableEdit}
+            title={t('message.edit_row')}
+            onClick={() => {
+              if (isPopUp) {
+                setOpenEditing(!openEditing);
+                setRollUp(row.id);
+              }
+            }}
+            style={{ width: 35, height: 35 }}
+          >
             <InfoIcon />
-          ) : (
-            <Link to={`${route}${row.id}`}>
+          </IconButton>
+        ) : (
+          <Link to={`${route}${row.id}`}>
+            <IconButton className="mx-2 my-0 p-0" hidden={disableEdit} title={t('message.edit_row')} style={{ width: 35, height: 35 }}>
               <InfoIcon />
-            </Link>
-          )}
-        </IconButton>
+            </IconButton>
+          </Link>
+        )}
 
         <IconButton
           className="mx-2 my-0 p-0"
@@ -496,10 +532,36 @@ const QTable = (props) => {
         >
           <DeleteIcon />
         </IconButton>
+        {isExportEmployeeSalary && (
+          <IconButton
+            className="mx-2 my-0 p-0"
+            onClick={() => {
+              setOpenExportEmployeeSalary(true);
+            }}
+            title={t('message.delete_row')}
+            style={{ width: 35, height: 35 }}
+          >
+            <MonetizationOn />
+          </IconButton>
+        )}
+        {isResetPassWord && (
+          <IconButton
+            className="mx-2 my-0 p-0"
+            onClick={() => {
+              setOpenResetPassWordWarning(true);
+            }}
+            style={{ width: 35, height: 35 }}
+            title={t('message.reset_password_row')}
+          >
+            <Replay />
+          </IconButton>
+        )}
       </TableEditColumn.Cell>
     );
   };
-
+  const CellComponent = ({ className, style, ...props }) => {
+    return <Table.Cell className={classNames(className, 'py-0')} {...props} style={{ ...style, height: 53 }}></Table.Cell>;
+  };
   return (
     <div>
       <Paper>
@@ -567,6 +629,7 @@ const QTable = (props) => {
                             placeholder={t('placeholder.enter_keyword')}
                             inputClassName={'form-control'}
                             isTouched={touched.value}
+                            isDisable={['empty', 'not_empty'].includes(values.op)}
                             isError={errors.value && touched.value}
                             errorMessage={t(errors.value)}
                           />
@@ -613,9 +676,9 @@ const QTable = (props) => {
                         filters[filter.rule]?.title +
                         ': ' +
                         t(`filter_operator.${filter.op}`) +
-                        ' "' +
-                        (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) +
-                        '"'
+                        (['empty', 'not_empty'].includes(filter.op)
+                          ? ''
+                          : ' "' + (filters[filter.rule]?.type === 'text' ? filter.value : t(`label.${filter.value}`)) + '"')
                       }
                       color="primary"
                       onDelete={handleDelete}
@@ -632,7 +695,7 @@ const QTable = (props) => {
 
         <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
-          <StatusProvider for={statusColumns} />
+          <StatusProvider for={statusCols ?? []} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
           <LinkTypeProvider for={linkColumns} />
           <EditingState editingRowIds={state.editingRowIds} rowChanges={rowChanges} onRowChangesChange={setRowChanges} addedRows={[]} />
@@ -655,14 +718,6 @@ const QTable = (props) => {
             }
           />
           <IntegratedSelection />
-          <SortingState
-            defaultSorting={[
-              {
-                columnName: columnDef && columnDef[0].name,
-                direction: 'asc',
-              },
-            ]}
-          />
           <DragDropProvider />
           {customTableCell ? (
             <Table
@@ -674,10 +729,16 @@ const QTable = (props) => {
               stubHeaderCellComponent={StubHeaderCellComponent}
             />
           ) : (
-            <Table key={route} columnExtensions={tableColumnExtensions} tableComponent={TableComponent} noDataCellComponent={NoDataCellComponent} />
+            <Table
+              key={route}
+              columnExtensions={tableColumnExtensions}
+              tableComponent={TableComponent}
+              cellComponent={CellComponent}
+              noDataCellComponent={NoDataCellComponent}
+            />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          {paddingColumnHeader ? <TableHeaderRow showSortingControls cellComponent={Label} /> : <TableHeaderRow showSortingControls />}
+          {paddingColumnHeader ? <TableHeaderRow cellComponent={Label} /> : <TableHeaderRow />}
           <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (
@@ -691,13 +752,6 @@ const QTable = (props) => {
             <div />
           ) : (
             <div>
-              <ExportPanel startExport={startExport} color={'primary'} />
-            </div>
-          )}
-          {disableToolBar ? (
-            <div />
-          ) : (
-            <div>
               <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
             </div>
           )}
@@ -705,12 +759,9 @@ const QTable = (props) => {
             <div />
           ) : (
             <div>
-              <ColumnChooser />
+              <ExportAllSalaryPanel t={t} disableExportAllSalary={disableExportAllSalary} />
             </div>
           )}
-          {/* <ExportPanel startExport={startExport} color={'primary'} />
-          <AddRowPanel route={route} disableCreate={disableCreate} isPopUp={isPopUp} t={t} rollUpData={rollUpData} />
-          <ColumnChooser /> */}
           <TableEditRow />
           {!disableEditColum && <TableEditColumn cellComponent={TestComponent} />}
           <TableFixedColumns rightColumns={fixed ? [TableEditColumn.COLUMN_TYPE] : []} leftColumns={fixed ? ['code'] : []} />
@@ -723,7 +774,7 @@ const QTable = (props) => {
               let editColumn = tableColumns.shift();
               //return tableColumns;
               // console.log(editColumn);
-              return [...tableColumns, { ...editColumn, width: 150 }];
+              return [...tableColumns, { ...editColumn, width: isExportEmployeeSalary || isResetPassWord ? '15%' : '10%' }];
             }}
           />
 
@@ -765,7 +816,6 @@ const QTable = (props) => {
           {!notPaging && <PagingPanel pageSizes={paging.pageSizes} />}
         </Grid>
 
-        {disableToolBar ? <div /> : <GridExporter ref={exporterRef} rows={data} columns={state.columns} onSave={onSave} />}
         {route === '/roll-up/' && (
           <div className="p-0">
             <div className="row m-2">

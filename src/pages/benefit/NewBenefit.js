@@ -63,7 +63,7 @@ const NewBenefit = ({ t, history, match }) => {
     delete form.wages;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.amount === '') delete form.amount;
-    form.allowanceIds = form.allowances && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
+    form.allowanceIds = form && form.allowances && form.allowances.length > 0 ? form.allowances.map((a) => parseInt(a.id)) : [];
     dispatch(createWageHistory(form, history, t('message.successful_create')));
   };
 

@@ -108,7 +108,7 @@ export const updateWageHistory = (data, success_msg) => {
   if (!data.expiredDate) delete data.expiredDate;
   // delete data.wage;
   // delete data.wages;
-  data.allowanceIds = data.allowances && data.allowances.length > 0 ? data.allowances.map((a) => parseInt(a.id)) : [];
+  data.allowanceIds = data && data.allowances && data.allowances.length > 0 ? data.allowances.map((a) => parseInt(a.id)) : [];
   return (dispatch, getState) => {
     api.wageHistory
       .put(data)

@@ -155,6 +155,18 @@ export const deleteAccount = (id, success_msg, handleAfterDelete) => {
       });
   };
 };
+export const resetPassword = (id, success_msg) => {
+  return (dispatch, getState) => {
+    api.account
+      .resetPassword(id)
+      .then(({ payload }) => {
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleAccountExceptions(err, dispatch, 'resetPassword');
+      });
+  };
+};
 
 export const setEmptyAccount = () => {
   return {

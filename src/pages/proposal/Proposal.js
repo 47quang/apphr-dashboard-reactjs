@@ -14,6 +14,8 @@ import {
   filterOvertimeRequests,
   filterRemoteRequests,
 } from 'src/stores/actions/request';
+import Chip from '@material-ui/core/Chip';
+import { COLORS } from 'src/constants/theme';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -47,27 +49,39 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
   const filters =
     type === 'leave'
       ? {
           code: {
             title: t('label.code'),
-            operates: [
-              {
-                id: FILTER_OPERATOR.LIKE,
-                name: t('filter_operator.like'),
-              },
-            ],
+            operates: operatesText,
             type: 'text',
           },
           type: {
             title: t('label.leave_form_type'),
-            operates: [
-              {
-                id: FILTER_OPERATOR.LIKE,
-                name: t('filter_operator.like'),
-              },
-            ],
+            operates: operatesText,
             type: 'text',
           },
           status: {
@@ -98,12 +112,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
       : {
           code: {
             title: t('label.code'),
-            operates: [
-              {
-                id: FILTER_OPERATOR.LIKE,
-                name: t('filter_operator.like'),
-              },
-            ],
+            operates: operatesText,
             type: 'text',
           },
           status: {
@@ -311,6 +320,17 @@ const Proposal = ({ t, location, match, type, profileId }) => {
             ),
           );
   };
+  const statusComponent = (value, colName) => {
+    return (
+      <Chip
+        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
+        className="m-0 p-0"
+        style={{
+          backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
+        }}
+      />
+    );
+  };
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       {type === 'leave' ? (
@@ -319,15 +339,16 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           columnDef={columnDefOfProfiles}
           data={proposals}
           route={match.url + '/' + type + '.id='}
-          idxColumnsFilter={[0, 1, 4]}
           disableDelete={true}
           // disableCreate={true}
-          statusCols={[4]}
+          statusCols={['status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           filters={filters}
           filterFunction={filterFunction}
+          statusComponent={statusComponent}
+          fixed={true}
         />
       ) : (
         <QTable
@@ -338,12 +359,14 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
           // disableCreate={true}
-          statusCols={[3]}
+          statusCols={['status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           filters={filters}
           filterFunction={filterFunction}
+          statusComponent={statusComponent}
+          fixed={true}
         />
       )}
     </CContainer>

@@ -35,6 +35,7 @@ export const fetchArticles = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((a) => {
+                a.type = a.typeId ? a.type.code + ' - ' + a.type.name : '';
                 a.createdAt = formatDateTimeToString(a.createdAt);
                 return a;
               })

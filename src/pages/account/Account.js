@@ -142,6 +142,7 @@ const Account = ({ t, location, history }) => {
           filters={filters}
           filterFunction={filterFunction}
           fixed={true}
+          isResetPassWord={true}
         />
       </CContainer>
     );
