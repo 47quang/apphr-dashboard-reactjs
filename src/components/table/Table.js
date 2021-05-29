@@ -421,7 +421,7 @@ const QTable = (props) => {
     const [openResetPassWordWarning, setOpenResetPassWordWarning] = useState(false);
     const [deletingRowID, setDeletingRowID] = useState(-1);
     const [openEditing, setOpenEditing] = useState(false);
-    const [openExportEmloyeeSalary, setOpenExportEmployeeSalary] = useState(false);
+    const [openExportEmployeeSalary, setOpenExportEmployeeSalary] = useState(false);
     const [rollUp, setRollUp] = useState(-1);
     const dispatch = useDispatch();
     const handleConfirmWarning = (e) => {
@@ -504,8 +504,8 @@ const QTable = (props) => {
             warningMessage={t('message.reset_password_warning_message')}
           />
         )}
-        {isExportEmployeeSalary && openExportEmloyeeSalary && (
-          <ExportWage isOpen={openExportEmloyeeSalary} t={t} handleCancel={handleCancelExportSalary} handleConfirm={handleConfirmExportSalary} />
+        {isExportEmployeeSalary && openExportEmployeeSalary && (
+          <ExportWage isOpen={openExportEmployeeSalary} t={t} handleCancel={handleCancelExportSalary} handleConfirm={handleConfirmExportSalary} />
         )}
         {isPopUp ? (
           <IconButton

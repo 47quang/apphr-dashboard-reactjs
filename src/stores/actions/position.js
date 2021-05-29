@@ -40,6 +40,7 @@ export const fetchPositions = (params, onTotalChange, setLoading) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
+
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
