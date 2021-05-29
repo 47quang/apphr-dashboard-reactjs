@@ -354,8 +354,18 @@ export const fetchStatisticChart = (params, success_msg) => {
     api.assignment
       .getStatisticChart(params)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload });
-        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+        let data = [];
+        data.push(payload.normal.length);
+        data.push(payload.remote.length);
+        data.push(payload.remote_overtime.length);
+        data.push(payload.overtime.length);
+        data.push(payload.leave.length);
+        data.push(payload.absent.length);
+        let rv = {
+          data: data,
+          payload: payload,
+        };
+        dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload: rv });
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'fetchStatisticChart');

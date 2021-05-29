@@ -101,7 +101,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
             setIsReload: setIsReload,
           }}
           editColumnWidth={'15%'}
-          disableCreate={rows.rollUps && rows.rollUps.length > 0}
+          disableCreate={rows.rollUps && rows.rollUps.length > 0 && assignment.status.includes('leave')}
         />
       </DialogContent>
     </Dialog>

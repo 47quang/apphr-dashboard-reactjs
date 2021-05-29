@@ -983,3 +983,11 @@ export const DateRange = Yup.object().shape({
     })
     .required('validation.required_select_end_date'),
 });
+export const SelectShift = Yup.object().shape({
+  date: Yup.string().required('validation.required_select_date'),
+  shiftId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_shift', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_shift'),
+});

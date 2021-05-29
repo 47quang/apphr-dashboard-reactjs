@@ -353,7 +353,7 @@
     "active": "Có hiệu lực",
     "number_hours_worked": "Số giờ làm được",
     "overtime_hours": "Số giờ làm thêm",
-    "chart_shift_in_month": "Biểu đồ thống kê ca làm việc trong tháng",
+    "chart_shift_in_day": "Biểu đồ thống kê ca làm việc trong ngày",
     "number_shift_works": "Số ca đã làm",
     "number_paid_shift": "Số ca nghỉ có lương",
     "number_unpaid_shift": "Số ca nghỉ không lương",
@@ -387,7 +387,13 @@
     "overtime_time": "Thời gian làm thêm giờ",
     "leave_time": "Thời gian nghỉ có lương / nghỉ chế độ",
     "absent_time": "Thời gian vắng",
-    "file_name": "Tên file"
+    "file_name": "Tên file",
+    "number_normal_work": "Số người đi làm bình thường",
+    "number_remote_work": "Số người làm từ xa",
+    "number_remote_overtime_work": "Số người làm thêm giờ từ xa",
+    "number_overtime_work": "Số người làm thêm giờ",
+    "number_leave_work": "Số người nghỉ",
+    "number_absence": "Số người không đi làm"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -455,7 +461,8 @@
     "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn tạo đợt lương này chứ?",
     "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?",
     "reset_password_warning_message": "Bạn thật sự muốn đặt lại mật khẩu cho tài khoản này",
-    "reset_password_row": "Đặt lại mật khẩu cho hàng này"
+    "reset_password_row": "Đặt lại mật khẩu cho hàng này",
+    "add": "Thêm mới"
 
   },
   "placeholder": {
