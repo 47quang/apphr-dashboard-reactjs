@@ -365,6 +365,16 @@ export const fetchStatisticChart = (params, success_msg) => {
           data: data,
           payload: payload,
         };
+        for (const [key, value] of Object.entries(payload)) {
+          payload[key] =
+            value.length > 0
+              ? value.map((a) => {
+                  a.profileCode = a.profile.code;
+                  a.fullname = a.profile.fullname;
+                  return a;
+                })
+              : [];
+        }
         dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload: rv });
       })
       .catch((err) => {

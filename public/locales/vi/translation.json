@@ -415,7 +415,13 @@
     "new_active_wage": "Tạo đợt lương mới",
     "update_active_wage": "Cập nhật đợt lương",
     "reset_password": "Đặt lại mật khẩu",
-    "person_chart": "Biểu đồ thống kê thời gian làm việc"
+    "person_chart": "Biểu đồ thống kê thời gian làm việc",
+    "list_working": "Danh sách nhân viên đi làm",
+    "list_remote": "Danh sách nhân viên làm từ xa",
+    "list_remote_overtime": "Danh sách nhân viên làm thêm giờ từ xa",
+    "list_overtime": "Danh sách nhân viên làm thêm giờ",
+    "list_leave": "Danh sách nhân viên nghỉ có phép",
+    "list_absent": "Danh sách nhân viên không đi làm"
   },
   "filter_operator": {
     "in": "trong",

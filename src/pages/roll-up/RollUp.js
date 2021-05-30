@@ -250,7 +250,7 @@ const RollUp = ({ t, location }) => {
     };
     const isDay = value?.assignment;
     const handleClose = (isReload) => {
-      console.log('isReload', isReload);
+      // console.log('isReload', isReload);
       setCell({ ...cell, isOpen: !cell.isOpen, isReload: isReload });
       if (isReload) reloadTable();
     };

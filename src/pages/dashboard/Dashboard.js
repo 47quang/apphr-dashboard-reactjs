@@ -102,10 +102,9 @@ const Dashboard = ({ t, location }) => {
   }, [paging.currentPage, paging.pageSize]);
 
   const handleChangeShift = (values) => {
-    console.log(values);
+    // console.log(values);
     dispatch(fetchStatisticChart(values));
   };
-
   return (
     <>
       <div className="m-4 p-4">
