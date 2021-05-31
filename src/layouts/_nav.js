@@ -87,8 +87,8 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: ROUTE_NAME.REPORT,
-    to: ROUTE_PATH.REPORT,
+    name: ROUTE_NAME.STORE,
+    to: ROUTE_PATH.STORE,
     icon: 'cil-print',
   },
   {

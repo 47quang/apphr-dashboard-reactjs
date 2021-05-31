@@ -6,7 +6,7 @@
   "Profile": "Nhân sự",
   "Account": "Tài khoản",
   "Notification": "Thông báo",
-  "Library": "Thư viện",
+  "Store": "Lưu trữ",
   "Setting": "Cấu hình",
   "Remote": "Làm từ xa",
   "Leave": "Nghỉ làm",
@@ -393,7 +393,9 @@
     "number_remote_overtime_work": "Số người làm thêm giờ từ xa",
     "number_overtime_work": "Số người làm thêm giờ",
     "number_leave_work": "Số người nghỉ",
-    "number_absence": "Số người không đi làm"
+    "number_absence": "Số người không đi làm",
+    "overtime_assignment": "Ca làm thêm giờ"
+
   },
   "title": {
     "confirm": "Xác nhận",
@@ -421,7 +423,11 @@
     "list_remote_overtime": "Danh sách nhân viên làm thêm giờ từ xa",
     "list_overtime": "Danh sách nhân viên làm thêm giờ",
     "list_leave": "Danh sách nhân viên nghỉ có phép",
-    "list_absent": "Danh sách nhân viên không đi làm"
+    "list_absent": "Danh sách nhân viên không đi làm",
+    "type_of_column": "Ký hiệu cột",
+    "type_of_cell": "Ký hiệu ô",
+    "type_of_request": "Ký hiệu các loại đề xuất",
+    "status_of_cell": "Trạng thái của các ca bình thường"
   },
   "filter_operator": {
     "in": "trong",
@@ -432,7 +438,7 @@
     "not_null": "không null",
     "empty": "rỗng",
     "not_empty": "không rỗng",
-    "autocomplete": "tự động điền",
+    "autocomplete": "autocomplete",
     ">": "lớn hơn",
     ">=": "lớn hơn hoặc bằng",
     "<": "bé hơn",

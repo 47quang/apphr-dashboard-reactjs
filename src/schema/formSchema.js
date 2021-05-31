@@ -968,7 +968,7 @@ export const FilterSchema = Yup.object().shape({
     .required('validation.required_select_filter_operator'),
   value: Yup.string().when('op', {
     is: (value) => {
-      return ['='].includes(value);
+      return ['=', 'autocomplete'].includes(value);
     },
     then: Yup.string().required('validation.required_select_filter_value'),
   }),

@@ -139,7 +139,7 @@ const routes = [
     name: ROUTE_NAME.NOTIFICATION,
     component: Notification,
   },
-  { path: ROUTE_PATH.REPORT, name: ROUTE_NAME.REPORT, component: Report },
+  { path: ROUTE_PATH.STORE, name: ROUTE_NAME.STORE, component: Report },
   {
     path: ROUTE_PATH.SETTING,
     exact: true,

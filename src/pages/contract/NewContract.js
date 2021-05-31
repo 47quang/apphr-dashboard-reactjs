@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
+import CommonAutoCompleteInput from 'src/components/input/CommonAutoCompleteInput';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
@@ -121,7 +122,7 @@ const NewContract = ({ t, history, match }) => {
     return (
       <>
         <div className="row">
-          <CommonSelectInput
+          <CommonAutoCompleteInput
             containerClassName={'form-group col-lg-4'}
             value={values.profileId ?? 0}
             labelText={t('label.profileId')}

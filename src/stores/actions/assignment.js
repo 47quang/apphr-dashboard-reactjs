@@ -151,24 +151,25 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                     date: from.clone().add(6, 'd'),
                   },
                 };
-                a.assignments.forEach((element) => {
-                  let dayTh = new Date(element.startTime).getDay();
-                  let thisDate = new Date();
-                  thisDate.setHours(23);
-                  thisDate.setMinutes(59);
-                  thisDate.setSeconds(59);
-                  let future = isBeforeTypeDate(thisDate, element.startTime); ///bug
-                  x[dayIndex[dayTh]].future = future;
-                  x[dayIndex[dayTh]].assignment.push({
-                    id: element.id,
-                    shiftName: element.shift.name,
-                    shiftCode: element.shift.code,
-                    point: element.point !== 1 && element.point !== 0 ? element.point.toFixed(2) : element.point === 0 ? 0 : 1,
-                    status: element.status,
-                    startCC: parseLocalTime(element.shift.startCC),
-                    endCC: parseLocalTime(element.shift.endCC),
+                if (a?.assignments && a.assignments.length > 0)
+                  a.assignments.forEach((element) => {
+                    let dayTh = new Date(element.startTime).getDay();
+                    let thisDate = new Date();
+                    thisDate.setHours(23);
+                    thisDate.setMinutes(59);
+                    thisDate.setSeconds(59);
+                    let future = isBeforeTypeDate(thisDate, element.startTime); ///bug
+                    x[dayIndex[dayTh]].future = future;
+                    x[dayIndex[dayTh]].assignment.push({
+                      id: element.id,
+                      shiftName: element.shift.name,
+                      shiftCode: element.shift.code,
+                      point: element.point !== 1 && element.point !== 0 ? element.point.toFixed(2) : element.point === 0 ? 0 : 1,
+                      status: element.status,
+                      startCC: parseLocalTime(element.shift.startCC),
+                      endCC: parseLocalTime(element.shift.endCC),
+                    });
                   });
-                });
                 data.push(x);
                 return a;
               })
@@ -190,6 +191,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
+        console.log(err);
         handleAssignmentExceptions(err, dispatch, 'fetchRollUpTable');
       })
       .finally(() => {
@@ -198,7 +200,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchAssignment = (id, setLoading) => {
+export const fetchAssignment = (id, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
@@ -213,6 +215,7 @@ export const fetchAssignment = (id, setLoading) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
+        if (onTotalChange) onTotalChange(payload.rollUps.length);
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'fetchAssignment');

@@ -221,9 +221,7 @@ export const fetchProfiles = (params) => {
       .getProfiles(params)
       .then(({ payload }) => {
         payload =
-          payload && payload.length > 0
-            ? payload.map((profile) => ({ id: profile.id ?? 0, name: (profile.shortname ?? 'NV001') + ' - ' + profile.fullname }))
-            : [];
+          payload && payload.length > 0 ? payload.map((profile) => ({ id: profile.id ?? 0, name: profile.code + ' - ' + profile.fullname })) : [];
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {

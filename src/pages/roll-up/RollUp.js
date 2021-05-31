@@ -1,9 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { Table } from '@devexpress/dx-react-grid-material-ui';
-import { Avatar, Button } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
 import { Lens } from '@material-ui/icons';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,10 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AssignmentsDialog from 'src/components/dialog/Assignments';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
-import WeekPicker from 'src/components/input/WeekPicker';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
+import { fetchProfiles } from 'src/stores/actions/account';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
@@ -23,11 +21,8 @@ import { backgroundColor, backgroundColorHover, borderColor, dotColor, renderIco
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const RollUp = ({ t, location }) => {
-  const [state, setState] = useState({
-    today: moment(),
-    fromDate: moment().clone().startOf('week'),
-    toDate: moment().clone().endOf('week'),
-  });
+  let today = moment();
+  const [fromDate, setFromDate] = useState(today.clone().startOf('week'));
   const dispatch = useDispatch();
   const data = useSelector((state) => state.assignment.assignments);
   const holidays = useSelector((state) => state.holiday.holidays);
@@ -60,6 +55,45 @@ const RollUp = ({ t, location }) => {
       loading: isLoading,
     }));
   };
+  const operatesText = [
+    {
+      id: FILTER_OPERATOR.LIKE,
+      name: t('filter_operator.like'),
+    },
+    {
+      id: FILTER_OPERATOR.START,
+      name: t('filter_operator.start'),
+    },
+    {
+      id: FILTER_OPERATOR.END,
+      name: t('filter_operator.end'),
+    },
+    {
+      id: FILTER_OPERATOR.EMPTY,
+      name: t('filter_operator.empty'),
+    },
+    {
+      id: FILTER_OPERATOR.NOT_EMPTY,
+      name: t('filter_operator.not_empty'),
+    },
+  ];
+  const filters = {
+    code: {
+      title: t('label.employee_code'),
+      operates: operatesText,
+      type: 'text',
+    },
+    suggestion: {
+      title: t('label.employee_full_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.AUTOCOMPLETE,
+          name: t('filter_operator.autocomplete'),
+        },
+      ],
+      type: 'text',
+    },
+  };
 
   const changeColDef = (fromDate) => [
     { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
@@ -69,7 +103,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
@@ -84,7 +118,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
@@ -99,7 +133,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
@@ -114,7 +148,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
@@ -129,7 +163,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
@@ -144,7 +178,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
@@ -159,7 +193,7 @@ const RollUp = ({ t, location }) => {
       align: 'left',
       width: '12%',
       wordWrapEnabled: true,
-      today: state.today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
+      today: today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
       holiday: holidays.find(
         (e) =>
           isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
@@ -171,31 +205,11 @@ const RollUp = ({ t, location }) => {
   ];
 
   let columnDefOfRollUp = useRef();
-  columnDefOfRollUp.current = changeColDef(state.fromDate);
-
-  const handlePrev = () => {
-    let from = state.fromDate.clone().subtract(7, 'd');
-    let to = state.toDate.clone().subtract(7, 'd');
-
-    setState((preState) => ({
-      ...preState,
-      fromDate: from,
-      toDate: to,
-    }));
-  };
-
-  const handleNext = () => {
-    let from = state.fromDate.clone().add(7, 'd');
-    let to = state.toDate.clone().add(7, 'd');
-
-    setState((preState) => ({
-      ...preState,
-      fromDate: from,
-      toDate: to,
-    }));
-  };
+  columnDefOfRollUp.current = changeColDef(fromDate);
 
   useEffect(() => {
+    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
+
     dispatch(
       fetchHolidays({
         page: 0,
@@ -207,20 +221,33 @@ const RollUp = ({ t, location }) => {
         {
           page: paging.currentPage,
           perpage: paging.pageSize,
-          from: state.fromDate,
-          to: state.toDate,
+          from: fromDate,
+          to: fromDate.clone().endOf('week'),
         },
         onTotalChange,
         setLoading,
       ),
     );
-    columnDefOfRollUp.current = changeColDef(state.fromDate);
     return () => {
       dispatch(setEmptyAssignments());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.fromDate, paging.currentPage, paging.pageSize]);
-
+  }, [fromDate, paging.currentPage, paging.pageSize]);
+  const filterFunction = (params) => {
+    dispatch(
+      fetchRollUpTable(
+        {
+          ...params,
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+          from: fromDate,
+          to: fromDate.clone().endOf('week'),
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
+  };
   const CustomTableCell = ({ value, row, column, children, className, ...restProps }) => {
     const [cell, setCell] = useState({
       rowId: '',
@@ -242,16 +269,16 @@ const RollUp = ({ t, location }) => {
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
-            from: state.fromDate,
-            to: state.toDate,
+            from: fromDate,
+            to: fromDate.clone().endOf('week'),
           },
           onTotalChange,
+          setLoading,
         ),
       );
     };
     const isDay = value?.assignment;
     const handleClose = (isReload) => {
-      // console.log('isReload', isReload);
       setCell({ ...cell, isOpen: !cell.isOpen, isReload: isReload });
       if (isReload) reloadTable();
     };
@@ -392,21 +419,12 @@ const RollUp = ({ t, location }) => {
   };
   return (
     <CContainer fluid className="c-main px-4 py-2">
-      <div className="p-0 d-flex justify-content-center align-items-center">
-        <Button onClick={handlePrev} style={{ height: '50%' }}>
-          <NavigateBeforeIcon className="m-1" fontSize="large" />
-        </Button>
-        <div className="d-inline">
-          <h2 className="d-flex justify-content-center">{t('label.roll_call_table')}</h2>
-          <h5 className="d-flex justify-content-center">
-            {t('label.from') + ': ' + state.fromDate.format('DD/MM/YYYY') + t('label.to') + ': ' + state.toDate.format('DD/MM/YYYY')}
-          </h5>
-          <WeekPicker />
+      {/* <div className="row d-flex align-items-center">
+        <div className="col-3">
+          <h2 className="d-flex justify-content-start">{t('label.roll_call_table')}</h2>
+          
         </div>
-        <Button onClick={handleNext} style={{ height: '50%' }} disabled={state.today <= state.toDate}>
-          <NavigateNextIcon className="m-1" fontSize="large" />
-        </Button>
-      </div>
+      </div> */}
       <QTable
         t={t}
         columnDef={columnDefOfRollUp.current}
@@ -420,7 +438,13 @@ const RollUp = ({ t, location }) => {
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
         paddingColumnHeader={true}
-        disableFilter={true}
+        filters={filters}
+        filterFunction={filterFunction}
+        fromDate={fromDate}
+        setFromDate={setFromDate}
+        pageSize={paging.pageSize}
+        currentPage={paging.currentPage}
+        onTotalChange={onTotalChange}
       />
     </CContainer>
   );

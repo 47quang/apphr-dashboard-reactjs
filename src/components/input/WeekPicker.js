@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
+import { useDispatch } from 'react-redux';
+import { fetchRollUpTable } from 'src/stores/actions/assignment';
 
-const WeekPicker = (props) => {
+const WeekPicker = ({ fromDate, setFromDate, currentPage, pageSize, onTotalChange }) => {
+  const dispatch = useDispatch();
   const calculateActiveWeek = (date) => {
     const sun = date.clone().startOf('week');
     const mon = sun.clone().add(1, 'd');
@@ -17,15 +20,12 @@ const WeekPicker = (props) => {
     return [sun, mon, tue, wed, thu, fri, sat];
   };
 
-  const currentMoment = moment();
-
   const [state, setState] = useState({
     focused: false,
-    selectedWorkWeek: currentMoment.week(),
-    selectedYear: currentMoment.year(),
-    hoveredDays: calculateActiveWeek(currentMoment),
+    selectedWorkWeek: fromDate.week(),
+    selectedYear: fromDate.year(),
+    hoveredDays: calculateActiveWeek(fromDate),
     workWeekMarginLeft: 0,
-    date: '',
   });
   const isDayHighlighted = (date) => {
     const { hoveredDays } = state;
@@ -51,12 +51,29 @@ const WeekPicker = (props) => {
   const onDateChange = (date) => {
     const selectedYear = date.year();
     const selectedWorkWeek = date.week();
-    setState({
-      ...state,
-      selectedYear,
-      selectedWorkWeek,
-      focused: false,
-    });
+    if (selectedWorkWeek === state.selectedWorkWeek) return;
+    else {
+      let from = date.clone().startOf('week');
+      let to = date.clone().endOf('week');
+      setFromDate(from);
+      dispatch(
+        fetchRollUpTable(
+          {
+            page: currentPage,
+            perpage: pageSize,
+            from: from,
+            to: to,
+          },
+          onTotalChange,
+        ),
+      );
+      setState({
+        ...state,
+        selectedYear,
+        selectedWorkWeek,
+        focused: false,
+      });
+    }
   };
 
   const renderCalendarDay = (date) => {
@@ -88,7 +105,7 @@ const WeekPicker = (props) => {
     <SingleDatePicker
       focused={state.focused} // PropTypes.bool
       readOnly={true}
-      onDateChange={(date) => setState({ ...state, date: date })} // PropTypes.func.isRequired
+      onDateChange={(date) => console.log('date', date)} // PropTypes.func.isRequired
       date={moment().year(state.selectedYear).week(state.selectedWorkWeek).startOf('week')}
       onFocusChange={({ focused }) => setState({ ...state, focused: !state.focused })} // PropTypes.func.isRequired
       id="single_date_picker" // PropTypes.string.isRequired,

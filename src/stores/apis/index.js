@@ -302,7 +302,7 @@ export const api = {
       return client.get(API_PREFIX.API_PROFILE + '?fields=' + params.fields.join());
     },
     getRollUpTable: (params) => {
-      return client.get(API_PREFIX.API_PROFILE + '/assignment', {
+      return client.get(API_PREFIX.API_PROFILE + '/group-assignment', {
         params: params,
       });
     },

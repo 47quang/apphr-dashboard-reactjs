@@ -58,7 +58,7 @@ const Profile = ({ t, location }) => {
       type: 'text',
     },
     firstname: {
-      title: t('label.employee_last_name'),
+      title: t('label.employee_first_name'),
       operates: operatesText,
       type: 'text',
     },
