@@ -25,6 +25,7 @@ const WeekPicker = (props) => {
     selectedYear: currentMoment.year(),
     hoveredDays: calculateActiveWeek(currentMoment),
     workWeekMarginLeft: 0,
+    date: '',
   });
   const isDayHighlighted = (date) => {
     const { hoveredDays } = state;
@@ -74,12 +75,12 @@ const WeekPicker = (props) => {
         color: isHighlighted ? 'white' : 'black',
       };
       return (
-        <td style={style} className={dayClasses} onClick={() => onDateChange(date.day)} onMouseEnter={() => onDateHovered(date.day)}>
+        <td key={date.key} style={style} className={dayClasses} onClick={() => onDateChange(date.day)} onMouseEnter={() => onDateHovered(date.day)}>
           {dayOfMonth}
         </td>
       );
     } else {
-      return <td style={style} className={dayClasses} />;
+      return <td key={date.key} style={style} className={dayClasses} />;
     }
   };
 
@@ -87,7 +88,7 @@ const WeekPicker = (props) => {
     <SingleDatePicker
       focused={state.focused} // PropTypes.bool
       readOnly={true}
-      onDateChange={(date) => setState({ ...state, date })} // PropTypes.func.isRequired
+      onDateChange={(date) => setState({ ...state, date: date })} // PropTypes.func.isRequired
       date={moment().year(state.selectedYear).week(state.selectedWorkWeek).startOf('week')}
       onFocusChange={({ focused }) => setState({ ...state, focused: !state.focused })} // PropTypes.func.isRequired
       id="single_date_picker" // PropTypes.string.isRequired,
