@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AssignmentsDialog from 'src/components/dialog/Assignments';
 import RollUpInfo from 'src/components/dialog/RollUpInfo';
+import WeekPicker from 'src/components/input/WeekPicker';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
@@ -400,6 +401,7 @@ const RollUp = ({ t, location }) => {
           <h5 className="d-flex justify-content-center">
             {t('label.from') + ': ' + state.fromDate.format('DD/MM/YYYY') + t('label.to') + ': ' + state.toDate.format('DD/MM/YYYY')}
           </h5>
+          <WeekPicker />
         </div>
         <Button onClick={handleNext} style={{ height: '50%' }} disabled={state.today <= state.toDate}>
           <NavigateNextIcon className="m-1" fontSize="large" />
