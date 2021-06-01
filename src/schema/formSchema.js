@@ -556,27 +556,26 @@ export const NewHistoryWorkingSchema = Yup.object().shape({
   }),
 });
 export const HistoryWorkingsSchema = Yup.object().shape({
-  histories: Yup.array().of(
-    Yup.object().shape({
-      branchId: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_branch_id'),
-      departmentId: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_department_id', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_department_id'),
-      positionId: Yup.string()
-        .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_position', function (value) {
-          return value !== '0';
-        })
-        .required('validation.required_select_position'),
-      from: Yup.string().required('validation.required_select_start_date'),
-      to: Yup.string(), //.required('validation.required_select_end_date'),
-    }),
-  ),
+  branchId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_branch_id'),
+  departmentId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_department_id', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_department_id'),
+  positionId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_position', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_position'),
+  from: Yup.string().required('validation.required_select_start_date'),
+  to: Yup.string().test('end_time_test', 'validation.expired_date_must_be_great_than_start_date', function (value) {
+    const { from } = this.parent;
+    return isSameBeforeTypeDate(from, value);
+  }),
 });
 export const WageSchema = Yup.object().shape({
   code: Yup.string().min(1, 'validation.required_enter_wage_code').required('validation.required_enter_wage_code'),
@@ -948,6 +947,7 @@ export const OtherFeeSchema = Yup.object().shape({
     .required('validation.required_enter_payment_value'),
 });
 export const ExportWageSchema = Yup.object().shape({
+  filename: Yup.string().min(1, 'validation.required_enter_file_name').required('validation.required_enter_file_name'),
   month: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_month', function (value) {
       return !!value;
@@ -968,8 +968,26 @@ export const FilterSchema = Yup.object().shape({
     .required('validation.required_select_filter_operator'),
   value: Yup.string().when('op', {
     is: (value) => {
-      return ['='].includes(value);
+      return ['=', 'autocomplete'].includes(value);
     },
     then: Yup.string().required('validation.required_select_filter_value'),
   }),
+});
+
+export const DateRange = Yup.object().shape({
+  from: Yup.string().required('validation.required_select_start_date'),
+  to: Yup.string()
+    .test('end_time_test', 'validation.expired_date_must_be_great_than_start_date', function (value) {
+      const { from } = this.parent;
+      return isSameBeforeTypeDate(from, value);
+    })
+    .required('validation.required_select_end_date'),
+});
+export const SelectShift = Yup.object().shape({
+  date: Yup.string().required('validation.required_select_date'),
+  shiftId: Yup.string()
+    .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_shift', function (value) {
+      return value !== '0';
+    })
+    .required('validation.required_select_shift'),
 });

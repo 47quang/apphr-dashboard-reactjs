@@ -2,7 +2,6 @@ import { CContainer } from '@coreui/react';
 import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchStatics, setEmptyStatics } from 'src/stores/actions/static';
 
 const Report = ({ t, location }) => {
@@ -16,7 +15,6 @@ const Report = ({ t, location }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log('statics', statics);
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       <div className="m-auto">
@@ -25,39 +23,42 @@ const Report = ({ t, location }) => {
             <CircularProgress />
           </div>
         ) : (
-          <div className="row">
+          <>
             {statics && statics.length > 0 ? (
-              statics.map((file, idx) => {
+              statics.map((st, idx) => {
                 return (
-                  <div className="col-2" key={idx}>
-                    {file.type === 'docx' ? (
-                      <img
-                        className="image"
-                        src="images/Microsoft_Word-Logo.wine.svg"
-                        alt="docx"
-                        style={{ height: '100px' }}
-                        // onClick={() => {
-                        //   window.location.href = `https://apphr.me/public/DEV/${file.file}`;
-                        // }}
-                      />
-                    ) : (
-                      <img className="image" src="images/microsoft-excel-logo.svg" alt="excel" style={{ height: '100px' }} />
-                    )}
+                  <div key={idx}>
+                    <h5 className="d-inline py-3">
+                      <b>{st.key}</b>
+                    </h5>
+                    <div className="row p-3">
+                      {st?.date && st.date.length > 0 ? (
+                        st.date.map((date, id) => {
+                          return (
+                            <div className="col-2" key={'date ' + id}>
+                              {date.type === 'docx' ? (
+                                <img className="image" src="images/Microsoft_Word-Logo.wine.svg" alt="docx" style={{ height: '100px' }} />
+                              ) : (
+                                <img className="image" src="images/microsoft-excel-logo.svg" alt="excel" style={{ height: '100px' }} />
+                              )}
 
-                    <Link
-                      onClick={() => {
-                        window.location.href = `https://apphr.me/public/DEV/${file.file}`;
-                      }}
-                    >
-                      <p>{file.file}</p>
-                    </Link>
+                              <a href={`https://apphr.me/public/DEV/${date.filename}`}>
+                                <p>{date.filename}</p>
+                              </a>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                   </div>
                 );
               })
             ) : (
               <></>
             )}
-          </div>
+          </>
         )}
       </div>
     </CContainer>

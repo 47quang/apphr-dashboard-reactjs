@@ -302,7 +302,7 @@ export const api = {
       return client.get(API_PREFIX.API_PROFILE + '?fields=' + params.fields.join());
     },
     getRollUpTable: (params) => {
-      return client.get(API_PREFIX.API_PROFILE + '/assignment', {
+      return client.get(API_PREFIX.API_PROFILE + '/group-assignment', {
         params: params,
       });
     },
@@ -490,6 +490,12 @@ export const api = {
     delete: (id) => {
       return client.delete(API_PREFIX.API_HISTORY_WORK + `/${id}`);
     },
+    active: (id) => {
+      return client.put(API_PREFIX.API_HISTORY_WORK + `/${id}/active`);
+    },
+    inactive: (id) => {
+      return client.put(API_PREFIX.API_HISTORY_WORK + `/${id}/inactive`);
+    },
   },
   wageHistory: {
     getAll: (params) => {
@@ -546,6 +552,16 @@ export const api = {
     },
     delete: (id) => {
       return client.delete(API_PREFIX.API_ASSIGNMENT + `/${id}`);
+    },
+    getPersonChart: (params) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT + `/chart`, {
+        params: params,
+      });
+    },
+    getStatisticChart: (params) => {
+      return client.get(API_PREFIX.API_ASSIGNMENT + `/statistic`, {
+        params: params,
+      });
     },
   },
   leaveRequest: {

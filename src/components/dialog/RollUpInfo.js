@@ -1,4 +1,4 @@
-import { Avatar, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Avatar, CircularProgress, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { Cancel } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,13 +39,14 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
       loading: isLoading,
     }));
   };
+  const onTotalChange = (total) =>
+    setPaging((prevState) => ({
+      ...prevState,
+      total: total,
+    }));
   useEffect(() => {
     if (assignment?.id && isOpen) {
-      dispatch(fetchAssignment(assignment.id, setLoading));
-      setPaging((prevState) => ({
-        ...prevState,
-        total: rows?.rollUps?.length ?? 0,
-      }));
+      dispatch(fetchAssignment(assignment.id, onTotalChange, setLoading));
     }
     return () => {
       dispatch(setEmptyAssignment());
@@ -53,7 +54,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
   const deleteRow = async (rowId) => {
-    dispatch(deleteRollUp(rowId, assignment.id, t('message.successful_delete')));
+    dispatch(deleteRollUp(rowId, assignment.id, t('message.successful_delete'), setIsReload));
   };
   return (
     <Dialog open={isOpen} maxWidth="md" fullWidth disableBackdropClick={false}>
@@ -64,45 +65,53 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
         </div>
       </DialogTitle>
       <DialogContent>
-        <div className="d-flex flex-row py-2 align-items-center">
-          <Avatar alt="avatar" src={avatar} className="mr-3" />
-          <div>
-            <div>
-              <div style={{ fontWeight: 'bold' }}>
-                {t('label.employee_full_name')} : {fullName}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontWeight: 'bold' }}>
-                {t('label.employee_code')} : {profileCode}
-              </div>
-            </div>
+        {paging.loading ? (
+          <div className="text-center">
+            <CircularProgress />
           </div>
-        </div>
-        <div>
-          <p className="mb-1">{t('label.shift_name') + ' : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
-          <p>{t('label.from') + assignment.startCC + t('label.to') + assignment.endCC}</p>
-        </div>
-        <QTable
-          t={t}
-          columnDef={columnDef}
-          data={rows?.rollUps ?? []}
-          paging={paging}
-          onCurrentPageChange={onCurrentPageChange}
-          onPageSizeChange={onPageSizeChange}
-          disableFilter={true}
-          isPopUp={true}
-          deleteRow={deleteRow}
-          rollUpData={{
-            profileId: profileId,
-            assignmentId: assignment?.id,
-            startCC: assignment.startCC,
-            date: rows.startTime,
-            setIsReload: setIsReload,
-          }}
-          editColumnWidth={'15%'}
-          disableCreate={rows.rollUps && rows.rollUps.length > 0}
-        />
+        ) : (
+          <>
+            <div className="d-flex flex-row py-2 align-items-center">
+              <Avatar alt="avatar" src={avatar} className="mr-3" />
+              <div>
+                <div>
+                  <div style={{ fontWeight: 'bold' }}>
+                    {t('label.employee_full_name')} : {fullName}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontWeight: 'bold' }}>
+                    {t('label.employee_code')} : {profileCode}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className="mb-1">{t('label.shift_name') + ' : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
+              <p>{t('label.from') + assignment.startCC + t('label.to') + assignment.endCC}</p>
+            </div>
+            <QTable
+              t={t}
+              columnDef={columnDef}
+              data={rows?.rollUps ?? []}
+              paging={paging}
+              onCurrentPageChange={onCurrentPageChange}
+              onPageSizeChange={onPageSizeChange}
+              disableFilter={true}
+              isPopUp={true}
+              deleteRow={deleteRow}
+              rollUpData={{
+                profileId: profileId,
+                assignmentId: assignment?.id,
+                startCC: assignment.startCC,
+                date: rows.startTime,
+                setIsReload: setIsReload,
+              }}
+              editColumnWidth={'15%'}
+              disableToolBar={(rows.rollUps && rows.rollUps.length > 0) || assignment.status.includes('leave')}
+            />
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -70,22 +70,6 @@ button:focus {
   font-size: small;
 }
 
-.assignment-leave:hover {
-  border-radius: 50px;
-  background-color: #ffc59a !important;
-}
-.assignment-remote:hover {
-  border-radius: 50px;
-  background-color: #f9ff3e !important;
-}
-.assignment-overtime:hover {
-  background-color: #56f94d !important;
-  border-radius: 9px;
-}
-.assignment-remote-overtime:hover {
-  background-color: #9ce1f7 !important;
-  border-radius: 9px;
-}
 .assignment-normal:hover {
   background-color: #b1ddff !important;
   border-radius: 9px;
@@ -94,16 +78,7 @@ button:focus {
   background-color: #ecef9d !important;
   border-radius: 9px;
 }
-.assignment-error:hover {
-  background-color: #ffb1a2 !important;
-  border-radius: 9px;
-}
 .assignment-request:hover {
   background-color: #d8b8f7 !important;
-  border-radius: 9px;
-}
-
-.assignment-late:hover {
-  background-color: #fbff87 !important;
   border-radius: 9px;
 }

@@ -6,7 +6,7 @@
   "Profile": "Nhân sự",
   "Account": "Tài khoản",
   "Notification": "Thông báo",
-  "Library": "Thư viện",
+  "Store": "Lưu trữ",
   "Setting": "Cấu hình",
   "Remote": "Làm từ xa",
   "Leave": "Nghỉ làm",
@@ -353,7 +353,7 @@
     "active": "Có hiệu lực",
     "number_hours_worked": "Số giờ làm được",
     "overtime_hours": "Số giờ làm thêm",
-    "chart_shift_in_month": "Biểu đồ thống kê ca làm việc trong tháng",
+    "chart_shift_in_day": "Biểu đồ thống kê ca làm việc trong ngày",
     "number_shift_works": "Số ca đã làm",
     "number_paid_shift": "Số ca nghỉ có lương",
     "number_unpaid_shift": "Số ca nghỉ không lương",
@@ -382,7 +382,20 @@
     "normal_assignment": "Ca thông thường",
     "many_assignments": "Nhiều ca làm việc",
     "month_salary": "Xuất phiếu lương",
-    "month": "Tháng"
+    "month": "Tháng",
+    "work_time": "Thời gian làm việc",
+    "overtime_time": "Thời gian làm thêm giờ",
+    "leave_time": "Thời gian nghỉ có lương / nghỉ chế độ",
+    "absent_time": "Thời gian vắng",
+    "file_name": "Tên file",
+    "number_normal_work": "Số người đi làm bình thường",
+    "number_remote_work": "Số người làm từ xa",
+    "number_remote_overtime_work": "Số người làm thêm giờ từ xa",
+    "number_overtime_work": "Số người làm thêm giờ",
+    "number_leave_work": "Số người nghỉ",
+    "number_absence": "Số người không đi làm",
+    "overtime_assignment": "Ca làm thêm giờ"
+
   },
   "title": {
     "confirm": "Xác nhận",
@@ -403,7 +416,18 @@
     "update_contract": "Cập nhật hợp đồng",
     "new_active_wage": "Tạo đợt lương mới",
     "update_active_wage": "Cập nhật đợt lương",
-    "reset_password": "Đặt lại mật khẩu"
+    "reset_password": "Đặt lại mật khẩu",
+    "person_chart": "Biểu đồ thống kê thời gian làm việc",
+    "list_working": "Danh sách nhân viên đi làm",
+    "list_remote": "Danh sách nhân viên làm từ xa",
+    "list_remote_overtime": "Danh sách nhân viên làm thêm giờ từ xa",
+    "list_overtime": "Danh sách nhân viên làm thêm giờ",
+    "list_leave": "Danh sách nhân viên nghỉ có phép",
+    "list_absent": "Danh sách nhân viên không đi làm",
+    "type_of_column": "Ký hiệu cột",
+    "type_of_cell": "Ký hiệu ô",
+    "type_of_request": "Ký hiệu các loại đề xuất",
+    "status_of_cell": "Trạng thái của các ca bình thường"
   },
   "filter_operator": {
     "in": "trong",
@@ -414,7 +438,7 @@
     "not_null": "không null",
     "empty": "rỗng",
     "not_empty": "không rỗng",
-    "autocomplete": "tự động điền",
+    "autocomplete": "autocomplete",
     ">": "lớn hơn",
     ">=": "lớn hơn hoặc bằng",
     "<": "bé hơn",
@@ -449,7 +473,8 @@
     "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn tạo đợt lương này chứ?",
     "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?",
     "reset_password_warning_message": "Bạn thật sự muốn đặt lại mật khẩu cho tài khoản này",
-    "reset_password_row": "Đặt lại mật khẩu cho hàng này"
+    "reset_password_row": "Đặt lại mật khẩu cho hàng này",
+    "add": "Thêm mới"
 
   },
   "placeholder": {
@@ -573,7 +598,8 @@
     "select_benefit_status": "Chọn trạng thái đợt lương",
     "enter_benefit_code": "Nhập mã đợt lương",
     "select_history_working_status": "Chọn tình trạng đợt công tác",
-    "select_month": "Chọn tháng"
+    "select_month": "Chọn tháng",
+    "enter_file_name": "Nhập tên file"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -728,7 +754,8 @@
     "required_select_contract_status": "Bắt buộc phải chọn tình trạng của hợp đồng",
     "required_select_benefit_status": "Bắt buộc phải chọn tình trạng của đợt lương",
     "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
-    "required_select_month": "Bắt buộc phải chọn tháng"
+    "required_select_month": "Bắt buộc phải chọn tháng",
+    "required_enter_file_name": "Bắt buộc phải nhập tên file"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

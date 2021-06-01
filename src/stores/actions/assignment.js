@@ -151,24 +151,25 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                     date: from.clone().add(6, 'd'),
                   },
                 };
-                a.assignments.forEach((element) => {
-                  let dayTh = new Date(element.startTime).getDay();
-                  let thisDate = new Date();
-                  thisDate.setHours(23);
-                  thisDate.setMinutes(59);
-                  thisDate.setSeconds(59);
-                  let future = isBeforeTypeDate(thisDate, element.startTime); ///bug
-                  x[dayIndex[dayTh]].future = future;
-                  x[dayIndex[dayTh]].assignment.push({
-                    id: element.id,
-                    shiftName: element.shift.name,
-                    shiftCode: element.shift.code,
-                    point: element.point !== 1 && element.point !== 0 ? element.point.toFixed(2) : element.point === 0 ? 0 : 1,
-                    status: element.status,
-                    startCC: parseLocalTime(element.shift.startCC),
-                    endCC: parseLocalTime(element.shift.endCC),
+                if (a?.assignments && a.assignments.length > 0)
+                  a.assignments.forEach((element) => {
+                    let dayTh = new Date(element.startTime).getDay();
+                    let thisDate = new Date();
+                    thisDate.setHours(23);
+                    thisDate.setMinutes(59);
+                    thisDate.setSeconds(59);
+                    let future = isBeforeTypeDate(thisDate, element.startTime); ///bug
+                    x[dayIndex[dayTh]].future = future;
+                    x[dayIndex[dayTh]].assignment.push({
+                      id: element.id,
+                      shiftName: element.shift.name,
+                      shiftCode: element.shift.code,
+                      point: element.point !== 1 && element.point !== 0 ? element.point.toFixed(2) : element.point === 0 ? 0 : 1,
+                      status: element.status,
+                      startCC: parseLocalTime(element.shift.startCC),
+                      endCC: parseLocalTime(element.shift.endCC),
+                    });
                   });
-                });
                 data.push(x);
                 return a;
               })
@@ -190,6 +191,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
+        console.log(err);
         handleAssignmentExceptions(err, dispatch, 'fetchRollUpTable');
       })
       .finally(() => {
@@ -198,7 +200,7 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchAssignment = (id, setLoading) => {
+export const fetchAssignment = (id, onTotalChange, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
@@ -213,6 +215,7 @@ export const fetchAssignment = (id, setLoading) => {
               })
             : [];
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENT, payload });
+        if (onTotalChange) onTotalChange(payload.rollUps.length);
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'fetchAssignment');
@@ -273,7 +276,18 @@ export const setEmptyAssignmentInADate = () => {
     payload: {},
   };
 };
-
+export const setEmptyPersonChart = () => {
+  return {
+    type: REDUX_STATE.assignment.SET_EMPTY_PERSON_CHART,
+    payload: {},
+  };
+};
+export const setEmptyStatisticChart = () => {
+  return {
+    type: REDUX_STATE.assignment.SET_EMPTY_STATISTIC_CHART,
+    payload: {},
+  };
+};
 export const checkin = (id, success_msg) => {
   return (dispatch, getState) => {
     api.assignment
@@ -285,6 +299,89 @@ export const checkin = (id, success_msg) => {
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'checkin');
+      });
+  };
+};
+
+export const fetchPersonChart = (params, t) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .getPersonChart(params)
+      .then(({ payload }) => {
+        let labels = [];
+
+        let datasets = [
+          {
+            label: t('label.work_time'),
+            backgroundColor: '#caf7e3',
+            data: [],
+          },
+          {
+            label: t('label.overtime_time'),
+            backgroundColor: '#ffdcb8',
+            data: [],
+          },
+          {
+            label: t('label.leave_time'),
+            backgroundColor: '#ddf3f5',
+            data: [],
+          },
+          {
+            label: t('label.absent_time'),
+            backgroundColor: '#ffc1b6',
+            data: [],
+          },
+        ];
+        for (const [key, value] of Object.entries(payload)) {
+          labels.push(t('label.month') + ' ' + key);
+          datasets[0].data.push(value.work.toFixed(2));
+          datasets[1].data.push(value.overtime.toFixed(2));
+          datasets[2].data.push(value.leave.toFixed(2));
+          datasets[3].data.push(value.absent.toFixed(2));
+        }
+        let rv = {
+          labels: labels,
+          datasets: datasets,
+        };
+        dispatch({ type: REDUX_STATE.assignment.SET_PERSON_CHART, payload: rv });
+      })
+      .catch((err) => {
+        console.log(err);
+        handleAssignmentExceptions(err, dispatch, 'fetchPersonChart');
+      });
+  };
+};
+
+export const fetchStatisticChart = (params, success_msg) => {
+  return (dispatch, getState) => {
+    api.assignment
+      .getStatisticChart(params)
+      .then(({ payload }) => {
+        let data = [];
+        data.push(payload.normal.length);
+        data.push(payload.remote.length);
+        data.push(payload.remote_overtime.length);
+        data.push(payload.overtime.length);
+        data.push(payload.leave.length);
+        data.push(payload.absent.length);
+        let rv = {
+          data: data,
+          payload: payload,
+        };
+        for (const [key, value] of Object.entries(payload)) {
+          payload[key] =
+            value.length > 0
+              ? value.map((a) => {
+                  a.profileCode = a.profile.code;
+                  a.fullname = a.profile.fullname;
+                  return a;
+                })
+              : [];
+        }
+        dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload: rv });
+      })
+      .catch((err) => {
+        handleAssignmentExceptions(err, dispatch, 'fetchStatisticChart');
       });
   };
 };

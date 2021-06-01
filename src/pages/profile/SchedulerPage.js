@@ -5,8 +5,8 @@ import {
   AppointmentTooltip,
   DateNavigator,
   EditRecurrenceMenu,
-  Scheduler,
   Resources,
+  Scheduler,
   TodayButton,
   Toolbar,
   WeekView,
@@ -15,7 +15,7 @@ import { CircularProgress, IconButton } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Delete, Lens, Room } from '@material-ui/icons';
+import { Delete, Room } from '@material-ui/icons';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ import { fetchHolidays } from 'src/stores/actions/holiday';
 import { REDUX_STATE } from 'src/stores/states';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
+import NoteScheduler from './NoteSchedule';
 //TODO
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -269,31 +270,6 @@ const SchedulerPage = ({ t, history, match }) => {
       <CContainer fluid className="c-main mb-3 px-4">
         {state.isOpen && <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />}
         <Paper>
-          <div className="row pt-2">
-            <div className="col-2"></div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.TODAY_HEADER_CELL }} />
-              <p className="d-inline">{t('label.today')}</p>
-            </div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.WEEKEND_HEADER_CELL }} />
-              <p className="d-inline">{t('label.weekend')}</p>
-            </div>
-
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.HOLIDAY_HEADER }} />
-              <p className="d-inline">{t('label.holiday')}</p>
-            </div>
-
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.OVERTIME_ASSIGNMENT }} />
-              <p className="d-inline">{t('label.overtime_req')}</p>
-            </div>
-            <div className="col-2">
-              <Lens className="mr-2" style={{ color: COLORS.NORMAL_ASSIGNMENT }} />
-              <p className="d-inline">{t('label.overtime_remote_req')}</p>
-            </div>
-          </div>
           {loading ? (
             <div className="text-center pt-4">
               <CircularProgress />
@@ -319,6 +295,9 @@ const SchedulerPage = ({ t, history, match }) => {
               <Resources data={resources} />
             </Scheduler>
           )}
+          <div className="d-flex justify-content-end">
+            <NoteScheduler t={t} />
+          </div>
         </Paper>
       </CContainer>
     );

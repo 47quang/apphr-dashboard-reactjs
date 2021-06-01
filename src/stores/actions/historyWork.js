@@ -33,7 +33,7 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
       .then(({ payload }) => {
         payload.from = formatDateInput(payload.from);
         payload.to = formatDateInput(payload.to);
-        dispatch({ type: REDUX_STATE.historyWork.CREATE_HISTORY, payload });
+        //dispatch({ type: REDUX_STATE.historyWork.CREATE_HISTORY, payload });
         handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -62,7 +62,7 @@ export const updateHistoryWork = (data, success_msg) => {
   };
 };
 
-export const fetchHistoriesWork = (params, setLoading) => {
+export const fetchHistoriesWork = (params, setLoading, departments, positions) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.historyWork
@@ -73,9 +73,12 @@ export const fetchHistoriesWork = (params, setLoading) => {
           payload.map(async (h) => {
             h.from = formatDateInput(h.from);
             h.to = formatDateInput(h.to);
-            h['departments'] = await api.department.getAll({ branchId: h.branchId }).then(({ payload }) => payload);
-            h['positions'] = await api.position.getAll({ departmentId: h.departmentId }).then(({ payload }) => payload);
-            h['branches'] = await api.branch.getAll().then(({ payload }) => payload);
+            //h['departments'] = await api.department.getAll({ branchId: h.branchId }).then(({ payload }) => payload);
+            //h['positions'] = await api.position.getAll({ departmentId: h.departmentId }).then(({ payload }) => payload);
+            //h['branches'] = await api.branch.getAll().then(({ payload }) => payload);
+            h['departments'] = departments ? departments.filter((x) => x.branch.id === h.branchId) : [];
+            h['positions'] = positions ? positions.filter((x) => x.department.id === h.departmentId) : [];
+
             return h;
           });
         payload = await Promise.all(payload);
@@ -138,5 +141,32 @@ export const setEmptyHistories = () => {
   return {
     type: REDUX_STATE.historyWork.EMPTY_VALUE,
     payload: [],
+  };
+};
+
+export const activeWorking = (id, setFieldValue, success_msg) => {
+  return (dispatch, getState) => {
+    api.historyWork
+      .active(id)
+      .then(({ payload }) => {
+        if (setFieldValue) setFieldValue('status', 'active');
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'activeContract');
+      });
+  };
+};
+export const inactiveWorking = (id, setFieldValue, success_msg) => {
+  return (dispatch, getState) => {
+    api.historyWork
+      .inactive(id)
+      .then(({ payload }) => {
+        if (setFieldValue) setFieldValue('status', 'inactive');
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'inactiveContract');
+      });
   };
 };

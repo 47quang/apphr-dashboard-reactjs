@@ -4,6 +4,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Field, FieldArray, Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CommonAutoCompleteInput from 'src/components/input/CommonAutoCompleteInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -267,7 +268,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
                         isError={errors.phone && touched.phone}
                         errorMessage={t(errors.phone)}
                       />
-                      <CommonSelectInput
+                      <CommonAutoCompleteInput
                         containerClassName={'form-group col-lg-6'}
                         value={values.profileId ?? 0}
                         labelText={t('label.profileId')}

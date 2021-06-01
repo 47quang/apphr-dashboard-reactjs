@@ -30,16 +30,19 @@ export const fetchStatics = (setLoading) => {
     api.static
       .getAll()
       .then(({ payload, total }) => {
-        payload =
-          payload && payload.length > 0
-            ? payload.map((file) => {
-                let rv = {};
-                rv.file = file;
-                rv.type = file.split('.')[1];
-                return rv;
-              })
-            : [];
-        dispatch({ type: REDUX_STATE.static.SET_STATICS, payload: payload });
+        let rvPayload = [];
+        for (const [key, value] of Object.entries(payload)) {
+          let element = { key: key };
+          element.date =
+            value && value.length > 0
+              ? value.map((e) => {
+                  e.type = e.filename.split('.')[1];
+                  return e;
+                })
+              : [];
+          rvPayload.push(element);
+        }
+        dispatch({ type: REDUX_STATE.static.SET_STATICS, payload: rvPayload });
       })
       .catch((err) => {
         handleStaticExceptions(err, dispatch, 'fetchStatics');

@@ -1,15 +1,17 @@
 import CIcon from '@coreui/icons-react';
-import { CCard, CCardBody, CCol, CRow, CWidgetDropdown } from '@coreui/react';
+import { CCardBody, CWidgetDropdown } from '@coreui/react';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import MainChartExample from 'src/components/charts/MainChartExample';
+import PieChart from 'src/components/charts/PieChart';
 import AccountIcon from 'src/components/icon/Account';
 import BranchesIcon from 'src/components/icon/Branches';
 import DepartmentIcon from 'src/components/icon/Department';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES } from 'src/constants/key';
 import { countAccounts } from 'src/stores/actions/account';
+import { fetchStatisticChart } from 'src/stores/actions/assignment';
 import { countActiveContracts } from 'src/stores/actions/contract';
 import { countBranches, countDepartments, countLeaveRequests, countOvertimeRequests, countRemoteRequests } from 'src/stores/actions/dashboard';
 import { fetchLogs } from 'src/stores/actions/log';
@@ -30,6 +32,10 @@ const Dashboard = ({ t, location }) => {
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
+  const initValues = {
+    date: moment().format('YYYY-MM-DD'),
+    shiftId: '',
+  };
   const onCurrentPageChange = (pageNumber) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -53,9 +59,9 @@ const Dashboard = ({ t, location }) => {
     }));
   };
   const columnDef = [
-    { name: 'user', title: t('label.log_user'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'message', title: t('label.log_message'), align: 'left', width: '60%', wordWrapEnabled: true },
-    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
   ];
 
   const dispatch = useDispatch();
@@ -94,6 +100,11 @@ const Dashboard = ({ t, location }) => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+
+  const handleChangeShift = (values) => {
+    // console.log(values);
+    dispatch(fetchStatisticChart(values));
+  };
   return (
     <>
       <div className="m-4 p-4">
@@ -257,31 +268,25 @@ const Dashboard = ({ t, location }) => {
             </CWidgetDropdown>
           </div>
         </div>
-        <CCard>
-          <CCardBody>
-            <CRow>
-              <CCol sm="5">
-                <h4 id="traffic" className="card-title mb-0">
-                  {t('label.roll_call_chart')}
-                </h4>
-                <div className="small text-muted">Tháng 5 2021</div>
-              </CCol>
-            </CRow>
-            <MainChartExample style={{ height: '300px', marginTop: '20px' }} />
+        <div className="row">
+          <CCardBody className="col-6 ">
+            <PieChart initValues={initValues} handleFunction={handleChangeShift} />
           </CCardBody>
-        </CCard>
-        <QTable
-          t={t}
-          disableFilter={true}
-          columnDef={columnDef}
-          data={logData}
-          disableEditColum={true}
-          paging={paging}
-          onCurrentPageChange={onCurrentPageChange}
-          onPageSizeChange={onPageSizeChange}
-          disableToolBar={true}
-          linkCols={[{ name: 'message', id: 'path' }]}
-        />
+          <CCardBody className="col-6 ">
+            <QTable
+              t={t}
+              disableFilter={true}
+              columnDef={columnDef}
+              data={logData}
+              disableEditColum={true}
+              paging={paging}
+              onCurrentPageChange={onCurrentPageChange}
+              onPageSizeChange={onPageSizeChange}
+              disableToolBar={true}
+              linkCols={[{ name: 'message', id: 'path' }]}
+            />
+          </CCardBody>
+        </div>
       </div>
     </>
   );
