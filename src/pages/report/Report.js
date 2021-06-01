@@ -37,9 +37,9 @@ const Report = ({ t, location }) => {
                           return (
                             <div className="col-2" key={'date ' + id}>
                               {date.type === 'docx' ? (
-                                <img className="image" src="images/Microsoft_Word-Logo.wine.svg" alt="docx" style={{ height: '100px' }} />
+                                <img className="image" src="images/word.svg" alt="docx" style={{ height: '100px' }} />
                               ) : (
-                                <img className="image" src="images/microsoft-excel-logo.svg" alt="excel" style={{ height: '100px' }} />
+                                <img className="image" src="images/excel.svg" alt="excel" style={{ height: '100px' }} />
                               )}
 
                               <a href={`https://apphr.me/public/DEV/${date.filename}`}>

@@ -146,7 +146,7 @@ export const createLeaveRequest = (data, history, success_msg) => {
     api.leaveRequest
       .post(data)
       .then(({ payload }) => {
-        history.push(ROUTE_PATH.LEAVE + `/leave.id=${payload.id}`);
+        history.push(ROUTE_PATH.LEAVE + `/${payload.id}`);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -279,7 +279,7 @@ export const createRemoteRequest = (data, history, success_msg) => {
     api.remoteRequest
       .post(data)
       .then(({ payload }) => {
-        history.push(ROUTE_PATH.REMOTE + `/remote.id=${payload.id}`);
+        history.push(ROUTE_PATH.REMOTE + `/${payload.id}`);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -406,7 +406,7 @@ export const createOvertimeRequest = (data, history, success_msg) => {
     api.overtimeRequest
       .post(data)
       .then(({ payload }) => {
-        history.push(ROUTE_PATH.OVERTIME + `/overtime.id=${payload.id}`);
+        history.push(ROUTE_PATH.OVERTIME + `/${payload.id}`);
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

@@ -1,4 +1,5 @@
 import { RESPONSE_CODE } from 'src/constants/key';
+import { formatDate } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleStaticExceptions = (err, dispatch, functionName) => {
@@ -32,7 +33,7 @@ export const fetchStatics = (setLoading) => {
       .then(({ payload, total }) => {
         let rvPayload = [];
         for (const [key, value] of Object.entries(payload)) {
-          let element = { key: key };
+          let element = { key: formatDate(key) };
           element.date =
             value && value.length > 0
               ? value.map((e) => {
