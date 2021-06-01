@@ -1,12 +1,10 @@
-import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteAllowance, fetchAllowances, setEmptyAllowances } from 'src/stores/actions/allowance';
+import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { Chip } from '@material-ui/core';
-import { COLORS } from 'src/constants/theme';
+import { setEmptyAllowances } from 'src/stores/actions/allowance';
+import { fetchLogs } from 'src/stores/actions/log';
 
 const LogTable = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -51,7 +49,7 @@ const LogTable = ({ t }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
-        fetchAllowances(
+        fetchLogs(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -66,67 +64,20 @@ const LogTable = ({ t }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
-  const filterFunction = (params) => {
-    dispatch(
-      fetchAllowances(
-        {
-          ...params,
-          page: paging.currentPage,
-          perpage: paging.pageSize,
-        },
-        onTotalChange,
-        setLoading,
-      ),
-    );
-  };
-  const handleAfterDelete = () => {
-    dispatch(
-      fetchAllowances(
-        {
-          page: paging.currentPage,
-          perpage: paging.pageSize,
-        },
-        onTotalChange,
-        setLoading,
-      ),
-    );
-  };
-  const deleteRow = async (rowId) => {
-    dispatch(deleteAllowance(rowId, t('message.successful_delete'), handleAfterDelete));
-  };
-  const statusComponent = (value, colName) => {
-    return (
-      <Chip
-        label={value === 'tax' ? t('label.tax') : value === 'no_tax' ? t('label.no_tax') : t('label.partial_tax')}
-        className="m-0 p-0"
-        style={{
-          backgroundColor: value === 'tax' ? COLORS.FULLY_ROLL_CALL : value === 'no_tax' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
-        }}
-      />
-    );
-  };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
-          t={t}
-          columnDef={columnDef}
-          data={allowances}
-          route={ROUTE_PATH.ALLOWANCE + '/'}
-          idxColumnsFilter={[0, 1]}
-          deleteRow={deleteRow}
-          onCurrentPageChange={onCurrentPageChange}
-          onPageSizeChange={onPageSizeChange}
-          paging={paging}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_ALLOWANCE)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_ALLOWANCE)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_ALLOWANCE)}
-          filters={filters}
-          filterFunction={filterFunction}
-          statusComponent={statusComponent}
-          statusCols={['type']}
-        />
-      </CContainer>
+      <QTable
+        t={t}
+        disableFilter={true}
+        columnDef={columnDef}
+        data={logData}
+        disableEditColum={true}
+        paging={paging}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
+        disableToolBar={true}
+        linkCols={[{ name: 'message' }]}
+      />
     );
   else return <Page404 />;
 };

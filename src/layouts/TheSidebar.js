@@ -42,7 +42,8 @@ const TheSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-        <img src="images/long_logo_web.svg" alt="" style={{ height: '45px' }} />
+        <img className="c-sidebar-brand-full" name="logo-negative" src="images/long_logo.png" alt="" style={{ height: '45px' }} />
+        <img className="c-sidebar-brand-minimized" name="sygnet" src="images/short_logo.png" alt="" style={{ height: '45px' }} />
       </CSidebarBrand>
 
       <CSidebarNav>

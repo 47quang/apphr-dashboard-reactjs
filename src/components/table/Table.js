@@ -174,9 +174,11 @@ const ExportAllSalaryPanel = ({ t, disableExportAllSalary }) => {
           <IconButton
             hidden={!disableExportAllSalary}
             className="py-0 px-2"
+            title={t('title.export_all_salary')}
             onClick={() => {
               setOpenExportEmployeeSalary(true);
             }}
+            style={{ width: 35, height: 35 }}
           >
             <AccountBalanceWallet color={'primary'} />
           </IconButton>
@@ -201,11 +203,11 @@ const Label = ({ column, className, ...props }) => {
       className={classNames(className)}
       {...props}
       style={{
-        backgroundColor: column.today ? COLORS.TODAY_HEADER_CELL : column.holiday ? COLORS.HOLIDAY_HEADER : '',
+        backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : column.today ? COLORS.TODAY_HEADER_CELL : '',
         borderStyle: 'solid',
         borderLeftColor: '#D8DBE0',
         borderTopColor: '#D8DBE0',
-        borderRightColor: column.today ? COLORS.TODAY_HEADER_CELL : column.holiday ? COLORS.HOLIDAY_HEADER : 'white',
+        borderRightColor: column.holiday ? COLORS.HOLIDAY_HEADER : column.today ? COLORS.TODAY_HEADER_CELL : 'white',
         borderBottomColor: '#D8DBE0',
         borderWidth: 'thin',
       }}
@@ -345,11 +347,68 @@ const QTable = (props) => {
 
   const LinkFormatter = ({ row, value, column }) => {
     let col = linkCols.filter((x) => x.name === column.name)[0];
+    const getPath = (model, modelId) => {
+      switch (model) {
+        case 'leave-form': {
+          return '/proposal/leave/' + modelId;
+        }
+        case 'remote-form': {
+          return '/proposal/remote/' + modelId;
+        }
+        case 'overtime-form': {
+          return '/proposal/overtime/' + modelId;
+        }
+        case 'branch': {
+          return '/setting/branch/' + modelId;
+        }
+        case 'department': {
+          return '/setting/department/' + modelId;
+        }
+        case 'position': {
+          return '/setting/position/' + modelId;
+        }
+        case 'shift': {
+          return '/setting/shift/' + modelId;
+        }
+        case 'holiday': {
+          return '/setting/holiday/' + modelId;
+        }
+        case 'role': {
+          return '/setting/role/' + modelId;
+        }
+        case 'type-article': {
+          return '/setting/articleType/' + modelId;
+        }
+        case 'attribute': {
+          return '/setting/attribute/' + modelId;
+        }
+        case 'wage': {
+          return '/setting/wage/' + modelId;
+        }
+        case 'allowance': {
+          return '/setting/allowance/' + modelId;
+        }
+        case 'user': {
+          return '/account/' + modelId;
+        }
+        case 'contract': {
+          return '/contract/' + modelId;
+        }
+        case 'wage-history': {
+          return '/benefit/' + modelId;
+        }
+        default: {
+        }
+      }
+    };
     if (value) {
       if (col.route) return <Link to={`${col.route}${row[col.id]}`}>{value}</Link>;
       else {
         if (row[col.id]) return <Link to={`${row[col.id]}`}>{value}</Link>;
-        else return <p>{value}</p>;
+        else {
+          if (row?.model) return <Link to={`${getPath(row.model, row.modelId)}`}>{value}</Link>;
+          return <p>{value}</p>;
+        }
       }
     }
     return t('message.empty_table');
@@ -385,7 +444,7 @@ const QTable = (props) => {
       setOpenWarning(!openWarning);
     };
     const handleConfirmResetPassWord = (e) => {
-      dispatch(resetPassword(+row.id));
+      dispatch(resetPassword(+row.id, t('message.successful_reset_password')));
       setOpenResetPassWordWarning(!openResetPassWordWarning);
     };
     const handleCancelResetPasswod = () => {
@@ -460,7 +519,7 @@ const QTable = (props) => {
         )}
         {isPopUp ? (
           <IconButton
-            className="mx-2 my-0 p-0"
+            className=""
             hidden={disableEdit}
             title={t('message.edit_row')}
             onClick={() => {
@@ -499,7 +558,7 @@ const QTable = (props) => {
             onClick={() => {
               setOpenExportEmployeeSalary(true);
             }}
-            title={t('message.delete_row')}
+            title={t('message.export_wage_row')}
             style={{ width: 35, height: 35 }}
           >
             <MonetizationOn />
