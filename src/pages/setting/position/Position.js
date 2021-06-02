@@ -6,6 +6,12 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import Page404 from 'src/pages/page404/Page404';
 import { deletePosition, fetchPositions } from 'src/stores/actions/position';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Position = ({ t, location, history }) => {
   const columnDef = [
     { name: 'code', title: t('label.position_code'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -108,7 +114,7 @@ const Position = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_POSITION))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           columnDef={columnDef}
           data={positions.map((p) => {
             p.branchName = p.branch?.name;

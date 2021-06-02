@@ -6,6 +6,12 @@ import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constan
 import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
 import Page404 from '../page404/Page404';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Account = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
@@ -124,7 +130,7 @@ const Account = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDefOfAccounts}
           data={accounts}

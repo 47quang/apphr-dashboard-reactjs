@@ -7,6 +7,12 @@ import { deleteArticleType, fetchTypes } from 'src/stores/actions/articleType';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const ArticleType = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
@@ -124,7 +130,7 @@ const ArticleType = ({ t }) => {
   if (permissionIds.includes(PERMISSION.LIST_TYPE_ARTICLE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={types}

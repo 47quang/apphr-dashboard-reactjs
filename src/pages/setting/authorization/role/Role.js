@@ -6,6 +6,12 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import Page404 from 'src/pages/page404/Page404';
 import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Role = ({ t, location, history }) => {
   const columnDef = [
     { name: 'code', title: t('label.role_code'), align: 'left', width: '20%', wordWrapEnabled: true },
@@ -124,7 +130,7 @@ const Role = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_ROLE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={roles}

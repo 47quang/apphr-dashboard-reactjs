@@ -3,8 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { setEmptyAllowances } from 'src/stores/actions/allowance';
-import { fetchLogs } from 'src/stores/actions/log';
+import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
+
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const LogTable = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -45,7 +50,6 @@ const LogTable = ({ t }) => {
       loading: isLoading,
     }));
   };
-
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
@@ -59,14 +63,14 @@ const LogTable = ({ t }) => {
         ),
       );
     return () => {
-      dispatch(setEmptyAllowances());
+      dispatch(setEmptyLogs());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
 
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
-      <QTable
+      <MemoizedQTable
         t={t}
         disableFilter={true}
         columnDef={columnDef}

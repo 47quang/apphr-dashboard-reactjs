@@ -6,7 +6,6 @@ import {
   PagingPanel,
   Table,
   TableColumnReordering,
-  TableColumnVisibility,
   TableEditColumn,
   TableEditRow,
   TableFixedColumns,
@@ -23,7 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
@@ -276,34 +275,16 @@ const QTable = (props) => {
     currentPage,
     onTotalChange,
   } = props;
-
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
-
+  // console.log('QTABLE', data, columnDef);
   const [state, setState] = useState({
-    columns: columnDef,
     selection: [],
     editingRowIds: [],
-    hiddenColumnNames: [],
   });
-
-  const setHiddenColumnNames = (hiddenColumns) => {
-    setState((preState) => ({
-      ...preState,
-      hiddenColumnNames: hiddenColumns,
-    }));
-  };
   const [rowChanges, setRowChanges] = useState({});
-
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
-
-  useEffect(() => {
-    setState((preState) => ({
-      ...preState,
-      columns: columnDef,
-    }));
-  }, [columnDef]);
 
   const tableColumnExtensions = columnDef
     ? columnDef.map((col, idx) => {
@@ -558,7 +539,7 @@ const QTable = (props) => {
             onClick={() => {
               setOpenExportEmployeeSalary(true);
             }}
-            title={t('message.export_wage_row')}
+            title={t('title.export_wage_row')}
             style={{ width: 35, height: 35 }}
           >
             <MonetizationOn />
@@ -603,7 +584,7 @@ const QTable = (props) => {
           </div>
         )}
 
-        <Grid rows={data} columns={state.columns} getRowId={(row) => row.id}>
+        <Grid rows={data} columns={columnDef} getRowId={(row) => row.id}>
           <DateTypeProvider for={dateColumns} />
           <StatusProvider for={statusCols ?? []} />
           <MultiValuesTypeProvider for={multiValuesColumns} />
@@ -649,7 +630,6 @@ const QTable = (props) => {
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
           {paddingColumnHeader ? <TableHeaderRow cellComponent={Label} /> : <TableHeaderRow />}
-          <TableColumnVisibility defaultHiddenColumnNames={state.hiddenColumnNames} onHiddenColumnNamesChange={setHiddenColumnNames} />
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (
             <div />

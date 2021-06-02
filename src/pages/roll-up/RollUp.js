@@ -12,13 +12,18 @@ import RollUpInfo from 'src/components/dialog/RollUpInfo';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PROFILE_TABS, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
-import { fetchProfiles } from 'src/stores/actions/account';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
 import {} from 'src/stores/actions/rollUp';
 import { backgroundColor, backgroundColorHover, borderColor, dotColor, renderIcon } from 'src/utils/colorOfCell';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
+
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const RollUp = ({ t, location }) => {
   let today = moment();
@@ -32,6 +37,7 @@ const RollUp = ({ t, location }) => {
     total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
+    columnDefFlag: false,
   });
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
@@ -95,121 +101,121 @@ const RollUp = ({ t, location }) => {
     },
   };
 
-  const changeColDef = (fromDate) => [
-    { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
-    {
-      name: 'sunday',
-      title: [t('label.sunday'), fromDate.clone().startOf('week').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'monday',
-      title: [t('label.monday'), fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(1, 'd'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'tuesday',
-      title: [t('label.tuesday'), fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(2, 'd'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'wednesday',
-      title: [t('label.wednesday'), fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(3, 'd'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'thursday',
-      title: [t('label.thursday'), fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(4, 'd'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'friday',
-      title: [t('label.friday'), fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
-          isSameBeforeTypeDate(fromDate.clone().startOf('week').add(5, 'd'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-    {
-      name: 'saturday',
-      title: [t('label.saturday'), fromDate.clone().endOf('week').format('DD/MM')],
-      align: 'left',
-      width: '12%',
-      wordWrapEnabled: true,
-      today: today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
-      holiday: holidays.find(
-        (e) =>
-          isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
-          isSameBeforeTypeDate(fromDate.clone().endOf('week').format('YYYY-MM-DD'), e.endDate.replace('Z', '')),
-      )
-        ? true
-        : false,
-    },
-  ];
+  const changeColDef = (fromDate) => {
+    return [
+      { name: 'code', title: t('label.employee'), align: 'left', width: '16%', wordWrapEnabled: true },
+      {
+        name: 'sunday',
+        title: [t('label.sunday'), fromDate.clone().startOf('week').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'monday',
+        title: [t('label.monday'), fromDate.clone().startOf('week').add(1, 'd').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week').add(1, 'd'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'tuesday',
+        title: [t('label.tuesday'), fromDate.clone().startOf('week').add(2, 'd').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week').add(2, 'd'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'wednesday',
+        title: [t('label.wednesday'), fromDate.clone().startOf('week').add(3, 'd').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week').add(3, 'd'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'thursday',
+        title: [t('label.thursday'), fromDate.clone().startOf('week').add(4, 'd').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week').add(4, 'd'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'friday',
+        title: [t('label.friday'), fromDate.clone().startOf('week').add(5, 'd').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
+            isSameBeforeTypeDate(fromDate.clone().startOf('week').add(5, 'd'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+      {
+        name: 'saturday',
+        title: [t('label.saturday'), fromDate.clone().endOf('week').format('DD/MM')],
+        align: 'left',
+        width: '12%',
+        wordWrapEnabled: true,
+        today: today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
+        holiday: holidays.find(
+          (e) =>
+            isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
+            isSameBeforeTypeDate(fromDate.clone().endOf('week').format('YYYY-MM-DD'), e.endDate.replace('Z', '')),
+        )
+          ? true
+          : false,
+      },
+    ];
+  };
 
   let columnDefOfRollUp = useRef();
   columnDefOfRollUp.current = changeColDef(fromDate);
 
   useEffect(() => {
-    dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
-
     dispatch(
       fetchHolidays({
         page: 0,
@@ -425,7 +431,7 @@ const RollUp = ({ t, location }) => {
           
         </div>
       </div> */}
-      <QTable
+      <MemoizedQTable
         t={t}
         columnDef={columnDefOfRollUp.current}
         data={data}

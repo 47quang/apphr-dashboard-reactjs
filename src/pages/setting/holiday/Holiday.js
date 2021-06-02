@@ -6,6 +6,12 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import Page404 from 'src/pages/page404/Page404';
 import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const HolidayPage = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
@@ -128,11 +134,11 @@ const HolidayPage = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_HOLIDAY))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={holidays}
-          route={ROUTE_PATH.HOLIDAY + '/tab1.id='}
+          route={ROUTE_PATH.HOLIDAY}
           idxColumnsFilter={[1]}
           dateCols={[3, 2]}
           deleteRow={deleteRow}

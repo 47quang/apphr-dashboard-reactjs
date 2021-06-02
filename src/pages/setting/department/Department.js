@@ -6,6 +6,12 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import Page404 from 'src/pages/page404/Page404';
 import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Department = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
@@ -127,7 +133,7 @@ const Department = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_DEPARTMENT))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={departments.map((d) => {
