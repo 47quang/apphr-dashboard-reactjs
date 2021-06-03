@@ -19,6 +19,12 @@ import { COLORS } from 'src/constants/theme';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Proposal = ({ t, location, match, type, profileId }) => {
   if (!type) type = match.path.split('/')[2];
   const columnDefOfProfiles =
@@ -334,7 +340,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   return (
     <CContainer fluid className="c-main mb-3 px-4">
       {type === 'leave' ? (
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDefOfProfiles}
           data={proposals}

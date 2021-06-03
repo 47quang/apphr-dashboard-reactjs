@@ -56,7 +56,6 @@ const EditDepartment = React.lazy(() => import('src/pages/setting/department/Edi
 const Holiday = React.lazy(() => import('src/pages/setting/holiday/HolidayTabs'));
 const NewHoliday = React.lazy(() => import('src/pages/setting/holiday/NewHoliday'));
 const EditHoliday = React.lazy(() => import('src/pages/setting/holiday/UpdateHoliday'));
-const EditHolidaySetting = React.lazy(() => import('src/pages/setting/holiday/HolidaySettingForm'));
 
 const Branch = React.lazy(() => import('src/pages/setting/branch/Branch'));
 const NewBranch = React.lazy(() => import('src/pages/setting/branch/NewBranch'));
@@ -202,16 +201,10 @@ const routes = [
     component: Department,
   },
   {
-    path: ROUTE_PATH.HOLIDAY + '/tab1.id=create',
+    path: ROUTE_PATH.HOLIDAY_CREATE,
     exact: true,
     name: ROUTE_NAME.NEW_HOLIDAY,
     component: NewHoliday,
-  },
-  {
-    path: ROUTE_PATH.HOLIDAY_UPDATE_SETTING,
-    exact: true,
-    name: ROUTE_NAME.HOLIDAY_SETTINGS_UPDATE,
-    component: EditHolidaySetting,
   },
   {
     path: ROUTE_PATH.HOLIDAY_UPDATE,

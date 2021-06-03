@@ -1,28 +1,31 @@
 import { CCard, CCardBody, CCardHeader } from '@coreui/react';
 import { CChartPie } from '@coreui/react-chartjs';
-import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { SelectShift } from 'src/schema/formSchema';
-import { fetchShifts } from 'src/stores/actions/shift';
+import { setEmptyStatisticChart } from 'src/stores/actions/assignment';
 import StatisticAssignmentTable from '../dialog/StatisticAssignmentTable';
-import CommonSelectInput from '../input/CommonSelectInput';
-import CommonTextInput from '../input/CommonTextInput';
+import FilterPieChart from './FilterPieChart';
+
+const equalChart = (prevChart, nextChart) => {
+  return JSON.stringify(prevChart.datasets[0].data) === JSON.stringify(nextChart.datasets[0].data);
+};
+
+const MemoizedCChartPie = React.memo(CChartPie, equalChart);
 
 const PieChart = ({ initValues, handleFunction }) => {
   const { t } = useTranslation();
-  const shifts = useSelector((state) => state.shift.shifts);
   const chart = useSelector((state) => state.assignment.chart);
   const [state, setState] = useState({
     isOpen: false,
     data: [],
     title: '',
   });
-
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchShifts({ day: new Date(initValues.date).getDay() + 1 }));
+    return () => {
+      dispatch(setEmptyStatisticChart());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // console.log('chart', chart);
@@ -99,74 +102,8 @@ const PieChart = ({ initValues, handleFunction }) => {
         ) : (
           <></>
         )}
-        <Formik
-          initialValues={initValues}
-          validationSchema={SelectShift}
-          enableReinitialize
-          onSubmit={(values) => {
-            handleFunction(values);
-          }}
-        >
-          {(props) => {
-            props.isCreate = true;
-            // console.log('errors', props.errors);
-
-            return (
-              <Form className="p-0 m-0">
-                <div className="row">
-                  <CommonTextInput
-                    containerClassName={'form-group col-xl-5'}
-                    value={props.values.date ?? ''}
-                    onBlur={props.handleBlur(`date`)}
-                    onChange={(e) => {
-                      dispatch(fetchShifts({ day: new Date(e.target.value).getDay() + 1 }));
-                      props.handleChange(`date`)(e);
-                      props.setFieldValue('shiftId', '');
-                    }}
-                    inputID={`date`}
-                    labelText={t('label.start_date')}
-                    inputType={'date'}
-                    inputClassName={'form-control'}
-                    isRequiredField
-                    isTouched={props.touched.date}
-                    isError={props.errors.date && props.touched.date}
-                    errorMessage={t(props.errors.date)}
-                  />
-                  <CommonSelectInput
-                    containerClassName={'form-group col-xl-5'}
-                    value={props.values.shiftId ?? ''}
-                    onBlur={props.handleBlur(`shiftId`)}
-                    onChange={(e) => {
-                      // props.handleSubmit();
-                      props.handleChange(`shiftId`)(e);
-                    }}
-                    inputID={`shiftId`}
-                    labelText={t('label.shift')}
-                    selectClassName={'form-control'}
-                    placeholder={t('placeholder.select_shift')}
-                    isRequiredField
-                    isTouched={props.touched.shiftId}
-                    isError={props.errors.shiftId && props.touched.shiftId}
-                    errorMessage={t(props.errors.shiftId)}
-                    lstSelectOptions={shifts}
-                  />
-                  <div className="col-xl-2 d-flex align-items-start pt-4 mt-1">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={(e) => {
-                        props.handleSubmit();
-                      }}
-                    >
-                      {t('label.search')}
-                    </button>
-                  </div>
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
-        <CChartPie
+        <FilterPieChart initValues={initValues} handleFunction={handleFunction} />
+        <MemoizedCChartPie
           datasets={[
             {
               backgroundColor: ['#caf7e3', '#f8ede3', '#f6dfeb', '#a1cae2', '#fdffbc', '#f4a9a8'],

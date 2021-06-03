@@ -8,6 +8,12 @@ import { COLORS } from 'src/constants/theme';
 import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
 import Page404 from '../page404/Page404';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Contract = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfAccounts = [
@@ -212,7 +218,7 @@ const Contract = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDefOfAccounts}
           data={contracts}

@@ -4,6 +4,12 @@ import React, { useState } from 'react';
 import { PAGE_SIZES } from 'src/constants/key';
 import QTable from '../table/Table';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const StatisticAssignmentTable = ({ t, isOpen, handleClose, data, title }) => {
   const columnDef = [
     { name: 'profileCode', title: t('label.employee_code'), align: 'left', width: '30%', wordWrapEnabled: true },
@@ -41,7 +47,7 @@ const StatisticAssignmentTable = ({ t, isOpen, handleClose, data, title }) => {
         </div>
       </DialogTitle>
       <DialogContent>
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={data ?? []}

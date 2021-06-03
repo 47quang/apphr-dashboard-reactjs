@@ -9,6 +9,12 @@ import { deletePayment, fetchPayments } from 'src/stores/actions/payment';
 import { Chip } from '@material-ui/core';
 import { COLORS } from 'src/constants/theme';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const OtherFee = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
@@ -153,7 +159,7 @@ const OtherFee = ({ t }) => {
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={payments}

@@ -206,6 +206,7 @@ export const fetchAssignment = (id, onTotalChange, setLoading) => {
     api.assignment
       .get(id)
       .then(({ payload }) => {
+        payload.branch = payload.shift.branch.code + ' - ' + payload.shift.branch.name;
         payload.rollUps =
           payload.rollUps && payload.rollUps.length > 0
             ? payload.rollUps.map((rollUp) => {

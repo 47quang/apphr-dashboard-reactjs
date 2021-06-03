@@ -146,8 +146,7 @@ export const ROUTE_PATH = {
   ROLE_CREATE: '/setting/role' + CREATE,
 
   HOLIDAY: '/setting/holiday',
-  HOLIDAY_UPDATE_SETTING: '/setting/holiday/tab2:id',
-  HOLIDAY_UPDATE: '/setting/holiday/tab1:id',
+  HOLIDAY_UPDATE: '/setting/holiday/:id',
   HOLIDAY_CREATE: '/setting/holiday' + CREATE,
 
   WAGE: '/setting/wage',

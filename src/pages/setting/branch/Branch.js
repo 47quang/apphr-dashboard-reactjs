@@ -6,6 +6,13 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
+
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Branch = ({ t, history }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
@@ -126,7 +133,7 @@ const Branch = ({ t, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_BRANCH))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={branches}

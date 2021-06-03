@@ -6,6 +6,13 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteArticle, fetchArticles } from 'src/stores/actions/article';
 import PropTypes from 'prop-types';
 import Page404 from '../page404/Page404';
+
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Notification = ({ t }) => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.article.articles);
@@ -137,7 +144,7 @@ const Notification = ({ t }) => {
   if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDef}
           data={articles}

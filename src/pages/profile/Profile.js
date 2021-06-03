@@ -8,6 +8,12 @@ import { COLORS } from 'src/constants/theme';
 import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actions/profile';
 import Page404 from '../page404/Page404';
 
+const equalQTable = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+};
+
+const MemoizedQTable = React.memo(QTable, equalQTable);
+
 const Profile = ({ t, location }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const columnDefOfProfiles = [
@@ -184,7 +190,7 @@ const Profile = ({ t, location }) => {
   if (permissionIds.includes(PERMISSION.LIST_PROFILE))
     return (
       <CContainer fluid className="c-main mb-3 px-4">
-        <QTable
+        <MemoizedQTable
           t={t}
           columnDef={columnDefOfProfiles}
           data={profiles}
