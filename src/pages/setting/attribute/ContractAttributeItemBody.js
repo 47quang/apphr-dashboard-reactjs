@@ -24,7 +24,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
     },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

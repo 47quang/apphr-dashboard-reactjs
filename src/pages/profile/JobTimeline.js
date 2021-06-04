@@ -710,7 +710,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -763,7 +763,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 props.isCreate = true;
                 return (
                   <form id="newContract" hidden={true} className="p-0 m-0">
-                    <div className="shadow bg-white rounded mx-4 p-4">
+                    <div className="shadow bg-white rounded p-4">
                       <h5>{t('label.create_new')}.</h5>
                       <hr className="mt-1" />
                       <BodyContract {...props} />
@@ -808,7 +808,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 {(props) => {
                   return (
                     <form className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                      <div className="shadow bg-white rounded p-4">
                         <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                           {props.values.code + ' - ' + props.values.fullname}
                         </div>

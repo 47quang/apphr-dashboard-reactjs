@@ -1,4 +1,4 @@
-import { CCardBody } from '@coreui/react';
+import { CCardBody, CContainer } from '@coreui/react';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,7 +21,7 @@ const Dashboard = ({ t, location }) => {
   };
   return (
     <>
-      <div className="m-4 p-4">
+      <CContainer fluid className="c-main p-4 m-auto">
         <Count t={t} />
         <div className="row">
           <CCardBody className="col-6 ">
@@ -31,7 +31,7 @@ const Dashboard = ({ t, location }) => {
             <LogTable t={t} />
           </CCardBody>
         </div>
-      </div>
+      </CContainer>
     </>
   );
 };

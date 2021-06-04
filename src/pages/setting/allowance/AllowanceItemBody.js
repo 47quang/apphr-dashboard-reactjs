@@ -15,7 +15,7 @@ const AllowanceItemBody = ({ t, allowanceRef, allowance, validationSchema, submi
     { id: 'partial_tax', name: t('label.partial_tax') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

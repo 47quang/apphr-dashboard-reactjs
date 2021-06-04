@@ -164,7 +164,7 @@ const Allowance = ({ t }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <MemoizedQTable
           t={t}
           columnDef={columnDef}

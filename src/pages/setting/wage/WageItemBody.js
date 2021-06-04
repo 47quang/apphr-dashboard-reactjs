@@ -14,7 +14,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons,
     { id: 'by_month', name: t('label.by_month') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

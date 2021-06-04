@@ -46,7 +46,7 @@ const NewLeaveForm = ({ t, history, match }) => {
   }, []);
 
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik

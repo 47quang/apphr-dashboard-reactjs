@@ -126,7 +126,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
         },
       ];
   const returnComponent = (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

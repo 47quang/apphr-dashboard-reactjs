@@ -113,7 +113,7 @@ const Position = ({ t, location, history }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_POSITION))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <MemoizedQTable
           columnDef={columnDef}
           data={positions.map((p) => {

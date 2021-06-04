@@ -6,7 +6,9 @@ import Page404 from 'src/pages/page404/Page404';
 import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -15,11 +17,11 @@ const LogTable = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const logData = useSelector((state) => state.log.data);
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
-  ];
+  ]);
 
   const [paging, setPaging] = useState({
     currentPage: 0,
@@ -67,7 +69,13 @@ const LogTable = ({ t }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    setColumnDef([
+      { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
       <MemoizedQTable

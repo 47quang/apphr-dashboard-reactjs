@@ -9,27 +9,24 @@ import { deleteProfile, fetchProfiles, setEmptyProfiles } from 'src/stores/actio
 import Page404 from '../page404/Page404';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Profile = ({ t, location }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDefOfProfiles = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.employee_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'lastname', title: t('label.employee_last_name'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'firstname', title: t('label.employee_first_name'), align: 'left', width: '10%', wordWrapEnabled: true },
-    // { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'gender', title: t('label.sex'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'positionId', title: t('label.position'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'departmentId', title: t('label.department'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'branchId', title: t('label.branch'), align: 'left', width: '15%', wordWrapEnabled: true },
-    // { name: 'status', title: t('label.status2'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -58,13 +55,8 @@ const Profile = ({ t, location }) => {
       operates: operatesText,
       type: 'text',
     },
-    lastname: {
-      title: t('label.employee_last_name'),
-      operates: operatesText,
-      type: 'text',
-    },
-    firstname: {
-      title: t('label.employee_first_name'),
+    fullname: {
+      title: t('label.employee_full_name'),
       operates: operatesText,
       type: 'text',
     },
@@ -131,6 +123,17 @@ const Profile = ({ t, location }) => {
     }));
   };
   useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.employee_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'lastname', title: t('label.employee_last_name'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'firstname', title: t('label.employee_first_name'), align: 'left', width: '10%', wordWrapEnabled: true },
+      { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'gender', title: t('label.sex'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
+  useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_PROFILE))
       dispatch(
         fetchProfiles(
@@ -189,10 +192,10 @@ const Profile = ({ t, location }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_PROFILE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfProfiles}
+          columnDef={columnDef}
           data={profiles}
           route={ROUTE_PATH.PROFILE + '/'}
           deleteRow={deleteRow}

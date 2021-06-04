@@ -129,7 +129,7 @@ const Account = ({ t, location, history }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main p-4 m-auto">
         <MemoizedQTable
           t={t}
           columnDef={columnDefOfAccounts}

@@ -256,10 +256,10 @@ const AddressInfo = ({ t, history, match }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto row">
-        <div className="col-xl-7">
-          <div className="shadow bg-white rounded p-4 mb-4">
+        <div className="col-xl-7 p-0">
+          <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('title.permanent_address')} />
 
             <Formik
@@ -424,7 +424,7 @@ const AddressInfo = ({ t, history, match }) => {
             </Formik>
           </div>
         </div>
-        <div className={'col-xl-5'}>
+        <div className={'col-xl-5 pl-4 pr-0'}>
           <div className="shadow bg-white rounded p-4">
             <FormHeader text={t('title.contact_channel')} />
             {contacts && contacts.length > 0 && contacts.map((contact, index) => <div key={index}>{getContactFormUpdate(contact)}</div>)}

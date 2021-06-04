@@ -66,7 +66,7 @@ const UpdateNotification = ({ t, location, history, match }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_ARTICLE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <div className="m-auto col-lg-12">
           <NotificationForm
             t={t}

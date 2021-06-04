@@ -50,7 +50,7 @@ const OtherInfo = ({ t, match, history }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main mb-3 px-4">
+        <CContainer fluid className="c-main m-auto p-4">
           <div className="m-auto">
             <div className="shadow bg-white rounded p-4">
               <Formik

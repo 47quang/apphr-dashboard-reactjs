@@ -20,14 +20,16 @@ import { COLORS } from 'src/constants/theme';
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Proposal = ({ t, location, match, type, profileId }) => {
   if (!type) type = match.path.split('/')[2];
-  const columnDefOfProfiles =
+  const [columnDef, setColumnDef] = useState(
     type === 'leave'
       ? [
           { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -45,7 +47,8 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
           { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
-        ];
+        ],
+  );
   const dispatch = useDispatch();
   const proposals = useSelector((state) => state.request[type + 'Requests']);
   const [paging, setPaging] = useState({
@@ -168,6 +171,29 @@ const Proposal = ({ t, location, match, type, profileId }) => {
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef(
+      type === 'leave'
+        ? [
+            { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
+            { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+            // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+            // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
+          ]
+        : [
+            { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
+            { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+            // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
+            { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
+            // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
+          ],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
   useEffect(() => {
     if (type === 'leave')
       profileId
@@ -338,11 +364,11 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
       {type === 'leave' ? (
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfProfiles}
+          columnDef={columnDef}
           data={proposals}
           route={match.url + '/'}
           disableDelete={true}
@@ -357,9 +383,9 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           fixed={true}
         />
       ) : (
-        <QTable
+        <MemoizedQTable
           t={t}
-          columnDef={columnDefOfProfiles}
+          columnDef={columnDef}
           data={proposals}
           route={match.url + '/'}
           idxColumnsFilter={[0, 1, 3]}

@@ -72,6 +72,7 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
                   onClick={(e) => {
                     props.handleSubmit();
                   }}
+                  style={{ width: '95%' }}
                 >
                   {t('label.search')}
                 </button>

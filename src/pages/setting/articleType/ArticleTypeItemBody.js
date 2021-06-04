@@ -9,7 +9,7 @@ import { generateCode } from 'src/utils/randomCode';
 
 const ArticleTypeItemBody = ({ t, typeRef, type, validationSchema, submitForm, buttons, loading, isCreate }) => {
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

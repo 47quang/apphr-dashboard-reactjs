@@ -15,12 +15,13 @@ import { COLORS } from 'src/constants/theme';
 import { fetchRollUpTable, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchHolidays } from 'src/stores/actions/holiday';
 import { setTabName } from 'src/stores/actions/profile';
-import {} from 'src/stores/actions/rollUp';
 import { backgroundColor, backgroundColorHover, borderColor, dotColor, renderIcon } from 'src/utils/colorOfCell';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -214,7 +215,10 @@ const RollUp = ({ t, location }) => {
 
   let columnDefOfRollUp = useRef();
   columnDefOfRollUp.current = changeColDef(fromDate);
-
+  useEffect(() => {
+    columnDefOfRollUp.current = changeColDef(fromDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
   useEffect(() => {
     dispatch(
       fetchHolidays({
@@ -424,13 +428,7 @@ const RollUp = ({ t, location }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main px-4 py-2">
-      {/* <div className="row d-flex align-items-center">
-        <div className="col-3">
-          <h2 className="d-flex justify-content-start">{t('label.roll_call_table')}</h2>
-          
-        </div>
-      </div> */}
+    <CContainer fluid className="c-main p-4 m-auto">
       <MemoizedQTable
         t={t}
         columnDef={columnDefOfRollUp.current}

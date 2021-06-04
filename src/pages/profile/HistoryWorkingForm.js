@@ -52,12 +52,11 @@ const HistoryWorkingForm = ({ t, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
-      const preLoading = async () => {
+      (async () => {
         dispatch(fetchBranches());
         dispatch(fetchPositions());
         dispatch(fetchDepartments());
-      };
-      preLoading();
+      })();
       dispatch(
         fetchHistoriesWork(
           {
@@ -212,15 +211,14 @@ const HistoryWorkingForm = ({ t, match }) => {
   const newHistoryRef = useRef();
 
   const handleResetNewHistory = () => {
-    // newHistoryRef.current.handleReset();
-    // document.getElementById('newHistory').hidden = true;
-    // document.getElementById('addBtn').disabled = false;
     dispatch(
       fetchHistoriesWork(
         {
           profileId: profileId,
         },
         setLoading,
+        departments,
+        positions,
       ),
     );
   };
@@ -237,7 +235,7 @@ const HistoryWorkingForm = ({ t, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main p-4 m-auto">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -267,7 +265,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                   props.isCreate = true;
                   return (
                     <Form id="newHistory" hidden={true} className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4">
+                      <div className="shadow bg-white rounded p-4">
                         <h5>{t('label.create_new')}.</h5>
 
                         <hr className="mt-1" />
@@ -278,7 +276,9 @@ const HistoryWorkingForm = ({ t, match }) => {
                             type: 'button',
                             className: `btn btn-primary  mx-2`,
                             onClick: () => {
-                              handleResetNewHistory();
+                              props.handleReset();
+                              document.getElementById('newHistory').hidden = true;
+                              document.getElementById('addBtn').disabled = false;
                             },
                             name: t('label.cancel'),
                             position: 'right',
@@ -313,7 +313,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                       {(props) => {
                         return (
                           <Form className="p-0 m-0">
-                            <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                            <div className="shadow bg-white rounded p-4">
                               <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                                 <Switch
                                   checked={props.values.status === 'active'}

@@ -1,8 +1,9 @@
 import { CContainer } from '@coreui/react';
+import { CircularProgress } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CommonCheckbox from 'src/components/checkox/CommonCheckbox';
+import UploadImageSingle from 'src/components/button/UploadImageSingle';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
@@ -10,14 +11,12 @@ import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { BasicInfoCreateSchema } from 'src/schema/formSchema';
 import { fetchProvinces } from 'src/stores/actions/location';
+import { createProfile, fetchProfile, setEmptyProfile, updateProfile } from 'src/stores/actions/profile';
 import { REDUX_STATE } from 'src/stores/states/index';
 import { renderButtons } from 'src/utils/formUtils';
-import { joinClassName } from 'src/utils/stringUtils';
-import { createProfile, fetchProfile, setEmptyProfile, updateProfile } from 'src/stores/actions/profile';
-import UploadImageSingle from 'src/components/button/UploadImageSingle';
-import Page404 from '../page404/Page404';
-import { CircularProgress } from '@material-ui/core';
 import { generateCode } from 'src/utils/randomCode';
+import { joinClassName } from 'src/utils/stringUtils';
+import Page404 from '../page404/Page404';
 
 const BasicInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -126,7 +125,7 @@ const BasicInfo = ({ t, history, match }) => {
     dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { avatar: fileUrl } });
   }
   const returnComponent = (
-    <CContainer fluid className={joinClassName(['c-main mb-3 px-4'])}>
+    <CContainer fluid className={joinClassName(['c-main m-auto p-4'])}>
       {loading ? (
         <div className="text-center">
           <CircularProgress />
@@ -324,110 +323,90 @@ const BasicInfo = ({ t, history, match }) => {
                         <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                         <div className="row">
                           <div className="col-lg-6">
-                            <div className="pl-2">
-                              <CommonCheckbox
-                                label={t('label.ID')}
-                                value={values.have_id ?? false}
-                                onBlur={handleBlur('have_id')}
-                                onChange={handleChange('have_id')}
+                            <>
+                              <CommonTextInput
+                                containerClassName={'form-group'}
+                                value={values.cmnd ?? ''}
+                                onBlur={handleBlur('cmnd')}
+                                onChange={handleChange('cmnd')}
+                                inputID={'cmnd'}
+                                labelText={t('label.ID_number')}
+                                inputType={'text'}
+                                placeholder={t('placeholder.enter_ID_number')}
+                                inputClassName={'form-control'}
                               />
-                            </div>
-                            {values.have_id && (
-                              <>
+                              <CommonTextInput
+                                containerClassName={'form-group'}
+                                value={values.cmndIssuedDate ?? ''}
+                                onBlur={handleBlur('cmndIssuedDate')}
+                                onChange={handleChange('cmndIssuedDate')}
+                                inputID={'cmndIssuedDate'}
+                                labelText={t('label.start_date2')}
+                                inputType={'date'}
+                                inputClassName={'form-control'}
+                              />
+                              <CommonSelectInput
+                                containerClassName={'form-group'}
+                                value={values.cmndProvinceId ?? '0'}
+                                onBlur={handleBlur('cmndProvinceId')}
+                                onChange={handleChange('cmndProvinceId')}
+                                inputID={'cmndProvinceId'}
+                                labelText={t('label.grant_place')}
+                                selectClassName={'form-control'}
+                                placeholder={t('placeholder.select_province')}
+                                lstSelectOptions={provinces}
+                              />
+                            </>
+                          </div>
+                          <div className="col-lg-6">
+                            <>
+                              <CommonTextInput
+                                containerClassName={'form-group'}
+                                value={values.passport ?? ''}
+                                onBlur={handleBlur('passport')}
+                                onChange={handleChange('passport')}
+                                inputID={'passport'}
+                                labelText={t('label.passport')}
+                                inputType={'text'}
+                                placeholder={t('placeholder.enter_passport_number')}
+                                inputClassName={'form-control'}
+                              />
+                              <div className="row">
                                 <CommonTextInput
-                                  containerClassName={'form-group'}
-                                  value={values.cmnd ?? ''}
-                                  onBlur={handleBlur('cmnd')}
-                                  onChange={handleChange('cmnd')}
-                                  inputID={'cmnd'}
-                                  labelText={t('label.ID_number')}
-                                  inputType={'text'}
-                                  placeholder={t('placeholder.enter_ID_number')}
-                                  inputClassName={'form-control'}
-                                />
-                                <CommonTextInput
-                                  containerClassName={'form-group'}
-                                  value={values.cmndIssuedDate ?? ''}
-                                  onBlur={handleBlur('cmndIssuedDate')}
-                                  onChange={handleChange('cmndIssuedDate')}
-                                  inputID={'cmndIssuedDate'}
+                                  containerClassName={'form-group col-6'}
+                                  value={values.passportIssuedDate ?? ''}
+                                  onBlur={handleBlur('passportIssuedDate')}
+                                  onChange={handleChange('passportIssuedDate')}
+                                  inputID={'passportIssuedDate'}
                                   labelText={t('label.start_date2')}
                                   inputType={'date'}
                                   inputClassName={'form-control'}
                                 />
-                                <CommonSelectInput
-                                  containerClassName={'form-group'}
-                                  value={values.cmndProvinceId ?? '0'}
-                                  onBlur={handleBlur('cmndProvinceId')}
-                                  onChange={handleChange('cmndProvinceId')}
-                                  inputID={'cmndProvinceId'}
-                                  labelText={t('label.grant_place')}
-                                  selectClassName={'form-control'}
-                                  placeholder={t('placeholder.select_province')}
-                                  lstSelectOptions={provinces}
-                                />
-                              </>
-                            )}
-                          </div>
-                          <div className="col-lg-6">
-                            <div className="pl-2">
-                              <CommonCheckbox
-                                label={t('label.passport')}
-                                value={values.have_passport ?? false}
-                                onBlur={handleBlur('have_passport')}
-                                onChange={handleChange('have_passport')}
-                              />
-                            </div>
-                            {values.have_passport && (
-                              <>
                                 <CommonTextInput
-                                  containerClassName={'form-group'}
-                                  value={values.passport ?? ''}
-                                  onBlur={handleBlur('passport')}
-                                  onChange={handleChange('passport')}
-                                  inputID={'passport'}
-                                  labelText={t('label.passport')}
-                                  inputType={'text'}
-                                  placeholder={t('placeholder.enter_passport_number')}
+                                  containerClassName={'form-group col-6'}
+                                  value={values.passportExpiredDate ?? ''}
+                                  onBlur={handleBlur('passportExpiredDate')}
+                                  onChange={handleChange('passportExpiredDate')}
+                                  inputID={'passportExpiredDate'}
+                                  labelText={t('label.expiration_date')}
+                                  inputType={'date'}
                                   inputClassName={'form-control'}
+                                  isError={errors.passportExpiredDate && touched.passportExpiredDate}
+                                  errorMessage={t(errors.passportExpiredDate)}
                                 />
-                                <div className="row">
-                                  <CommonTextInput
-                                    containerClassName={'form-group col-6'}
-                                    value={values.passportIssuedDate ?? ''}
-                                    onBlur={handleBlur('passportIssuedDate')}
-                                    onChange={handleChange('passportIssuedDate')}
-                                    inputID={'passportIssuedDate'}
-                                    labelText={t('label.start_date2')}
-                                    inputType={'date'}
-                                    inputClassName={'form-control'}
-                                  />
-                                  <CommonTextInput
-                                    containerClassName={'form-group col-6'}
-                                    value={values.passportExpiredDate ?? ''}
-                                    onBlur={handleBlur('passportExpiredDate')}
-                                    onChange={handleChange('passportExpiredDate')}
-                                    inputID={'passportExpiredDate'}
-                                    labelText={t('label.expiration_date')}
-                                    inputType={'date'}
-                                    inputClassName={'form-control'}
-                                    isError={errors.passportExpiredDate && touched.passportExpiredDate}
-                                    errorMessage={t(errors.passportExpiredDate)}
-                                  />
-                                </div>
-                                <CommonSelectInput
-                                  containerClassName={'form-group'}
-                                  value={values.passportProvinceId ?? '0'}
-                                  onBlur={handleBlur('passportProvinceId')}
-                                  onChange={handleChange('passportProvinceId')}
-                                  inputID={'passportProvinceId'}
-                                  labelText={t('label.grant_place')}
-                                  selectClassName={'form-control'}
-                                  placeholder={t('placeholder.select_province')}
-                                  lstSelectOptions={provinces}
-                                />
-                              </>
-                            )}
+                              </div>
+                              <CommonSelectInput
+                                containerClassName={'form-group'}
+                                value={values.passportProvinceId ?? '0'}
+                                onBlur={handleBlur('passportProvinceId')}
+                                onChange={handleChange('passportProvinceId')}
+                                inputID={'passportProvinceId'}
+                                labelText={t('label.grant_place')}
+                                selectClassName={'form-control'}
+                                placeholder={t('placeholder.select_province')}
+                                lstSelectOptions={provinces}
+                              />
+                            </>
                           </div>
                         </div>
                       </div>

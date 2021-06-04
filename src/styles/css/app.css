@@ -19,6 +19,9 @@
 .c-sidebar .c-sidebar-nav-link:hover {
   background: #303c54 !important;
 }
+.c-body {
+  background: #f7f7f7;
+}
 
 :host .ui5-shellbar-root {
   padding: 0.25rem 0.5rem !important;

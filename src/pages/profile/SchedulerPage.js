@@ -267,7 +267,7 @@ const SchedulerPage = ({ t, history, match }) => {
 
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         {state.isOpen && <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />}
         <Paper>
           {loading ? (

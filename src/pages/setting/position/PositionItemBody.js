@@ -23,7 +23,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
     { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

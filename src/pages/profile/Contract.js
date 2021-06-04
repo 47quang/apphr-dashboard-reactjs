@@ -32,7 +32,7 @@ const Contract = ({ t, isCreate }) => {
     );
   } else {
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <QTable t={t} columnDef={columnDef} data={contracts} route={ROUTE_PATH.CONTRACT + '/'} idxColumnsFilter={[0, 1, 2]} deleteRow={deleteRow} />;
       </CContainer>
     );

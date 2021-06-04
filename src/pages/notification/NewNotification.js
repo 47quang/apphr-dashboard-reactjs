@@ -45,7 +45,7 @@ const NewNotification = ({ t, location, history }) => {
   ];
   if (permissionIds.includes(PERMISSION.CREATE_ARTICLE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <div className="m-auto col-lg-12">
           <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} isCreate={true} />
         </div>

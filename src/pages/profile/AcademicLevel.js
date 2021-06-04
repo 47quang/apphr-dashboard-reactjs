@@ -172,7 +172,7 @@ const AcademicLevel = ({ t, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -202,7 +202,7 @@ const AcademicLevel = ({ t, match }) => {
                   let isCreate = true;
                   return (
                     <form id="newDegree" hidden={true} className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4">
+                      <div className="shadow bg-white rounded p-4">
                         {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate)}
                         {renderButtons([
                           {
@@ -244,7 +244,7 @@ const AcademicLevel = ({ t, match }) => {
                     }}
                   >
                     {({ values, errors, touched, handleBlur, handleSubmit, handleChange, handleReset }) => (
-                      <div className="shadow bg-white rounded m-4 p-4">
+                      <div className="shadow bg-white rounded p-4">
                         {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
 
                         {renderButtons(

@@ -11,7 +11,7 @@ import { generateCode } from 'src/utils/randomCode';
 
 const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, submitForm, loading, isCreate }) => {
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

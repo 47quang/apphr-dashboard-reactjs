@@ -31,8 +31,6 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
     api.historyWork
       .post(data)
       .then(({ payload }) => {
-        payload.from = formatDateInput(payload.from);
-        payload.to = formatDateInput(payload.to);
         //dispatch({ type: REDUX_STATE.historyWork.CREATE_HISTORY, payload });
         handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
@@ -73,9 +71,6 @@ export const fetchHistoriesWork = (params, setLoading, departments, positions) =
           payload.map(async (h) => {
             h.from = formatDateInput(h.from);
             h.to = formatDateInput(h.to);
-            //h['departments'] = await api.department.getAll({ branchId: h.branchId }).then(({ payload }) => payload);
-            //h['positions'] = await api.position.getAll({ departmentId: h.departmentId }).then(({ payload }) => payload);
-            //h['branches'] = await api.branch.getAll().then(({ payload }) => payload);
             h['departments'] = departments ? departments.filter((x) => x.branch.id === h.branchId) : [];
             h['positions'] = positions ? positions.filter((x) => x.department.id === h.departmentId) : [];
 
