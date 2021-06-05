@@ -97,7 +97,7 @@ const SchedulerPage = ({ t, history, match }) => {
   const DayScaleCell = (props) => {
     const classes = useStyles();
     const { startDate, today } = props;
-    const holiday = holidays.find(
+    const holiday = holidays.payload.find(
       (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
     )
       ? true
@@ -118,7 +118,7 @@ const SchedulerPage = ({ t, history, match }) => {
     const classes = useStyles();
     const { startDate } = props;
     const date = moment(startDate);
-    const holiday = holidays.find(
+    const holiday = holidays.payload.find(
       (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
     )
       ? true
@@ -150,7 +150,7 @@ const SchedulerPage = ({ t, history, match }) => {
       var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
       var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
       lastDay.setHours(23, 59, 59, 0);
-      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, undefined, setLoading));
+      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
       dispatch(
         fetchHolidays({
           page: 0,
@@ -264,7 +264,6 @@ const SchedulerPage = ({ t, history, match }) => {
       );
     else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
   };
-
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
       <CContainer fluid className="c-main m-auto p-4">
@@ -275,7 +274,7 @@ const SchedulerPage = ({ t, history, match }) => {
               <CircularProgress />
             </div>
           ) : (
-            <Scheduler data={assignments} height="auto">
+            <Scheduler data={assignments?.payload ?? []} height="auto">
               <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
               <EditingState />
               <IntegratedEditing />

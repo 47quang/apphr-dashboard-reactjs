@@ -54,8 +54,8 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'fetchAssignments');

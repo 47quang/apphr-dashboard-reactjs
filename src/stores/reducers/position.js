@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  positions: {},
+  positions: { payload: [], total: 0 },
   position: {
     name: '',
     shortname: '',

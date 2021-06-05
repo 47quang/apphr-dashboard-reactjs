@@ -310,7 +310,7 @@ const Benefit = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(touched, `allowances.${allowanceIdx}.id`) && getIn(errors, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances}
+                          lstSelectOptions={allowances.payload}
                         />
                         <CommonTextInput
                           containerClassName={'form-group col-lg-4'}

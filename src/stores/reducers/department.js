@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  departments: {},
+  departments: { payload: [], total: 0 },
   department: {
     id: 0,
     name: '',

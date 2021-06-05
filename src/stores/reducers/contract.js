@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  contracts: [],
+  contracts: { payload: [], total: 0 },
   contract: {},
   branches: [],
   wages: [],

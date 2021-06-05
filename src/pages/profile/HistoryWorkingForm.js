@@ -63,8 +63,8 @@ const HistoryWorkingForm = ({ t, match }) => {
             profileId: profileId,
           },
           setLoading,
-          departments,
-          positions,
+          departments.payload,
+          positions.payload,
         ),
       );
     }
@@ -100,7 +100,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               handleChange('branchId')(e);
               setFieldValue(
                 'departments',
-                departments.filter((x) => x.branch.id === +e.target.value),
+                departments.payload.filter((x) => x.branch.id === +e.target.value),
               );
               setFieldValue('departmentId', '');
               setFieldValue('positionId', '');
@@ -113,7 +113,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.branchId}
             isError={errors.branchId && touched.branchId}
             errorMessage={t(errors.branchId)}
-            lstSelectOptions={branches}
+            lstSelectOptions={branches.payload}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -124,7 +124,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               handleChange('departmentId')(e);
               setFieldValue(
                 'positions',
-                positions.filter((x) => x.department.id === +e.target.value),
+                positions.payload.filter((x) => x.department.id === +e.target.value),
               );
               setFieldValue('positionId', '');
             }}
@@ -136,7 +136,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.departmentId}
             isError={errors.departmentId && touched.departmentId}
             errorMessage={t(errors.departmentId)}
-            lstSelectOptions={isCreate ? departments : values.departments}
+            lstSelectOptions={isCreate ? departments.payload : values.departments}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -153,7 +153,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.positionId}
             isError={errors.positionId && touched.positionId}
             errorMessage={t(errors.positionId)}
-            lstSelectOptions={isCreate ? positions : values.positions}
+            lstSelectOptions={isCreate ? positions.payload : values.positions}
           />
           {isCreate ? (
             <CommonSelectInput
@@ -217,8 +217,8 @@ const HistoryWorkingForm = ({ t, match }) => {
           profileId: profileId,
         },
         setLoading,
-        departments,
-        positions,
+        departments.payload,
+        positions.payload,
       ),
     );
   };

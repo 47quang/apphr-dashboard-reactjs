@@ -55,7 +55,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       onChange={(e) => {
                         let selected = +e.target.value;
                         if (selected !== 0) {
-                          let shift = shifts.filter((x) => x.id === selected)[0];
+                          let shift = shifts.payload.filter((x) => x.id === selected)[0];
                           props.setFieldValue('start', shift.startCC);
                           props.setFieldValue('end', shift.endCC);
                         } else {
@@ -72,7 +72,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                       isTouched={props.touched.shiftId}
                       isError={props.errors.shiftId && props.touched.shiftId}
                       errorMessage={t(props.errors.shiftId)}
-                      lstSelectOptions={shifts}
+                      lstSelectOptions={shifts.payload}
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}

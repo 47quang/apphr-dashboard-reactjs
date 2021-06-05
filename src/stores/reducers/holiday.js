@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  holidays: {},
+  holidays: {
+    payload: [],
+    total: 0,
+  },
   holiday: {
     id: 0,
     shortname: '',

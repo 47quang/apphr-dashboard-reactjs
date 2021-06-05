@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  branches: {},
+  branches: {
+    payload: [],
+    total: 0,
+  },
   branch: {
     name: '',
     shortname: '',

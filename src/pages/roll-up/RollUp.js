@@ -107,7 +107,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week'), e.endDate.replace('Z', '')),
@@ -122,7 +122,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(1, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(1, 'd')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week').add(1, 'd'), e.endDate.replace('Z', '')),
@@ -137,7 +137,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(2, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(2, 'd')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week').add(2, 'd'), e.endDate.replace('Z', '')),
@@ -152,7 +152,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(3, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(3, 'd')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week').add(3, 'd'), e.endDate.replace('Z', '')),
@@ -167,7 +167,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(4, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(4, 'd')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week').add(4, 'd'), e.endDate.replace('Z', '')),
@@ -182,7 +182,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(5, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().startOf('week').add(5, 'd')) &&
             isSameBeforeTypeDate(fromDate.clone().startOf('week').add(5, 'd'), e.endDate.replace('Z', '')),
@@ -197,7 +197,7 @@ const RollUp = ({ t, location }) => {
         width: '12%',
         wordWrapEnabled: true,
         today: today.isSame(fromDate.clone().startOf('week').add(6, 'd'), 'day'),
-        holiday: holidays.find(
+        holiday: holidays.payload.find(
           (e) =>
             isSameBeforeTypeDate(e.startDate.replace('Z', ''), fromDate.clone().endOf('week')) &&
             isSameBeforeTypeDate(fromDate.clone().endOf('week').format('YYYY-MM-DD'), e.endDate.replace('Z', '')),

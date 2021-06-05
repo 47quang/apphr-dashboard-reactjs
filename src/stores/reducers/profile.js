@@ -2,7 +2,10 @@ import { formatDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  profiles: [],
+  profiles: {
+    payload: [],
+    total: 0,
+  },
   profile: {
     id: 0,
     shortname: '',

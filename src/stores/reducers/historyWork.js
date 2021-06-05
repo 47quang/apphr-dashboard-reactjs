@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  histories: [],
+  histories: {
+    payload: [],
+    total: 0,
+  },
   history: {},
 };
 
