@@ -57,15 +57,12 @@ const WeekPicker = ({ fromDate, setFromDate, currentPage, pageSize, onTotalChang
       let to = date.clone().endOf('week');
       setFromDate(from);
       dispatch(
-        fetchRollUpTable(
-          {
-            page: currentPage,
-            perpage: pageSize,
-            from: from,
-            to: to,
-          },
-          onTotalChange,
-        ),
+        fetchRollUpTable({
+          page: currentPage,
+          perpage: pageSize,
+          from: from,
+          to: to,
+        }),
       );
       setState({
         ...state,

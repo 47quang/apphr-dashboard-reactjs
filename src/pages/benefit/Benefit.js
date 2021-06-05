@@ -5,25 +5,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
-import { deleteWageHistory, fetchWageHistories } from 'src/stores/actions/wageHistories';
+import { deleteWageHistory, fetchWageHistories, setEmptyWageHistories } from 'src/stores/actions/wageHistories';
 import Page404 from '../page404/Page404';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Benefit = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDefOfAccounts = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.benefit_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'contractName', title: t('label.contract'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const filters = {
     code: {
       title: t('label.benefit_code'),
@@ -31,6 +33,16 @@ const Benefit = ({ t, location, history }) => {
         {
           id: FILTER_OPERATOR.LIKE,
           name: t('filter_operator.like'),
+        },
+      ],
+      type: 'text',
+    },
+    suggestion: {
+      title: t('label.employee_full_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.AUTOCOMPLETE,
+          name: t('filter_operator.autocomplete'),
         },
       ],
       type: 'text',
@@ -82,7 +94,6 @@ const Benefit = ({ t, location, history }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     loading: false,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
@@ -96,17 +107,23 @@ const Benefit = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.benefit_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'contractName', title: t('label.contract'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
@@ -115,13 +132,18 @@ const Benefit = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
           t,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyWageHistories());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchWageHistories(
@@ -130,7 +152,6 @@ const Benefit = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
         t,
       ),
@@ -143,7 +164,6 @@ const Benefit = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
         t,
       ),
@@ -168,8 +188,8 @@ const Benefit = ({ t, location, history }) => {
       <CContainer fluid className="c-main m-auto p-4">
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfAccounts}
-          data={wageHistories}
+          columnDef={columnDef}
+          data={wageHistories?.payload ?? []}
           route={ROUTE_PATH.NAV_BENEFIT + '/'}
           deleteRow={deleteRow}
           linkCols={[
@@ -187,6 +207,7 @@ const Benefit = ({ t, location, history }) => {
           filterFunction={filterFunction}
           fixed={true}
           statusComponent={statusComponent}
+          total={wageHistories?.total ?? 0}
         />
       </CContainer>
     );

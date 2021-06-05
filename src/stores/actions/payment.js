@@ -26,7 +26,7 @@ const handlePaymentExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchPayments = (params, onTotalChange, setLoading, t) => {
+export const fetchPayments = (params, setLoading, t) => {
   if (setLoading) setLoading(true);
 
   return (dispatch, getState) => {
@@ -40,8 +40,8 @@ export const fetchPayments = (params, onTotalChange, setLoading, t) => {
                 return f;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.payment.SET_PAYMENTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handlePaymentExceptions(err, dispatch, 'fetchPayments');
@@ -115,6 +115,12 @@ export const deletePayment = (id, success_msg, handleAfterDelete) => {
 export const setEmptyPayment = () => {
   return {
     type: REDUX_STATE.payment.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyPayments = () => {
+  return {
+    type: REDUX_STATE.payment.EMPTY_LIST,
     payload: [],
   };
 };

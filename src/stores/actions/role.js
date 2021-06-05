@@ -33,15 +33,15 @@ const formatDownloadedData = (payload) => {
   });
 };
 
-export const fetchRoles = (params, onTotalChange, setLoading) => {
+export const fetchRoles = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .getAll(params)
       .then(({ payload, total }) => {
         payload = formatDownloadedData(payload);
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.role.SET_ROLES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleRoleExceptions(err, dispatch, 'fetchRoles');
@@ -117,6 +117,12 @@ export const deleteRole = (id, success_msg, handleAfterDelete) => {
 export const setEmptyRole = () => {
   return {
     type: REDUX_STATE.role.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyRoles = () => {
+  return {
+    type: REDUX_STATE.role.EMPTY_LIST,
     payload: [],
   };
 };

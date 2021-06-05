@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  holidays: [],
+  holidays: {},
   holiday: {
     id: 0,
     shortname: '',
@@ -36,6 +36,11 @@ const holidayReducer = (state = initialState, { type, payload }) => {
         ...state,
         holiday: initialState.holiday,
         holidays: [],
+      };
+    case REDUX_STATE.holiday.EMPTY_LIST:
+      return {
+        ...state,
+        holidays: {},
       };
     case REDUX_STATE.holiday.GET_REQUESTS:
       return {

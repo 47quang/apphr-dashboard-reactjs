@@ -26,7 +26,7 @@ const handleAllowanceExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAllowances = (params, onTotalChange, setLoading) => {
+export const fetchAllowances = (params, setLoading) => {
   if (setLoading) setLoading(true);
 
   return (dispatch, getState) => {
@@ -40,8 +40,7 @@ export const fetchAllowances = (params, onTotalChange, setLoading) => {
                 return allowance;
               })
             : [];
-
-        if (onTotalChange) onTotalChange(total);
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.allowance.SET_ALLOWANCES, payload });
       })
       .catch((err) => {

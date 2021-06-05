@@ -26,7 +26,7 @@ const handleProfileExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchProfiles = (params, onTotalChange, setLoading) => {
+export const fetchProfiles = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
@@ -39,8 +39,11 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
                 return profile;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'fetchProfiles');

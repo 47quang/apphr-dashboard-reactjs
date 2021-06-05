@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteHoliday, fetchHolidays } from 'src/stores/actions/holiday';
+import { deleteHoliday, fetchHolidays, setEmptyHolidays } from 'src/stores/actions/holiday';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -15,13 +17,13 @@ const MemoizedQTable = React.memo(QTable, equalQTable);
 const HolidayPage = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.holiday_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'endDate', title: t('label.end_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -61,7 +63,6 @@ const HolidayPage = ({ t, location, history }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -75,17 +76,22 @@ const HolidayPage = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.holiday_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'title', title: t('label.holiday_title'), align: 'left', width: '30%', wordWrapEnabled: true },
+      { name: 'startDate', title: t('label.start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'endDate', title: t('label.end_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_HOLIDAY)) {
       dispatch(
@@ -94,7 +100,6 @@ const HolidayPage = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
@@ -102,7 +107,12 @@ const HolidayPage = ({ t, location, history }) => {
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyHolidays());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchHolidays(
@@ -111,7 +121,6 @@ const HolidayPage = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -123,7 +132,6 @@ const HolidayPage = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -137,7 +145,7 @@ const HolidayPage = ({ t, location, history }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={holidays}
+          data={holidays?.payload ?? []}
           route={ROUTE_PATH.HOLIDAY}
           idxColumnsFilter={[1]}
           dateCols={[3, 2]}
@@ -150,6 +158,7 @@ const HolidayPage = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_HOLIDAY)}
           filters={filters}
           filterFunction={filterFunction}
+          total={holidays?.total ?? 0}
         />
       </CContainer>
     );

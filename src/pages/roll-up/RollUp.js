@@ -35,7 +35,6 @@ const RollUp = ({ t, location }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
     columnDefFlag: false,
@@ -51,11 +50,7 @@ const RollUp = ({ t, location }) => {
       pageSize: newPageSize,
       currentPage: 0,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -234,15 +229,18 @@ const RollUp = ({ t, location }) => {
           from: fromDate,
           to: fromDate.clone().endOf('week'),
         },
-        onTotalChange,
         setLoading,
       ),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, paging.currentPage, paging.pageSize]);
+
+  useEffect(() => {
     return () => {
       dispatch(setEmptyAssignments());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, paging.currentPage, paging.pageSize]);
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchRollUpTable(
@@ -253,7 +251,6 @@ const RollUp = ({ t, location }) => {
           from: fromDate,
           to: fromDate.clone().endOf('week'),
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -282,7 +279,6 @@ const RollUp = ({ t, location }) => {
             from: fromDate,
             to: fromDate.clone().endOf('week'),
           },
-          onTotalChange,
           setLoading,
         ),
       );
@@ -432,7 +428,7 @@ const RollUp = ({ t, location }) => {
       <MemoizedQTable
         t={t}
         columnDef={columnDefOfRollUp.current}
-        data={data}
+        data={data?.payload ?? []}
         route={ROUTE_PATH.ROLL_UP + '/'}
         disableEditColum={true}
         headerDateCols={[2, 3, 4, 5, 6, 7, 8]}
@@ -448,7 +444,8 @@ const RollUp = ({ t, location }) => {
         setFromDate={setFromDate}
         pageSize={paging.pageSize}
         currentPage={paging.currentPage}
-        onTotalChange={onTotalChange}
+        // onTotalChange={onTotalChange}
+        total={data?.total ?? 0}
       />
     </CContainer>
   );

@@ -4,22 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deletePosition, fetchPositions } from 'src/stores/actions/position';
+import { deletePosition, fetchPositions, setEmptyPositions } from 'src/stores/actions/position';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Position = ({ t, location, history }) => {
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.position_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'name', title: t('label.position_name'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'branchName', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'departmentName', title: t('label.department'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
   const dispatch = useDispatch();
@@ -27,7 +29,6 @@ const Position = ({ t, location, history }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -41,11 +42,7 @@ const Position = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -87,10 +84,25 @@ const Position = ({ t, location, history }) => {
     },
   };
   useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.position_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.position_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'branchName', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'departmentName', title: t('label.department'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
+  useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_POSITION))
-      dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+      dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, setLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyPositions());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const filterFunction = (params) => {
     dispatch(
@@ -100,13 +112,12 @@ const Position = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
   };
   const handleAfterDelete = () => {
-    dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+    dispatch(fetchPositions({ page: paging.currentPage, perpage: paging.pageSize }, setLoading));
   };
   const deleteRow = async (rowId) => {
     dispatch(deletePosition({ id: rowId }, t('message.successful_delete'), handleAfterDelete));
@@ -116,11 +127,7 @@ const Position = ({ t, location, history }) => {
       <CContainer fluid className="c-main m-auto p-4">
         <MemoizedQTable
           columnDef={columnDef}
-          data={positions.map((p) => {
-            p.branchName = p.branch?.name;
-            p.departmentName = p.department?.name;
-            return p;
-          })}
+          data={positions?.payload ?? []}
           t={t}
           route={ROUTE_PATH.POSITION + '/'}
           idxColumnsFilter={[0, 2]}
@@ -133,6 +140,7 @@ const Position = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_POSITION)}
           filters={filters}
           filterFunction={filterFunction}
+          total={positions?.total ?? 0}
         />
       </CContainer>
     );

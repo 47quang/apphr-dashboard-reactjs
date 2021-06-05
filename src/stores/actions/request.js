@@ -43,7 +43,7 @@ const handleRequestExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchLeaveRequests = (params, onTotalChange, setLoading) => {
+export const fetchLeaveRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
@@ -60,8 +60,11 @@ export const fetchLeaveRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleRequestExceptions(err, dispatch, 'fetchLeaveRequests');
@@ -71,7 +74,7 @@ export const fetchLeaveRequests = (params, onTotalChange, setLoading) => {
       });
   };
 };
-export const filterLeaveRequests = (params, onTotalChange, setLoading) => {
+export const filterLeaveRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
@@ -88,8 +91,11 @@ export const filterLeaveRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
         if (setLoading) setLoading(false);
       })
       .catch((err) => {
@@ -184,7 +190,7 @@ export const rejectLeaveRequest = (id, success_msg) => {
   };
 };
 
-export const fetchRemoteRequests = (params, onTotalChange, setLoading) => {
+export const fetchRemoteRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
@@ -198,8 +204,12 @@ export const fetchRemoteRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
+
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleRequestExceptions(err, dispatch, 'fetchRemoteRequests');
@@ -209,7 +219,7 @@ export const fetchRemoteRequests = (params, onTotalChange, setLoading) => {
       });
   };
 };
-export const filterRemoteRequests = (params, onTotalChange, setLoading) => {
+export const filterRemoteRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
@@ -223,8 +233,11 @@ export const filterRemoteRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
         if (setLoading) setLoading(false);
       })
       .catch((err) => {
@@ -316,7 +329,7 @@ export const rejectRemoteRequest = (id, success_msg) => {
   };
 };
 
-export const fetchOvertimeRequests = (params, onTotalChange, setLoading) => {
+export const fetchOvertimeRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
@@ -330,8 +343,11 @@ export const fetchOvertimeRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleRequestExceptions(err, dispatch, 'fetchOvertimeRequests');
@@ -341,7 +357,7 @@ export const fetchOvertimeRequests = (params, onTotalChange, setLoading) => {
       });
   };
 };
-export const filterOvertimeRequests = (params, onTotalChange, setLoading) => {
+export const filterOvertimeRequests = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
@@ -355,8 +371,11 @@ export const filterOvertimeRequests = (params, onTotalChange, setLoading) => {
                 return req;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
-        if (onTotalChange) onTotalChange(total);
         if (setLoading) setLoading(false);
       })
       .catch((err) => {

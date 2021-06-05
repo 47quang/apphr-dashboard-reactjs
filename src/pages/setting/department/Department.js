@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteDepartment, fetchDepartments } from 'src/stores/actions/department';
+import { deleteDepartment, fetchDepartments, setEmptyDepartments } from 'src/stores/actions/department';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -15,13 +17,12 @@ const MemoizedQTable = React.memo(QTable, equalQTable);
 const Department = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
-  const columnDef = [
-    { name: 'code', title: t('label.department_code'), align: 'left', width: '15%', wordWrapEnabled: true },
-    { name: 'name', title: t('label.department_name'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'branchname', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'note', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
-    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  const [columnDef, setColumnDef] = useState([
+    { name: 'code', title: t('label.department_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+    { name: 'name', title: t('label.department_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'branchname', title: t('label.branch'), align: 'left', width: '25%', wordWrapEnabled: true },
+    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -61,7 +62,6 @@ const Department = ({ t, location, history }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -75,17 +75,22 @@ const Department = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.department_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.department_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'branchname', title: t('label.branch'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'note', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_DEPARTMENT)) {
       dispatch(
@@ -94,14 +99,18 @@ const Department = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyDepartments());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchDepartments(
@@ -110,7 +119,6 @@ const Department = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -122,7 +130,6 @@ const Department = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -136,11 +143,7 @@ const Department = ({ t, location, history }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={departments.map((d) => {
-            d.branchname = d.branch?.name;
-            d.note = d.note.substr(0, 30) + '...';
-            return d;
-          })}
+          data={departments?.payload ?? []}
           route={ROUTE_PATH.DEPARTMENT + '/'}
           idxColumnsFilter={[0, 2]}
           deleteRow={deleteRow}
@@ -152,6 +155,7 @@ const Department = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_DEPARTMENT)}
           filters={filters}
           filterFunction={filterFunction}
+          total={departments?.total ?? 0}
         />
       </CContainer>
     );

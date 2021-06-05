@@ -85,7 +85,8 @@
     "payment_name": "Tên chi phí",
     "personal_tax_level": "Mức chịu thuế",
     "name_tax": "Diễn giải",
-    "percentage_tax": "Thuế suất",
+    "percentage_tax_person": "Thuế suất cá nhân",
+    "percentage_tax_company": "Thuế suất doanh nghiệp",
     "required_insurance": "Bảo hiểm bắt buộc",
     "personal_tax": "Thuế thu nhập cá nhân",
     "other_fee": "Các khoản khác",
@@ -394,7 +395,15 @@
     "number_overtime_work": "Số người làm thêm giờ",
     "number_leave_work": "Số người nghỉ",
     "number_absence": "Số người không đi làm",
-    "overtime_assignment": "Ca làm thêm giờ"
+    "overtime_assignment": "Ca làm thêm giờ",
+    "accident_insurance": "Bảo hiểm Tai nạn lao động - Bệnh nghề nghiệp",
+    "less_than_5m":"Đến 5 triệu VNĐ",
+    "great_than_5m_less_than_10m": "Trên 5 triệu VNĐ đến 10 triệu VNĐ",
+    "great_than_10m_less_than_18m": "Trên 10 triệu VNĐ đến 18 triệu VNĐ",
+    "great_than_18m_less_than_32m": "Trên 18 triệu VNĐ đến 32 triệu VNĐ",
+    "great_than_32m_less_than_52m": "Trên 32 triệu VNĐ đến 52 triệu VNĐ",
+    "great_than_52m_less_than_80m": "Trên 52 triệu VNĐ đến 80 triệu VNĐ",
+    "great_than_80m":"Trên 80 triệu VNĐ"
 
   },
   "title": {
@@ -477,7 +486,8 @@
     "reset_password_warning_message": "Bạn thật sự muốn đặt lại mật khẩu cho tài khoản này",
     "reset_password_row": "Đặt lại mật khẩu cho hàng này",
     "add": "Thêm mới",
-    "successful_reset_password": "Đặt lại mật khẩu thành công"
+    "successful_reset_password": "Đặt lại mật khẩu thành công",
+    "no_data": "Không có dữ liệu"
 
   },
   "placeholder": {

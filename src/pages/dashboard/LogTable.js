@@ -26,7 +26,6 @@ const LogTable = ({ t }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -41,11 +40,12 @@ const LogTable = ({ t }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
+  const onTotalChange = (total) => {
     setPaging((prevState) => ({
       ...prevState,
       total: total,
     }));
+  };
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -64,11 +64,14 @@ const LogTable = ({ t }) => {
           setLoading,
         ),
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
     return () => {
       dispatch(setEmptyLogs());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.currentPage, paging.pageSize]);
+  }, []);
   useEffect(() => {
     setColumnDef([
       { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
@@ -82,13 +85,14 @@ const LogTable = ({ t }) => {
         t={t}
         disableFilter={true}
         columnDef={columnDef}
-        data={logData}
+        data={logData?.payload ?? []}
         disableEditColum={true}
         paging={paging}
         onCurrentPageChange={onCurrentPageChange}
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
         linkCols={[{ name: 'message' }]}
+        total={logData?.total ?? 0}
       />
     );
   else return <Page404 />;

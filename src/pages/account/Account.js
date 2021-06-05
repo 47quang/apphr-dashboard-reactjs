@@ -7,21 +7,23 @@ import { fetchAccounts, deleteAccount } from 'src/stores/actions/account';
 import Page404 from '../page404/Page404';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Account = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDefOfAccounts = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'username', title: t('label.username'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const filters = {
     username: {
       title: t('label.username'),
@@ -60,7 +62,6 @@ const Account = ({ t, location, history }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     loading: false,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
@@ -74,17 +75,23 @@ const Account = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'username', title: t('label.username'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'email', title: t('label.email'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'phone', title: t('label.phone_number'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'role', title: t('label.role'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
@@ -93,7 +100,6 @@ const Account = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
@@ -107,7 +113,6 @@ const Account = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -119,7 +124,6 @@ const Account = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -132,8 +136,8 @@ const Account = ({ t, location, history }) => {
       <CContainer fluid className="c-main p-4 m-auto">
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfAccounts}
-          data={accounts}
+          columnDef={columnDef}
+          data={accounts?.payload ?? []}
           route={ROUTE_PATH.ACCOUNT + '/'}
           idxColumnsFilter={[0]}
           deleteRow={deleteRow}
@@ -148,6 +152,7 @@ const Account = ({ t, location, history }) => {
           filterFunction={filterFunction}
           fixed={true}
           isResetPassWord={true}
+          total={accounts?.total ?? 0}
         />
       </CContainer>
     );

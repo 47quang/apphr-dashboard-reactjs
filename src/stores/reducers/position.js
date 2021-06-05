@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  positions: [],
+  positions: {},
   position: {
     name: '',
     shortname: '',
@@ -31,6 +31,11 @@ const positionReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         position: initialState.position,
+      };
+    case REDUX_STATE.position.EMPTY_LIST:
+      return {
+        ...state,
+        positions: initialState.position,
       };
     default:
       return state;

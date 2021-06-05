@@ -26,7 +26,7 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchWageHistories = (params, onTotalChange, setLoading, t) => {
+export const fetchWageHistories = (params, setLoading, t) => {
   const paymentType = {
     by_hour: 'Chi trả theo giờ',
     by_month: 'Chi trả theo tháng',
@@ -52,8 +52,11 @@ export const fetchWageHistories = (params, onTotalChange, setLoading, t) => {
                 return wage;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORIES, payload: payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleWageExceptions(err, dispatch, 'fetchWageHistories');

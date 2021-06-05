@@ -27,6 +27,8 @@ export const shiftReducer = (state = initialState, { type, payload }) => {
       return { ...state, shift: Object.assign({}, state.shift, payload) };
     case REDUX_STATE.shift.EMPTY_VALUE:
       return { ...state, shift: initialState.shift };
+    case REDUX_STATE.shift.EMPTY_LIST:
+      return { ...state, shift: {} };
     case REDUX_STATE.shift.RESET_SHIFTS:
       return { ...state, shifts: [] };
     case REDUX_STATE.shift.DELETE_SHIFT:

@@ -28,7 +28,7 @@ const handleShiftExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 
-export const fetchShifts = (params, onTotalChange, setLoading) => {
+export const fetchShifts = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.shift
@@ -42,8 +42,8 @@ export const fetchShifts = (params, onTotalChange, setLoading) => {
                 return p;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleShiftExceptions(err, dispatch, 'fetchShifts');
@@ -131,6 +131,13 @@ export const deleteShift = (params, success_msg, handleAfterDelete) => {
 export const resetShift = () => {
   return {
     type: REDUX_STATE.shift.EMPTY_VALUE,
+    payload: {},
+  };
+};
+
+export const setEmptyShifts = () => {
+  return {
+    type: REDUX_STATE.shift.EMPTY_LIST,
     payload: {},
   };
 };

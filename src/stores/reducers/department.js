@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  departments: [],
+  departments: {},
   department: {
     id: 0,
     name: '',
@@ -30,6 +30,16 @@ const departmentReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         department: initialState.department,
+      };
+    case REDUX_STATE.department.EMPTY_VALUE:
+      return {
+        ...state,
+        department: initialState.department,
+      };
+    case REDUX_STATE.department.EMPTY_LIST:
+      return {
+        ...state,
+        departments: {},
       };
     case REDUX_STATE.department.COUNT_DEPARTMENTS:
       return { ...state, total: payload };

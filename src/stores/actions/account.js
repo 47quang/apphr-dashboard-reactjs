@@ -27,7 +27,7 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAccounts = (params, onTotalChange, setLoading) => {
+export const fetchAccounts = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
@@ -44,8 +44,11 @@ export const fetchAccounts = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleAccountExceptions(err, dispatch, 'fetch Accounts');

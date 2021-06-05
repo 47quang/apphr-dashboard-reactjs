@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  wages: [],
+  wages: {
+    payload: [],
+    total: 0,
+  },
   wage: {
     id: 0,
     name: '',
@@ -27,6 +30,11 @@ const wageReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         wage: initialState.wage,
+      };
+    case REDUX_STATE.wage.EMPTY_LIST:
+      return {
+        ...state,
+        wages: initialState.wages,
       };
     default:
       return state;

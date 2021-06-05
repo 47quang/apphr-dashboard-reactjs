@@ -7,7 +7,7 @@ import Chip from '@material-ui/core/Chip';
 import WeekPicker from '../input/WeekPicker';
 import CommonAutoCompleteInput from '../input/CommonAutoCompleteInput';
 
-const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage, onTotalChange }) => {
+const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage }) => {
   let columnsFilter = filters ? Object.keys(filters) : [];
   columnsFilter =
     columnsFilter && columnsFilter.length > 0
@@ -53,7 +53,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
       <div className="row mx-2 px-2">
         <div className="d-flex justify-content-start col-2 p-2">
           <h5 style={{ paddingTop: 21 }}>
-            <WeekPicker fromDate={fromDate} setFromDate={setFromDate} pageSize={pageSize} currentPage={currentPage} onTotalChange={onTotalChange} />
+            <WeekPicker fromDate={fromDate} setFromDate={setFromDate} pageSize={pageSize} currentPage={currentPage} />
           </h5>
         </div>
         <div className=" col-md-10 pt-2">

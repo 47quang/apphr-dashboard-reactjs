@@ -54,7 +54,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -160,11 +159,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
       pageSize: newPageSize,
       currentPage: 0,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -204,7 +199,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -214,7 +208,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -227,7 +220,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -237,7 +229,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -250,7 +241,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -260,17 +250,20 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
     return () => {
       if (type === 'leave') dispatch(setEmptyLeaveRequests());
       else if (type === 'remote') dispatch(setEmptyRemoteRequests());
       else dispatch(setEmptyOverTimeRequests());
     };
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.currentPage, paging.pageSize]);
+  }, []);
   // const deleteRow = async (rowId) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
   //   dispatch(fetchProfiles());
@@ -286,7 +279,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -297,7 +289,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -311,7 +302,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -322,7 +312,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -336,7 +325,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -347,7 +335,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -369,7 +356,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={proposals}
+          data={proposals?.payload ?? []}
           route={match.url + '/'}
           disableDelete={true}
           // disableCreate={true}
@@ -381,12 +368,13 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           fixed={true}
+          total={proposals?.total ?? 0}
         />
       ) : (
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={proposals}
+          data={proposals?.payload ?? []}
           route={match.url + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
@@ -399,6 +387,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           fixed={true}
+          total={proposals?.total ?? 0}
         />
       )}
     </CContainer>

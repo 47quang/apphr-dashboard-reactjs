@@ -70,18 +70,18 @@ const TaxDefineTabs = ({ t, history, match }) => {
             aria-label="full width tabs example"
           >
             <Tab className="noselect" label={t('label.other_fee')} {...a11yProps(0)} />
-            <Tab className="noselect" label={t('label.required_insurance')} {...a11yProps(2)} />
-            <Tab className="noselect" label={t('label.personal_tax')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.required_insurance')} {...a11yProps(1)} />
+            <Tab className="noselect" label={t('label.personal_tax')} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
-        <TabPanel value={tabName} index={2} dir={theme.direction}>
-          <ObligatoryTax t={t} />
-        </TabPanel>
-        <TabPanel value={tabName} index={1}>
-          <PersonalTax t={t} />
-        </TabPanel>
         <TabPanel value={tabName} index={0}>
           <OtherFee t={t} match={match} />
+        </TabPanel>
+        <TabPanel value={tabName} index={1} dir={theme.direction}>
+          <ObligatoryTax t={t} />
+        </TabPanel>
+        <TabPanel value={tabName} index={2}>
+          <PersonalTax t={t} />
         </TabPanel>
       </div>
       {/* <div

@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteBranch, fetchBranches } from 'src/stores/actions/branch';
+import { deleteBranch, fetchBranches, setEmptyBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -17,16 +19,15 @@ const Branch = ({ t, history }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.branch_code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.branch_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'address', title: t('label.address'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -75,17 +76,21 @@ const Branch = ({ t, history }) => {
       pageSize: newPageSize,
       currentPage: 0,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.branch_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.branch_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'address', title: t('label.address'), align: 'left', width: '30%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_BRANCH)) {
       dispatch(
@@ -94,14 +99,18 @@ const Branch = ({ t, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyBranches());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchBranches(
@@ -110,7 +119,6 @@ const Branch = ({ t, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -122,7 +130,6 @@ const Branch = ({ t, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -136,7 +143,7 @@ const Branch = ({ t, history }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={branches}
+          data={branches?.payload ?? []}
           route={ROUTE_PATH.BRANCH + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -148,6 +155,7 @@ const Branch = ({ t, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_BRANCH)}
           filters={filters}
           filterFunction={filterFunction}
+          total={branches?.total ?? 0}
         />
       </CContainer>
     );

@@ -55,9 +55,14 @@ const Profile = ({ t, location }) => {
       operates: operatesText,
       type: 'text',
     },
-    fullname: {
+    suggestion: {
       title: t('label.employee_full_name'),
-      operates: operatesText,
+      operates: [
+        {
+          id: FILTER_OPERATOR.AUTOCOMPLETE,
+          name: t('filter_operator.autocomplete'),
+        },
+      ],
       type: 'text',
     },
     phone: {
@@ -97,7 +102,6 @@ const Profile = ({ t, location }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     loading: false,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
@@ -111,11 +115,7 @@ const Profile = ({ t, location }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -141,16 +141,18 @@ const Profile = ({ t, location }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging.currentPage, paging.pageSize]);
+
+  useEffect(() => {
     return () => {
       dispatch(setEmptyProfiles());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.currentPage, paging.pageSize]);
-
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchProfiles(
@@ -159,7 +161,6 @@ const Profile = ({ t, location }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -171,7 +172,6 @@ const Profile = ({ t, location }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -196,7 +196,7 @@ const Profile = ({ t, location }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={profiles}
+          data={profiles?.payload ?? []}
           route={ROUTE_PATH.PROFILE + '/'}
           deleteRow={deleteRow}
           onCurrentPageChange={onCurrentPageChange}
@@ -212,6 +212,7 @@ const Profile = ({ t, location }) => {
           statusComponent={statusComponent}
           isExportEmployeeSalary={true}
           disableExportAllSalary={true}
+          total={profiles?.total ?? 0}
         />
       </CContainer>
     );

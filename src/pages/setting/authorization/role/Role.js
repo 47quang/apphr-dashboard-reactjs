@@ -4,27 +4,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteRole, fetchRoles } from 'src/stores/actions/role';
+import { deleteRole, fetchRoles, setEmptyRoles } from 'src/stores/actions/role';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Role = ({ t, location, history }) => {
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.role_code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.role_name'), align: 'left', width: '50%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
-  ];
+  ]);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const roles = useSelector((state) => state.role.roles);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -73,17 +74,20 @@ const Role = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.role_code'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.role_name'), align: 'left', width: '50%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ROLE))
       dispatch(
@@ -92,13 +96,17 @@ const Role = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyRoles());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchRoles(
@@ -107,7 +115,6 @@ const Role = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -119,7 +126,6 @@ const Role = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -133,7 +139,7 @@ const Role = ({ t, location, history }) => {
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={roles}
+          data={roles?.payload ?? []}
           route={ROUTE_PATH.ROLE + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -145,6 +151,7 @@ const Role = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_ROLE)}
           filters={filters}
           filterFunction={filterFunction}
+          total={roles?.total ?? 0}
         />
       </CContainer>
     );

@@ -101,6 +101,10 @@ export const fetchContractTable = (params, onTotalChange, setLoading) => {
                 return contract;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
         if (onTotalChange) onTotalChange(total);
       })

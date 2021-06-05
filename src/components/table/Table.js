@@ -273,7 +273,7 @@ const QTable = (props) => {
     setFromDate,
     pageSize,
     currentPage,
-    onTotalChange,
+    total,
   } = props;
   console.log('TABLE', columnDef, data);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
@@ -401,8 +401,8 @@ const QTable = (props) => {
   const NoDataCellComponent = ({ getMessage, ...restProps }) => {
     //<CircularProgress className="loading-icon-mui" />
     return (
-      <td className="py-5 text-center" colSpan={restProps.colSpan}>
-        {paging.loading ? <CircularProgress className="loading-icon-mui" /> : <big className="text-muted">{getMessage('noData')}</big>}
+      <td className="text-center" colSpan={restProps.colSpan} style={{ height: 53 }}>
+        {paging.loading ? <CircularProgress className="loading-icon-mui" /> : <big className="text-muted">{t('message.no_data')}</big>}
       </td>
     );
   };
@@ -564,6 +564,7 @@ const QTable = (props) => {
   const CellComponent = ({ className, style, ...props }) => {
     return <Table.Cell className={classNames(className, 'py-0')} {...props} style={{ ...style, height: 53 }}></Table.Cell>;
   };
+  // console.log(paging);
   return (
     <div>
       <Paper>
@@ -580,7 +581,6 @@ const QTable = (props) => {
               setFromDate={setFromDate}
               pageSize={pageSize}
               currentPage={currentPage}
-              onTotalChange={onTotalChange}
             />
           </div>
         )}
@@ -599,7 +599,7 @@ const QTable = (props) => {
               onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
             />
           )}
-          {!notPaging && <CustomPaging totalCount={paging.total} />}
+          {!notPaging && <CustomPaging totalCount={total} />}
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>

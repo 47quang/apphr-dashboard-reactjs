@@ -187,8 +187,11 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
-        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
-        if (onTotalChange) onTotalChange(total);
+        payload = {
+          payload: data,
+          total: total,
+        };
+        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
       })
       .catch((err) => {
         console.log(err);

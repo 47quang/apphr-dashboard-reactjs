@@ -26,7 +26,7 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchWages = (params, onTotalChange, setLoading) => {
+export const fetchWages = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
@@ -39,8 +39,8 @@ export const fetchWages = (params, onTotalChange, setLoading) => {
                 return wage;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.wage.SET_WAGES, payload: payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleWageExceptions(err, dispatch, 'fetchWages');
@@ -114,6 +114,13 @@ export const deleteWage = (id, success_msg, handleAfterDelete) => {
 export const setEmptyWage = () => {
   return {
     type: REDUX_STATE.wage.EMPTY_VALUE,
+    payload: [],
+  };
+};
+
+export const setEmptyWages = () => {
+  return {
+    type: REDUX_STATE.wage.EMPTY_LIST,
     payload: [],
   };
 };

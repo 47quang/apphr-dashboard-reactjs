@@ -26,7 +26,7 @@ const handleHolidayExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchHolidays = (params, onTotalChange, setLoading) => {
+export const fetchHolidays = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.holiday
@@ -39,8 +39,8 @@ export const fetchHolidays = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAYS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleHolidayExceptions(err, dispatch, 'fetchHolidays');
@@ -120,6 +120,13 @@ export const deleteHoliday = (id, success_msg, handleAfterDelete) => {
 export const setEmptyHoliday = () => {
   return {
     type: REDUX_STATE.holiday.EMPTY_VALUE,
+    payload: [],
+  };
+};
+
+export const setEmptyHolidays = () => {
+  return {
+    type: REDUX_STATE.holiday.EMPTY_LIST,
     payload: [],
   };
 };

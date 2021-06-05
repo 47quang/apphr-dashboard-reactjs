@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  roles: [],
+  roles: {
+    payload: [],
+    total: 0,
+  },
   role: {
     id: '',
     shortname: '',
@@ -26,6 +29,11 @@ const roleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         role: initialState.role,
+      };
+    case REDUX_STATE.role.EMPTY_LIST:
+      return {
+        ...state,
+        roles: initialState.roles,
       };
     case REDUX_STATE.role.SET_PERMISSIONS:
       return {

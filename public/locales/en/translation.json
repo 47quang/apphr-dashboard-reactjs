@@ -85,7 +85,8 @@
     "payment_name": "Payment Name",
     "personal_tax_level": "Personal Tax Rate",
     "name_tax": "Explanation",
-    "percentage_tax": "Tax Rate",
+    "percentage_tax_person": "Tax Rate For Personal",
+    "percentage_tax_company": "Tax Rate For Company",
     "required_insurance": "Compulsory Insurance",
     "personal_tax": "Personal Income Tax",
     "other_fee": "Other Fee",
@@ -396,8 +397,15 @@
     "number_leave_work": "Number of people leaved",
     "number_absence": "Number of people not working",
     "overtime_assignment": "Overtime assignment",
-    "chart_shift_in_day": "Statistical chart of working shifts of the day"
-
+    "chart_shift_in_day": "Statistical chart of working shifts of the day",
+    "accident_insurance": "Occupational accident insurance - Occupational disease",
+    "less_than_5m":"Up to 5 million VND",
+    "great_than_5m_less_than_10m": "Over 5 million VND to 10 million VND",
+    "great_than_10m_less_than_18m": "Over 10 million VND to 18 million VND",
+    "great_than_18m_less_than_32m": "Over 18 million VND to 32 million VND",
+    "great_than_32m_less_than_52m": "Over 32 million VND to 52 million VND",
+    "great_than_52m_less_than_80m": "Over 52 million VND to 80 million VND",
+    "great_than_80m":"Over 80 million VND"
 
   },
   "title": {
@@ -478,7 +486,8 @@
     "reset_password_warning_message": "You really want to reset the password for this account",
     "reset_password_row": "Reset password for this row",
     "add": "Create",
-    "successful_reset_password": "Password reset successful"
+    "successful_reset_password": "Password reset successful",
+    "no_data": "No Data"
   },
   "placeholder": {
     "select_contract": "Select contract",
