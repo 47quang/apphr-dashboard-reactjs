@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION } from 'src/constants/key';
 import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
@@ -68,6 +69,7 @@ const SettingGeneralPage = ({ t, location }) => {
             <Formik innerRef={settingRef} enableReinitialize initialValues={general} validationSchema={SettingGeneralInfoSchema}>
               {({ values, errors, touched, handleChange, handleBlur }) => (
                 <form>
+                  <FormHeader text={t('label.company_info')} />
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-xl-6'}

@@ -405,7 +405,20 @@
     "great_than_18m_less_than_32m": "Over 18 million VND to 32 million VND",
     "great_than_32m_less_than_52m": "Over 32 million VND to 52 million VND",
     "great_than_52m_less_than_80m": "Over 52 million VND to 80 million VND",
-    "great_than_80m":"Over 80 million VND"
+    "great_than_80m":"Over 80 million VND",
+    "company_info":"Business information",
+    "branch_info": "Branch information",
+    "department_info": "Department information",
+    "position_info": "Position information",
+    "shift_info": "Shift information",
+    "holiday_info": "Holiday information",
+    "role_info": "Role information",
+    "article_type_info": "Notification type information",
+    "attribute_info": "Contract attribute information",
+    "allowance_info": "Allowance information",
+    "wage_info": "Wage information",
+    "other_fee_info": "Fee information"
+
 
   },
   "title": {

@@ -379,6 +379,9 @@ const QTable = (props) => {
         case 'wage-history': {
           return '/benefit/' + modelId;
         }
+        case 'payment': {
+          return '/setting/taxDefine/' + modelId;
+        }
         default: {
         }
       }

@@ -34,7 +34,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, load
             >
               {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
                 <form>
-                  <FormHeader text={t('title.role')} />
+                  <FormHeader text={t('label.role_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-6">

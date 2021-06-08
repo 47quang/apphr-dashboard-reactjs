@@ -30,7 +30,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading,
             >
               {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                 <form>
-                  <FormHeader text={t('label.holiday')} />
+                  <FormHeader text={t('label.holiday_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">

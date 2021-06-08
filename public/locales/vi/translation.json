@@ -403,7 +403,19 @@
     "great_than_18m_less_than_32m": "Trên 18 triệu VNĐ đến 32 triệu VNĐ",
     "great_than_32m_less_than_52m": "Trên 32 triệu VNĐ đến 52 triệu VNĐ",
     "great_than_52m_less_than_80m": "Trên 52 triệu VNĐ đến 80 triệu VNĐ",
-    "great_than_80m":"Trên 80 triệu VNĐ"
+    "great_than_80m":"Trên 80 triệu VNĐ",
+    "company_info": "Thông tin doanh nghiệp",
+    "branch_info": "Thông tin chi nhánh",
+    "department_info": "Thông tin phòng ban",
+    "position_info": "Thông tin vị trí",
+    "shift_info": "Thông tin ca làm",
+    "holiday_info": "Thông tin ngày nghỉ",
+    "role_info": "Thông tin vai trò",
+    "article_type_info": "Thông in loại thông báo",
+    "attribute_info": "Thông tin thuộc tính hợp đồng",
+    "allowance_info": "Thông tin trợ cấp",
+    "wage_info": "Thông tin nhóm lương",
+    "other_fee_info": "Thông tin chi phí"
 
   },
   "title": {

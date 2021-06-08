@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { SettingPositionInfoSchema } from 'src/schema/formSchema';
 import { fetchDepartments } from 'src/stores/actions/department';
@@ -40,7 +41,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
             >
               {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
-                  {/* <FormHeader text={t('label.position_create')} /> */}
+                  <FormHeader text={t('label.position_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">

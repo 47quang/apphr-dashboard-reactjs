@@ -3,6 +3,7 @@ import { CircularProgress } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
@@ -38,6 +39,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
               {({ values, errors, touched, handleChange, setValues, handleBlur, setFieldValue }) => {
                 return (
                   <form autoComplete="off">
+                    <FormHeader text={t('label.shift_info')} />
                     <div className="row">
                       {isCreate ? (
                         <div className="form-group col-xl-12">

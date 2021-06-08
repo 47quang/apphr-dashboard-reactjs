@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { SettingDepartmentInfoSchema } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
@@ -30,6 +31,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
             >
               {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
+                  <FormHeader text={t('label.department_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">
