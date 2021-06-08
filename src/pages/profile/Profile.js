@@ -212,6 +212,8 @@ const Profile = ({ t, location }) => {
           statusComponent={statusComponent}
           isExportEmployeeSalary={true}
           disableExportAllSalary={true}
+          disableExportProfile={true}
+          disableImportProfile={true}
           total={profiles?.total ?? 0}
         />
       </CContainer>

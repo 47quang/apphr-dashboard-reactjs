@@ -324,6 +324,12 @@ export const api = {
     getActiveWorking: (id) => {
       return client.get(API_PREFIX.API_PROFILE + `/${id}/work-history-active`);
     },
+    export: (data) => {
+      return client.post(API_PREFIX.API_PROFILE + `/export`, data);
+    },
+    import: (data) => {
+      return client.post(API_PREFIX.API_PROFILE + `/import`, data);
+    },
   },
   contract: {
     getAll: (params) => {

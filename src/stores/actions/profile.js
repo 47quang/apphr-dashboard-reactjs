@@ -526,3 +526,27 @@ export const setEmptyActiveWorking = () => {
     payload: [],
   };
 };
+export const exportProfiles = (data) => {
+  return (dispatch, getState) => {
+    api.profile
+      .export(data)
+      .then(({ payload }) => {
+        //window.location.href = payload.publicPath;
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+      });
+  };
+};
+export const importProfiles = (data) => {
+  return (dispatch, getState) => {
+    api.profile
+      .import(data)
+      .then(({ payload }) => {
+        window.location.href = payload.publicPath;
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+      });
+  };
+};

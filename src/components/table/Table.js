@@ -17,7 +17,7 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import { AccountBalanceWallet, AddCircle, MonetizationOn, Replay } from '@material-ui/icons';
+import { AccountBalanceWallet, AddCircle, CloudDownload, CloudUpload, MonetizationOn, Replay } from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
@@ -28,8 +28,9 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import { COLORS } from 'src/constants/theme';
 import { resetPassword } from 'src/stores/actions/account';
-import { exportAllWage, exportWage } from 'src/stores/actions/profile';
+import { exportAllWage, exportWage, exportProfiles, importProfiles } from 'src/stores/actions/profile';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
+import ExportProfiles from '../dialog/ExportProfiles';
 import ExportWage from '../dialog/ExportWage';
 import NewRollUp from '../dialog/NewRollUp';
 import FilterTable from './FilterTable';
@@ -186,6 +187,71 @@ const ExportAllSalaryPanel = ({ t, disableExportAllSalary }) => {
     </Plugin>
   );
 };
+const ExportProfile = ({ t, disableExportProfile }) => {
+  const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleConfirm = (values) => {
+    setIsOpen(false);
+    dispatch(exportProfiles(values));
+  };
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+  return (
+    <Plugin name="ExportProfile" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {disableExportProfile && isOpen && <ExportProfiles isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
+        {
+          <IconButton
+            hidden={!disableExportProfile}
+            className="py-0 px-2"
+            title={t('title.export_profile')}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            style={{ width: 35, height: 35 }}
+          >
+            <CloudDownload color={'primary'} />
+          </IconButton>
+        }
+      </Template>
+    </Plugin>
+  );
+};
+
+const ImportProfile = ({ t, disableImportProfile }) => {
+  const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleConfirm = (values) => {
+    setIsOpen(false);
+    dispatch(importProfiles(values));
+  };
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+  return (
+    <Plugin name="ImportProfile" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {disableImportProfile && isOpen && <ExportWage isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
+        {
+          <IconButton
+            hidden={!disableImportProfile}
+            className="py-0 px-2"
+            title={t('title.import_profile')}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            style={{ width: 35, height: 35 }}
+          >
+            <CloudUpload color={'primary'} />
+          </IconButton>
+        }
+      </Template>
+    </Plugin>
+  );
+};
 const StubHeaderCellComponent = ({ column, className, ...props }) => {
   return (
     <Table.StubHeaderCell
@@ -274,6 +340,8 @@ const QTable = (props) => {
     pageSize,
     currentPage,
     total,
+    disableExportProfile,
+    disableImportProfile,
   } = props;
   console.log('TABLE', columnDef, data);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
@@ -654,6 +722,20 @@ const QTable = (props) => {
           ) : (
             <div>
               <ExportAllSalaryPanel t={t} disableExportAllSalary={disableExportAllSalary} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
+              <ImportProfile t={t} disableImportProfile={disableImportProfile} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
+              <ExportProfile t={t} disableExportProfile={disableExportProfile} />
             </div>
           )}
           <TableEditRow />

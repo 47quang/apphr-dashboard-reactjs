@@ -450,7 +450,9 @@
     "type_of_request": "Các loại đề xuất",
     "status_of_cell": "Trạng thái của các ca bình thường",
     "export_all_salary": "Xuất bảng lương",
-    "export_wage_row": "Xuất phiếu lương cho hàng này"
+    "export_wage_row": "Xuất phiếu lương cho hàng này",
+    "export_profile": "Export danh sách nhân sự",
+    "import_profile": "Upload danh sách nhân sự"
   },
   "filter_operator": {
     "in": "trong",
@@ -780,7 +782,8 @@
     "required_select_benefit_status": "Bắt buộc phải chọn tình trạng của đợt lương",
     "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
     "required_select_month": "Bắt buộc phải chọn tháng",
-    "required_enter_file_name": "Bắt buộc phải nhập tên file"
+    "required_enter_file_name": "Bắt buộc phải nhập tên file",
+    "start_of_file_name": "Tên file không hợp lệ"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

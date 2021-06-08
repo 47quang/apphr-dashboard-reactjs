@@ -950,12 +950,22 @@ export const OtherFeeSchema = Yup.object().shape({
     .required('validation.required_enter_payment_value'),
 });
 export const ExportWageSchema = Yup.object().shape({
-  filename: Yup.string().min(1, 'validation.required_enter_file_name').required('validation.required_enter_file_name'),
+  filename: Yup.string()
+    .matches(getRegexExpression(VALIDATION_TYPE.FILE_NAME), 'validation.start_of_file_name')
+    .min(1, 'validation.required_enter_file_name')
+    .required('validation.required_enter_file_name'),
   month: Yup.string()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_month', function (value) {
       return !!value;
     })
     .required('validation.required_select_month'),
+});
+
+export const ExportProfilesSchema = Yup.object().shape({
+  filename: Yup.string()
+    .matches(getRegexExpression(VALIDATION_TYPE.FILE_NAME), 'validation.start_of_file_name')
+    .min(1, 'validation.required_enter_file_name')
+    .required('validation.required_enter_file_name'),
 });
 
 export const FilterSchema = Yup.object().shape({

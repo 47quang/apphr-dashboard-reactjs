@@ -453,7 +453,9 @@
     "type_of_request": "Types of Requests",
     "status_of_cell": "Status of normal assignment",
     "export_all_salary": "Export Salary Table",
-    "export_wage_row": "Export paycheck for this row"
+    "export_wage_row": "Export paycheck for this row",
+    "export_profile": "Export list profiles",
+    "import_profile": "Upload list profiles"
   },
   "filter_operator": {
     "in": "in",
@@ -772,7 +774,9 @@
     "allowance_level_must_not_be_negative": "Allowance level must be a non-negative number",
     "required_enter_allowance_level": "Required to enter Allowance Level",
     "required_select_contract_id": "Required to select a Contract",
-    "required_enter_benefit_code": "Required to enter benefit code"
+    "required_enter_benefit_code": "Required to enter benefit code",
+    "start_of_file_name": "Invalid file name"
+
   },
   "exceptions": {
     "message_unknown_error": "An unknown error occurred"
