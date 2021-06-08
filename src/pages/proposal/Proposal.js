@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { FILTER_OPERATOR, PAGE_SIZES } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, ROUTE_PATH } from 'src/constants/key';
 import {
   fetchLeaveRequests,
   fetchRemoteRequests,
@@ -357,7 +357,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           t={t}
           columnDef={columnDef}
           data={proposals?.payload ?? []}
-          route={match.url + '/'}
+          route={ROUTE_PATH.LEAVE + '/'}
           disableDelete={true}
           // disableCreate={true}
           statusCols={['status']}
@@ -375,7 +375,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           t={t}
           columnDef={columnDef}
           data={proposals?.payload ?? []}
-          route={match.url + '/'}
+          route={(type === 'remote' ? ROUTE_PATH.REMOTE : ROUTE_PATH.OVERTIME) + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
           // disableCreate={true}

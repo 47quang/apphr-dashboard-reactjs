@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteRole, fetchRoles, setEmptyRoles } from 'src/stores/actions/role';
+import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -101,12 +101,7 @@ const Role = ({ t, location, history }) => {
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-  useEffect(() => {
-    return () => {
-      dispatch(setEmptyRoles());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   const filterFunction = (params) => {
     dispatch(
       fetchRoles(

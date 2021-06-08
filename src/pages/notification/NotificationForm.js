@@ -125,7 +125,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       isTouched={touched.typeId}
                       isError={errors.typeId && touched.typeId}
                       errorMessage={t(errors.typeId)}
-                      lstSelectOptions={articleTypes}
+                      lstSelectOptions={articleTypes?.payload ?? []}
                       placeholder={t('placeholder.select_notification_type')}
                     />
                     <CommonTextInput
@@ -151,7 +151,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
                           values={values.branchIds}
-                          listValues={branches}
+                          listValues={branches?.payload ?? []}
                           onChangeValues={(e) => {
                             let branchIds = e.target.value;
                             departmentsSelect = departments.filter((dep) => branchIds.includes(dep.branchId));
@@ -166,7 +166,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
                           values={values.departmentIds}
-                          listValues={departmentsSelect}
+                          listValues={departmentsSelect?.payload ?? []}
                           onChangeValues={handleChange('departmentIds')}
                         />
                       </div>

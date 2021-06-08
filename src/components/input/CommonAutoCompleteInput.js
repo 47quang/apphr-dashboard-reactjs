@@ -65,6 +65,7 @@ const CommonAutoCompleteInput = ({
         options={lstSelectOptions ?? []}
         style={{ height: 35 }}
         getOptionLabel={(option) => option.name}
+        getOptionSelected={(option) => option.id}
         noOptionsText={placeholder}
         onBlur={onBlur}
         onChange={(e, v) => {

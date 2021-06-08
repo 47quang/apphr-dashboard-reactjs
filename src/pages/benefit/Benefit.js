@@ -199,7 +199,7 @@ const Benefit = ({ t, location, history }) => {
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
-          statusCols={['status']}
+          statusCols={['type', 'status']}
           disableDelete={!permissionIds.includes(PERMISSION.DELETE_USER)}
           disableCreate={!permissionIds.includes(PERMISSION.CREATE_USER)}
           disableEdit={!permissionIds.includes(PERMISSION.GET_USER)}

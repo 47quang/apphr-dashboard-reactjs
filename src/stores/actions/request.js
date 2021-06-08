@@ -35,7 +35,14 @@ const handleRequestExceptions = (err, dispatch, functionName) => {
 
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;

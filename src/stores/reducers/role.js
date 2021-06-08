@@ -7,7 +7,7 @@ const initialState = {
   },
   role: {
     id: '',
-    shortname: '',
+    code: '',
     name: '',
     permissionIds: [],
   },
@@ -29,11 +29,6 @@ const roleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         role: initialState.role,
-      };
-    case REDUX_STATE.role.EMPTY_LIST:
-      return {
-        ...state,
-        roles: initialState.roles,
       };
     case REDUX_STATE.role.SET_PERMISSIONS:
       return {

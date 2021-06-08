@@ -14,7 +14,7 @@ const UpdateHoliday = ({ t, location, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_HOLIDAY)) {
-      dispatch(fetchHoliday(match?.params?.id.split('=')[1], setLoading)); //param.id = ".id=4"
+      dispatch(fetchHoliday(match?.params?.id, setLoading));
       return () => {
         dispatch(setEmptyHoliday());
       };

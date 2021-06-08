@@ -120,7 +120,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                       isRequiredField
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_branch')}
-                      lstSelectOptions={branches}
+                      lstSelectOptions={branches?.payload ?? []}
                       isTouched={touched.branchId}
                       isError={errors.branchId && touched.branchId}
                       errorMessage={t(errors.branchId)}

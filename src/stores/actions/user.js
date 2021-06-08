@@ -17,7 +17,14 @@ const handleLoginExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -32,6 +39,7 @@ export const login = (params, history) => {
       .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.user.SET_USER, payload });
         localStorage.setItem('token', payload.token);
+        localStorage.setItem('user', payload.user.username);
         localStorage.setItem('permissionIds', JSON.stringify(payload.user.role.permissionIds));
         history.push(ROUTE_PATH.ROOT);
       })
@@ -51,8 +59,7 @@ export const logout = (history) => {
       type: REDUX_STATE.user.SET_USER,
       payload,
     });
-    localStorage.setItem('token', payload.token);
-    localStorage.setItem('permissionIds', payload.permissionIds);
+    localStorage.clear();
     history.push(ROUTE_PATH.LOGIN);
   };
 };

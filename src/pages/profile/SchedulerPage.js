@@ -97,10 +97,12 @@ const SchedulerPage = ({ t, history, match }) => {
   const DayScaleCell = (props) => {
     const classes = useStyles();
     const { startDate, today } = props;
-    const holiday = holidays.payload.find(
-      (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
-    )
-      ? true
+    const holiday = holidays?.payload
+      ? holidays.payload.find(
+          (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
+        )
+        ? true
+        : false
       : false;
     if (holiday) {
       return <WeekView.DayScaleCell {...props} className={classes.holiday} />;
@@ -118,10 +120,12 @@ const SchedulerPage = ({ t, history, match }) => {
     const classes = useStyles();
     const { startDate } = props;
     const date = moment(startDate);
-    const holiday = holidays.payload.find(
-      (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
-    )
-      ? true
+    const holiday = holidays?.payload
+      ? holidays.payload.find(
+          (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
+        )
+        ? true
+        : false
       : false;
     const onClickEvent = () => {
       if (permissionIds.includes(PERMISSION.CREATE_ASSIGNMENT))

@@ -609,7 +609,7 @@ const NewContract = ({ t, history, match }) => {
   };
 
   return (
-    <CContainer fluid className="c-main">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {openWarning && (
           <WarningAlertDialog

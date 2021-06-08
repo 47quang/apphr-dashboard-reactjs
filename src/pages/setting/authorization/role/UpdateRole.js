@@ -15,7 +15,7 @@ const UpdateRole = ({ t, location, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ROLE)) {
-      dispatch(fetchPermissions());
+      if (permissions && permissions.length === 0) dispatch(fetchPermissions());
       dispatch(fetchRole(match?.params?.id, setLoading));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

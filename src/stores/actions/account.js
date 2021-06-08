@@ -19,7 +19,14 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -86,6 +93,7 @@ export const filterAccounts = (params, onTotalChange, setLoading) => {
       });
   };
 };
+
 export const fetchAccount = (id, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
@@ -94,8 +102,14 @@ export const fetchAccount = (id, setLoading) => {
       .then(async ({ payload }) => {
         payload.email = payload.email ?? '';
         payload.phone = payload.phone ?? '';
-        payload.profileId = payload.profileId ?? 0;
-        payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
+        payload.profileId = payload.profileId ?? undefined;
+        payload.profileName = payload.profileId ? payload.profile.code + ' - ' + payload.profile.fullname : '';
+        let roles = await api.role.getAll().then(({ payload }) => {
+          dispatch({ type: REDUX_STATE.account.GET_ROLES, payload });
+          return payload;
+        });
+        let thisRole = roles.filter((r) => r.id === payload.roleId);
+        payload.permissionIds = thisRole.length > 0 ? thisRole[0].permissionIds : [];
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
@@ -111,12 +125,7 @@ export const createAccount = (params, history, success_msg) => {
   return (dispatch, getState) => {
     api.account
       .post(params)
-      .then(async ({ payload }) => {
-        payload.profileId = payload.profileId ?? 0;
-        payload.resetCode = payload.resetCode ?? '';
-        payload.rollUp = payload.rollUp ?? '';
-        payload.permissionIds = await api.role.get(payload.roleId).then(({ payload }) => payload.permissionIds);
-        dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
+      .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
@@ -131,10 +140,8 @@ export const updateAccount = (data, success_msg) => {
     api.account
       .put(data)
       .then(({ payload }) => {
-        payload.profileId = payload.profileId ?? 0;
-        payload.resetCode = payload.resetCode ?? '';
-        payload.rollUp = payload.rollUp ?? '';
-        payload.salt = payload.salt ?? '';
+        payload.profileName = data.profileName;
+        payload.permissionIds = data.permissionIds;
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -149,7 +156,6 @@ export const deleteAccount = (id, success_msg, handleAfterDelete) => {
     api.account
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.account.DELETE_ACCOUNT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })
@@ -201,19 +207,6 @@ export const fetchRole = (id) => {
       })
       .catch((err) => {
         handleAccountExceptions(err, dispatch, 'fetch Role');
-      });
-  };
-};
-
-export const fetchPermissionGroups = () => {
-  return (dispatch, getState) => {
-    api.role
-      .getAllPermission()
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.account.GET_ALL_PERMISSION, payload });
-      })
-      .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch permissionGroups');
       });
   };
 };

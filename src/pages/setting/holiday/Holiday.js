@@ -146,7 +146,7 @@ const HolidayPage = ({ t, location, history }) => {
           t={t}
           columnDef={columnDef}
           data={holidays?.payload ?? []}
-          route={ROUTE_PATH.HOLIDAY}
+          route={ROUTE_PATH.HOLIDAY + '/'}
           idxColumnsFilter={[1]}
           dateCols={[3, 2]}
           deleteRow={deleteRow}

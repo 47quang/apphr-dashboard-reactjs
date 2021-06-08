@@ -28,7 +28,8 @@ const TheLayout = (props) => {
   const handleClose = (event, reason) => {
     if (reason === 'timeout') {
       dispatch({ type: REDUX_STATE.notification.SET_OPEN });
-    }
+    } else if (reason === 'timeout') return;
+    else dispatch({ type: REDUX_STATE.notification.SET_OPEN });
   };
   return (
     <div className="c-app c-default-layout">
@@ -36,7 +37,7 @@ const TheLayout = (props) => {
       <div className="c-wrapper">
         <TheHeader {...props} />
         <Snackbar open={notification.open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-          <Alert variant="filled" severity={notification.type}>
+          <Alert variant="filled" severity={notification.type} onClose={handleClose}>
             {notification.message}
           </Alert>
         </Snackbar>

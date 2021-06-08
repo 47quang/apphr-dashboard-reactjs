@@ -289,7 +289,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                           handleChange('branchId')(e);
                         }}
                         inputID={'branchId'}
-                        lstSelectOptions={branches}
+                        lstSelectOptions={branches?.payload ?? []}
                         placeholder={t('placeholder.select_branch')}
                         isTouched={touched.branchId}
                         isError={errors.branchId && touched.branchId}

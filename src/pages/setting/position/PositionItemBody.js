@@ -134,7 +134,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                         handleChange('branchId')(e);
                       }}
                       inputID={'branchId'}
-                      lstSelectOptions={branches}
+                      lstSelectOptions={branches?.payload ?? []}
                       placeholder={t('placeholder.select_branch')}
                       isTouched={touched.branchId}
                       isError={errors.branchId && touched.branchId}
@@ -151,7 +151,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                       onBlur={handleBlur('departmentId')}
                       onChange={handleChange('departmentId')}
                       inputID={'departmentId'}
-                      lstSelectOptions={departments}
+                      lstSelectOptions={departments?.payload ?? []}
                       placeholder={t('placeholder.select_department')}
                       isTouched={touched.departmentId}
                       isError={errors.departmentId && touched.departmentId}

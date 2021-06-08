@@ -482,7 +482,7 @@
     "update_contract_warning_message": "Change of contract status may affect the current contract and active wage. Do you really want to update this contract?",
     "not_assign_in_this_time": "Can't assign work in this time frame!",
     "new_active_wage_warning_message": "Creating a new active wage will affect the current active wage. Do you really want to create this wage?",
-    "update_active_wage_warning_message": "Changing the status of an active wage may affect the current active wage. Do you really want to update this pay period?",
+    "update_active_wage_warning_message": "Changing the status of a wage may affect the current active wage. Do you really want to update this pay period?",
     "reset_password_warning_message": "You really want to reset the password for this account",
     "reset_password_row": "Reset password for this row",
     "add": "Create",

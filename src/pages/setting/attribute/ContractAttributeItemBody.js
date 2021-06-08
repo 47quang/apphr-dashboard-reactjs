@@ -12,7 +12,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
   const typeOptions = [
     {
       id: 'date',
-      name: t('lael.date'),
+      name: t('label.date'),
     },
     {
       id: 'text',

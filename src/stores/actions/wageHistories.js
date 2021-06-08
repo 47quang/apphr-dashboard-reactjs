@@ -18,7 +18,14 @@ const handleWageExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -27,14 +34,6 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchWageHistories = (params, setLoading, t) => {
-  const paymentType = {
-    by_hour: 'Chi trả theo giờ',
-    by_month: 'Chi trả theo tháng',
-  };
-  const status = {
-    active: t('label.active'),
-    inactive: t('label.inactive'),
-  };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wageHistory
@@ -45,8 +44,6 @@ export const fetchWageHistories = (params, setLoading, t) => {
             ? payload.map((wage) => {
                 wage.contractName = wage?.contract?.code + ' - ' + wage?.contract?.fullname;
                 wage.employee = wage.profile.code + ' - ' + wage.profile.fullname;
-                wage.type = paymentType[wage.type];
-                wage.status = status[wage.status];
                 wage.startDate = formatDate(wage.startDate);
                 wage.createdAt = formatDateTimeToString(wage.createdAt);
                 return wage;
@@ -74,6 +71,8 @@ export const fetchWageHistory = (id, setLoading) => {
       .get(id)
       .then(async ({ payload }) => {
         payload.wageId = payload.wageId ?? undefined;
+        payload.profileName = payload?.profile?.code + ' - ' + payload?.profile?.fullname;
+        payload.contractName = payload?.contract?.code + ' - ' + payload?.contract?.fullname;
         payload.type = payload?.wage?.type;
         payload.code = payload.code ?? undefined;
         payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
@@ -117,7 +116,9 @@ export const updateWageHistory = (data, success_msg) => {
       .put(data)
       .then(({ payload }) => {
         payload.type = data?.wage?.type;
-        payload.wageId = data.wageId;
+        payload.wageId = payload.wageId ?? undefined;
+        payload.profileName = data.profileName;
+        payload.contractName = data.contractName;
         payload.wages = data.wages;
         payload.allowances = data.allowances;
         payload.startDate = formatDateInput(payload.startDate);

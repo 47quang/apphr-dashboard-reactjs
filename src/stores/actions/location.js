@@ -17,7 +17,14 @@ const handleLocationExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
