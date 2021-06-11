@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import ObligatoryTax from './ObligatoryTax';
-import OtherFee from './OhterFee';
+import OtherFee from './OtherFee';
 import PersonalTax from './PersonalTax';
 
 const TabPanel = (props) => {

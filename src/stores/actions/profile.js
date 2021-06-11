@@ -531,7 +531,7 @@ export const exportProfiles = (data) => {
     api.profile
       .export(data)
       .then(({ payload }) => {
-        //window.location.href = payload.publicPath;
+        window.location.href = payload.publicPath;
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'updateWageHistory');

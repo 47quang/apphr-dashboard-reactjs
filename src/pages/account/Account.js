@@ -1,5 +1,6 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
@@ -134,6 +135,9 @@ const Account = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
       <CContainer fluid className="c-main p-4 m-auto">
+        <Helmet>
+          <title>{'APPHR | ' + t('Account')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}

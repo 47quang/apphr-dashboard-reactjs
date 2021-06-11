@@ -1,6 +1,7 @@
 import { CContainer } from '@coreui/react';
 import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStatics, setEmptyStatics } from 'src/stores/actions/static';
 
@@ -17,6 +18,9 @@ const Report = ({ t, location }) => {
   }, []);
   return (
     <CContainer fluid className="c-main m-auto p-4">
+      <Helmet>
+        <title>{'APPHR | ' + t('Store')}</title>
+      </Helmet>
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

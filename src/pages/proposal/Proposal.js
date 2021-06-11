@@ -16,6 +16,7 @@ import {
 } from 'src/stores/actions/request';
 import Chip from '@material-ui/core/Chip';
 import { COLORS } from 'src/constants/theme';
+import { Helmet } from 'react-helmet';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -352,6 +353,10 @@ const Proposal = ({ t, location, match, type, profileId }) => {
   };
   return (
     <CContainer fluid className="c-main p-4 m-auto">
+      <Helmet>
+        <title>{'APPHR | ' + t('Proposal')}</title>
+        <link rel="icon" href={'images/short_logo.png'} type="image/png" />
+      </Helmet>
       {type === 'leave' ? (
         <MemoizedQTable
           t={t}

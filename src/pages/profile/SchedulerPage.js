@@ -182,7 +182,9 @@ const SchedulerPage = ({ t, history, match }) => {
     let { selectedDate } = state;
     let startDate = selectedDate + 'T' + values.start;
     let endDate = selectedDate + 'T' + values.end;
-    let checkValidTask = assignments.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate)); //bug
+    let checkValidTask = assignments?.payload
+      ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
+      : false; //bug
     if (!checkValidTask) {
       dispatch({
         type: REDUX_STATE.notification.SET_NOTI,

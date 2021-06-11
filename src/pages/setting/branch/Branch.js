@@ -6,6 +6,7 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteBranch, fetchBranches, setEmptyBranches } from 'src/stores/actions/branch';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -140,6 +141,9 @@ const Branch = ({ t, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_BRANCH))
     return (
       <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}

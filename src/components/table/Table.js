@@ -32,6 +32,7 @@ import { exportAllWage, exportWage, exportProfiles, importProfiles } from 'src/s
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
 import ExportProfiles from '../dialog/ExportProfiles';
 import ExportWage from '../dialog/ExportWage';
+import ImportProfiles from '../dialog/ImportProfiles';
 import NewRollUp from '../dialog/NewRollUp';
 import FilterTable from './FilterTable';
 import NoteTable from './NoteTable';
@@ -234,7 +235,7 @@ const ImportProfile = ({ t, disableImportProfile }) => {
     <Plugin name="ImportProfile" dependencies={[{ name: 'Toolbar' }]}>
       <Template name="toolbarContent">
         <TemplatePlaceholder />
-        {disableImportProfile && isOpen && <ExportWage isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
+        {disableImportProfile && isOpen && <ImportProfiles isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
         {
           <IconButton
             hidden={!disableImportProfile}

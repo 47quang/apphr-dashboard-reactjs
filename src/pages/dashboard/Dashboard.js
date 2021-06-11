@@ -6,6 +6,7 @@ import PieChart from 'src/components/charts/PieChart';
 import { fetchStatisticChart } from 'src/stores/actions/assignment';
 import Count from './Count';
 import LogTable from './LogTable';
+import { Helmet } from 'react-helmet';
 
 const Dashboard = ({ t, location }) => {
   const initValues = {
@@ -21,6 +22,9 @@ const Dashboard = ({ t, location }) => {
   };
   return (
     <>
+      <Helmet>
+        <title>{'APPHR | ' + t('Dashboard')}</title>
+      </Helmet>
       <CContainer fluid className="c-main p-4 m-auto">
         <Count t={t} />
         <div className="row">

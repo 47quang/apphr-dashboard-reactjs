@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 import { Chip } from '@material-ui/core';
 import { COLORS } from 'src/constants/theme';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -168,6 +169,9 @@ const Wage = ({ t }) => {
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
       <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}

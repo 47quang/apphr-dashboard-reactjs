@@ -1,5 +1,6 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -124,6 +125,9 @@ const Shifts = ({ t, location, history }) => {
   if (permissionIds.includes(PERMISSION.LIST_SHIFT))
     return (
       <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}

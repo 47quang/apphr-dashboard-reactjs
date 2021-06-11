@@ -5,6 +5,7 @@ import { Lens } from '@material-ui/icons';
 import classNames from 'classnames';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AssignmentsDialog from 'src/components/dialog/Assignments';
@@ -439,6 +440,9 @@ const RollUp = ({ t, location }) => {
   };
   return (
     <CContainer fluid className="c-main p-4 m-auto">
+      <Helmet>
+        <title>{'APPHR | ' + t('Roll up')}</title>
+      </Helmet>
       <MemoizedQTable
         t={t}
         columnDef={columnDefOfRollUp.current}

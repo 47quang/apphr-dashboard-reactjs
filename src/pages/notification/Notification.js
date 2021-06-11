@@ -6,6 +6,7 @@ import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constan
 import { deleteArticle, fetchArticles, setEmptyArticles } from 'src/stores/actions/article';
 import PropTypes from 'prop-types';
 import Page404 from '../page404/Page404';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -152,6 +153,9 @@ const Notification = ({ t }) => {
   if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
     return (
       <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Notification')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
