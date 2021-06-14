@@ -17,9 +17,9 @@ import { renderButtons } from 'src/utils/formUtils';
 const LeaveForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const type = [
-    { id: 'no-pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
+    { id: 'no-pay', name: t('label.no-pay') },
+    { id: 'pay', name: t('label.pay') },
+    { id: 'policy', name: t('label.policy') },
   ];
   const status = [
     { id: 'new', name: t('label.new') },

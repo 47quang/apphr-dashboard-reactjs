@@ -542,9 +542,7 @@ export const importProfiles = (data) => {
   return (dispatch, getState) => {
     api.profile
       .import(data)
-      .then(({ payload }) => {
-        window.location.href = payload.publicPath;
-      })
+      .then(({ payload }) => {})
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'updateWageHistory');
       });

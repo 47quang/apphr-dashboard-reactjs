@@ -39,12 +39,15 @@ const Report = ({ t, location }) => {
                       {st?.date && st.date.length > 0 ? (
                         st.date.map((date, id) => {
                           return (
-                            <div className="col-2" key={'date ' + id}>
-                              {date.type === 'docx' ? (
-                                <img className="image" src="images/word.svg" alt="docx" style={{ height: '100px' }} />
-                              ) : (
-                                <img className="image" src="images/excel.svg" alt="excel" style={{ height: '100px' }} />
-                              )}
+                            <div className="col-2 d-block" key={'date ' + id}>
+                              <div className="show-image">
+                                {date.type === 'docx' ? (
+                                  <img src="images/word.svg" alt="docx" style={{ height: '100px' }} />
+                                ) : (
+                                  <img src="images/excel.svg" alt="excel" style={{ height: '100px' }} />
+                                )}
+                                <span className="close">X</span>
+                              </div>
 
                               <a href={`https://apphr.me/public/DEV/${date.filename}`}>
                                 <p>{date.filename}</p>

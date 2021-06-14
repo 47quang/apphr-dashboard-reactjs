@@ -983,7 +983,11 @@ export const FilterSchema = Yup.object().shape({
     is: (value) => {
       return ['=', 'autocomplete'].includes(value);
     },
-    then: Yup.string().required('validation.required_select_filter_value'),
+    then: Yup.string()
+      .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_filter_value', function (value) {
+        return value !== '0';
+      })
+      .required('validation.required_select_filter_value'),
   }),
 });
 

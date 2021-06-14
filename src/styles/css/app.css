@@ -85,3 +85,19 @@ button:focus {
   background-color: #d8b8f7 !important;
   border-radius: 9px;
 }
+
+div.show-image {
+}
+
+div.show-image:hover span {
+  display: block;
+}
+div.show-image span {
+  position: absolute;
+  display: none;
+}
+
+div.show-image span.delete {
+  top: 0;
+  left: 79%;
+}

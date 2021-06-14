@@ -387,6 +387,12 @@ export const setEmptyContract = () => {
     payload: [],
   };
 };
+export const setEmptyRenewContracts = () => {
+  return {
+    type: REDUX_STATE.contract.EMPTY_LIST_RENEW_CONTRACT,
+    payload: [],
+  };
+};
 
 export const addField = (params, success_msg) => {
   return (dispatch, getState) => {
@@ -449,6 +455,23 @@ export const countActiveContracts = () => {
       .count()
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT, payload });
+      })
+      .catch((err) => {
+        handleContractExceptions(err, dispatch, 'countActiveContracts');
+      });
+  };
+};
+
+export const fetchRenewContracts = (params) => {
+  return (dispatch, getState) => {
+    api.contract
+      .getRenew()
+      .then(({ payload, total }) => {
+        payload = {
+          payload: payload,
+          total: total,
+        };
+        dispatch({ type: REDUX_STATE.contract.SET_RENEW_CONTRACTS, payload });
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'countActiveContracts');

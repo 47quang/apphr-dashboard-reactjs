@@ -7,6 +7,7 @@ import { fetchStatisticChart } from 'src/stores/actions/assignment';
 import Count from './Count';
 import LogTable from './LogTable';
 import { Helmet } from 'react-helmet';
+import RenewContract from './RenewContract';
 
 const Dashboard = ({ t, location }) => {
   const initValues = {
@@ -27,9 +28,11 @@ const Dashboard = ({ t, location }) => {
       </Helmet>
       <CContainer fluid className="c-main p-4 m-auto">
         <Count t={t} />
+
         <div className="row">
           <CCardBody className="col-6 ">
             <PieChart initValues={initValues} handleFunction={handleChangeShift} />
+            <RenewContract t={t} />
           </CCardBody>
           <CCardBody className="col-6 ">
             <LogTable t={t} />

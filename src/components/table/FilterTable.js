@@ -121,7 +121,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                           isError={errors.value && touched.value}
                           errorMessage={t(errors.value)}
                         />
-                      ) : filters[values.rule]?.type === 'select' ? (
+                      ) : (
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
                           value={values.value}
@@ -134,20 +134,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                           selectClassName={'form-control'}
                           lstSelectOptions={filters[values.rule]?.values ?? []}
                           isTouched={touched.value}
-                          isError={errors.value && touched.value}
-                          errorMessage={t(errors.value)}
-                        />
-                      ) : (
-                        <CommonAutoCompleteInput
-                          containerClassName={'form-group col-lg-4'}
-                          value={values.value}
-                          onBlur={handleBlur('value')}
-                          onChange={handleChange('value')}
-                          labelText={t('label.filter_value')}
-                          placeholder={t('placeholder.select_value')}
-                          selectClassName={'form-control'}
-                          lstSelectOptions={filters[values.rule]?.values ?? []}
-                          isTouched={touched.value}
+                          isRequiredField
                           isError={errors.value && touched.value}
                           errorMessage={t(errors.value)}
                         />

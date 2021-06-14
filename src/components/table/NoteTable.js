@@ -114,7 +114,7 @@ const NoteTable = ({ t }) => {
           </div>
           <div className="col-12">
             <Gavel className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />
-            <p className="d-inline">{t('label.leave_policy_req')}</p>
+            <p className="d-inline">{t('label.policy_req')}</p>
           </div>
           <div className="col-12">
             <BluetoothAudio className="mr-2 mb-2" style={{ color: COLORS.SUCCESS }} />

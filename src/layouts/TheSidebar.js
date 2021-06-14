@@ -33,6 +33,7 @@ const TheSidebar = () => {
       }
     }
   };
+  console.log('show', show);
   return (
     <CSidebar
       fixed={true}

@@ -90,8 +90,27 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           },
           type: {
             title: t('label.leave_form_type'),
-            operates: operatesText,
-            type: 'text',
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+            type: 'select',
+            values: [
+              {
+                id: 'pay',
+                name: t('label.pay'),
+              },
+              {
+                id: 'no-pay',
+                name: t('label.no-pay'),
+              },
+              {
+                id: 'policy',
+                name: t('label.policy'),
+              },
+            ],
           },
           status: {
             title: t('label.status'),
@@ -355,7 +374,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     <CContainer fluid className="c-main p-4 m-auto">
       <Helmet>
         <title>{'APPHR | ' + t('Proposal')}</title>
-        <link rel="icon" href={'images/short_logo.png'} type="image/png" />
+        <link rel="shortcut icon" href={'images/short_logo.png'} type="image/png" />
       </Helmet>
       {type === 'leave' ? (
         <MemoizedQTable

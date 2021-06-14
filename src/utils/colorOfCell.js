@@ -22,7 +22,7 @@ export const backgroundColor = (value) => {
 //   else if (status === 'remote_overtime') return COLORS.BACKGROUND_REMOTE_OVERTIME;
 //   else if (status === 'leave_no_pay') return COLORS.BACKGROUND_LEAVE_NO_PAY;
 //   else if (status === 'leave_pay') return COLORS.BACKGROUND_LEAVE_PAY;
-//   else if (status === 'leave_policy') return COLORS.BACKGROUND_LEAVE_POLICY;
+//   else if (status === 'policy') return COLORS.BACKGROUND_LEAVE_POLICY;
 // };
 export const backgroundColorOfAssignment = (assignment) => {
   let status = assignment.status;
@@ -41,7 +41,7 @@ export const backgroundColorOfAssignment = (assignment) => {
 //   else if (status === 'remote_overtime') return COLORS.BORDER_REMOTE_OVERTIME;
 //   else if (status === 'leave_no_pay') return COLORS.BORDER_LEAVE_NO_PAY;
 //   else if (status === 'leave_pay') return COLORS.BORDER_LEAVE_PAY;
-//   else if (status === 'leave_policy') return COLORS.BORDER_LEAVE_POLICY;
+//   else if (status === 'policy') return COLORS.BORDER_LEAVE_POLICY;
 //   else return COLORS.ERROR;
 // };
 export const dotColor = (assignment) => {
@@ -87,7 +87,7 @@ export const renderIcon = (assignment) => {
       return <MoneyOff style={{ color: COLORS.ERROR }} />;
     case 'leave_pay':
       return <AttachMoney style={{ color: COLORS.SUCCESS }} />;
-    case 'leave_policy':
+    case 'policy':
       return <Gavel style={{ color: COLORS.SUCCESS }} />;
     case 'remote':
       return <BluetoothAudio style={{ color: COLORS.SUCCESS }} />;

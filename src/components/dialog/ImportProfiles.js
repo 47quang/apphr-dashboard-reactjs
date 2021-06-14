@@ -3,23 +3,20 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { Attachment, Cancel, HighlightOff } from '@material-ui/icons';
 import { Formik } from 'formik';
 import React, { useRef } from 'react';
-import { api } from 'src/stores/apis';
+import { useDispatch } from 'react-redux';
+import { importProfiles } from 'src/stores/actions/profile';
 import { renderButtons } from 'src/utils/formUtils';
 
 const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
+  const dispatch = useDispatch();
   const range = {
     import: '',
   };
   const uploadFileRef = useRef();
-  async function upload(files) {
-    const responses = await Promise.all(
-      Object.values(files).map((file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        return api.upload.postForm(formData);
-      }),
-    );
-    return responses.map((r) => r['Location']);
+  function upload(files) {
+    const formData = new FormData();
+    formData.append('import', files[0]);
+    dispatch(importProfiles(formData));
   }
   return (
     <div>
@@ -59,10 +56,8 @@ const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
                         ref={uploadFileRef}
                         type="file"
                         style={{ display: 'none' }}
-                        onChange={async (e) => {
-                          let location = await upload(e.target.files);
-                          console.log(location);
-                          props.setFieldValue('import', location[0]);
+                        onChange={(e) => {
+                          upload(e.target.files);
                         }}
                       />
                       {props.values.import !== '' ? (

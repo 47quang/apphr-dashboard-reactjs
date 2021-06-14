@@ -328,7 +328,11 @@ export const api = {
       return client.post(API_PREFIX.API_PROFILE + `/export`, data);
     },
     import: (data) => {
-      return client.post(API_PREFIX.API_PROFILE + `/import`, data);
+      return client.post(API_PREFIX.API_PROFILE + '/import', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
     },
   },
   contract: {
@@ -360,6 +364,11 @@ export const api = {
     },
     count: () => {
       return client.get(API_PREFIX.API_CONTRACT + `/count-active`);
+    },
+    getRenew: (params) => {
+      return client.get(API_PREFIX.API_CONTRACT + '/need-renew', {
+        params: params,
+      });
     },
   },
   wage: {
