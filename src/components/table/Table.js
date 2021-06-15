@@ -344,7 +344,7 @@ const QTable = (props) => {
     disableExportProfile,
     disableImportProfile,
   } = props;
-  console.log('TABLE', columnDef, data);
+  // console.log('TABLE', columnDef, data);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];

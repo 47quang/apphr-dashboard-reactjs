@@ -91,9 +91,17 @@ export const filterLeaveRequests = (params, setLoading) => {
           payload && payload?.length > 0
             ? payload.map((req) => {
                 req.fullname = req.profile.fullname;
-                if (req.type === 'pay') req.type = 'Nghỉ có trả lương';
-                else if (req.type === 'no-pay') req.type = 'Nghỉ không trả lương';
-                else req.type = 'Nghỉ theo chế độ';
+                switch (req.type) {
+                  case 'pay':
+                    req.type = 'Nghỉ có trả lương';
+                    break;
+                  case 'no-pay':
+                    req.type = 'Nghỉ không trả lương';
+                    break;
+                  default:
+                    req.type = 'Nghỉ theo chế độ';
+                    break;
+                }
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
@@ -103,16 +111,12 @@ export const filterLeaveRequests = (params, setLoading) => {
           total: total,
         };
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleRequestExceptions(err, dispatch, 'filterLeaveRequests');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -245,16 +249,12 @@ export const filterRemoteRequests = (params, setLoading) => {
           total: total,
         };
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleRequestExceptions(err, dispatch, 'filterRemoteRequests');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
@@ -383,16 +383,12 @@ export const filterOvertimeRequests = (params, setLoading) => {
           total: total,
         };
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleRequestExceptions(err, dispatch, 'filterOvertimeRequests');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        console.log(err);
-        if (err.response?.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };

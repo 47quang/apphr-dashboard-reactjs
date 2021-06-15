@@ -24,10 +24,8 @@ const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
         <DialogContent>
           <Formik
             initialValues={range}
-            //validationSchema={ImportProfilesSchema}
             enableReinitialize
             onSubmit={(values) => {
-              // console.log(moment(values.month).endOf('month').format('YYYY-MM-DD'));
               handleConfirm(values);
             }}
           >

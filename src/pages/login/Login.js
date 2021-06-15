@@ -18,6 +18,7 @@ import React, { useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import AlertSnackbar from 'src/components/alert_snackbar/AlertSnackbar';
 import { LoginSchema } from 'src/schema/formSchema';
 import { login } from 'src/stores/actions/user';
 
@@ -33,6 +34,7 @@ const Login = ({ location, history }) => {
       <Helmet>
         <title>{'APPHR | ' + t('title.login')}</title>
       </Helmet>
+      <AlertSnackbar />
       <div className="c-app c-default-layout flex-column justify-content-center" style={{ background: '#3c4b64' }}>
         <CContainer>
           <CRow className="justify-content-center">

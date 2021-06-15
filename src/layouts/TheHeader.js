@@ -8,7 +8,6 @@ import { REDUX_STATE } from 'src/stores/states';
 import '../styles/scss/header.scss';
 
 const TheHeader = (props) => {
-  // const { t } = useTranslation();
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'vi', name: 'Vietnam' },
