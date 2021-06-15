@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  leaveRequests: [],
+  leaveRequests: {
+    payload: [],
+    total: 0,
+  },
   leaveForm: {
     id: '',
     type: '',
@@ -9,14 +12,20 @@ const initialState = {
     note: '',
     assignments: [],
   },
-  remoteRequests: [],
+  remoteRequests: {
+    payload: [],
+    total: 0,
+  },
   remoteForm: {
     id: '',
     status: '',
     note: '',
     assignments: [],
   },
-  overtimeRequests: [],
+  overtimeRequests: {
+    payload: [],
+    total: 0,
+  },
   overtimeForm: {
     id: '',
     type: '',

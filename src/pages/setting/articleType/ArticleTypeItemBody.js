@@ -3,13 +3,14 @@ import { CircularProgress } from '@material-ui/core';
 import { Formik } from 'formik';
 import React from 'react';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
 
 const ArticleTypeItemBody = ({ t, typeRef, type, validationSchema, submitForm, buttons, loading, isCreate }) => {
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -28,6 +29,7 @@ const ArticleTypeItemBody = ({ t, typeRef, type, validationSchema, submitForm, b
             >
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
+                  <FormHeader text={t('label.article_type_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">

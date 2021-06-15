@@ -18,7 +18,14 @@ const handleContractExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -37,43 +44,46 @@ const status = {
   active: 'Có hiệu lực',
 };
 
-export const fetchContracts = (params, onTotalChange, setLoading) => {
+export const fetchContracts = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
-      .then(async ({ payload }) => {
+      .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
-            ? payload.map(async (contract) => {
-                contract.name = contract.code + ' - ' + status[contract.status] + ' - ' + contract.fullname;
+            ? payload.map((contract) => {
+                contract.name = contract.code + ' - ' + contract.fullname + ' - ' + status[contract.status];
                 contract.text_type = type[contract.type];
-                contract.handleDate = formatDateInput(contract.handleDate);
-                contract.expiredDate = formatDateInput(contract.expiredDate);
-                contract.validDate = formatDateInput(contract.validDate);
-                contract.startWork = formatDateInput(contract.startWork);
-                contract['formOfPayment'] = contract?.wage?.type;
-                contract['wageId'] = contract?.wage?.id;
-                contract['amount'] = contract?.wage?.amount;
-                contract['standardHours'] = contract.standardHours ?? undefined;
-                contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
-                contract['attributes'] =
-                  contract.contractAttributes && contract.contractAttributes.length > 0
-                    ? contract.contractAttributes.map((attr) => {
-                        let rv = {};
-                        rv.value = attr.value;
-                        rv.name = attr.attribute.name;
-                        rv.type = attr.attribute.type;
-                        rv.id = attr.attribute.id;
-                        return rv;
-                      })
-                    : [];
+                // contract.handleDate = formatDateInput(contract.handleDate);
+                // contract.expiredDate = formatDateInput(contract.expiredDate);
+                // contract.validDate = formatDateInput(contract.validDate);
+                // contract.startWork = formatDateInput(contract.startWork);
+                // contract['formOfPayment'] = contract?.wage?.type;
+                // contract['wageId'] = contract?.wage?.id;
+                // contract['amount'] = contract?.wage?.amount;
+                // contract['standardHours'] = contract.standardHours ?? undefined;
+                // contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
+                // contract['attributes'] =
+                //   contract.contractAttributes && contract.contractAttributes.length > 0
+                //     ? contract.contractAttributes.map((attr) => {
+                //         let rv = {};
+                //         rv.value = attr.value;
+                //         rv.name = attr.attribute.name;
+                //         rv.type = attr.attribute.type;
+                //         rv.id = attr.attribute.id;
+                //         return rv;
+                //       })
+                //     : [];
                 return contract;
               })
             : [];
-        payload = await Promise.all(payload);
+        // payload = await Promise.all(payload);
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        if (onTotalChange) onTotalChange();
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContracts');
@@ -84,7 +94,7 @@ export const fetchContracts = (params, onTotalChange, setLoading) => {
   };
 };
 
-export const fetchContractTable = (params, onTotalChange, setLoading) => {
+export const fetchContractTable = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
@@ -101,8 +111,11 @@ export const fetchContractTable = (params, onTotalChange, setLoading) => {
                 return contract;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContracts');
@@ -374,6 +387,12 @@ export const setEmptyContract = () => {
     payload: [],
   };
 };
+export const setEmptyRenewContracts = () => {
+  return {
+    type: REDUX_STATE.contract.EMPTY_LIST_RENEW_CONTRACT,
+    payload: [],
+  };
+};
 
 export const addField = (params, success_msg) => {
   return (dispatch, getState) => {
@@ -436,6 +455,23 @@ export const countActiveContracts = () => {
       .count()
       .then(({ payload, total }) => {
         dispatch({ type: REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT, payload });
+      })
+      .catch((err) => {
+        handleContractExceptions(err, dispatch, 'countActiveContracts');
+      });
+  };
+};
+
+export const fetchRenewContracts = (params) => {
+  return (dispatch, getState) => {
+    api.contract
+      .getRenew()
+      .then(({ payload, total }) => {
+        payload = {
+          payload: payload,
+          total: total,
+        };
+        dispatch({ type: REDUX_STATE.contract.SET_RENEW_CONTRACTS, payload });
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'countActiveContracts');

@@ -28,7 +28,14 @@ const handleAssignmentExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -54,8 +61,8 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleAssignmentExceptions(err, dispatch, 'fetchAssignments');
@@ -187,8 +194,11 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
-        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload: data });
-        if (onTotalChange) onTotalChange(total);
+        payload = {
+          payload: data,
+          total: total,
+        };
+        dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
       })
       .catch((err) => {
         console.log(err);

@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  allowances: [],
+  allowances: {
+    payload: [],
+    total: 0,
+  },
   allowance: {
     id: 0,
     name: '',

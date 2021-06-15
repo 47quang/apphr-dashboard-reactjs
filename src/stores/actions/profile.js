@@ -18,7 +18,14 @@ const handleProfileExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handleProfileExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchProfiles = (params, onTotalChange, setLoading) => {
+export const fetchProfiles = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
@@ -39,8 +46,11 @@ export const fetchProfiles = (params, onTotalChange, setLoading) => {
                 return profile;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleProfileExceptions(err, dispatch, 'fetchProfiles');
@@ -514,5 +524,27 @@ export const setEmptyActiveWorking = () => {
   return {
     type: REDUX_STATE.profile.EMPTY_ACTIVE_WORKING,
     payload: [],
+  };
+};
+export const exportProfiles = (data) => {
+  return (dispatch, getState) => {
+    api.profile
+      .export(data)
+      .then(({ payload }) => {
+        window.location.href = payload.publicPath;
+      })
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+      });
+  };
+};
+export const importProfiles = (data) => {
+  return (dispatch, getState) => {
+    api.profile
+      .import(data)
+      .then(({ payload }) => {})
+      .catch((err) => {
+        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+      });
   };
 };

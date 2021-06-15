@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
+import { fetchRenewContracts, setEmptyRenewContracts } from 'src/stores/actions/contract';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -13,14 +13,14 @@ const equalQTable = (prevProps, nextProps) => {
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
-const LogTable = ({ t }) => {
+const RenewContract = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
-  const logData = useSelector((state) => state.log.data);
+  const renewContract = useSelector((state) => state.contract.renewContract);
   const [columnDef, setColumnDef] = useState([
     { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
-    { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
-    { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
+    // { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
+    // { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
   ]);
 
   const [paging, setPaging] = useState({
@@ -55,7 +55,7 @@ const LogTable = ({ t }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
-        fetchLogs(
+        fetchRenewContracts(
           {
             page: paging.currentPage,
             perpage: paging.pageSize,
@@ -68,15 +68,15 @@ const LogTable = ({ t }) => {
   }, [paging.currentPage, paging.pageSize]);
   useEffect(() => {
     return () => {
-      dispatch(setEmptyLogs());
+      dispatch(setEmptyRenewContracts());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     setColumnDef([
       { name: 'user', title: t('label.log_user'), align: 'left', width: '25%', wordWrapEnabled: true },
-      { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
-      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
+      // { name: 'message', title: t('label.log_message'), align: 'left', width: '50%', wordWrapEnabled: true },
+      // { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
     ]);
   }, [t]);
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
@@ -85,17 +85,17 @@ const LogTable = ({ t }) => {
         t={t}
         disableFilter={true}
         columnDef={columnDef}
-        data={logData?.payload ?? []}
+        data={renewContract?.payload ?? []}
         disableEditColum={true}
         paging={paging}
         onCurrentPageChange={onCurrentPageChange}
         onPageSizeChange={onPageSizeChange}
         disableToolBar={true}
         linkCols={[{ name: 'message' }]}
-        total={logData?.total ?? 0}
+        total={renewContract?.total ?? 0}
       />
     );
   else return <Page404 />;
 };
 
-export default LogTable;
+export default RenewContract;

@@ -25,7 +25,7 @@ const Statistic = ({ t, location, profileId }) => {
   };
   return (
     <div className="d-flex justify-content-center">
-      <CCardGroup className="m-4 p-4 col-9" wrap={true}>
+      <CCardGroup className="m-4 p-4 col-9">
         <GroupBarChart t={t} title={title} chart={chart} initValues={initValues} handleFunction={handleRangeTime} />
       </CCardGroup>
     </div>

@@ -1,9 +1,10 @@
 import { CContainer } from '@coreui/react';
 import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
@@ -120,12 +121,11 @@ const NewBenefit = ({ t, history, match }) => {
             onBlur={handleBlur('contractId')}
             onChange={(e) => {
               handleChange('contractId')(e);
-              let contract = contracts.filter((x) => x.id === +e.target.value);
-              console.log('contract', contract);
+              let contract = contracts?.payload ? contracts.payload.filter((x) => x.id === +e.target.value) : [];
               setFieldValue('contractType', contract.length === 1 ? contract[0].type : '');
             }}
             inputID={t('label.contractId')}
-            lstSelectOptions={contracts}
+            lstSelectOptions={contracts?.payload ?? []}
             isRequiredField
             isDisable={values.profileId === '0' || values.profileId === ''}
             placeholder={t('placeholder.select_contract')}
@@ -326,7 +326,7 @@ const NewBenefit = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(touched, `allowances.${allowanceIdx}.id`) && getIn(errors, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances}
+                          lstSelectOptions={allowances ?? []}
                         />
                         <CommonTextInput
                           containerClassName={'form-group col-lg-4'}
@@ -383,7 +383,6 @@ const NewBenefit = ({ t, history, match }) => {
                   className: `btn btn-primary px-4 ml-2`,
                   onClick: (e) => {
                     handleSubmit(e);
-                    console.log(errors);
                   },
                   name: t('label.create_new'),
                 },
@@ -393,17 +392,39 @@ const NewBenefit = ({ t, history, match }) => {
       </>
     );
   };
+  const newBenefitRef = useRef();
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    create(newBenefitRef.current.values);
+    setOpenWarning(!openWarning);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
+  };
   return (
-    <CContainer fluid className="c-main">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         <div>
+          {openWarning && (
+            <WarningAlertDialog
+              isVisible={openWarning}
+              title={t('title.new_active_wage')}
+              titleConfirm={t('label.agree')}
+              handleConfirm={handleConfirmWarning}
+              titleCancel={t('label.decline')}
+              handleCancel={handleCancelWarning}
+              warningMessage={t('message.new_active_wage_warning_message')}
+            />
+          )}
           {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
             <Formik
               initialValues={benefit}
               validationSchema={BenefitsSchema}
               enableReinitialize
               onSubmit={(values) => {
-                create(values);
+                if (values?.status === 'active') setOpenWarning(true);
+                else create(values);
               }}
             >
               {(props) => {

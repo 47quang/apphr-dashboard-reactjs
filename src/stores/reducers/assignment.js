@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  assignments: [],
+  assignments: {
+    payload: [],
+    total: 0,
+  },
   assignment: {},
   assignmentsInADate: [],
   personChart: {

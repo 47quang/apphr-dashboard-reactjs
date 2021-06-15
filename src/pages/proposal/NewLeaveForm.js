@@ -23,9 +23,9 @@ const NewLeaveForm = ({ t, history, match }) => {
   const profiles = useSelector((state) => state.account.profiles);
 
   const type = [
-    { id: 'no-pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
+    { id: 'no-pay', name: t('label.no-pay') },
+    { id: 'pay', name: t('label.pay') },
+    { id: 'policy', name: t('label.policy') },
   ];
   const status = [
     { id: 'new', name: t('label.new') },
@@ -46,7 +46,7 @@ const NewLeaveForm = ({ t, history, match }) => {
   }, []);
 
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik

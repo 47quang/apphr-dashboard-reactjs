@@ -16,7 +16,7 @@ const TheHeader = (props) => {
   const sidebarShow = useSelector((state) => state.style.sidebarShow);
 
   const dispatch = useDispatch();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const language = useSelector((state) => state.style.language);
   const changeLanguage = (lang) => {
     dispatch({
@@ -71,6 +71,7 @@ const TheHeader = (props) => {
             dispatch(logout(props.history));
           }}
           className="d-flex flex-row justify-content-between"
+          title={t('title.logout')}
         >
           {/* <div>{t('title.logout')}</div> */}
           <ExitToApp style={{ color: 'red' }} />

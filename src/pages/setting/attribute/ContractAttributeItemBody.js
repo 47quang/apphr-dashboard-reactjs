@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import React from 'react';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
@@ -12,7 +13,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
   const typeOptions = [
     {
       id: 'date',
-      name: t('lael.date'),
+      name: t('label.date'),
     },
     {
       id: 'text',
@@ -24,7 +25,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
     },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -43,6 +44,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
             >
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
+                  <FormHeader text={t('label.attribute_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">

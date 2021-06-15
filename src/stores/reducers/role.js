@@ -1,10 +1,13 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  roles: [],
+  roles: {
+    payload: [],
+    total: 0,
+  },
   role: {
     id: '',
-    shortname: '',
+    code: '',
     name: '',
     permissionIds: [],
   },

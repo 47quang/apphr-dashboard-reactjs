@@ -3,12 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
-import { deleteArticle, fetchArticles } from 'src/stores/actions/article';
+import { deleteArticle, fetchArticles, setEmptyArticles } from 'src/stores/actions/article';
 import PropTypes from 'prop-types';
 import Page404 from '../page404/Page404';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -17,18 +20,17 @@ const Notification = ({ t }) => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.article.articles);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.notification_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'type', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     loading: false,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const operatesText = [
@@ -87,17 +89,22 @@ const Notification = ({ t }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.notification_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'type', title: t('label.notification_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'title', title: t('label.notification_title'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'description', title: t('label.notification_description'), align: 'left', width: '30%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
       dispatch(
@@ -106,13 +113,17 @@ const Notification = ({ t }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyArticles());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchArticles(
@@ -121,7 +132,6 @@ const Notification = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -133,7 +143,6 @@ const Notification = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -143,11 +152,14 @@ const Notification = ({ t }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_ARTICLE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Notification')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={articles}
+          data={articles?.payload ?? []}
           route={ROUTE_PATH.NOTIFICATION + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -160,6 +172,7 @@ const Notification = ({ t }) => {
           filters={filters}
           filterFunction={filterFunction}
           fixed={true}
+          total={articles?.total ?? 0}
         />
       </CContainer>
     );

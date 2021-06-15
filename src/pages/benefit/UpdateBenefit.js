@@ -2,16 +2,16 @@ import { CContainer } from '@coreui/react';
 import { CircularProgress } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
+import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { UpdateBenefitsSchema } from 'src/schema/formSchema';
-import { fetchProfiles } from 'src/stores/actions/account';
-import { fetchAllowances, fetchContracts } from 'src/stores/actions/contract';
+import { fetchAllowances } from 'src/stores/actions/contract';
 import { fetchWageHistory, updateWageHistory } from 'src/stores/actions/wageHistories';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
@@ -19,8 +19,6 @@ import { renderButtons } from 'src/utils/formUtils';
 const UpdateBenefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
-  const profiles = useSelector((state) => state.account.profiles);
-  let contracts = useSelector((state) => state.contract.contracts);
   let allowances = useSelector((state) => state.contract.allowances);
   let wageHistoryId = +match?.params?.id;
   const [loading, isLoading] = useState(false);
@@ -37,14 +35,12 @@ const UpdateBenefit = ({ t, history, match }) => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
       dispatch(fetchWageHistory(wageHistoryId, isLoading));
-      dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
       return () => {};
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const update = (form) => {
-    // console.log('updateWageHistory', form);
     let thisWage = form.wages.filter((s) => s.id === parseInt(form.wageId));
     if (thisWage.length > 0) form.wage = thisWage[0];
     if (form.amount === '') delete form.amount;
@@ -75,36 +71,20 @@ const UpdateBenefit = ({ t, history, match }) => {
         </div>
         <hr className="mt-1" />
         <div className="row">
-          <CommonSelectInput
+          <CommonTextInput
             containerClassName={'form-group col-lg-4'}
-            value={values.profileId ?? 0}
+            value={values?.profileName ?? ''}
             labelText={t('label.profileId')}
-            selectClassName={'form-control'}
-            onBlur={(e) => {
-              if (e.target.value !== 0) {
-                dispatch(fetchContracts({ profileId: +e.target.value }));
-                setFieldValue('contractId', '');
-              }
-              handleBlur('profileId')(e);
-            }}
-            onChange={handleChange('profileId')}
-            inputID={t('label.profileId')}
-            lstSelectOptions={profiles}
-            isRequiredField
-            placeholder={t('placeholder.select_profile')}
+            inputType={'text'}
+            inputClassName={'form-control'}
             isDisable
           />
-          <CommonSelectInput
+          <CommonTextInput
             containerClassName={'form-group col-lg-4'}
-            value={values.contractId ?? 0}
+            value={values?.contractName ?? ''}
             labelText={t('label.contract')}
-            selectClassName={'form-control'}
-            onBlur={handleBlur('contractId')}
-            onChange={handleChange('contractId')}
-            inputID={t('label.contractId')}
-            lstSelectOptions={contracts}
-            isRequiredField
-            placeholder={t('placeholder.select_contract')}
+            inputType={'text'}
+            inputClassName={'form-control'}
             isDisable
           />
           <div className="form-group col-xl-4">
@@ -352,9 +332,19 @@ const UpdateBenefit = ({ t, history, match }) => {
       </>
     );
   };
+  const editWageRef = useRef();
+  const preStatus = benefit?.status;
+  const [openWarning, setOpenWarning] = useState(false);
+  const handleConfirmWarning = (e) => {
+    update(editWageRef.current.values);
+    setOpenWarning(!openWarning);
+  };
+  const handleCancelWarning = () => {
+    setOpenWarning(!openWarning);
+  };
   return (
     <>
-      <CContainer fluid className="c-main">
+      <CContainer fluid className="c-main m-auto p-4">
         <div className="m-auto">
           {loading ? (
             <div className="text-center">
@@ -368,7 +358,8 @@ const UpdateBenefit = ({ t, history, match }) => {
                   validationSchema={UpdateBenefitsSchema}
                   enableReinitialize
                   onSubmit={(values) => {
-                    update(values);
+                    if (values.status !== preStatus) setOpenWarning(true);
+                    else update(values);
                   }}
                 >
                   {(props) => {
@@ -377,6 +368,17 @@ const UpdateBenefit = ({ t, history, match }) => {
                         <div className="shadow bg-white rounded mx-4 p-4 mb-4">
                           <div>
                             <BodyItem {...props} />
+                            {openWarning && (
+                              <WarningAlertDialog
+                                isVisible={openWarning}
+                                title={t('title.update_active_wage')}
+                                titleConfirm={t('label.agree')}
+                                handleConfirm={handleConfirmWarning}
+                                titleCancel={t('label.decline')}
+                                handleCancel={handleCancelWarning}
+                                warningMessage={t('message.update_active_wage_warning_message')}
+                              />
+                            )}
                             <hr className="mt-1" />
                           </div>
                         </div>

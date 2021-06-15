@@ -62,7 +62,7 @@ const HolidaySetting = ({ t, location, history }) => {
   }, [paging.currentPage, paging.pageSize]);
   if (permissionIds.includes(PERMISSION.LIST_HOLIDAY))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         <QTable
           t={t}
           columnDef={columnDef}

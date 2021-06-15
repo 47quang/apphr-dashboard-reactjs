@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  articles: [],
+  articles: {
+    payload: [],
+    total: 0,
+  },
   article: {
     code: '',
     title: '',
@@ -30,6 +33,11 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         article: initialState.article,
+      };
+    case REDUX_STATE.article.EMPTY_LIST:
+      return {
+        ...state,
+        articles: initialState.articles,
       };
     default:
       return state;

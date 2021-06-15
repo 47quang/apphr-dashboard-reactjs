@@ -33,13 +33,16 @@ const TheSidebar = () => {
       }
     }
   };
+  console.log('show', show);
   return (
     <CSidebar
+      fixed={true}
       show={show}
       onShowChange={(val) => {
         const value = [true, 'responsive'].includes(val) ? false : 'responsive';
         dispatch({ type: REDUX_STATE.style.CHANGE_SIDE_BAR_SHOW, payload: { sidebarShow: value } });
       }}
+      style={{ overflowY: 'hidden' }}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
         <img className="c-sidebar-brand-full" name="logo-negative" src="images/long_logo.png" alt="" style={{ height: '45px' }} />

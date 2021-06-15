@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  branches: [],
+  branches: {
+    payload: [],
+    total: 0,
+  },
   branch: {
     name: '',
     shortname: '',
@@ -31,6 +34,11 @@ const branchReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         branch: initialState.branch,
+      };
+    case REDUX_STATE.branch.EMPTY_LIST:
+      return {
+        ...state,
+        branches: {},
       };
     case REDUX_STATE.branch.COUNT_BRANCHES:
       return { ...state, total: payload };

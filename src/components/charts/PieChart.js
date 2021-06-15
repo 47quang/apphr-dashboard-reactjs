@@ -8,7 +8,10 @@ import StatisticAssignmentTable from '../dialog/StatisticAssignmentTable';
 import FilterPieChart from './FilterPieChart';
 
 const equalChart = (prevChart, nextChart) => {
-  return JSON.stringify(prevChart.datasets[0].data) === JSON.stringify(nextChart.datasets[0].data);
+  return (
+    JSON.stringify(prevChart.datasets[0].data) === JSON.stringify(nextChart.datasets[0].data) &&
+    JSON.stringify(prevChart.labels) === JSON.stringify(nextChart.labels)
+  );
 };
 
 const MemoizedCChartPie = React.memo(CChartPie, equalChart);
@@ -21,6 +24,14 @@ const PieChart = ({ initValues, handleFunction }) => {
     data: [],
     title: '',
   });
+  const [labels, setLabels] = useState([
+    t('label.number_normal_work'),
+    t('label.number_remote_work'),
+    t('label.number_remote_overtime_work'),
+    t('label.number_overtime_work'),
+    t('label.number_leave_work'),
+    t('label.number_absence'),
+  ]);
   const dispatch = useDispatch();
   useEffect(() => {
     return () => {
@@ -28,7 +39,17 @@ const PieChart = ({ initValues, handleFunction }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // console.log('chart', chart);
+  useEffect(() => {
+    setLabels([
+      t('label.number_normal_work'),
+      t('label.number_remote_work'),
+      t('label.number_remote_overtime_work'),
+      t('label.number_overtime_work'),
+      t('label.number_leave_work'),
+      t('label.number_absence'),
+    ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
   const handleClick = (e, item) => {
     if (item && item.length > 0) {
       let index = item[0]._index;
@@ -92,7 +113,6 @@ const PieChart = ({ initValues, handleFunction }) => {
       isOpen: false,
     });
   };
-
   return (
     <CCard>
       <CCardHeader>{t('label.chart_shift_in_day')}</CCardHeader>
@@ -111,14 +131,7 @@ const PieChart = ({ initValues, handleFunction }) => {
               hoverOffset: 100,
             },
           ]}
-          labels={[
-            t('label.number_normal_work'),
-            t('label.number_remote_work'),
-            t('label.number_remote_overtime_work'),
-            t('label.number_overtime_work'),
-            t('label.number_leave_work'),
-            t('label.number_absence'),
-          ]}
+          labels={labels}
           options={{
             onClick: handleClick,
             tooltips: {

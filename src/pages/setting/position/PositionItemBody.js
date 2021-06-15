@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { SettingPositionInfoSchema } from 'src/schema/formSchema';
 import { fetchDepartments } from 'src/stores/actions/department';
@@ -23,7 +24,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
     { id: 'doctor_of_philosophy', name: t('label.doctor_of_philosophy') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -40,7 +41,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
             >
               {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
-                  {/* <FormHeader text={t('label.position_create')} /> */}
+                  <FormHeader text={t('label.position_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">
@@ -134,7 +135,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                         handleChange('branchId')(e);
                       }}
                       inputID={'branchId'}
-                      lstSelectOptions={branches}
+                      lstSelectOptions={branches?.payload ?? []}
                       placeholder={t('placeholder.select_branch')}
                       isTouched={touched.branchId}
                       isError={errors.branchId && touched.branchId}
@@ -151,7 +152,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                       onBlur={handleBlur('departmentId')}
                       onChange={handleChange('departmentId')}
                       inputID={'departmentId'}
-                      lstSelectOptions={departments}
+                      lstSelectOptions={departments?.payload ?? []}
                       placeholder={t('placeholder.select_department')}
                       isTouched={touched.departmentId}
                       isError={errors.departmentId && touched.departmentId}

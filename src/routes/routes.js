@@ -5,8 +5,8 @@ const Dashboard = React.lazy(() => import('src/pages/dashboard/Dashboard'));
 const Course = React.lazy(() => import('src/pages/course/Course'));
 
 const Account = React.lazy(() => import('src/pages/account/Account'));
-const NewAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
-const EditAccount = React.lazy(() => import('src/pages/account/AccountItemBody'));
+const NewAccount = React.lazy(() => import('src/pages/account/NewAccount'));
+const EditAccount = React.lazy(() => import('src/pages/account/UpdateAccount'));
 
 const Contract = React.lazy(() => import('src/pages/contract/Contract'));
 const NewContract = React.lazy(() => import('src/pages/contract/NewContract'));

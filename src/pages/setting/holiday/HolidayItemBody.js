@@ -11,7 +11,7 @@ import { generateCode } from 'src/utils/randomCode';
 
 const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading, isCreate }) => {
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -30,7 +30,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading,
             >
               {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                 <form>
-                  <FormHeader text={t('label.holiday')} />
+                  <FormHeader text={t('label.holiday_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">

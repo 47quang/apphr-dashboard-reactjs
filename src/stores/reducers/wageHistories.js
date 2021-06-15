@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  wageHistories: [],
+  wageHistories: {
+    payload: [],
+    total: 0,
+  },
   wageHistory: {
     profileId: '',
     contractId: '',

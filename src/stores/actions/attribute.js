@@ -18,7 +18,14 @@ const handleAttributeExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handleAttributeExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAttributes = (params, onTotalChange, setLoading) => {
+export const fetchAttributes = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.attribute
@@ -39,8 +46,8 @@ export const fetchAttributes = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.attribute.SET_ATTRIBUTES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleAttributeExceptions(err, dispatch, 'fetchAttributes');
@@ -114,6 +121,12 @@ export const deleteAttribute = (id, success_msg, handleAfterDelete) => {
 export const setEmptyAttribute = () => {
   return {
     type: REDUX_STATE.attribute.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyContractAttributes = () => {
+  return {
+    type: REDUX_STATE.attribute.EMPTY_LIST,
     payload: [],
   };
 };

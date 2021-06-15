@@ -18,7 +18,14 @@ const handleBranchExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handleBranchExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchBranches = (params, onTotalChange, setLoading) => {
+export const fetchBranches = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.branch
@@ -39,8 +46,8 @@ export const fetchBranches = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleBranchExceptions(err, dispatch, 'fetchBranches');
@@ -114,7 +121,13 @@ export const deleteBranch = (id, success_msg, handleAfterDelete) => {
 export const setEmptyBranch = () => {
   return {
     type: REDUX_STATE.branch.EMPTY_VALUE,
-    payload: [],
+    payload: {},
+  };
+};
+export const setEmptyBranches = () => {
+  return {
+    type: REDUX_STATE.branch.EMPTY_LIST,
+    payload: {},
   };
 };
 export const countBranches = (params) => {

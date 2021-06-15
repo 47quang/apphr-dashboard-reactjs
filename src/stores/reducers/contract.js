@@ -1,13 +1,17 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  contracts: [],
+  contracts: { payload: [], total: 0 },
   contract: {},
   branches: [],
   wages: [],
   allowances: [],
   benefits: [],
   total: 0,
+  renewContract: {
+    payload: [],
+    total: 0,
+  },
 };
 
 const contractReducer = (state = initialState, { type, payload }) => {
@@ -24,12 +28,12 @@ const contractReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.contract.EMPTY_LIST_CONTRACT:
       return {
         ...state,
-        contracts: [],
+        contracts: initialState.contracts,
       };
     case REDUX_STATE.contract.EMPTY_VALUE:
       return {
         ...state,
-        contract: {},
+        contract: initialState.contract,
       };
     case REDUX_STATE.contract.GET_BRANCHES:
       payload =
@@ -51,6 +55,13 @@ const contractReducer = (state = initialState, { type, payload }) => {
       return { ...state, benefits: payload };
     case REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT:
       return { ...state, total: payload };
+    case REDUX_STATE.contract.EMPTY_LIST_RENEW_CONTRACT:
+      return {
+        ...state,
+        renewContract: initialState.renewContract,
+      };
+    case REDUX_STATE.contract.SET_RENEW_CONTRACTS:
+      return { ...state, renewContract: payload };
     default:
       return state;
   }

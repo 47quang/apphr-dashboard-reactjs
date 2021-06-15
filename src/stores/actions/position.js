@@ -18,7 +18,14 @@ const handlePositionExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handlePositionExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchPositions = (params, onTotalChange, setLoading) => {
+export const fetchPositions = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.position
@@ -36,12 +43,13 @@ export const fetchPositions = (params, onTotalChange, setLoading) => {
           payload && payload.length > 0
             ? payload.map((a) => {
                 a.createdAt = formatDateTimeToString(a.createdAt);
+                a.branchName = a.branch?.name;
+                a.departmentName = a.department?.name;
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
-
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handlePositionExceptions(err, dispatch, 'fetchPositions');
@@ -116,6 +124,12 @@ export const deletePosition = (params, success_msg, handleAfterDelete) => {
 export const setEmptyPosition = () => {
   return {
     type: REDUX_STATE.position.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyPositions = () => {
+  return {
+    type: REDUX_STATE.position.EMPTY_LIST,
     payload: [],
   };
 };

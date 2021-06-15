@@ -1,4 +1,3 @@
-import { CContainer } from '@coreui/react';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -44,13 +43,7 @@ const NewNotification = ({ t, location, history }) => {
     },
   ];
   if (permissionIds.includes(PERMISSION.CREATE_ARTICLE))
-    return (
-      <CContainer fluid className="c-main mb-3 px-4">
-        <div className="m-auto col-lg-12">
-          <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} isCreate={true} />
-        </div>
-      </CContainer>
-    );
+    return <NotificationForm t={t} articleRef={articleInfoForm} article={article} buttons={buttons} submitForm={submitForm} isCreate={true} />;
   else return <Page404 />;
 };
 

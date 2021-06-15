@@ -18,7 +18,14 @@ const handleArticleTypeExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handleArticleTypeExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchTypes = (params, onTotalChange, setLoading) => {
+export const fetchTypes = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.articleType
@@ -39,8 +46,8 @@ export const fetchTypes = (params, onTotalChange, setLoading) => {
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.articleType.SET_TYPES, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleArticleTypeExceptions(err, dispatch, 'fetchTypes');
@@ -114,6 +121,12 @@ export const deleteArticleType = (id, success_msg, handleAfterDelete) => {
 export const setEmptyArticleType = () => {
   return {
     type: REDUX_STATE.articleType.EMPTY_VALUE,
+    payload: [],
+  };
+};
+export const setEmptyArticleTypes = () => {
+  return {
+    type: REDUX_STATE.articleType.EMPTY_LIST,
     payload: [],
   };
 };

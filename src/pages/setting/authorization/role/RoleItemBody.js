@@ -15,7 +15,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, load
     return groupPermission.every((val) => checks.indexOf(val) >= 0);
   };
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -34,7 +34,7 @@ const RoleItemBody = ({ t, roleRef, role, buttons, submitForm, permissions, load
             >
               {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
                 <form>
-                  <FormHeader text={t('title.role')} />
+                  <FormHeader text={t('label.role_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-6">

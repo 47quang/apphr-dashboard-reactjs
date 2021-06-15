@@ -324,6 +324,16 @@ export const api = {
     getActiveWorking: (id) => {
       return client.get(API_PREFIX.API_PROFILE + `/${id}/work-history-active`);
     },
+    export: (data) => {
+      return client.post(API_PREFIX.API_PROFILE + `/export`, data);
+    },
+    import: (data) => {
+      return client.post(API_PREFIX.API_PROFILE + '/import', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    },
   },
   contract: {
     getAll: (params) => {
@@ -354,6 +364,11 @@ export const api = {
     },
     count: () => {
       return client.get(API_PREFIX.API_CONTRACT + `/count-active`);
+    },
+    getRenew: (params) => {
+      return client.get(API_PREFIX.API_CONTRACT + '/need-renew', {
+        params: params,
+      });
     },
   },
   wage: {

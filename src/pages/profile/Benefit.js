@@ -310,7 +310,7 @@ const Benefit = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(touched, `allowances.${allowanceIdx}.id`) && getIn(errors, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances}
+                          lstSelectOptions={allowances.payload}
                         />
                         <CommonTextInput
                           containerClassName={'form-group col-lg-4'}
@@ -388,7 +388,7 @@ const Benefit = ({ t, history, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -444,7 +444,7 @@ const Benefit = ({ t, history, match }) => {
                     props.contractType = activeContract?.type;
                     return (
                       <form id="newWage" hidden={true} className="p-0 m-0">
-                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                        <div className="shadow bg-white rounded p-4">
                           <div>
                             <BodyItem {...props} />
                             <hr className="mt-1" />
@@ -491,7 +491,7 @@ const Benefit = ({ t, history, match }) => {
                     props.contractType = activeContract?.type;
                     return (
                       <form className="p-0 m-0">
-                        <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                        <div className="shadow bg-white rounded p-4">
                           <div>
                             <BodyItem {...props} />
                             <hr className="mt-1" />

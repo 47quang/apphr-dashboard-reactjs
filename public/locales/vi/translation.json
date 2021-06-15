@@ -74,6 +74,7 @@
     "weekend": "Cuối tuần",
     "social_insurance": "Lương bảo hiểm",
     "export": "Xuất",
+    "import": "Upload",
     "export_wage": "Xuất phiếu lương",
     "profile_statistic": "Thống kê",
     "standard_hours": "Tổng thời gian tiêu chuẩn",
@@ -85,7 +86,8 @@
     "payment_name": "Tên chi phí",
     "personal_tax_level": "Mức chịu thuế",
     "name_tax": "Diễn giải",
-    "percentage_tax": "Thuế suất",
+    "percentage_tax_person": "Thuế suất cá nhân",
+    "percentage_tax_company": "Thuế suất doanh nghiệp",
     "required_insurance": "Bảo hiểm bắt buộc",
     "personal_tax": "Thuế thu nhập cá nhân",
     "other_fee": "Các khoản khác",
@@ -93,7 +95,7 @@
     "overtime_date": "Ngày làm thêm giờ",
     "leave_pay_req": "Nghỉ có lương",
     "leave_no_pay_req": "Nghỉ không lương",
-    "leave_policy_req": "Nghỉ chế độ",
+    "policy_req": "Nghỉ chế độ",
     "remote_req": "Đề xuất làm từ xa",
     "overtime_req": "Đề xuất làm thêm giờ",
     "leave_date": "Ngày nghỉ",
@@ -151,10 +153,10 @@
     "deny": "Từ chối",
     "accept_success": "Phê duyệt thành công",
     "deny_success": "Từ chối thành công",
-    "have_salary": "Nghỉ có trả lương",
-    "not_have_salary": "Nghỉ không được trả lương",
+    "pay": "Nghỉ có trả lương",
+    "no-pay": "Nghỉ không được trả lương",
     "roll_call_table": "Bảng điểm danh",
-    "leave_policy": "Nghỉ theo chế độ",
+    "policy": "Nghỉ theo chế độ",
     "proposal_id": "Mã đề xuất",
     "shifts": "Các buổi đề xuất",
     "sent_date": "Ngày gửi đề xuất",
@@ -394,7 +396,27 @@
     "number_overtime_work": "Số người làm thêm giờ",
     "number_leave_work": "Số người nghỉ",
     "number_absence": "Số người không đi làm",
-    "overtime_assignment": "Ca làm thêm giờ"
+    "overtime_assignment": "Ca làm thêm giờ",
+    "accident_insurance": "Bảo hiểm Tai nạn lao động - Bệnh nghề nghiệp",
+    "less_than_5m":"Đến 5 triệu VNĐ",
+    "great_than_5m_less_than_10m": "Trên 5 triệu VNĐ đến 10 triệu VNĐ",
+    "great_than_10m_less_than_18m": "Trên 10 triệu VNĐ đến 18 triệu VNĐ",
+    "great_than_18m_less_than_32m": "Trên 18 triệu VNĐ đến 32 triệu VNĐ",
+    "great_than_32m_less_than_52m": "Trên 32 triệu VNĐ đến 52 triệu VNĐ",
+    "great_than_52m_less_than_80m": "Trên 52 triệu VNĐ đến 80 triệu VNĐ",
+    "great_than_80m":"Trên 80 triệu VNĐ",
+    "company_info": "Thông tin doanh nghiệp",
+    "branch_info": "Thông tin chi nhánh",
+    "department_info": "Thông tin phòng ban",
+    "position_info": "Thông tin vị trí",
+    "shift_info": "Thông tin ca làm",
+    "holiday_info": "Thông tin ngày nghỉ",
+    "role_info": "Thông tin vai trò",
+    "article_type_info": "Thông in loại thông báo",
+    "attribute_info": "Thông tin thuộc tính hợp đồng",
+    "allowance_info": "Thông tin trợ cấp",
+    "wage_info": "Thông tin nhóm lương",
+    "other_fee_info": "Thông tin chi phí"
 
   },
   "title": {
@@ -429,7 +451,9 @@
     "type_of_request": "Các loại đề xuất",
     "status_of_cell": "Trạng thái của các ca bình thường",
     "export_all_salary": "Xuất bảng lương",
-    "export_wage_row": "Xuất phiếu lương cho hàng này"
+    "export_wage_row": "Xuất phiếu lương cho hàng này",
+    "export_profile": "Export danh sách nhân sự",
+    "import_profile": "Upload danh sách nhân sự"
   },
   "filter_operator": {
     "in": "trong",
@@ -469,15 +493,16 @@
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",
-    "new_contract_warning_message": "Việc tạo mới một hợp đồng có hiệu lực sẽ ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn tạo hợp đồng này chứ?",
-    "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực. Bạn thật sự muốn cập nhật hợp đồng này chứ?",
+    "new_contract_warning_message": "Việc tạo mới một hợp đồng có hiệu lực sẽ ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực nếu có. Bạn thật sự muốn tạo hợp đồng này chứ?",
+    "update_contract_warning_message": "Việc thay đổi tình trạng hợp đồng có thể ảnh hưởng đến hợp đồng và đợt lương đang có hiệu lực nếu có. Bạn thật sự muốn cập nhật hợp đồng này chứ?",
     "not_assign_in_this_time": "Không thể giao việc trong khung giờ này!",
-    "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn tạo đợt lương này chứ?",
-    "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có hiệu lực có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?",
+    "new_active_wage_warning_message": "Việc tạo mới một đợt lương có hiệu lực sẽ ảnh hưởng đến đợt lương có hiệu lực hiện tại nếu có. Bạn thật sự muốn tạo đợt lương này chứ?",
+    "update_active_wage_warning_message": "Việc thay đổi tình trạng đợt lương có thể ảnh hưởng đến đợt lương có hiệu lực hiện tại. Bạn thật sự muốn cập nhật đợt lương này chứ?",
     "reset_password_warning_message": "Bạn thật sự muốn đặt lại mật khẩu cho tài khoản này",
     "reset_password_row": "Đặt lại mật khẩu cho hàng này",
     "add": "Thêm mới",
-    "successful_reset_password": "Đặt lại mật khẩu thành công"
+    "successful_reset_password": "Đặt lại mật khẩu thành công",
+    "no_data": "Không có dữ liệu"
 
   },
   "placeholder": {
@@ -758,7 +783,8 @@
     "required_select_benefit_status": "Bắt buộc phải chọn tình trạng của đợt lương",
     "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
     "required_select_month": "Bắt buộc phải chọn tháng",
-    "required_enter_file_name": "Bắt buộc phải nhập tên file"
+    "required_enter_file_name": "Bắt buộc phải nhập tên file",
+    "start_of_file_name": "Tên file không hợp lệ"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

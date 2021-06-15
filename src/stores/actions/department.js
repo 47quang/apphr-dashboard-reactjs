@@ -18,7 +18,14 @@ const handleDepartmentExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -26,7 +33,7 @@ const handleDepartmentExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchDepartments = (params, onTotalChange, setLoading) => {
+export const fetchDepartments = (params, setLoading) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.department
@@ -36,11 +43,12 @@ export const fetchDepartments = (params, onTotalChange, setLoading) => {
           payload && payload.length > 0
             ? payload.map((a) => {
                 a.createdAt = formatDateTimeToString(a.createdAt);
+                a.branchname = a.branch?.name;
                 return a;
               })
             : [];
+        payload = { payload: payload, total: total };
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENTS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleDepartmentExceptions(err, dispatch, 'fetchDepartments');
@@ -129,5 +137,17 @@ export const countDepartments = (params) => {
       .catch((err) => {
         handleDepartmentExceptions(err, dispatch, 'countDepartments');
       });
+  };
+};
+export const setEmptyDepartment = () => {
+  return {
+    type: REDUX_STATE.department.EMPTY_VALUE,
+    payload: {},
+  };
+};
+export const setEmptyDepartments = () => {
+  return {
+    type: REDUX_STATE.department.EMPTY_LIST,
+    payload: {},
   };
 };

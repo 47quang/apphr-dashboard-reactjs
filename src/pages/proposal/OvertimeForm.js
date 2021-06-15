@@ -76,7 +76,7 @@ const OvertimeForm = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

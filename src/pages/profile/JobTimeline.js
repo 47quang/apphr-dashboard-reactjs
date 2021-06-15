@@ -58,7 +58,8 @@ const JobTimelineInfo = ({ t, history, match }) => {
     allowances: [],
     files: [],
   };
-  newContract.attributes = useSelector((state) => state.attribute.attributes);
+  const attributes = useSelector((state) => state.attribute.attributes);
+  newContract.attributes = attributes.payload;
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: t('label.by_hour') },
@@ -328,7 +329,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             labelText={t('label.job_place')}
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_branch')}
-            lstSelectOptions={branches}
+            lstSelectOptions={branches.payload}
           />
           {values.attributes &&
             isCreate &&
@@ -441,7 +442,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 onBlur={handleBlur(`wageId`)}
                 onChange={(e) => {
                   let thisWage;
-                  if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
+                  if (isCreate) thisWage = wages.payload.filter((s) => s.id === parseInt(e.target.value));
                   else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
                   if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
                   else setFieldValue(`amount`, '');
@@ -456,7 +457,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 isTouched={touched?.wageId}
                 isError={errors?.wageId && touched.wageId}
                 errorMessage={t(errors?.wageId)}
-                lstSelectOptions={isCreate ? wages : values.wages}
+                lstSelectOptions={isCreate ? wages.payload : values.wages}
               />
               <CommonTextInput
                 containerClassName={'form-group col-xl-4'}
@@ -613,7 +614,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(errors, `allowances.${allowanceIdx}.id`) && getIn(touched, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances}
+                          lstSelectOptions={allowances.payload}
                           isDisable={!isCreate}
                         />
                         <CommonTextInput
@@ -710,7 +711,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -763,7 +764,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 props.isCreate = true;
                 return (
                   <form id="newContract" hidden={true} className="p-0 m-0">
-                    <div className="shadow bg-white rounded mx-4 p-4">
+                    <div className="shadow bg-white rounded p-4">
                       <h5>{t('label.create_new')}.</h5>
                       <hr className="mt-1" />
                       <BodyContract {...props} />
@@ -808,7 +809,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 {(props) => {
                   return (
                     <form className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                      <div className="shadow bg-white rounded p-4">
                         <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                           {props.values.code + ' - ' + props.values.fullname}
                         </div>

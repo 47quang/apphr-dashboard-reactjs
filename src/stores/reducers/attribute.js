@@ -1,7 +1,7 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  attributes: [],
+  attributes: { payload: [], total: 0 },
   attribute: {
     id: 0,
     name: '',
@@ -24,6 +24,11 @@ const attributeReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         attribute: initialState.attribute,
+      };
+    case REDUX_STATE.attribute.EMPTY_LIST:
+      return {
+        ...state,
+        attributes: initialState.attributes,
       };
     default:
       return state;

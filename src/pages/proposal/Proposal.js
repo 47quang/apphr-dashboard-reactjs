@@ -2,7 +2,7 @@ import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { FILTER_OPERATOR, PAGE_SIZES } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, ROUTE_PATH } from 'src/constants/key';
 import {
   fetchLeaveRequests,
   fetchRemoteRequests,
@@ -16,18 +16,21 @@ import {
 } from 'src/stores/actions/request';
 import Chip from '@material-ui/core/Chip';
 import { COLORS } from 'src/constants/theme';
+import { Helmet } from 'react-helmet';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Proposal = ({ t, location, match, type, profileId }) => {
   if (!type) type = match.path.split('/')[2];
-  const columnDefOfProfiles =
+  const [columnDef, setColumnDef] = useState(
     type === 'leave'
       ? [
           { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -45,13 +48,13 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
           { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
           // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
-        ];
+        ],
+  );
   const dispatch = useDispatch();
   const proposals = useSelector((state) => state.request[type + 'Requests']);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -87,8 +90,27 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           },
           type: {
             title: t('label.leave_form_type'),
-            operates: operatesText,
-            type: 'text',
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+            type: 'select',
+            values: [
+              {
+                id: 'pay',
+                name: t('label.pay'),
+              },
+              {
+                id: 'no-pay',
+                name: t('label.no-pay'),
+              },
+              {
+                id: 'policy',
+                name: t('label.policy'),
+              },
+            ],
           },
           status: {
             title: t('label.status'),
@@ -157,17 +179,36 @@ const Proposal = ({ t, location, match, type, profileId }) => {
       pageSize: newPageSize,
       currentPage: 0,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef(
+      type === 'leave'
+        ? [
+            { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
+            { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+            // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'type', title: t('label.leave_form_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+            // { name: 'handler', title: t('label.handler'), align: 'left', width: '15%', wordWrapEnabled: true },
+          ]
+        : [
+            { name: 'code', title: t('label.code'), align: 'left', width: '15%', wordWrapEnabled: true },
+            { name: 'fullname', title: t('label.employee_full_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+            // { name: 'description', title: t('label.description'), align: 'left', width: '20%', wordWrapEnabled: true },
+            { name: 'createdAt', title: t('label.sent_date'), align: 'left', width: '25%', wordWrapEnabled: true },
+            { name: 'status', title: t('label.status'), align: 'left', width: '20%', wordWrapEnabled: true },
+            // { name: 'handler', title: t('label.handler'), align: 'left', width: '20%', wordWrapEnabled: true },
+          ],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
   useEffect(() => {
     if (type === 'leave')
       profileId
@@ -178,7 +219,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -188,7 +228,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -201,7 +240,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -211,7 +249,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -224,7 +261,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -234,17 +270,20 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
     return () => {
       if (type === 'leave') dispatch(setEmptyLeaveRequests());
       else if (type === 'remote') dispatch(setEmptyRemoteRequests());
       else dispatch(setEmptyOverTimeRequests());
     };
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.currentPage, paging.pageSize]);
+  }, []);
   // const deleteRow = async (rowId) => {
   //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
   //   dispatch(fetchProfiles());
@@ -260,7 +299,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -271,7 +309,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -285,7 +322,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -296,7 +332,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -310,7 +345,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 perpage: paging.pageSize,
                 profileId: profileId,
               },
-              onTotalChange,
               setLoading,
             ),
           )
@@ -321,7 +355,6 @@ const Proposal = ({ t, location, match, type, profileId }) => {
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
-              onTotalChange,
               setLoading,
             ),
           );
@@ -338,13 +371,17 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
+      <Helmet>
+        <title>{'APPHR | ' + t('Proposal')}</title>
+        <link rel="shortcut icon" href={'images/short_logo.png'} type="image/png" />
+      </Helmet>
       {type === 'leave' ? (
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfProfiles}
-          data={proposals}
-          route={match.url + '/'}
+          columnDef={columnDef}
+          data={proposals?.payload ?? []}
+          route={ROUTE_PATH.LEAVE + '/'}
           disableDelete={true}
           // disableCreate={true}
           statusCols={['status']}
@@ -355,13 +392,14 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           fixed={true}
+          total={proposals?.total ?? 0}
         />
       ) : (
-        <QTable
+        <MemoizedQTable
           t={t}
-          columnDef={columnDefOfProfiles}
-          data={proposals}
-          route={match.url + '/'}
+          columnDef={columnDef}
+          data={proposals?.payload ?? []}
+          route={(type === 'remote' ? ROUTE_PATH.REMOTE : ROUTE_PATH.OVERTIME) + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
           // disableCreate={true}
@@ -373,6 +411,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           fixed={true}
+          total={proposals?.total ?? 0}
         />
       )}
     </CContainer>

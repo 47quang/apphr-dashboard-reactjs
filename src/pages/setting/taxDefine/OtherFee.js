@@ -5,12 +5,15 @@ import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
-import { deletePayment, fetchPayments } from 'src/stores/actions/payment';
+import { deletePayment, fetchPayments, setEmptyPayments } from 'src/stores/actions/payment';
 import { Chip } from '@material-ui/core';
 import { COLORS } from 'src/constants/theme';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -19,12 +22,12 @@ const OtherFee = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const payments = useSelector((state) => state.payment.payments);
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'name', title: t('label.payment_name'), align: 'left', width: '30%', wordWrapEnabled: true },
     { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
-  ];
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -76,7 +79,6 @@ const OtherFee = ({ t }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -91,17 +93,21 @@ const OtherFee = ({ t }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.code'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.payment_name'), align: 'left', width: '30%', wordWrapEnabled: true },
+      { name: 'type', title: t('label.payment_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '20%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WAGE))
       dispatch(
@@ -110,13 +116,17 @@ const OtherFee = ({ t }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyPayments());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchPayments(
@@ -125,7 +135,6 @@ const OtherFee = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -137,7 +146,6 @@ const OtherFee = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -158,11 +166,14 @@ const OtherFee = ({ t }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_WAGE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={payments}
+          data={payments?.payload ?? []}
           route={ROUTE_PATH.TAX_DETAIL + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -176,6 +187,7 @@ const OtherFee = ({ t }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           statusCols={['type']}
+          total={payments?.total ?? 0}
         />
       </CContainer>
     );

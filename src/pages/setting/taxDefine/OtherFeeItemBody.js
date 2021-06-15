@@ -7,6 +7,7 @@ import { renderButtons } from 'src/utils/formUtils';
 import Label from 'src/components/text/Label';
 import { CircularProgress } from '@material-ui/core';
 import { generateCode } from 'src/utils/randomCode';
+import FormHeader from 'src/components/text/FormHeader';
 
 const OtherFeeItemBody = ({ t, paymentRef, payment, validationSchema, submitForm, buttons, loading, isCreate }) => {
   const type = [
@@ -18,7 +19,7 @@ const OtherFeeItemBody = ({ t, paymentRef, payment, validationSchema, submitForm
     { id: 'insurrance', name: t('label.social_insurance') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -38,6 +39,7 @@ const OtherFeeItemBody = ({ t, paymentRef, payment, validationSchema, submitForm
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => {
                 return (
                   <form autoComplete="off">
+                    <FormHeader text={t('label.other_fee_info')} />
                     <div className="row">
                       {isCreate ? (
                         <div className="form-group col-xl-12">

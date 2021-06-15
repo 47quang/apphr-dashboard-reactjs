@@ -97,10 +97,12 @@ const SchedulerPage = ({ t, history, match }) => {
   const DayScaleCell = (props) => {
     const classes = useStyles();
     const { startDate, today } = props;
-    const holiday = holidays.find(
-      (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
-    )
-      ? true
+    const holiday = holidays?.payload
+      ? holidays.payload.find(
+          (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
+        )
+        ? true
+        : false
       : false;
     if (holiday) {
       return <WeekView.DayScaleCell {...props} className={classes.holiday} />;
@@ -118,10 +120,12 @@ const SchedulerPage = ({ t, history, match }) => {
     const classes = useStyles();
     const { startDate } = props;
     const date = moment(startDate);
-    const holiday = holidays.find(
-      (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
-    )
-      ? true
+    const holiday = holidays?.payload
+      ? holidays.payload.find(
+          (e) => isSameBeforeTypeDate(e.startDate.replace('Z', ''), startDate) && isSameBeforeTypeDate(startDate, e.endDate.replace('Z', '')),
+        )
+        ? true
+        : false
       : false;
     const onClickEvent = () => {
       if (permissionIds.includes(PERMISSION.CREATE_ASSIGNMENT))
@@ -150,7 +154,7 @@ const SchedulerPage = ({ t, history, match }) => {
       var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
       var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
       lastDay.setHours(23, 59, 59, 0);
-      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, undefined, setLoading));
+      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
       dispatch(
         fetchHolidays({
           page: 0,
@@ -178,7 +182,9 @@ const SchedulerPage = ({ t, history, match }) => {
     let { selectedDate } = state;
     let startDate = selectedDate + 'T' + values.start;
     let endDate = selectedDate + 'T' + values.end;
-    let checkValidTask = assignments.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate)); //bug
+    let checkValidTask = assignments?.payload
+      ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
+      : false; //bug
     if (!checkValidTask) {
       dispatch({
         type: REDUX_STATE.notification.SET_NOTI,
@@ -264,10 +270,9 @@ const SchedulerPage = ({ t, history, match }) => {
       );
     else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
   };
-
   if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
         {state.isOpen && <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />}
         <Paper>
           {loading ? (
@@ -275,7 +280,7 @@ const SchedulerPage = ({ t, history, match }) => {
               <CircularProgress />
             </div>
           ) : (
-            <Scheduler data={assignments} height="auto">
+            <Scheduler data={assignments?.payload ?? []} height="auto">
               <ViewState currentDate={state.currentDate} onCurrentDateChange={changeCurrentDate} />
               <EditingState />
               <IntegratedEditing />

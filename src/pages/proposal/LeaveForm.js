@@ -17,9 +17,9 @@ import { renderButtons } from 'src/utils/formUtils';
 const LeaveForm = ({ t, history, match }) => {
   const dispatch = useDispatch();
   const type = [
-    { id: 'no-pay', name: t('label.not_have_salary') },
-    { id: 'pay', name: t('label.have_salary') },
-    { id: 'policy', name: t('label.leave_policy') },
+    { id: 'no-pay', name: t('label.no-pay') },
+    { id: 'pay', name: t('label.pay') },
+    { id: 'policy', name: t('label.policy') },
   ];
   const status = [
     { id: 'new', name: t('label.new') },
@@ -62,7 +62,8 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-primary `,
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        console.log(history);
+        history.goBack();
       },
       name: t('label.back'),
       position: 'left',
@@ -81,7 +82,7 @@ const LeaveForm = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main p-4 m-auto">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

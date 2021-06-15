@@ -19,6 +19,9 @@
 .c-sidebar .c-sidebar-nav-link:hover {
   background: #303c54 !important;
 }
+.c-body {
+  background: #f7f7f7;
+}
 
 :host .ui5-shellbar-root {
   padding: 0.25rem 0.5rem !important;
@@ -81,4 +84,20 @@ button:focus {
 .assignment-request:hover {
   background-color: #d8b8f7 !important;
   border-radius: 9px;
+}
+
+div.show-image {
+}
+
+div.show-image:hover span {
+  display: block;
+}
+div.show-image span {
+  position: absolute;
+  display: none;
+}
+
+div.show-image span.delete {
+  top: 0;
+  left: 79%;
 }

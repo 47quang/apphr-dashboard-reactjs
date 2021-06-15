@@ -8,9 +8,12 @@ import PropTypes from 'prop-types';
 import Page404 from 'src/pages/page404/Page404';
 import { Chip } from '@material-ui/core';
 import { COLORS } from 'src/constants/theme';
+import { Helmet } from 'react-helmet';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
@@ -19,13 +22,13 @@ const Allowance = ({ t }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const allowances = useSelector((state) => state.allowance.allowances);
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.allowance_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -78,7 +81,6 @@ const Allowance = ({ t }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -93,18 +95,22 @@ const Allowance = ({ t }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
-
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.allowance_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.allowance_name'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'type', title: t('label.allowance_type'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'amount', title: t('label.allowance_amount'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
       dispatch(
@@ -113,15 +119,19 @@ const Allowance = ({ t }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging.currentPage, paging.pageSize]);
+
+  useEffect(() => {
     return () => {
       dispatch(setEmptyAllowances());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.currentPage, paging.pageSize]);
+  }, []);
 
   const filterFunction = (params) => {
     dispatch(
@@ -131,7 +141,6 @@ const Allowance = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -143,7 +152,6 @@ const Allowance = ({ t }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -164,11 +172,14 @@ const Allowance = ({ t }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={allowances}
+          data={allowances?.payload ?? []}
           route={ROUTE_PATH.ALLOWANCE + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -182,6 +193,7 @@ const Allowance = ({ t }) => {
           filterFunction={filterFunction}
           statusComponent={statusComponent}
           statusCols={['type']}
+          total={allowances?.total ?? 0}
         />
       </CContainer>
     );

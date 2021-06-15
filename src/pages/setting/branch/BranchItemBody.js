@@ -11,6 +11,7 @@ import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 import Label from 'src/components/text/Label';
 import { generateCode } from 'src/utils/randomCode';
+import FormHeader from 'src/components/text/FormHeader';
 
 const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons, loading, isCreate }) => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
     { id: 'QR_CODE', name: t('label.qr_code') },
   ];
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -38,6 +39,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
             >
               {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue }) => (
                 <form autoComplete="off">
+                  <FormHeader text={t('label.branch_info')} />
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-6">

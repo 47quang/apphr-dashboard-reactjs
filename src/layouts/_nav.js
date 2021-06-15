@@ -94,13 +94,13 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.SETTING,
-    route: ROUTE_PATH.SETTING,
+    to: ROUTE_PATH.SETTING,
     icon: 'cil-puzzle',
     _children: [
       {
         _tag: 'CSidebarNavDropdown',
         name: ROUTE_NAME.GENERAL,
-        // route: ROUTE_PATH.GENERAL,
+        to: ROUTE_PATH.SETTING,
         _children: [
           {
             _tag: 'CSidebarNavItem',

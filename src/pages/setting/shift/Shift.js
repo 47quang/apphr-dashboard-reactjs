@@ -1,33 +1,35 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { deleteShift, fetchShifts } from 'src/stores/actions/shift';
+import { deleteShift, fetchShifts, setEmptyShifts } from 'src/stores/actions/shift';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Shifts = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDef = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.shift_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'name', title: t('label.shift_name'), align: 'left', width: '20%', wordWrapEnabled: true },
     { name: 'startCC', title: t('label.check_in_time'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'endCC', title: t('label.check_out_time'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'coefficient', title: t('label.working_time_coefficient'), align: 'left', width: '10%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const dispatch = useDispatch();
   const shifts = useSelector((state) => state.shift.shifts);
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
     loading: false,
   });
@@ -75,11 +77,7 @@ const Shifts = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
@@ -87,11 +85,25 @@ const Shifts = ({ t, location, history }) => {
     }));
   };
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_SHIFT))
-      dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+    setColumnDef([
+      { name: 'code', title: t('label.shift_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'name', title: t('label.shift_name'), align: 'left', width: '20%', wordWrapEnabled: true },
+      { name: 'startCC', title: t('label.check_in_time'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'endCC', title: t('label.check_out_time'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'coefficient', title: t('label.working_time_coefficient'), align: 'left', width: '10%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
+  useEffect(() => {
+    if (permissionIds.includes(PERMISSION.LIST_SHIFT)) dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, setLoading));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
-
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyShifts());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const filterFunction = (params) => {
     dispatch(
       fetchShifts(
@@ -100,24 +112,26 @@ const Shifts = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
   };
   const handleAfterDelete = () => {
-    dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, onTotalChange, setLoading));
+    dispatch(fetchShifts({ page: paging.currentPage, perpage: paging.pageSize }, setLoading));
   };
   const deleteRow = (rowID) => {
     dispatch(deleteShift({ id: rowID }, t('message.successful_delete'), handleAfterDelete));
   };
   if (permissionIds.includes(PERMISSION.LIST_SHIFT))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main m-auto p-4">
+        <Helmet>
+          <title>{'APPHR | ' + t('Setting')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
           columnDef={columnDef}
-          data={shifts}
+          data={shifts?.payload ?? []}
           route={ROUTE_PATH.SHIFT + '/'}
           idxColumnsFilter={[0, 1]}
           deleteRow={deleteRow}
@@ -129,6 +143,7 @@ const Shifts = ({ t, location, history }) => {
           disableEdit={!permissionIds.includes(PERMISSION.GET_SHIFT)}
           filters={filters}
           filterFunction={filterFunction}
+          total={shifts?.total ?? 0}
         />
       </CContainer>
     );

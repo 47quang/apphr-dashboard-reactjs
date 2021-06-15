@@ -1,9 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  accounts: [
-    //{ id: 1, username: 'admin', email: 'dat@gmail.com', phone: '0212312321312', role: 'Pro', profileId: 1 }
-  ],
+  accounts: {
+    payload: [],
+    total: 0,
+  },
   account: {
     id: 0,
     username: '',
@@ -15,7 +16,6 @@ const initialState = {
     permissionIds: [],
   },
   roles: [],
-  permissionGroups: [],
   profiles: [],
   total: 0,
 };
@@ -40,11 +40,6 @@ const accountReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         roles: payload,
-      };
-    case REDUX_STATE.account.GET_ALL_PERMISSION:
-      return {
-        ...state,
-        permissionGroups: payload,
       };
     case REDUX_STATE.account.GET_PERMISSION_ARRAY:
       return {

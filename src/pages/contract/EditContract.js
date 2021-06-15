@@ -537,7 +537,7 @@ const EditContract = ({ t, history, match }) => {
     );
   };
   const newContractRef = useRef();
-  const preStatus = contract.status;
+  const preStatus = contract?.status;
   const [openWarning, setOpenWarning] = useState(false);
   const handleConfirmWarning = (e) => {
     create(newContractRef.current.values);
@@ -547,7 +547,7 @@ const EditContract = ({ t, history, match }) => {
     setOpenWarning(!openWarning);
   };
   return (
-    <CContainer fluid className="c-main">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

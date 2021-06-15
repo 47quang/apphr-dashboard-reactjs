@@ -11,15 +11,8 @@ import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountCreateInfoSchema, AccountUpdateInfoSchema } from 'src/schema/formSchema';
-import {
-  fetchAccount,
-  fetchPermissionGroups,
-  fetchProfilesWithoutAccount,
-  fetchRoles,
-  setEmptyAccount,
-  createAccount,
-  updateAccount,
-} from 'src/stores/actions/account';
+import { createAccount, fetchAccount, setEmptyAccount, updateAccount } from 'src/stores/actions/account';
+import { fetchPermissions } from 'src/stores/actions/role';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
 import Page404 from '../page404/Page404';
@@ -29,7 +22,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
   const accountRef = useRef();
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account.account);
-  const permissionGroups = useSelector((state) => state.account.permissionGroups);
+  const permissionGroups = useSelector((state) => state.role.permissions);
   const roles = useSelector((state) => state.account.roles);
   const profiles = useSelector((state) => state.account.profiles);
   const isCreate = accountId ? false : true;
@@ -41,12 +34,11 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
+    //dispatch(fetchRoles());
     if (!isCreate) {
       if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(+match?.params?.id, setLoading));
     } else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());
-    dispatch(fetchRoles());
-    dispatch(fetchPermissionGroups());
-    dispatch(fetchProfilesWithoutAccount());
+    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,7 +118,7 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
         },
       ];
   const returnComponent = (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

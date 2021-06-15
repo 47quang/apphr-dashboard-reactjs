@@ -1,7 +1,10 @@
 import { REDUX_STATE } from '../states';
 
 const initialState = {
-  payments: [],
+  payments: {
+    payload: [],
+    total: 0,
+  },
   payment: {
     code: '',
     name: '',
@@ -26,6 +29,11 @@ const paymentReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         payment: initialState.payment,
+      };
+    case REDUX_STATE.payment.EMPTY_LIST:
+      return {
+        ...state,
+        payments: initialState.payments,
       };
     default:
       return state;

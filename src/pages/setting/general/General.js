@@ -3,10 +3,12 @@ import { CContainer } from '@coreui/react';
 import { CircularProgress } from '@material-ui/core';
 import { Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION } from 'src/constants/key';
 import { SettingGeneralInfoSchema } from 'src/schema/formSchema';
 import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
@@ -57,7 +59,10 @@ const SettingGeneralPage = ({ t, location }) => {
     : [];
 
   return (
-    <CContainer fluid className="c-main mb-3 px-4">
+    <CContainer fluid className="c-main m-auto p-4">
+      <Helmet>
+        <title>{'APPHR | ' + t('Setting')}</title>
+      </Helmet>
       <div className="m-auto">
         {loading ? (
           <div className="text-center">
@@ -68,6 +73,7 @@ const SettingGeneralPage = ({ t, location }) => {
             <Formik innerRef={settingRef} enableReinitialize initialValues={general} validationSchema={SettingGeneralInfoSchema}>
               {({ values, errors, touched, handleChange, handleBlur }) => (
                 <form>
+                  <FormHeader text={t('label.company_info')} />
                   <div className="row">
                     <CommonTextInput
                       containerClassName={'form-group col-xl-6'}

@@ -17,7 +17,7 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import { AccountBalanceWallet, AddCircle, MonetizationOn, Replay } from '@material-ui/icons';
+import { AccountBalanceWallet, AddCircle, CloudDownload, CloudUpload, MonetizationOn, Replay } from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
@@ -28,9 +28,11 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import { COLORS } from 'src/constants/theme';
 import { resetPassword } from 'src/stores/actions/account';
-import { exportAllWage, exportWage } from 'src/stores/actions/profile';
+import { exportAllWage, exportWage, exportProfiles, importProfiles } from 'src/stores/actions/profile';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
+import ExportProfiles from '../dialog/ExportProfiles';
 import ExportWage from '../dialog/ExportWage';
+import ImportProfiles from '../dialog/ImportProfiles';
 import NewRollUp from '../dialog/NewRollUp';
 import FilterTable from './FilterTable';
 import NoteTable from './NoteTable';
@@ -186,6 +188,71 @@ const ExportAllSalaryPanel = ({ t, disableExportAllSalary }) => {
     </Plugin>
   );
 };
+const ExportProfile = ({ t, disableExportProfile }) => {
+  const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleConfirm = (values) => {
+    setIsOpen(false);
+    dispatch(exportProfiles(values));
+  };
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+  return (
+    <Plugin name="ExportProfile" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {disableExportProfile && isOpen && <ExportProfiles isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
+        {
+          <IconButton
+            hidden={!disableExportProfile}
+            className="py-0 px-2"
+            title={t('title.export_profile')}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            style={{ width: 35, height: 35 }}
+          >
+            <CloudDownload color={'primary'} />
+          </IconButton>
+        }
+      </Template>
+    </Plugin>
+  );
+};
+
+const ImportProfile = ({ t, disableImportProfile }) => {
+  const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleConfirm = (values) => {
+    setIsOpen(false);
+    dispatch(importProfiles(values));
+  };
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
+  return (
+    <Plugin name="ImportProfile" dependencies={[{ name: 'Toolbar' }]}>
+      <Template name="toolbarContent">
+        <TemplatePlaceholder />
+        {disableImportProfile && isOpen && <ImportProfiles isOpen={isOpen} t={t} handleCancel={handleCancel} handleConfirm={handleConfirm} />}
+        {
+          <IconButton
+            hidden={!disableImportProfile}
+            className="py-0 px-2"
+            title={t('title.import_profile')}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            style={{ width: 35, height: 35 }}
+          >
+            <CloudUpload color={'primary'} />
+          </IconButton>
+        }
+      </Template>
+    </Plugin>
+  );
+};
 const StubHeaderCellComponent = ({ column, className, ...props }) => {
   return (
     <Table.StubHeaderCell
@@ -273,8 +340,11 @@ const QTable = (props) => {
     setFromDate,
     pageSize,
     currentPage,
-    onTotalChange,
+    total,
+    disableExportProfile,
+    disableImportProfile,
   } = props;
+  console.log('TABLE', columnDef, data);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
@@ -378,6 +448,9 @@ const QTable = (props) => {
         case 'wage-history': {
           return '/benefit/' + modelId;
         }
+        case 'payment': {
+          return '/setting/taxDefine/' + modelId;
+        }
         default: {
         }
       }
@@ -400,8 +473,8 @@ const QTable = (props) => {
   const NoDataCellComponent = ({ getMessage, ...restProps }) => {
     //<CircularProgress className="loading-icon-mui" />
     return (
-      <td className="py-5 text-center" colSpan={restProps.colSpan}>
-        {paging.loading ? <CircularProgress className="loading-icon-mui" /> : <big className="text-muted">{getMessage('noData')}</big>}
+      <td className="text-center" colSpan={restProps.colSpan} style={{ height: 53 }}>
+        {paging.loading ? <CircularProgress className="loading-icon-mui" /> : <big className="text-muted">{t('message.no_data')}</big>}
       </td>
     );
   };
@@ -563,6 +636,7 @@ const QTable = (props) => {
   const CellComponent = ({ className, style, ...props }) => {
     return <Table.Cell className={classNames(className, 'py-0')} {...props} style={{ ...style, height: 53 }}></Table.Cell>;
   };
+  // console.log(paging);
   return (
     <div>
       <Paper>
@@ -579,7 +653,6 @@ const QTable = (props) => {
               setFromDate={setFromDate}
               pageSize={pageSize}
               currentPage={currentPage}
-              onTotalChange={onTotalChange}
             />
           </div>
         )}
@@ -598,7 +671,7 @@ const QTable = (props) => {
               onPageSizeChange={(newPageSize) => onPageSizeChange(newPageSize)}
             />
           )}
-          {!notPaging && <CustomPaging totalCount={paging.total} />}
+          {!notPaging && <CustomPaging totalCount={total} />}
           <SelectionState
             selection={state.selection}
             onSelectionChange={(selection) =>
@@ -650,6 +723,20 @@ const QTable = (props) => {
           ) : (
             <div>
               <ExportAllSalaryPanel t={t} disableExportAllSalary={disableExportAllSalary} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
+              <ImportProfile t={t} disableImportProfile={disableImportProfile} />
+            </div>
+          )}
+          {disableToolBar ? (
+            <div />
+          ) : (
+            <div>
+              <ExportProfile t={t} disableExportProfile={disableExportProfile} />
             </div>
           )}
           <TableEditRow />

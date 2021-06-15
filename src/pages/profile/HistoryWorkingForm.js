@@ -52,20 +52,19 @@ const HistoryWorkingForm = ({ t, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
-      const preLoading = async () => {
+      (async () => {
         dispatch(fetchBranches());
         dispatch(fetchPositions());
         dispatch(fetchDepartments());
-      };
-      preLoading();
+      })();
       dispatch(
         fetchHistoriesWork(
           {
             profileId: profileId,
           },
           setLoading,
-          departments,
-          positions,
+          departments.payload,
+          positions.payload,
         ),
       );
     }
@@ -101,7 +100,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               handleChange('branchId')(e);
               setFieldValue(
                 'departments',
-                departments.filter((x) => x.branch.id === +e.target.value),
+                departments.payload.filter((x) => x.branch.id === +e.target.value),
               );
               setFieldValue('departmentId', '');
               setFieldValue('positionId', '');
@@ -114,7 +113,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.branchId}
             isError={errors.branchId && touched.branchId}
             errorMessage={t(errors.branchId)}
-            lstSelectOptions={branches}
+            lstSelectOptions={branches.payload}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -125,7 +124,7 @@ const HistoryWorkingForm = ({ t, match }) => {
               handleChange('departmentId')(e);
               setFieldValue(
                 'positions',
-                positions.filter((x) => x.department.id === +e.target.value),
+                positions.payload.filter((x) => x.department.id === +e.target.value),
               );
               setFieldValue('positionId', '');
             }}
@@ -137,7 +136,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.departmentId}
             isError={errors.departmentId && touched.departmentId}
             errorMessage={t(errors.departmentId)}
-            lstSelectOptions={isCreate ? departments : values.departments}
+            lstSelectOptions={isCreate ? departments.payload : values.departments}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -154,7 +153,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.positionId}
             isError={errors.positionId && touched.positionId}
             errorMessage={t(errors.positionId)}
-            lstSelectOptions={isCreate ? positions : values.positions}
+            lstSelectOptions={isCreate ? positions.payload : values.positions}
           />
           {isCreate ? (
             <CommonSelectInput
@@ -212,15 +211,14 @@ const HistoryWorkingForm = ({ t, match }) => {
   const newHistoryRef = useRef();
 
   const handleResetNewHistory = () => {
-    // newHistoryRef.current.handleReset();
-    // document.getElementById('newHistory').hidden = true;
-    // document.getElementById('addBtn').disabled = false;
     dispatch(
       fetchHistoriesWork(
         {
           profileId: profileId,
         },
         setLoading,
+        departments.payload,
+        positions.payload,
       ),
     );
   };
@@ -237,7 +235,7 @@ const HistoryWorkingForm = ({ t, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main">
+        <CContainer fluid className="c-main p-4 m-auto">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"
@@ -267,7 +265,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                   props.isCreate = true;
                   return (
                     <Form id="newHistory" hidden={true} className="p-0 m-0">
-                      <div className="shadow bg-white rounded mx-4 p-4">
+                      <div className="shadow bg-white rounded p-4">
                         <h5>{t('label.create_new')}.</h5>
 
                         <hr className="mt-1" />
@@ -278,7 +276,9 @@ const HistoryWorkingForm = ({ t, match }) => {
                             type: 'button',
                             className: `btn btn-primary  mx-2`,
                             onClick: () => {
-                              handleResetNewHistory();
+                              props.handleReset();
+                              document.getElementById('newHistory').hidden = true;
+                              document.getElementById('addBtn').disabled = false;
                             },
                             name: t('label.cancel'),
                             position: 'right',
@@ -313,7 +313,7 @@ const HistoryWorkingForm = ({ t, match }) => {
                       {(props) => {
                         return (
                           <Form className="p-0 m-0">
-                            <div className="shadow bg-white rounded mx-4 p-4 mb-4">
+                            <div className="shadow bg-white rounded p-4">
                               <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
                                 <Switch
                                   checked={props.values.status === 'active'}

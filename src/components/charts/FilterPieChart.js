@@ -63,7 +63,7 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
                 isTouched={props.touched.shiftId}
                 isError={props.errors.shiftId && props.touched.shiftId}
                 errorMessage={t(props.errors.shiftId)}
-                lstSelectOptions={shifts}
+                lstSelectOptions={shifts?.payload ?? []}
               />
               <div className="col-xl-2 d-flex align-items-start pt-4 mt-1">
                 <button
@@ -72,6 +72,7 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
                   onClick={(e) => {
                     props.handleSubmit();
                   }}
+                  style={{ width: '95%' }}
                 >
                   {t('label.search')}
                 </button>

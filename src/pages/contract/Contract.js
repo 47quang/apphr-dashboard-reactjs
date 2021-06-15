@@ -1,22 +1,25 @@
 import { CContainer } from '@coreui/react';
 import { Chip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
-import { deleteContract, fetchContractTable } from 'src/stores/actions/contract';
+import { deleteContract, fetchContractTable, setEmptyContracts } from 'src/stores/actions/contract';
 import Page404 from '../page404/Page404';
 
 const equalQTable = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+  );
 };
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Contract = ({ t, location, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const columnDefOfAccounts = [
+  const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'fullname', title: t('label.contract_fullname'), align: 'left', width: '25%', wordWrapEnabled: true },
     { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
@@ -25,7 +28,7 @@ const Contract = ({ t, location, history }) => {
     { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
     { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
-  ];
+  ]);
   const operatesText = [
     {
       id: FILTER_OPERATOR.LIKE,
@@ -78,14 +81,14 @@ const Contract = ({ t, location, history }) => {
         },
       ],
     },
-    firstname: {
-      title: t('label.employee_first_name'),
-      operates: operatesText,
-      type: 'text',
-    },
-    lastname: {
-      title: t('label.employee_last_name'),
-      operates: operatesText,
+    suggestion: {
+      title: t('label.employee_full_name'),
+      operates: [
+        {
+          id: FILTER_OPERATOR.AUTOCOMPLETE,
+          name: t('filter_operator.autocomplete'),
+        },
+      ],
       type: 'text',
     },
     fullname: {
@@ -125,7 +128,6 @@ const Contract = ({ t, location, history }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     loading: false,
-    total: 0,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
@@ -139,17 +141,25 @@ const Contract = ({ t, location, history }) => {
       ...prevState,
       pageSize: newPageSize,
     }));
-  const onTotalChange = (total) =>
-    setPaging((prevState) => ({
-      ...prevState,
-      total: total,
-    }));
+
   const setLoading = (isLoading) => {
     setPaging((prevState) => ({
       ...prevState,
       loading: isLoading,
     }));
   };
+  useEffect(() => {
+    setColumnDef([
+      { name: 'code', title: t('label.contract_code'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'fullname', title: t('label.contract_fullname'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'type', title: t('label.contract_type'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'employee', title: t('label.employee'), align: 'left', width: '25%', wordWrapEnabled: true },
+      { name: 'status', title: t('label.status'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'handleDate', title: t('label.signature_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'startWork', title: t('label.job_start_date'), align: 'left', width: '15%', wordWrapEnabled: true },
+      { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '15%', wordWrapEnabled: true },
+    ]);
+  }, [t]);
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_USER))
       dispatch(
@@ -158,12 +168,18 @@ const Contract = ({ t, location, history }) => {
             page: paging.currentPage,
             perpage: paging.pageSize,
           },
-          onTotalChange,
           setLoading,
         ),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
+  useEffect(() => {
+    return () => {
+      dispatch(setEmptyContracts());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const filterFunction = (params) => {
     dispatch(
       fetchContractTable(
@@ -172,7 +188,6 @@ const Contract = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -184,7 +199,6 @@ const Contract = ({ t, location, history }) => {
           page: paging.currentPage,
           perpage: paging.pageSize,
         },
-        onTotalChange,
         setLoading,
       ),
     );
@@ -217,11 +231,14 @@ const Contract = ({ t, location, history }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
+      <CContainer fluid className="c-main p-4 m-auto">
+        <Helmet>
+          <title>{'APPHR | ' + t('Contract')}</title>
+        </Helmet>
         <MemoizedQTable
           t={t}
-          columnDef={columnDefOfAccounts}
-          data={contracts}
+          columnDef={columnDef}
+          data={contracts?.payload ?? []}
           route={ROUTE_PATH.NAV_CONTRACT + '/'}
           deleteRow={deleteRow}
           //linkCols={[{ name: 'profileId', route: `${ROUTE_PATH.PROFILE}/` }]}
@@ -236,6 +253,7 @@ const Contract = ({ t, location, history }) => {
           filterFunction={filterFunction}
           fixed={true}
           statusComponent={statusComponent}
+          total={contracts?.total ?? 0}
         />
       </CContainer>
     );

@@ -18,7 +18,14 @@ const handleLogExceptions = (err, dispatch, functionName) => {
         errorMessage = 'Bạn không thể thực hiện chức năng này';
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
-        errorMessage = 'Token bị quá hạn';
+        localStorage.clear();
+        dispatch({
+          type: REDUX_STATE.user.SET_USER,
+          payload: {
+            username: '',
+            token: '',
+          },
+        });
         break;
       default:
         break;
@@ -40,8 +47,11 @@ export const fetchLogs = (params, onTotalChange, setLoading) => {
                 return log;
               })
             : [];
+        payload = {
+          payload: payload,
+          total: total,
+        };
         dispatch({ type: REDUX_STATE.log.SET_LOGS, payload });
-        if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
         handleLogExceptions(err, dispatch, 'fetchLogs');

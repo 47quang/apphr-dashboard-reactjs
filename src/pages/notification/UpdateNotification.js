@@ -1,4 +1,3 @@
-import { CContainer } from '@coreui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -66,19 +65,15 @@ const UpdateNotification = ({ t, location, history, match }) => {
       ];
   if (permissionIds.includes(PERMISSION.GET_ARTICLE))
     return (
-      <CContainer fluid className="c-main mb-3 px-4">
-        <div className="m-auto col-lg-12">
-          <NotificationForm
-            t={t}
-            articleRef={articleInfoForm}
-            article={article}
-            buttons={buttons}
-            submitForm={submitForm}
-            loading={loading}
-            isCreate={false}
-          />
-        </div>
-      </CContainer>
+      <NotificationForm
+        t={t}
+        articleRef={articleInfoForm}
+        article={article}
+        buttons={buttons}
+        submitForm={submitForm}
+        loading={loading}
+        isCreate={false}
+      />
     );
   else return <Page404 />;
 };
