@@ -400,14 +400,14 @@
     "overtime_assignment": "Overtime assignment",
     "chart_shift_in_day": "Statistical chart of working shifts of the day",
     "accident_insurance": "Occupational accident insurance - Occupational disease",
-    "less_than_5m":"Up to 5 million VND",
+    "less_than_5m": "Up to 5 million VND",
     "great_than_5m_less_than_10m": "Over 5 million VND to 10 million VND",
     "great_than_10m_less_than_18m": "Over 10 million VND to 18 million VND",
     "great_than_18m_less_than_32m": "Over 18 million VND to 32 million VND",
     "great_than_32m_less_than_52m": "Over 32 million VND to 52 million VND",
     "great_than_52m_less_than_80m": "Over 52 million VND to 80 million VND",
-    "great_than_80m":"Over 80 million VND",
-    "company_info":"Business information",
+    "great_than_80m": "Over 80 million VND",
+    "company_info": "Business information",
     "branch_info": "Branch information",
     "department_info": "Department information",
     "position_info": "Position information",
@@ -419,8 +419,6 @@
     "allowance_info": "Allowance information",
     "wage_info": "Wage information",
     "other_fee_info": "Fee information"
-
-
   },
   "title": {
     "confirm": "Confirm",
@@ -437,7 +435,7 @@
     "delete_academic": "Delete Academic",
     "delete_contract": "Delete Contract",
     "delete_certificate": "Delete Certificate",
-    "new_contract": "New Contract", 
+    "new_contract": "New Contract",
     "update_contract": "Update Contract",
     "new_active_wage": "New Wage",
     "update_active_wage": "Update Wage",
@@ -766,7 +764,7 @@
     "required_enter_branch_name": "Required to enter Branch Name",
     "required_enter_dayOff": "Required to enter the Number of Days-Off allowed",
     "enter_valid_ip_v4_address": "Invalid BSSID address",
-    "required_enter_usename": "Required to enter Username",
+    "required_enter_username": "Required to enter Username",
     "required_enter_password": "Required to enter Password",
     "password_length_must_be_greater_than_6": "Password must be at least 6 characters long",
     "required_select_contact_type": "Required to select Contact Type",
@@ -777,7 +775,6 @@
     "required_select_contract_id": "Required to select a Contract",
     "required_enter_benefit_code": "Required to enter benefit code",
     "start_of_file_name": "Invalid file name"
-
   },
   "exceptions": {
     "message_unknown_error": "An unknown error occurred"

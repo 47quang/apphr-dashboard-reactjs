@@ -126,7 +126,7 @@ export const SettingDepartmentInfoSchema = Yup.object().shape({
 });
 //Account
 export const AccountCreateInfoSchema = Yup.object().shape({
-  username: Yup.string().required('validation.required_enter_usename'),
+  username: Yup.string().required('validation.required_enter_username'),
   password: Yup.string().test('empty string', 'validation.password_length_must_be_greater_than_6', function (value) {
     return value ? value.length > 5 : false;
   }),
@@ -142,7 +142,7 @@ export const AccountCreateInfoSchema = Yup.object().shape({
   }),
 });
 export const AccountUpdateInfoSchema = Yup.object().shape({
-  username: Yup.string().required('validation.required_enter_usename'),
+  username: Yup.string().required('validation.required_enter_username'),
   email: Yup.string().email('validation.enter_valid_email').required('validation.required_enter_email'),
   phone: Yup.string().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
   roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
@@ -1007,4 +1007,9 @@ export const SelectShift = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_shift'),
+});
+
+export const LoginSchema = Yup.object().shape({
+  username: Yup.string().required('validation.required_enter_username'),
+  password: Yup.string().min(6, 'validation.password_length_must_be_greater_than_6').required('validation.required_enter_password'),
 });

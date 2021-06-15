@@ -1,11 +1,10 @@
+import Chip from '@material-ui/core/Chip';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { FilterSchema } from 'src/schema/formSchema';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
-import Chip from '@material-ui/core/Chip';
 import WeekPicker from '../input/WeekPicker';
-import CommonAutoCompleteInput from '../input/CommonAutoCompleteInput';
 
 const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage }) => {
   let columnsFilter = filters ? Object.keys(filters) : [];
