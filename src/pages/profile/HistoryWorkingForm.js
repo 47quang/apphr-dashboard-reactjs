@@ -235,7 +235,7 @@ const HistoryWorkingForm = ({ t, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main p-4 m-auto">
+        <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"

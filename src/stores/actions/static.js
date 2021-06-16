@@ -40,7 +40,7 @@ export const fetchStatics = (setLoading) => {
       .then(({ payload, total }) => {
         let rvPayload = [];
         for (const [key, value] of Object.entries(payload)) {
-          let element = { key: formatDate(key) };
+          let element = { key: formatDate(new Date(key)) };
           element.date =
             value && value.length > 0
               ? value.map((e) => {
@@ -61,12 +61,12 @@ export const fetchStatics = (setLoading) => {
   };
 };
 
-export const deleteStatic = (id, success_msg) => {
+export const deleteStatic = (filename, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.static
-      .delete(id)
+      .delete(filename)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.static.DELETE_STATIC, payload });
+        if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

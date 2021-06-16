@@ -25,7 +25,7 @@ const Dashboard = ({ t, location }) => {
       <Helmet>
         <title>{'APPHR | ' + t('Dashboard')}</title>
       </Helmet>
-      <CContainer fluid className="c-main p-4 m-auto">
+      <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
         <Count t={t} />
 
         <div className="row">

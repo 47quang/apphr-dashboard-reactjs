@@ -371,7 +371,8 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     );
   };
   return (
-    <CContainer fluid className="c-main p-4 m-auto">
+          <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
+      
       <Helmet>
         <title>{'APPHR | ' + t('Proposal')}</title>
         <link rel="shortcut icon" href={'images/short_logo.png'} type="image/png" />

@@ -452,7 +452,8 @@
     "export_all_salary": "Xuất bảng lương",
     "export_wage_row": "Xuất phiếu lương cho hàng này",
     "export_profile": "Export danh sách nhân sự",
-    "import_profile": "Upload danh sách nhân sự"
+    "import_profile": "Upload danh sách nhân sự",
+    "delete_file": "Xóa file này"
   },
   "filter_operator": {
     "in": "trong",
@@ -489,6 +490,7 @@
     "delete_row": "Xóa hàng này",
     "edit_row": "Xem thông tin chi tiết",
     "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
+    "delete_file_warning_message": "Bạn chắc chắn muốn xóa file này?",
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",

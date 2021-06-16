@@ -454,7 +454,9 @@
     "export_all_salary": "Export Salary Table",
     "export_wage_row": "Export paycheck for this row",
     "export_profile": "Export list profiles",
-    "import_profile": "Upload list profiles"
+    "import_profile": "Upload list profiles",
+    "delete_file": "Delete this file"
+
   },
   "filter_operator": {
     "in": "in",
@@ -489,6 +491,7 @@
     "delete_row": "Delete row",
     "edit_row": "Details",
     "delete_warning_message": "Are you sure to delete this row?",
+    "delete_file_warning_message":  "Are you sure to delete this file?",
     "confirm_delete_contact": "Are you sure to delete this channel?",
     "confirm_delete_academic": "Are you sure to delete this academic ?",
     "confirm_delete_contract": "Are you sure to delete this contract?",

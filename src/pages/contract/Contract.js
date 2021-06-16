@@ -231,7 +231,7 @@ const Contract = ({ t, location, history }) => {
   };
   if (permissionIds.includes(PERMISSION.LIST_USER))
     return (
-      <CContainer fluid className="c-main p-4 m-auto">
+      <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
         <Helmet>
           <title>{'APPHR | ' + t('Contract')}</title>
         </Helmet>
