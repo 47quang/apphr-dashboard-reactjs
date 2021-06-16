@@ -18,7 +18,6 @@ const Dashboard = ({ t, location }) => {
   const dispatch = useDispatch();
 
   const handleChangeShift = (values) => {
-    // console.log(values);
     dispatch(fetchStatisticChart(values));
   };
   return (

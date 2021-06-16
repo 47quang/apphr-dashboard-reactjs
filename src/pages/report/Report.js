@@ -46,7 +46,16 @@ const Report = ({ t, location }) => {
                                 ) : (
                                   <img src="images/excel.svg" alt="excel" style={{ height: '100px' }} />
                                 )}
-                                <span className="close">X</span>
+                                <span className="pl-2 close">X</span>
+                                {/* <IconButton
+                                  className="mx-2 my-0 p-0"
+                                  hidden={false}
+                                  onClick={() => {}}
+                                  title={t('message.delete_row')}
+                                  style={{ width: 35, height: 35, color: 'red' }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton> */}
                               </div>
 
                               <a href={`https://apphr.me/public/DEV/${date.filename}`}>

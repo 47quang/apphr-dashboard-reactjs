@@ -86,11 +86,8 @@ button:focus {
   border-radius: 9px;
 }
 
-div.show-image {
-}
-
 div.show-image:hover span {
-  display: block;
+  display: inline-block;
 }
 div.show-image span {
   position: absolute;
