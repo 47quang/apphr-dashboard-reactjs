@@ -8,10 +8,18 @@ const AlertSnackbar = () => {
   const notification = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const handleClose = (event, reason) => {
-    if (reason === 'timeout') {
-      dispatch({ type: REDUX_STATE.notification.SET_OPEN });
-    } else if (reason === 'timeout') return;
-    else dispatch({ type: REDUX_STATE.notification.SET_OPEN });
+    switch (reason) {
+      case 'timeout': {
+        dispatch({ type: REDUX_STATE.notification.SET_OPEN });
+        break;
+      }
+      case 'clickaway':
+        break;
+      default: {
+        dispatch({ type: REDUX_STATE.notification.SET_OPEN });
+        break;
+      }
+    }
   };
   return (
     <Snackbar open={notification.open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
