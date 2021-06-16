@@ -1,11 +1,10 @@
-import React, { Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { CFade } from "@coreui/react";
-import utils from "src/utils/index";
-
+import React, { Suspense } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { CFade } from '@coreui/react';
+import utils from 'src/utils/index';
 // routes config
-import routes from "src/routes/routes";
-import { withTranslation } from "react-i18next";
+import routes from 'src/routes/routes';
+import { withTranslation } from 'react-i18next';
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -27,12 +26,7 @@ const TheContent = ({ t, i18n }) => {
                   name={route.name}
                   render={(props) => (
                     <CFade>
-                      <route.component
-                        utils={utils}
-                        t={t}
-                        i18n={i18n}
-                        {...props}
-                      />
+                      <route.component utils={utils} t={t} i18n={i18n} {...props} />
                     </CFade>
                   )}
                 />

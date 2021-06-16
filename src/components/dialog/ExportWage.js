@@ -22,7 +22,6 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
             validationSchema={ExportWageSchema}
             enableReinitialize
             onSubmit={(values) => {
-              // console.log(moment(values.month).endOf('month').format('YYYY-MM-DD'));
               handleConfirm(values);
             }}
           >

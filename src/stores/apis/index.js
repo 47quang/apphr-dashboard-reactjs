@@ -396,8 +396,8 @@ export const api = {
         params: params,
       });
     },
-    delete: (id) => {
-      return client.delete(API_PREFIX.API_STATIC + `/${id}`);
+    delete: (filename) => {
+      return client.delete(API_PREFIX.API_STATIC + `/${filename}`);
     },
   },
 

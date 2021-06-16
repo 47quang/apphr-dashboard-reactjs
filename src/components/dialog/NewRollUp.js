@@ -12,6 +12,7 @@ const NewRollUp = ({ isOpen, handleConfirm, handleCancel, t, startCC }) => {
     startTime: startCC,
     endTime: '',
   };
+  console.log('startCC', startCC);
   return (
     <div>
       <Dialog open={isOpen} onClose={handleCancel} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>

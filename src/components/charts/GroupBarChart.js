@@ -7,7 +7,9 @@ import { DateRange } from 'src/schema/formSchema';
 const GroupBarChart = ({ chart, title, t, initValues, handleFunction }) => {
   return (
     <CCard>
-      <CCardHeader>{title}</CCardHeader>
+      <CCardHeader>
+        <b>{title}</b>
+      </CCardHeader>
       <CCardBody>
         <Formik
           initialValues={initValues}

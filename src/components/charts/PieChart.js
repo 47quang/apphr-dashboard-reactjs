@@ -103,6 +103,7 @@ const PieChart = ({ initValues, handleFunction }) => {
           break;
         }
         default: {
+          break;
         }
       }
     }
@@ -115,7 +116,9 @@ const PieChart = ({ initValues, handleFunction }) => {
   };
   return (
     <CCard>
-      <CCardHeader>{t('label.chart_shift_in_day')}</CCardHeader>
+      <CCardHeader>
+        <b>{t('label.chart_shift_in_day')}</b>
+      </CCardHeader>
       <CCardBody>
         {state.isOpen ? (
           <StatisticAssignmentTable t={t} isOpen={state.isOpen} handleClose={handleClose} data={state.data} title={state.title} />

@@ -77,7 +77,7 @@ const RemoteForm = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <CContainer fluid className="c-main p-4 m-auto">
+    <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="m-auto">
         {loading ? (
           <div className="text-center">

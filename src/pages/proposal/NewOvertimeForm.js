@@ -37,7 +37,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
   }, []);
 
   return (
-    <CContainer fluid className="c-main p-4 m-auto">
+    <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="m-auto">
         <div className="shadow bg-white rounded p-4 container col-xl-6">
           <Formik

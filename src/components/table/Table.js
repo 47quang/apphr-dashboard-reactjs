@@ -69,39 +69,11 @@ const styles = (theme) => ({
   },
 });
 
-const _styles = (theme) => ({
-  dialog: {
-    width: 'calc(100% - 16px)',
-  },
-  inputRoot: {
-    width: '100%',
-  },
-  selectMenu: {
-    position: 'absolute !important',
-  },
-  tableStriped: {
-    '& tbody tr:nth-of-type(odd)': {
-      backgroundColor: '#ffffff',
-    },
-  },
-  customToolbar: {
-    float: 'left',
-    display: 'inline-flex',
-  },
-  MuiTableCell: {
-    padding: 'none',
-  },
-});
-
 const TableComponentBase = ({ classes, ...restProps }) => {
   return <Table.Table {...restProps} className={classes.tableStriped} />;
 };
 
 export const TableComponent = withStyles(styles, {
-  name: 'TableComponent',
-})(TableComponentBase);
-
-export const _TableComponent = withStyles(_styles, {
   name: 'TableComponent',
 })(TableComponentBase);
 
@@ -262,18 +234,33 @@ const StubHeaderCellComponent = ({ column, className, ...props }) => {
     ></Table.StubHeaderCell>
   );
 };
-const Label = ({ column, className, ...props }) => {
-  props.draggingEnabled = false;
-  const rvComponent = Array.isArray(column.title) ? (
+
+const Label = ({ column, className, ...restProps }) => {
+  restProps.draggingEnabled = false;
+  const getBackgroundColor = (col) => {
+    if (col.holiday) return COLORS.HOLIDAY_HEADER;
+    else {
+      if (col.today) return COLORS.TODAY_HEADER_CELL;
+      else return '';
+    }
+  };
+  const getBorderRightColor = (col) => {
+    if (col.holiday) return COLORS.HOLIDAY_HEADER;
+    else {
+      if (col.today) return COLORS.TODAY_HEADER_CELL;
+      else return 'white';
+    }
+  };
+  return Array.isArray(column.title) ? (
     <TableHeaderRow.Cell
       className={classNames(className)}
-      {...props}
+      {...restProps}
       style={{
-        backgroundColor: column.holiday ? COLORS.HOLIDAY_HEADER : column.today ? COLORS.TODAY_HEADER_CELL : '',
+        backgroundColor: getBackgroundColor(column),
         borderStyle: 'solid',
         borderLeftColor: '#D8DBE0',
         borderTopColor: '#D8DBE0',
-        borderRightColor: column.holiday ? COLORS.HOLIDAY_HEADER : column.today ? COLORS.TODAY_HEADER_CELL : 'white',
+        borderRightColor: getBorderRightColor(column),
         borderBottomColor: '#D8DBE0',
         borderWidth: 'thin',
       }}
@@ -285,7 +272,7 @@ const Label = ({ column, className, ...props }) => {
   ) : (
     <TableHeaderRow.Cell
       className={classNames(className)}
-      {...props}
+      {...restProps}
       style={{
         borderStyle: 'solid',
         borderLeftColor: '#D8DBE0',
@@ -300,7 +287,6 @@ const Label = ({ column, className, ...props }) => {
       </div>
     </TableHeaderRow.Cell>
   );
-  return rvComponent;
 };
 
 const QTable = (props) => {
@@ -344,11 +330,9 @@ const QTable = (props) => {
     disableExportProfile,
     disableImportProfile,
   } = props;
-  console.log('TABLE', columnDef, data);
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
   let linkColumns = Array.isArray(linkCols) ? linkCols.map((val) => val.name) : [''];
-  // console.log('QTABLE', data, columnDef);
   const [state, setState] = useState({
     selection: [],
     editingRowIds: [],
@@ -452,6 +436,7 @@ const QTable = (props) => {
           return '/setting/taxDefine/' + modelId;
         }
         default: {
+          break;
         }
       }
     };
@@ -479,8 +464,7 @@ const QTable = (props) => {
     );
   };
 
-  const TestComponent = ({ row, className, ...props }) => {
-    // console.log('TestComponent', props);
+  const TestComponent = ({ row, className, ...restProps }) => {
     const [openWarning, setOpenWarning] = useState(false);
     const [openResetPassWordWarning, setOpenResetPassWordWarning] = useState(false);
     const [deletingRowID, setDeletingRowID] = useState(-1);
@@ -536,15 +520,9 @@ const QTable = (props) => {
       setOpenExportEmployeeSalary(false);
     };
     return (
-      <TableEditColumn.Cell className={classNames(className, isExportEmployeeSalary ? 'm-0 p-0' : '')} {...props}>
+      <TableEditColumn.Cell className={classNames(className, isExportEmployeeSalary ? 'm-0 p-0' : '')} {...restProps}>
         {openEditing && (
-          <NewRollUp
-            isOpen={openEditing}
-            handleConfirm={handleConfirmEditing}
-            handleCancel={handleCancelEditing}
-            t={t}
-            startCC={rollUp?.row?.startTime}
-          />
+          <NewRollUp isOpen={openEditing} handleConfirm={handleConfirmEditing} handleCancel={handleCancelEditing} t={t} startCC={rollUp?.startTime} />
         )}
         {openWarning && (
           <WarningAlertDialog
@@ -579,7 +557,7 @@ const QTable = (props) => {
             onClick={() => {
               if (isPopUp) {
                 setOpenEditing(!openEditing);
-                setRollUp(row.id);
+                setRollUp(row);
               }
             }}
             style={{ width: 35, height: 35 }}
@@ -633,10 +611,9 @@ const QTable = (props) => {
       </TableEditColumn.Cell>
     );
   };
-  const CellComponent = ({ className, style, ...props }) => {
-    return <Table.Cell className={classNames(className, 'py-0')} {...props} style={{ ...style, height: 53 }}></Table.Cell>;
+  const CellComponent = ({ className, style, ...restProps }) => {
+    return <Table.Cell className={classNames(className, 'py-0')} {...restProps} style={{ ...style, height: 53 }}></Table.Cell>;
   };
-  // console.log(paging);
   return (
     <div>
       <Paper>
@@ -648,7 +625,7 @@ const QTable = (props) => {
               t={t}
               filters={filters}
               filterFunction={filterFunction}
-              isRollUpTable={route === '/roll-up/' ? true : false}
+              isRollUpTable={route === '/roll-up/'}
               fromDate={fromDate}
               setFromDate={setFromDate}
               pageSize={pageSize}
@@ -687,7 +664,7 @@ const QTable = (props) => {
             <Table
               key={route}
               columnExtensions={tableColumnExtensions}
-              tableComponent={disableToolBar ? _TableComponent : TableComponent}
+              tableComponent={TableComponent}
               cellComponent={customTableCell}
               noDataCellComponent={NoDataCellComponent}
               stubHeaderCellComponent={StubHeaderCellComponent}
@@ -746,11 +723,8 @@ const QTable = (props) => {
           <Getter
             name="tableColumns"
             computed={({ tableColumns }) => {
-              // console.log('tableColumns', tableColumns);
               if (disableEditColum) return tableColumns;
               let editColumn = tableColumns.shift();
-              //return tableColumns;
-              // console.log(editColumn);
               return [...tableColumns, { ...editColumn, width: isExportEmployeeSalary || isResetPassWord ? '15%' : '10%' }];
             }}
           />
@@ -759,7 +733,6 @@ const QTable = (props) => {
             name="tableHeaderColumnChains"
             computed={({ tableHeaderColumnChains }) => {
               if (!fixed) return tableHeaderColumnChains;
-              // console.log('tableHeaderColumnChainstableHeaderColumnChains', tableHeaderColumnChains);
               tableHeaderColumnChains =
                 tableHeaderColumnChains && tableHeaderColumnChains.length > 0
                   ? tableHeaderColumnChains.map((ele) => {

@@ -253,7 +253,7 @@
     "scheduler": "Phân công công việc",
     "profile": "Hồ sơ",
     "profileId": "Nhân sự",
-    "username": "Username",
+    "username": "Tên đăng nhập",
     "email": "Email",
     "start_date": "Ngày bắt đầu",
     "job_start_date": "Ngày bắt đầu làm việc",
@@ -398,13 +398,13 @@
     "number_absence": "Số người không đi làm",
     "overtime_assignment": "Ca làm thêm giờ",
     "accident_insurance": "Bảo hiểm Tai nạn lao động - Bệnh nghề nghiệp",
-    "less_than_5m":"Đến 5 triệu VNĐ",
+    "less_than_5m": "Đến 5 triệu VNĐ",
     "great_than_5m_less_than_10m": "Trên 5 triệu VNĐ đến 10 triệu VNĐ",
     "great_than_10m_less_than_18m": "Trên 10 triệu VNĐ đến 18 triệu VNĐ",
     "great_than_18m_less_than_32m": "Trên 18 triệu VNĐ đến 32 triệu VNĐ",
     "great_than_32m_less_than_52m": "Trên 32 triệu VNĐ đến 52 triệu VNĐ",
     "great_than_52m_less_than_80m": "Trên 52 triệu VNĐ đến 80 triệu VNĐ",
-    "great_than_80m":"Trên 80 triệu VNĐ",
+    "great_than_80m": "Trên 80 triệu VNĐ",
     "company_info": "Thông tin doanh nghiệp",
     "branch_info": "Thông tin chi nhánh",
     "department_info": "Thông tin phòng ban",
@@ -417,7 +417,6 @@
     "allowance_info": "Thông tin trợ cấp",
     "wage_info": "Thông tin nhóm lương",
     "other_fee_info": "Thông tin chi phí"
-
   },
   "title": {
     "confirm": "Xác nhận",
@@ -434,7 +433,7 @@
     "delete_academic": "Xóa trình độ chuyên môn",
     "delete_contract": "Xóa hợp đồng",
     "delete_certificate": "Xóa chứng chỉ",
-    "new_contract": "Tạo mới hợp đồng", 
+    "new_contract": "Tạo mới hợp đồng",
     "update_contract": "Cập nhật hợp đồng",
     "new_active_wage": "Tạo đợt lương mới",
     "update_active_wage": "Cập nhật đợt lương",
@@ -453,7 +452,8 @@
     "export_all_salary": "Xuất bảng lương",
     "export_wage_row": "Xuất phiếu lương cho hàng này",
     "export_profile": "Export danh sách nhân sự",
-    "import_profile": "Upload danh sách nhân sự"
+    "import_profile": "Upload danh sách nhân sự",
+    "delete_file": "Xóa file này"
   },
   "filter_operator": {
     "in": "trong",
@@ -490,6 +490,7 @@
     "delete_row": "Xóa hàng này",
     "edit_row": "Xem thông tin chi tiết",
     "delete_warning_message": "Bạn chắc chắn muốn xóa hàng này?",
+    "delete_file_warning_message": "Bạn chắc chắn muốn xóa file này?",
     "confirm_delete_contact": "Bạn thật sự muốn xóa kênh liên lạc này?",
     "confirm_delete_academic": "Bạn thật sự muốn xóa mục này?",
     "confirm_delete_contract": "Bạn thật sự muốn xóa hợp đồng này?",
@@ -503,7 +504,6 @@
     "add": "Thêm mới",
     "successful_reset_password": "Đặt lại mật khẩu thành công",
     "no_data": "Không có dữ liệu"
-
   },
   "placeholder": {
     "select_contract": "Chọn hợp đồng",
@@ -769,7 +769,7 @@
     "required_enter_branch_name": "Bắt buộc nhập vào tên của chi nhánh",
     "required_enter_dayOff": "Bắt buộc nhập vào số ngày nghỉ cho phép",
     "enter_valid_ip_v4_address": "Địa chỉ BSSID không hợp lệ",
-    "required_enter_usename": "Bắt buộc nhập tên đăng nhập",
+    "required_enter_username": "Bắt buộc nhập tên đăng nhập",
     "required_enter_password": "Bắt buộc nhập vào mật khẩu của tài khoản",
     "password_length_must_be_greater_than_6": "Mật khẩu có độ dài tối thiểu 6 ký tự",
     "required_select_contact_type": "Phải chọn loại địa chỉ",

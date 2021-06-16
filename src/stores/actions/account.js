@@ -81,15 +81,12 @@ export const filterAccounts = (params, onTotalChange, setLoading) => {
             : [];
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
         if (onTotalChange) onTotalChange(total);
-        if (setLoading) setLoading(false);
       })
       .catch((err) => {
+        handleAccountExceptions(err, dispatch, 'filterAccounts');
+      })
+      .finally(() => {
         if (setLoading) setLoading(false);
-        if (err.response.status >= 500)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'loi o server' } });
-        else if (err.response?.status >= 400)
-          dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi o client' } });
-        else dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'Loi' } });
       });
   };
 };
