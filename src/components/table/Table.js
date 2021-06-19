@@ -495,7 +495,7 @@ const QTable = (props) => {
         updateRollUp(
           {
             endTime: new Date(endTime),
-            id: rollUp.rowId,
+            id: rollUp.id,
           },
           rollUpData.assignmentId,
           rollUpData.setIsReload,
