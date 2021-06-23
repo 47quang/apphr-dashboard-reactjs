@@ -435,6 +435,9 @@ const QTable = (props) => {
         case 'payment': {
           return '/setting/taxDefine/' + modelId;
         }
+        case 'article': {
+          return '/notification/' + modelId;
+        }
         default: {
           break;
         }

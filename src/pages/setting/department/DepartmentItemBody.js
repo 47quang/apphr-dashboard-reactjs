@@ -137,7 +137,7 @@ const DepartmentItemBody = ({ t, departmentRef, department, branches, buttons, s
                       onChange={handleChange('note')}
                       inputID={'note'}
                       rows={10}
-                      labelText={t('label.description')}
+                      labelText={t('label.note')}
                       inputClassName={'form-control'}
                       placeholder={t('placeholder.enter_description')}
                     />

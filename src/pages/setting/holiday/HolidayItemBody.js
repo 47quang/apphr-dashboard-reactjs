@@ -34,7 +34,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading,
                   <div className="row">
                     {isCreate ? (
                       <div className="form-group col-xl-12">
-                        <Label text={t('label.holiday')} required />
+                        <Label text={t('label.holiday_code')} required />
                         <div className="input-group">
                           <input
                             type="text"
@@ -69,7 +69,7 @@ const HolidayItemBody = ({ t, holidayRef, holiday, buttons, submitForm, loading,
                       </div>
                     ) : (
                       <div className="form-group col-xl-12">
-                        <Label text={t('label.holiday')} required />
+                        <Label text={t('label.holiday_code')} required />
                         <div className="input-group">
                           <input
                             type="text"

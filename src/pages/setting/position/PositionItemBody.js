@@ -200,7 +200,7 @@ const PositionItemBody = ({ t, positionRef, position, branches, submitForm, butt
                       onBlur={handleBlur('note')}
                       onChange={handleChange('note')}
                       inputID={'note'}
-                      labelText={t('label.description')}
+                      labelText={t('label.note')}
                       inputClassName={'form-control'}
                     />
                   </div>
