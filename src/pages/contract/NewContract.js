@@ -65,7 +65,8 @@ const NewContract = ({ t, history, match }) => {
   const handleCancelWarning = () => {
     setOpenWarning(!openWarning);
   };
-  newContract.attributes = useSelector((state) => state.attribute.attributes);
+  const attributes = useSelector((state) => state.attribute.attributes);
+  newContract.attributes = attributes?.payload ?? [];
   const allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: t('label.by_hour') },

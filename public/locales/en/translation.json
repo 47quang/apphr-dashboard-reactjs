@@ -625,7 +625,9 @@
     "enter_allowance_amount": "Enter allowance amount",
     "enter_contract_fullname": "Enter contract fullname",
     "select_benefit_status": "Select Benefit status",
-    "enter_benefit_code": "Enter benefit code"
+    "enter_benefit_code": "Enter benefit code",
+    "enter_code": "Enter identify code"
+
   },
   "validation": {
     "required_enter_fee_code": "Required to enter Fee Code",
@@ -777,7 +779,8 @@
     "required_enter_allowance_level": "Required to enter Allowance Level",
     "required_select_contract_id": "Required to select a Contract",
     "required_enter_benefit_code": "Required to enter benefit code",
-    "start_of_file_name": "Invalid file name"
+    "start_of_file_name": "Invalid file name",
+    "required_enter_code": "Required to enter identify code"
   },
   "exceptions": {
     "message_unknown_error": "An unknown error occurred"

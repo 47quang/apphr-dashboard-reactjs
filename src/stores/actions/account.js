@@ -155,7 +155,7 @@ export const deleteAccount = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.account
       .delete(id)
-      .then(({ payload }) => {
+      .then(() => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })

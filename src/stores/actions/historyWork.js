@@ -1,5 +1,5 @@
 import { RESPONSE_CODE } from 'src/constants/key';
-import { formatDateInput } from 'src/utils/datetimeUtils';
+import { formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -41,7 +41,6 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
     api.historyWork
       .post(data)
       .then(({ payload }) => {
-        //dispatch({ type: REDUX_STATE.historyWork.CREATE_HISTORY, payload });
         handleResetNewHistory();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
@@ -70,15 +69,60 @@ export const updateHistoryWork = (data, success_msg) => {
   };
 };
 
-export const fetchHistoriesWork = (params, setLoading, departments, positions) => {
+export const fetchHistoriesWork = (params, setLoading) => {
   if (setLoading) setLoading(true);
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
+    let departments = await api.department
+      .getAll()
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                a.branchname = a.branch?.name;
+                return a;
+              })
+            : [];
+        let rValue = { payload: payload, total: total };
+        dispatch({ type: REDUX_STATE.department.SET_DEPARTMENTS, payload: rValue });
+        return payload;
+      })
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'fetchDepartments');
+        return [];
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
+      });
+    let positions = await api.position
+      .getAll()
+      .then(({ payload, total }) => {
+        payload =
+          payload && payload.length > 0
+            ? payload.map((a) => {
+                a.createdAt = formatDateTimeToString(a.createdAt);
+                a.branchName = a.branch?.name;
+                a.departmentName = a.department?.name;
+                return a;
+              })
+            : [];
+        let rValue = { payload: payload, total: total };
+        dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload: rValue });
+        return payload;
+      })
+      .catch((err) => {
+        handleHistoryWorkExceptions(err, dispatch, 'fetchPositions');
+        return [];
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
+      });
     api.historyWork
       .getAll(params)
-      .then(async ({ payload }) => {
+      .then(({ payload }) => {
         payload =
           payload &&
-          payload.map(async (h) => {
+          payload.map((h) => {
             h.from = formatDateInput(h.from);
             h.to = formatDateInput(h.to);
             h['departments'] = departments ? departments.filter((x) => x.branch.id === h.branchId) : [];
@@ -86,7 +130,7 @@ export const fetchHistoriesWork = (params, setLoading, departments, positions) =
 
             return h;
           });
-        payload = await Promise.all(payload);
+        // payload = await Promise.all(payload);
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
       })
       .catch((err) => {
