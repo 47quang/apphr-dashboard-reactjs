@@ -6,7 +6,6 @@ const initialState = {
     total: 0,
   },
   role: {
-    id: '',
     code: '',
     name: '',
     permissionIds: [],
