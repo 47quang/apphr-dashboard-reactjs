@@ -174,7 +174,7 @@ const Allowance = ({ t }) => {
     return (
       <CContainer fluid className="c-main m-auto p-4">
         <Helmet>
-          <title>{'APPHR | ' + t('Setting')}</title>
+          <title>{'APPHR | ' + t('Allowance')}</title>
         </Helmet>
         <MemoizedQTable
           t={t}

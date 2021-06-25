@@ -133,7 +133,7 @@ const Role = ({ t, location, history }) => {
     return (
       <CContainer fluid className="c-main m-auto p-4">
         <Helmet>
-          <title>{'APPHR | ' + t('Setting')}</title>
+          <title>{'APPHR | ' + t('Role')}</title>
         </Helmet>
         <MemoizedQTable
           t={t}
