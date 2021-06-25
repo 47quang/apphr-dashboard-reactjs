@@ -28,7 +28,7 @@ import { REDUX_STATE } from 'src/stores/states';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
 import NoteScheduler from './NoteSchedule';
-//TODO
+
 const useStyles = makeStyles((theme) => ({
   todayCell: {
     backgroundColor: COLORS.TODAY_BODY_CELL,

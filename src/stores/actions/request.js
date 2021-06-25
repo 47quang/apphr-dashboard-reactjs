@@ -2,20 +2,20 @@ import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constant
 import { formatDate, formatDateTimeScheduleToString, formatDateTimeToString, parseLocalTime } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-//TODO
+
 const handleRequestExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
-  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
         errorMessage = 'Server bad gateway';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Đã xảy ra lỗi ở server';
+        errorMessage = 'Internal server error';
         break;
       case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        errorMessage = "You don't have permission to do this function";
         break;
       case RESPONSE_CODE.CE_BAD_REQUEST:
         let serverErrorMessage = err.response.data.message;
@@ -24,7 +24,7 @@ const handleRequestExceptions = (err, dispatch, functionName) => {
             errorMessage = 'Không còn ngày nghỉ được hưởng lương nữa';
             break;
           case SERVER_RESPONSE_MESSAGE.INVALID_ASSIGNMENT_STATUS:
-            errorMessage = 'Đã có lỗi bất thường xảy ra';
+            errorMessage = 'Unknown error occurred';
             break;
           case SERVER_RESPONSE_MESSAGE.ALREADY_EXISTED_ASSIGNMENT:
             errorMessage = 'Không thể tạo đề xuất làm ngoài giờ khi đã có đề xuất khác trong thời gian này';
@@ -44,6 +44,7 @@ const handleRequestExceptions = (err, dispatch, functionName) => {
           },
         });
         break;
+
       default:
         break;
     }

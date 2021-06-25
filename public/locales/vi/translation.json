@@ -787,6 +787,6 @@
     "start_of_file_name": "Tên file không hợp lệ"
   },
   "exceptions": {
-    "message_unknown_error": "Đã có lỗi bất thường xảy ra"
+    "message_unknown_error": "Unknown error occurred"
   }
 }

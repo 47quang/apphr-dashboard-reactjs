@@ -384,7 +384,7 @@ const RollUp = ({ t, location }) => {
             >
               {value.assignment.length > 1 ? (
                 <div>
-                  <p className="mb-0">{value.assignment.length + ' Ca'}</p>
+                  <p className="mb-0">{value.assignment.length + ' ' + t('label.shifts')}</p>
                   <div>
                     {value.assignment.map((assignment, idx) => (
                       <Lens

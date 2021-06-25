@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 // import countries from './country.json';
-//TODO
+
 const obj = {
   formatDateTime(value) {
     const _value = new Date(value);

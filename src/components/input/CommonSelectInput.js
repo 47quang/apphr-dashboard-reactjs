@@ -1,6 +1,7 @@
 import React from 'react';
+import { joinClassName } from 'src/utils/stringUtils';
 import Label from '../text/Label';
-
+import './input_style.css';
 const CommonSelectInput = ({
   containerClassName,
   labelText,
@@ -23,11 +24,17 @@ const CommonSelectInput = ({
     acc[val.id] = val;
     return acc;
   }, {});
+  const checkSelectClassName = () => {
+    if (isError) return joinClassName([selectClassName, 'is-invalid-border']);
+    else if (isTouched) {
+      return joinClassName([selectClassName, 'is-valid-border']);
+    } else return selectClassName;
+  };
   return (
     <div className={containerClassName} hidden={isHidden}>
       {labelText && <Label text={labelText} required={isRequiredField} labelID={inputID} />}
       <select
-        className={selectClassName}
+        className={checkSelectClassName()}
         onChange={onChange}
         onBlur={onBlur}
         value={value}

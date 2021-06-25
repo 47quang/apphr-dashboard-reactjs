@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import GroupBarChart from 'src/components/charts/GroupBarChart';
 import { fetchPersonChart } from 'src/stores/actions/assignment';
 
-//TODO
 const Statistic = ({ t, location, profileId }) => {
   const dispatch = useDispatch();
 
