@@ -221,8 +221,7 @@ export const deleteProfile = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.profile
       .delete(id)
-      .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.profile.DELETE_PROFILE, payload });
+      .then(() => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })
