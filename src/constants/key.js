@@ -141,25 +141,25 @@ export const ROUTE_PATH = {
   DEPARTMENT_CREATE: '/setting/department' + CREATE,
   DEPARTMENT_UPDATE: '/setting/department' + ID,
 
-  ROLE: '/setting/role',
-  ROLE_UPDATE: '/setting/role' + ID,
-  ROLE_CREATE: '/setting/role' + CREATE,
+  ROLE: '/role',
+  ROLE_UPDATE: '/role' + ID,
+  ROLE_CREATE: '/role' + CREATE,
 
   HOLIDAY: '/setting/holiday',
   HOLIDAY_UPDATE: '/setting/holiday' + ID,
   HOLIDAY_CREATE: '/setting/holiday' + CREATE,
 
-  WAGE: '/setting/wage',
-  WAGE_CREATE: '/setting/wage' + CREATE,
-  WAGE_UPDATE: '/setting/wage' + ID,
+  WAGE: '/wage',
+  WAGE_CREATE: '/wage' + CREATE,
+  WAGE_UPDATE: '/wage' + ID,
 
-  ALLOWANCE: '/setting/allowance',
-  ALLOWANCE_CREATE: '/setting/allowance' + CREATE,
-  ALLOWANCE_UPDATE: '/setting/allowance' + ID,
+  ALLOWANCE: '/allowance',
+  ALLOWANCE_CREATE: '/allowance' + CREATE,
+  ALLOWANCE_UPDATE: '/allowance' + ID,
 
-  ARTICLE_TYPE: '/setting/articleType',
-  ARTICLE_TYPE_CREATE: '/setting/articleType' + CREATE,
-  ARTICLE_TYPE_UPDATE: '/setting/articleType' + ID,
+  ARTICLE_TYPE: '/articleType',
+  ARTICLE_TYPE_CREATE: '/articleType' + CREATE,
+  ARTICLE_TYPE_UPDATE: '/articleType' + ID,
 
   LEAVE: '/proposal/leave',
   LEAVE_REQUEST: '/proposal/leave/:id',
@@ -173,13 +173,13 @@ export const ROUTE_PATH = {
   OVERTIME_REQUEST: '/proposal/overtime/:id',
   NEW_OVERTIME_REQUEST: '/proposal/overtime/create',
 
-  CONTRACT_ATTRIBUTE: '/setting/attribute',
-  CONTRACT_ATTRIBUTE_CREATE: '/setting/attribute' + CREATE,
-  CONTRACT_ATTRIBUTE_UPDATE: '/setting/attribute' + ID,
+  CONTRACT_ATTRIBUTE: '/attribute',
+  CONTRACT_ATTRIBUTE_CREATE: '/attribute' + CREATE,
+  CONTRACT_ATTRIBUTE_UPDATE: '/attribute' + ID,
 
-  TAX_DETAIL: '/setting/taxDefine',
-  TAX_DETAIL_CREATE: '/setting/taxDefine' + CREATE,
-  TAX_DETAIL_UPDATE: '/setting/taxDefine' + ID,
+  TAX_DETAIL: '/taxDefine',
+  TAX_DETAIL_CREATE: '/taxDefine' + CREATE,
+  TAX_DETAIL_UPDATE: '/taxDefine' + ID,
 };
 export const SERVER_RESPONSE_MESSAGE = {
   VALIDATE_FAILED_EMAIL: 'Validation failed: email must be an email',
