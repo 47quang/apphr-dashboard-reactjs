@@ -10,7 +10,7 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import { PERMISSION } from 'src/constants/key';
 import { NewHistoryWorkingSchema, HistoryWorkingsSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
-import { fetchDepartments } from 'src/stores/actions/department';
+//import { fetchDepartments } from 'src/stores/actions/department';
 import {
   createHistoryWork,
   deleteHistoryWork,
@@ -20,9 +20,10 @@ import {
   activeWorking,
   inactiveWorking,
 } from 'src/stores/actions/historyWork';
-import { fetchPositions } from 'src/stores/actions/position';
+//import { fetchPositions } from 'src/stores/actions/position';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
+import { joinClassName } from 'src/utils/stringUtils';
 
 const HistoryWorkingForm = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -44,6 +45,8 @@ const HistoryWorkingForm = ({ t, match }) => {
     from: '',
     to: '',
     status: '',
+    departments: [],
+    positions: [],
   };
   const status = [
     { id: 'active', name: t('label.active') },
@@ -54,8 +57,6 @@ const HistoryWorkingForm = ({ t, match }) => {
     if (permissionIds.includes(PERMISSION.LIST_WORK_HISTORY)) {
       (async () => {
         dispatch(fetchBranches());
-        dispatch(fetchPositions());
-        dispatch(fetchDepartments());
       })();
       dispatch(
         fetchHistoriesWork(
@@ -96,7 +97,6 @@ const HistoryWorkingForm = ({ t, match }) => {
             value={values.branchId ?? ''}
             onBlur={handleBlur(`branchId`)}
             onChange={(e) => {
-              //dispatch(fetchDepartments({ branchId: e.target.value }));
               handleChange('branchId')(e);
               setFieldValue(
                 'departments',
@@ -113,7 +113,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.branchId}
             isError={errors.branchId && touched.branchId}
             errorMessage={t(errors.branchId)}
-            lstSelectOptions={branches.payload}
+            lstSelectOptions={branches}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -136,7 +136,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.departmentId}
             isError={errors.departmentId && touched.departmentId}
             errorMessage={t(errors.departmentId)}
-            lstSelectOptions={isCreate ? departments.payload : values.departments}
+            lstSelectOptions={values.departments}
           />
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
@@ -153,7 +153,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             isTouched={touched.positionId}
             isError={errors.positionId && touched.positionId}
             errorMessage={t(errors.positionId)}
-            lstSelectOptions={isCreate ? positions.payload : values.positions}
+            lstSelectOptions={values.positions}
           />
           {isCreate ? (
             <CommonSelectInput
@@ -235,7 +235,7 @@ const HistoryWorkingForm = ({ t, match }) => {
           <CircularProgress />
         </div>
       ) : (
-        <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
+        <CContainer fluid className={joinClassName(['c-main m-auto p-4'])}>
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
               type="button"

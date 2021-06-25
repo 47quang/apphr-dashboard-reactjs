@@ -627,7 +627,8 @@
     "enter_benefit_code": "Nhập mã đợt lương",
     "select_history_working_status": "Chọn tình trạng đợt công tác",
     "select_month": "Chọn tháng",
-    "enter_file_name": "Nhập tên file"
+    "enter_file_name": "Nhập tên file",
+    "enter_code": "Nhập mã định danh"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -784,7 +785,8 @@
     "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
     "required_select_month": "Bắt buộc phải chọn tháng",
     "required_enter_file_name": "Bắt buộc phải nhập tên file",
-    "start_of_file_name": "Tên file không hợp lệ"
+    "start_of_file_name": "Tên file không hợp lệ",
+    "required_enter_code": "Bắt buộc nhập mã định danh"
   },
   "exceptions": {
     "message_unknown_error": "Đã có lỗi bất thường xảy ra"

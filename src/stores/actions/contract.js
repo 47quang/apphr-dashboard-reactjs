@@ -315,7 +315,7 @@ export const fetchBranches = () => {
   return (dispatch, getState) => {
     api.branch
       .getAll()
-      .then(async ({ payload }) => {
+      .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
       })
       .catch((err) => {

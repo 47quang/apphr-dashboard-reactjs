@@ -8,10 +8,12 @@ import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
+import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { NewCertificateSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyCertificate, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
+import { generateCode } from 'src/utils/randomCode';
 
 const CertificateInfo = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -24,6 +26,7 @@ const CertificateInfo = ({ t, match }) => {
     issuedDate: '',
     expiredDate: '',
     note: '',
+    code: '',
   };
   const dispatch = useDispatch();
   useEffect(() => {
@@ -49,12 +52,72 @@ const CertificateInfo = ({ t, match }) => {
     }
   };
 
-  const getFormBody = (title, values, handleChange, handleBlur, touched, errors, isCreate) => {
+  const getFormBody = (title, values, handleChange, handleBlur, touched, errors, isCreate, setFieldValue) => {
     return (
       <>
         <h5>{title}.</h5>
         <hr className="mt-1" />
         <div className="row">
+          {isCreate ? (
+            <div className="form-group col-xl-4">
+              <Label text={t('label.code')} required />
+              <div className="input-group">
+                <input
+                  type="text"
+                  className={'form-control col9'}
+                  rows={5}
+                  onBlur={handleBlur('code')}
+                  name={`code`}
+                  onChange={(e) => handleChange(`code`)(e)}
+                  value={values.code}
+                  disabled={!isCreate}
+                  placeholder={t('placeholder.enter_code')}
+                />
+                <div
+                  className="input-group-text col-3 d-flex justify-content-center"
+                  id="basic-addon2"
+                  type="button"
+                  onClick={(e) => {
+                    let randomCode = generateCode();
+                    setFieldValue('code', randomCode);
+                  }}
+                >
+                  {t('label.random')}
+                </div>
+              </div>
+              {errors.code && touched.code && t(errors.code) ? (
+                <div>
+                  <small className={'text-danger'}>{t(errors.code)}</small>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <div className="form-group col-xl-4">
+              <Label text={t('label.code')} required />
+              <div className="input-group">
+                <input
+                  type="text"
+                  className={'form-control col-12'}
+                  rows={5}
+                  onBlur={handleBlur('code')}
+                  name={`code`}
+                  onChange={(e) => handleChange(`code`)(e)}
+                  value={values.code}
+                  disabled={!isCreate}
+                  placeholder={t('placeholder.enter_code')}
+                />
+              </div>
+              {errors.code && touched.code && t(errors.code) ? (
+                <div>
+                  <small className={'text-danger'}>{t(errors.code)}</small>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          )}
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values.name ?? ''}
@@ -89,8 +152,6 @@ const CertificateInfo = ({ t, match }) => {
             placeholder={t('placeholder.enter_grant_place')}
             inputClassName={'form-control'}
           />
-        </div>
-        <div className="row">
           <CommonTextInput
             containerClassName={'form-group col-xl-4'}
             value={values.issuedDate ?? ''}
@@ -116,8 +177,6 @@ const CertificateInfo = ({ t, match }) => {
             isError={errors.expiredDate && touched.expiredDate}
             errorMessage={t(errors.expiredDate)}
           />
-        </div>
-        <div className="row">
           <CommonMultipleTextInput
             containerClassName={'form-group col-xl-12'}
             value={values.note}
@@ -196,12 +255,12 @@ const CertificateInfo = ({ t, match }) => {
                   createCertificate(values);
                 }}
               >
-                {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange }) => {
+                {({ values, errors, touched, handleReset, handleBlur, handleSubmit, handleChange, setFieldValue }) => {
                   let isCreate = true;
                   return (
                     <form id="newCertificate" hidden={true} className="p-0 m-0">
                       <div className="shadow bg-white rounded p-4">
-                        {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate)}
+                        {getFormBody(t('label.create_new'), values, handleChange, handleBlur, touched, errors, isCreate, setFieldValue)}
                         {renderButtons([
                           {
                             type: 'button',
@@ -241,9 +300,9 @@ const CertificateInfo = ({ t, match }) => {
                       createCertificate(values);
                     }}
                   >
-                    {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit }) => (
+                    {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit, setFieldValue }) => (
                       <div key={index} className="shadow bg-white rounded p-4">
-                        {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors)}
+                        {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
                         {renderButtons(
                           permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
                             ? [
