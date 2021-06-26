@@ -27,7 +27,6 @@ const _nav = [
   {
     _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.PROPOSAL,
-    to: ROUTE_PATH.PROPOSAL,
     icon: 'cil-description',
     _children: [
       {

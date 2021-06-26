@@ -12,6 +12,7 @@ const ExportWage = ({ isOpen, handleConfirm, handleCancel, t }) => {
     from: '',
     to: '',
     month: '',
+    filename: '',
   };
   return (
     <div>

@@ -161,17 +161,17 @@ export const ROUTE_PATH = {
   ARTICLE_TYPE_CREATE: '/articleType' + CREATE,
   ARTICLE_TYPE_UPDATE: '/articleType' + ID,
 
-  LEAVE: '/proposal/leave',
-  LEAVE_REQUEST: '/proposal/leave/:id',
-  NEW_LEAVE_REQUEST: '/proposal/leave/create',
+  LEAVE: '/leave',
+  LEAVE_REQUEST: '/leave/:id',
+  NEW_LEAVE_REQUEST: '/leave/create',
 
-  REMOTE: '/proposal/remote',
-  REMOTE_REQUEST: '/proposal/remote/:id',
-  NEW_REMOTE_REQUEST: '/proposal/remote/create',
+  REMOTE: '/remote',
+  REMOTE_REQUEST: '/remote/:id',
+  NEW_REMOTE_REQUEST: '/remote/create',
 
-  OVERTIME: '/proposal/overtime',
-  OVERTIME_REQUEST: '/proposal/overtime/:id',
-  NEW_OVERTIME_REQUEST: '/proposal/overtime/create',
+  OVERTIME: '/overtime',
+  OVERTIME_REQUEST: '/overtime/:id',
+  NEW_OVERTIME_REQUEST: '/overtime/create',
 
   CONTRACT_ATTRIBUTE: '/attribute',
   CONTRACT_ATTRIBUTE_CREATE: '/attribute' + CREATE,

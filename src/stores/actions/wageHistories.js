@@ -57,6 +57,7 @@ export const fetchWageHistories = (params, setLoading, t) => {
           total: total,
         };
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORIES, payload: payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         handleWageExceptions(err, dispatch, 'fetchWageHistories');

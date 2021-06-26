@@ -58,7 +58,7 @@ const Benefit = ({ t, location, history }) => {
       ],
       type: 'text',
     },
-    profileCode: {
+    profile_code: {
       title: t('label.employee_code'),
       operates: [
         {
