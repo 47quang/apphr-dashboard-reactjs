@@ -463,7 +463,6 @@ const Benefit = ({ t, history, match }) => {
                                 className: `btn btn-primary px-4 ml-2`,
                                 onClick: (e) => {
                                   props.handleSubmit(e);
-                                  console.log(props.errors);
                                 },
                                 name: t('label.create_new'),
                               },
@@ -512,7 +511,6 @@ const Benefit = ({ t, history, match }) => {
                                       className: `btn btn-primary px-4 ml-2`,
                                       onClick: (e) => {
                                         props.handleSubmit(e);
-                                        console.log(props.errors);
                                       },
                                       name: t('label.save'),
                                     },

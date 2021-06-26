@@ -33,7 +33,7 @@ const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
               return (
                 <form className="p-0 m-0">
                   <div className="d-flex flex-row justify-content-between align-items-center">
-                    <h5>{t('title.export_profile')}</h5>
+                    <h5>{t('title.import_profile')}</h5>
                     <Cancel fontSize="large" onClick={handleCancel} role="button" style={{ color: '#969696' }} />
                   </div>
                   <hr className="mb-3" />

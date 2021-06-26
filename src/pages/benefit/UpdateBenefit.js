@@ -379,7 +379,6 @@ const UpdateBenefit = ({ t, history, match }) => {
                                 warningMessage={t('message.update_active_wage_warning_message')}
                               />
                             )}
-                            <hr className="mt-1" />
                           </div>
                         </div>
                       </form>

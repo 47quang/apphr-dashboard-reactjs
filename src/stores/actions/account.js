@@ -249,7 +249,6 @@ export const countAccounts = (params) => {
         dispatch({ type: REDUX_STATE.account.COUNT_ACCOUNT, payload });
       })
       .catch((err) => {
-        console.log(err);
         handleAccountExceptions(err, dispatch, 'count accounts');
       });
   };

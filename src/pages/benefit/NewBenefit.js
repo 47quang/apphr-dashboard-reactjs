@@ -83,7 +83,6 @@ const NewBenefit = ({ t, history, match }) => {
     setTouched,
     handleSubmit,
   }) => {
-    console.log('render body');
     return (
       <>
         <h5>{t('label.payroll')}</h5>
@@ -461,7 +460,6 @@ const NewBenefit = ({ t, history, match }) => {
                     <div className="shadow bg-white rounded mx-4 p-4 mb-4">
                       <div>
                         <MemoizedBodyItem {...props} />
-                        <hr className="mt-1" />
                       </div>
                     </div>
                   </form>

@@ -62,7 +62,6 @@ const LeaveForm = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-primary `,
       onClick: (e) => {
-        console.log(history);
         history.goBack();
       },
       name: t('label.back'),
