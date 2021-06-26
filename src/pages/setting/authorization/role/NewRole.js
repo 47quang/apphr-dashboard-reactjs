@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { createRole, setEmptyRole } from 'src/stores/actions/role';
+import { createRole, fetchPermissions, setEmptyRole } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
 const NewRole = ({ t, location, history }) => {
@@ -15,14 +15,13 @@ const NewRole = ({ t, location, history }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.CREATE_ROLE)) {
       dispatch(setEmptyRole());
-      // dispatch(fetchPermissions());
+      dispatch(fetchPermissions());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitForm = (values) => {
-    let { name, permissionIds } = values;
-    dispatch(createRole({ name, permissionIds }, history, t('message.successful_create')));
+    dispatch(createRole(values, history, t('message.successful_create')));
   };
 
   const buttons = [

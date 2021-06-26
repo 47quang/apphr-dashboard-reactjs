@@ -123,9 +123,6 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       value={values.typeCC}
                       onBlur={handleBlur('typeCC')}
                       onChange={(e) => {
-                        if (e.target.value !== 'WIFI') {
-                          setFieldValue('bssid', '');
-                        }
                         handleChange('typeCC')(e);
                       }}
                       inputID={'typeCC'}

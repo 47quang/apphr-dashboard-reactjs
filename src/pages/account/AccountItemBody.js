@@ -34,7 +34,6 @@ const AccountItemBody = ({ t, branches, departments, positions, history, match }
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    //dispatch(fetchRoles());
     if (!isCreate) {
       if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(+match?.params?.id, setLoading));
     } else if (permissionIds.includes(PERMISSION.CREATE_USER)) dispatch(setEmptyAccount());

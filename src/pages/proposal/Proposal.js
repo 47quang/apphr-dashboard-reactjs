@@ -29,7 +29,7 @@ const equalQTable = (prevProps, nextProps) => {
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Proposal = ({ t, location, match, type, profileId }) => {
-  if (!type) type = match.path.split('/')[2];
+  if (!type) type = match.path.split('/')[1];
   const [columnDef, setColumnDef] = useState(
     type === 'leave'
       ? [
@@ -371,8 +371,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     );
   };
   return (
-          <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
-      
+    <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <Helmet>
         <title>{'APPHR | ' + t('Proposal')}</title>
         <link rel="shortcut icon" href={'images/short_logo.png'} type="image/png" />

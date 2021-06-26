@@ -139,7 +139,7 @@ const ArticleType = ({ t }) => {
     return (
       <CContainer fluid className="c-main m-auto p-4">
         <Helmet>
-          <title>{'APPHR | ' + t('Setting')}</title>
+          <title>{'APPHR | ' + t('label.notification_type')}</title>
         </Helmet>
         <MemoizedQTable
           t={t}

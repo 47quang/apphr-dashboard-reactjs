@@ -1,17 +1,18 @@
 import { CContainer } from '@coreui/react';
 import { AddCircle } from '@material-ui/icons';
 import { FieldArray, Formik, getIn } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIconButton from 'src/components/button/DeleteIconButton';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
+import CommonAutoCompleteInput from 'src/components/input/CommonAutoCompleteInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import Label from 'src/components/text/Label';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { BenefitsSchema } from 'src/schema/formSchema';
 import { fetchProfiles } from 'src/stores/actions/account';
-import { fetchAllowances, fetchContracts } from 'src/stores/actions/contract';
+import { fetchAllowances } from 'src/stores/actions/contract';
 import { createWageHistory } from 'src/stores/actions/wageHistories';
 import { api } from 'src/stores/apis';
 import { formatDate } from 'src/utils/datetimeUtils';
@@ -22,7 +23,7 @@ const NewBenefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.account.profiles);
-  let contracts = useSelector((state) => state.contract.contracts);
+  // let contracts = useSelector((state) => state.contract.contracts);
   let allowances = useSelector((state) => state.contract.allowances);
   const paymentType = [
     { id: 'by_hour', name: t('label.by_hour') },
@@ -41,6 +42,7 @@ const NewBenefit = ({ t, history, match }) => {
     startDate: '',
     expiredDate: '',
     wages: [],
+    contracts: [],
     code: '',
     status: '',
     contractType: '',
@@ -53,7 +55,6 @@ const NewBenefit = ({ t, history, match }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const create = (form) => {
     form.profileId = parseInt(form.profileId);
     form.contractId = parseInt(form.contractId);
@@ -82,6 +83,7 @@ const NewBenefit = ({ t, history, match }) => {
     setTouched,
     handleSubmit,
   }) => {
+    console.log('render body');
     return (
       <>
         <h5>{t('label.payroll')}</h5>
@@ -92,19 +94,32 @@ const NewBenefit = ({ t, history, match }) => {
         </div>
         <hr className="mt-1" />
         <div className="row">
-          <CommonSelectInput
+          <CommonAutoCompleteInput
             containerClassName={'form-group col-lg-4'}
             value={values.profileId ?? 0}
             labelText={t('label.profileId')}
             selectClassName={'form-control'}
-            onBlur={(e) => {
-              if (e.target.value !== 0) {
-                dispatch(fetchContracts({ profileId: +e.target.value }));
+            onBlur={handleBlur('profileId')}
+            onChange={async (e) => {
+              handleChange('profileId')(e);
+              if (e.target.value) {
+                let contracts = await api.contract.getAll({ profileId: +e.target.value }).then(({ payload }) => {
+                  payload =
+                    payload && payload.length > 0
+                      ? payload.map((contract) => {
+                          contract.name = contract.code + ' - ' + contract.fullname + ' - ' + t('label.' + contract.status);
+                          return contract;
+                        })
+                      : [];
+                  return payload;
+                });
+                setFieldValue('contracts', contracts);
+                setFieldValue('contractId', '');
+              } else {
+                setFieldValue('contracts', []);
                 setFieldValue('contractId', '');
               }
-              handleBlur('profileId')(e);
             }}
-            onChange={handleChange('profileId')}
             inputID={t('label.profileId')}
             lstSelectOptions={profiles}
             isRequiredField
@@ -113,6 +128,7 @@ const NewBenefit = ({ t, history, match }) => {
             isError={errors.profileId && touched.profileId}
             errorMessage={t(errors.profileId)}
           />
+
           <CommonSelectInput
             containerClassName={'form-group col-lg-4'}
             value={values.contractId ?? 0}
@@ -121,11 +137,11 @@ const NewBenefit = ({ t, history, match }) => {
             onBlur={handleBlur('contractId')}
             onChange={(e) => {
               handleChange('contractId')(e);
-              let contract = contracts?.payload ? contracts.payload.filter((x) => x.id === +e.target.value) : [];
+              let contract = values.contracts.filter((x) => x.id === +e.target.value);
               setFieldValue('contractType', contract.length === 1 ? contract[0].type : '');
             }}
             inputID={t('label.contractId')}
-            lstSelectOptions={contracts?.payload ?? []}
+            lstSelectOptions={values.contracts ?? []}
             isRequiredField
             isDisable={values.profileId === '0' || values.profileId === ''}
             placeholder={t('placeholder.select_contract')}
@@ -392,6 +408,17 @@ const NewBenefit = ({ t, history, match }) => {
       </>
     );
   };
+
+  const equalBody = (prevProps, nextProps) => {
+    return (
+      JSON.stringify(prevProps.values) === JSON.stringify(nextProps.values) &&
+      JSON.stringify(prevProps.errors) === JSON.stringify(nextProps.errors) &&
+      JSON.stringify(prevProps.touched) === JSON.stringify(nextProps.touched)
+    );
+  };
+
+  const MemoizedBodyItem = React.memo(BodyItem, equalBody);
+
   const newBenefitRef = useRef();
 
   const [openWarning, setOpenWarning] = useState(false);
@@ -419,6 +446,7 @@ const NewBenefit = ({ t, history, match }) => {
           )}
           {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
             <Formik
+              innerRef={newBenefitRef}
               initialValues={benefit}
               validationSchema={BenefitsSchema}
               enableReinitialize
@@ -432,7 +460,7 @@ const NewBenefit = ({ t, history, match }) => {
                   <form className="p-0 m-0">
                     <div className="shadow bg-white rounded mx-4 p-4 mb-4">
                       <div>
-                        <BodyItem {...props} />
+                        <MemoizedBodyItem {...props} />
                         <hr className="mt-1" />
                       </div>
                     </div>

@@ -106,7 +106,7 @@
     "attribute_code": "Mã thuộc tính",
     "attribute_name": "Tên thuộc tính",
     "attribute_type": "Loại thuộc tính",
-    "gross_salary": "Tổng thu nhập",
+    "gross_salary": "Thu nhập chính",
     "insurance_salary": "Lương bảo hiểm",
     "insurance": "Công ty đóng bảo hiểm",
     "periodic_payment": "Định kỳ trả",
@@ -144,7 +144,7 @@
     "history_roll_call": "Lịch sử điểm danh",
     "check_in": "Check-in",
     "type_roll_call": "Hình thức điểm danh",
-    "leave_info": "Yêu cầu xin nghỉ",
+    "leave_info": "Đề xuất xin nghỉ",
     "remote_info": "Yêu cầu làm từ xa",
     "overtime_info": "Yêu cầu làm thêm giờ",
     "basic_info": "Thông tin cá nhân",
@@ -171,8 +171,8 @@
     "roll_up": "Điểm danh",
     "reset_roll_up": "Hoàn tác",
     "field_label": "Nhãn của trường",
-    "field_type": "Loại",
-    "field_name": "Tên trường",
+    "field_type": "Phân loại",
+    "field_name": "Tên thuộc tính",
     "article_type_code": "Mã loại thông báo",
     "article_type_name": "Tên loại thông báo",
     "notification_code": "Mã thông báo",
@@ -193,7 +193,7 @@
     "delete": "Xóa",
     "contract_fullname": "Tên hợp đồng",
     "avatar": "Hình đại diện",
-    "employee": "Nhân viên",
+    "employee": "Nhân sự",
     "employee_last_name": "Họ và tên lót",
     "employee_first_name": "Tên",
     "employee_full_name": "Họ và tên",
@@ -232,7 +232,7 @@
     "holiday": "Ngày nghỉ lễ",
     "holiday_setting": "Thiết lập số ngày nghỉ",
     "holiday_code": "Mã ngày nghỉ",
-    "holiday_title": "Tiêu đề",
+    "holiday_title": "Tên ngày nghỉ",
     "proposal_type": "Loại đề xuất",
     "employee_code": "Mã nhân viên",
     "profile_basic_info": "Thông tin cơ bản",
@@ -248,7 +248,7 @@
     "profile_personal_history_working": "Công tác",
     "role": "Vai trò",
     "role_code": "Mã vai trò",
-    "role_name": "Tiêu đề của vai trò",
+    "role_name": "Tên vai trò",
     "account_info": "Thông tin tài khoản",
     "scheduler": "Phân công công việc",
     "profile": "Hồ sơ",
@@ -297,7 +297,7 @@
     "university": "Đại học",
     "master": "Thạc sĩ",
     "doctor_of_philosophy": "Tiến sĩ",
-    "experience_year": "Năm kinh nghiệp",
+    "experience_year": "Số năm kinh nghiệm",
     "academic_level": "Trình độ",
     "major": "Chuyên ngành",
     "sex": "Giới tính",
@@ -572,7 +572,7 @@
     "select_periodic_payment_method": "Chọn hình thức chi trả định kỳ",
     "select_field_type": "Chọn loại trường",
     "select_notification_type": "Chọn loại thông báo",
-    "select_contact_channels": "Chọn kênh liên lạc",
+    "select_contact_channel": "Chọn kênh liên lạc",
     "select_contract_payment_method": "Chọn hình thức chi trả",
     "select_contract_type_work": "Chọn loại công việc",
     "select_contract_type_tax": "Chọn loại thuế thu nhập cá nhân",
@@ -627,7 +627,8 @@
     "enter_benefit_code": "Nhập mã đợt lương",
     "select_history_working_status": "Chọn tình trạng đợt công tác",
     "select_month": "Chọn tháng",
-    "enter_file_name": "Nhập tên file"
+    "enter_file_name": "Nhập tên file",
+    "enter_code": "Nhập mã định danh"
   },
   "validation": {
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
@@ -784,9 +785,10 @@
     "required_select_history_working_status": "Bắt buộc phải chọn tình trạng đợt công tác",
     "required_select_month": "Bắt buộc phải chọn tháng",
     "required_enter_file_name": "Bắt buộc phải nhập tên file",
-    "start_of_file_name": "Tên file không hợp lệ"
+    "start_of_file_name": "Tên file không hợp lệ",
+    "required_enter_code": "Bắt buộc nhập mã định danh"
   },
   "exceptions": {
-    "message_unknown_error": "Đã có lỗi bất thường xảy ra"
+    "message_unknown_error": "Unknown error occurred"
   }
 }

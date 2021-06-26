@@ -2,20 +2,20 @@ import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { formatDate, formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-//TODO
+
 const handleWageExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
-  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
         errorMessage = 'Server Bad Gateway';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Đã xảy ra lỗi ở server';
+        errorMessage = 'Internal server error';
         break;
       case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        errorMessage = "You don't have permission to do this function";
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
         localStorage.clear();
@@ -26,6 +26,9 @@ const handleWageExceptions = (err, dispatch, functionName) => {
             token: '',
           },
         });
+        break;
+      case RESPONSE_CODE.CE_BAD_REQUEST:
+        errorMessage = err.response.data.message.en;
         break;
       default:
         break;
@@ -54,6 +57,7 @@ export const fetchWageHistories = (params, setLoading, t) => {
           total: total,
         };
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORIES, payload: payload });
+        if (setLoading) setLoading(false);
       })
       .catch((err) => {
         handleWageExceptions(err, dispatch, 'fetchWageHistories');

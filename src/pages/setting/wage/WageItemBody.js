@@ -96,6 +96,21 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons,
                         )}
                       </div>
                     )}
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={values.name}
+                      onBlur={handleBlur('name')}
+                      onChange={handleChange('name')}
+                      inputID={'name'}
+                      labelText={t('label.wage_name')}
+                      inputType={'text'}
+                      placeholder={t('placeholder.enter_wage_name')}
+                      inputClassName={'form-control'}
+                      isRequiredField
+                      isTouched={touched.name}
+                      isError={errors.name && touched.name}
+                      errorMessage={t(errors.name)}
+                    />
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.type}
@@ -113,23 +128,7 @@ const WageItemBody = ({ t, wageRef, wage, validationSchema, submitForm, buttons,
                       isError={errors.type && touched.type}
                       errorMessage={t(errors.type)}
                     />
-                  </div>
-                  <div className="row">
-                    <CommonTextInput
-                      containerClassName={'form-group col-xl-12'}
-                      value={values.name}
-                      onBlur={handleBlur('name')}
-                      onChange={handleChange('name')}
-                      inputID={'name'}
-                      labelText={t('label.wage_name')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_wage_name')}
-                      inputClassName={'form-control'}
-                      isRequiredField
-                      isTouched={touched.name}
-                      isError={errors.name && touched.name}
-                      errorMessage={t(errors.name)}
-                    />
+
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
                       value={values.amount}

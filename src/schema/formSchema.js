@@ -95,7 +95,7 @@ export const SettingPositionInfoSchema = Yup.object().shape({
   }),
   expYear: Yup.number().required('validation.required_enter_experience_year').min(0, 'validation.experience_year_must_not_be_negative'),
 });
-//TODO
+
 //Branch
 export const SettingBranchInfoSchema = Yup.object().shape({
   code: Yup.string().min(1, 'validation.required_enter_branch_code').required('validation.required_enter_branch_code'),
@@ -489,6 +489,7 @@ export const ContactSchema = Yup.object().shape({
     }),
 });
 export const NewDegreeSchema = Yup.object().shape({
+  code: Yup.string().min(1, 'validation.required_enter_code').required('validation.required_enter_code'),
   level: Yup.string()
     .required('validation.required_select_academic_level')
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {

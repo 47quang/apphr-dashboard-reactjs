@@ -2,10 +2,10 @@ import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constant
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
-//TODO
+
 const handleAccountExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
-  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
@@ -13,10 +13,10 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
         if (messageFromServer === SERVER_RESPONSE_MESSAGE.VALIDATE_FAILED_EMAIL) errorMessage = 'Không tìm thấy email này';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Đã xảy ra lỗi ở server';
+        errorMessage = 'Internal server error';
         break;
       case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        errorMessage = "You don't have permission to do this function";
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
         localStorage.clear();
@@ -27,6 +27,9 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
             token: '',
           },
         });
+        break;
+      case RESPONSE_CODE.CE_BAD_REQUEST:
+        errorMessage = err.response.data.message.en;
         break;
       default:
         break;
@@ -152,7 +155,7 @@ export const deleteAccount = (id, success_msg, handleAfterDelete) => {
   return (dispatch, getState) => {
     api.account
       .delete(id)
-      .then(({ payload }) => {
+      .then(() => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })

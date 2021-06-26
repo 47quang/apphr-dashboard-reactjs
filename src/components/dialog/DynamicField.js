@@ -6,7 +6,7 @@ import { NewFieldContract } from 'src/schema/formSchema';
 import { renderButtons } from 'src/utils/formUtils';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
-//TODO
+
 const DynamicField = ({ isOpen, handleConfirm, handleCancel, t }) => {
   const newField = {
     name: '',

@@ -1,20 +1,20 @@
 import { RESPONSE_CODE } from 'src/constants/key';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
-//TODO
+
 const handleDashboardExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
-  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
         errorMessage = 'Server bad gateway';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Đã xảy ra lỗi ở server';
+        errorMessage = 'Internal server error';
         break;
       case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        errorMessage = "You don't have permission to do this function";
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
         localStorage.clear();
@@ -33,6 +33,9 @@ const handleDashboardExceptions = (err, dispatch, functionName) => {
             token: '',
           },
         });
+        break;
+      case RESPONSE_CODE.CE_BAD_REQUEST:
+        errorMessage = err.response.data.message.en;
         break;
       default:
         break;

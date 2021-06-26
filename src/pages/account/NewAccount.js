@@ -27,7 +27,6 @@ const NewAccount = ({ t, history, match }) => {
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    //dispatch(fetchRoles());
     if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     dispatch(fetchProfilesWithoutAccount());
     dispatch(fetchRoles());

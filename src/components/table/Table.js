@@ -435,6 +435,9 @@ const QTable = (props) => {
         case 'payment': {
           return '/setting/taxDefine/' + modelId;
         }
+        case 'article': {
+          return '/notification/' + modelId;
+        }
         default: {
           break;
         }
@@ -495,7 +498,7 @@ const QTable = (props) => {
         updateRollUp(
           {
             endTime: new Date(endTime),
-            id: rollUp.rowId,
+            id: rollUp.id,
           },
           rollUpData.assignmentId,
           rollUpData.setIsReload,

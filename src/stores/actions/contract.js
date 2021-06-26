@@ -2,20 +2,20 @@ import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
 import { formatDateInput, formatDate, formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-//TODO
+
 const handleContractExceptions = (err, dispatch, functionName) => {
   console.log(functionName + ' errors', err.response);
-  let errorMessage = 'Đã có lỗi bất thường xảy ra';
+  let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
       case RESPONSE_CODE.SE_BAD_GATEWAY:
         errorMessage = 'Server bad gateway';
         break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Đã xảy ra lỗi ở server';
+        errorMessage = 'Internal server error';
         break;
       case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = 'Bạn không thể thực hiện chức năng này';
+        errorMessage = "You don't have permission to do this function";
         break;
       case RESPONSE_CODE.CE_UNAUTHORIZED:
         localStorage.clear();
@@ -26,6 +26,9 @@ const handleContractExceptions = (err, dispatch, functionName) => {
             token: '',
           },
         });
+        break;
+      case RESPONSE_CODE.CE_BAD_REQUEST:
+        errorMessage = err.response.data.message.en;
         break;
       default:
         break;
@@ -315,7 +318,7 @@ export const fetchBranches = () => {
   return (dispatch, getState) => {
     api.branch
       .getAll()
-      .then(async ({ payload }) => {
+      .then(({ payload }) => {
         dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
       })
       .catch((err) => {

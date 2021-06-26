@@ -5,7 +5,7 @@ const initialState = {
   department: {
     id: 0,
     name: '',
-    shortname: '',
+    code: '',
     branchId: 0,
     note: '',
   },
