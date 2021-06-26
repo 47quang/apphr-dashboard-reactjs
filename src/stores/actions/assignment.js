@@ -204,7 +204,6 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
       })
       .catch((err) => {
-        console.log(err);
         handleAssignmentExceptions(err, dispatch, 'fetchRollUpTable');
       })
       .finally(() => {
@@ -360,7 +359,6 @@ export const fetchPersonChart = (params, t) => {
         dispatch({ type: REDUX_STATE.assignment.SET_PERSON_CHART, payload: rv });
       })
       .catch((err) => {
-        console.log(err);
         handleAssignmentExceptions(err, dispatch, 'fetchPersonChart');
       });
   };

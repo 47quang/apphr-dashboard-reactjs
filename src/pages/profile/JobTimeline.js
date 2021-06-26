@@ -127,7 +127,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
       } else {
         form.standardHours = +form.standardHours;
       }
-      // console.log(form);
       dispatch(createContract(form, t('message.successful_create'), handleResetNewContract));
     }
   }
@@ -841,7 +840,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
                                     className: `btn btn-primary px-4 ml-2`,
                                     onClick: (e) => {
                                       props.handleSubmit(e);
-                                      console.log(props.errors);
                                     },
                                     name: t('label.save'),
                                   },
