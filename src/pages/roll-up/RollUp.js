@@ -72,10 +72,6 @@ const RollUp = ({ t, location }) => {
       name: t('filter_operator.end'),
     },
     {
-      id: FILTER_OPERATOR.EMPTY,
-      name: t('filter_operator.empty'),
-    },
-    {
       id: FILTER_OPERATOR.NOT_EMPTY,
       name: t('filter_operator.not_empty'),
     },

@@ -136,7 +136,6 @@ export const fetchLeaveRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        // console.log(workingAt);
         payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
         payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
         payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
@@ -274,7 +273,6 @@ export const fetchRemoteRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        // console.log(workingAt);
         payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
         payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
         payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
@@ -408,7 +406,6 @@ export const fetchOvertimeRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        // console.log(workingAt);
         payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
         payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
         payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
