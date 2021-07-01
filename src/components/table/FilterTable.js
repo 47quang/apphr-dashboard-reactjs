@@ -6,7 +6,7 @@ import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 import WeekPicker from '../input/WeekPicker';
 
-const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage }) => {
+const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage, filterValues }) => {
   let columnsFilter = filters ? Object.keys(filters) : [];
   columnsFilter =
     columnsFilter && columnsFilter.length > 0
@@ -15,14 +15,16 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
           name: filters[colName]?.title,
         }))
       : [];
-  const filterValues = {
-    rule: '',
-    op: '',
-    value: '',
-    operates: [],
-  };
+  let filterInitial = filterValues?.rule
+    ? filterValues
+    : {
+        rule: '',
+        op: '',
+        value: '',
+        operates: [],
+      };
 
-  const [multiFilter, setMultiFilter] = useState([]);
+  const [multiFilter, setMultiFilter] = useState(filterValues?.rule ? [filterInitial] : []);
 
   const updateMultiFilter = async (newFilter) => {
     return new Promise((resolve, reject) => {

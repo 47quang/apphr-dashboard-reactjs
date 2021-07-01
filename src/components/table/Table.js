@@ -329,6 +329,7 @@ const QTable = (props) => {
     total,
     disableExportProfile,
     disableImportProfile,
+    filterValues,
   } = props;
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
@@ -633,6 +634,7 @@ const QTable = (props) => {
               setFromDate={setFromDate}
               pageSize={pageSize}
               currentPage={currentPage}
+              filterValues={filterValues}
             />
           </div>
         )}

@@ -1,5 +1,6 @@
 import CIcon from '@coreui/icons-react';
 import { CWidgetDropdown } from '@coreui/react';
+import { IconButton } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -67,9 +68,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/profile'}>
-              <AccountIcon />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={'/profile'}>
+                <AccountIcon />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
         <div className={'col-3'}>
@@ -91,9 +94,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/account'} style={{ color: 'white' }}>
-              <CIcon name="cilPeople" size="xl" />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={'/account'} style={{ color: 'white' }}>
+                <CIcon name="cilPeople" size="xl" />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
         <div className={'col-3'}>
@@ -115,9 +120,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/setting/branch'}>
-              <BranchesIcon />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={'/setting/branch'}>
+                <BranchesIcon />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
         <div className={'col-3'}>
@@ -139,9 +146,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/setting/department'}>
-              <DepartmentIcon />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={'/setting/department'}>
+                <DepartmentIcon />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
       </div>
@@ -162,9 +171,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/proposal/leave'} style={{ color: 'white' }}>
-              <CIcon name="cilPeople" size="xl" />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={{ pathname: '/leave', state: { rule: 'status', op: '=', value: 'new' } }} style={{ color: 'white' }}>
+                <CIcon name="cilDescription" size="xl" />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
         <div className={'col-3'}>
@@ -182,9 +193,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/proposal/remote'} style={{ color: 'white' }}>
-              <CIcon name="cilPeople" size="xl" />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={{ pathname: '/remote', state: { rule: 'status', op: '=', value: 'new' } }} style={{ color: 'white' }}>
+                <CIcon name="cilDescription" size="xl" />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
         <div className={'col-3'}>
@@ -202,9 +215,11 @@ const Count = () => {
               </div>
             }
           >
-            <Link to={'/proposal/overtime'} style={{ color: 'white' }}>
-              <CIcon name="cilPeople" size="xl" />
-            </Link>
+            <IconButton style={{ width: 40, height: 40 }}>
+              <Link to={{ pathname: '/overtime', state: { rule: 'status', op: '=', value: 'new' } }} style={{ color: 'white' }}>
+                <CIcon name="cilDescription" size="xl" />
+              </Link>
+            </IconButton>
           </CWidgetDropdown>
         </div>
       </div>

@@ -361,7 +361,7 @@
     "number_unpaid_shift": "Number of unpaid leave shifts",
     "number_policy_shift": "number of policy shifts",
     "absence": "Absence",
-    "total_number_employees": "Total number of employees",
+    "total_number_employees": "Total number of employees (Number of employees with contract expiration)",
     "total_number_accounts": "Total number of accounts",
     "total_number_branches": "Total number of branches",
     "total_number_departments": "Total number of departments",

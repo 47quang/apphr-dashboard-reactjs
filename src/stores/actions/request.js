@@ -60,10 +60,6 @@ export const fetchLeaveRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
-                if (req.type === 'pay') req.type = 'Nghỉ có trả lương';
-                else if (req.type === 'no-pay') req.type = 'Nghỉ không trả lương';
-                else req.type = 'Nghỉ theo chế độ';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })

@@ -28,7 +28,8 @@ const equalQTable = (prevProps, nextProps) => {
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
-const Proposal = ({ t, location, match, type, profileId }) => {
+const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
+  let filterObject = location.state ?? {};
   if (!type) type = match.path.split('/')[1];
   const [columnDef, setColumnDef] = useState(
     type === 'leave'
@@ -215,6 +216,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         ? dispatch(
             fetchLeaveRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
                 profileId: profileId,
@@ -225,6 +227,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         : dispatch(
             fetchLeaveRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
@@ -236,6 +239,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         ? dispatch(
             fetchRemoteRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
                 profileId: profileId,
@@ -246,6 +250,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         : dispatch(
             fetchRemoteRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
@@ -257,6 +262,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         ? dispatch(
             fetchOvertimeRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
                 profileId: profileId,
@@ -267,6 +273,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
         : dispatch(
             fetchOvertimeRequests(
               {
+                filters: [filterObject],
                 page: paging.currentPage,
                 perpage: paging.pageSize,
               },
@@ -284,10 +291,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
     };
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // const deleteRow = async (rowId) => {
-  //   dispatch(deleteProfile(rowId, t('message.successful_delete')));
-  //   dispatch(fetchProfiles());
-  // };
+
   const filterFunction = (params) => {
     if (type === 'leave')
       profileId
@@ -360,15 +364,26 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           );
   };
   const statusComponent = (value, colName) => {
-    return (
-      <Chip
-        label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
-        className="m-0 p-0"
-        style={{
-          backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
-        }}
-      />
-    );
+    if (colName === 'type')
+      return (
+        <Chip
+          label={value === 'pay' ? t('label.pay') : value === 'no-pay' ? t('label.no-pay') : t('label.policy')}
+          className="m-0 p-0"
+          style={{
+            backgroundColor: value === 'pay' ? COLORS.FULLY_ROLL_CALL : value === 'no-pay' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
+          }}
+        />
+      );
+    else
+      return (
+        <Chip
+          label={value === 'approve' ? t('label.approve') : value === 'reject' ? t('label.reject') : t('label.new')}
+          className="m-0 p-0"
+          style={{
+            backgroundColor: value === 'approve' ? COLORS.FULLY_ROLL_CALL : value === 'reject' ? COLORS.FULLY_ABSENT_ROLL_CALL : COLORS.BLUE,
+          }}
+        />
+      );
   };
   return (
     <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
@@ -384,7 +399,7 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           route={ROUTE_PATH.LEAVE + '/'}
           disableDelete={true}
           // disableCreate={true}
-          statusCols={['status']}
+          statusCols={['type', 'status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
@@ -393,6 +408,15 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           statusComponent={statusComponent}
           fixed={true}
           total={proposals?.total ?? 0}
+          filterValues={{
+            ...filterObject,
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+          }}
         />
       ) : (
         <MemoizedQTable
@@ -412,6 +436,15 @@ const Proposal = ({ t, location, match, type, profileId }) => {
           statusComponent={statusComponent}
           fixed={true}
           total={proposals?.total ?? 0}
+          filterValues={{
+            ...filterObject,
+            operates: [
+              {
+                id: FILTER_OPERATOR.EQUAL,
+                name: t('filter_operator.='),
+              },
+            ],
+          }}
         />
       )}
     </CContainer>

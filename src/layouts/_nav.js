@@ -65,6 +65,12 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.NAV_CONTRACT,
+        to: ROUTE_PATH.NAV_CONTRACT,
+        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
         to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
         // permission: PERMISSION.LIST_TYPE_ARTICLE,
@@ -87,12 +93,6 @@ const _nav = [
         to: ROUTE_PATH.TAX_DETAIL,
         // permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.NAV_CONTRACT,
-        to: ROUTE_PATH.NAV_CONTRACT,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
-      },
     ],
   },
   {
@@ -110,15 +110,15 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ROLE,
-        to: ROUTE_PATH.ROLE,
-        permission: PERMISSION.LIST_ROLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.ACCOUNT,
         to: ROUTE_PATH.ACCOUNT,
         permission: PERMISSION.LIST_USER,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.ROLE,
+        to: ROUTE_PATH.ROLE,
+        permission: PERMISSION.LIST_ROLE,
       },
     ],
   },
@@ -192,13 +192,6 @@ const _nav = [
         name: ROUTE_NAME.HOLIDAY,
         to: ROUTE_PATH.HOLIDAY,
         permission: PERMISSION.LIST_HOLIDAY,
-      },
-
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ROLE,
-        to: ROUTE_PATH.ROLE,
-        permission: PERMISSION.LIST_ROLE,
       },
 
       // {
