@@ -418,7 +418,11 @@
     "attribute_info": "Contract attribute information",
     "allowance_info": "Allowance information",
     "wage_info": "Wage information",
-    "other_fee_info": "Fee information"
+    "other_fee_info": "Fee information",
+    "file_type": "Type of file",
+    "Excel": "Excel",
+    "Word": "Word"
+
   },
   "title": {
     "confirm": "Confirm",
@@ -504,7 +508,8 @@
     "reset_password_row": "Reset password for this row",
     "add": "Create",
     "successful_reset_password": "Password reset successful",
-    "no_data": "No Data"
+    "no_data": "No Data",
+    "download" : "Download"
   },
   "placeholder": {
     "select_contract": "Select contract",

@@ -10,6 +10,7 @@ import {
   TableEditRow,
   TableFixedColumns,
   TableHeaderRow,
+  VirtualTable,
   Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 import { CircularProgress } from '@material-ui/core';
@@ -17,7 +18,7 @@ import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import { AccountBalanceWallet, AddCircle, CloudDownload, CloudUpload, MonetizationOn, Replay } from '@material-ui/icons';
+import { AccountBalanceWallet, AddCircle, CloudDownload, CloudUpload, GetApp, MonetizationOn, Replay } from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import classNames from 'classnames';
@@ -330,6 +331,7 @@ const QTable = (props) => {
     disableExportProfile,
     disableImportProfile,
     filterValues,
+    isDownload,
   } = props;
   let dateColumns = Array.isArray(dateCols) ? dateCols.map((idx) => columnDef[idx].name) : [''];
   let multiValuesColumns = Array.isArray(multiValuesCols) ? multiValuesCols.map((idx) => columnDef[idx].name) : [''];
@@ -477,9 +479,7 @@ const QTable = (props) => {
     const [rollUp, setRollUp] = useState(-1);
     const dispatch = useDispatch();
     const handleConfirmWarning = (e) => {
-      if (Number.isInteger(deletingRowID)) {
-        deleteRow(deletingRowID);
-      }
+      deleteRow(deletingRowID);
       setOpenWarning(!openWarning);
     };
     const handleCancelWarning = () => {
@@ -576,11 +576,19 @@ const QTable = (props) => {
           </Link>
         )}
 
+        {isDownload && (
+          <a href={`https://apphr.me/public/DEV/${row.filename}`} className="px-0 py-0">
+            <IconButton hidden={!isDownload} className="py-0 px-0" title={t('message.download')} style={{ width: 35, height: 35 }}>
+              <GetApp />
+            </IconButton>
+          </a>
+        )}
         <IconButton
           className="mx-2 my-0 p-0"
           hidden={disableDelete}
           onClick={() => {
-            setDeletingRowID(row.id);
+            if (row.id.length === 13) setDeletingRowID(row?.filename ?? '');
+            else setDeletingRowID(row.id);
             setOpenWarning(!openWarning);
           }}
           title={t('message.delete_row')}
@@ -588,6 +596,7 @@ const QTable = (props) => {
         >
           <DeleteIcon />
         </IconButton>
+
         {isExportEmployeeSalary && (
           <IconButton
             className="mx-2 my-0 p-0"
@@ -684,6 +693,7 @@ const QTable = (props) => {
             />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
+          {notPaging && <VirtualTable height={636} />}
           {paddingColumnHeader ? <TableHeaderRow cellComponent={Label} /> : <TableHeaderRow />}
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (
