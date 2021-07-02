@@ -509,9 +509,12 @@
     "add": "Create",
     "successful_reset_password": "Password reset successful",
     "no_data": "No Data",
-    "download" : "Download"
+    "download" : "Download",
+    "no_options": "No options"
   },
   "placeholder": {
+    "select_branches": "Chọn các chi nhánh",
+    "select_departments": "Select departments",
     "select_contract": "Select contract",
     "enter_remote_code": "Enter code",
     "enter_overtime_code": "Enter code",

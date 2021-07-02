@@ -507,10 +507,13 @@
     "add": "Thêm mới",
     "successful_reset_password": "Đặt lại mật khẩu thành công",
     "no_data": "Không có dữ liệu",
-    "download" : "Tải xuống"
+    "download" : "Tải xuống",
+    "no_options": "Không có lựa chọn"
 
   },
   "placeholder": {
+    "select_branches": "Chọn các chi nhánh",
+    "select_departments": "Chọn các phòng ban",
     "select_contract": "Chọn hợp đồng",
     "enter_remote_code": "Nhập mã xin làm từ xa",
     "enter_overtime_code": "Nhập mã xin làm thêm giờ",
