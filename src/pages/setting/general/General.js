@@ -18,6 +18,7 @@ import { renderButtons } from 'src/utils/formUtils';
 
 const SettingGeneralPage = ({ t, location }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
+  const tenantId = JSON.parse(localStorage.getItem('tenantId'));
   const settingRef = useRef();
   const dispatch = useDispatch();
   const general = useSelector((state) => state.setting);
@@ -28,7 +29,7 @@ const SettingGeneralPage = ({ t, location }) => {
 
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
-    dispatch(fetchGeneral(1, setLoading));
+    dispatch(fetchGeneral(tenantId, setLoading));
   }, []);
 
   useEffect(() => {
@@ -40,11 +41,11 @@ const SettingGeneralPage = ({ t, location }) => {
     }
   }, [general.provinceId, general.districtId]);
 
-  const updateSetting = () => {
-    const form = settingRef.current.values;
+  const updateSetting = (form) => {
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
+    form.id = parseInt(tenantId);
     dispatch(updateGeneral(form, t('message.successful_update')));
   };
   const buttons = permissionIds.includes(PERMISSION.UPDATE_GENERAL)
@@ -52,7 +53,9 @@ const SettingGeneralPage = ({ t, location }) => {
         {
           type: 'button',
           className: `btn btn-primary`,
-          onClick: updateSetting,
+          onClick: (e) => {
+            settingRef.current.handleSubmit(e);
+          },
           name: t('label.update'),
         },
       ]
@@ -70,7 +73,13 @@ const SettingGeneralPage = ({ t, location }) => {
           </div>
         ) : (
           <div className="shadow bg-white rounded p-4 container col-xl-10">
-            <Formik innerRef={settingRef} enableReinitialize initialValues={general} validationSchema={SettingGeneralInfoSchema}>
+            <Formik
+              innerRef={settingRef}
+              enableReinitialize
+              initialValues={general}
+              validationSchema={SettingGeneralInfoSchema}
+              onSubmit={(values) => updateSetting(values)}
+            >
               {({ values, errors, touched, handleChange, handleBlur }) => (
                 <form>
                   <FormHeader text={t('label.company_info')} />

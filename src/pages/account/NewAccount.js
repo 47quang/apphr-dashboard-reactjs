@@ -10,7 +10,6 @@ import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountCreateInfoSchema } from 'src/schema/formSchema';
 import { createAccount, fetchProfilesWithoutAccount, fetchRoles } from 'src/stores/actions/account';
-import { fetchPermissions } from 'src/stores/actions/role';
 import { renderButtons } from 'src/utils/formUtils';
 import Page404 from '../page404/Page404';
 
@@ -27,7 +26,6 @@ const NewAccount = ({ t, history, match }) => {
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     dispatch(fetchProfilesWithoutAccount());
     dispatch(fetchRoles());
     // eslint-disable-next-line react-hooks/exhaustive-deps

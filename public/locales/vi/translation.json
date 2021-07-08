@@ -508,7 +508,8 @@
     "successful_reset_password": "Đặt lại mật khẩu thành công",
     "no_data": "Không có dữ liệu",
     "download" : "Tải xuống",
-    "no_options": "Không có lựa chọn"
+    "no_options": "Không có lựa chọn",
+    "something_went_wrong": "Có gì đó không đúng"
 
   },
   "placeholder": {

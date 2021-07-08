@@ -158,13 +158,14 @@ const _nav = [
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.COMPANY_INFO,
         to: ROUTE_PATH.GENERAL,
+        permission: PERMISSION.LIST_BRANCH,
       },
 
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.BRANCH,
         to: ROUTE_PATH.BRANCH,
-        permission: PERMISSION.LIST_BRANCH,
+        //permission: PERMISSION.LIST_BRANCH,
       },
 
       {

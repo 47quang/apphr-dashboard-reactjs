@@ -14,7 +14,7 @@ Yup.addMethod(Yup.array, 'unique', function (message, mapper = (a) => a) {
 });
 
 export const SettingGeneralInfoSchema = Yup.object().shape({
-  name: Yup.string().trim().required('validation.required_enter_company_name'),
+  name: Yup.string().min(1, 'validation.required_enter_company_name').required('validation.required_enter_company_name'),
   phone: Yup.string()
     .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number')
     .required('validation.required_enter_phone_number'),

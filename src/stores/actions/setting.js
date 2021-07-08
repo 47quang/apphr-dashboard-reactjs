@@ -37,7 +37,8 @@ const handleSettingExceptions = (err, dispatch, functionName) => {
 };
 export const fetchGeneral = (params, setLoading) => {
   if (setLoading) setLoading(true);
-  return (dispatch, getState) => {
+
+  return async (dispatch, getState) => {
     api.setting
       .getGeneral(params)
       .then(({ payload }) => {

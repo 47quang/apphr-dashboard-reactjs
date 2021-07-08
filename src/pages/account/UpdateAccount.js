@@ -10,7 +10,6 @@ import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountUpdateInfoSchema } from 'src/schema/formSchema';
 import { fetchAccount, setEmptyAccount, updateAccount } from 'src/stores/actions/account';
-import { fetchPermissions } from 'src/stores/actions/role';
 import { renderButtons } from 'src/utils/formUtils';
 import Page404 from '../page404/Page404';
 
@@ -29,7 +28,6 @@ const UpdateAccount = ({ t, history, match }) => {
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(accountId, setLoading));
-    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     return () => {
       dispatch(setEmptyAccount());
     };

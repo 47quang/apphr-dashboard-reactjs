@@ -173,6 +173,9 @@ export const api = {
     putGeneral: (payload) => {
       return client.put(API_PREFIX.API_GENERAL + `/${payload.id}`, payload);
     },
+    getIdByCode: (code) => {
+      return client.get(API_PREFIX.API_GENERAL + `/by-code/${code}`);
+    },
   },
   holiday: {
     getAll: (params) => {

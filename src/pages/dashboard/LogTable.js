@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
-import Page404 from 'src/pages/page404/Page404';
 import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
 
 const equalQTable = (prevProps, nextProps) => {
@@ -79,23 +78,21 @@ const LogTable = ({ t }) => {
       { name: 'createdAt', title: t('label.createdAt'), align: 'left', width: '25%', wordWrapEnabled: true },
     ]);
   }, [t]);
-  if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
-    return (
-      <MemoizedQTable
-        t={t}
-        disableFilter={true}
-        columnDef={columnDef}
-        data={logData?.payload ?? []}
-        disableEditColum={true}
-        paging={paging}
-        onCurrentPageChange={onCurrentPageChange}
-        onPageSizeChange={onPageSizeChange}
-        disableToolBar={true}
-        linkCols={[{ name: 'message' }]}
-        total={logData?.total ?? 0}
-      />
-    );
-  else return <Page404 />;
+  return (
+    <MemoizedQTable
+      t={t}
+      disableFilter={true}
+      columnDef={columnDef}
+      data={logData?.payload ?? []}
+      disableEditColum={true}
+      paging={paging}
+      onCurrentPageChange={onCurrentPageChange}
+      onPageSizeChange={onPageSizeChange}
+      disableToolBar={true}
+      linkCols={[{ name: 'message' }]}
+      total={logData?.total ?? 0}
+    />
+  );
 };
 
 export default LogTable;

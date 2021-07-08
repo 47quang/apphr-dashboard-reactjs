@@ -510,7 +510,8 @@
     "successful_reset_password": "Password reset successful",
     "no_data": "No Data",
     "download" : "Download",
-    "no_options": "No options"
+    "no_options": "No options",
+    "something_went_wrong": "Something went wrong"
   },
   "placeholder": {
     "select_branches": "Chọn các chi nhánh",

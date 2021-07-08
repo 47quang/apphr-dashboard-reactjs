@@ -452,7 +452,7 @@ const QTable = (props) => {
         if (row[col.id]) return <Link to={`${row[col.id]}`}>{value}</Link>;
         else {
           if (row?.model) return <Link to={`${getPath(row.model, row.modelId)}`}>{value}</Link>;
-          return <p>{value}</p>;
+          return <p className="m-0 p-0">{value}</p>;
         }
       }
     }

@@ -40,9 +40,14 @@ export const login = (params, history) => {
     api.user
       .login(params)
       .then(({ payload }) => {
+        let host = window.location.host;
+        let parts = host.split('.');
+        let subdomain = parts.length >= 3 ? parts[0] : 'dev';
+        api.setting.getIdByCode(subdomain).then(({ payload }) => localStorage.setItem('tenantId', payload.id));
         dispatch({ type: REDUX_STATE.user.SET_USER, payload });
         localStorage.setItem('token', payload.token);
         localStorage.setItem('user', payload.user.username);
+        localStorage.setItem('roleId', payload.user.roleId);
         localStorage.setItem('permissionIds', JSON.stringify(payload.user.role.permissionIds));
         history.push(ROUTE_PATH.ROOT);
       })

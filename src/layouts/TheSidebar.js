@@ -9,16 +9,21 @@ import {
   CSidebarNavItem,
   CSidebarNavTitle,
 } from '@coreui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { REDUX_STATE } from 'src/stores/states';
 import nav from './_nav';
+import { fetchPermissions } from 'src/stores/actions/role';
+import { api } from 'src/stores/apis';
+
 const TheSidebar = () => {
   let navigation = JSON.parse(JSON.stringify(nav));
   const permissionIds = localStorage.getItem('permissionIds');
+  const roleId = localStorage.getItem('roleId');
   navigation = navigation.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
   const { t } = useTranslation();
+  const permissionGroups = useSelector((state) => state.role.permissions);
 
   const dispatch = useDispatch();
   const show = useSelector((state) => state.style.sidebarShow);
@@ -33,6 +38,22 @@ const TheSidebar = () => {
       }
     }
   };
+  const updatePermissionIds = () => {
+    api.role
+      .get(roleId)
+      .then(({ payload }) => {
+        localStorage.setItem('permissionIds', JSON.stringify(payload.permissionIds));
+        return payload;
+      })
+      .catch((err) => {
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: t('message.something_went_wrong') } });
+      });
+  };
+  useEffect(() => {
+    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
+    updatePermissionIds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <CSidebar
       fixed={true}

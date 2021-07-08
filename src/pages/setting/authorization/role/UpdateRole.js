@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
-import { fetchPermissions, fetchRole, updateRole } from 'src/stores/actions/role';
+import { fetchRole, updateRole } from 'src/stores/actions/role';
 import RoleItemBody from './RoleItemBody';
 
 const UpdateRole = ({ t, location, history, match }) => {
@@ -15,7 +15,6 @@ const UpdateRole = ({ t, location, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ROLE)) {
-      if (permissions && permissions.length === 0) dispatch(fetchPermissions());
       dispatch(fetchRole(match?.params?.id, setLoading));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
