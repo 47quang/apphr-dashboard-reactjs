@@ -35,7 +35,6 @@ const UpdateBenefit = ({ t, history, match }) => {
     if (permissionIds.includes(PERMISSION.GET_WAGE_HISTORY)) {
       dispatch(fetchAllowances());
       dispatch(fetchWageHistory(wageHistoryId, isLoading));
-      return () => {};
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -354,6 +353,7 @@ const UpdateBenefit = ({ t, history, match }) => {
             <div>
               {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
                 <Formik
+                  innerRef={editWageRef}
                   initialValues={benefit}
                   validationSchema={UpdateBenefitsSchema}
                   enableReinitialize
