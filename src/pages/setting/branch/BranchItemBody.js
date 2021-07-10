@@ -218,7 +218,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       onBlur={handleBlur('note')}
                       onChange={handleChange('note')}
                       inputID={'note'}
-                      labelText={t('label.description')}
+                      labelText={t('label.note')}
                       inputClassName={'form-control'}
                     />
                   </div>

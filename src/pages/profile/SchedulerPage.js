@@ -82,7 +82,6 @@ const SchedulerPage = ({ t, history, match }) => {
     day: 0,
   });
   const [loading, setLoading] = useState(false);
-
   const resources = [
     {
       fieldName: 'status',
