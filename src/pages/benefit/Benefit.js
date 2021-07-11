@@ -2,9 +2,10 @@ import { CContainer } from '@coreui/react';
 import { Chip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION, ROUTE_PATH, FILTER_OPERATOR } from 'src/constants/key';
+import { FILTER_OPERATOR, PAGE_SIZES, PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { deleteWageHistory, fetchWageHistories, setEmptyWageHistories } from 'src/stores/actions/wageHistories';
 import Page404 from '../page404/Page404';
@@ -17,7 +18,8 @@ const equalQTable = (prevProps, nextProps) => {
 
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
-const Benefit = ({ t, location, history }) => {
+const Benefit = ({ location, history }) => {
+  const { t } = useTranslation();
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const [columnDef, setColumnDef] = useState([
     { name: 'code', title: t('label.benefit_code'), align: 'left', width: '15%', wordWrapEnabled: true },

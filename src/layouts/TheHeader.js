@@ -62,9 +62,6 @@ const TheHeader = (props) => {
             })}
           </ul>
         </div>
-        {/* <TheHeaderDropdownNotif /> */}
-        {/* <TheHeaderDropdownMssg /> */}
-        {/* <TheHeaderDropdownTasks /> */}
         <CButton
           onClick={(e) => {
             dispatch(logout(props.history));
@@ -72,10 +69,8 @@ const TheHeader = (props) => {
           className="d-flex flex-row justify-content-between"
           title={t('title.logout')}
         >
-          {/* <div>{t('title.logout')}</div> */}
           <ExitToApp style={{ color: 'red' }} />
         </CButton>
-        {/* <TheHeaderDropdown {...props} /> */}
       </CHeaderNav>
     </CHeader>
   );

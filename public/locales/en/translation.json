@@ -1,5 +1,5 @@
 {
-  "Welcome to React": "Welcome to React and react-i18next",
+  "Welcome to React": "Welcome to React and ",
   "Dashboard": "Dashboard",
   "Roll up": "Roll call",
   "Proposal": "Request",
@@ -460,7 +460,7 @@
     "export_wage_row": "Export paycheck for this row",
     "export_profile": "Export list profiles",
     "import_profile": "Upload list profiles",
-    "delete_file": "Delete this file",
+    "delete_file": "Delete this file"
 
   },
   "filter_operator": {
