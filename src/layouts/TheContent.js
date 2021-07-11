@@ -12,7 +12,6 @@ const loading = (
 );
 
 const TheContent = ({ t, i18n }) => {
-  console.log('tt', { t });
   return (
     <main>
       <Suspense fallback={loading}>
