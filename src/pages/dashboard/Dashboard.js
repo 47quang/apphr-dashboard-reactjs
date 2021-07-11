@@ -1,13 +1,12 @@
 import { CCardBody, CContainer } from '@coreui/react';
 import moment from 'moment';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import PieChart from 'src/components/charts/PieChart';
 import { fetchStatisticChart } from 'src/stores/actions/assignment';
 import Count from './Count';
 import LogTable from './LogTable';
-import { Helmet } from 'react-helmet';
-import RenewContract from './RenewContract';
 
 const Dashboard = ({ t, location }) => {
   const initValues = {
@@ -31,7 +30,6 @@ const Dashboard = ({ t, location }) => {
         <div className="row">
           <CCardBody className="col-6 ">
             <PieChart initValues={initValues} handleFunction={handleChangeShift} />
-            <RenewContract t={t} />
           </CCardBody>
           <CCardBody className="col-6 ">
             <LogTable t={t} />
