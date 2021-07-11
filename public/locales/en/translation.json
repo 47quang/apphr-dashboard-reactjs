@@ -227,6 +227,7 @@
     "position_code": "Position Code",
     "shift_name": "Shift Name",
     "shift": "Shift",
+    "shift_short": "Shifts",
     "shift_code": "Shift Code",
     "shift_time": "Shift Time",
     "holiday": "Holiday",

@@ -29,7 +29,7 @@ const equalQTable = (prevProps, nextProps) => {
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
-  let filterObject = location.state ?? {};
+  let filterObject = location?.state ?? {};
   if (!type) type = match.path.split('/')[1];
   const [columnDef, setColumnDef] = useState(
     type === 'leave'

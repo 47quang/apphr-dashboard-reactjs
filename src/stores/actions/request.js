@@ -60,6 +60,7 @@ export const fetchLeaveRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
+                //req.fullname = req.profile.fullname;
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
