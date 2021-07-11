@@ -9,12 +9,12 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
-import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveLeaveRequest, fetchLeaveRequest, rejectLeaveRequest, setEmptyLeaveRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
-const LeaveForm = ({ t, history, match }) => {
+const LeaveForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
   const type = [
     { id: 'no-pay', name: t('label.no-pay') },
@@ -35,7 +35,11 @@ const LeaveForm = ({ t, history, match }) => {
       className: `btn btn-primary`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.LEAVE);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.LEAVE_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',
@@ -57,11 +61,16 @@ const LeaveForm = ({ t, history, match }) => {
       name: t('label.accept'),
     },
   ];
+
   const handledButtons = [
     {
       type: 'button',
       className: `btn btn-primary `,
       onClick: (e) => {
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.LEAVE_REQUEST));
+        }
         history.goBack();
       },
       name: t('label.back'),

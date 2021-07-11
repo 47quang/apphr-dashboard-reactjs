@@ -569,7 +569,7 @@ const QTable = (props) => {
             <InfoIcon />
           </IconButton>
         ) : (
-          <Link to={`${route}${row.id}`}>
+          <Link to={{ pathname: `${route}${row.id}`, state: { prevURL: window.location.href } }}>
             <IconButton className="mx-2 my-0 p-0" hidden={disableEdit} title={t('message.edit_row')} style={{ width: 35, height: 35 }}>
               <InfoIcon />
             </IconButton>

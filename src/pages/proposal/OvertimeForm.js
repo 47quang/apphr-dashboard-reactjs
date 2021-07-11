@@ -8,12 +8,12 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
-import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveOvertimeRequest, fetchOvertimeRequest, rejectOvertimeRequest, setEmptyOverTimeRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
-const OvertimeForm = ({ t, history, match }) => {
+const OvertimeForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
 
   const status = [
@@ -30,7 +30,11 @@ const OvertimeForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.OVERTIME);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.OVERTIME_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',
@@ -58,7 +62,11 @@ const OvertimeForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.OVERTIME);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.OVERTIME_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',

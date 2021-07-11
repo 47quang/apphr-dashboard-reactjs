@@ -958,6 +958,7 @@ export const OtherFeeSchema = Yup.object().shape({
 });
 export const ExportWageSchema = Yup.object().shape({
   filename: Yup.string()
+    .trim()
     .matches(getRegexExpression(VALIDATION_TYPE.FILE_NAME), 'validation.start_of_file_name')
     .min(1, 'validation.required_enter_file_name')
     .required('validation.required_enter_file_name'),
@@ -970,6 +971,7 @@ export const ExportWageSchema = Yup.object().shape({
 
 export const ExportProfilesSchema = Yup.object().shape({
   filename: Yup.string()
+    .trim()
     .matches(getRegexExpression(VALIDATION_TYPE.FILE_NAME), 'validation.start_of_file_name')
     .min(1, 'validation.required_enter_file_name')
     .required('validation.required_enter_file_name'),
