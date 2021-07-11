@@ -164,6 +164,20 @@ const UpdateAccount = ({ t, history, match }) => {
                         isError={errors.phone && touched.phone}
                         errorMessage={t(errors.phone)}
                       />
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-6'}
+                        value={values.macAddress ?? ''}
+                        onBlur={handleBlur('macAddress')}
+                        onChange={handleChange('macAddress')}
+                        inputID={'macAddress'}
+                        labelText={t('label.macAddress')}
+                        inputType={'text'}
+                        isRequiredField
+                        placeholder={t('placeholder.enter_macAddress')}
+                        inputClassName={'form-control'}
+                        isError={errors.macAddress && touched.macAddress}
+                        errorMessage={t(errors.macAddress)}
+                      />
                     </div>
                     <FormHeader text={t('title.permission')} />
                     <div className="row">

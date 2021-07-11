@@ -421,7 +421,8 @@
     "other_fee_info": "Fee information",
     "file_type": "Type of file",
     "Excel": "Excel",
-    "Word": "Word"
+    "Word": "Word",
+    "macAddress": "MAC address"
 
   },
   "title": {
@@ -459,7 +460,7 @@
     "export_wage_row": "Export paycheck for this row",
     "export_profile": "Export list profiles",
     "import_profile": "Upload list profiles",
-    "delete_file": "Delete this file"
+    "delete_file": "Delete this file",
 
   },
   "filter_operator": {
@@ -514,7 +515,8 @@
     "something_went_wrong": "Something went wrong"
   },
   "placeholder": {
-    "select_branches": "Chọn các chi nhánh",
+    "enter_macAddress": "Enter MAC address",
+    "select_branches": "Select branches",
     "select_departments": "Select departments",
     "select_contract": "Select contract",
     "enter_remote_code": "Enter code",
@@ -685,6 +687,7 @@
     "required_select_leave_status": "Required to select request status",
     "required_select_end_time_repeat": "Required to select loop end time",
     "required_enter_bssid": "Required to enter BSSID",
+    "required_enter_macAddress": "Required to enter MAC address",
     "required_select_periodic_payment": "Required to select form of recurring payment",
     "required_enter_flexible_time": "Required to enter roll-call time variation",
     "required_select_start_time": "Required to select start time",

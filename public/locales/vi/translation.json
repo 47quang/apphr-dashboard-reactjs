@@ -419,7 +419,9 @@
     "other_fee_info": "Thông tin chi phí",
     "file_type": "Loại file",
     "Excel": "Excel",
-    "Word": "Word"
+    "Word": "Word",
+    "macAddress": "Địa chỉ MAC"
+
   },
   "title": {
     "confirm": "Xác nhận",
@@ -513,6 +515,7 @@
 
   },
   "placeholder": {
+    "enter_macAddress": "Nhập địa chỉ MAC",
     "select_branches": "Chọn các chi nhánh",
     "select_departments": "Chọn các phòng ban",
     "select_contract": "Chọn hợp đồng",
@@ -686,6 +689,7 @@
     "required_select_leave_status": "Bắt buộc chọn trạng thái của đề xuất",
     "required_select_end_time_repeat": "Bắt buộc chọn thời gian kết thúc lặp",
     "required_enter_bssid": "Bắt buộc nhập BSSID",
+    "required_enter_macAddress": "Bắt buộc nhập địa chỉ MAC",
     "required_select_periodic_payment": "Bắt buộc chọn hình thức chi trả định kỳ",
     "required_enter_flexible_time": "Bắt buộc nhập mức dao động thời gian điểm danh",
     "required_select_start_time": "Bắt buộc chọn giờ bắt đầu",

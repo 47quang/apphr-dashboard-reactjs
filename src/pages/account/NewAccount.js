@@ -39,7 +39,7 @@ const NewAccount = ({ t, history, match }) => {
     delete form.id;
     delete form.permissionIds;
     if (form.profileId !== '0') form.profileId = +form.profileId;
-    dispatch(createAccount(form, history, t('message.successful_delete')));
+    dispatch(createAccount(form, history, t('message.successful_create')));
   };
 
   const buttons = [
@@ -150,6 +150,20 @@ const NewAccount = ({ t, history, match }) => {
                       inputClassName={'form-control'}
                       isError={errors.phone && touched.phone}
                       errorMessage={t(errors.phone)}
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.macAddress ?? ''}
+                      onBlur={handleBlur('macAddress')}
+                      onChange={handleChange('macAddress')}
+                      inputID={'macAddress'}
+                      labelText={t('label.macAddress')}
+                      inputType={'text'}
+                      isRequiredField
+                      placeholder={t('placeholder.enter_macAddress')}
+                      inputClassName={'form-control'}
+                      isError={errors.macAddress && touched.macAddress}
+                      errorMessage={t(errors.macAddress)}
                     />
                   </div>
                   <FormHeader text={t('title.permission')} />

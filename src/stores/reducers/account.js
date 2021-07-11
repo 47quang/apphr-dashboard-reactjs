@@ -14,6 +14,7 @@ const initialState = {
     roleId: 0,
     profileId: 0,
     permissionIds: [],
+    macAddress: '',
   },
   roles: [],
   profiles: [],
