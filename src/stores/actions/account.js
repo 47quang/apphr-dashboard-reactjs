@@ -4,7 +4,7 @@ import { REDUX_STATE } from '../states';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 
 const handleAccountExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
