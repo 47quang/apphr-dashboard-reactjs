@@ -9,12 +9,12 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
-import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest, setEmptyRemoteRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
 
-const RemoteForm = ({ t, history, match }) => {
+const RemoteForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
   const status = [
     { id: 'new', name: t('label.new') },
@@ -31,7 +31,11 @@ const RemoteForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.REMOTE);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',
@@ -59,7 +63,11 @@ const RemoteForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.REMOTE);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',

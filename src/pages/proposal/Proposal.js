@@ -397,8 +397,8 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
           columnDef={columnDef}
           data={proposals?.payload ?? []}
           route={ROUTE_PATH.LEAVE + '/'}
-          disableDelete={true}
-          // disableCreate={true}
+          // disableDelete={true}
+          disableToolBar={profileId ? true : false}
           statusCols={['type', 'status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
@@ -426,7 +426,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
           route={(type === 'remote' ? ROUTE_PATH.REMOTE : ROUTE_PATH.OVERTIME) + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
-          // disableCreate={true}
+          disableToolBar={profileId ? true : false}
           statusCols={['status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}

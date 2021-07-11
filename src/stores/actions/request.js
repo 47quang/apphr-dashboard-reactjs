@@ -60,7 +60,7 @@ export const fetchLeaveRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                //req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
@@ -88,7 +88,7 @@ export const filterLeaveRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 switch (req.type) {
                   case 'pay':
                     req.type = 'Nghỉ có trả lương';
@@ -207,7 +207,7 @@ export const fetchRemoteRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
@@ -236,7 +236,7 @@ export const filterRemoteRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
@@ -341,7 +341,7 @@ export const fetchOvertimeRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
@@ -369,7 +369,7 @@ export const filterOvertimeRequests = (params, setLoading) => {
         payload =
           payload && payload?.length > 0
             ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
                 return req;
               })
