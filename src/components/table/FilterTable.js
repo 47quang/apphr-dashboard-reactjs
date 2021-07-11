@@ -6,7 +6,7 @@ import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 import WeekPicker from '../input/WeekPicker';
 
-const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage }) => {
+const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setFromDate, pageSize, currentPage, filterValues }) => {
   let columnsFilter = filters ? Object.keys(filters) : [];
   columnsFilter =
     columnsFilter && columnsFilter.length > 0
@@ -15,14 +15,15 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
           name: filters[colName]?.title,
         }))
       : [];
-  const filterValues = {
-    rule: '',
-    op: '',
-    value: '',
-    operates: [],
-  };
-
-  const [multiFilter, setMultiFilter] = useState([]);
+  let filterInitial = filterValues?.rule
+    ? filterValues
+    : {
+        rule: '',
+        op: '',
+        value: '',
+        operates: [],
+      };
+  const [multiFilter, setMultiFilter] = useState(filterValues?.rule ? [filterInitial] : []);
 
   const updateMultiFilter = async (newFilter) => {
     return new Promise((resolve, reject) => {
@@ -58,7 +59,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
         <div className=" col-md-10 pt-2">
           <Formik
             enableReinitialize
-            initialValues={filterValues}
+            initialValues={filterInitial}
             validationSchema={FilterSchema}
             onSubmit={async ({ operates, ...values }) => {
               let newState = await updateMultiFilter(values);
@@ -72,7 +73,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                     <div className="row col-lg-11">
                       <CommonSelectInput
                         containerClassName={'form-group col-lg-4'}
-                        value={values.rule}
+                        value={values?.rule ?? ''}
                         onBlur={handleBlur('rule')}
                         onChange={(e) => {
                           handleChange('rule')(e);
@@ -91,7 +92,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                       />
                       <CommonSelectInput
                         containerClassName={'form-group col-lg-4'}
-                        value={values.op}
+                        value={values?.op ?? ''}
                         onBlur={handleBlur('op')}
                         onChange={handleChange('op')}
                         labelText={t('label.filter_option')}
@@ -106,7 +107,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                       {filters[values.rule]?.type === 'text' ? (
                         <CommonTextInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.value}
+                          value={values?.value ?? ''}
                           onBlur={handleBlur('value')}
                           onChange={(e) => {
                             handleChange('value')(e);
@@ -123,7 +124,7 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
                       ) : (
                         <CommonSelectInput
                           containerClassName={'form-group col-lg-4'}
-                          value={values.value}
+                          value={values?.value ?? ''}
                           onBlur={handleBlur('value')}
                           onChange={(e) => {
                             handleChange('value')(e);
@@ -187,100 +188,102 @@ const FilterTable = ({ t, filters, filterFunction, isRollUpTable, fromDate, setF
       <div className="col-md-12 pt-3 m-auto">
         <Formik
           enableReinitialize
-          initialValues={filterValues}
+          initialValues={filterInitial}
           validationSchema={FilterSchema}
           onSubmit={async ({ operates, ...values }) => {
             let newState = await updateMultiFilter(values);
             filterFunction({ filters: newState });
           }}
         >
-          {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue, handleReset }) => (
-            <form autoComplete="off">
-              <div className="row">
-                <div className="row col-lg-11">
-                  <CommonSelectInput
-                    containerClassName={'form-group col-lg-4'}
-                    value={values.rule}
-                    onBlur={handleBlur('rule')}
-                    onChange={(e) => {
-                      handleChange('rule')(e);
-                      setFieldValue('op', '');
-                      setFieldValue('operates', filters[e.target.value]?.operates);
-                      setFieldValue('value', '');
-                    }}
-                    labelText={t('label.column_filter')}
-                    selectClassName={'form-control'}
-                    lstSelectOptions={columnsFilter}
-                    placeholder={t('placeholder.select_column_filter')}
-                    isRequiredField
-                    isTouched={touched.rule}
-                    isError={errors.rule && touched.rule}
-                    errorMessage={t(errors.rule)}
-                  />
-                  <CommonSelectInput
-                    containerClassName={'form-group col-lg-4'}
-                    value={values.op}
-                    onBlur={handleBlur('op')}
-                    onChange={handleChange('op')}
-                    labelText={t('label.filter_option')}
-                    placeholder={t('placeholder.select_filter_option')}
-                    selectClassName={'form-control'}
-                    lstSelectOptions={values.operates}
-                    isRequiredField
-                    isTouched={touched.op}
-                    isError={errors.op && touched.op}
-                    errorMessage={t(errors.op)}
-                  />
-                  {filters[values.rule]?.type === 'text' ? (
-                    <CommonTextInput
-                      containerClassName={'form-group col-lg-4'}
-                      value={values.value}
-                      onBlur={handleBlur('value')}
-                      onChange={(e) => {
-                        handleChange('value')(e);
-                      }}
-                      labelText={t('label.keyword')}
-                      inputType={'text'}
-                      placeholder={t('placeholder.enter_keyword')}
-                      inputClassName={'form-control'}
-                      isTouched={touched.value}
-                      isDisable={['empty', 'not_empty'].includes(values.op)}
-                      isError={errors.value && touched.value}
-                      errorMessage={t(errors.value)}
-                    />
-                  ) : (
+          {({ values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue, handleReset }) => {
+            return (
+              <form autoComplete="off">
+                <div className="row">
+                  <div className="row col-lg-11">
                     <CommonSelectInput
                       containerClassName={'form-group col-lg-4'}
-                      value={values.value}
-                      onBlur={handleBlur('value')}
+                      value={values?.rule ?? ''}
+                      onBlur={handleBlur('rule')}
                       onChange={(e) => {
-                        handleChange('value')(e);
+                        handleChange('rule')(e);
+                        setFieldValue('op', '');
+                        setFieldValue('operates', filters[e.target.value]?.operates);
+                        setFieldValue('value', '');
                       }}
-                      labelText={t('label.filter_value')}
-                      placeholder={t('placeholder.select_value')}
+                      labelText={t('label.column_filter')}
                       selectClassName={'form-control'}
-                      lstSelectOptions={filters[values.rule]?.values ?? []}
-                      isTouched={touched.value}
-                      isError={errors.value && touched.value}
-                      errorMessage={t(errors.value)}
+                      lstSelectOptions={columnsFilter}
+                      placeholder={t('placeholder.select_column_filter')}
+                      isRequiredField
+                      isTouched={touched.rule}
+                      isError={errors.rule && touched.rule}
+                      errorMessage={t(errors.rule)}
                     />
-                  )}
+                    <CommonSelectInput
+                      containerClassName={'form-group col-lg-4'}
+                      value={values?.op ?? ''}
+                      onBlur={handleBlur('op')}
+                      onChange={handleChange('op')}
+                      labelText={t('label.filter_option')}
+                      placeholder={t('placeholder.select_filter_option')}
+                      selectClassName={'form-control'}
+                      lstSelectOptions={values.operates}
+                      isRequiredField
+                      isTouched={touched.op}
+                      isError={errors.op && touched.op}
+                      errorMessage={t(errors.op)}
+                    />
+                    {filters[values.rule]?.type === 'text' ? (
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values?.value ?? ''}
+                        onBlur={handleBlur('value')}
+                        onChange={(e) => {
+                          handleChange('value')(e);
+                        }}
+                        labelText={t('label.keyword')}
+                        inputType={'text'}
+                        placeholder={t('placeholder.enter_keyword')}
+                        inputClassName={'form-control'}
+                        isTouched={touched.value}
+                        isDisable={['empty', 'not_empty'].includes(values.op)}
+                        isError={errors.value && touched.value}
+                        errorMessage={t(errors.value)}
+                      />
+                    ) : (
+                      <CommonSelectInput
+                        containerClassName={'form-group col-lg-4'}
+                        value={values?.value ?? ''}
+                        onBlur={handleBlur('value')}
+                        onChange={(e) => {
+                          handleChange('value')(e);
+                        }}
+                        labelText={t('label.filter_value')}
+                        placeholder={t('placeholder.select_value')}
+                        selectClassName={'form-control'}
+                        lstSelectOptions={filters[values.rule]?.values ?? []}
+                        isTouched={touched.value}
+                        isError={errors.value && touched.value}
+                        errorMessage={t(errors.value)}
+                      />
+                    )}
+                  </div>
+                  <div className="col-lg-1 d-flex align-items-start pt-4 mt-1 px-0">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={(e) => {
+                        handleSubmit();
+                      }}
+                      style={{ width: '100%' }}
+                    >
+                      {t('label.search')}
+                    </button>
+                  </div>
                 </div>
-                <div className="col-lg-1 d-flex align-items-start pt-4 mt-1 px-0">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={(e) => {
-                      handleSubmit();
-                    }}
-                    style={{ width: '100%' }}
-                  >
-                    {t('label.search')}
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
+              </form>
+            );
+          }}
         </Formik>
         {multiFilter && multiFilter.length > 0 ? (
           multiFilter.map((filter, idx) => {

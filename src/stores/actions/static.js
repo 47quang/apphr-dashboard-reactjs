@@ -1,5 +1,5 @@
 import { RESPONSE_CODE } from 'src/constants/key';
-import { formatDate } from 'src/utils/datetimeUtils';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleStaticExceptions = (err, dispatch, functionName) => {
@@ -35,23 +35,28 @@ const handleStaticExceptions = (err, dispatch, functionName) => {
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
+
 export const fetchStatics = (setLoading) => {
+  const type = {
+    xlsx: 'Excel',
+    docx: 'Word',
+    csv: 'Excel',
+  };
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.static
       .getAll()
       .then(({ payload, total }) => {
         let rvPayload = [];
-        for (const [key, value] of Object.entries(payload)) {
-          let element = { key: formatDate(new Date(key)) };
-          element.date =
-            value && value.length > 0
-              ? value.map((e) => {
-                  e.type = e.filename.split('.')[1];
-                  return e;
-                })
-              : [];
-          rvPayload.push(element);
+        for (const value of Object.values(payload)) {
+          for (var e of value) {
+            let stampIndex = e.filename.search(/-[0-9]{13}\./);
+            e.type = type[e.filename.substring(stampIndex + 15)];
+            e.createdAt = formatDateTimeToString(new Date(parseInt(e.filename.substring(stampIndex + 1, stampIndex + 14))));
+            e.name = e.filename.substring(0, stampIndex);
+            e.id = e.filename.substring(stampIndex + 1, stampIndex + 14);
+            rvPayload.push(e);
+          }
         }
         dispatch({ type: REDUX_STATE.static.SET_STATICS, payload: rvPayload });
       })

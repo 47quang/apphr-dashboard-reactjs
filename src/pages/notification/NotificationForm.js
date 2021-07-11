@@ -4,11 +4,11 @@ import { Formik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
-import CommonMultiSelectInput from 'src/components/input/CommonMultiSelectInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import CommonUploadFileButton from 'src/components/input/CommonUploadFileButton';
 import Editor from 'src/components/input/Editor';
+import MultiSelectInput from 'src/components/input/MultiSelectInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
@@ -23,7 +23,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const departments = useSelector((state) => state.department.departments);
-  let departmentsSelect = departments;
+  let departmentsSelect = [];
   const articleTypes = useSelector((state) => state.articleType.types);
   useEffect(() => {
     dispatch(fetchBranches());
@@ -148,28 +148,63 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                     <div className="form-group col-xl-12">
                       <Label text={t('Branch')} required={true} />
 
-                      <div className="d-flex flex-row flex-wrap justify-content-between border">
+                      {/* <div className="d-flex flex-row flex-wrap justify-content-between border">
                         <CommonMultiSelectInput
+                          placeholder={t('placeholder.select_branches')}
                           values={values.branchIds}
                           listValues={branches?.payload ?? []}
                           onChangeValues={(e) => {
                             let branchIds = e.target.value;
-                            departmentsSelect = departments.filter((dep) => branchIds.includes(dep.branchId));
+                            departmentsSelect = departments.payload.filter((dep) => branchIds.includes(dep.branchId));
+                            console.log('departmentsSelect', departmentsSelect);
                             handleChange('branchIds')(e);
                             setFieldValue('departmentIds', []);
                           }}
                         />
-                      </div>
+                      </div> */}
+                      <MultiSelectInput
+                        noOptionsMessage={() => t('message.no_options')}
+                        values={values.branches}
+                        onBlur={handleBlur('branches')}
+                        listValues={branches.payload ?? []}
+                        onChange={(e) => {
+                          if (e.length === 0) {
+                            setFieldValue('branches', []);
+                            setFieldValue('branchIds', []);
+                            setFieldValue('departments', []);
+                            departmentsSelect = [];
+                          } else {
+                            let branchIds = e && e.length ? e.map((b) => b.id) : [];
+                            setFieldValue('departments', []);
+                            departmentsSelect = departments.payload.filter((dep) => branchIds.includes(dep.branchId));
+                            setFieldValue('branches', e);
+                            setFieldValue('branchIds', branchIds);
+                          }
+                        }}
+                        placeholder={t('placeholder.select_departments')}
+                        isTouched={touched.branches}
+                        isError={errors.branches && touched.branches}
+                        errorMessage={errors.branches}
+                      />
                     </div>
                     <div className="form-group col-xl-12">
                       <Label text={t('Department')} />
-                      <div className="d-flex flex-row flex-wrap justify-content-between border">
-                        <CommonMultiSelectInput
-                          values={values.departmentIds}
-                          listValues={departmentsSelect?.payload ?? []}
-                          onChangeValues={handleChange('departmentIds')}
-                        />
-                      </div>
+                      <MultiSelectInput
+                        noOptionsMessage={() => t('message.no_options')}
+                        values={values.departments}
+                        onBlur={handleBlur('departments')}
+                        listValues={departmentsSelect}
+                        onChange={(e) => {
+                          console.log(e);
+                          setFieldValue('departments', e);
+                          let departmentIds = e && e.length ? e.map((d) => d.id) : [];
+                          setFieldValue('departmentIds', departmentIds);
+                        }}
+                        placeholder={t('placeholder.select_departments')}
+                        isTouched={touched.departments}
+                        isError={errors.departments && touched.departments}
+                        errorMessage={errors.departments}
+                      />
                     </div>
                   </div>
 

@@ -361,7 +361,7 @@
     "number_unpaid_shift": "Number of unpaid leave shifts",
     "number_policy_shift": "number of policy shifts",
     "absence": "Absence",
-    "total_number_employees": "Total number of employees",
+    "total_number_employees": "Total number of employees (Number of employees with contract expiration)",
     "total_number_accounts": "Total number of accounts",
     "total_number_branches": "Total number of branches",
     "total_number_departments": "Total number of departments",
@@ -418,7 +418,12 @@
     "attribute_info": "Contract attribute information",
     "allowance_info": "Allowance information",
     "wage_info": "Wage information",
-    "other_fee_info": "Fee information"
+    "other_fee_info": "Fee information",
+    "file_type": "Type of file",
+    "Excel": "Excel",
+    "Word": "Word",
+    "macAddress": "MAC address"
+
   },
   "title": {
     "confirm": "Confirm",
@@ -455,7 +460,7 @@
     "export_wage_row": "Export paycheck for this row",
     "export_profile": "Export list profiles",
     "import_profile": "Upload list profiles",
-    "delete_file": "Delete this file"
+    "delete_file": "Delete this file",
 
   },
   "filter_operator": {
@@ -504,9 +509,15 @@
     "reset_password_row": "Reset password for this row",
     "add": "Create",
     "successful_reset_password": "Password reset successful",
-    "no_data": "No Data"
+    "no_data": "No Data",
+    "download" : "Download",
+    "no_options": "No options",
+    "something_went_wrong": "Something went wrong"
   },
   "placeholder": {
+    "enter_macAddress": "Enter MAC address",
+    "select_branches": "Select branches",
+    "select_departments": "Select departments",
     "select_contract": "Select contract",
     "enter_remote_code": "Enter code",
     "enter_overtime_code": "Enter code",
@@ -676,6 +687,7 @@
     "required_select_leave_status": "Required to select request status",
     "required_select_end_time_repeat": "Required to select loop end time",
     "required_enter_bssid": "Required to enter BSSID",
+    "required_enter_macAddress": "Required to enter MAC address",
     "required_select_periodic_payment": "Required to select form of recurring payment",
     "required_enter_flexible_time": "Required to enter roll-call time variation",
     "required_select_start_time": "Required to select start time",

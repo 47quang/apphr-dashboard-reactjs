@@ -41,7 +41,7 @@ function getStyles(id, values, theme) {
     };
 }
 
-export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues, key }) {
+export default function CommonMultiSelectInput({ values = [], onChangeValues, listValues, placeholder, setValues, key, isDisable }) {
   values = [...new Set(values)];
   const classes = useStyles();
   const theme = useTheme();
@@ -54,6 +54,7 @@ export default function CommonMultiSelectInput({ values = [], onChangeValues, li
   return (
     <FormControl className={classes.formControl} style={{ width: '100%' }}>
       <Select
+        disabled={isDisable}
         labelId="demo-mutiple-chip-label"
         className="border-bottom"
         multiple

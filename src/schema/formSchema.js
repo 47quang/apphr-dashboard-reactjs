@@ -14,7 +14,7 @@ Yup.addMethod(Yup.array, 'unique', function (message, mapper = (a) => a) {
 });
 
 export const SettingGeneralInfoSchema = Yup.object().shape({
-  name: Yup.string().trim().required('validation.required_enter_company_name'),
+  name: Yup.string().min(1, 'validation.required_enter_company_name').required('validation.required_enter_company_name'),
   phone: Yup.string()
     .matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number')
     .required('validation.required_enter_phone_number'),
@@ -140,6 +140,9 @@ export const AccountCreateInfoSchema = Yup.object().shape({
   roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
     return value !== '0';
   }),
+  macAddress: Yup.string()
+    .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')
+    .required('validation.required_enter_macAddress'),
 });
 export const AccountUpdateInfoSchema = Yup.object().shape({
   username: Yup.string().required('validation.required_enter_username'),
@@ -148,6 +151,9 @@ export const AccountUpdateInfoSchema = Yup.object().shape({
   roleId: Yup.string().test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_role_id', function (value) {
     return value !== '0';
   }),
+  macAddress: Yup.string()
+    .matches(getRegexExpression(VALIDATION_TYPE.BSS_ID), 'validation.enter_valid_ip_v4_address')
+    .required('validation.required_enter_macAddress'),
 });
 export const RoleInfoSchema = Yup.object().shape({
   code: Yup.string().min(1, 'validation.required_enter_role_code').required('validation.required_enter_role_code'),

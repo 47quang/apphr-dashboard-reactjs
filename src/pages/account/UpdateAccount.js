@@ -10,7 +10,6 @@ import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountUpdateInfoSchema } from 'src/schema/formSchema';
 import { fetchAccount, setEmptyAccount, updateAccount } from 'src/stores/actions/account';
-import { fetchPermissions } from 'src/stores/actions/role';
 import { renderButtons } from 'src/utils/formUtils';
 import Page404 from '../page404/Page404';
 
@@ -29,7 +28,6 @@ const UpdateAccount = ({ t, history, match }) => {
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(accountId, setLoading));
-    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     return () => {
       dispatch(setEmptyAccount());
     };
@@ -165,6 +163,20 @@ const UpdateAccount = ({ t, history, match }) => {
                         inputClassName={'form-control'}
                         isError={errors.phone && touched.phone}
                         errorMessage={t(errors.phone)}
+                      />
+                      <CommonTextInput
+                        containerClassName={'form-group col-lg-6'}
+                        value={values.macAddress ?? ''}
+                        onBlur={handleBlur('macAddress')}
+                        onChange={handleChange('macAddress')}
+                        inputID={'macAddress'}
+                        labelText={t('label.macAddress')}
+                        inputType={'text'}
+                        isRequiredField
+                        placeholder={t('placeholder.enter_macAddress')}
+                        inputClassName={'form-control'}
+                        isError={errors.macAddress && touched.macAddress}
+                        errorMessage={t(errors.macAddress)}
                       />
                     </div>
                     <FormHeader text={t('title.permission')} />

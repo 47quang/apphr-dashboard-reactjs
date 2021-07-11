@@ -361,7 +361,7 @@
     "number_unpaid_shift": "Số ca nghỉ không lương",
     "number_policy_shift": "Số ca nghỉ chế độ",
     "absence": "Vắng",
-    "total_number_employees": "Tổng số nhân viên",
+    "total_number_employees": "Tổng số nhân viên (Số nhân viên còn hạn hợp đồng)",
     "total_number_accounts": "Tổng số tài khoản",
     "total_number_branches": "Tổng số chi nhánh",
     "total_number_departments": "Tổng số phòng ban",
@@ -416,7 +416,12 @@
     "attribute_info": "Thông tin thuộc tính hợp đồng",
     "allowance_info": "Thông tin trợ cấp",
     "wage_info": "Thông tin nhóm lương",
-    "other_fee_info": "Thông tin chi phí"
+    "other_fee_info": "Thông tin chi phí",
+    "file_type": "Loại file",
+    "Excel": "Excel",
+    "Word": "Word",
+    "macAddress": "Địa chỉ MAC"
+
   },
   "title": {
     "confirm": "Xác nhận",
@@ -503,9 +508,16 @@
     "reset_password_row": "Đặt lại mật khẩu cho hàng này",
     "add": "Thêm mới",
     "successful_reset_password": "Đặt lại mật khẩu thành công",
-    "no_data": "Không có dữ liệu"
+    "no_data": "Không có dữ liệu",
+    "download" : "Tải xuống",
+    "no_options": "Không có lựa chọn",
+    "something_went_wrong": "Có gì đó không đúng"
+
   },
   "placeholder": {
+    "enter_macAddress": "Nhập địa chỉ MAC",
+    "select_branches": "Chọn các chi nhánh",
+    "select_departments": "Chọn các phòng ban",
     "select_contract": "Chọn hợp đồng",
     "enter_remote_code": "Nhập mã xin làm từ xa",
     "enter_overtime_code": "Nhập mã xin làm thêm giờ",
@@ -677,6 +689,7 @@
     "required_select_leave_status": "Bắt buộc chọn trạng thái của đề xuất",
     "required_select_end_time_repeat": "Bắt buộc chọn thời gian kết thúc lặp",
     "required_enter_bssid": "Bắt buộc nhập BSSID",
+    "required_enter_macAddress": "Bắt buộc nhập địa chỉ MAC",
     "required_select_periodic_payment": "Bắt buộc chọn hình thức chi trả định kỳ",
     "required_enter_flexible_time": "Bắt buộc nhập mức dao động thời gian điểm danh",
     "required_select_start_time": "Bắt buộc chọn giờ bắt đầu",

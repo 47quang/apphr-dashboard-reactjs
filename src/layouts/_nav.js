@@ -65,15 +65,21 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.NAV_CONTRACT,
+        to: ROUTE_PATH.NAV_CONTRACT,
+        permission: PERMISSION.LIST_CONTRACT,
+      },
+      {
+        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
         to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+        //permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.WAGE,
         to: ROUTE_PATH.WAGE,
-        permission: PERMISSION.LIST_SHIFT,
+        permission: PERMISSION.LIST_WAGE,
       },
       {
         _tag: 'CSidebarNavItem',
@@ -85,13 +91,7 @@ const _nav = [
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.TAX_DETAIL,
         to: ROUTE_PATH.TAX_DETAIL,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.NAV_CONTRACT,
-        to: ROUTE_PATH.NAV_CONTRACT,
-        // permission: PERMISSION.LIST_TYPE_ARTICLE,
+        permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
     ],
   },
@@ -100,7 +100,7 @@ const _nav = [
     name: ROUTE_NAME.NAV_BENEFIT,
     to: ROUTE_PATH.NAV_BENEFIT,
     icon: 'cil-dollar',
-    //permission: PERMISSION.LIST_PROFILE,
+    permission: PERMISSION.LIST_WAGE_HISTORY,
   },
   {
     _tag: 'CSidebarNavDropdown',
@@ -110,15 +110,15 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ROLE,
-        to: ROUTE_PATH.ROLE,
-        permission: PERMISSION.LIST_ROLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.ACCOUNT,
         to: ROUTE_PATH.ACCOUNT,
         permission: PERMISSION.LIST_USER,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.ROLE,
+        to: ROUTE_PATH.ROLE,
+        permission: PERMISSION.LIST_ROLE,
       },
     ],
   },
@@ -158,13 +158,14 @@ const _nav = [
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.COMPANY_INFO,
         to: ROUTE_PATH.GENERAL,
+        permission: PERMISSION.LIST_BRANCH,
       },
 
       {
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.BRANCH,
         to: ROUTE_PATH.BRANCH,
-        permission: PERMISSION.LIST_BRANCH,
+        //permission: PERMISSION.LIST_BRANCH,
       },
 
       {
@@ -192,13 +193,6 @@ const _nav = [
         name: ROUTE_NAME.HOLIDAY,
         to: ROUTE_PATH.HOLIDAY,
         permission: PERMISSION.LIST_HOLIDAY,
-      },
-
-      {
-        _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ROLE,
-        to: ROUTE_PATH.ROLE,
-        permission: PERMISSION.LIST_ROLE,
       },
 
       // {

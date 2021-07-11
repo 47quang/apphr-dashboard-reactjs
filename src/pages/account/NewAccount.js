@@ -10,7 +10,6 @@ import FormHeader from 'src/components/text/FormHeader';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { AccountCreateInfoSchema } from 'src/schema/formSchema';
 import { createAccount, fetchProfilesWithoutAccount, fetchRoles } from 'src/stores/actions/account';
-import { fetchPermissions } from 'src/stores/actions/role';
 import { renderButtons } from 'src/utils/formUtils';
 import Page404 from '../page404/Page404';
 
@@ -27,7 +26,6 @@ const NewAccount = ({ t, history, match }) => {
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
-    if (permissionGroups && permissionGroups.length === 0) dispatch(fetchPermissions());
     dispatch(fetchProfilesWithoutAccount());
     dispatch(fetchRoles());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,7 +39,7 @@ const NewAccount = ({ t, history, match }) => {
     delete form.id;
     delete form.permissionIds;
     if (form.profileId !== '0') form.profileId = +form.profileId;
-    dispatch(createAccount(form, history, t('message.successful_delete')));
+    dispatch(createAccount(form, history, t('message.successful_create')));
   };
 
   const buttons = [
@@ -152,6 +150,20 @@ const NewAccount = ({ t, history, match }) => {
                       inputClassName={'form-control'}
                       isError={errors.phone && touched.phone}
                       errorMessage={t(errors.phone)}
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-lg-6'}
+                      value={values.macAddress ?? ''}
+                      onBlur={handleBlur('macAddress')}
+                      onChange={handleChange('macAddress')}
+                      inputID={'macAddress'}
+                      labelText={t('label.macAddress')}
+                      inputType={'text'}
+                      isRequiredField
+                      placeholder={t('placeholder.enter_macAddress')}
+                      inputClassName={'form-control'}
+                      isError={errors.macAddress && touched.macAddress}
+                      errorMessage={t(errors.macAddress)}
                     />
                   </div>
                   <FormHeader text={t('title.permission')} />

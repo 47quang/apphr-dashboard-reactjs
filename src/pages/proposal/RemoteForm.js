@@ -239,6 +239,7 @@ const RemoteForm = ({ t, history, match }) => {
                       <div className="form-group col-xl-12">
                         <Label text={t('label.assignment_requests')} required={true} />
                         <CommonMultiSelectInput
+                          isDisable={true}
                           values={values.assignmentIds ?? []}
                           listValues={values.assignments}
                           onChangeValues={(e) => {
