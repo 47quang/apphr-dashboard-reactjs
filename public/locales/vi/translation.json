@@ -356,7 +356,7 @@
     "active": "Có hiệu lực",
     "number_hours_worked": "Số giờ làm được",
     "overtime_hours": "Số giờ làm thêm",
-    "chart_shift_in_day": "Biểu đồ thống kê ca làm việc trong ngày",
+    "chart_shift_in_month": "Biểu đồ số ca làm việc trong một tháng",
     "number_shift_works": "Số ca đã làm",
     "number_paid_shift": "Số ca nghỉ có lương",
     "number_unpaid_shift": "Số ca nghỉ không lương",
@@ -398,6 +398,7 @@
     "number_leave_work": "Số người nghỉ",
     "number_absence": "Số người không đi làm",
     "overtime_assignment": "Ca làm thêm giờ",
+    "chart_shift_in_day": "Biểu đồ thống kê ca làm việc trong ngày",
     "accident_insurance": "Bảo hiểm Tai nạn lao động - Bệnh nghề nghiệp",
     "less_than_5m": "Đến 5 triệu VNĐ",
     "great_than_5m_less_than_10m": "Trên 5 triệu VNĐ đến 10 triệu VNĐ",
@@ -422,7 +423,6 @@
     "Excel": "Excel",
     "Word": "Word",
     "macAddress": "Địa chỉ MAC"
-
   },
   "title": {
     "confirm": "Xác nhận",
@@ -510,10 +510,9 @@
     "add": "Thêm mới",
     "successful_reset_password": "Đặt lại mật khẩu thành công",
     "no_data": "Không có dữ liệu",
-    "download" : "Tải xuống",
+    "download": "Tải xuống",
     "no_options": "Không có lựa chọn",
     "something_went_wrong": "Có gì đó không đúng"
-
   },
   "placeholder": {
     "enter_macAddress": "Nhập địa chỉ MAC",
@@ -753,6 +752,7 @@
     "experience_year_must_not_be_negative": "Năm kinh nghiệm là một số không âm",
     "minimum_work_time_must_not_be_negative": "Thời gian làm việc kỳ vọng là một số không âm",
     "flexible_time_must_not_be_negative": "Mức dao động thời gian điểm danh là một số không âm",
+    "flexible_time_must_be_integer": "Mức dao động thời gian điểm danh phải là một số nguyên",
     "required_enter_shift_name": "Bắt buộc nhập tên ca làm",
     "required_select_checkin_time": "Bắt buộc chọn giờ check-in",
     "required_select_checkout_time": "Bắt buộc chọn giờ check-out",
@@ -772,7 +772,6 @@
     "required_enter_total_proposal_day": "Bắt buộc nhập số ngày đề xuất tối đa",
     "required_enter_salary_level": "Bắt buộc nhập mức lương",
     "total_proposal_day_must_be_integer": "Số ngày đề xuất tối đa phải là một số nguyên",
-    "flexible_time_must_be_integer": "Mức dao động thời gian điểm danh phải là một số nguyên",
     "min_point_must_be_integer": "Thời gian làm việc tối thiểu là một số nguyên",
     "dependant_must_not_be_negative": "Số người phụ thuộc là một số không âm",
     "salary_level_must_be_integer": "Mức lương phải là một số nguyên",
