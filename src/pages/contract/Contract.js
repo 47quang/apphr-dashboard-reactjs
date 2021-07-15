@@ -136,6 +136,13 @@ const Contract = ({ t, location, history }) => {
       currentPage: pageNumber,
     }));
   };
+  const onPreviousPage = () => {
+    if (paging.currentPage !== 0)
+      setPaging((prevState) => ({
+        ...prevState,
+        currentPage: prevState.currentPage - 1,
+      }));
+  };
   const onPageSizeChange = (newPageSize) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -200,6 +207,7 @@ const Contract = ({ t, location, history }) => {
           perpage: paging.pageSize,
         },
         setLoading,
+        onPreviousPage,
       ),
     );
   };

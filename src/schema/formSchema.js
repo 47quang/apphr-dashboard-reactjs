@@ -969,6 +969,12 @@ export const ExportWageSchema = Yup.object().shape({
     .required('validation.required_select_month'),
 });
 
+export const ImportProfileSchema = Yup.object().shape({
+  import: Yup.mixed().test('import', 'validation.required_select_file', function (value) {
+    return value?.name && value.name.trim() !== '';
+  }),
+});
+
 export const ExportProfilesSchema = Yup.object().shape({
   filename: Yup.string()
     .trim()

@@ -30,7 +30,11 @@ const handleContractExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
@@ -97,7 +101,7 @@ export const fetchContracts = (params, setLoading) => {
   };
 };
 
-export const fetchContractTable = (params, setLoading) => {
+export const fetchContractTable = (params, setLoading, onPreviousPage) => {
   if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
@@ -114,11 +118,14 @@ export const fetchContractTable = (params, setLoading) => {
                 return contract;
               })
             : [];
-        payload = {
-          payload: payload,
-          total: total,
-        };
-        dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        if (!payload.length && onPreviousPage) onPreviousPage();
+        else {
+          payload = {
+            payload: payload,
+            total: total,
+          };
+          dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        }
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContracts');
