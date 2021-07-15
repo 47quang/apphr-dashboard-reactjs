@@ -422,13 +422,9 @@
     "file_type": "Type of file",
     "Excel": "Excel",
     "Word": "Word",
-<<<<<<< HEAD
-    "macAddress": "MAC address"
-=======
     "macAddress": "MAC address",
     "download_sample": "Download sample data"
 
->>>>>>> e3166a8098734053534fddb617a443aabaeb95f5
   },
   "title": {
     "confirm": "Confirm",
