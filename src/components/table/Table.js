@@ -342,7 +342,6 @@ const QTable = (props) => {
   });
   const [rowChanges, setRowChanges] = useState({});
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
-
   const tableColumnExtensions = columnDef
     ? columnDef.map((col, idx) => {
         return {
@@ -693,7 +692,7 @@ const QTable = (props) => {
             />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          {notPaging && <VirtualTable height={636} />}
+          {notPaging && <VirtualTable height={636} noDataCellComponent={NoDataCellComponent} />}
           {paddingColumnHeader ? <TableHeaderRow cellComponent={Label} /> : <TableHeaderRow />}
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (

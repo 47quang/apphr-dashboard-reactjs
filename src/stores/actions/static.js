@@ -40,7 +40,7 @@ const handleStaticExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 
-export const fetchStatics = (setLoading) => {
+export const fetchStatics = (setLoading, setFetch) => {
   const type = {
     xlsx: 'Excel',
     docx: 'Word',
@@ -62,6 +62,8 @@ export const fetchStatics = (setLoading) => {
             rvPayload.push(e);
           }
         }
+        if (setFetch) setFetch(rvPayload);
+
         dispatch({ type: REDUX_STATE.static.SET_STATICS, payload: rvPayload });
       })
       .catch((err) => {
