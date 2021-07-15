@@ -320,7 +320,6 @@ const BasicInfo = ({ t, history, match }) => {
                           </div>
                         </div>
                         <div className="row"></div>
-                        <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                         <div className="row">
                           <div className="col-lg-6">
                             <>

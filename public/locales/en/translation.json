@@ -422,7 +422,13 @@
     "file_type": "Type of file",
     "Excel": "Excel",
     "Word": "Word",
+<<<<<<< HEAD
     "macAddress": "MAC address"
+=======
+    "macAddress": "MAC address",
+    "download_sample": "Download sample data"
+
+>>>>>>> e3166a8098734053534fddb617a443aabaeb95f5
   },
   "title": {
     "confirm": "Confirm",
@@ -643,6 +649,7 @@
     "enter_code": "Enter identify code"
   },
   "validation": {
+    "required_select_file": "Required to select data file",
     "required_enter_fee_code": "Required to enter Fee Code",
     "required_enter_allowance_code": "Required to enter Allowance Code",
     "required_enter_wage_code": "Required to enter Salary group Code",

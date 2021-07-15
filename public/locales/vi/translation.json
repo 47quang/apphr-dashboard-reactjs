@@ -422,7 +422,13 @@
     "file_type": "Loại file",
     "Excel": "Excel",
     "Word": "Word",
+<<<<<<< HEAD
     "macAddress": "Địa chỉ MAC"
+=======
+    "macAddress": "Địa chỉ MAC",
+    "download_sample": "Tải xuống file mẫu"
+
+>>>>>>> e3166a8098734053534fddb617a443aabaeb95f5
   },
   "title": {
     "confirm": "Xác nhận",
@@ -643,6 +649,7 @@
     "enter_code": "Nhập mã định danh"
   },
   "validation": {
+    "required_select_file": "Bắt buộc chọn file dữ liệu",
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
     "required_enter_allowance_code": "Bắt buộc phải nhập mã trợ cấp",
     "required_enter_wage_code": "Bắt buộc phải nhập mã nhóm lương",

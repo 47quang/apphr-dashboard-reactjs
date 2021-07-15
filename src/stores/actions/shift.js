@@ -31,7 +31,11 @@ const handleShiftExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
