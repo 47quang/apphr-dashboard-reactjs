@@ -195,7 +195,6 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                         onBlur={handleBlur('departments')}
                         listValues={departmentsSelect}
                         onChange={(e) => {
-                          console.log(e);
                           setFieldValue('departments', e);
                           let departmentIds = e && e.length ? e.map((d) => d.id) : [];
                           setFieldValue('departmentIds', departmentIds);

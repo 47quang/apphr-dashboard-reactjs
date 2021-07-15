@@ -18,7 +18,6 @@ const NoteScheduler = ({ t }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handlePopoverOpen = (event) => {
-    console.log(event);
     setAnchorEl(event.currentTarget);
   };
 

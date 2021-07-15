@@ -81,7 +81,6 @@ const Report = ({ t, location }) => {
     console.log(params);
   };
   const deleteRow = async (rowId) => {
-    console.log(rowId);
     dispatch(deleteStatic(rowId, t('message.successful_delete'), handleAfterDelete));
   };
 
