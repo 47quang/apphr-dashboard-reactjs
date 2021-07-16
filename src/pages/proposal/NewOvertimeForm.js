@@ -137,7 +137,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     onBlur={handleBlur('shiftId')}
                     onChange={handleChange('shiftId')}
                     inputID={'shiftId'}
-                    lstSelectOptions={shifts}
+                    lstSelectOptions={shifts?.payload ?? []}
                     isRequiredField
                     isDisable={values.profileId === '0' || values.profileId === ''}
                     placeholder={t('placeholder.select_shift')}

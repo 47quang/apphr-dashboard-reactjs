@@ -84,15 +84,18 @@ const OvertimeForm = ({ t, history, location, match }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (overtimeRequest.id === '') return <Page404 />;
-  return (
-    <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
-      <div className="m-auto">
-        {loading ? (
-          <div className="text-center">
-            <CircularProgress />
-          </div>
-        ) : (
+
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (overtimeRequest.id === '') return <Page404 />;
+  else
+    return (
+      <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
+        <div className="m-auto">
           <div className="row">
             <div className="shadow bg-white rounded p-4 container col-xl-4">
               <Formik
@@ -309,7 +312,7 @@ const OvertimeForm = ({ t, history, location, match }) => {
                         labelText={t('label.note')}
                         inputClassName={'form-control'}
                         placeholder={t('placeholder.enter_note')}
-                        rows={9}
+                        rows={10}
                       />
                     </div>
 
@@ -319,10 +322,9 @@ const OvertimeForm = ({ t, history, location, match }) => {
               </Formik>
             </div>
           </div>
-        )}
-      </div>
-    </CContainer>
-  );
+        </div>
+      </CContainer>
+    );
 };
 
 export default OvertimeForm;
