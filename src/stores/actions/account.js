@@ -42,21 +42,25 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchAccounts = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
-            ? payload.map((a) => {
+            ? payload.reduce((accumulator, a) => {
+                if (a.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
                 a.role = a.role.name;
                 a.profileCode = a.profile.code;
                 a.profileId = a.profile.id;
                 a.employee = a.profile.code + ' - ' + a.profile.fullname;
                 a.createdAt = formatDateTimeToString(a.createdAt);
-                return a;
-              })
+                accumulator.push(a);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,

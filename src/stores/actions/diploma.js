@@ -71,7 +71,6 @@ export const updateDiploma = (data, success_msg) => {
 };
 
 export const fetchDiplomaByType = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.diploma
       .getAll(params)

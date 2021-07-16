@@ -40,8 +40,6 @@ const handleSettingExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchGeneral = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-
   return async (dispatch, getState) => {
     api.setting
       .getGeneral(params)

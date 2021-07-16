@@ -18,7 +18,7 @@ import { generateCode } from 'src/utils/randomCode';
 const CertificateInfo = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const initialValues = useSelector((state) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   let newCertificate = {
     name: '',
     certificateType: '',

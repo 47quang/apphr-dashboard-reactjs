@@ -6,7 +6,7 @@ const initialState = {
     total: 0,
   },
   holiday: {
-    id: 0,
+    id: '',
     shortname: '',
     title: '',
     startDate: '',

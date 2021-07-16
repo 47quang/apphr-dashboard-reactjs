@@ -148,20 +148,6 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                     <div className="form-group col-xl-12">
                       <Label text={t('Branch')} required={true} />
 
-                      {/* <div className="d-flex flex-row flex-wrap justify-content-between border">
-                        <CommonMultiSelectInput
-                          placeholder={t('placeholder.select_branches')}
-                          values={values.branchIds}
-                          listValues={branches?.payload ?? []}
-                          onChangeValues={(e) => {
-                            let branchIds = e.target.value;
-                            departmentsSelect = departments.payload.filter((dep) => branchIds.includes(dep.branchId));
-                            console.log('departmentsSelect', departmentsSelect);
-                            handleChange('branchIds')(e);
-                            setFieldValue('departmentIds', []);
-                          }}
-                        />
-                      </div> */}
                       <MultiSelectInput
                         noOptionsMessage={() => t('message.no_options')}
                         values={values.branches}

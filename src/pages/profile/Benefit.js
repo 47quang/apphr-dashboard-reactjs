@@ -22,7 +22,7 @@ const Benefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = match?.params?.id;
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const activeContract = useSelector((state) => state.profile.activeContract);
 
   const activeWage = useSelector((state) => state.profile.activeWage);

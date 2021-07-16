@@ -487,6 +487,7 @@
     "end": "end"
   },
   "message": {
+    "404": "The page you are looking for was not found.",
     "sign_in": "Sign in with your account",
     "successful_update": "Update successfully",
     "successful_active": "Activate successfully",

@@ -41,7 +41,6 @@ const handleAttributeExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchAttributes = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.attribute
       .getAll(params)
@@ -66,7 +65,6 @@ export const fetchAttributes = (params, setLoading) => {
 };
 
 export const fetchAttribute = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.attribute
       .get(id)

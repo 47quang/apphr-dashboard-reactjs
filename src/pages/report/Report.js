@@ -20,7 +20,7 @@ const MemoizedQTable = React.memo(QTable, equalQTable);
 const Report = ({ t, location }) => {
   const dispatch = useDispatch();
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
     data: [],
     statics: [],
   });
@@ -90,7 +90,6 @@ const Report = ({ t, location }) => {
   };
 
   var filterFunction = (params) => {
-    console.log(params);
     let newData = params.filters.reduce((init, filter) => {
       let filterValues, keyWord;
       if (filter.rule === 'type') {

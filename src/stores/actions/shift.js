@@ -43,7 +43,6 @@ const handleShiftExceptions = (err, dispatch, functionName) => {
 };
 
 export const fetchShifts = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.shift
       .getAll(params)
@@ -76,7 +75,6 @@ const formatDownloadedData = (payload) => {
 };
 
 export const fetchShift = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.shift
       .get(id)

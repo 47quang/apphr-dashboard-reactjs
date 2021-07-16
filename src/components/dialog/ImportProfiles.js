@@ -13,7 +13,6 @@ const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
   const uploadFileRef = useRef();
   function upload(files, setFieldValue) {
     setFieldValue('import', files[0]);
-    console.log(files[0]);
   }
   return (
     <div>
@@ -26,7 +25,6 @@ const ImportProfiles = ({ isOpen, handleConfirm, handleCancel, t }) => {
             onSubmit={(values) => {
               const formData = new FormData();
               formData.append('import', values.import);
-              console.log(values);
               handleConfirm(formData);
             }}
           >

@@ -21,13 +21,14 @@ const UpdateAccount = ({ t, history, match }) => {
   const permissionGroups = useSelector((state) => state.role.permissions);
   const roles = useSelector((state) => state.account.roles);
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const initCheck = (groupPermission, checks) => {
     return checks ? groupPermission.every((val) => checks.indexOf(val) >= 0) : false;
   };
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_USER)) dispatch(fetchAccount(accountId, setLoading));
+    else setLoading(false);
     return () => {
       dispatch(setEmptyAccount());
     };
@@ -294,7 +295,12 @@ const UpdateAccount = ({ t, history, match }) => {
       </div>
     </CContainer>
   );
-
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
   if (permissionIds.includes(PERMISSION.GET_USER)) return returnComponent;
   else return <Page404 />;
 };

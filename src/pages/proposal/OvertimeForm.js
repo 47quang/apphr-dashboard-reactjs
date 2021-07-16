@@ -12,6 +12,7 @@ import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveOvertimeRequest, fetchOvertimeRequest, rejectOvertimeRequest, setEmptyOverTimeRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
+import Page404 from '../page404/Page404';
 
 const OvertimeForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const OvertimeForm = ({ t, history, location, match }) => {
     { id: 'reject', name: t('label.reject') },
   ];
   const overtimeRequest = useSelector((state) => state.request.overtimeForm);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const requestId = match?.params?.id;
   const fullyButtons = [
     {
@@ -83,6 +84,7 @@ const OvertimeForm = ({ t, history, location, match }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (overtimeRequest.id === '') return <Page404 />;
   return (
     <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="m-auto">

@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -15,7 +16,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_BRANCH)) {
@@ -24,7 +25,7 @@ const UpdateBranch = ({ t, location, history, match }) => {
       return () => {
         dispatch(setEmptyBranch());
       };
-    }
+    } else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -88,7 +89,13 @@ const UpdateBranch = ({ t, location, history, match }) => {
           position: 'left',
         },
       ];
-  if (permissionIds.includes(PERMISSION.GET_BRANCH))
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  if (permissionIds.includes(PERMISSION.GET_BRANCH) && branch.id)
     return (
       <BranchItemBody
         branchRef={branchInfoForm}

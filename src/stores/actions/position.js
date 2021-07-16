@@ -41,7 +41,6 @@ const handlePositionExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchPositions = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.position
       .getAll(params)
@@ -68,7 +67,6 @@ export const fetchPositions = (params, setLoading) => {
 };
 
 export const fetchPosition = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.position
       .get(id)

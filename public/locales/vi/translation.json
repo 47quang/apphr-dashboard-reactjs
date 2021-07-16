@@ -487,6 +487,7 @@
     "end": "kết thúc bằng"
   },
   "message": {
+    "404": "Không tìm thấy trang bạn đang tìm.",
     "sign_in": "Đăng nhập với tài khoản của bạn",
     "successful_update": "Cập nhật thành công",
     "successful_active": "Kích hoạt thành công",

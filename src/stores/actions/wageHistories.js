@@ -41,7 +41,6 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchWageHistories = (params, setLoading, t) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wageHistory
       .getAll(params)

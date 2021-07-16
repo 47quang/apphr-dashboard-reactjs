@@ -41,7 +41,6 @@ const handleLogExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchLogs = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.log
       .getAll(params)

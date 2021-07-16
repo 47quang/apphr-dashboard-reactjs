@@ -48,7 +48,6 @@ const formatDownloadedData = (payload) => {
 };
 
 export const fetchRoles = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .getAll(params)
@@ -67,7 +66,6 @@ export const fetchRoles = (params, setLoading) => {
 };
 
 export const fetchRole = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .get(id)

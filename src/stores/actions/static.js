@@ -46,7 +46,6 @@ export const fetchStatics = (setLoading, setFetch) => {
     docx: 'Word',
     csv: 'Excel',
   };
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.static
       .getAll()

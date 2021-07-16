@@ -30,7 +30,7 @@ const Branch = ({ t, history }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-    loading: false,
+    loading: true,
   });
   const operatesText = [
     {

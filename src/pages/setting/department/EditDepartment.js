@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -12,7 +13,7 @@ const EditDepartment = ({ t, location, match, history }) => {
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const department = useSelector((state) => state.department.department);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_DEPARTMENT)) {
@@ -21,6 +22,8 @@ const EditDepartment = ({ t, location, match, history }) => {
       return () => {
         dispatch(resetDepartment());
       };
+    } else {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +73,13 @@ const EditDepartment = ({ t, location, match, history }) => {
           position: 'left',
         },
       ];
-  if (permissionIds.includes(PERMISSION.GET_DEPARTMENT))
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  if (permissionIds.includes(PERMISSION.GET_DEPARTMENT) && department.id !== '')
     return (
       <DepartmentItemBody
         t={t}

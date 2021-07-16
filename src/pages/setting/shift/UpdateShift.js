@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -16,7 +17,7 @@ const UpdateShift = ({ t, location, match, history }) => {
   const dispatch = useDispatch();
   const shift = useSelector((state) => state.shift.shift);
   const branches = useSelector((state) => state.branch.branches);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_SHIFT)) {
@@ -31,7 +32,7 @@ const UpdateShift = ({ t, location, match, history }) => {
         dispatch(changeActions([]));
         dispatch(resetShift());
       };
-    }
+    } else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const submitForm = (values) => {
@@ -82,7 +83,13 @@ const UpdateShift = ({ t, location, match, history }) => {
           position: 'left',
         },
       ];
-  if (permissionIds.includes(PERMISSION.GET_SHIFT))
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  if (permissionIds.includes(PERMISSION.GET_SHIFT) && shift.id !== '')
     return (
       <ShiftItemBody
         t={t}

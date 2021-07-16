@@ -2,12 +2,13 @@ import { formatDateInput } from 'src/utils/datetimeUtils';
 import { REDUX_STATE } from '../states';
 
 const initialState = {
+  currentProfileId: '',
   profiles: {
     payload: [],
     total: 0,
   },
   profile: {
-    id: 0,
+    id: '',
     shortname: '',
     firstname: '',
     lastname: '',
@@ -101,6 +102,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
         ...state,
         profiles: state.profiles.filter((b) => b.id !== payload.id),
       };
+    case REDUX_STATE.profile.CURRENT_PROFILE_ID:
+      return { ...state, currentProfileId: payload };
     case REDUX_STATE.profile.EMPTY_VALUE:
       return {
         ...state,

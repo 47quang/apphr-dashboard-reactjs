@@ -13,6 +13,7 @@ import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest, setEmptyRemoteRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
+import Page404 from '../page404/Page404';
 
 const RemoteForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const RemoteForm = ({ t, history, location, match }) => {
     { id: 'reject', name: t('label.reject') },
   ];
   const remoteRequest = useSelector((state) => state.request.remoteForm);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const requestId = match?.params?.id;
 
   const fullyButtons = [
@@ -84,6 +85,7 @@ const RemoteForm = ({ t, history, location, match }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (remoteRequest.id === '') return <Page404 />;
   return (
     <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="m-auto">

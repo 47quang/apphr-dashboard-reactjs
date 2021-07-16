@@ -41,8 +41,6 @@ const handlePaymentExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchPayments = (params, setLoading, t) => {
-  if (setLoading) setLoading(true);
-
   return (dispatch, getState) => {
     api.payment
       .getAll(params)
@@ -67,7 +65,6 @@ export const fetchPayments = (params, setLoading, t) => {
 };
 
 export const fetchPayment = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.payment
       .get(id)

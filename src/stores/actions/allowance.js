@@ -41,8 +41,6 @@ const handleAllowanceExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchAllowances = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-
   return (dispatch, getState) => {
     api.allowance
       .getAll(params)
@@ -67,7 +65,6 @@ export const fetchAllowances = (params, setLoading) => {
 };
 
 export const fetchAllowance = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.allowance
       .get(id)

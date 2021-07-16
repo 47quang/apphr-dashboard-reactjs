@@ -17,6 +17,7 @@ const initialState = {
     minPoint: '',
     operateLoop: [],
     isOvertime: true,
+    id: '',
   },
 };
 

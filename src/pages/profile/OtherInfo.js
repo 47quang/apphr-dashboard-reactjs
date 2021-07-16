@@ -13,7 +13,7 @@ const OtherInfo = ({ t, match, history }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const otherInfoRef = useRef();
   const profile = useSelector((state) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   useEffect(() => {

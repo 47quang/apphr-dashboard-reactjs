@@ -41,7 +41,6 @@ const handleWageExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchWages = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
       .getAll(params)
@@ -66,7 +65,6 @@ export const fetchWages = (params, setLoading) => {
 };
 
 export const fetchWage = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wage
       .get(id)

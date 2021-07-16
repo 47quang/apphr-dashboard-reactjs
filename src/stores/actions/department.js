@@ -41,7 +41,6 @@ const handleDepartmentExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchDepartments = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.department
       .getAll(params)
@@ -81,7 +80,6 @@ export const deleteDepartment = (params, success_msg, handleAfterDelete) => {
 };
 
 export const fetchDepartment = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.department
       .get(params.id)

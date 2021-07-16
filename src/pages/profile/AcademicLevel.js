@@ -20,7 +20,7 @@ const AcademicLevel = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const newDegree = {
     level: '',

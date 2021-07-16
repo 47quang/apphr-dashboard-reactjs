@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -11,11 +12,11 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
   const attributeInfoForm = useRef();
   const dispatch = useDispatch();
   const attribute = useSelector((state) => state.attribute.attribute);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAttribute(match.params?.id, setLoading));
-
+    else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -65,6 +66,12 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
           position: 'left',
         },
       ];
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
   if (permissionIds.includes(PERMISSION.GET_ALLOWANCE))
     return (
       <ContractAttributeItemBody

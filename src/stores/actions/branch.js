@@ -41,7 +41,6 @@ const handleBranchExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchBranches = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.branch
       .getAll(params)
@@ -66,7 +65,6 @@ export const fetchBranches = (params, setLoading) => {
 };
 
 export const fetchBranch = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.branch
       .get(id)

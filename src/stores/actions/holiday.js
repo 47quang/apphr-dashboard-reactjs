@@ -41,7 +41,6 @@ const handleHolidayExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchHolidays = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.holiday
       .getAll(params)
@@ -66,7 +65,6 @@ export const fetchHolidays = (params, setLoading) => {
 };
 
 export const fetchHoliday = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.holiday
       .get(id)

@@ -28,7 +28,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const dispatch = useDispatch();
   let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const activeContract = useSelector((state) => state.profile.activeContract);
   const status = [

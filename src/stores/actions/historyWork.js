@@ -74,7 +74,6 @@ export const updateHistoryWork = (data, success_msg) => {
 };
 
 export const fetchHistoriesWork = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return async (dispatch, getState) => {
     let departments = await api.department
       .getAll()

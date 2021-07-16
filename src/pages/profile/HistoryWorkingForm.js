@@ -10,7 +10,6 @@ import CommonTextInput from 'src/components/input/CommonTextInput';
 import { PERMISSION } from 'src/constants/key';
 import { NewHistoryWorkingSchema, HistoryWorkingsSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
-//import { fetchDepartments } from 'src/stores/actions/department';
 import {
   createHistoryWork,
   deleteHistoryWork,
@@ -20,7 +19,6 @@ import {
   activeWorking,
   inactiveWorking,
 } from 'src/stores/actions/historyWork';
-//import { fetchPositions } from 'src/stores/actions/position';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
@@ -35,7 +33,7 @@ const HistoryWorkingForm = ({ t, match }) => {
   const historyWorkingForm = {};
   historyWorkingForm.histories = histories;
   const profileId = +match?.params?.id;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const newHistory = {
     profileId: profileId,
