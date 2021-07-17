@@ -72,7 +72,6 @@ export const fetchWageHistories = (params, setLoading, t) => {
 };
 
 export const fetchWageHistory = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wageHistory
       .get(id)

@@ -646,6 +646,12 @@
     "enter_code": "Nhập mã định danh"
   },
   "validation": {
+    "required_select_branch": "Bắt buộc phải chọn chi nhánh",
+    "required_enter_notification_title": "Bắt buộc phải nhập tiêu đề",
+    "required_enter_notification_code": "Bắt buộc phải nhập mã thông báo",
+    "required_select_notification_type": "Bắt buộc phải chọn loại thông báo",
+    "required_enter_description": "Bắt buộc phải nhập mô tả",
+    "required_enter_content": "Bắt buộc phải nhập nội dung",
     "required_select_file": "Bắt buộc chọn file dữ liệu",
     "required_enter_fee_code": "Bắt buộc phải nhập mã chi phí",
     "required_enter_allowance_code": "Bắt buộc phải nhập mã trợ cấp",

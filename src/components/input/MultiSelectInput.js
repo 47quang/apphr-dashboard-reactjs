@@ -33,7 +33,12 @@ const MultiSelectInput = ({
         className={checkSelectClassName()}
         value={values}
         isMulti
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => {
+          let rValue = option.name;
+          if (option?.branchname) rValue = option.branchname + ' - ' + rValue;
+          else if (option?.departmentName) rValue = option.branchName + ' - ' + option.departmentName + ' - ' + rValue;
+          return rValue;
+        }}
         getOptionValue={(option) => {
           return option.id;
         }}

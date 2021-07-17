@@ -646,6 +646,12 @@
     "enter_code": "Enter identify code"
   },
   "validation": {
+    "required_select_branch": "Required to select branch",
+    "required_enter_notification_title": "Required to enter title",
+    "required_enter_notification_code": "Required to enter code",
+    "required_select_notification_type": "Required to select type",
+    "required_enter_description": "Required to enter description",
+    "required_enter_content": "Required to enter content",
     "required_select_file": "Required to select data file",
     "required_enter_fee_code": "Required to enter Fee Code",
     "required_enter_allowance_code": "Required to enter Allowance Code",

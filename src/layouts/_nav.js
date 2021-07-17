@@ -132,15 +132,15 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ARTICLE_TYPE,
-        to: ROUTE_PATH.ARTICLE_TYPE,
-        permission: PERMISSION.LIST_TYPE_ARTICLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.NOTIFICATION,
         to: ROUTE_PATH.NOTIFICATION,
         permission: PERMISSION.LIST_ARTICLE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.ARTICLE_TYPE,
+        to: ROUTE_PATH.ARTICLE_TYPE,
+        permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
     ],
   },
