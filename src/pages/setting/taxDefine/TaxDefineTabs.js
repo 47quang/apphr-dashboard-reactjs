@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 const TaxDefineTabs = ({ t, history, match }) => {
   const classes = useStyles();
   const theme = useTheme();
-  // const basicInfoRef = createRef();
   const [tabName, setTabName] = useState(0);
 
   const handleChange = (event, newValue) => {

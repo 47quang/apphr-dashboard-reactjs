@@ -305,7 +305,7 @@ const AcademicLevel = ({ t, match }) => {
                     }}
                   >
                     {({ values, errors, touched, handleBlur, handleSubmit, handleChange, handleReset, setFieldValue }) => (
-                      <div className="shadow bg-white rounded p-4">
+                      <div className="shadow bg-white rounded p-4 mb-4">
                         {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
 
                         {renderButtons(

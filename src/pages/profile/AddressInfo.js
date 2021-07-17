@@ -259,7 +259,7 @@ const AddressInfo = ({ t, history, match }) => {
     <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto row">
         <div className="col-xl-7 p-0">
-          <div className="shadow bg-white rounded p-4">
+          <div className="shadow bg-white rounded p-4 mb-4">
             <FormHeader text={t('title.permanent_address')} />
 
             <Formik

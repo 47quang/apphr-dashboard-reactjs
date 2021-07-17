@@ -444,7 +444,7 @@ const Benefit = ({ t, history, match }) => {
                     props.contractType = activeContract?.type;
                     return (
                       <form id="newWage" hidden={true} className="p-0 m-0">
-                        <div className="shadow bg-white rounded p-4">
+                        <div className="shadow bg-white rounded p-4 mb-4">
                           <div>
                             <BodyItem {...props} />
                             <hr className="mt-1" />

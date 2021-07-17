@@ -414,7 +414,7 @@
     "shift_info": "Thông tin ca làm",
     "holiday_info": "Thông tin ngày nghỉ",
     "role_info": "Thông tin vai trò",
-    "article_type_info": "Thông in loại thông báo",
+    "article_type_info": "Thông tin loại thông báo",
     "attribute_info": "Thông tin thuộc tính hợp đồng",
     "allowance_info": "Thông tin trợ cấp",
     "wage_info": "Thông tin nhóm lương",
@@ -424,7 +424,6 @@
     "Word": "Word",
     "macAddress": "Địa chỉ MAC",
     "download_sample": "Tải xuống file mẫu"
-
   },
   "title": {
     "confirm": "Xác nhận",
