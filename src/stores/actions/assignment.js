@@ -80,7 +80,6 @@ export const fetchAssignments = (params, setLoading) => {
 };
 
 export const fetchAssignmentsInDate = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
       .getAll(params)

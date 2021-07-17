@@ -22,6 +22,7 @@ import {
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
+import NoData from '../page404/NoData';
 
 const HistoryWorkingForm = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -226,13 +227,16 @@ const HistoryWorkingForm = ({ t, match }) => {
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
-  return (
-    <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
-        </div>
-      ) : (
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!historyWorkingForm.histories.length) return <NoData />;
+  else
+    return (
+      <>
         <CContainer fluid className={joinClassName(['c-main m-auto p-4'])}>
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
@@ -395,8 +399,7 @@ const HistoryWorkingForm = ({ t, match }) => {
             </div>
           </div>
         </CContainer>
-      )}
-    </>
-  );
+      </>
+    );
 };
 export default HistoryWorkingForm;

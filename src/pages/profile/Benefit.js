@@ -17,6 +17,7 @@ import { api } from 'src/stores/apis';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
+import NoData from '../page404/NoData';
 
 const Benefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -381,155 +382,156 @@ const Benefit = ({ t, history, match }) => {
   const handleCancelUpdateWarning = () => {
     setOpenUpdateWarning(!openUpdateWarning);
   };
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!activeWage) return <NoData />;
   return (
     <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
+      <CContainer fluid className="c-main m-auto p-4">
+        <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+          <button
+            type="button"
+            className="btn btn-success rounded-circle p-3"
+            hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+            id="addBtn"
+            onClick={() => {
+              document.getElementById('newWage').hidden = false;
+              document.getElementById('addBtn').disabled = true;
+            }}
+          >
+            <Add fontSize="large" />
+          </button>
         </div>
-      ) : (
-        <CContainer fluid className="c-main m-auto p-4">
-          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-            <button
-              type="button"
-              className="btn btn-success rounded-circle p-3"
-              hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newWage').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add fontSize="large" />
-            </button>
-          </div>
-          {openWarning && (
-            <WarningAlertDialog
-              isVisible={openWarning}
-              title={t('title.new_active_wage')}
-              titleConfirm={t('label.agree')}
-              handleConfirm={handleConfirmWarning}
-              titleCancel={t('label.decline')}
-              handleCancel={handleCancelWarning}
-              warningMessage={t('message.new_active_wage_warning_message')}
-            />
-          )}
-          {openUpdateWarning && (
-            <WarningAlertDialog
-              isVisible={openUpdateWarning}
-              title={t('title.update_active_wage')}
-              titleConfirm={t('label.agree')}
-              handleConfirm={handleConfirmUpdateWarning}
-              titleCancel={t('label.decline')}
-              handleCancel={handleCancelUpdateWarning}
-              warningMessage={t('message.update_active_wage_warning_message')}
-            />
-          )}
+        {openWarning && (
+          <WarningAlertDialog
+            isVisible={openWarning}
+            title={t('title.new_active_wage')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelWarning}
+            warningMessage={t('message.new_active_wage_warning_message')}
+          />
+        )}
+        {openUpdateWarning && (
+          <WarningAlertDialog
+            isVisible={openUpdateWarning}
+            title={t('title.update_active_wage')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmUpdateWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelUpdateWarning}
+            warningMessage={t('message.update_active_wage_warning_message')}
+          />
+        )}
 
-          <div className="m-auto">
-            <div>
-              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
-                <Formik
-                  innerRef={newWageRef}
-                  initialValues={newBenefit}
-                  validationSchema={NewActiveBenefitSchema}
-                  enableReinitialize
-                  onSubmit={(values) => {
-                    if (values?.status === 'active') setOpenWarning(true);
-                    else create(values);
-                  }}
-                >
-                  {(props) => {
-                    props.isCreate = true;
-                    props.contractType = activeContract?.type;
-                    return (
-                      <form id="newWage" hidden={true} className="p-0 m-0">
-                        <div className="shadow bg-white rounded p-4 mb-4">
-                          <div>
-                            <BodyItem {...props} />
-                            <hr className="mt-1" />
-                            {renderButtons([
-                              {
-                                type: 'button',
-                                className: `btn btn-primary  mx-2`,
-                                onClick: (e) => {
-                                  handleResetNewWage();
-                                },
-                                name: t('label.cancel'),
-                                position: 'right',
+        <div className="m-auto">
+          <div>
+            {permissionIds.includes(PERMISSION.LIST_CONTRACT) && (
+              <Formik
+                innerRef={newWageRef}
+                initialValues={newBenefit}
+                validationSchema={NewActiveBenefitSchema}
+                enableReinitialize
+                onSubmit={(values) => {
+                  if (values?.status === 'active') setOpenWarning(true);
+                  else create(values);
+                }}
+              >
+                {(props) => {
+                  props.isCreate = true;
+                  props.contractType = activeContract?.type;
+                  return (
+                    <form id="newWage" hidden={true} className="p-0 m-0">
+                      <div className="shadow bg-white rounded p-4 mb-4">
+                        <div>
+                          <BodyItem {...props} />
+                          <hr className="mt-1" />
+                          {renderButtons([
+                            {
+                              type: 'button',
+                              className: `btn btn-primary  mx-2`,
+                              onClick: (e) => {
+                                handleResetNewWage();
                               },
-                              {
-                                type: 'button',
-                                className: `btn btn-primary px-4 ml-2`,
-                                onClick: (e) => {
-                                  props.handleSubmit(e);
-                                },
-                                name: t('label.create_new'),
+                              name: t('label.cancel'),
+                              position: 'right',
+                            },
+                            {
+                              type: 'button',
+                              className: `btn btn-primary px-4 ml-2`,
+                              onClick: (e) => {
+                                props.handleSubmit(e);
                               },
-                            ])}
-                          </div>
+                              name: t('label.create_new'),
+                            },
+                          ])}
                         </div>
-                      </form>
-                    );
-                  }}
-                </Formik>
-              )}
-              {permissionIds.includes(PERMISSION.LIST_CONTRACT) && activeWage ? (
-                <Formik
-                  innerRef={updateWageRef}
-                  initialValues={activeWage}
-                  validationSchema={NewActiveBenefitSchema}
-                  enableReinitialize
-                  onSubmit={(values) => {
-                    if (preStatus && values.status !== preStatus) setOpenUpdateWarning(true);
-                    else create(values);
-                  }}
-                >
-                  {(props) => {
-                    props.isCreate = false;
-                    props.contractType = activeContract?.type;
-                    return (
-                      <form className="p-0 m-0">
-                        <div className="shadow bg-white rounded p-4">
-                          <div>
-                            <BodyItem {...props} />
-                            <hr className="mt-1" />
-                            {renderButtons(
-                              permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
-                                ? [
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 mx-2`,
-                                      onClick: (e) => {
-                                        props.handleReset(e);
-                                      },
-                                      name: t('label.reset'),
-                                      position: 'right',
+                      </div>
+                    </form>
+                  );
+                }}
+              </Formik>
+            )}
+            {permissionIds.includes(PERMISSION.LIST_CONTRACT) && activeWage ? (
+              <Formik
+                innerRef={updateWageRef}
+                initialValues={activeWage}
+                validationSchema={NewActiveBenefitSchema}
+                enableReinitialize
+                onSubmit={(values) => {
+                  if (preStatus && values.status !== preStatus) setOpenUpdateWarning(true);
+                  else create(values);
+                }}
+              >
+                {(props) => {
+                  props.isCreate = false;
+                  props.contractType = activeContract?.type;
+                  return (
+                    <form className="p-0 m-0">
+                      <div className="shadow bg-white rounded p-4">
+                        <div>
+                          <BodyItem {...props} />
+                          <hr className="mt-1" />
+                          {renderButtons(
+                            permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                              ? [
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 mx-2`,
+                                    onClick: (e) => {
+                                      props.handleReset(e);
                                     },
-                                    {
-                                      type: 'button',
-                                      className: `btn btn-primary px-4 ml-2`,
-                                      onClick: (e) => {
-                                        props.handleSubmit(e);
-                                      },
-                                      name: t('label.save'),
+                                    name: t('label.reset'),
+                                    position: 'right',
+                                  },
+                                  {
+                                    type: 'button',
+                                    className: `btn btn-primary px-4 ml-2`,
+                                    onClick: (e) => {
+                                      props.handleSubmit(e);
                                     },
-                                  ]
-                                : [],
-                            )}
-                          </div>
+                                    name: t('label.save'),
+                                  },
+                                ]
+                              : [],
+                          )}
                         </div>
-                      </form>
-                    );
-                  }}
-                </Formik>
-              ) : (
-                <></>
-              )}
-            </div>
+                      </div>
+                    </form>
+                  );
+                }}
+              </Formik>
+            ) : (
+              <></>
+            )}
           </div>
-        </CContainer>
-      )}
+        </div>
+      </CContainer>
     </>
   );
 };

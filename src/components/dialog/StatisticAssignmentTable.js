@@ -19,7 +19,7 @@ const StatisticAssignmentTable = ({ t, isOpen, handleClose, data, title }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     total: data.length,
-    loading: false,
+    loading: true,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) =>

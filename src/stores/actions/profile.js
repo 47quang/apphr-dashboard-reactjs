@@ -41,7 +41,6 @@ const handleProfileExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchProfiles = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getAll(params)
@@ -454,7 +453,6 @@ export const fetchActiveWage = (id, setLoading) => {
   };
 };
 export const fetchActiveWorking = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getActiveWorking(id)

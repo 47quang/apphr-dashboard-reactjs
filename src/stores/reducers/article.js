@@ -16,6 +16,7 @@ const initialState = {
     departmentIds: [],
     departments: [],
     positionIds: [],
+    positions: [],
     uploads: [],
   },
 };

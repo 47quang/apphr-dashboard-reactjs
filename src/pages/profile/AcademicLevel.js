@@ -15,6 +15,7 @@ import { NewDegreeSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyAcademic, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
+import NoData from '../page404/NoData';
 
 const AcademicLevel = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -226,13 +227,16 @@ const AcademicLevel = ({ t, match }) => {
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
-  return (
-    <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
-        </div>
-      ) : (
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!initialValues.degrees.length) return <NoData />;
+  else
+    return (
+      <>
         <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
@@ -361,8 +365,7 @@ const AcademicLevel = ({ t, match }) => {
             </div>
           </div>
         </CContainer>
-      )}
-    </>
-  );
+      </>
+    );
 };
 export default AcademicLevel;

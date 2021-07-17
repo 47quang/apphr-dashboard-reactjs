@@ -41,7 +41,6 @@ const handleArticleTypeExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchTypes = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.articleType
       .getAll(params)
@@ -66,7 +65,6 @@ export const fetchTypes = (params, setLoading) => {
 };
 
 export const fetchType = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.articleType
       .get(id)

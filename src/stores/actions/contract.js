@@ -52,7 +52,6 @@ const status = {
 };
 
 export const fetchContracts = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -136,7 +135,6 @@ export const fetchContractTable = (params, setLoading, onPreviousPage) => {
 };
 
 export const fetchWageHistories = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)

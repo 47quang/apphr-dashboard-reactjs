@@ -21,6 +21,7 @@ import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
+import NoData from '../page404/NoData';
 
 const JobTimelineInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -703,161 +704,163 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const handleCancelUpdateWarning = () => {
     setOpenUpdateWarning(!openUpdateWarning);
   };
+
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!activeContract) return <NoData />;
   return (
     <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
+      <CContainer fluid className="c-main m-auto p-4">
+        <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
+          <button
+            type="button"
+            className="btn btn-success rounded-circle p-3"
+            hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
+            id="addBtn"
+            onClick={() => {
+              document.getElementById('newContract').hidden = false;
+              document.getElementById('addBtn').disabled = true;
+            }}
+          >
+            <Add fontSize="large" />
+          </button>
         </div>
-      ) : (
-        <CContainer fluid className="c-main m-auto p-4">
-          <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
-            <button
-              type="button"
-              className="btn btn-success rounded-circle p-3"
-              hidden={!permissionIds.includes(PERMISSION.CREATE_CONTRACT)}
-              id="addBtn"
-              onClick={() => {
-                document.getElementById('newContract').hidden = false;
-                document.getElementById('addBtn').disabled = true;
-              }}
-            >
-              <Add fontSize="large" />
-            </button>
-          </div>
-          {openWarning && (
-            <WarningAlertDialog
-              isVisible={openWarning}
-              title={t('title.new_contract')}
-              titleConfirm={t('label.agree')}
-              handleConfirm={handleConfirmWarning}
-              titleCancel={t('label.decline')}
-              handleCancel={handleCancelWarning}
-              warningMessage={t('message.new_contract_warning_message')}
-            />
-          )}
-          {openUpdateWarning && (
-            <WarningAlertDialog
-              isVisible={openUpdateWarning}
-              title={t('title.update_contract')}
-              titleConfirm={t('label.agree')}
-              handleConfirm={handleConfirmUpdateWarning}
-              titleCancel={t('label.decline')}
-              handleCancel={handleCancelUpdateWarning}
-              warningMessage={t('message.update_contract_warning_message')}
-            />
-          )}
+        {openWarning && (
+          <WarningAlertDialog
+            isVisible={openWarning}
+            title={t('title.new_contract')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelWarning}
+            warningMessage={t('message.new_contract_warning_message')}
+          />
+        )}
+        {openUpdateWarning && (
+          <WarningAlertDialog
+            isVisible={openUpdateWarning}
+            title={t('title.update_contract')}
+            titleConfirm={t('label.agree')}
+            handleConfirm={handleConfirmUpdateWarning}
+            titleCancel={t('label.decline')}
+            handleCancel={handleCancelUpdateWarning}
+            warningMessage={t('message.update_contract_warning_message')}
+          />
+        )}
 
-          <div className="m-auto">
+        <div className="m-auto">
+          <Formik
+            innerRef={newContractRef}
+            initialValues={newContract}
+            validationSchema={NewContractSchema}
+            enableReinitialize
+            onSubmit={(values) => {
+              if (values?.status === 'active') setOpenWarning(true);
+              else create(values);
+            }}
+          >
+            {(props) => {
+              props.isCreate = true;
+              return (
+                <form id="newContract" hidden={true} className="p-0 m-0">
+                  <div className="shadow bg-white rounded p-4">
+                    <h5>{t('label.create_new')}.</h5>
+                    <hr className="mt-1" />
+                    <BodyContract {...props} />
+
+                    <hr className="mt-1" />
+                    {renderButtons([
+                      {
+                        type: 'button',
+                        className: `btn btn-primary  mx-2`,
+                        onClick: (e) => {
+                          handleResetNewContract();
+                        },
+                        name: t('label.cancel'),
+                        position: 'right',
+                      },
+                      {
+                        type: 'button',
+                        className: `btn btn-primary px-4 ml-2`,
+                        onClick: (e) => {
+                          props.handleSubmit(e);
+                        },
+                        name: t('label.create_new'),
+                      },
+                    ])}
+                  </div>
+                  <br />
+                </form>
+              );
+            }}
+          </Formik>
+          {activeContract ? (
             <Formik
-              innerRef={newContractRef}
-              initialValues={newContract}
+              innerRef={updateContractRef}
+              initialValues={activeContract}
               validationSchema={NewContractSchema}
               enableReinitialize
               onSubmit={(values) => {
-                if (values?.status === 'active') setOpenWarning(true);
+                if (values.status !== preStatus) setOpenUpdateWarning(true);
                 else create(values);
               }}
             >
               {(props) => {
-                props.isCreate = true;
                 return (
-                  <form id="newContract" hidden={true} className="p-0 m-0">
+                  <form className="p-0 m-0">
                     <div className="shadow bg-white rounded p-4">
-                      <h5>{t('label.create_new')}.</h5>
-                      <hr className="mt-1" />
-                      <BodyContract {...props} />
+                      <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
+                        {props.values.code + ' - ' + props.values.fullname}
+                      </div>
 
+                      <div style={{ fontSize: 14 }}>
+                        {props.values.expiredDate
+                          ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
+                          : t('label.from') + formatDate(props.values.handleDate)}
+                      </div>
                       <hr className="mt-1" />
-                      {renderButtons([
-                        {
-                          type: 'button',
-                          className: `btn btn-primary  mx-2`,
-                          onClick: (e) => {
-                            handleResetNewContract();
-                          },
-                          name: t('label.cancel'),
-                          position: 'right',
-                        },
-                        {
-                          type: 'button',
-                          className: `btn btn-primary px-4 ml-2`,
-                          onClick: (e) => {
-                            props.handleSubmit(e);
-                          },
-                          name: t('label.create_new'),
-                        },
-                      ])}
+                      <div>
+                        <BodyContract {...props} />
+                        <hr className="mt-1" />
+
+                        {renderButtons(
+                          permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
+                            ? [
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 mx-2`,
+                                  onClick: (e) => {
+                                    props.handleReset(e);
+                                  },
+                                  name: t('label.reset'),
+                                  position: 'right',
+                                },
+                                {
+                                  type: 'button',
+                                  className: `btn btn-primary px-4 ml-2`,
+                                  onClick: (e) => {
+                                    props.handleSubmit(e);
+                                  },
+                                  name: t('label.save'),
+                                },
+                              ]
+                            : [],
+                        )}
+                      </div>
                     </div>
-                    <br />
                   </form>
                 );
               }}
             </Formik>
-            {activeContract ? (
-              <Formik
-                innerRef={updateContractRef}
-                initialValues={activeContract}
-                validationSchema={NewContractSchema}
-                enableReinitialize
-                onSubmit={(values) => {
-                  if (values.status !== preStatus) setOpenUpdateWarning(true);
-                  else create(values);
-                }}
-              >
-                {(props) => {
-                  return (
-                    <form className="p-0 m-0">
-                      <div className="shadow bg-white rounded p-4">
-                        <div style={{ fontSize: 18, fontWeight: 'bold', textOverflow: 'ellipsis' }}>
-                          {props.values.code + ' - ' + props.values.fullname}
-                        </div>
-
-                        <div style={{ fontSize: 14 }}>
-                          {props.values.expiredDate
-                            ? t('label.from') + formatDate(props.values.handleDate) + t('label.to') + formatDate(props.values.expiredDate)
-                            : t('label.from') + formatDate(props.values.handleDate)}
-                        </div>
-                        <hr className="mt-1" />
-                        <div>
-                          <BodyContract {...props} />
-                          <hr className="mt-1" />
-
-                          {renderButtons(
-                            permissionIds.includes(PERMISSION.UPDATE_CONTRACT)
-                              ? [
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 mx-2`,
-                                    onClick: (e) => {
-                                      props.handleReset(e);
-                                    },
-                                    name: t('label.reset'),
-                                    position: 'right',
-                                  },
-                                  {
-                                    type: 'button',
-                                    className: `btn btn-primary px-4 ml-2`,
-                                    onClick: (e) => {
-                                      props.handleSubmit(e);
-                                    },
-                                    name: t('label.save'),
-                                  },
-                                ]
-                              : [],
-                          )}
-                        </div>
-                      </div>
-                    </form>
-                  );
-                }}
-              </Formik>
-            ) : (
-              <></>
-            )}
-          </div>
-        </CContainer>
-      )}
+          ) : (
+            <></>
+          )}
+        </div>
+      </CContainer>
     </>
   );
 };

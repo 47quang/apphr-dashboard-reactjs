@@ -93,9 +93,6 @@ export const fetchHistoriesWork = (params, setLoading) => {
       .catch((err) => {
         handleHistoryWorkExceptions(err, dispatch, 'fetchDepartments');
         return [];
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
       });
     let positions = await api.position
       .getAll()
@@ -116,9 +113,6 @@ export const fetchHistoriesWork = (params, setLoading) => {
       .catch((err) => {
         handleHistoryWorkExceptions(err, dispatch, 'fetchPositions');
         return [];
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
       });
     api.historyWork
       .getAll(params)

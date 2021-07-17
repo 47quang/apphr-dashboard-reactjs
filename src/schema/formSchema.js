@@ -695,6 +695,7 @@ export const AllowanceSchema = Yup.object().shape({
     }),
 });
 export const NotificationSchema = Yup.object().shape({
+  code: Yup.string().trim().min(1, 'validation.required_enter_notification_code').required('validation.required_enter_notification_code'),
   title: Yup.string().trim().min(1, 'validation.required_enter_notification_title').required('validation.required_enter_notification_title'),
   typeId: Yup.string()
     .trim()
@@ -702,6 +703,11 @@ export const NotificationSchema = Yup.object().shape({
       return value !== '0';
     })
     .required('validation.required_select_notification_type'),
+  branchIds: Yup.array().of(Yup.number()).min(1, 'validation.required_select_branch'),
+  departmentIds: Yup.array().of(Yup.number()),
+  positionIds: Yup.array().of(Yup.number()),
+  description: Yup.string().trim().min(1, 'validation.required_enter_description').required('validation.required_enter_description'),
+  content: Yup.string().trim().min(1, 'validation.required_enter_content').required('validation.required_enter_content'),
 });
 export const ArticleTypeSchema = Yup.object().shape({
   code: Yup.string().trim().min(1, 'validation.required_enter_article_type_code').required('validation.required_enter_article_type_code'),

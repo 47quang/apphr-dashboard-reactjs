@@ -78,7 +78,6 @@ export const fetchAccounts = (params, setLoading) => {
 };
 
 export const filterAccounts = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .filter(params)
@@ -103,7 +102,6 @@ export const filterAccounts = (params, onTotalChange, setLoading) => {
 };
 
 export const fetchAccount = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .get(id)
