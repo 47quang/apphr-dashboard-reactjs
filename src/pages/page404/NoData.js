@@ -1,4 +1,4 @@
-import { CContainer, CRow } from '@coreui/react';
+import { CContainer } from '@coreui/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,16 +8,17 @@ const NoData = ({ history, location }) => {
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
-        <CRow className="justify-content-center">
-          <div className="clearfix">
-            <div className="row d-flex justyfy-content-center">
+        <div className="row justify-content-center ">
+          <img src="/images/sad_face.svg" alt="no data" width="300px" height="300px" />
+          <div className="my-auto">
+            <div className="d-block">
               <h2 className="pt-3">Oops!.</h2>
             </div>
-            <div className="row d-flex justyfy-content-center">
+            <div>
               <h3 className="text-muted float-left">{t('message.no_data')}</h3>
             </div>
           </div>
-        </CRow>
+        </div>
       </CContainer>
     </div>
   );

@@ -29,7 +29,6 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     loading: true,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
-  console.log(paging);
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
       ...prevState,
