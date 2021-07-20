@@ -7,16 +7,6 @@ import { FILTER_OPERATOR, ROUTE_PATH } from 'src/constants/key';
 import { deleteStatic, fetchStatics, setEmptyStatics } from 'src/stores/actions/static';
 import { slugify } from 'src/utils/stringUtils';
 
-const equalQTable = (prevProps, nextProps) => {
-  return (
-    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
-    JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef) &&
-    JSON.stringify(prevProps.paging.statics) === JSON.stringify(nextProps.paging.statics)
-  );
-};
-
-const MemoizedQTable = React.memo(QTable, equalQTable);
-
 const Report = ({ t, location }) => {
   const dispatch = useDispatch();
   const [state, setState] = useState({
@@ -112,7 +102,7 @@ const Report = ({ t, location }) => {
         <title>{'APPHR | ' + t('Store')}</title>
       </Helmet>
       {/* <div className="m-auto">{load(state.loading)}</div> */}
-      <MemoizedQTable
+      <QTable
         t={t}
         columnDef={columnDef}
         route={ROUTE_PATH.STORE + '/'}

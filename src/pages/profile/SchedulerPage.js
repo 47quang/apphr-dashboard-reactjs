@@ -284,8 +284,8 @@ const SchedulerPage = ({ t, history, match }) => {
               <EditingState />
               <IntegratedEditing />
               <WeekView
-                startDayHour={6}
-                endDayHour={22}
+                startDayHour={0}
+                endDayHour={24}
                 cellDuration={60}
                 timeTableCellComponent={TimeTableCell}
                 dayScaleCellComponent={DayScaleCell}
