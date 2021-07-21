@@ -9,12 +9,13 @@ import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
-import { PROFILE_TABS, REQUEST_TABS, ROUTE_PATH } from 'src/constants/key';
+import { PROFILE_TABS, REQUEST_TABS } from 'src/constants/key';
 import { setSubTabName, setTabName } from 'src/stores/actions/profile';
 import { approveRemoteRequest, fetchRemoteRequest, rejectRemoteRequest, setEmptyRemoteRequest } from 'src/stores/actions/request';
 import { renderButtons } from 'src/utils/formUtils';
+import Page404 from '../page404/Page404';
 
-const RemoteForm = ({ t, history, match }) => {
+const RemoteForm = ({ t, history, location, match }) => {
   const dispatch = useDispatch();
   const status = [
     { id: 'new', name: t('label.new') },
@@ -22,7 +23,7 @@ const RemoteForm = ({ t, history, match }) => {
     { id: 'reject', name: t('label.reject') },
   ];
   const remoteRequest = useSelector((state) => state.request.remoteForm);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const requestId = match?.params?.id;
 
   const fullyButtons = [
@@ -31,7 +32,11 @@ const RemoteForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.REMOTE);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',
@@ -59,7 +64,11 @@ const RemoteForm = ({ t, history, match }) => {
       className: `btn btn-primary mr-4`,
 
       onClick: (e) => {
-        history.push(ROUTE_PATH.REMOTE);
+        history.goBack();
+        if (location?.state?.prevURL?.includes('profile')) {
+          dispatch(setTabName(PROFILE_TABS.REQUEST));
+          dispatch(setSubTabName(REQUEST_TABS.REMOTE_REQUEST));
+        }
       },
       name: t('label.back'),
       position: 'left',
@@ -76,14 +85,18 @@ const RemoteForm = ({ t, history, match }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
-      <div className="m-auto">
-        {loading ? (
-          <div className="text-center">
-            <CircularProgress />
-          </div>
-        ) : (
+
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (remoteRequest.id === '') return <Page404 />;
+  else
+    return (
+      <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
+        <div className="m-auto">
           <div className="row">
             <div className="shadow bg-white rounded p-4 container col-xl-4">
               <Formik
@@ -308,10 +321,9 @@ const RemoteForm = ({ t, history, match }) => {
               </Formik>
             </div>
           </div>
-        )}
-      </div>
-    </CContainer>
-  );
+        </div>
+      </CContainer>
+    );
 };
 
 export default RemoteForm;

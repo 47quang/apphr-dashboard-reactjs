@@ -24,7 +24,7 @@ const EditContract = ({ t, history, match }) => {
   let branches = useSelector((state) => state.contract.branches);
   let contract = useSelector((state) => state.contract.contract);
   const allowances = useSelector((state) => state.contract.allowances);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const status = [
     { id: 'active', name: t('label.active') },
@@ -61,7 +61,7 @@ const EditContract = ({ t, history, match }) => {
       return () => {
         dispatch(setEmptyContract());
       };
-    }
+    } else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

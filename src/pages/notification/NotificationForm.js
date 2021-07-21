@@ -12,9 +12,11 @@ import MultiSelectInput from 'src/components/input/MultiSelectInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
+import { NotificationSchema } from 'src/schema/formSchema';
 import { fetchTypes } from 'src/stores/actions/articleType';
 import { fetchBranches } from 'src/stores/actions/branch';
 import { fetchDepartments } from 'src/stores/actions/department';
+import { fetchPositions } from 'src/stores/actions/position';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
 
@@ -23,11 +25,15 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
   const dispatch = useDispatch();
   const branches = useSelector((state) => state.branch.branches);
   const departments = useSelector((state) => state.department.departments);
+  const positions = useSelector((state) => state.position.positions);
+
   let departmentsSelect = [];
+  let positionsSelect = [];
   const articleTypes = useSelector((state) => state.articleType.types);
   useEffect(() => {
     dispatch(fetchBranches());
     dispatch(fetchDepartments());
+    dispatch(fetchPositions());
     dispatch(fetchTypes());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -46,6 +52,7 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
               innerRef={articleRef}
               initialValues={article}
               enableReinitialize
+              validationSchema={NotificationSchema}
               onSubmit={(values) => {
                 submitForm(values);
               }}
@@ -141,27 +148,12 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       isRequiredField
                       isTouched={touched.title}
                       isError={errors.title && touched.title}
-                      errorMessage={errors.title}
+                      errorMessage={t(errors.title)}
                     />
                   </div>
                   <div className="row">
                     <div className="form-group col-xl-12">
                       <Label text={t('Branch')} required={true} />
-
-                      {/* <div className="d-flex flex-row flex-wrap justify-content-between border">
-                        <CommonMultiSelectInput
-                          placeholder={t('placeholder.select_branches')}
-                          values={values.branchIds}
-                          listValues={branches?.payload ?? []}
-                          onChangeValues={(e) => {
-                            let branchIds = e.target.value;
-                            departmentsSelect = departments.payload.filter((dep) => branchIds.includes(dep.branchId));
-                            console.log('departmentsSelect', departmentsSelect);
-                            handleChange('branchIds')(e);
-                            setFieldValue('departmentIds', []);
-                          }}
-                        />
-                      </div> */}
                       <MultiSelectInput
                         noOptionsMessage={() => t('message.no_options')}
                         values={values.branches}
@@ -172,10 +164,15 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                             setFieldValue('branches', []);
                             setFieldValue('branchIds', []);
                             setFieldValue('departments', []);
+                            setFieldValue('departmentIds', []);
+                            setFieldValue('positions', []);
+                            setFieldValue('positionIds', []);
                             departmentsSelect = [];
+                            positionsSelect = [];
                           } else {
                             let branchIds = e && e.length ? e.map((b) => b.id) : [];
                             setFieldValue('departments', []);
+                            setFieldValue('departmentIds', []);
                             departmentsSelect = departments.payload.filter((dep) => branchIds.includes(dep.branchId));
                             setFieldValue('branches', e);
                             setFieldValue('branchIds', branchIds);
@@ -183,8 +180,8 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                         }}
                         placeholder={t('placeholder.select_departments')}
                         isTouched={touched.branches}
-                        isError={errors.branches && touched.branches}
-                        errorMessage={errors.branches}
+                        isError={errors.branchIds && touched.branches}
+                        errorMessage={t(errors.branchIds)}
                       />
                     </div>
                     <div className="form-group col-xl-12">
@@ -195,15 +192,43 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                         onBlur={handleBlur('departments')}
                         listValues={departmentsSelect}
                         onChange={(e) => {
-                          console.log(e);
-                          setFieldValue('departments', e);
-                          let departmentIds = e && e.length ? e.map((d) => d.id) : [];
-                          setFieldValue('departmentIds', departmentIds);
+                          if (e.length === 0) {
+                            setFieldValue('departments', []);
+                            setFieldValue('departmentIds', []);
+                            setFieldValue('positions', []);
+                            setFieldValue('positionIds', []);
+                            positionsSelect = [];
+                          } else {
+                            let departmentIds = e && e.length ? e.map((b) => b.id) : [];
+                            setFieldValue('positions', []);
+                            setFieldValue('positionIds', []);
+                            positionsSelect = positions.payload.filter((dep) => departmentIds.includes(dep.departmentId));
+                            setFieldValue('departments', e);
+                            setFieldValue('departmentIds', departmentIds);
+                          }
                         }}
                         placeholder={t('placeholder.select_departments')}
                         isTouched={touched.departments}
-                        isError={errors.departments && touched.departments}
-                        errorMessage={errors.departments}
+                        isError={errors.departmentIds && touched.departments}
+                        errorMessage={t(errors.departmentIds)}
+                      />
+                    </div>
+                    <div className="form-group col-xl-12">
+                      <Label text={t('Position')} />
+                      <MultiSelectInput
+                        noOptionsMessage={() => t('message.no_options')}
+                        values={values.positions}
+                        onBlur={handleBlur('positions')}
+                        listValues={positionsSelect}
+                        onChange={(e) => {
+                          setFieldValue('positions', e);
+                          let positionIds = e && e.length ? e.map((d) => d.id) : [];
+                          setFieldValue('positionIds', positionIds);
+                        }}
+                        placeholder={t('placeholder.select_departments')}
+                        isTouched={touched.positions}
+                        isError={errors.positions && touched.positions}
+                        errorMessage={t(errors.positionIds)}
                       />
                     </div>
                   </div>
@@ -221,12 +246,15 @@ const NotificationForm = ({ t, articleRef, article, buttons, submitForm, loading
                       isRequiredField
                       isTouched={touched.description}
                       isError={errors.description && touched.description}
-                      errorMessage={errors.description}
+                      errorMessage={t(errors.description)}
                       rows={3}
                     />
                     <div className="form-group col-xl-12 wrapper">
                       <Label text={t('label.notification_content')} required />
                       <Editor placeholder={t('placeholder.enter_notification_content')} value={values.content} onChange={handleChange('content')} />
+                      <div>
+                        <small className={'text-danger'}> {t(errors.content)}</small>
+                      </div>
                     </div>
                     <CommonUploadFileButton
                       name={'uploads'}

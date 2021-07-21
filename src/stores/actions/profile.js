@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleProfileExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,24 +30,32 @@ const handleProfileExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchProfiles = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
-            ? payload.map((profile) => {
+            ? payload.reduce((accumulator, profile) => {
+                if (profile.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
                 profile.createdAt = formatDateTimeToString(profile.createdAt);
-                return profile;
-              })
+                accumulator.push(profile);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,
@@ -65,7 +73,6 @@ export const fetchProfiles = (params, setLoading) => {
 };
 
 export const fetchProfile = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .get(id)
@@ -76,7 +83,7 @@ export const fetchProfile = (id, setLoading) => {
         payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
         payload['have_id'] = payload.cmnd ? true : false;
         payload['have_passport'] = payload.passport ? true : false;
-
+        dispatch({ type: REDUX_STATE.profile.CURRENT_PROFILE_ID, payload: payload.id });
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
@@ -393,7 +400,6 @@ const type = {
   season: 'Thuê khoán',
 };
 export const fetchActiveContract = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getActiveContract(id)
@@ -427,7 +433,6 @@ export const setEmptyActiveContract = () => {
 };
 
 export const fetchActiveWage = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getActiveWage(id)
@@ -448,7 +453,6 @@ export const fetchActiveWage = (id, setLoading) => {
   };
 };
 export const fetchActiveWorking = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.profile
       .getActiveWorking(id)

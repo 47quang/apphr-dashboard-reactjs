@@ -18,7 +18,7 @@ const PersonalTax = ({ t, location, history }) => {
   ];
 
   return (
-    <CContainer fluid className="c-main m-auto p-4">
+    <CContainer fluid className="c-main m-auto col-xl-6">
       <QTable t={t} columnDef={columnDef} data={taxes} disableEditColum={true} disableToolBar={true} disableFilter={true} notPaging={true} />
     </CContainer>
   );

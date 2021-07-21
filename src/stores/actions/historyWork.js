@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleHistoryWorkExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,7 +30,11 @@ const handleHistoryWorkExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
@@ -70,7 +74,6 @@ export const updateHistoryWork = (data, success_msg) => {
 };
 
 export const fetchHistoriesWork = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return async (dispatch, getState) => {
     let departments = await api.department
       .getAll()
@@ -90,9 +93,6 @@ export const fetchHistoriesWork = (params, setLoading) => {
       .catch((err) => {
         handleHistoryWorkExceptions(err, dispatch, 'fetchDepartments');
         return [];
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
       });
     let positions = await api.position
       .getAll()
@@ -113,9 +113,6 @@ export const fetchHistoriesWork = (params, setLoading) => {
       .catch((err) => {
         handleHistoryWorkExceptions(err, dispatch, 'fetchPositions');
         return [];
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
       });
     api.historyWork
       .getAll(params)

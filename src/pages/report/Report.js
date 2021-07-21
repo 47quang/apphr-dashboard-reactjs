@@ -1,24 +1,41 @@
 import { CContainer } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, ROUTE_PATH } from 'src/constants/key';
 import { deleteStatic, fetchStatics, setEmptyStatics } from 'src/stores/actions/static';
+import { slugify } from 'src/utils/stringUtils';
 
 const Report = ({ t, location }) => {
   const dispatch = useDispatch();
-  const statics = useSelector((st) => st.static.statics);
-  let data = statics;
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
+    data: [],
+    statics: [],
   });
   const setLoading = (isLoad) => {
-    setState({ ...state, loading: isLoad });
+    setState((prevState) => ({
+      ...prevState,
+      loading: isLoad,
+    }));
+  };
+  const setData = (newData) => {
+    setState((prevState) => ({
+      ...prevState,
+      data: newData,
+    }));
+  };
+  const setFetch = (newData) => {
+    setState((prevState) => ({
+      ...prevState,
+      data: newData,
+      statics: newData,
+    }));
   };
 
   useEffect(() => {
-    dispatch(fetchStatics(setLoading));
+    dispatch(fetchStatics(setLoading, setFetch));
     return () => {
       dispatch(setEmptyStatics());
     };
@@ -38,22 +55,6 @@ const Report = ({ t, location }) => {
     {
       id: FILTER_OPERATOR.LIKE,
       name: t('filter_operator.like'),
-    },
-    {
-      id: FILTER_OPERATOR.START,
-      name: t('filter_operator.start'),
-    },
-    {
-      id: FILTER_OPERATOR.END,
-      name: t('filter_operator.end'),
-    },
-    {
-      id: FILTER_OPERATOR.EMPTY,
-      name: t('filter_operator.empty'),
-    },
-    {
-      id: FILTER_OPERATOR.NOT_EMPTY,
-      name: t('filter_operator.not_empty'),
     },
   ];
   const filters = {
@@ -77,14 +78,24 @@ const Report = ({ t, location }) => {
       ],
     },
   };
-  const filterFunction = (params) => {
-    console.log(params);
+
+  var filterFunction = (params) => {
+    let newData = params.filters.reduce((init, filter) => {
+      let filterValues, keyWord;
+      if (filter.rule === 'type') {
+        keyWord = filter.value;
+        filterValues = init.filter((record) => record.type === keyWord);
+      } else {
+        keyWord = slugify(filter.value);
+        filterValues = init.filter((record) => record.name.includes(keyWord));
+      }
+      return filterValues;
+    }, state.statics);
+    setData(newData);
   };
   const deleteRow = async (rowId) => {
-    console.log(rowId);
     dispatch(deleteStatic(rowId, t('message.successful_delete'), handleAfterDelete));
   };
-
   return (
     <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
       <Helmet>
@@ -95,7 +106,8 @@ const Report = ({ t, location }) => {
         t={t}
         columnDef={columnDef}
         route={ROUTE_PATH.STORE + '/'}
-        data={data}
+        data={state.data}
+        paging={state}
         deleteRow={deleteRow}
         disableCreate={true}
         disableEdit={true}

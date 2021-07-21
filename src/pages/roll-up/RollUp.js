@@ -37,7 +37,7 @@ const RollUp = ({ t, location }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-    loading: false,
+    loading: true,
     columnDefFlag: false,
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -380,7 +380,7 @@ const RollUp = ({ t, location }) => {
             >
               {value.assignment.length > 1 ? (
                 <div>
-                  <p className="mb-0">{value.assignment.length + ' ' + t('label.shifts')}</p>
+                  <p className="mb-0">{value.assignment.length + ' ' + t('label.shift_short')}</p>
                   <div>
                     {value.assignment.map((assignment, idx) => (
                       <Lens

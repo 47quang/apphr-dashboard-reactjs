@@ -3,7 +3,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleSettingExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -29,15 +29,17 @@ const handleSettingExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchGeneral = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-
   return async (dispatch, getState) => {
     api.setting
       .getGeneral(params)

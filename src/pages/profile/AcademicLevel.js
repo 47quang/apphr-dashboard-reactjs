@@ -15,12 +15,13 @@ import { NewDegreeSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyAcademic, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
+import NoData from '../page404/NoData';
 
 const AcademicLevel = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const initialValues = useSelector((state) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const newDegree = {
     level: '',
@@ -226,13 +227,16 @@ const AcademicLevel = ({ t, match }) => {
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
-  return (
-    <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
-        </div>
-      ) : (
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!initialValues.degrees.length) return <NoData />;
+  else
+    return (
+      <>
         <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
@@ -305,7 +309,7 @@ const AcademicLevel = ({ t, match }) => {
                     }}
                   >
                     {({ values, errors, touched, handleBlur, handleSubmit, handleChange, handleReset, setFieldValue }) => (
-                      <div className="shadow bg-white rounded p-4">
+                      <div className="shadow bg-white rounded p-4 mb-4">
                         {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
 
                         {renderButtons(
@@ -361,8 +365,7 @@ const AcademicLevel = ({ t, match }) => {
             </div>
           </div>
         </CContainer>
-      )}
-    </>
-  );
+      </>
+    );
 };
 export default AcademicLevel;

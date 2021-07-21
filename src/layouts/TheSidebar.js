@@ -22,10 +22,11 @@ const TheSidebar = () => {
   const permissionIds = localStorage.getItem('permissionIds');
   const roleId = localStorage.getItem('roleId');
   navigation = navigation.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
-  navigation = navigation.map((item) => {
+  navigation = navigation.reduce((init, item) => {
     if (item?._children) item._children = item._children.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
-    return item;
-  });
+    if (item?._children?.length !== 0) init.push(item);
+    return init;
+  }, []);
 
   const { t } = useTranslation();
   const permissionGroups = useSelector((state) => state.role.permissions);

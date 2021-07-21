@@ -28,6 +28,7 @@ const _nav = [
     _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.PROPOSAL,
     icon: 'cil-description',
+
     _children: [
       {
         _tag: 'CSidebarNavItem',
@@ -73,7 +74,7 @@ const _nav = [
         _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.CONTRACT_ATTRIBUTE,
         to: ROUTE_PATH.CONTRACT_ATTRIBUTE,
-        //permission: PERMISSION.LIST_TYPE_ARTICLE,
+        permission: PERMISSION.LIST_CONTRACT,
       },
       {
         _tag: 'CSidebarNavItem',
@@ -106,7 +107,7 @@ const _nav = [
     _tag: 'CSidebarNavDropdown',
     name: ROUTE_NAME.ACCOUNT,
     icon: 'cil-pencil',
-    permission: PERMISSION.LIST_USER,
+    //permission: PERMISSION.LIST_USER,
     _children: [
       {
         _tag: 'CSidebarNavItem',
@@ -131,15 +132,15 @@ const _nav = [
     _children: [
       {
         _tag: 'CSidebarNavItem',
-        name: ROUTE_NAME.ARTICLE_TYPE,
-        to: ROUTE_PATH.ARTICLE_TYPE,
-        permission: PERMISSION.LIST_TYPE_ARTICLE,
-      },
-      {
-        _tag: 'CSidebarNavItem',
         name: ROUTE_NAME.NOTIFICATION,
         to: ROUTE_PATH.NOTIFICATION,
         permission: PERMISSION.LIST_ARTICLE,
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: ROUTE_NAME.ARTICLE_TYPE,
+        to: ROUTE_PATH.ARTICLE_TYPE,
+        permission: PERMISSION.LIST_TYPE_ARTICLE,
       },
     ],
   },
@@ -148,6 +149,7 @@ const _nav = [
     name: ROUTE_NAME.STORE,
     to: ROUTE_PATH.STORE,
     icon: 'cil-print',
+    permission: PERMISSION.LIST_WAGE_HISTORY,
   },
   {
     _tag: 'CSidebarNavDropdown',

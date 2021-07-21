@@ -227,6 +227,7 @@
     "position_code": "Position Code",
     "shift_name": "Shift Name",
     "shift": "Shift",
+    "shift_short": "Shifts",
     "shift_code": "Shift Code",
     "shift_time": "Shift Time",
     "holiday": "Holiday",
@@ -369,7 +370,6 @@
     "unprocessed_remote_request": "Unprocessed remote requests",
     "unprocessed_overtime_request": "Unprocessed overtime requests",
     "roll_call_chart": "Roll call Chart",
-    "list_working": "Statistical chart of working shifts of the day",
     "day_offs_in_year": "Number of day off in a year",
     "chart_number_requests_in_month": "Statistical chart of the number of requests in the month",
     "chart_hours_in_month": "Statistical chart of working hours in the month",
@@ -422,7 +422,8 @@
     "file_type": "Type of file",
     "Excel": "Excel",
     "Word": "Word",
-    "macAddress": "MAC address"
+    "macAddress": "MAC address",
+    "download_sample": "Download sample data"
 
   },
   "title": {
@@ -461,7 +462,6 @@
     "export_profile": "Export list profiles",
     "import_profile": "Upload list profiles",
     "delete_file": "Delete this file"
-
   },
   "filter_operator": {
     "in": "in",
@@ -482,9 +482,12 @@
     "like": "like",
     "not_like": "not like",
     "contain": "contain",
-    "custom": "custom"
+    "custom": "custom",
+    "start": "start",
+    "end": "end"
   },
   "message": {
+    "404": "The page you are looking for was not found.",
     "sign_in": "Sign in with your account",
     "successful_update": "Update successfully",
     "successful_active": "Activate successfully",
@@ -496,7 +499,7 @@
     "delete_row": "Delete row",
     "edit_row": "Details",
     "delete_warning_message": "Are you sure to delete this row?",
-    "delete_file_warning_message":  "Are you sure to delete this file?",
+    "delete_file_warning_message": "Are you sure to delete this file?",
     "confirm_delete_contact": "Are you sure to delete this channel?",
     "confirm_delete_academic": "Are you sure to delete this academic ?",
     "confirm_delete_contract": "Are you sure to delete this contract?",
@@ -510,7 +513,7 @@
     "add": "Create",
     "successful_reset_password": "Password reset successful",
     "no_data": "No Data",
-    "download" : "Download",
+    "download": "Download",
     "no_options": "No options",
     "something_went_wrong": "Something went wrong"
   },
@@ -637,10 +640,19 @@
     "enter_contract_fullname": "Enter contract fullname",
     "select_benefit_status": "Select Benefit status",
     "enter_benefit_code": "Enter benefit code",
+    "select_history_working_status": "Select history working status",
+    "select_month": "Select month",
+    "enter_file_name": "Enter file name",
     "enter_code": "Enter identify code"
-
   },
   "validation": {
+    "required_select_branch": "Required to select branch",
+    "required_enter_notification_title": "Required to enter title",
+    "required_enter_notification_code": "Required to enter code",
+    "required_select_notification_type": "Required to select type",
+    "required_enter_description": "Required to enter description",
+    "required_enter_content": "Required to enter content",
+    "required_select_file": "Required to select data file",
     "required_enter_fee_code": "Required to enter Fee Code",
     "required_enter_allowance_code": "Required to enter Allowance Code",
     "required_enter_wage_code": "Required to enter Salary group Code",
@@ -791,6 +803,11 @@
     "required_enter_allowance_level": "Required to enter Allowance Level",
     "required_select_contract_id": "Required to select a Contract",
     "required_enter_benefit_code": "Required to enter benefit code",
+    "required_select_contract_status": "Required to select contract status",
+    "required_select_benefit_status": "Required to select benefit status",
+    "required_select_history_working_status": "Required to select history working status",
+    "required_select_month": "Required to select month",
+    "required_enter_file_name": "Required to enter file name",
     "start_of_file_name": "Invalid file name",
     "required_enter_code": "Required to enter identify code"
   },

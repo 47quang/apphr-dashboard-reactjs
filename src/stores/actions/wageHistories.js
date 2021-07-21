@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleWageExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,14 +30,17 @@ const handleWageExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchWageHistories = (params, setLoading, t) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wageHistory
       .getAll(params)
@@ -69,7 +72,6 @@ export const fetchWageHistories = (params, setLoading, t) => {
 };
 
 export const fetchWageHistory = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.wageHistory
       .get(id)

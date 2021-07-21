@@ -127,7 +127,7 @@ const Contract = ({ t, location, history }) => {
   const [paging, setPaging] = useState({
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
-    loading: false,
+    loading: true,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) => {
@@ -135,6 +135,13 @@ const Contract = ({ t, location, history }) => {
       ...prevState,
       currentPage: pageNumber,
     }));
+  };
+  const onPreviousPage = () => {
+    if (paging.currentPage !== 0)
+      setPaging((prevState) => ({
+        ...prevState,
+        currentPage: prevState.currentPage - 1,
+      }));
   };
   const onPageSizeChange = (newPageSize) =>
     setPaging((prevState) => ({
@@ -200,6 +207,7 @@ const Contract = ({ t, location, history }) => {
           perpage: paging.pageSize,
         },
         setLoading,
+        onPreviousPage,
       ),
     );
   };

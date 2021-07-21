@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -11,10 +12,11 @@ const UpdateAllowance = ({ t, location, history, match }) => {
   const allowanceInfoForm = useRef();
   const dispatch = useDispatch();
   const allowance = useSelector((state) => state.allowance.allowance);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAllowance(match.params?.id, setLoading));
+    else setLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,6 +67,12 @@ const UpdateAllowance = ({ t, location, history, match }) => {
           position: 'left',
         },
       ];
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
   if (permissionIds.includes(PERMISSION.GET_ALLOWANCE))
     return (
       <AllowanceItemBody

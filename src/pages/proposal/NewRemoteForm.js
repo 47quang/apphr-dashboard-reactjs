@@ -214,7 +214,7 @@ const NewRemoteForm = ({ t, history, match }) => {
                 />
                 <div className="row">
                   <CommonSelectInput
-                    containerClassName={'form-group col-xl-12'}
+                    containerClassName={'form-group col-xl-12  '}
                     value={values.status ?? ''}
                     onBlur={handleBlur('status')}
                     onChange={handleChange('status')}

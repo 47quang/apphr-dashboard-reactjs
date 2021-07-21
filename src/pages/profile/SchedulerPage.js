@@ -81,7 +81,7 @@ const SchedulerPage = ({ t, history, match }) => {
     visible: false,
     day: 0,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const resources = [
     {
       fieldName: 'status',
@@ -284,8 +284,8 @@ const SchedulerPage = ({ t, history, match }) => {
               <EditingState />
               <IntegratedEditing />
               <WeekView
-                startDayHour={6}
-                endDayHour={22}
+                startDayHour={0}
+                endDayHour={24}
                 cellDuration={60}
                 timeTableCellComponent={TimeTableCell}
                 dayScaleCellComponent={DayScaleCell}

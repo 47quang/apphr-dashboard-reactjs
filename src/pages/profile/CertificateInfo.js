@@ -14,11 +14,12 @@ import { NewCertificateSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyCertificate, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
+import NoData from '../page404/NoData';
 
 const CertificateInfo = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const initialValues = useSelector((state) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   let newCertificate = {
     name: '',
     certificateType: '',
@@ -222,13 +223,16 @@ const CertificateInfo = ({ t, match }) => {
   const handleCloseDeleteAlert = () => {
     setIsVisibleDeleteAlert(false);
   };
-  return (
-    <>
-      {loading ? (
-        <div className="text-center pt-4">
-          <CircularProgress />
-        </div>
-      ) : (
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  else if (!initialValues.degrees.length) return <NoData />;
+  else
+    return (
+      <>
         <CContainer fluid className="c-main m-auto p-4">
           <div style={{ position: 'fixed', bottom: 40, right: 40, zIndex: 1000 }}>
             <button
@@ -358,8 +362,7 @@ const CertificateInfo = ({ t, match }) => {
             </div>
           </div>
         </CContainer>
-      )}
-    </>
-  );
+      </>
+    );
 };
 export default CertificateInfo;

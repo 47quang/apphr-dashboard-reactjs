@@ -6,12 +6,12 @@ import { useDispatch } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
+import FormHeader from 'src/components/text/FormHeader';
+import Label from 'src/components/text/Label';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
-import Label from 'src/components/text/Label';
 import { generateCode } from 'src/utils/randomCode';
-import FormHeader from 'src/components/text/FormHeader';
 
 const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons, loading, isCreate }) => {
   const dispatch = useDispatch();
@@ -210,6 +210,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       placeholder={t('placeholder.enter_branch_address')}
                       inputClassName={'form-control'}
                     />
+                    {/* <CommonPlaceAutocomplete /> */}
                   </div>
                   <div className="row">
                     <CommonMultipleTextInput

@@ -3,7 +3,7 @@ import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 const handleStaticExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -29,20 +29,23 @@ const handleStaticExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 
-export const fetchStatics = (setLoading) => {
+export const fetchStatics = (setLoading, setFetch) => {
   const type = {
     xlsx: 'Excel',
     docx: 'Word',
     csv: 'Excel',
   };
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.static
       .getAll()
@@ -58,6 +61,8 @@ export const fetchStatics = (setLoading) => {
             rvPayload.push(e);
           }
         }
+        if (setFetch) setFetch(rvPayload);
+
         dispatch({ type: REDUX_STATE.static.SET_STATICS, payload: rvPayload });
       })
       .catch((err) => {

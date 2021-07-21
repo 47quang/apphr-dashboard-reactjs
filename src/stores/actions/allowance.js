@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleAllowanceExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,15 +30,17 @@ const handleAllowanceExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchAllowances = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-
   return (dispatch, getState) => {
     api.allowance
       .getAll(params)
@@ -63,7 +65,6 @@ export const fetchAllowances = (params, setLoading) => {
 };
 
 export const fetchAllowance = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.allowance
       .get(id)

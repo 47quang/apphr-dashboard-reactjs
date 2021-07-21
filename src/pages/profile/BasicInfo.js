@@ -26,10 +26,12 @@ const BasicInfo = ({ t, history, match }) => {
   const isCreate = match?.params.id ? true : false;
   const dispatch = useDispatch();
   const refInfo = useRef();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (profileId) {
+      if (profileId === 1)
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'not found profile' } });
       if (permissionIds.includes(PERMISSION.GET_PROFILE)) {
         if (provinces.length === 0) dispatch(fetchProvinces());
         dispatch(fetchProfile(profileId, setLoading));
@@ -320,7 +322,6 @@ const BasicInfo = ({ t, history, match }) => {
                           </div>
                         </div>
                         <div className="row"></div>
-                        <Label text={t('label.ID_passport')} labelID="checkbox-id-password" className="py-2" />
                         <div className="row">
                           <div className="col-lg-6">
                             <>

@@ -14,7 +14,7 @@ const dayIndex = {
   6: 'saturday',
 };
 const handleAssignmentExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -40,14 +40,17 @@ const handleAssignmentExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
-export const fetchAssignments = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
+export const fetchAssignments = (params, setLoading) => {
   return (dispatch, getState) => {
     api.assignment
       .getAll(params)
@@ -77,7 +80,6 @@ export const fetchAssignments = (params, onTotalChange, setLoading) => {
 };
 
 export const fetchAssignmentsInDate = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
       .getAll(params)
@@ -109,9 +111,6 @@ const compareHours = (a1, a2) => {
 
 export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
   let from = params?.from ? moment(params.from) : undefined;
-  if (setLoading) {
-    setLoading(true);
-  }
   return (dispatch, getState) => {
     api.profile
       .getRollUpTable(params)
@@ -120,6 +119,10 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
         payload =
           payload && payload.length > 0
             ? payload.map((a) => {
+                if (a.id === 1) {
+                  total -= 1;
+                  return a;
+                }
                 let x = {
                   id: a.id,
                   fullname: a.fullname,
@@ -213,7 +216,6 @@ export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
 };
 
 export const fetchAssignment = (id, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.assignment
       .get(id)

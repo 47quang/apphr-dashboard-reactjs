@@ -342,7 +342,6 @@ const QTable = (props) => {
   });
   const [rowChanges, setRowChanges] = useState({});
   const [columnOrder, setColumnOrder] = useState(columnDef.map((col) => col.name));
-
   const tableColumnExtensions = columnDef
     ? columnDef.map((col, idx) => {
         return {
@@ -412,19 +411,19 @@ const QTable = (props) => {
           return '/setting/holiday/' + modelId;
         }
         case 'role': {
-          return '/setting/role/' + modelId;
+          return '/role/' + modelId;
         }
         case 'type-article': {
-          return '/setting/articleType/' + modelId;
+          return '/articleType/' + modelId;
         }
         case 'attribute': {
-          return '/setting/attribute/' + modelId;
+          return '/attribute/' + modelId;
         }
         case 'wage': {
-          return '/setting/wage/' + modelId;
+          return '/wage/' + modelId;
         }
         case 'allowance': {
-          return '/setting/allowance/' + modelId;
+          return '/allowance/' + modelId;
         }
         case 'user': {
           return '/account/' + modelId;
@@ -436,7 +435,7 @@ const QTable = (props) => {
           return '/benefit/' + modelId;
         }
         case 'payment': {
-          return '/setting/taxDefine/' + modelId;
+          return '/taxDefine/' + modelId;
         }
         case 'article': {
           return '/notification/' + modelId;
@@ -569,7 +568,7 @@ const QTable = (props) => {
             <InfoIcon />
           </IconButton>
         ) : (
-          <Link to={`${route}${row.id}`}>
+          <Link to={{ pathname: `${route}${row.id}`, state: { prevURL: window.location.href } }}>
             <IconButton className="mx-2 my-0 p-0" hidden={disableEdit} title={t('message.edit_row')} style={{ width: 35, height: 35 }}>
               <InfoIcon />
             </IconButton>
@@ -693,7 +692,7 @@ const QTable = (props) => {
             />
           )}
           <TableColumnReordering order={columnOrder} onOrderChange={setColumnOrder} />
-          {notPaging && <VirtualTable height={636} />}
+          {notPaging && <VirtualTable height={636} noDataCellComponent={NoDataCellComponent} />}
           {paddingColumnHeader ? <TableHeaderRow cellComponent={Label} /> : <TableHeaderRow />}
           {/* <Toolbar rootComponent={ToolbarRoot} /> */}
           {disableToolBar ? (

@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleRequestExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -45,24 +45,33 @@ const handleRequestExceptions = (err, dispatch, functionName) => {
         });
         break;
 
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchLeaveRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload?.length > 0
-            ? payload.map((req) => {
+            ? payload.reduce((accumulator, req) => {
+                if (req?.profile?.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
+                accumulator.push(req);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,
@@ -78,48 +87,8 @@ export const fetchLeaveRequests = (params, setLoading) => {
       });
   };
 };
-export const filterLeaveRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-  return (dispatch, getState) => {
-    api.leaveRequest
-      .filter(params)
-      .then(({ payload, total }) => {
-        payload =
-          payload && payload?.length > 0
-            ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
-                switch (req.type) {
-                  case 'pay':
-                    req.type = 'Nghỉ có trả lương';
-                    break;
-                  case 'no-pay':
-                    req.type = 'Nghỉ không trả lương';
-                    break;
-                  default:
-                    req.type = 'Nghỉ theo chế độ';
-                    break;
-                }
-                req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
-            : [];
-        payload = {
-          payload: payload,
-          total: total,
-        };
-        dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
-      })
-      .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'filterLeaveRequests');
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
-      });
-  };
-};
 
 export const fetchLeaveRequest = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.leaveRequest
       .get(id)
@@ -132,9 +101,11 @@ export const fetchLeaveRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
-        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
-        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        if (workingAt?.payload) {
+          payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
+          payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+          payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        }
 
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
@@ -198,18 +169,22 @@ export const rejectLeaveRequest = (id, success_msg) => {
 };
 
 export const fetchRemoteRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload?.length > 0
-            ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+            ? payload.reduce((accumulator, req) => {
+                if (req?.profile?.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
+                accumulator.push(req);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,
@@ -226,37 +201,8 @@ export const fetchRemoteRequests = (params, setLoading) => {
       });
   };
 };
-export const filterRemoteRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-  return (dispatch, getState) => {
-    api.remoteRequest
-      .filter(params)
-      .then(({ payload, total }) => {
-        payload =
-          payload && payload?.length > 0
-            ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
-            : [];
-        payload = {
-          payload: payload,
-          total: total,
-        };
-        dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
-      })
-      .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'filterRemoteRequests');
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
-      });
-  };
-};
 
 export const fetchRemoteRequest = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.remoteRequest
       .get(id)
@@ -269,9 +215,11 @@ export const fetchRemoteRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
-        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
-        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        if (workingAt?.payload) {
+          payload.branch = workingAt.payload?.branch.code + ' - ' + workingAt.payload.branch.name;
+          payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+          payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        }
         payload.assignments =
           payload.assignments && payload.assignments.length > 0
             ? payload.assignments.map((ass) => {
@@ -332,18 +280,22 @@ export const rejectRemoteRequest = (id, success_msg) => {
 };
 
 export const fetchOvertimeRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload?.length > 0
-            ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
+            ? payload.reduce((accumulator, req) => {
+                if (req?.profile?.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
+                req.fullname = req?.profile?.fullname ?? '';
                 req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
+                accumulator.push(req);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,
@@ -359,37 +311,8 @@ export const fetchOvertimeRequests = (params, setLoading) => {
       });
   };
 };
-export const filterOvertimeRequests = (params, setLoading) => {
-  if (setLoading) setLoading(true);
-  return (dispatch, getState) => {
-    api.overtimeRequest
-      .filter(params)
-      .then(({ payload, total }) => {
-        payload =
-          payload && payload?.length > 0
-            ? payload.map((req) => {
-                req.fullname = req.profile.fullname;
-                req.createdAt = formatDateTimeToString(req.createdAt);
-                return req;
-              })
-            : [];
-        payload = {
-          payload: payload,
-          total: total,
-        };
-        dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
-      })
-      .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'filterOvertimeRequests');
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
-      });
-  };
-};
 
 export const fetchOvertimeRequest = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.overtimeRequest
       .get(id)
@@ -402,9 +325,11 @@ export const fetchOvertimeRequest = (id, setLoading) => {
         payload.phone = payload.profileId ? payload.profile.phone : '';
         payload.email = payload.profileId ? payload.profile.email : '';
         let workingAt = await api.profile.getActiveWorking(payload.profileId);
-        payload.branch = workingAt.payload.branch.code + ' - ' + workingAt.payload.branch.name;
-        payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
-        payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        if (workingAt?.payload) {
+          payload.branch = workingAt.payload?.branch.code + ' - ' + workingAt.payload.branch.name;
+          payload.department = workingAt.payload.department.code + ' - ' + workingAt.payload.department.name;
+          payload.position = workingAt.payload.position.code + ' - ' + workingAt.payload.position.name;
+        }
         payload.assignment = parseLocalTime(payload.shift.startCC) + ' - ' + parseLocalTime(payload.shift.endCC) + ' - ' + formatDate(payload.date);
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })

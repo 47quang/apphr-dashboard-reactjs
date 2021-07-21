@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -18,7 +19,7 @@ const UpdatePosition = ({ t, location, match, history }) => {
   const departments = useSelector((state) => state.department.departments);
   const branches = useSelector((state) => state.branch.branches);
   const position = useSelector((state) => state.position.position);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_POSITION)) {
@@ -30,6 +31,8 @@ const UpdatePosition = ({ t, location, match, history }) => {
         dispatch(changeActions([]));
         dispatch(setEmptyPosition());
       };
+    } else {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -80,7 +83,13 @@ const UpdatePosition = ({ t, location, match, history }) => {
           position: 'left',
         },
       ];
-  if (permissionIds.includes(PERMISSION.GET_POSITION))
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
+  if (permissionIds.includes(PERMISSION.GET_POSITION) && position.id !== '')
     return (
       <PositionItemBody
         t={t}

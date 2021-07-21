@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
@@ -10,10 +11,11 @@ const UpdateNotification = ({ t, location, history, match }) => {
   const articleInfoForm = useRef();
   const dispatch = useDispatch();
   const article = useSelector((state) => state.article.article);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_ARTICLE)) dispatch(fetchArticle(match?.params?.id, setLoading));
+    else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,6 +65,12 @@ const UpdateNotification = ({ t, location, history, match }) => {
           position: 'left',
         },
       ];
+  if (loading)
+    return (
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
+    );
   if (permissionIds.includes(PERMISSION.GET_ARTICLE))
     return (
       <NotificationForm

@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleContractExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,7 +30,11 @@ const handleContractExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
@@ -48,7 +52,6 @@ const status = {
 };
 
 export const fetchContracts = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -97,8 +100,7 @@ export const fetchContracts = (params, setLoading) => {
   };
 };
 
-export const fetchContractTable = (params, setLoading) => {
-  if (setLoading) setLoading(true);
+export const fetchContractTable = (params, setLoading, onPreviousPage) => {
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -114,11 +116,14 @@ export const fetchContractTable = (params, setLoading) => {
                 return contract;
               })
             : [];
-        payload = {
-          payload: payload,
-          total: total,
-        };
-        dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        if (!payload.length && onPreviousPage) onPreviousPage();
+        else {
+          payload = {
+            payload: payload,
+            total: total,
+          };
+          dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
+        }
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContracts');
@@ -130,7 +135,6 @@ export const fetchContractTable = (params, setLoading) => {
 };
 
 export const fetchWageHistories = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .getAll(params)
@@ -174,7 +178,6 @@ export const fetchWageHistories = (params, setLoading) => {
 };
 
 export const fetchContract = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.contract
       .get(id)

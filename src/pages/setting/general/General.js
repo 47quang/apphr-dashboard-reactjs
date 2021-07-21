@@ -25,7 +25,7 @@ const SettingGeneralPage = ({ t, location }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (provinces.length === 0) dispatch(fetchProvinces());
@@ -68,7 +68,7 @@ const SettingGeneralPage = ({ t, location }) => {
       </Helmet>
       <div className="m-auto">
         {loading ? (
-          <div className="text-center">
+          <div className="text-center pt-4">
             <CircularProgress />
           </div>
         ) : (

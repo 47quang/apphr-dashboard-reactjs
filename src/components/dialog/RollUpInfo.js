@@ -26,7 +26,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     total: 0,
-    loading: false,
+    loading: true,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
   });
   const onCurrentPageChange = (pageNumber) =>
@@ -78,7 +78,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
         ) : (
           <>
             <div className="row">
-              <div className="col-6 d-flex py-2 justify-content-start align-items-center">
+              <div className="col-6 d-flex py-2 justify-content-start align-items-start">
                 <Avatar alt="avatar" src={avatar} className="mr-3" />
                 <div>
                   <div>
@@ -93,10 +93,25 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
                   </div>
                 </div>
               </div>
-              <div className="col-6">
-                <p className="mb-1">{t('label.shift_name') + ' : ' + assignment.shiftCode + ' - ' + assignment.shiftName}</p>
-                <p className="mb-1">{t('label.from') + assignment.startCC + t('label.to') + assignment.endCC}</p>
-                <p>{t('label.branch') + ' : ' + rows.branch}</p>
+              <div className="col-6 py-2">
+                <div className="row">
+                  <div className="col-3">{t('label.shift_name')}</div>
+                  <div className="col-9">
+                    <b>{assignment.shiftCode + ' - ' + assignment.shiftName}</b>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-3">{t('label.from')}</div>
+                  <div className="col-9">
+                    <b>{assignment.startCC + t('label.to') + assignment.endCC}</b>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-3">{t('label.branch')}</div>
+                  <div className="col-9">
+                    <b>{rows.branch}</b>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -105,6 +120,7 @@ const RollUpInfo = ({ t, isOpen, handleClose, profileCode, fullName, avatar, ass
               columnDef={columnDef}
               data={rows?.rollUps ?? []}
               paging={paging}
+              total={paging.total}
               onCurrentPageChange={onCurrentPageChange}
               onPageSizeChange={onPageSizeChange}
               disableFilter={true}

@@ -1,12 +1,14 @@
+import { CircularProgress } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION } from 'src/constants/key';
-import { setSubTabName, setTabName } from 'src/stores/actions/profile';
+import { fetchProfile, setSubTabName, setTabName } from 'src/stores/actions/profile';
+import { REDUX_STATE } from 'src/stores/states';
 import { joinClassName } from 'src/utils/stringUtils';
 import Page404 from '../page404/Page404';
 import Proposal from '../proposal/Proposal';
@@ -63,11 +65,13 @@ const ProfileTabs = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const classes = useStyles();
   const theme = useTheme();
-  // const basicInfoRef = createRef();
   const tabName = useSelector((state) => state.profile.tabName);
   const subTabName = useSelector((state) => state.profile.subTabName);
   const dispatch = useDispatch();
   const isCreate = match.params.id ? false : true;
+  const profileId = +match?.params?.id;
+  const currentProfileId = useSelector((state) => state.profile.currentProfileId);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (event, newValue) => {
     dispatch(setTabName(newValue));
@@ -78,6 +82,12 @@ const ProfileTabs = ({ t, history, match }) => {
     dispatch(setSubTabName(newValue));
   };
   useEffect(() => {
+    if (profileId) {
+      if (profileId === 1) {
+        setLoading(false);
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: 'not found profile' } });
+      } else dispatch(fetchProfile(profileId, setLoading));
+    }
     return () => {
       dispatch(setTabName(0));
       dispatch(setSubTabName(0));
@@ -87,7 +97,7 @@ const ProfileTabs = ({ t, history, match }) => {
   const returnComponent = (
     <>
       <div className={classes.root} id="profile-tabs">
-        <AppBar position="static" color="default">
+        <AppBar position="sticky" color="default">
           <Tabs
             value={tabName}
             onChange={handleChange}
@@ -105,7 +115,7 @@ const ProfileTabs = ({ t, history, match }) => {
         </AppBar>
         <TabPanel value={tabName} index={0} dir={theme.direction}>
           <div className={joinClassName([classes.root, 'pb-5'])}>
-            <AppBar position="static" color="default">
+            <AppBar position="sticky" color="default">
               <Tabs
                 value={subTabName}
                 onChange={handleChangeSubTab}
@@ -157,7 +167,7 @@ const ProfileTabs = ({ t, history, match }) => {
         </TabPanel>
         <TabPanel value={tabName} index={2}>
           <div className={joinClassName([classes.root, 'pb-5'])}>
-            <AppBar position="static" color="default">
+            <AppBar position="sticky" color="default">
               <Tabs
                 value={subTabName}
                 onChange={handleChangeSubTab}
@@ -188,19 +198,21 @@ const ProfileTabs = ({ t, history, match }) => {
           <Statistic t={t} profileId={match?.params?.id} />
         </TabPanel>
       </div>
-      {/* <div
-      className={joinClassName(['bg-white d-flex flex-column justify-content-center', 'px-4'])}
-      style={{ position: 'fixed', right: 0, bottom: 0, width: `${snackBarWidth}px`, height: 50, borderTop: '0.5px solid #d8dbe0' }}
-    >
-      {renderButtons(buttons)}
-    </div> */}
+    </>
+  );
+  const waiting = (
+    <>
+      <div className="text-center pt-4">
+        <CircularProgress />
+      </div>
     </>
   );
   if (isCreate) {
     if (permissionIds.includes(PERMISSION.CREATE_PROFILE)) return returnComponent;
     else return <Page404 />;
   } else {
-    if (permissionIds.includes(PERMISSION.GET_PROFILE)) return returnComponent;
+    if (loading) return waiting;
+    if (permissionIds.includes(PERMISSION.GET_PROFILE) && profileId !== 1 && currentProfileId) return returnComponent;
     else return <Page404 />;
   }
 };

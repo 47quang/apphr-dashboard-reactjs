@@ -4,7 +4,7 @@ import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
 const handleRoleExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = '';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -30,7 +30,11 @@ const handleRoleExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
@@ -44,7 +48,6 @@ const formatDownloadedData = (payload) => {
 };
 
 export const fetchRoles = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .getAll(params)
@@ -63,7 +66,6 @@ export const fetchRoles = (params, setLoading) => {
 };
 
 export const fetchRole = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.role
       .get(id)

@@ -1,22 +1,19 @@
 import { CContainer } from '@coreui/react';
+import Chip from '@material-ui/core/Chip';
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { FILTER_OPERATOR, PAGE_SIZES, ROUTE_PATH } from 'src/constants/key';
+import { COLORS } from 'src/constants/theme';
 import {
   fetchLeaveRequests,
-  fetchRemoteRequests,
   fetchOvertimeRequests,
+  fetchRemoteRequests,
   setEmptyLeaveRequests,
-  setEmptyRemoteRequests,
   setEmptyOverTimeRequests,
-  filterLeaveRequests,
-  filterOvertimeRequests,
-  filterRemoteRequests,
+  setEmptyRemoteRequests,
 } from 'src/stores/actions/request';
-import Chip from '@material-ui/core/Chip';
-import { COLORS } from 'src/constants/theme';
-import { Helmet } from 'react-helmet';
 
 // import { deleteProfile, fetchProfiles } from 'src/stores/actions/profile';
 
@@ -29,7 +26,7 @@ const equalQTable = (prevProps, nextProps) => {
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
-  let filterObject = location.state ?? {};
+  let filterObject = location?.state ?? {};
   if (!type) type = match.path.split('/')[1];
   const [columnDef, setColumnDef] = useState(
     type === 'leave'
@@ -57,7 +54,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
     currentPage: 0,
     pageSize: PAGE_SIZES.LEVEL_1,
     pageSizes: [PAGE_SIZES.LEVEL_1, PAGE_SIZES.LEVEL_2, PAGE_SIZES.LEVEL_3],
-    loading: false,
+    loading: true,
   });
   const operatesText = [
     {
@@ -296,7 +293,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
     if (type === 'leave')
       profileId
         ? dispatch(
-            filterLeaveRequests(
+            fetchLeaveRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -307,7 +304,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
             ),
           )
         : dispatch(
-            filterLeaveRequests(
+            fetchLeaveRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -319,7 +316,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
     else if (type === 'remote')
       profileId
         ? dispatch(
-            filterRemoteRequests(
+            fetchRemoteRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -330,7 +327,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
             ),
           )
         : dispatch(
-            filterRemoteRequests(
+            fetchRemoteRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -342,7 +339,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
     else
       profileId
         ? dispatch(
-            filterOvertimeRequests(
+            fetchOvertimeRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -353,7 +350,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
             ),
           )
         : dispatch(
-            filterOvertimeRequests(
+            fetchOvertimeRequests(
               {
                 ...params,
                 page: paging.currentPage,
@@ -397,8 +394,8 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
           columnDef={columnDef}
           data={proposals?.payload ?? []}
           route={ROUTE_PATH.LEAVE + '/'}
-          disableDelete={true}
-          // disableCreate={true}
+          // disableDelete={true}
+          disableToolBar={profileId ? true : false}
           statusCols={['type', 'status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}
@@ -426,7 +423,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
           route={(type === 'remote' ? ROUTE_PATH.REMOTE : ROUTE_PATH.OVERTIME) + '/'}
           idxColumnsFilter={[0, 1, 3]}
           disableDelete={true}
-          // disableCreate={true}
+          disableToolBar={profileId ? true : false}
           statusCols={['status']}
           paging={paging}
           onCurrentPageChange={onCurrentPageChange}

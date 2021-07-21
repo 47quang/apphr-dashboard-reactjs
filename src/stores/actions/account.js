@@ -4,7 +4,7 @@ import { REDUX_STATE } from '../states';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 
 const handleAccountExceptions = (err, dispatch, functionName) => {
-  console.log(functionName + ' errors', err.response);
+  console.debug(functionName + ' errors', err.response);
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -31,28 +31,36 @@ const handleAccountExceptions = (err, dispatch, functionName) => {
       case RESPONSE_CODE.CE_BAD_REQUEST:
         errorMessage = err.response.data.message.en;
         break;
+      case RESPONSE_CODE.CE_NOT_FOUND:
+        errorMessage = err.response.data.message.en;
+        break;
       default:
+        errorMessage = err.response?.data?.message?.en || errorMessage;
         break;
     }
   }
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 export const fetchAccounts = (params, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .getAll(params)
       .then(({ payload, total }) => {
         payload =
           payload && payload.length > 0
-            ? payload.map((a) => {
+            ? payload.reduce((accumulator, a) => {
+                if (a.id === 1) {
+                  total -= 1;
+                  return accumulator;
+                }
                 a.role = a.role.name;
                 a.profileCode = a.profile.code;
                 a.profileId = a.profile.id;
                 a.employee = a.profile.code + ' - ' + a.profile.fullname;
                 a.createdAt = formatDateTimeToString(a.createdAt);
-                return a;
-              })
+                accumulator.push(a);
+                return accumulator;
+              }, [])
             : [];
         payload = {
           payload: payload,
@@ -70,7 +78,6 @@ export const fetchAccounts = (params, setLoading) => {
 };
 
 export const filterAccounts = (params, onTotalChange, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .filter(params)
@@ -95,7 +102,6 @@ export const filterAccounts = (params, onTotalChange, setLoading) => {
 };
 
 export const fetchAccount = (id, setLoading) => {
-  if (setLoading) setLoading(true);
   return (dispatch, getState) => {
     api.account
       .get(id)
