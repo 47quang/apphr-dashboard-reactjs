@@ -9,7 +9,9 @@ import { deleteRole, fetchRoles } from 'src/stores/actions/role';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
-    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
+    JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef) &&
+    JSON.stringify(prevProps.paging.loading) === JSON.stringify(nextProps.paging.loading)
   );
 };
 
