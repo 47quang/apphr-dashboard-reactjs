@@ -423,7 +423,10 @@
     "Excel": "Excel",
     "Word": "Word",
     "macAddress": "Địa chỉ MAC",
-    "download_sample": "Tải xuống file mẫu"
+    "download_sample": "Tải xuống file mẫu",
+    "days_need_renew": "Số ngày còn hạn hợp đồng ít hơn:",
+    "list_contract_need_renew": "Danh sách nhân viên sắp hết hạn hợp đồng",
+    "list_activity": "Lịch sử thao tác"
   },
   "title": {
     "confirm": "Xác nhận",
@@ -645,6 +648,9 @@
     "enter_code": "Nhập mã định danh"
   },
   "validation": {
+    "required_positive_days": "Số ngày phải là số không âm",
+    "required_integer_days": "Số ngày phải là một só nguyên",
+    "required_enter_days": "Bắt buộc phải nhập số ngày",
     "required_select_branch": "Bắt buộc phải chọn chi nhánh",
     "required_enter_notification_title": "Bắt buộc phải nhập tiêu đề",
     "required_enter_notification_code": "Bắt buộc phải nhập mã thông báo",

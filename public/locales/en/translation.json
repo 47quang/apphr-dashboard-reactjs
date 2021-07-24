@@ -423,7 +423,11 @@
     "Excel": "Excel",
     "Word": "Word",
     "macAddress": "MAC address",
-    "download_sample": "Download sample data"
+    "download_sample": "Download sample data",
+    "days_need_renew": "Fewer days of contract remaining :",
+    "list_contract_need_renew": "List of employees whose contracts are about to expire",
+    "list_activity": "Activity history"
+
 
   },
   "title": {
@@ -646,6 +650,9 @@
     "enter_code": "Enter identify code"
   },
   "validation": {
+    "required_positive_days": "Days is a positive number",
+    "required_integer_days": "Days is an integer number",
+    "required_enter_days": "Required to enter days",
     "required_select_branch": "Required to select branch",
     "required_enter_notification_title": "Required to enter title",
     "required_enter_notification_code": "Required to enter code",

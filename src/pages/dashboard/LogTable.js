@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
 import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
 import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
+import { CCard, CCardHeader } from '@coreui/react';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
-    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
+    JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef) &&
+    JSON.stringify(prevProps.paging.loading) === JSON.stringify(nextProps.paging.loading)
   );
 };
 
@@ -79,19 +82,24 @@ const LogTable = ({ t }) => {
     ]);
   }, [t]);
   return (
-    <MemoizedQTable
-      t={t}
-      disableFilter={true}
-      columnDef={columnDef}
-      data={logData?.payload ?? []}
-      disableEditColum={true}
-      paging={paging}
-      onCurrentPageChange={onCurrentPageChange}
-      onPageSizeChange={onPageSizeChange}
-      disableToolBar={true}
-      linkCols={[{ name: 'message' }]}
-      total={logData?.total ?? 0}
-    />
+    <CCard>
+      <CCardHeader>
+        <b>{t('label.list_activity')}</b>
+      </CCardHeader>
+      <MemoizedQTable
+        t={t}
+        disableFilter={true}
+        columnDef={columnDef}
+        data={logData?.payload ?? []}
+        disableEditColum={true}
+        paging={paging}
+        onCurrentPageChange={onCurrentPageChange}
+        onPageSizeChange={onPageSizeChange}
+        disableToolBar={true}
+        linkCols={[{ name: 'message' }]}
+        total={logData?.total ?? 0}
+      />
+    </CCard>
   );
 };
 

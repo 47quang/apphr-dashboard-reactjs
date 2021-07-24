@@ -21,7 +21,9 @@ import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
-    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef)
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
+    JSON.stringify(prevProps.columnDef) === JSON.stringify(nextProps.columnDef) &&
+    JSON.stringify(prevProps.paging.loading) === JSON.stringify(nextProps.paging.loading)
   );
 };
 
@@ -245,7 +247,6 @@ const RollUp = ({ t, location }) => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, paging.currentPage, paging.pageSize]);
-
   useEffect(() => {
     return () => {
       dispatch(setEmptyAssignments());

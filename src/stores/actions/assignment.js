@@ -109,7 +109,7 @@ const compareHours = (a1, a2) => {
   return +a1.startCC.split(':')[0] - a2.startCC.split(':')[0];
 };
 
-export const fetchRollUpTable = (params, onTotalChange, setLoading) => {
+export const fetchRollUpTable = (params, setLoading) => {
   let from = params?.from ? moment(params.from) : undefined;
   return (dispatch, getState) => {
     api.profile

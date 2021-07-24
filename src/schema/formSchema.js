@@ -1164,3 +1164,10 @@ export const LoginSchema = Yup.object().shape({
   username: Yup.string().trim().required('validation.required_enter_username'),
   password: Yup.string().trim().min(6, 'validation.password_length_must_be_greater_than_6').required('validation.required_enter_password'),
 });
+
+export const EnterNumber = Yup.object().shape({
+  days: Yup.number()
+    .positive('validation.required_positive_days')
+    .integer('validation.required_integer_days')
+    .required('validation.required_enter_days'),
+});

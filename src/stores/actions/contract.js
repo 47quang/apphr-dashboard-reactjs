@@ -209,6 +209,9 @@ export const fetchContract = (id, setLoading) => {
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'fetchContract');
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };
@@ -468,19 +471,30 @@ export const countActiveContracts = () => {
   };
 };
 
-export const fetchRenewContracts = (params) => {
+export const fetchRenewContracts = (params, setLoading) => {
   return (dispatch, getState) => {
     api.contract
-      .getRenew()
+      .getRenew(params)
       .then(({ payload, total }) => {
+        payload =
+          payload && payload.length
+            ? payload.map((contract) => {
+                contract.expiredDate = contract?.expiredDate ? formatDate(contract.expiredDate) : '';
+                contract.employee = contract.profileId ? contract.profile?.code + ' - ' + contract.profile?.fullname : '';
+                return contract;
+              })
+            : [];
         payload = {
           payload: payload,
-          total: total,
+          total: payload.length,
         };
         dispatch({ type: REDUX_STATE.contract.SET_RENEW_CONTRACTS, payload });
       })
       .catch((err) => {
         handleContractExceptions(err, dispatch, 'countActiveContracts');
+      })
+      .finally(() => {
+        if (setLoading) setLoading(false);
       });
   };
 };

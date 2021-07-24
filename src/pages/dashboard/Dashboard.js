@@ -7,6 +7,7 @@ import PieChart from 'src/components/charts/PieChart';
 import { fetchStatisticChart } from 'src/stores/actions/assignment';
 import Count from './Count';
 import LogTable from './LogTable';
+import RenewContract from './RenewContract';
 
 const Dashboard = ({ t, location }) => {
   const initValues = {
@@ -28,6 +29,9 @@ const Dashboard = ({ t, location }) => {
         <Count t={t} />
 
         <div className="row">
+          <CCardBody className="col-12 ">
+            <RenewContract t={t} />
+          </CCardBody>
           <CCardBody className="col-6 ">
             <PieChart initValues={initValues} handleFunction={handleChangeShift} />
           </CCardBody>
