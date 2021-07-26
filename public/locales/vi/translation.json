@@ -517,7 +517,8 @@
     "no_data": "Không có dữ liệu",
     "download": "Tải xuống",
     "no_options": "Không có lựa chọn",
-    "something_went_wrong": "Có gì đó không đúng"
+    "something_went_wrong": "Có gì đó không đúng",
+    "upload_success": "Upload thành công"
   },
   "placeholder": {
     "enter_macAddress": "Nhập địa chỉ MAC",

@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
 import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import { COLORS } from 'src/constants/theme';
 import { resetPassword } from 'src/stores/actions/account';
-import { exportAllWage, exportWage, exportProfiles, importProfiles } from 'src/stores/actions/profile';
+import { exportAllWage, exportWage, exportProfiles, importProfiles, fetchProfiles } from 'src/stores/actions/profile';
 import { createRollUp, updateRollUp } from 'src/stores/actions/rollUp';
 import ExportProfiles from '../dialog/ExportProfiles';
 import ExportWage from '../dialog/ExportWage';
@@ -197,9 +197,17 @@ const ExportProfile = ({ t, disableExportProfile }) => {
 const ImportProfile = ({ t, disableImportProfile }) => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const handleAfterImport = () => {
+    dispatch(
+      fetchProfiles({
+        page: 0,
+        perpage: 10,
+      }),
+    );
+  };
   const handleConfirm = (values) => {
     setIsOpen(false);
-    dispatch(importProfiles(values));
+    dispatch(importProfiles(values, handleAfterImport, t('message.upload_success')));
   };
   const handleCancel = () => {
     setIsOpen(false);
