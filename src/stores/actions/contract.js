@@ -478,11 +478,14 @@ export const fetchRenewContracts = (params, setLoading) => {
       .then(({ payload, total }) => {
         payload =
           payload && payload.length
-            ? payload.map((contract) => {
+            ? payload.reduce((init, contract) => {
                 contract.expiredDate = contract?.expiredDate ? formatDate(contract.expiredDate) : '';
-                contract.employee = contract.profileId ? contract.profile?.code + ' - ' + contract.profile?.fullname : '';
-                return contract;
-              })
+                if (contract.profile) {
+                  contract.employee = contract.profile?.code + ' - ' + contract.profile?.fullname;
+                  init.push(contract);
+                }
+                return init;
+              }, [])
             : [];
         payload = {
           payload: payload,

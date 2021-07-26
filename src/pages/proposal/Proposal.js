@@ -396,7 +396,7 @@ const Proposal = ({ t, location, match, type, profileId, ...restProps }) => {
           columnDef={columnDef}
           data={proposals?.payload ?? []}
           route={ROUTE_PATH.LEAVE + '/'}
-          // disableDelete={true}
+          disableDelete={true}
           disableToolBar={profileId ? true : false}
           statusCols={['type', 'status']}
           paging={paging}

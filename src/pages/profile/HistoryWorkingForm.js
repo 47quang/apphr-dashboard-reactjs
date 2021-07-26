@@ -8,21 +8,20 @@ import WarningAlertDialog from 'src/components/dialog/WarningAlertDialog';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import { PERMISSION } from 'src/constants/key';
-import { NewHistoryWorkingSchema, HistoryWorkingsSchema } from 'src/schema/formSchema';
+import { HistoryWorkingsSchema, NewHistoryWorkingSchema } from 'src/schema/formSchema';
 import { fetchBranches } from 'src/stores/actions/contract';
 import {
+  activeWorking,
   createHistoryWork,
   deleteHistoryWork,
   fetchHistoriesWork,
+  inactiveWorking,
   setEmptyHistories,
   updateHistoryWork,
-  activeWorking,
-  inactiveWorking,
 } from 'src/stores/actions/historyWork';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { joinClassName } from 'src/utils/stringUtils';
-import NoData from '../page404/NoData';
 
 const HistoryWorkingForm = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -233,7 +232,6 @@ const HistoryWorkingForm = ({ t, match }) => {
         <CircularProgress />
       </div>
     );
-  else if (!historyWorkingForm.histories.length) return <NoData />;
   else
     return (
       <>
@@ -290,6 +288,8 @@ const HistoryWorkingForm = ({ t, match }) => {
                             className: `btn btn-primary px-4 ml-4`,
                             onClick: async (e) => {
                               props.handleSubmit(e);
+                              document.getElementById('newHistory').hidden = true;
+                              document.getElementById('addBtn').disabled = false;
                             },
                             name: t('label.create_new'),
                           },

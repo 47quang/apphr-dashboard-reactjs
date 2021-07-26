@@ -21,7 +21,6 @@ import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
-import NoData from '../page404/NoData';
 
 const JobTimelineInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -329,7 +328,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             labelText={t('label.job_place')}
             selectClassName={'form-control'}
             placeholder={t('placeholder.select_branch')}
-            lstSelectOptions={branches.payload}
+            lstSelectOptions={branches}
           />
           {values.attributes &&
             isCreate &&
@@ -614,7 +613,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(errors, `allowances.${allowanceIdx}.id`) && getIn(touched, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances.payload}
+                          lstSelectOptions={allowances}
                           isDisable={!isCreate}
                         />
                         <CommonTextInput
@@ -711,7 +710,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
         <CircularProgress />
       </div>
     );
-  else if (!activeContract) return <NoData />;
   return (
     <>
       <CContainer fluid className="c-main m-auto p-4">

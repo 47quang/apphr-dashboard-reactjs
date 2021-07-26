@@ -14,7 +14,6 @@ import { NewCertificateSchema } from 'src/schema/formSchema';
 import { createDiploma, deleteDiploma, fetchDiplomaByType, setEmptyCertificate, updateDiploma } from 'src/stores/actions/diploma';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
-import NoData from '../page404/NoData';
 
 const CertificateInfo = ({ t, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -229,7 +228,6 @@ const CertificateInfo = ({ t, match }) => {
         <CircularProgress />
       </div>
     );
-  else if (!initialValues.degrees.length) return <NoData />;
   else
     return (
       <>
@@ -306,7 +304,7 @@ const CertificateInfo = ({ t, match }) => {
                   >
                     {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit, setFieldValue }) => (
                       <div key={index} className="shadow bg-white rounded p-4">
-                        {getFormBody(index + 1, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
+                        {getFormBody(values?.code + ' - ' + values.name, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
                         {renderButtons(
                           permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)
                             ? [

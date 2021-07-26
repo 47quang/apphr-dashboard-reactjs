@@ -544,13 +544,16 @@ export const exportProfiles = (data) => {
       });
   };
 };
-export const importProfiles = (data) => {
+export const importProfiles = (data, handleAfterImport, success_msg) => {
   return (dispatch, getState) => {
     api.profile
       .import(data)
-      .then(({ payload }) => {})
+      .then(({ payload }) => {
+        if (handleAfterImport) handleAfterImport();
+        dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
+      })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+        handleProfileExceptions(err, dispatch, 'importProfiles');
       });
   };
 };

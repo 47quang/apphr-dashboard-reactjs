@@ -17,7 +17,6 @@ import { api } from 'src/stores/apis';
 import { formatDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
-import NoData from '../page404/NoData';
 
 const Benefit = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
@@ -311,7 +310,7 @@ const Benefit = ({ t, history, match }) => {
                           isTouched={getIn(touched, `allowances.${allowanceIdx}.id`)}
                           isError={getIn(touched, `allowances.${allowanceIdx}.id`) && getIn(errors, `allowances.${allowanceIdx}.id`)}
                           errorMessage={t(getIn(errors, `allowances.${allowanceIdx}.id`))}
-                          lstSelectOptions={allowances.payload}
+                          lstSelectOptions={allowances}
                         />
                         <CommonTextInput
                           containerClassName={'form-group col-lg-4'}
@@ -388,7 +387,6 @@ const Benefit = ({ t, history, match }) => {
         <CircularProgress />
       </div>
     );
-  else if (!activeWage) return <NoData />;
   return (
     <>
       <CContainer fluid className="c-main m-auto p-4">

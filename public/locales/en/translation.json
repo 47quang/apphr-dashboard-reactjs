@@ -519,7 +519,9 @@
     "no_data": "No Data",
     "download": "Download",
     "no_options": "No options",
-    "something_went_wrong": "Something went wrong"
+    "something_went_wrong": "Something went wrong",
+    "upload_success": "Upload successful"
+
   },
   "placeholder": {
     "enter_macAddress": "Enter MAC address",
