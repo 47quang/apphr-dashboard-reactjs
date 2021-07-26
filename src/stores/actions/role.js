@@ -41,10 +41,11 @@ const handleRoleExceptions = (err, dispatch, functionName) => {
   dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
 };
 const formatDownloadedData = (payload) => {
-  return payload?.map((tup) => {
+  return payload.reduce((init, tup) => {
     tup.createdAt = formatDateTimeToString(tup.createdAt);
-    return tup;
-  });
+    if (tup?.id !== 1) init.push(tup);
+    return init;
+  }, []);
 };
 
 export const fetchRoles = (params, setLoading) => {
