@@ -220,7 +220,6 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
-  params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;
   params.wageId = params.wageId !== null && parseInt(params.wageId) !== 0 ? parseInt(params.wageId) : undefined;
@@ -270,7 +269,6 @@ export const updateContract = (params, isActive, success_msg) => {
   params.handleDate = params.handleDate === '' ? null : params.handleDate;
   params.expiredDate = params.expiredDate === '' ? null : params.expiredDate;
   params.startWork = params.startWork === '' ? null : params.startWork;
-  params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
 
   params.probTime = params.probTime !== null && parseInt(params.probTime) !== 0 ? parseInt(params.probTime) : null;
   params.profileId = params.profileId !== null && parseInt(params.profileId) !== 0 ? parseInt(params.profileId) : null;

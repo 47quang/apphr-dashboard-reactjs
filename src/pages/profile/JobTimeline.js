@@ -15,7 +15,7 @@ import Label from 'src/components/text/Label';
 import { PERMISSION } from 'src/constants/key';
 import { NewContractSchema } from 'src/schema/formSchema';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import { createContract, fetchAllowances, fetchBranches, fetchWagesByType, updateContract } from 'src/stores/actions/contract';
+import { createContract, fetchAllowances, fetchWagesByType, updateContract } from 'src/stores/actions/contract';
 import { fetchActiveContract, setEmptyActiveContract } from 'src/stores/actions/profile';
 import { api } from 'src/stores/apis';
 import { formatDate, getCurrentDate } from 'src/utils/datetimeUtils';
@@ -26,7 +26,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const profileId = +match?.params?.id;
   const dispatch = useDispatch();
-  let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +46,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
     handleDate: '',
     validDate: '',
     expiredDate: '',
-    branchId: '',
     startWork: '',
     formOfPayment: '',
     wageId: '',
@@ -89,7 +87,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.GET_CONTRACT)) {
       dispatch(fetchActiveContract(+profileId, setLoading));
-      dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
       return () => {
@@ -102,13 +99,6 @@ const JobTimelineInfo = ({ t, history, match }) => {
   function create(values) {
     let form = values;
     form.profileId = +match.params.id;
-
-    if (!form.branchId) delete form.branchId;
-    // else form['branchName'] = branches.filter((br) => br.id === parseInt(form.branchId))[0]?.branch;
-    // if (form.departmentId === '0') delete form.departmentId;
-    // else form['departmentName'] = departments.filter((br) => br.id === parseInt(form.departmentId))[0]?.name;
-    // if (form.positionId === '0') delete form.positionId;
-    // else form['positionName'] = positions.filter((br) => br.id === parseInt(form.positionId))[0]?.name;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.id) {
       dispatch(updateContract(form, true, t('message.successful_update')));
@@ -317,19 +307,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
             errorMessage={t(getIn(errors, `status`))}
             lstSelectOptions={status}
           />
-          <CommonSelectInput
-            containerClassName={'form-group col-xl-4'}
-            value={values?.branchId ?? ''}
-            onBlur={handleBlur(`branchId`)}
-            onChange={(e) => {
-              handleChange('branchId')(e);
-            }}
-            inputID={`branchId`}
-            labelText={t('label.job_place')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_branch')}
-            lstSelectOptions={branches}
-          />
+
           {values.attributes &&
             isCreate &&
             values.attributes.length > 0 &&
@@ -441,7 +419,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 onBlur={handleBlur(`wageId`)}
                 onChange={(e) => {
                   let thisWage;
-                  if (isCreate) thisWage = wages.payload.filter((s) => s.id === parseInt(e.target.value));
+                  if (isCreate) thisWage = wages.filter((s) => s.id === parseInt(e.target.value));
                   else thisWage = values.wages.filter((s) => s.id === parseInt(e.target.value));
                   if (thisWage.length > 0) setFieldValue(`amount`, thisWage[0].amount);
                   else setFieldValue(`amount`, '');
@@ -456,7 +434,7 @@ const JobTimelineInfo = ({ t, history, match }) => {
                 isTouched={touched?.wageId}
                 isError={errors?.wageId && touched.wageId}
                 errorMessage={t(errors?.wageId)}
-                lstSelectOptions={isCreate ? wages.payload : values.wages}
+                lstSelectOptions={isCreate ? wages : values.wages}
               />
               <CommonTextInput
                 containerClassName={'form-group col-xl-4'}

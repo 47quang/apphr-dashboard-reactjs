@@ -16,7 +16,7 @@ import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import { NewContractSchemaWithProfileID } from 'src/schema/formSchema';
 import { fetchProfiles } from 'src/stores/actions/account';
 import { fetchAttributes } from 'src/stores/actions/attribute';
-import { createContract, fetchAllowances, fetchBranches, fetchWagesByType } from 'src/stores/actions/contract';
+import { createContract, fetchAllowances, fetchWagesByType } from 'src/stores/actions/contract';
 import { api } from 'src/stores/apis';
 import { getCurrentDate } from 'src/utils/datetimeUtils';
 import { renderButtons } from 'src/utils/formUtils';
@@ -25,7 +25,6 @@ import { generateCode } from 'src/utils/randomCode';
 const NewContract = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
-  let branches = useSelector((state) => state.contract.branches);
   let wages = useSelector((state) => state.contract.wages);
   const profiles = useSelector((state) => state.account.profiles);
   const status = [
@@ -43,7 +42,6 @@ const NewContract = ({ t, history, match }) => {
     handleDate: '',
     validDate: '',
     expiredDate: '',
-    branchId: '',
     startWork: '',
     formOfPayment: '',
     wageId: '',
@@ -86,14 +84,9 @@ const NewContract = ({ t, history, match }) => {
 
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_CONTRACT)) {
-      dispatch(fetchBranches());
       dispatch(fetchAllowances());
       dispatch(fetchAttributes());
       dispatch(fetchProfiles({ fields: ['id', 'firstname', 'lastname', 'code'] }));
-
-      return () => {
-        //dispatch(setEmptyContracts());
-      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -101,7 +94,6 @@ const NewContract = ({ t, history, match }) => {
   function create(values) {
     let form = values;
 
-    if (!form.branchId) delete form.branchId;
     if (!form.expiredDate) delete form.expiredDate;
     if (form.type === 'season') {
       delete form.wageId;
@@ -297,22 +289,7 @@ const NewContract = ({ t, history, match }) => {
             errorMessage={t(getIn(errors, `status`))}
             lstSelectOptions={status}
           />
-          <CommonSelectInput
-            containerClassName={'form-group col-xl-4'}
-            value={values?.branchId ?? ''}
-            onBlur={handleBlur(`branchId`)}
-            onChange={(e) => {
-              handleChange('branchId')(e);
-            }}
-            inputID={`branchId`}
-            labelText={t('label.job_place')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_branch')}
-            isTouched={touched?.branchId}
-            isError={errors?.branchId && touched?.branchId}
-            errorMessage={t(errors?.branchId)}
-            lstSelectOptions={branches}
-          />
+
           {values.attributes &&
             values.attributes.length > 0 &&
             values.attributes.map((attribute, attributeIdx) => {
