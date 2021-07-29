@@ -21,7 +21,6 @@ import { renderButtons } from 'src/utils/formUtils';
 const EditContract = ({ t, history, match }) => {
   const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
-  let branches = useSelector((state) => state.contract.branches);
   let contract = useSelector((state) => state.contract.contract);
   const allowances = useSelector((state) => state.contract.allowances);
   const [loading, setLoading] = useState(true);
@@ -68,11 +67,7 @@ const EditContract = ({ t, history, match }) => {
   function create(values) {
     let form = values;
     form.profileId = +match.params.id;
-
-    if (!form.branchId) delete form.branchId;
-
     if (!form.expiredDate) delete form.expiredDate;
-
     dispatch(updateContract(form, false, t('message.successful_update')));
   }
   const BodyContract = ({ values, handleBlur, handleChange, touched, errors, setFieldValue }) => {
@@ -229,22 +224,7 @@ const EditContract = ({ t, history, match }) => {
             errorMessage={t(getIn(errors, `status`))}
             lstSelectOptions={status}
           />
-          <CommonSelectInput
-            containerClassName={'form-group col-xl-4'}
-            value={values?.branchId ?? ''}
-            onBlur={handleBlur(`branchId`)}
-            onChange={(e) => {
-              handleChange('branchId')(e);
-            }}
-            inputID={`branchId`}
-            labelText={t('label.job_place')}
-            selectClassName={'form-control'}
-            placeholder={t('placeholder.select_branch')}
-            isTouched={touched?.branchId}
-            isError={errors?.branchId && touched?.branchId}
-            errorMessage={t(errors?.branchId)}
-            lstSelectOptions={branches}
-          />
+
           {values.contractAttributes &&
             values.contractAttributes.length > 0 &&
             values.contractAttributes.map((attribute, attributeIdx) => {

@@ -39,6 +39,7 @@ const BasicInfo = ({ t, history, match }) => {
     } else if (permissionIds.includes(PERMISSION.CREATE_PROFILE)) {
       if (provinces.length === 0) dispatch(fetchProvinces());
       dispatch(setEmptyProfile());
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -75,6 +76,7 @@ const BasicInfo = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
+        console.log(refInfo.current.errors);
         refInfo.current.handleSubmit(e);
       },
       name: t('label.create_new'),

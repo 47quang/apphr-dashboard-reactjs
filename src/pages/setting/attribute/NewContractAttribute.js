@@ -51,6 +51,7 @@ const NewContractAttribute = ({ t, location, history }) => {
         validationSchema={NewFieldContract}
         buttons={buttons}
         submitForm={submitForm}
+        isCreate={true}
       />
     );
   else return <Page404 />;

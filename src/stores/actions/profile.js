@@ -105,9 +105,6 @@ export const createProfile = (params, history, success_msg) => {
   params.passportExpiredDate = params.passportExpiredDate === '' ? null : params.passportExpiredDate;
   params.passportProvinceId =
     params.passportProvinceId !== null && parseInt(params.passportProvinceId) !== 0 ? parseInt(params.passportProvinceId) : null;
-  params.branchId = params.branchId !== null && parseInt(params.branchId) !== 0 ? parseInt(params.branchId) : null;
-  params.departmentId = params.departmentId !== null && parseInt(params.departmentId) !== 0 ? parseInt(params.departmentId) : null;
-  params.positionId = params.positionId !== null && parseInt(params.positionId) !== 0 ? parseInt(params.positionId) : null;
   if (!params.have_id) {
     params.cmnd = null;
     params.cmndIssuedDate = null;
@@ -439,6 +436,7 @@ export const fetchActiveWage = (id, setLoading) => {
       .then(async ({ payload }) => {
         if (payload) {
           payload.wageId = payload.wageId ?? undefined;
+          payload.amount = payload.wage?.amount ?? undefined;
           payload.type = payload?.wage?.type;
           payload.wages = payload.wageId ? await api.wage.getAll({ type: payload.type }).then(({ payload }) => payload) : [];
           payload.startDate = formatDateInput(payload.startDate);
