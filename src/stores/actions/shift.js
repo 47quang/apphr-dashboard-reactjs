@@ -1,46 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { deCodeChecked } from 'src/pages/setting/shift/shiftFunctionUtil';
 import { formatDateTimeToString, parseLocalTime } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis';
 import { REDUX_STATE } from '../states';
-
-const handleShiftExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 
 export const fetchShifts = (params, setLoading) => {
   return (dispatch, getState) => {
@@ -59,7 +22,7 @@ export const fetchShifts = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.shift.GET_SHIFTS, payload: payload });
       })
       .catch((err) => {
-        handleShiftExceptions(err, dispatch, 'fetchShifts');
+        handleExceptions(err, dispatch, getState, 'fetchShifts');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -83,7 +46,7 @@ export const fetchShift = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.shift.SET_SHIFT, payload: payload });
       })
       .catch((err) => {
-        handleShiftExceptions(err, dispatch, 'fetchShift');
+        handleExceptions(err, dispatch, getState, 'fetchShift');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -102,7 +65,7 @@ export const createNewShift = (data, history, success_msg) => {
         history.push(ROUTE_PATH.SHIFT + `/${payload.id}`);
       })
       .catch((err) => {
-        handleShiftExceptions(err, dispatch, 'createNewShift');
+        handleExceptions(err, dispatch, getState, 'createNewShift');
       });
   };
 };
@@ -120,7 +83,7 @@ export const updateShift = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleShiftExceptions(err, dispatch, 'updateShift');
+        handleExceptions(err, dispatch, getState, 'updateShift');
       });
   };
 };
@@ -135,7 +98,7 @@ export const deleteShift = (params, success_msg, handleAfterDelete) => {
         if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
-        handleShiftExceptions(err, dispatch, 'deleteShift');
+        handleExceptions(err, dispatch, getState, 'deleteShift');
       });
   };
 };

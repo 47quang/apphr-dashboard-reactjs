@@ -1,45 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleProfileExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchProfiles = (params, setLoading) => {
   return (dispatch, getState) => {
     api.profile
@@ -64,7 +28,7 @@ export const fetchProfiles = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.profile.SET_PROFILES, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchProfiles');
+        handleExceptions(err, dispatch, getState, 'fetchProfiles');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -87,7 +51,7 @@ export const fetchProfile = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchProfile');
+        handleExceptions(err, dispatch, getState, 'fetchProfile');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -125,7 +89,7 @@ export const createProfile = (params, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'createProfile');
+        handleExceptions(err, dispatch, getState, 'createProfile');
       });
   };
 };
@@ -164,7 +128,7 @@ export const updateProfile = (data, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateProfile');
+        handleExceptions(err, dispatch, getState, 'updateProfile');
       });
   };
 };
@@ -199,7 +163,7 @@ export const updatePermanentAddress = (data, provinces, districts, wards, succes
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updatePermanentAddress');
+        handleExceptions(err, dispatch, getState, 'updatePermanentAddress');
       });
   };
 };
@@ -219,7 +183,7 @@ export const updateRelationship = (data, profileId, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateRelationship');
+        handleExceptions(err, dispatch, getState, 'updateRelationship');
       });
   };
 };
@@ -233,7 +197,7 @@ export const deleteProfile = (id, success_msg, handleAfterDelete) => {
         if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'deleteProfile');
+        handleExceptions(err, dispatch, getState, 'deleteProfile');
       });
   };
 };
@@ -259,7 +223,7 @@ export const fetchRoles = (params) => {
         dispatch({ type: REDUX_STATE.profile.GET_ROLES, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchRoles');
+        handleExceptions(err, dispatch, getState, 'fetchRoles');
       });
   };
 };
@@ -289,7 +253,7 @@ export const fetchContacts = (profileId) => {
         dispatch({ type: REDUX_STATE.profile.SET_CONTACTS, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchContacts');
+        handleExceptions(err, dispatch, getState, 'fetchContacts');
       });
   };
 };
@@ -308,7 +272,7 @@ export const createNewContact = (data, profileId, success_msg, ref) => {
         ref.current.handleReset();
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'createNewContact');
+        handleExceptions(err, dispatch, getState, 'createNewContact');
       });
   };
 };
@@ -322,7 +286,7 @@ export const updateContact = (data, profileId, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateContact');
+        handleExceptions(err, dispatch, getState, 'updateContact');
       });
   };
 };
@@ -336,7 +300,7 @@ export const deleteContact = (contactId, profileId, setClosePopOver, success_msg
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'deleteContact');
+        handleExceptions(err, dispatch, getState, 'deleteContact');
       })
       .finally(() => {
         setClosePopOver();
@@ -360,7 +324,7 @@ export const updateOtherInfo = (profile, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateOtherInfo');
+        handleExceptions(err, dispatch, getState, 'updateOtherInfo');
       });
   };
 };
@@ -374,7 +338,7 @@ export const exportWage = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'exportWage');
+        handleExceptions(err, dispatch, getState, 'exportWage');
       });
   };
 };
@@ -387,7 +351,7 @@ export const exportAllWage = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'exportWage');
+        handleExceptions(err, dispatch, getState, 'exportWage');
       });
   };
 };
@@ -417,7 +381,7 @@ export const fetchActiveContract = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_CONTRACT, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchActiveContract');
+        handleExceptions(err, dispatch, getState, 'fetchActiveContract');
       });
   };
 };
@@ -446,7 +410,7 @@ export const fetchActiveWage = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+        handleExceptions(err, dispatch, getState, 'fetchActiveWage');
       });
   };
 };
@@ -461,7 +425,7 @@ export const fetchActiveWorking = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+        handleExceptions(err, dispatch, getState, 'fetchActiveWage');
       });
   };
 };
@@ -487,7 +451,7 @@ export const createActiveWage = (params, success_msg, handleResetNewWage) => {
         dispatch({ type: REDUX_STATE.profile.GET_ACTIVE_WAGE, payload });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'fetchActiveWage');
+        handleExceptions(err, dispatch, getState, 'fetchActiveWage');
       });
   };
 };
@@ -512,7 +476,7 @@ export const updateWageHistory = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+        handleExceptions(err, dispatch, getState, 'updateWageHistory');
       });
   };
 };
@@ -538,7 +502,7 @@ export const exportProfiles = (data) => {
         window.location.href = payload.publicPath;
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'updateWageHistory');
+        handleExceptions(err, dispatch, getState, 'updateWageHistory');
       });
   };
 };
@@ -551,7 +515,7 @@ export const importProfiles = (data, handleAfterImport, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleProfileExceptions(err, dispatch, 'importProfiles');
+        handleExceptions(err, dispatch, getState, 'importProfiles');
       });
   };
 };

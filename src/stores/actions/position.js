@@ -1,45 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handlePositionExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchPositions = (params, setLoading) => {
   return (dispatch, getState) => {
     api.position
@@ -58,7 +22,7 @@ export const fetchPositions = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITIONS, payload });
       })
       .catch((err) => {
-        handlePositionExceptions(err, dispatch, 'fetchPositions');
+        handleExceptions(err, dispatch, getState, 'fetchPositions');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -74,7 +38,7 @@ export const fetchPosition = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.position.GET_POSITION, payload });
       })
       .catch((err) => {
-        handlePositionExceptions(err, dispatch, 'fetchPosition');
+        handleExceptions(err, dispatch, getState, 'fetchPosition');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -92,7 +56,7 @@ export const createPosition = (params, history, success_msg) => {
         history.push(ROUTE_PATH.POSITION + `/${payload.id}`);
       })
       .catch((err) => {
-        handlePositionExceptions(err, dispatch, 'createPosition');
+        handleExceptions(err, dispatch, getState, 'createPosition');
       });
   };
 };
@@ -106,7 +70,7 @@ export const updatePosition = (data, id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handlePositionExceptions(err, dispatch, 'updatePosition');
+        handleExceptions(err, dispatch, getState, 'updatePosition');
       });
   };
 };
@@ -121,7 +85,7 @@ export const deletePosition = (params, success_msg, handleAfterDelete) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handlePositionExceptions(err, dispatch, 'deletePosition');
+        handleExceptions(err, dispatch, getState, 'deletePosition');
       });
   };
 };

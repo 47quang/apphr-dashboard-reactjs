@@ -1,45 +1,8 @@
-import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleHistoryWorkExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
   return (dispatch, getState) => {
     api.historyWork
@@ -49,7 +12,7 @@ export const createHistoryWork = (data, success_msg, handleResetNewHistory) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'createHistoryWork');
+        handleExceptions(err, dispatch, getState, 'createHistoryWork');
       });
   };
 };
@@ -68,7 +31,7 @@ export const updateHistoryWork = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'updateHistoryWork');
+        handleExceptions(err, dispatch, getState, 'updateHistoryWork');
       });
   };
 };
@@ -91,7 +54,7 @@ export const fetchHistoriesWork = (params, setLoading) => {
         return payload;
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'fetchDepartments');
+        handleExceptions(err, dispatch, getState, 'fetchHistoriesWork');
         return [];
       });
     let positions = await api.position
@@ -111,7 +74,7 @@ export const fetchHistoriesWork = (params, setLoading) => {
         return payload;
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'fetchPositions');
+        handleExceptions(err, dispatch, getState, 'fetchHistoriesWork');
         return [];
       });
     api.historyWork
@@ -131,7 +94,7 @@ export const fetchHistoriesWork = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.historyWork.SET_HISTORIES, payload });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'fetchHistoriesWork');
+        handleExceptions(err, dispatch, getState, 'fetchHistoriesWork');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -152,7 +115,7 @@ export const deleteHistoryWork = (id, msg, handleAfterSuccess) => {
         });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'deleteHistoryWork');
+        handleExceptions(err, dispatch, getState, 'deleteHistoryWork');
       });
   };
 };
@@ -165,7 +128,7 @@ export const onChangeDepartment = (params, index) => {
         dispatch({ type: REDUX_STATE.historyWork.GET_DEPARTMENTS, payload });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'onChangeDepartment');
+        handleExceptions(err, dispatch, getState, 'onChangeDepartment');
       });
   };
 };
@@ -178,7 +141,7 @@ export const onChangePosition = (params, index) => {
         dispatch({ type: REDUX_STATE.historyWork.GET_POSITIONS, payload });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'onChangePosition');
+        handleExceptions(err, dispatch, getState, 'onChangePosition');
       });
   };
 };
@@ -199,7 +162,7 @@ export const activeWorking = (id, setFieldValue, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'activeContract');
+        handleExceptions(err, dispatch, getState, 'activeWorking');
       });
   };
 };
@@ -212,7 +175,7 @@ export const inactiveWorking = (id, setFieldValue, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleHistoryWorkExceptions(err, dispatch, 'inactiveContract');
+        handleExceptions(err, dispatch, getState, 'inactiveWorking');
       });
   };
 };

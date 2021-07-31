@@ -1,45 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDate, formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleWageExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server Bad Gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchWageHistories = (params, setLoading, t) => {
   return (dispatch, getState) => {
     api.wageHistory
@@ -63,7 +27,7 @@ export const fetchWageHistories = (params, setLoading, t) => {
         if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        handleWageExceptions(err, dispatch, 'fetchWageHistories');
+        handleExceptions(err, dispatch, getState, 'fetchWageHistories');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -87,7 +51,7 @@ export const fetchWageHistory = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.wageHistory.SET_WAGE_HISTORY, payload });
       })
       .catch((err) => {
-        handleWageExceptions(err, dispatch, 'fetchWageHistory');
+        handleExceptions(err, dispatch, getState, 'fetchWageHistory');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -104,7 +68,7 @@ export const createWageHistory = (params, history, success_msg) => {
         history.push(ROUTE_PATH.NAV_BENEFIT + `/${payload.id}`);
       })
       .catch((err) => {
-        handleWageExceptions(err, dispatch, 'createWageHistory');
+        handleExceptions(err, dispatch, getState, 'createWageHistory');
       });
   };
 };
@@ -134,7 +98,7 @@ export const updateWageHistory = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleWageExceptions(err, dispatch, 'updateWageHistory');
+        handleExceptions(err, dispatch, getState, 'updateWageHistory');
       });
   };
 };
@@ -148,7 +112,7 @@ export const deleteWageHistory = (id, handleAfterDelete, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleWageExceptions(err, dispatch, 'deleteWageHistory');
+        handleExceptions(err, dispatch, getState, 'deleteWageHistory');
       });
   };
 };

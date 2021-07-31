@@ -1,45 +1,8 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
-import { formatDateInput, formatDate, formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { ROUTE_PATH } from 'src/constants/key';
+import { formatDate, formatDateInput, formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-
-const handleContractExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 
 const type = {
   limitation: 'Có xác định thời hạn',
@@ -61,30 +24,9 @@ export const fetchContracts = (params, setLoading) => {
             ? payload.map((contract) => {
                 contract.name = contract.code + ' - ' + contract.fullname + ' - ' + status[contract.status];
                 contract.text_type = type[contract.type];
-                // contract.handleDate = formatDateInput(contract.handleDate);
-                // contract.expiredDate = formatDateInput(contract.expiredDate);
-                // contract.validDate = formatDateInput(contract.validDate);
-                // contract.startWork = formatDateInput(contract.startWork);
-                // contract['formOfPayment'] = contract?.wage?.type;
-                // contract['wageId'] = contract?.wage?.id;
-                // contract['amount'] = contract?.wage?.amount;
-                // contract['standardHours'] = contract.standardHours ?? undefined;
-                // contract['wages'] = await api.wage.getAll({ type: contract?.wage?.type }).then(({ payload }) => payload);
-                // contract['attributes'] =
-                //   contract.contractAttributes && contract.contractAttributes.length > 0
-                //     ? contract.contractAttributes.map((attr) => {
-                //         let rv = {};
-                //         rv.value = attr.value;
-                //         rv.name = attr.attribute.name;
-                //         rv.type = attr.attribute.type;
-                //         rv.id = attr.attribute.id;
-                //         return rv;
-                //       })
-                //     : [];
                 return contract;
               })
             : [];
-        // payload = await Promise.all(payload);
         payload = {
           payload: payload,
           total: total,
@@ -92,7 +34,7 @@ export const fetchContracts = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchContracts');
+        handleExceptions(err, dispatch, getState, 'fetchContracts');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -126,7 +68,7 @@ export const fetchContractTable = (params, setLoading, onPreviousPage) => {
         }
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchContracts');
+        handleExceptions(err, dispatch, getState, 'fetchContractTable');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -169,7 +111,7 @@ export const fetchWageHistories = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.contract.SET_CONTRACTS, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchWageHistories');
+        handleExceptions(err, dispatch, getState, 'fetchWageHistories');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -208,7 +150,7 @@ export const fetchContract = (id, setLoading) => {
         if (setLoading) setLoading(false);
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchContract');
+        handleExceptions(err, dispatch, getState, 'fetchContract');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -260,7 +202,7 @@ export const createContract = (params, success_msg, handleResetNewContract, hist
         } else history.push(ROUTE_PATH.CONTRACT + `/${payload.id}`);
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'createContract');
+        handleExceptions(err, dispatch, getState, 'createContract');
       });
   };
 };
@@ -299,7 +241,7 @@ export const updateContract = (params, isActive, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'updateContract');
+        handleExceptions(err, dispatch, getState, 'updateContract');
       });
   };
 };
@@ -313,7 +255,7 @@ export const deleteContract = (id, success_msg, handleAfterSuccess) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'deleteContract');
+        handleExceptions(err, dispatch, getState, 'deleteContract');
       });
   };
 };
@@ -326,7 +268,7 @@ export const fetchBranches = () => {
         dispatch({ type: REDUX_STATE.contract.GET_BRANCHES, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchBranches');
+        handleExceptions(err, dispatch, getState, 'fetchBranches');
       });
   };
 };
@@ -339,7 +281,7 @@ export const fetchWagesByType = (type) => {
         dispatch({ type: REDUX_STATE.contract.GET_WAGES, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchWagesByType');
+        handleExceptions(err, dispatch, getState, 'fetchWagesByType');
       });
   };
 };
@@ -351,7 +293,7 @@ export const fetchHistoriesWage = (params) => {
         dispatch({ type: REDUX_STATE.contract.SET_BENEFITS, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchHistoriesWage');
+        handleExceptions(err, dispatch, getState, 'fetchHistoriesWage');
       });
   };
 };
@@ -364,7 +306,7 @@ export const fetchAllowances = () => {
         dispatch({ type: REDUX_STATE.contract.GET_ALLOWANCES, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'fetchAllowances');
+        handleExceptions(err, dispatch, getState, 'fetchAllowances');
       });
   };
 };
@@ -378,7 +320,7 @@ export const createWageHistory = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'createWageHistory');
+        handleExceptions(err, dispatch, getState, 'createWageHistory');
       });
   };
 };
@@ -405,12 +347,9 @@ export const addField = (params, success_msg) => {
   return (dispatch, getState) => {
     api.contract
       .putField(params)
-      .then(({ payload }) => {
-        //dispatch({ type: REDUX_STATE.contract.SET_CONTRACT, payload });
-        // dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-      })
+      .then(({ payload }) => {})
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'addField');
+        handleExceptions(err, dispatch, getState, 'addField');
       });
   };
 };
@@ -423,7 +362,7 @@ export const deleteWageHistory = (id, handleAfterSuccess, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'deleteWageHistory');
+        handleExceptions(err, dispatch, getState, 'deleteWageHistory');
       });
   };
 };
@@ -437,7 +376,7 @@ export const activeContract = (id, setFieldValue, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'activeContract');
+        handleExceptions(err, dispatch, getState, 'activeContract');
       });
   };
 };
@@ -451,7 +390,7 @@ export const inactiveContract = (id, setFieldValue, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'inactiveContract');
+        handleExceptions(err, dispatch, getState, 'inactiveContract');
       });
   };
 };
@@ -464,7 +403,7 @@ export const countActiveContracts = () => {
         dispatch({ type: REDUX_STATE.contract.COUNT_ACTIVE_CONTRACT, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'countActiveContracts');
+        handleExceptions(err, dispatch, getState, 'countActiveContracts');
       });
   };
 };
@@ -492,7 +431,7 @@ export const fetchRenewContracts = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.contract.SET_RENEW_CONTRACTS, payload });
       })
       .catch((err) => {
-        handleContractExceptions(err, dispatch, 'countActiveContracts');
+        handleExceptions(err, dispatch, getState, 'fetchRenewContracts');
       })
       .finally(() => {
         if (setLoading) setLoading(false);

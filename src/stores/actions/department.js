@@ -1,45 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleDepartmentExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchDepartments = (params, setLoading) => {
   return (dispatch, getState) => {
     api.department
@@ -57,7 +21,7 @@ export const fetchDepartments = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENTS, payload });
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'fetchDepartments');
+        handleExceptions(err, dispatch, getState, 'fetchDepartments');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -74,7 +38,7 @@ export const deleteDepartment = (params, success_msg, handleAfterDelete) => {
         if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'deleteDepartment');
+        handleExceptions(err, dispatch, getState, 'deleteDepartment');
       });
   };
 };
@@ -87,7 +51,7 @@ export const fetchDepartment = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.department.SET_DEPARTMENT, payload });
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'fetchDepartment');
+        handleExceptions(err, dispatch, getState, 'fetchDepartment');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -104,7 +68,7 @@ export const updateDepartment = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'updateDepartment');
+        handleExceptions(err, dispatch, getState, 'updateDepartment');
       });
   };
 };
@@ -120,7 +84,7 @@ export const createDepartment = (data, history, success_msg) => {
         history.push(ROUTE_PATH.DEPARTMENT + `/${payload.id}`);
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'createDepartment');
+        handleExceptions(err, dispatch, getState, 'createDepartment');
       });
   };
 };
@@ -140,7 +104,7 @@ export const countDepartments = (params) => {
         dispatch({ type: REDUX_STATE.department.COUNT_DEPARTMENTS, payload });
       })
       .catch((err) => {
-        handleDepartmentExceptions(err, dispatch, 'countDepartments');
+        handleExceptions(err, dispatch, getState, 'countDepartments');
       });
   };
 };

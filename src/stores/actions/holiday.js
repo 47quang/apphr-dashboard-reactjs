@@ -91,7 +91,7 @@ export const createHoliday = (params, history, success_msg) => {
         payload.endDate = payload.endDate.replace('T23:59:59.000Z', '');
         dispatch({ type: REDUX_STATE.holiday.SET_HOLIDAY, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
-        history.push(ROUTE_PATH.HOLIDAY + `/tab1.id=${payload.id}`);
+        history.push(ROUTE_PATH.HOLIDAY + `/${payload.id}`);
       })
       .catch((err) => {
         handleHolidayExceptions(err, dispatch, 'createHoliday');
