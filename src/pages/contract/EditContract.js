@@ -33,12 +33,6 @@ const EditContract = ({ t, history, match }) => {
     { id: 'by_hour', name: t('label.by_hour') },
     { id: 'by_month', name: t('label.by_month') },
   ];
-  const periodicPayment = [
-    { id: 'hourly', name: t('label.by_hour') },
-    { id: 'daily', name: t('label.by_date') },
-    { id: 'weekly', name: t('label.by_week') },
-    { id: 'monthly', name: t('label.by_month') },
-  ];
 
   const personalIncomeTaxType = [
     { id: 'resident', name: t('label.resident') },
@@ -377,21 +371,6 @@ const EditContract = ({ t, history, match }) => {
                 inputClassName={'form-control'}
                 isRequiredField
                 isDisable
-              />
-              <CommonSelectInput
-                containerClassName={'form-group col-xl-4'}
-                value={values?.periodicPayment ?? ''}
-                onBlur={handleBlur(`periodicPayment`)}
-                onChange={async (e) => {
-                  handleChange(`periodicPayment`)(e);
-                }}
-                inputID={`periodicPayment`}
-                labelText={t('label.periodic_payment')}
-                selectClassName={'form-control'}
-                placeholder={t('placeholder.select_periodic_payment_method')}
-                isRequiredField
-                isDisable
-                lstSelectOptions={periodicPayment}
               />
             </div>
             <div className="row">
