@@ -4,16 +4,16 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { api } from 'src/stores/apis';
 
 function UploadImageSingle(props) {
-  const { src, handleChangeUpload } = props;
+  const { src, handleChange } = props;
 
   async function browserUpload(file) {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
       const resp = await api.upload.postForm(formData);
-      handleChangeUpload(resp['Location']);
+      handleChange(resp['Location']);
     } else {
-      handleChangeUpload('');
+      handleChange('');
     }
   }
 

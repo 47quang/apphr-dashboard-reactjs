@@ -1,45 +1,8 @@
-import { RESPONSE_CODE } from 'src/constants/key';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 import { fetchAssignment } from './assignment';
 
-const handleRollUpExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchRollUps = (params) => {
   return (dispatch, getState) => {
     api.rollUp
@@ -48,7 +11,7 @@ export const fetchRollUps = (params) => {
         dispatch({ type: REDUX_STATE.rollUp.GET_ROLLUP, payload });
       })
       .catch((err) => {
-        handleRollUpExceptions(err, dispatch, 'fetchRollUps');
+        handleExceptions(err, dispatch, getState, 'fetchRollUps');
       });
   };
 };
@@ -63,7 +26,7 @@ export const createRollUp = (params, setIsReload, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRollUpExceptions(err, dispatch, 'createRollUp');
+        handleExceptions(err, dispatch, getState, 'createRollUp');
       });
   };
 };
@@ -78,7 +41,7 @@ export const updateRollUp = (data, assignmentId, setIsReload, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRollUpExceptions(err, dispatch, 'updateRollUp');
+        handleExceptions(err, dispatch, getState, 'updateRollUp');
       });
   };
 };
@@ -93,7 +56,7 @@ export const deleteRollUp = (id, assignmentId, success_msg, setIsReload) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRollUpExceptions(err, dispatch, 'deleteRollUp');
+        handleExceptions(err, dispatch, getState, 'deleteRollUp');
       });
   };
 };

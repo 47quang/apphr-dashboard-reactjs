@@ -1,45 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleArticleTypeExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server Bad Gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchTypes = (params, setLoading) => {
   return (dispatch, getState) => {
     api.articleType
@@ -56,7 +20,7 @@ export const fetchTypes = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.articleType.SET_TYPES, payload });
       })
       .catch((err) => {
-        handleArticleTypeExceptions(err, dispatch, 'fetchTypes');
+        handleExceptions(err, dispatch, getState, 'fetchTypes');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -72,7 +36,7 @@ export const fetchType = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.articleType.SET_TYPE, payload });
       })
       .catch((err) => {
-        handleArticleTypeExceptions(err, dispatch, 'fetchType');
+        handleExceptions(err, dispatch, getState, 'fetchType');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -90,7 +54,7 @@ export const createArticleType = (params, history, success_msg) => {
         history.push(ROUTE_PATH.ARTICLE_TYPE + `/${payload.id}`);
       })
       .catch((err) => {
-        handleArticleTypeExceptions(err, dispatch, 'createArticleType');
+        handleExceptions(err, dispatch, getState, 'createArticleType');
       });
   };
 };
@@ -104,7 +68,7 @@ export const updateArticleType = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleArticleTypeExceptions(err, dispatch, 'updateArticleType');
+        handleExceptions(err, dispatch, getState, 'updateArticleType');
       });
   };
 };
@@ -118,7 +82,7 @@ export const deleteArticleType = (id, success_msg, handleAfterDelete) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleArticleTypeExceptions(err, dispatch, 'deleteArticleType');
+        handleExceptions(err, dispatch, getState, 'deleteArticleType');
       });
   };
 };

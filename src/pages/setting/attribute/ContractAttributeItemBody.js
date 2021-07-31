@@ -58,7 +58,7 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
                             name={`code`}
                             onChange={(e) => handleChange(`code`)(e)}
                             value={values.code ?? ''}
-                            disabled={isCreate}
+                            disabled={!isCreate}
                             placeholder={t('placeholder.enter_attribute_code')}
                           />
                           <div

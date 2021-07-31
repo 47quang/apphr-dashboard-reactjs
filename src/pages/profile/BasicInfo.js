@@ -125,9 +125,9 @@ const BasicInfo = ({ t, history, match }) => {
         },
       ];
 
-  function handleChangeUpload(fileUrl) {
-    dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { avatar: fileUrl } });
-  }
+  // function handleChangeUpload(fileUrl) {
+  //   dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { ...profile, avatar: fileUrl } });
+  // }
   const returnComponent = (
     <CContainer fluid className={joinClassName(['c-main m-auto p-4'])}>
       {loading ? (
@@ -136,15 +136,8 @@ const BasicInfo = ({ t, history, match }) => {
         </div>
       ) : (
         <div className="row">
-          <div className="col-xl-3 mb-4">
-            <div className="shadow bg-white rounded p-4">
-              <FormHeader text={t('label.avatar')} />
-              <UploadImageSingle src={profile.avatar} handleChangeUpload={handleChangeUpload} />
-            </div>
-          </div>
-          <div className=" col-xl-9">
-            <div className="shadow bg-white rounded p-4">
-              <FormHeader text={t('label.profile_basic_info')} />
+          <div className=" col-xl-12">
+            <div className="rounded p-4">
               <Formik
                 initialValues={profile}
                 innerRef={refInfo}
@@ -158,8 +151,15 @@ const BasicInfo = ({ t, history, match }) => {
                 {({ values, errors, touched, handleBlur, handleChange, setFieldValue }) => (
                   <form>
                     <div className="row">
-                      <div className="col-xl-12">
-                        <div className="row">
+                      <div className="col-3 mb-4">
+                        <div className="shadow bg-white rounded p-4">
+                          <FormHeader text={t('label.avatar')} />
+                          <UploadImageSingle src={values.avatar} handleChange={handleChange('avatar')} />
+                        </div>
+                      </div>
+                      <div className="col-9 shadow bg-white rounded p-4">
+                        <FormHeader text={t('label.profile_basic_info')} />
+                        <div className="row ">
                           {!isCreate ? (
                             <div className="form-group col-xl-6">
                               <Label text={t('label.employee_code')} required />
@@ -412,9 +412,9 @@ const BasicInfo = ({ t, history, match }) => {
                             </>
                           </div>
                         </div>
+                        {renderButtons(!isCreate ? buttonsCreate : buttonsUpdate)}
                       </div>
                     </div>
-                    {renderButtons(!isCreate ? buttonsCreate : buttonsUpdate)}
                   </form>
                 )}
               </Formik>

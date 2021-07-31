@@ -10,7 +10,7 @@ const initialState = {
     academicLevel: '0',
     note: '',
     expYear: 0,
-    id: '',
+    code: '',
   },
   deletedPositionId: 0,
 };

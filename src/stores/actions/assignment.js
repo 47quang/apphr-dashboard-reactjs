@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { RESPONSE_CODE } from 'src/constants/key';
 import { formatDateTimeScheduleToString, getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
@@ -13,43 +13,7 @@ const dayIndex = {
   5: 'friday',
   6: 'saturday',
 };
-const handleAssignmentExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
+
 export const fetchAssignments = (params, setLoading) => {
   return (dispatch, getState) => {
     api.assignment
@@ -71,7 +35,7 @@ export const fetchAssignments = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchAssignments');
+        handleExceptions(err, dispatch, getState, 'fetchAssignments');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -98,7 +62,7 @@ export const fetchAssignmentsInDate = (params, onTotalChange, setLoading) => {
         if (onTotalChange) onTotalChange(total);
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchAssignments');
+        handleExceptions(err, dispatch, getState, 'fetchAssignmentsInDate');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -207,7 +171,7 @@ export const fetchRollUpTable = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.assignment.SET_ASSIGNMENTS, payload });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchRollUpTable');
+        handleExceptions(err, dispatch, getState, 'fetchRollUpTable');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -233,7 +197,7 @@ export const fetchAssignment = (id, onTotalChange, setLoading) => {
         if (onTotalChange) onTotalChange(payload.rollUps.length);
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchAssignment');
+        handleExceptions(err, dispatch, getState, 'fetchAssignment');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -254,7 +218,7 @@ export const createAssignment = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'createAssignment');
+        handleExceptions(err, dispatch, getState, 'createAssignment');
       });
   };
 };
@@ -268,7 +232,7 @@ export const deleteAssignment = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'deleteAssignment');
+        handleExceptions(err, dispatch, getState, 'deleteAssignment');
       });
   };
 };
@@ -313,7 +277,7 @@ export const checkin = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'checkin');
+        handleExceptions(err, dispatch, getState, 'checkin');
       });
   };
 };
@@ -361,7 +325,7 @@ export const fetchPersonChart = (params, t) => {
         dispatch({ type: REDUX_STATE.assignment.SET_PERSON_CHART, payload: rv });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchPersonChart');
+        handleExceptions(err, dispatch, getState, 'fetchPersonChart');
       });
   };
 };
@@ -395,7 +359,7 @@ export const fetchStatisticChart = (params, success_msg) => {
         dispatch({ type: REDUX_STATE.assignment.SET_STATISTIC_CHART, payload: rv });
       })
       .catch((err) => {
-        handleAssignmentExceptions(err, dispatch, 'fetchStatisticChart');
+        handleExceptions(err, dispatch, getState, 'fetchStatisticChart');
       });
   };
 };

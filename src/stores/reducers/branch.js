@@ -15,6 +15,7 @@ const initialState = {
     phone: '',
     note: '',
     ipRouter: '',
+    bssid: '',
   },
   total: 0,
 };

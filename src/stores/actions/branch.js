@@ -3,8 +3,9 @@ import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleBranchExceptions = (err, dispatch, functionName) => {
+const handleBranchExceptions = (err, dispatch, getState, functionName) => {
   console.debug(functionName + ' errors', err.response);
+  let language = getState().style.language;
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
@@ -28,13 +29,13 @@ const handleBranchExceptions = (err, dispatch, functionName) => {
         });
         break;
       case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
+        errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
         break;
       case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
+        errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
         break;
       default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
+        errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
         break;
     }
   }
@@ -56,7 +57,7 @@ export const fetchBranches = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCHES, payload });
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'fetchBranches');
+        handleBranchExceptions(err, dispatch, getState, 'fetchBranches');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -72,7 +73,7 @@ export const fetchBranch = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.branch.SET_BRANCH, payload });
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'fetchBranch');
+        handleBranchExceptions(err, dispatch, getState, 'fetchBranch');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -81,6 +82,7 @@ export const fetchBranch = (id, setLoading) => {
 };
 
 export const createBranch = (params, history, success_msg) => {
+  params.bssid = params.bssid.toLowerCase();
   return (dispatch, getState) => {
     api.branch
       .post(params)
@@ -90,12 +92,13 @@ export const createBranch = (params, history, success_msg) => {
         history.push(ROUTE_PATH.BRANCH + `/${payload.id}`);
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'createBranch');
+        handleBranchExceptions(err, dispatch, getState, 'createBranch');
       });
   };
 };
 
 export const updateBranch = (data, success_msg) => {
+  data.bssid = data.bssid.toLowerCase();
   return (dispatch, getState) => {
     api.branch
       .put(data)
@@ -104,7 +107,7 @@ export const updateBranch = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'updateBranch');
+        handleBranchExceptions(err, dispatch, getState, 'updateBranch');
       });
   };
 };
@@ -118,7 +121,7 @@ export const deleteBranch = (id, success_msg, handleAfterDelete) => {
         if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'deleteBranch');
+        handleBranchExceptions(err, dispatch, getState, 'deleteBranch');
       });
   };
 };
@@ -143,7 +146,7 @@ export const countBranches = (params) => {
         dispatch({ type: REDUX_STATE.branch.COUNT_BRANCHES, payload });
       })
       .catch((err) => {
-        handleBranchExceptions(err, dispatch, 'countBranches');
+        handleBranchExceptions(err, dispatch, getState, 'countBranches');
       });
   };
 };

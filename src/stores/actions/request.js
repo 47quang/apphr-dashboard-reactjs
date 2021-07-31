@@ -1,60 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
 import { formatDate, formatDateTimeScheduleToString, formatDateTimeToString, parseLocalTime } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
 
-const handleRequestExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        let serverErrorMessage = err.response.data.message;
-        switch (serverErrorMessage) {
-          case SERVER_RESPONSE_MESSAGE.NO_DAYS_OFF:
-            errorMessage = 'Không còn ngày nghỉ được hưởng lương nữa';
-            break;
-          case SERVER_RESPONSE_MESSAGE.INVALID_ASSIGNMENT_STATUS:
-            errorMessage = 'Unknown error occurred';
-            break;
-          case SERVER_RESPONSE_MESSAGE.ALREADY_EXISTED_ASSIGNMENT:
-            errorMessage = 'Không thể tạo đề xuất làm ngoài giờ khi đã có đề xuất khác trong thời gian này';
-            break;
-          default:
-            break;
-        }
-
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchLeaveRequests = (params, setLoading) => {
   return (dispatch, getState) => {
     api.leaveRequest
@@ -80,7 +29,7 @@ export const fetchLeaveRequests = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchLeaveRequests');
+        handleExceptions(err, dispatch, getState, 'fetchLeaveRequests');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -117,7 +66,7 @@ export const fetchLeaveRequest = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.leaveReq.SET_LEAVE_REQUEST, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchLeaveRequest');
+        handleExceptions(err, dispatch, getState, 'fetchLeaveRequest');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -134,7 +83,7 @@ export const createLeaveRequest = (data, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'createLeaveRequest');
+        handleExceptions(err, dispatch, getState, 'createLeaveRequest');
       });
   };
 };
@@ -149,7 +98,7 @@ export const approveLeaveRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'approveLeaveRequest');
+        handleExceptions(err, dispatch, getState, 'approveLeaveRequest');
       });
   };
 };
@@ -163,7 +112,7 @@ export const rejectLeaveRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'rejectLeaveRequest ');
+        handleExceptions(err, dispatch, getState, 'rejectLeaveRequest ');
       });
   };
 };
@@ -194,7 +143,7 @@ export const fetchRemoteRequests = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchRemoteRequests');
+        handleExceptions(err, dispatch, getState, 'fetchRemoteRequests');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -230,7 +179,7 @@ export const fetchRemoteRequest = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.remoteReq.SET_REMOTE_REQUEST, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchRemoteRequest');
+        handleExceptions(err, dispatch, getState, 'fetchRemoteRequest');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -246,7 +195,7 @@ export const createRemoteRequest = (data, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'createRemoteRequest');
+        handleExceptions(err, dispatch, getState, 'createRemoteRequest');
       });
   };
 };
@@ -260,7 +209,7 @@ export const approveRemoteRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'approveRemoteRequest');
+        handleExceptions(err, dispatch, getState, 'approveRemoteRequest');
       });
   };
 };
@@ -274,7 +223,7 @@ export const rejectRemoteRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'rejectRemoteRequest');
+        handleExceptions(err, dispatch, getState, 'rejectRemoteRequest');
       });
   };
 };
@@ -304,7 +253,7 @@ export const fetchOvertimeRequests = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchOvertimeRequests');
+        handleExceptions(err, dispatch, getState, 'fetchOvertimeRequests');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -334,7 +283,7 @@ export const fetchOvertimeRequest = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.overtimeReq.SET_OVERTIME_REQUEST, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'fetchOvertimeRequest');
+        handleExceptions(err, dispatch, getState, 'fetchOvertimeRequest');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -351,7 +300,7 @@ export const createOvertimeRequest = (data, history, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'createOvertimeRequest');
+        handleExceptions(err, dispatch, getState, 'createOvertimeRequest');
       });
   };
 };
@@ -365,7 +314,7 @@ export const approveOvertimeRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'approveOvertimeRequest');
+        handleExceptions(err, dispatch, getState, 'approveOvertimeRequest');
       });
   };
 };
@@ -379,7 +328,7 @@ export const rejectOvertimeRequest = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'rejectOvertimeRequest');
+        handleExceptions(err, dispatch, getState, 'rejectOvertimeRequest');
       });
   };
 };
@@ -429,7 +378,7 @@ export const countLeaveRequests = (params) => {
         dispatch({ type: REDUX_STATE.leaveReq.COUNT_LEAVE_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'countLeaveRequests');
+        handleExceptions(err, dispatch, getState, 'countLeaveRequests');
       });
   };
 };
@@ -442,7 +391,7 @@ export const countRemoteRequests = (params) => {
         dispatch({ type: REDUX_STATE.remoteReq.COUNT_REMOTE_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'countRemoteRequests');
+        handleExceptions(err, dispatch, getState, 'countRemoteRequests');
       });
   };
 };
@@ -455,7 +404,7 @@ export const countOvertimeRequests = (params) => {
         dispatch({ type: REDUX_STATE.overtimeReq.COUNT_OVERTIME_REQUESTS, payload });
       })
       .catch((err) => {
-        handleRequestExceptions(err, dispatch, 'countOvertimeRequests');
+        handleExceptions(err, dispatch, getState, 'countOvertimeRequests');
       });
   };
 };

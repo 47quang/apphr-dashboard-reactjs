@@ -1,46 +1,9 @@
-import { RESPONSE_CODE, ROUTE_PATH, SERVER_RESPONSE_MESSAGE } from 'src/constants/key';
+import { ROUTE_PATH } from 'src/constants/key';
+import { formatDateTimeToString } from 'src/utils/datetimeUtils';
+import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
-import { formatDateTimeToString } from 'src/utils/datetimeUtils';
 
-const handleAccountExceptions = (err, dispatch, functionName) => {
-  console.debug(functionName + ' errors', err.response);
-  let errorMessage = 'Unknown error occurred';
-  if (err?.response?.status) {
-    switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        let messageFromServer = err.response.data.message;
-        if (messageFromServer === SERVER_RESPONSE_MESSAGE.VALIDATE_FAILED_EMAIL) errorMessage = 'Không tìm thấy email này';
-        break;
-      case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
-        errorMessage = 'Internal server error';
-        break;
-      case RESPONSE_CODE.CE_FORBIDDEN:
-        errorMessage = "You don't have permission to do this function";
-        break;
-      case RESPONSE_CODE.CE_UNAUTHORIZED:
-        localStorage.clear();
-        dispatch({
-          type: REDUX_STATE.user.SET_USER,
-          payload: {
-            username: '',
-            token: '',
-          },
-        });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message.en;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message.en;
-        break;
-      default:
-        errorMessage = err.response?.data?.message?.en || errorMessage;
-        break;
-    }
-  }
-  dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'error', message: errorMessage } });
-};
 export const fetchAccounts = (params, setLoading) => {
   return (dispatch, getState) => {
     api.account
@@ -69,31 +32,7 @@ export const fetchAccounts = (params, setLoading) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch Accounts');
-      })
-      .finally(() => {
-        if (setLoading) setLoading(false);
-      });
-  };
-};
-
-export const filterAccounts = (params, onTotalChange, setLoading) => {
-  return (dispatch, getState) => {
-    api.account
-      .filter(params)
-      .then(({ payload, total }) => {
-        payload =
-          payload && payload.length > 0
-            ? payload.map((a) => {
-                a.role = a.role.name;
-                return a;
-              })
-            : [];
-        dispatch({ type: REDUX_STATE.account.SET_ACCOUNTS, payload });
-        if (onTotalChange) onTotalChange(total);
-      })
-      .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'filterAccounts');
+        handleExceptions(err, dispatch, getState, 'fetch Accounts');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -119,7 +58,7 @@ export const fetchAccount = (id, setLoading) => {
         dispatch({ type: REDUX_STATE.account.SET_ACCOUNT, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch Account');
+        handleExceptions(err, dispatch, getState, 'fetchAccount');
       })
       .finally(() => {
         if (setLoading) setLoading(false);
@@ -136,7 +75,7 @@ export const createAccount = (params, history, success_msg) => {
         history.push(ROUTE_PATH.ACCOUNT + `/${payload.id}`);
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'create Account');
+        handleExceptions(err, dispatch, getState, 'createAccount');
       });
   };
 };
@@ -152,7 +91,7 @@ export const updateAccount = (data, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'update Account');
+        handleExceptions(err, dispatch, getState, 'updateAccount');
       });
   };
 };
@@ -166,7 +105,7 @@ export const deleteAccount = (id, success_msg, handleAfterDelete) => {
         if (handleAfterDelete) handleAfterDelete();
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'delete Accounts');
+        handleExceptions(err, dispatch, getState, 'deleteAccount');
       });
   };
 };
@@ -178,7 +117,7 @@ export const resetPassword = (id, success_msg) => {
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'resetPassword');
+        handleExceptions(err, dispatch, getState, 'resetPassword');
       });
   };
 };
@@ -195,10 +134,11 @@ export const fetchRoles = (params) => {
     api.account
       .getAllRole(params)
       .then(({ payload }) => {
+        payload = payload.filter((x) => x.id !== 1);
         dispatch({ type: REDUX_STATE.account.GET_ROLES, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch roles');
+        handleExceptions(err, dispatch, getState, 'fetchRoles');
       });
   };
 };
@@ -212,7 +152,7 @@ export const fetchRole = (id) => {
         dispatch({ type: REDUX_STATE.account.GET_PERMISSION_ARRAY, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch Role');
+        handleExceptions(err, dispatch, getState, 'fetchRole');
       });
   };
 };
@@ -227,7 +167,7 @@ export const fetchProfiles = (params) => {
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch profiles');
+        handleExceptions(err, dispatch, getState, 'fetchProfiles');
       });
   };
 };
@@ -242,7 +182,7 @@ export const fetchProfilesWithoutAccount = (params) => {
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'fetch profiles');
+        handleExceptions(err, dispatch, getState, 'fetchProfilesWithoutAccount');
       });
   };
 };
@@ -255,7 +195,7 @@ export const countAccounts = (params) => {
         dispatch({ type: REDUX_STATE.account.COUNT_ACCOUNT, payload });
       })
       .catch((err) => {
-        handleAccountExceptions(err, dispatch, 'count accounts');
+        handleExceptions(err, dispatch, getState, 'countAccounts');
       });
   };
 };
