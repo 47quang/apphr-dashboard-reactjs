@@ -111,7 +111,7 @@ const OtherFee = ({ t }) => {
     ]);
   }, [t]);
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_WAGE))
+    if (permissionIds.includes(PERMISSION.LIST_PAYMENT))
       dispatch(
         fetchPayments(
           {
@@ -166,7 +166,7 @@ const OtherFee = ({ t }) => {
       />
     );
   };
-  if (permissionIds.includes(PERMISSION.LIST_WAGE))
+  if (permissionIds.includes(PERMISSION.LIST_PAYMENT))
     return (
       <CContainer fluid className="c-main m-auto p-4">
         <Helmet>
@@ -182,9 +182,9 @@ const OtherFee = ({ t }) => {
           onCurrentPageChange={onCurrentPageChange}
           onPageSizeChange={onPageSizeChange}
           paging={paging}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_WAGE)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_WAGE)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_WAGE)}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_PAYMENT)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_PAYMENT)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_PAYMENT)}
           filters={filters}
           filterFunction={filterFunction}
           statusComponent={statusComponent}

@@ -13,7 +13,7 @@ const NewContractAttribute = ({ t, location, history }) => {
   const attribute = useSelector((state) => state.attribute.attribute);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.CREATE_ALLOWANCE)) dispatch(setEmptyAttribute());
+    if (permissionIds.includes(PERMISSION.CREATE_ATTRIBUTE)) dispatch(setEmptyAttribute());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -42,7 +42,7 @@ const NewContractAttribute = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  if (permissionIds.includes(PERMISSION.CREATE_ALLOWANCE))
+  if (permissionIds.includes(PERMISSION.CREATE_ATTRIBUTE))
     return (
       <ContractAttributeItemBody
         attributeRef={attributeInfoForm}

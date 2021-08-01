@@ -15,7 +15,7 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_ALLOWANCE)) dispatch(fetchAttribute(match.params?.id, setLoading));
+    if (permissionIds.includes(PERMISSION.GET_ATTRIBUTE)) dispatch(fetchAttribute(match.params?.id, setLoading));
     else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -25,7 +25,7 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
     // Call API UPDATE
     dispatch(updateAttribute(form, t('message.successful_update')));
   };
-  const buttons = permissionIds.includes(PERMISSION.UPDATE_ALLOWANCE)
+  const buttons = permissionIds.includes(PERMISSION.UPDATE_ATTRIBUTE)
     ? [
         {
           type: 'button',
@@ -72,7 +72,7 @@ const UpdateContractAttribute = ({ t, location, history, match }) => {
         <CircularProgress />
       </div>
     );
-  if (permissionIds.includes(PERMISSION.GET_ALLOWANCE))
+  if (permissionIds.includes(PERMISSION.GET_ATTRIBUTE))
     return (
       <ContractAttributeItemBody
         attributeRef={attributeInfoForm}

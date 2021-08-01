@@ -13,7 +13,7 @@ const NewOtherFee = ({ t, location, history }) => {
   const payment = useSelector((state) => state.payment.payment);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.CREATE_WAGE)) dispatch(setEmptyPayment());
+    if (permissionIds.includes(PERMISSION.CREATE_PAYMENT)) dispatch(setEmptyPayment());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -43,7 +43,7 @@ const NewOtherFee = ({ t, location, history }) => {
       name: t('label.create_new'),
     },
   ];
-  if (permissionIds.includes(PERMISSION.CREATE_WAGE))
+  if (permissionIds.includes(PERMISSION.CREATE_PAYMENT))
     return (
       <OtherFeeItemBody
         paymentRef={feeInfoForm}
