@@ -112,7 +112,7 @@ const ContractAttribute = ({ t }) => {
     ]);
   }, [t]);
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
+    if (permissionIds.includes(PERMISSION.LIST_ATTRIBUTE))
       dispatch(
         fetchAttributes(
           {
@@ -167,7 +167,7 @@ const ContractAttribute = ({ t }) => {
       />
     );
   };
-  if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
+  if (permissionIds.includes(PERMISSION.LIST_ATTRIBUTE))
     return (
       <CContainer fluid className="c-main m-auto p-4">
         <Helmet>
@@ -185,9 +185,9 @@ const ContractAttribute = ({ t }) => {
           paging={paging}
           statusCols={['type']}
           statusComponent={statusComponent}
-          disableDelete={!permissionIds.includes(PERMISSION.DELETE_ALLOWANCE)}
-          disableCreate={!permissionIds.includes(PERMISSION.CREATE_ALLOWANCE)}
-          disableEdit={!permissionIds.includes(PERMISSION.GET_ALLOWANCE)}
+          disableDelete={!permissionIds.includes(PERMISSION.DELETE_ATTRIBUTE)}
+          disableCreate={!permissionIds.includes(PERMISSION.CREATE_ATTRIBUTE)}
+          disableEdit={!permissionIds.includes(PERMISSION.GET_ATTRIBUTE)}
           filters={filters}
           filterFunction={filterFunction}
           total={attributes?.total ?? 0}

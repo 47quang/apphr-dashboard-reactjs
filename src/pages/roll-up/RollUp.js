@@ -42,6 +42,7 @@ const RollUp = ({ t, location }) => {
     loading: true,
     columnDefFlag: false,
   });
+  const [paramsFilter, setParamsFilter] = useState({ filters: [] });
   const onCurrentPageChange = (pageNumber) =>
     setPaging((prevState) => ({
       ...prevState,
@@ -254,6 +255,8 @@ const RollUp = ({ t, location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const filterFunction = (params) => {
+    console.log(params);
+    setParamsFilter(params);
     dispatch(
       fetchRollUpTable(
         {
@@ -286,6 +289,7 @@ const RollUp = ({ t, location }) => {
       dispatch(
         fetchRollUpTable(
           {
+            ...paramsFilter,
             page: paging.currentPage,
             perpage: paging.pageSize,
             from: fromDate,

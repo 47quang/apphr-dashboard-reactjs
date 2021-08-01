@@ -15,7 +15,7 @@ const UpdateOtherFee = ({ t, location, history, match }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.GET_WAGE)) dispatch(fetchPayment(match.params?.id, setLoading));
+    if (permissionIds.includes(PERMISSION.GET_PAYMENT)) dispatch(fetchPayment(match.params?.id, setLoading));
     else setLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,7 +26,7 @@ const UpdateOtherFee = ({ t, location, history, match }) => {
     // Call API UPDATE
     dispatch(updatePayment(form, t('message.successful_update')));
   };
-  const buttons = permissionIds.includes(PERMISSION.UPDATE_WAGE)
+  const buttons = permissionIds.includes(PERMISSION.UPDATE_PAYMENT)
     ? [
         {
           type: 'button',
@@ -73,7 +73,7 @@ const UpdateOtherFee = ({ t, location, history, match }) => {
         <CircularProgress />
       </div>
     );
-  if (permissionIds.includes(PERMISSION.GET_WAGE))
+  if (permissionIds.includes(PERMISSION.GET_PAYMENT))
     return (
       <OtherFeeItemBody
         paymentRef={paymentInfoForm}

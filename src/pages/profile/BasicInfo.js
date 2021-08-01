@@ -125,9 +125,6 @@ const BasicInfo = ({ t, history, match }) => {
         },
       ];
 
-  // function handleChangeUpload(fileUrl) {
-  //   dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload: { ...profile, avatar: fileUrl } });
-  // }
   const returnComponent = (
     <CContainer fluid className={joinClassName(['c-main m-auto p-4'])}>
       {loading ? (
