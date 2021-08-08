@@ -17,11 +17,11 @@ const ContractAttributeItemBody = ({ t, attributeRef, attribute, validationSchem
     },
     {
       id: 'text',
-      name: 'Text',
+      name: t('label.text'),
     },
     {
       id: 'textArea',
-      name: 'Text Area',
+      name: t('label.textArea'),
     },
   ];
   return (

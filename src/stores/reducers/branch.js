@@ -16,6 +16,9 @@ const initialState = {
     note: '',
     ipRouter: '',
     bssid: '',
+    provinces: [],
+    districts: [],
+    wards: [],
   },
   total: 0,
 };

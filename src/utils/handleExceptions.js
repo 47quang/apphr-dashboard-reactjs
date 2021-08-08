@@ -8,9 +8,10 @@ export const handleExceptions = (err, dispatch, getState, functionName) => {
   let errorMessage = 'Unknown error occurred';
   if (err?.response?.status) {
     switch (err.response.status) {
-      case RESPONSE_CODE.SE_BAD_GATEWAY:
-        errorMessage = 'Server bad gateway';
-        break;
+      // case RESPONSE_CODE.SE_BAD_GATEWAY:
+      //   errorMessage = 'Server bad gateway';
+      //   errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
+      //   break;
       case RESPONSE_CODE.SE_INTERNAL_SERVER_ERROR:
         errorMessage = 'Internal server error';
         break;
@@ -23,12 +24,6 @@ export const handleExceptions = (err, dispatch, getState, functionName) => {
             token: '',
           },
         });
-        break;
-      case RESPONSE_CODE.CE_BAD_REQUEST:
-        errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
-        break;
-      case RESPONSE_CODE.CE_NOT_FOUND:
-        errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;
         break;
       default:
         errorMessage = err.response.data.message[language] || err.response.data.message.en || errorMessage;

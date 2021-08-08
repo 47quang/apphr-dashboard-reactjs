@@ -93,7 +93,6 @@ export const deleteShift = (params, success_msg, handleAfterDelete) => {
     api.shift
       .delete(params.id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })

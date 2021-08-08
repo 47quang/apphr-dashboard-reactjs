@@ -24,7 +24,6 @@ import { PERMISSION } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchHolidays } from 'src/stores/actions/holiday';
-import { REDUX_STATE } from 'src/stores/states';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
 import NoteScheduler from './NoteSchedule';
@@ -179,30 +178,45 @@ const SchedulerPage = ({ t, history, match }) => {
 
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
-    let startDate = selectedDate + 'T' + values.start;
-    let endDate = selectedDate + 'T' + values.end;
-    let checkValidTask = assignments?.payload
-      ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
-      : false; //bug
-    if (!checkValidTask) {
-      dispatch({
-        type: REDUX_STATE.notification.SET_NOTI,
-        payload: { open: true, type: 'error', message: t('message.not_assign_in_this_time') },
-      });
-      setState({
-        ...state,
-        isOpen: false,
-      });
-    } else {
-      let body = {
-        shiftId: +values.shiftId,
-        profileId: profileId,
-        date: new Date(selectedDate),
-        endTime: values.endTime ? new Date(values.endTime) : undefined,
-      };
-      dispatch(createAssignment(body, t('message.successful_create')));
-      handleClose();
-    }
+    const [sHH, sMM] = values.start.split(':');
+    const [eHH, eMM] = values.end.split(':');
+    let startTime = new Date(selectedDate);
+    startTime.setHours(+sHH, +sMM, 0, 0);
+    let endTime = new Date(selectedDate);
+    endTime.setHours(+eHH, +eMM, 0, 0);
+
+    let body = {
+      shiftId: +values.shiftId,
+      profileId: profileId,
+      startTime: startTime,
+      endTime: endTime,
+      to: values.to ? new Date(values.to) : undefined,
+    };
+    dispatch(createAssignment(body, t('message.successful_create')));
+    handleClose();
+
+    // let checkValidTask = assignments?.payload
+    //   ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
+    //   : false; //bug
+    // if (!checkValidTask) {
+    //   dispatch({
+    //     type: REDUX_STATE.notification.SET_NOTI,
+    //     payload: { open: true, type: 'error', message: t('message.not_assign_in_this_time') },
+    //   });
+    //   setState({
+    //     ...state,
+    //     isOpen: false,
+    //   });
+    // } else {
+    //   let body = {
+    //     shiftId: +values.shiftId,
+    //     profileId: profileId,
+    //     date: new Date(selectedDate),
+    //     endTime: values.endTime ? new Date(values.endTime) : undefined,
+    //   };
+    //   dispatch(createAssignment(body, t('message.successful_create')));
+    //   handleClose();
+    // }
   };
   const style = ({ palette }) => ({
     icon: {

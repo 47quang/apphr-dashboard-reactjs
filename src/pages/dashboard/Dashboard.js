@@ -1,5 +1,4 @@
 import { CCardBody, CContainer } from '@coreui/react';
-import moment from 'moment';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
@@ -10,11 +9,6 @@ import LogTable from './LogTable';
 import RenewContract from './RenewContract';
 
 const Dashboard = ({ t, location }) => {
-  const initValues = {
-    date: moment().format('YYYY-MM-DD'),
-    shiftId: '',
-  };
-
   const dispatch = useDispatch();
 
   const handleChangeShift = (values) => {
@@ -33,7 +27,7 @@ const Dashboard = ({ t, location }) => {
             <RenewContract t={t} />
           </CCardBody>
           <CCardBody className="col-6 ">
-            <PieChart initValues={initValues} handleFunction={handleChangeShift} />
+            <PieChart handleFunction={handleChangeShift} />
           </CCardBody>
           <CCardBody className="col-6 ">
             <LogTable t={t} />

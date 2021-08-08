@@ -560,6 +560,7 @@ export const api = {
       });
     },
     post: (data) => {
+      console.log('data', data);
       return client.post(API_PREFIX.API_ASSIGNMENT, data);
     },
     put: (data) => {

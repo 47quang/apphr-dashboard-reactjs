@@ -4,7 +4,7 @@ import querystring from 'query-string';
 const getDefaultHeaders = () => {
   let host = window.location.host;
   let parts = host.split('.');
-  let subdomain = parts.length >= 3 ? parts[0] : 'dev';
+  let subdomain = parts.length >= 3 ? parts[0] : 'test';
   return {
     Authorization: 'Bearer ' + localStorage.getItem('token'),
     subdomain: subdomain,

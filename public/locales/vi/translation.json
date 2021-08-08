@@ -649,6 +649,7 @@
     "enter_code": "Nhập mã định danh"
   },
   "validation": {
+    "experience_year_must_be_integer": "Số năm kinh nghiệm là một số nguyên",
     "required_positive_days": "Số ngày phải là số không âm",
     "required_integer_days": "Số ngày phải là một só nguyên",
     "required_enter_days": "Bắt buộc phải nhập số ngày",

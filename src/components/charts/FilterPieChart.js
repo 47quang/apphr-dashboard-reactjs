@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +8,16 @@ import { fetchShifts } from 'src/stores/actions/shift';
 import CommonSelectInput from '../input/CommonSelectInput';
 import CommonTextInput from '../input/CommonTextInput';
 
-const FilterPieChart = ({ initValues, handleFunction }) => {
+const FilterPieChart = ({ handleFunction }) => {
   const { t } = useTranslation();
   const shifts = useSelector((state) => state.shift.shifts);
   const dispatch = useDispatch();
+  const initValues = {
+    start: moment().format('YYYY-MM-DD'),
+    shiftId: '',
+  };
   useEffect(() => {
-    dispatch(fetchShifts({ day: new Date(initValues.date).getDay() + 1 }));
+    dispatch(fetchShifts({ day: new Date(initValues.start).getDay() + 1 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -21,6 +26,10 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
       validationSchema={SelectShift}
       enableReinitialize
       onSubmit={(values) => {
+        let shift = shifts.payload.filter((x) => x.id === +values.shiftId);
+        const [hh, mm] = shift[0].startCC.split(':');
+        values.start = new Date(values.start);
+        values.start.setHours(+hh, +mm, 0, 0);
         handleFunction(values);
       }}
     >
@@ -31,21 +40,21 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
             <div className="row">
               <CommonTextInput
                 containerClassName={'form-group col-xl-5'}
-                value={props.values.date ?? ''}
-                onBlur={props.handleBlur(`date`)}
+                value={props.values.start ?? ''}
+                onBlur={props.handleBlur(`start`)}
                 onChange={(e) => {
                   dispatch(fetchShifts({ day: new Date(e.target.value).getDay() + 1 }));
-                  props.handleChange(`date`)(e);
+                  props.handleChange(`start`)(e);
                   props.setFieldValue('shiftId', '');
                 }}
-                inputID={`date`}
+                inputID={`start`}
                 labelText={t('label.start_date')}
                 inputType={'date'}
                 inputClassName={'form-control'}
                 isRequiredField
-                isTouched={props.touched.date}
-                isError={props.errors.date && props.touched.date}
-                errorMessage={t(props.errors.date)}
+                isTouched={props.touched.start}
+                isError={props.errors.start && props.touched.start}
+                errorMessage={t(props.errors.start)}
               />
               <CommonSelectInput
                 containerClassName={'form-group col-xl-5'}
@@ -70,6 +79,7 @@ const FilterPieChart = ({ initValues, handleFunction }) => {
                   type="button"
                   className="btn btn-primary"
                   onClick={(e) => {
+                    console.log(props.errors);
                     props.handleSubmit();
                   }}
                   style={{ width: '95%' }}

@@ -15,7 +15,8 @@ const NewBranchPage = ({ t, location, history }) => {
   const provinces = useSelector((state) => state.location.provinces);
   const districts = useSelector((state) => state.location.districts);
   const wards = useSelector((state) => state.location.wards);
-
+  branch.provinces = provinces;
+  console.log('render');
   useEffect(() => {
     if (permissionIds.includes(PERMISSION.CREATE_BRANCH)) {
       dispatch(setEmptyBranch());

@@ -19,6 +19,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
     { id: 'WIFI', name: t('label.wi_fi') },
     { id: 'QR_CODE', name: t('label.qr_code') },
   ];
+  console.log('render1');
   return (
     <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
@@ -170,7 +171,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       labelText={t('label.province')}
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_province')}
-                      lstSelectOptions={provinces}
+                      lstSelectOptions={values.provinces}
                     />
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-6'}

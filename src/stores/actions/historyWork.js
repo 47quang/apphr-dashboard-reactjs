@@ -153,12 +153,12 @@ export const setEmptyHistories = () => {
   };
 };
 
-export const activeWorking = (id, setFieldValue, success_msg) => {
+export const activeWorking = (id, handleFunction, success_msg) => {
   return (dispatch, getState) => {
     api.historyWork
       .active(id)
       .then(({ payload }) => {
-        if (setFieldValue) setFieldValue('status', 'active');
+        if (handleFunction) handleFunction();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -166,12 +166,12 @@ export const activeWorking = (id, setFieldValue, success_msg) => {
       });
   };
 };
-export const inactiveWorking = (id, setFieldValue, success_msg) => {
+export const inactiveWorking = (id, handleFunction, success_msg) => {
   return (dispatch, getState) => {
     api.historyWork
       .inactive(id)
       .then(({ payload }) => {
-        if (setFieldValue) setFieldValue('status', 'inactive');
+        if (handleFunction) handleFunction();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {

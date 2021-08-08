@@ -52,6 +52,7 @@ const NewContract = ({ t, history, match }) => {
     allowances: [],
     files: [],
     status: '',
+    profileId: '',
   };
   const newContractRef = useRef();
 

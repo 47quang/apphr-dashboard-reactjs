@@ -206,12 +206,15 @@ export const fetchAssignment = (id, onTotalChange, setLoading) => {
 };
 
 export const createAssignment = (params, success_msg) => {
+  console.log(params);
   return (dispatch, getState) => {
     api.assignment
       .post(params)
       .then(({ payload }) => {
         payload.startDate = formatDateTimeScheduleToString(payload.startTime);
         payload.endDate = formatDateTimeScheduleToString(payload.endTime);
+        payload.startDate = payload.startTime;
+        payload.endDate = payload.endTime;
         payload.title = payload.shift.code + ' - ' + payload.shift.name;
         payload.location = payload.shift.branch.code + ' - ' + payload.shift.branch.name;
         dispatch({ type: REDUX_STATE.assignment.CREATE_ASSIGNMENT, payload });

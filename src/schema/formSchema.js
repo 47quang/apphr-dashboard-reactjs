@@ -59,7 +59,8 @@ export const SettingShiftInfoSchema = Yup.object().shape({
     .trim()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
       return value !== '0';
-    }),
+    })
+    .required('validation.required_select_branch_id'),
   operateLoop: Yup.array()
     .of(Yup.number())
     .required('validation.required_select_operator_loop')
@@ -105,7 +106,10 @@ export const SettingPositionInfoSchema = Yup.object().shape({
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_academic_level', function (value) {
       return value !== '0';
     }),
-  expYear: Yup.number().required('validation.required_enter_experience_year').min(0, 'validation.experience_year_must_not_be_negative'),
+  expYear: Yup.number()
+    .required('validation.required_enter_experience_year')
+    .integer('validation.experience_year_must_be_integer')
+    .min(0, 'validation.experience_year_must_not_be_negative'),
 });
 
 //Branch
@@ -929,7 +933,7 @@ export const NewTaskSchedule = Yup.object().shape({
     .required('validation.required_select_shift'),
   start: Yup.string().trim(),
   end: Yup.string().trim(),
-  endTime: Yup.string().trim(),
+  to: Yup.string().trim(),
 });
 
 export const NewRollUpSchema = Yup.object().shape({
@@ -1151,7 +1155,7 @@ export const DateRange = Yup.object().shape({
     .required('validation.required_select_end_date'),
 });
 export const SelectShift = Yup.object().shape({
-  date: Yup.string().trim().required('validation.required_select_date'),
+  start: Yup.string().trim().required('validation.required_select_date'),
   shiftId: Yup.string()
     .trim()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_shift', function (value) {

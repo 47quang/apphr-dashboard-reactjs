@@ -48,6 +48,14 @@ const NewOvertimeForm = ({ t, history, match }) => {
               let data = { ...values };
               data.profileId = parseInt(data.profileId);
               data.shiftId = parseInt(data.shiftId);
+              let shift = shifts.payload.filter((x) => x.id === data.shiftId);
+              const [sHH, sMM] = shift[0].startCC.split(':');
+              const [eHH, eMM] = shift[0].endCC.split(':');
+              data.startTime = new Date(data.date);
+              data.startTime.setHours(+sHH, +sMM, 0, 0);
+              data.endTime = new Date(data.date);
+              data.endTime.setHours(+eHH, +eMM, 0, 0);
+              delete data.date;
               dispatch(createOvertimeRequest(data, history, t('message.successful_create')));
             }}
           >
@@ -181,7 +189,7 @@ const NewOvertimeForm = ({ t, history, match }) => {
                     className: `btn btn-primary mr-4`,
 
                     onClick: (e) => {
-                      history.push(ROUTE_PATH.REMOTE);
+                      history.push(ROUTE_PATH.OVERTIME);
                     },
                     name: t('label.back'),
                     position: 'left',
