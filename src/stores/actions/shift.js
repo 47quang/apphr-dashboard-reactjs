@@ -29,7 +29,7 @@ export const fetchShifts = (params, setLoading) => {
   };
 };
 const formatDownloadedData = (payload) => {
-  payload.name = payload.code + ' - ' + payload.name;
+  // payload.name = payload.code + ' - ' + payload.name;
   payload.operateLoop = deCodeChecked(payload.operateLoop);
   payload.startCC = parseLocalTime(payload.startCC);
   payload.endCC = parseLocalTime(payload.endCC);

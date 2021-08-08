@@ -79,7 +79,6 @@ const FilterPieChart = ({ handleFunction }) => {
                   type="button"
                   className="btn btn-primary"
                   onClick={(e) => {
-                    console.log(props.errors);
                     props.handleSubmit();
                   }}
                   style={{ width: '95%' }}

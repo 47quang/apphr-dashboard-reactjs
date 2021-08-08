@@ -521,6 +521,7 @@
     "upload_success": "Upload thành công"
   },
   "placeholder": {
+    "enter_flexible_time": "Nhập mức giao động thời gian điểm danh",
     "enter_macAddress": "Nhập địa chỉ MAC",
     "select_branches": "Chọn các chi nhánh",
     "select_departments": "Chọn các phòng ban",
@@ -649,6 +650,7 @@
     "enter_code": "Nhập mã định danh"
   },
   "validation": {
+    "min_point_must_be_less_or_equal_than_expected": "Thời gian làm việc tối thiểu phải bé hơn hoặc bằng thời gian làm việc kỳ vọng",
     "experience_year_must_be_integer": "Số năm kinh nghiệm là một số nguyên",
     "required_positive_days": "Số ngày phải là số không âm",
     "required_integer_days": "Số ngày phải là một só nguyên",

@@ -255,7 +255,6 @@ const RollUp = ({ t, location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const filterFunction = (params) => {
-    console.log(params);
     setParamsFilter(params);
     dispatch(
       fetchRollUpTable(

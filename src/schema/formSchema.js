@@ -52,9 +52,15 @@ export const SettingShiftInfoSchema = Yup.object().shape({
   overtimeCoefficient: Yup.number()
     .min(0, 'validation.working_time_overtime_coefficient_must_not_be_negative')
     .required('validation.required_enter_working_time_overtime_coefficient'),
-  expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
   flexibleTime: Yup.number().min(0, 'validation.flexible_time_must_not_be_negative').required('validation.required_enter_flexible_time'),
-  minPoint: Yup.number().min(0, 'validation.min_point_must_not_be_negative').required('validation.required_enter_min_point'),
+  expected: Yup.number().min(0, 'validation.minimum_work_time_must_not_be_negative').required('validation.required_enter_minimum_work_time'),
+  minPoint: Yup.number()
+    .min(0, 'validation.min_point_must_not_be_negative')
+    .test('test_min_point', 'validation.min_point_must_be_less_or_equal_than_expected', function (value) {
+      const { expected } = this.parent;
+      return value <= expected;
+    })
+    .required('validation.required_enter_min_point'),
   branchId: Yup.string()
     .trim()
     .test(VALIDATION_STRING.NOT_EMPTY, 'validation.required_select_branch_id', function (value) {
@@ -126,6 +132,7 @@ export const SettingBranchInfoSchema = Yup.object().shape({
       then: Yup.string().trim().required('validation.required_enter_bssid'),
     }),
   address: Yup.string().trim(),
+  phone: Yup.string().trim().matches(getRegexExpression(VALIDATION_TYPE.PHONE_NUMBER), 'validation.enter_valid_phone_number'),
   typeCC: Yup.string()
     .trim()
     .required('validation.required_select_roll_call')

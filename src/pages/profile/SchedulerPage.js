@@ -146,22 +146,20 @@ const SchedulerPage = ({ t, history, match }) => {
     return <WeekView.TimeTableCell {...props} onClick={onClickEvent} role="button" />;
   };
   useEffect(() => {
+    return () => {
+      dispatch(setEmptyAssignments());
+    };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
-      var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
-      var last = first + 6; // last day is the first day + 6
-      var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
-      var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
-      lastDay.setHours(23, 59, 59, 0);
-      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
+      handleReload();
       dispatch(
         fetchHolidays({
           page: 0,
           perpage: 999,
         }),
       );
-      return () => {
-        dispatch(setEmptyAssignments());
-      };
     }
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,6 +172,14 @@ const SchedulerPage = ({ t, history, match }) => {
   };
   const handleClose = () => {
     setState({ ...state, isOpen: false });
+  };
+  const handleReload = () => {
+    var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+    var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
+    var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
+    lastDay.setHours(23, 59, 59, 0);
+    dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
   };
 
   const handleConfirm = async (values) => {
@@ -192,7 +198,7 @@ const SchedulerPage = ({ t, history, match }) => {
       endTime: endTime,
       to: values.to ? new Date(values.to) : undefined,
     };
-    dispatch(createAssignment(body, t('message.successful_create')));
+    dispatch(createAssignment(body, handleReload, t('message.successful_create')));
     handleClose();
 
     // let checkValidTask = assignments?.payload
@@ -239,7 +245,7 @@ const SchedulerPage = ({ t, history, match }) => {
         {permissionIds.includes(PERMISSION.DELETE_ASSIGNMENT) ? (
           <IconButton
             onClick={() => {
-              dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
+              dispatch(deleteAssignment(appointmentData.id, handleReload, t('message.successful_delete')));
               restProps.onHide();
             }}
             className={classes.commandButton}
@@ -283,7 +289,7 @@ const SchedulerPage = ({ t, history, match }) => {
       );
     else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
   };
-  if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
+  if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
     return (
       <CContainer fluid className="c-main m-auto p-4">
         {state.isOpen && <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />}
@@ -319,6 +325,6 @@ const SchedulerPage = ({ t, history, match }) => {
         </Paper>
       </CContainer>
     );
-  else return <Page404 />;
+  } else return <Page404 />;
 };
 export default SchedulerPage;

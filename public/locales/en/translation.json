@@ -524,6 +524,7 @@
 
   },
   "placeholder": {
+    "enter_flexible_time": "Enter flexible time",
     "enter_macAddress": "Enter MAC address",
     "select_branches": "Select branches",
     "select_departments": "Select departments",
@@ -652,6 +653,7 @@
     "enter_code": "Enter identify code"
   },
   "validation": {
+    "min_point_must_be_less_or_equal_than_expected": "Minimum working time must be less or equal than expected working time",
     "experience_year_must_be_integer": "Experience year is an integer number",
     "required_positive_days": "Days is a positive number",
     "required_integer_days": "Days is an integer number",

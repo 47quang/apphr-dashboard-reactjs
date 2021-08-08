@@ -81,7 +81,6 @@ export const deleteRole = (id, success_msg, handleAfterDelete) => {
     api.role
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.role.DELETE_ROLE, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })

@@ -70,7 +70,6 @@ const BasicInfo = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
-        console.log(refInfo.current.errors);
         refInfo.current.handleSubmit(e);
       },
       name: t('label.create_new'),

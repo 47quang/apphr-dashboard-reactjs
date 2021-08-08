@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { formatDateTimeScheduleToString, getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
+import { getTimeFromDate, isBeforeTypeDate, parseLocalTime } from 'src/utils/datetimeUtils';
 import { handleExceptions } from 'src/utils/handleExceptions';
 import { api } from '../apis/index';
 import { REDUX_STATE } from '../states';
@@ -205,19 +205,12 @@ export const fetchAssignment = (id, onTotalChange, setLoading) => {
   };
 };
 
-export const createAssignment = (params, success_msg) => {
-  console.log(params);
+export const createAssignment = (params, handleReload, success_msg) => {
   return (dispatch, getState) => {
     api.assignment
       .post(params)
       .then(({ payload }) => {
-        payload.startDate = formatDateTimeScheduleToString(payload.startTime);
-        payload.endDate = formatDateTimeScheduleToString(payload.endTime);
-        payload.startDate = payload.startTime;
-        payload.endDate = payload.endTime;
-        payload.title = payload.shift.code + ' - ' + payload.shift.name;
-        payload.location = payload.shift.branch.code + ' - ' + payload.shift.branch.name;
-        dispatch({ type: REDUX_STATE.assignment.CREATE_ASSIGNMENT, payload });
+        if (handleReload) handleReload();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -226,12 +219,12 @@ export const createAssignment = (params, success_msg) => {
   };
 };
 
-export const deleteAssignment = (id, success_msg) => {
+export const deleteAssignment = (id, handleReload, success_msg) => {
   return (dispatch, getState) => {
     api.assignment
       .delete(id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.assignment.DELETE_ASSIGNMENT, payload });
+        if (handleReload) handleReload();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })
       .catch((err) => {
@@ -243,7 +236,10 @@ export const deleteAssignment = (id, success_msg) => {
 export const setEmptyAssignments = () => {
   return {
     type: REDUX_STATE.assignment.EMPTY_VALUE,
-    payload: [],
+    payload: {
+      payload: [],
+      total: 0,
+    },
   };
 };
 export const setEmptyAssignment = () => {

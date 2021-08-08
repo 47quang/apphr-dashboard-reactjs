@@ -162,7 +162,7 @@ const ShiftItemBody = ({ t, shiftRef, shift, validationSchema, branches, buttons
                             name={`flexibleTime`}
                             onChange={(e) => handleChange(`flexibleTime`)(e)}
                             value={values.flexibleTime}
-                            placeholder={'Nhập mức giao động thời gian điểm danh'}
+                            placeholder={t('placeholder.enter_flexible_time')}
                           />
                           <span className="input-group-text col-1 d-flex justify-content-center" id="basic-addon2">
                             {t('label.minutes')}
