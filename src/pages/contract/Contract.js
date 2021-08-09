@@ -239,7 +239,7 @@ const Contract = ({ t, location, history }) => {
         />
       );
   };
-  if (permissionIds.includes(PERMISSION.LIST_USER))
+  if (permissionIds.includes(PERMISSION.LIST_CONTRACT))
     return (
       <CContainer fluid className="c-main m-auto p-4" style={{ backgroundColor: '#f7f7f7' }}>
         <Helmet>

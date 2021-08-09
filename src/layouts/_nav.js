@@ -22,7 +22,7 @@ const _nav = [
     name: ROUTE_NAME.ROLL_UP,
     to: ROUTE_PATH.ROLL_UP,
     icon: 'cil-touch-app',
-    permission: PERMISSION.LIST_ROLL_UP,
+    permission: PERMISSION.LIST_PROFILE,
   },
   {
     _tag: 'CSidebarNavDropdown',

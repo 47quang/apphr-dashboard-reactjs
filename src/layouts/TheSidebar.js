@@ -19,12 +19,17 @@ import { api } from 'src/stores/apis';
 
 const TheSidebar = () => {
   let navigation = JSON.parse(JSON.stringify(nav));
-  const permissionIds = localStorage.getItem('permissionIds');
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const roleId = localStorage.getItem('roleId');
   navigation = navigation.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
   navigation = navigation.reduce((init, item) => {
-    if (item?._children) item._children = item._children.filter((x) => (x?.permission ? permissionIds.includes(x.permission) : true));
-    if (item?._children?.length !== 0) init.push(item);
+    if (item?._children) {
+      item._children = item._children.filter((x) => {
+        if (x.permission === 48) console.log(x?.permission ? permissionIds.includes(x.permission) : true);
+        return x?.permission ? permissionIds.includes(x.permission) : true;
+      });
+      if (item._children.length !== 0) init.push(item);
+    } else init.push(item);
     return init;
   }, []);
 

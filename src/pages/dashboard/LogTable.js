@@ -1,9 +1,9 @@
+import { CCard, CCardHeader } from '@coreui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QTable from 'src/components/table/Table';
-import { PAGE_SIZES, PERMISSION } from 'src/constants/key';
+import { PAGE_SIZES } from 'src/constants/key';
 import { fetchLogs, setEmptyLogs } from 'src/stores/actions/log';
-import { CCard, CCardHeader } from '@coreui/react';
 
 const equalQTable = (prevProps, nextProps) => {
   return (
@@ -16,7 +16,6 @@ const equalQTable = (prevProps, nextProps) => {
 const MemoizedQTable = React.memo(QTable, equalQTable);
 
 const LogTable = ({ t }) => {
-  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
   const dispatch = useDispatch();
   const logData = useSelector((state) => state.log.data);
   const [columnDef, setColumnDef] = useState([
@@ -55,17 +54,16 @@ const LogTable = ({ t }) => {
     }));
   };
   useEffect(() => {
-    if (permissionIds.includes(PERMISSION.LIST_ALLOWANCE))
-      dispatch(
-        fetchLogs(
-          {
-            page: paging.currentPage,
-            perpage: paging.pageSize,
-          },
-          onTotalChange,
-          setLoading,
-        ),
-      );
+    dispatch(
+      fetchLogs(
+        {
+          page: paging.currentPage,
+          perpage: paging.pageSize,
+        },
+        onTotalChange,
+        setLoading,
+      ),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging.currentPage, paging.pageSize]);
   useEffect(() => {
