@@ -44,12 +44,6 @@ const BasicInfo = ({ t, history, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    profile.have_id = profile.cmnd && profile.cmnd !== '';
-    profile.have_passport = profile.passport && profile.passport !== '';
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile.cmnd, profile.passport]);
-
   const genders = [
     { id: 'male', name: t('label.male') },
     { id: 'female', name: t('label.female') },
@@ -76,7 +70,6 @@ const BasicInfo = ({ t, history, match }) => {
       type: 'button',
       className: `btn btn-primary`,
       onClick: (e) => {
-        console.log(refInfo.current.errors);
         refInfo.current.handleSubmit(e);
       },
       name: t('label.create_new'),

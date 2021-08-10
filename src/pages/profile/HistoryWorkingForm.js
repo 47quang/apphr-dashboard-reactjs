@@ -288,8 +288,11 @@ const HistoryWorkingForm = ({ t, match }) => {
                             className: `btn btn-primary px-4 ml-4`,
                             onClick: async (e) => {
                               props.handleSubmit(e);
-                              document.getElementById('newHistory').hidden = true;
-                              document.getElementById('addBtn').disabled = false;
+                              let keys = Object.keys(props.errors);
+                              if (!keys.length) {
+                                document.getElementById('newHistory').hidden = true;
+                                document.getElementById('addBtn').disabled = false;
+                              }
                             },
                             name: t('label.create_new'),
                           },
@@ -322,8 +325,8 @@ const HistoryWorkingForm = ({ t, match }) => {
                                   name={`status`}
                                   onChange={(e) => {
                                     e.target.checked
-                                      ? dispatch(activeWorking(props.values.id, props.setFieldValue, t('message.successful_active')))
-                                      : dispatch(inactiveWorking(props.values.id, props.setFieldValue, t('message.successful_inactive')));
+                                      ? dispatch(activeWorking(props.values.id, handleResetNewHistory, t('message.successful_active')))
+                                      : dispatch(inactiveWorking(props.values.id, handleResetNewHistory, t('message.successful_inactive')));
                                   }}
                                 />
                                 {index + 1}

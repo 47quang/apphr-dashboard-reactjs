@@ -16,7 +16,7 @@ const equalChart = (prevChart, nextChart) => {
 
 const MemoizedCChartPie = React.memo(CChartPie, equalChart);
 
-const PieChart = ({ initValues, handleFunction }) => {
+const PieChart = ({ handleFunction }) => {
   const { t } = useTranslation();
   const chart = useSelector((state) => state.assignment.chart);
   const [state, setState] = useState({
@@ -24,6 +24,7 @@ const PieChart = ({ initValues, handleFunction }) => {
     data: [],
     title: '',
   });
+
   const [labels, setLabels] = useState([
     t('label.number_normal_work'),
     t('label.number_remote_work'),
@@ -125,7 +126,7 @@ const PieChart = ({ initValues, handleFunction }) => {
         ) : (
           <></>
         )}
-        <FilterPieChart initValues={initValues} handleFunction={handleFunction} />
+        <FilterPieChart handleFunction={handleFunction} />
         <MemoizedCChartPie
           datasets={[
             {

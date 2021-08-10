@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import AccountIcon from 'src/components/icon/Account';
 import BranchesIcon from 'src/components/icon/Branches';
 import DepartmentIcon from 'src/components/icon/Department';
+import { PERMISSION } from 'src/constants/key';
 import { countAccounts } from 'src/stores/actions/account';
 import { countActiveContracts } from 'src/stores/actions/contract';
 import { countBranches, countDepartments, countLeaveRequests, countOvertimeRequests, countRemoteRequests } from 'src/stores/actions/dashboard';
@@ -23,9 +24,10 @@ const Count = () => {
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const permissionIds = JSON.parse(localStorage.getItem('permissionIds'));
 
   useEffect(() => {
-    dispatch(countActiveContracts());
+    if (permissionIds.includes(PERMISSION.LIST_PROFILE)) dispatch(countActiveContracts());
     dispatch(countBranches());
     dispatch(countDepartments());
     dispatch(countAccounts());
@@ -51,30 +53,31 @@ const Count = () => {
     <>
       <h2>{t('label.overall')}</h2>
       <div className={'row mt-2'}>
-        <div className={'col-3'}>
-          <CWidgetDropdown
-            color="gradient-warning"
-            text={t('label.total_number_employees')}
-            style={{ height: '175px' }}
-            footerSlot={
-              <div className={'text-center'} style={{ height: '100px' }}>
-                <h1>
-                  <p>{totalEmployee}</p>
-                </h1>
-                {/* <div className="row ml-4">
-                    <TrendingUp />
-                    <h5 className="pl-2">5% + {t('label.compare_with_previous_month')}</h5>
-                  </div> */}
-              </div>
-            }
-          >
-            <IconButton style={{ width: 40, height: 40 }}>
-              <Link to={'/profile'}>
-                <AccountIcon />
-              </Link>
-            </IconButton>
-          </CWidgetDropdown>
-        </div>
+        {permissionIds.includes(PERMISSION.LIST_PROFILE) ? (
+          <div className={'col-3'}>
+            <CWidgetDropdown
+              color="gradient-warning"
+              text={t('label.total_number_employees')}
+              style={{ height: '175px' }}
+              footerSlot={
+                <div className={'text-center'} style={{ height: '100px' }}>
+                  <h1>
+                    <p>{totalEmployee}</p>
+                  </h1>
+                </div>
+              }
+            >
+              <IconButton style={{ width: 40, height: 40 }}>
+                <Link to={'/profile'}>
+                  <AccountIcon />
+                </Link>
+              </IconButton>
+            </CWidgetDropdown>
+          </div>
+        ) : (
+          <></>
+        )}
+
         <div className={'col-3'}>
           <CWidgetDropdown
             style={{

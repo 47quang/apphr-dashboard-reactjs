@@ -45,8 +45,6 @@ export const fetchProfile = (id, setLoading) => {
         payload.cmndIssuedDate = formatDateInput(payload.cmndIssuedDate);
         payload.passportIssuedDate = formatDateInput(payload.passportIssuedDate);
         payload.passportExpiredDate = formatDateInput(payload.passportExpiredDate);
-        payload['have_id'] = payload.cmnd ? true : false;
-        payload['have_passport'] = payload.passport ? true : false;
         dispatch({ type: REDUX_STATE.profile.CURRENT_PROFILE_ID, payload: payload.id });
         dispatch({ type: REDUX_STATE.profile.SET_PROFILE, payload });
       })
@@ -104,17 +102,6 @@ export const updateProfile = (data, history, success_msg) => {
   data.passportExpiredDate = data.passportExpiredDate === '' ? null : data.passportExpiredDate;
   data.passportProvinceId = data.passportProvinceId !== null && parseInt(data.passportProvinceId) !== 0 ? parseInt(data.passportProvinceId) : null;
   data.branchId = data.branchId !== null && parseInt(data.branchId) !== 0 ? parseInt(data.branchId) : null;
-  if (!data.have_id) {
-    data.cmnd = null;
-    data.cmndIssuedDate = null;
-    data.cmndProvinceId = null;
-  }
-  if (!data.have_passport) {
-    data.passport = null;
-    data.passportIssuedDate = null;
-    data.passportExpiredDate = null;
-    data.passportProvinceId = null;
-  }
 
   return (dispatch, getState) => {
     api.profile

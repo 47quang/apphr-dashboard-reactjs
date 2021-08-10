@@ -1,11 +1,10 @@
-import { CircularProgress } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PERMISSION, ROUTE_PATH } from 'src/constants/key';
 import Page404 from 'src/pages/page404/Page404';
 import { SettingBranchInfoSchema } from 'src/schema/formSchema';
-import { fetchBranch, setEmptyBranch, updateBranch } from 'src/stores/actions/branch';
-import { fetchDistricts, fetchProvinces, fetchWards } from 'src/stores/actions/location';
+import { fetchBranch, updateBranch } from 'src/stores/actions/branch';
+import { fetchProvinces } from 'src/stores/actions/location';
 import BranchItemBody from './BranchItemBody';
 
 const UpdateBranch = ({ t, location, history, match }) => {
@@ -13,37 +12,27 @@ const UpdateBranch = ({ t, location, history, match }) => {
   const branchInfoForm = useRef();
   const dispatch = useDispatch();
   const branch = useSelector((state) => state.branch.branch);
-  const provinces = useSelector((state) => state.location.provinces);
-  const districts = useSelector((state) => state.location.districts);
-  const wards = useSelector((state) => state.location.wards);
+  branch.provinces = useSelector((state) => state.location.provinces);
+  branch.districts = useSelector((state) => state.location.districts);
+  branch.wards = useSelector((state) => state.location.wards);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const effectFunction = () => {
     if (permissionIds.includes(PERMISSION.GET_BRANCH)) {
       dispatch(fetchBranch(match.params?.id, setLoading));
-      if (provinces.length === 0) dispatch(fetchProvinces());
-      return () => {
-        dispatch(setEmptyBranch());
-      };
+      if (branch.provinces.length === 0) dispatch(fetchProvinces());
     } else setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
-  useEffect(() => {
-    if (branch.provinceId) {
-      dispatch(fetchDistricts({ provinceId: branch.provinceId }));
-    }
-    if (branch.districtId) {
-      dispatch(fetchWards({ districtId: branch.districtId }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branch.provinceId, branch.districtId]);
   const submitForm = (values) => {
     let form = values;
     form.provinceId = parseInt(form.provinceId);
     form.districtId = parseInt(form.districtId);
     form.wardId = parseInt(form.wardId);
-
+    delete form.wards;
+    delete form.districts;
+    delete form.provinces;
     // Call API UPDATE
     dispatch(updateBranch(form, t('message.successful_update')));
   };
@@ -89,22 +78,13 @@ const UpdateBranch = ({ t, location, history, match }) => {
           position: 'left',
         },
       ];
-  if (loading)
-    return (
-      <div className="text-center pt-4">
-        <CircularProgress />
-      </div>
-    );
-  if (permissionIds.includes(PERMISSION.GET_BRANCH) && branch.id)
+  if (permissionIds.includes(PERMISSION.GET_BRANCH))
     return (
       <BranchItemBody
         branchRef={branchInfoForm}
-        branch={branch}
+        effectFunction={effectFunction}
         t={t}
         validationSchema={SettingBranchInfoSchema}
-        provinces={provinces}
-        districts={districts}
-        wards={wards}
         buttons={buttons}
         submitForm={submitForm}
         loading={loading}

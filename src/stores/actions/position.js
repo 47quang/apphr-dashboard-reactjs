@@ -80,7 +80,6 @@ export const deletePosition = (params, success_msg, handleAfterDelete) => {
     api.position
       .delete(params.id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.position.DELETE_POSITION, payload });
         if (handleAfterDelete) handleAfterDelete();
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
       })

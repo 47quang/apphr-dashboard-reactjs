@@ -24,7 +24,6 @@ import { PERMISSION } from 'src/constants/key';
 import { COLORS } from 'src/constants/theme';
 import { createAssignment, deleteAssignment, fetchAssignments, setEmptyAssignments } from 'src/stores/actions/assignment';
 import { fetchHolidays } from 'src/stores/actions/holiday';
-import { REDUX_STATE } from 'src/stores/states';
 import { isSameBeforeTypeDate } from 'src/utils/datetimeUtils';
 import Page404 from '../page404/Page404';
 import NoteScheduler from './NoteSchedule';
@@ -147,22 +146,20 @@ const SchedulerPage = ({ t, history, match }) => {
     return <WeekView.TimeTableCell {...props} onClick={onClickEvent} role="button" />;
   };
   useEffect(() => {
+    return () => {
+      dispatch(setEmptyAssignments());
+    };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
     if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
-      var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
-      var last = first + 6; // last day is the first day + 6
-      var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
-      var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
-      lastDay.setHours(23, 59, 59, 0);
-      dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
+      handleReload();
       dispatch(
         fetchHolidays({
           page: 0,
           perpage: 999,
         }),
       );
-      return () => {
-        dispatch(setEmptyAssignments());
-      };
     }
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,33 +173,56 @@ const SchedulerPage = ({ t, history, match }) => {
   const handleClose = () => {
     setState({ ...state, isOpen: false });
   };
+  const handleReload = () => {
+    var first = state.currentDate.getDate() - state.currentDate.getDay(); // First day is the day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+    var firstDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), first);
+    var lastDay = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), last);
+    lastDay.setHours(23, 59, 59, 0);
+    dispatch(fetchAssignments({ profileId: profileId, from: firstDay, to: lastDay }, setLoading));
+  };
 
   const handleConfirm = async (values) => {
     let { selectedDate } = state;
-    let startDate = selectedDate + 'T' + values.start;
-    let endDate = selectedDate + 'T' + values.end;
-    let checkValidTask = assignments?.payload
-      ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
-      : false; //bug
-    if (!checkValidTask) {
-      dispatch({
-        type: REDUX_STATE.notification.SET_NOTI,
-        payload: { open: true, type: 'error', message: t('message.not_assign_in_this_time') },
-      });
-      setState({
-        ...state,
-        isOpen: false,
-      });
-    } else {
-      let body = {
-        shiftId: +values.shiftId,
-        profileId: profileId,
-        date: new Date(selectedDate),
-        endTime: values.endTime ? new Date(values.endTime) : undefined,
-      };
-      dispatch(createAssignment(body, t('message.successful_create')));
-      handleClose();
-    }
+    const [sHH, sMM] = values.start.split(':');
+    const [eHH, eMM] = values.end.split(':');
+    let startTime = new Date(selectedDate);
+    startTime.setHours(+sHH, +sMM, 0, 0);
+    let endTime = new Date(selectedDate);
+    endTime.setHours(+eHH, +eMM, 0, 0);
+
+    let body = {
+      shiftId: +values.shiftId,
+      profileId: profileId,
+      startTime: startTime,
+      endTime: endTime,
+      to: values.to ? new Date(values.to) : undefined,
+    };
+    dispatch(createAssignment(body, handleReload, t('message.successful_create')));
+    handleClose();
+
+    // let checkValidTask = assignments?.payload
+    //   ? assignments.payload.every((x) => isSameBeforeTypeDate(x.endDate, startDate) || isSameBeforeTypeDate(endDate, x.startDate))
+    //   : false; //bug
+    // if (!checkValidTask) {
+    //   dispatch({
+    //     type: REDUX_STATE.notification.SET_NOTI,
+    //     payload: { open: true, type: 'error', message: t('message.not_assign_in_this_time') },
+    //   });
+    //   setState({
+    //     ...state,
+    //     isOpen: false,
+    //   });
+    // } else {
+    //   let body = {
+    //     shiftId: +values.shiftId,
+    //     profileId: profileId,
+    //     date: new Date(selectedDate),
+    //     endTime: values.endTime ? new Date(values.endTime) : undefined,
+    //   };
+    //   dispatch(createAssignment(body, t('message.successful_create')));
+    //   handleClose();
+    // }
   };
   const style = ({ palette }) => ({
     icon: {
@@ -225,7 +245,7 @@ const SchedulerPage = ({ t, history, match }) => {
         {permissionIds.includes(PERMISSION.DELETE_ASSIGNMENT) ? (
           <IconButton
             onClick={() => {
-              dispatch(deleteAssignment(appointmentData.id, t('message.successful_delete')));
+              dispatch(deleteAssignment(appointmentData.id, handleReload, t('message.successful_delete')));
               restProps.onHide();
             }}
             className={classes.commandButton}
@@ -269,7 +289,7 @@ const SchedulerPage = ({ t, history, match }) => {
       );
     else return <Appointments.Appointment {...restProps}>{children}</Appointments.Appointment>;
   };
-  if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT))
+  if (permissionIds.includes(PERMISSION.LIST_ASSIGNMENT)) {
     return (
       <CContainer fluid className="c-main m-auto p-4">
         {state.isOpen && <CalendarForm t={t} day={state.day} handleCancel={handleClose} isOpen={state.isOpen} handleConfirm={handleConfirm} />}
@@ -305,6 +325,6 @@ const SchedulerPage = ({ t, history, match }) => {
         </Paper>
       </CContainer>
     );
-  else return <Page404 />;
+  } else return <Page404 />;
 };
 export default SchedulerPage;

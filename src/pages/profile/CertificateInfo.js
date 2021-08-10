@@ -303,7 +303,7 @@ const CertificateInfo = ({ t, match }) => {
                     }}
                   >
                     {({ values, errors, touched, handleChange, handleBlur, handleReset, handleSubmit, setFieldValue }) => (
-                      <div key={index} className="shadow bg-white rounded p-4">
+                      <div className="shadow bg-white rounded p-4 mb-4">
                         {getFormBody(values?.code + ' - ' + values.name, values, handleChange, handleBlur, touched, errors, false, setFieldValue)}
                         {renderButtons(
                           permissionIds.includes(PERMISSION.UPDATE_DIPLOMA)

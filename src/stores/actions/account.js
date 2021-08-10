@@ -163,7 +163,12 @@ export const fetchProfiles = (params) => {
       .getProfiles(params)
       .then(({ payload }) => {
         payload =
-          payload && payload.length > 0 ? payload.map((profile) => ({ id: profile.id ?? 0, name: profile.code + ' - ' + profile.fullname })) : [];
+          payload && payload.length > 0
+            ? payload.reduce((init, profile) => {
+                if (profile.id !== 1) init.push({ id: profile.id ?? 0, name: profile.code + ' - ' + profile.fullname });
+                return init;
+              }, [])
+            : [];
         dispatch({ type: REDUX_STATE.account.GET_PROFILES, payload });
       })
       .catch((err) => {

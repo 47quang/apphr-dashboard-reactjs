@@ -15,7 +15,7 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
     shiftId: '',
     start: '',
     end: '',
-    endTime: '',
+    to: '',
   };
   const shifts = useSelector((state) => state.shift.shifts);
   const dispatch = useDispatch();
@@ -101,16 +101,16 @@ const CalendarForm = ({ isOpen, handleConfirm, handleCancel, t, day }) => {
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
-                      value={props.values.endTime ?? ''}
-                      onBlur={props.handleBlur('endTime')}
-                      onChange={props.handleChange('endTime')}
-                      inputID={'endTime'}
+                      value={props.values.to ?? ''}
+                      onBlur={props.handleBlur('to')}
+                      onChange={props.handleChange('to')}
+                      inputID={'to'}
                       labelText={t('label.end_time_repeat')}
                       inputType={'date'}
                       inputClassName={'form-control'}
-                      isTouched={props.touched.endTime}
-                      isError={props.errors.endTime && props.touched.endTime}
-                      errorMessage={t(props.errors.endTime)}
+                      isTouched={props.touched.to}
+                      isError={props.errors.to && props.touched.to}
+                      errorMessage={t(props.errors.to)}
                     />
                   </div>
                   <hr className="mt-1" />

@@ -41,7 +41,7 @@ const assignmentReducer = (state = initialState, { type, payload }) => {
     case REDUX_STATE.assignment.EMPTY_VALUE:
       return {
         ...state,
-        assignments: [],
+        assignments: payload,
       };
     case REDUX_STATE.assignment.EMPTY_ASSIGNMENT:
       return { ...state, assignment: payload };

@@ -9,6 +9,7 @@ const initialState = {
     name: '',
     code: '',
     coefficient: '',
+    overtimeCoefficient: '',
     startCC: '',
     endCC: '',
     branchId: '',

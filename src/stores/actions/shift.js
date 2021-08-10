@@ -29,7 +29,7 @@ export const fetchShifts = (params, setLoading) => {
   };
 };
 const formatDownloadedData = (payload) => {
-  payload.name = payload.code + ' - ' + payload.name;
+  // payload.name = payload.code + ' - ' + payload.name;
   payload.operateLoop = deCodeChecked(payload.operateLoop);
   payload.startCC = parseLocalTime(payload.startCC);
   payload.endCC = parseLocalTime(payload.endCC);
@@ -93,7 +93,6 @@ export const deleteShift = (params, success_msg, handleAfterDelete) => {
     api.shift
       .delete(params.id)
       .then(({ payload }) => {
-        dispatch({ type: REDUX_STATE.shift.DELETE_SHIFT, payload });
         dispatch({ type: REDUX_STATE.notification.SET_NOTI, payload: { open: true, type: 'success', message: success_msg } });
         if (handleAfterDelete) handleAfterDelete();
       })

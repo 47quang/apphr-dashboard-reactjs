@@ -1,24 +1,43 @@
 import { CContainer } from '@coreui/react';
 import { CircularProgress } from '@material-ui/core';
 import { Formik } from 'formik';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CommonMultipleTextInput from 'src/components/input/CommonMultipleTextInput';
 import CommonSelectInput from 'src/components/input/CommonSelectInput';
 import CommonTextInput from 'src/components/input/CommonTextInput';
 import FormHeader from 'src/components/text/FormHeader';
 import Label from 'src/components/text/Label';
+import { setEmptyBranch } from 'src/stores/actions/branch';
 import { fetchDistricts, fetchWards } from 'src/stores/actions/location';
+import { api } from 'src/stores/apis';
 import { REDUX_STATE } from 'src/stores/states';
 import { renderButtons } from 'src/utils/formUtils';
 import { generateCode } from 'src/utils/randomCode';
 
-const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, districts, wards, submitForm, buttons, loading, isCreate }) => {
+const BranchItemBody = ({ t, branchRef, effectFunction, validationSchema, provinces, districts, wards, submitForm, buttons, loading, isCreate }) => {
   const dispatch = useDispatch();
   const typeCC = [
     { id: 'WIFI', name: t('label.wi_fi') },
     { id: 'QR_CODE', name: t('label.qr_code') },
   ];
+  const branch = useSelector((state) => state.branch.branch);
+  useEffect(() => {
+    effectFunction();
+    return () => {
+      dispatch(setEmptyBranch());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (branch.provinceId) {
+      dispatch(fetchDistricts({ provinceId: branch.provinceId }));
+    }
+    if (branch.districtId) {
+      dispatch(fetchWards({ districtId: branch.districtId }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branch.provinceId, branch.districtId]);
   return (
     <CContainer fluid className="c-main m-auto p-4">
       <div className="m-auto">
@@ -68,7 +87,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                             {t('label.random')}
                           </div>
                         </div>
-                        {errors.code && touched.code && t(errors.code) ? (
+                        {errors.code && t(errors.code) ? (
                           <div>
                             <small className={'text-danger'}>{t(errors.code)}</small>
                           </div>
@@ -158,33 +177,43 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       containerClassName={'form-group col-xl-6'}
                       value={values.provinceId}
                       onBlur={handleBlur('provinceId')}
-                      onChange={(e) => {
-                        dispatch(fetchDistricts({ provinceId: e.target.value }));
-                        dispatch({
-                          type: REDUX_STATE.location.SET_WARDS,
-                          payload: [],
-                        });
+                      onChange={async (e) => {
                         handleChange('provinceId')(e);
+                        if (isCreate) {
+                          dispatch(fetchDistricts({ provinceId: e.target.value }));
+                          dispatch({
+                            type: REDUX_STATE.location.SET_WARDS,
+                            payload: [],
+                          });
+                        } else {
+                          let newDistricts = await api.location.getDistricts(+e.target.value).then(({ payload }) => payload);
+                          setFieldValue('districts', newDistricts);
+                          setFieldValue('wards', []);
+                        }
                       }}
                       inputID={'provinceId'}
                       labelText={t('label.province')}
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_province')}
-                      lstSelectOptions={provinces}
+                      lstSelectOptions={isCreate ? provinces : values.provinces}
                     />
                     <CommonSelectInput
                       containerClassName={'form-group col-xl-6'}
                       value={values.districtId}
                       onBlur={handleBlur('districtId')}
-                      onChange={(e) => {
-                        dispatch(fetchWards({ districtId: e.target.value }));
+                      onChange={async (e) => {
                         handleChange('districtId')(e);
+                        if (isCreate) dispatch(fetchWards({ districtId: e.target.value }));
+                        else {
+                          let newWards = await api.location.getWards(+e.target.value).then(({ payload }) => payload);
+                          setFieldValue('wards', newWards);
+                        }
                       }}
                       inputID={'districtId'}
                       labelText={t('label.district')}
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_district')}
-                      lstSelectOptions={districts}
+                      lstSelectOptions={isCreate ? districts : values.districts}
                     />
                   </div>
                   <div className="row">
@@ -197,7 +226,7 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       labelText={t('label.ward')}
                       selectClassName={'form-control'}
                       placeholder={t('placeholder.select_ward')}
-                      lstSelectOptions={wards}
+                      lstSelectOptions={isCreate ? wards : values.wards}
                     />
                     <CommonTextInput
                       containerClassName={'form-group col-xl-12'}
@@ -209,6 +238,20 @@ const BranchItemBody = ({ t, branchRef, branch, validationSchema, provinces, dis
                       inputType={'text'}
                       placeholder={t('placeholder.enter_branch_address')}
                       inputClassName={'form-control'}
+                    />
+                    <CommonTextInput
+                      containerClassName={'form-group col-xl-12'}
+                      value={values.phone}
+                      onBlur={handleBlur('phone')}
+                      onChange={handleChange('phone')}
+                      inputID={'phone'}
+                      labelText={t('label.phone_number')}
+                      inputType={'text'}
+                      placeholder={t('placeholder.enter_phone_number')}
+                      inputClassName={'form-control'}
+                      isTouched={touched.phone}
+                      isError={errors.phone && touched.phone}
+                      errorMessage={t(errors.phone)}
                     />
                     {/* <CommonPlaceAutocomplete /> */}
                   </div>
